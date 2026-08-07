@@ -1,0 +1,14 @@
+.localstorage/ECE/.tmp.driveupload/
+.localstorage/ECE/.tmp.drivedownload/
+desktop.ini
+.localstorage/**/desktop.ini
+node_modules/
+dist-v2-pending/
+coverage/
+.localstorage/
+.localstorage.zip
+.vscode/
+.env
+.env.*
+!.env.example
+/release/

@@ -1,0 +1,62 @@
+{
+  "manifestVersion": 1,
+  "name": "Talespire CharSheet Source",
+  "summary": "Hoja de personaje colaborativa para TaleSpire",
+  "descriptionFilePath": "/README.md",
+  "version": "0.7.6",
+  "license": "MIT",
+  "about": {
+    "website": "",
+    "authors": ["illume63"]
+  },
+  "kind": "webView",
+  "entryPoint": "/dist-v2/v2.html",
+  "api": {
+    "version": "0.1",
+    "initTimeout": 10,
+    "subscriptions": {
+      "dice": {
+        "onRollResults": "handleRollResult"
+      },
+      "symbiote": {
+        "onVisibilityEvent": "logSymbioteEvent",
+        "onStateChangeEvent": "onStateChangeEvent"
+        
+      },
+      "creatures": {
+        "onCreatureStateChange": "onCreatureStateChange"
+      },
+      "sync": {
+        "onSyncMessage": "handleSyncEvents",
+        "onClientEvent": "handleSyncClientEvents"
+      },
+      "clients": {
+        "onClientEvent": "handleClientEvents"
+      },
+      "players": {
+        "onCampaignPlayerEvent": "handlePlayerPermissionEvents"
+      },
+      "chat":{
+        "onChatMessage":"handleChatMessage"
+      }
+    },
+    "interop": {
+      "id": "10f34bc9-dfa2-4623-a691-bf0a1fb2d9d4"
+    }
+  },
+  "controls": {
+    "reload": true
+  },
+  "environment": {
+    "capabilities": [
+      "playAudio",
+      "runInBackground"
+    ],
+    "extras": [
+      "icons",
+      "fonts",
+      "colorStyles"
+    ],
+    "webViewBackgroundColor": "#000"
+  }
+}
