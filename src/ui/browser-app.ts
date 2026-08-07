@@ -174,6 +174,9 @@ function readText(data: FormData, key: string): string {
 
 function formatError(error: unknown): string {
   if (error instanceof CampaignRepositoryConflictError) {
+    if (error.conflictPaths.length > 0) {
+      return `Otro jugador modificó el mismo dato (${error.conflictPaths.join(", ")}). Se conservó la versión remota; revisá el valor antes de volver a guardar.`;
+    }
     return "La campaña cambió desde que abriste el formulario. Se recargó la versión más reciente; revisá tus cambios antes de volver a guardar.";
   }
   if (error instanceof CharacterRevisionConflictError) {

@@ -17,8 +17,11 @@ import {
   RemoteCampaignRevisionConflictError,
   SupabaseCampaignDocumentClient,
 } from "./supabase-campaign-document-client";
+import { mergeCampaignChanges } from "./campaign-three-way-merge";
 
 export class SupabaseCampaignRepository implements CampaignRepository {
+  private readonly versions = new Map<string, CampaignSnapshot>();
+
   constructor(
     private readonly client: SupabaseCampaignDocumentClient,
     private readonly campaignId: string,
@@ -28,52 +31,96 @@ export class SupabaseCampaignRepository implements CampaignRepository {
   async load(): Promise<CampaignSnapshot | null> {
     const document = await this.client.readCampaign(this.campaignId);
     if (document !== null) this.onRemoteRevision(document.revision);
-    return document === null
+    const snapshot = document === null
       ? null
-      : decodeCampaignEnvelope(JSON.stringify(document.payload));
+      : await decodeCampaignEnvelope(JSON.stringify(document.payload));
+    if (snapshot !== null) this.remember(snapshot);
+    return snapshot;
+  }
+
+  async loadVersion(checksum: string): Promise<CampaignSnapshot | null> {
+    const known = this.versions.get(checksum);
+    if (known !== undefined) return createCampaignSnapshot(known.campaign);
+    return this.load();
   }
 
   async save(
     campaign: CampaignV2,
     expectation: SaveExpectation,
   ): Promise<CampaignSnapshot> {
-    const currentDocument = await this.client.readCampaign(this.campaignId);
-    const current = currentDocument === null
-      ? null
-      : await decodeCampaignEnvelope(JSON.stringify(currentDocument.payload));
-
     if (expectation.kind === "empty") {
+      const currentDocument = await this.client.readCampaign(this.campaignId);
+      const current = currentDocument === null
+        ? null
+        : await decodeCampaignEnvelope(JSON.stringify(currentDocument.payload));
       if (current !== null) throw new CampaignRepositoryConflictError("empty", current.checksum);
       throw new CampaignRepositoryCorruptionError(
         "Remote campaign exists without an initialized campaign document",
       );
     }
-    if (current?.checksum !== expectation.checksum || currentDocument === null) {
-      throw new CampaignRepositoryConflictError(expectation.checksum, current?.checksum ?? null);
+    const base = this.versions.get(expectation.checksum);
+    if (base === undefined) {
+      throw new CampaignRepositoryConflictError(expectation.checksum, null);
     }
+    const local = await createCampaignSnapshot(campaign);
 
-    const candidate = await createCampaignSnapshot(campaign);
-    try {
-      const saved = await this.client.saveCampaign(
-        this.campaignId,
-        currentDocument.revision,
-        JSON.parse(encodeCampaignEnvelope(candidate)) as Record<string, unknown>,
-      );
-      const verified = await decodeCampaignEnvelope(JSON.stringify(saved.payload));
-      if (verified.checksum !== candidate.checksum) {
-        throw new CampaignRepositoryCorruptionError(
-          `Remote campaign verification failed: expected ${candidate.checksum}, found ${verified.checksum}`,
-        );
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      const currentDocument = await this.client.readCampaign(this.campaignId);
+      if (currentDocument === null) {
+        throw new CampaignRepositoryConflictError(expectation.checksum, null);
       }
-      this.onRemoteRevision(saved.revision);
-      return verified;
-    } catch (error) {
-      if (!(error instanceof RemoteCampaignRevisionConflictError)) throw error;
-      const latest = await this.load();
+      const remote = await decodeCampaignEnvelope(JSON.stringify(currentDocument.payload));
+      this.remember(remote);
+      const candidate = remote.checksum === expectation.checksum
+        ? local
+        : await this.mergedCandidate(base, local, remote, expectation.checksum);
+      try {
+        const saved = await this.client.saveCampaign(
+          this.campaignId,
+          currentDocument.revision,
+          JSON.parse(encodeCampaignEnvelope(candidate)) as Record<string, unknown>,
+        );
+        const verified = await decodeCampaignEnvelope(JSON.stringify(saved.payload));
+        if (verified.checksum !== candidate.checksum) {
+          throw new CampaignRepositoryCorruptionError(
+            `Remote campaign verification failed: expected ${candidate.checksum}, found ${verified.checksum}`,
+          );
+        }
+        this.remember(verified);
+        this.onRemoteRevision(saved.revision);
+        return verified;
+      } catch (error) {
+        if (!(error instanceof RemoteCampaignRevisionConflictError)) throw error;
+      }
+    }
+    const latest = await this.load();
+    throw new CampaignRepositoryConflictError(expectation.checksum, latest?.checksum ?? null);
+  }
+
+  private async mergedCandidate(
+    base: CampaignSnapshot,
+    local: CampaignSnapshot,
+    remote: CampaignSnapshot,
+    expectedChecksum: string,
+  ): Promise<CampaignSnapshot> {
+    const result = mergeCampaignChanges(base.campaign, local.campaign, remote.campaign);
+    if (result.campaign === null) {
       throw new CampaignRepositoryConflictError(
-        expectation.checksum,
-        latest?.checksum ?? null,
+        expectedChecksum,
+        remote.checksum,
+        result.conflictPaths,
       );
+    }
+    return createCampaignSnapshot(result.campaign);
+  }
+
+  private remember(snapshot: CampaignSnapshot): void {
+    this.versions.delete(snapshot.checksum);
+    this.versions.set(snapshot.checksum, snapshot);
+    while (this.versions.size > 20) {
+      const oldest = this.versions.keys().next().value as string | undefined;
+      if (oldest === undefined) break;
+      this.versions.delete(oldest);
     }
   }
 }

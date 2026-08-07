@@ -58,6 +58,13 @@ critical section. The browser adapter uses the Web Locks API to coordinate
 pages from the same origin when available, with a shared in-process mutex as a
 fallback.
 
-This prevents stale edits in one application instance. It is not yet the
-distributed TaleSpire protocol: cross-player operations, merge semantics and
-the change journal belong to later stages.
+The remote Supabase repository additionally retains recently loaded checksums
+as merge bases. If another player saves first, it performs a three-way merge
+between the loaded base, the local candidate and the latest remote document.
+Independent JSON fields (including fields on different characters) are merged;
+arrays of entities with stable IDs are merged per entity. Only paths changed to
+different values by both clients are rejected and reported as conflicts.
+
+The database still commits the complete campaign document atomically. The
+granularity comes from deterministic client-side reconciliation followed by a
+revision-checked retry, so existing remote campaigns require no schema migration.

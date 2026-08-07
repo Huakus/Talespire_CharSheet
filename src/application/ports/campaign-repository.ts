@@ -11,6 +11,12 @@ export type SaveExpectation =
 
 export interface CampaignRepository {
   load(): Promise<CampaignSnapshot | null>;
+  /**
+   * Returns a previously loaded version when the adapter keeps version history.
+   * Remote adapters use this as the base for a three-way merge; local adapters
+   * may omit it and retain strict whole-document compare-and-save semantics.
+   */
+  loadVersion?(checksum: string): Promise<CampaignSnapshot | null>;
   save(
     campaign: CampaignV2,
     expectation: SaveExpectation,
@@ -21,12 +27,28 @@ export class CampaignRepositoryConflictError extends Error {
   constructor(
     readonly expected: string,
     readonly actual: string | null,
+    readonly conflictPaths: readonly string[] = [],
   ) {
     super(
-      `Campaign persistence conflict: expected ${expected}, found ${actual ?? "empty"}`,
+      conflictPaths.length === 0
+        ? `Campaign persistence conflict: expected ${expected}, found ${actual ?? "empty"}`
+        : `Campaign persistence conflict at ${conflictPaths.join(", ")}`,
     );
     this.name = "CampaignRepositoryConflictError";
   }
+}
+
+export async function loadCampaignVersion(
+  repository: CampaignRepository,
+  expectedChecksum: string,
+): Promise<CampaignSnapshot | null> {
+  const snapshot = repository.loadVersion
+    ? await repository.loadVersion(expectedChecksum)
+    : await repository.load();
+  if (snapshot !== null && snapshot.checksum !== expectedChecksum) {
+    throw new CampaignRepositoryConflictError(expectedChecksum, snapshot.checksum);
+  }
+  return snapshot;
 }
 
 export class CampaignRepositoryCorruptionError extends Error {

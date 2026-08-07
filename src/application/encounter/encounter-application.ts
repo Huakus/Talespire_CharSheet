@@ -1,5 +1,5 @@
 import type { CampaignRepository, CampaignSnapshot } from "../ports/campaign-repository";
-import { CampaignRepositoryConflictError } from "../ports/campaign-repository";
+import { CampaignRepositoryConflictError, loadCampaignVersion } from "../ports/campaign-repository";
 import { CampaignV2Schema } from "../../domain/character/character-v2";
 import { EncounterSchema, type Encounter, type EncounterCombatant } from "../../domain/encounter/encounter-model";
 import { applyEncounterCommand, type EncounterCommand, type EncounterCommandResult } from "../../domain/encounter/encounter";
@@ -176,7 +176,7 @@ export class EncounterApplication {
   }
 
   private async requireCurrent(expectedChecksum: string): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, expectedChecksum);
     if (!current) throw new Error("CAMPAIGN_NOT_FOUND");
     if (current.checksum !== expectedChecksum) throw new CampaignRepositoryConflictError(expectedChecksum, current.checksum);
     return current;

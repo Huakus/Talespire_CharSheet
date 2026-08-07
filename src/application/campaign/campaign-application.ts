@@ -87,7 +87,7 @@ import type {
   CampaignSnapshot,
   SaveExpectation,
 } from "../ports/campaign-repository";
-import { CampaignRepositoryConflictError } from "../ports/campaign-repository";
+import { CampaignRepositoryConflictError, loadCampaignVersion } from "../ports/campaign-repository";
 
 export class CampaignNotFoundError extends Error {
   constructor() {
@@ -370,7 +370,7 @@ export class CampaignApplication {
   }
 
   async createCharacter(command: CreateCharacterCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (!current) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     const createdAt = command.createdAt ?? new Date().toISOString();
@@ -379,7 +379,7 @@ export class CampaignApplication {
   }
 
   async deleteCharacter(command: DeleteCharacterCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (!current) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     if (!current.campaign.characters[command.characterId]) throw new CharacterNotFoundError(command.characterId);
@@ -396,7 +396,7 @@ export class CampaignApplication {
   }
 
   async importCharacter(command: ImportCharacterCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (!current) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     const importedAt = command.importedAt ?? new Date().toISOString();
@@ -475,7 +475,7 @@ export class CampaignApplication {
   async editCharacter(
     command: EditCharacterCommand,
   ): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) {
       throw new CampaignNotFoundError();
     }
@@ -522,7 +522,7 @@ export class CampaignApplication {
   async applyCharacterResource(
     command: ApplyCharacterResourceCommand,
   ): Promise<ApplyCharacterResourceResult> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     if (current.checksum !== command.expectedCampaignChecksum) {
       throw new CampaignRepositoryConflictError(
@@ -566,7 +566,7 @@ export class CampaignApplication {
   }
 
   async restoreCharacterState(command: RestoreCharacterStateCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     const currentCharacter = current.campaign.characters[command.characterId];
@@ -592,7 +592,7 @@ export class CampaignApplication {
   }
 
   async restoreCharacterStates(command: RestoreCharacterStatesCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     if (!command.characters.length) throw new Error("At least one character state is required");
@@ -625,7 +625,7 @@ export class CampaignApplication {
   async upsertCharacterAction(
     command: UpsertCharacterActionCommand,
   ): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     const character = current.campaign.characters[command.characterId];
@@ -651,7 +651,7 @@ export class CampaignApplication {
   async removeCharacterAction(
     command: RemoveCharacterActionCommand,
   ): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     const character = current.campaign.characters[command.characterId];
@@ -846,7 +846,7 @@ export class CampaignApplication {
   }
 
   async transferCurrency(command: TransferCurrencyCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     if (command.sourceCharacterId === command.targetCharacterId) {
@@ -887,7 +887,7 @@ export class CampaignApplication {
   }
 
   async transferInventoryItem(command: TransferInventoryItemCommand): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     if (command.sourceCharacterId === command.targetCharacterId) {
@@ -1190,7 +1190,7 @@ export class CampaignApplication {
     characterId: string,
     expectedChecksum: string,
   ): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+    const current = await loadCampaignVersion(this.repository, expectedChecksum);
     if (current === null) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, expectedChecksum);
     if (!current.campaign.characters[characterId]) {
