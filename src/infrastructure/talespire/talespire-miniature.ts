@@ -17,10 +17,12 @@ export class TaleSpireMiniatureAdapter {
   async selectFirst(): Promise<MiniatureLink> {
     if (!this.api.creatures) throw new Error("TaleSpire creature selection is unavailable");
     const selected = await this.api.creatures.getSelectedCreatures();
-    if (!Array.isArray(selected) || typeof selected[0] !== "string") {
+    const first = Array.isArray(selected) ? selected[0] : null;
+    const selectedId = typeof first === "string" ? first : String(object(first).id ?? "");
+    if (!selectedId) {
       throw new Error("Seleccioná una miniatura en TaleSpire antes de vincularla.");
     }
-    const infoResult = await this.api.creatures.getMoreInfo([selected[0]]);
+    const infoResult = await this.api.creatures.getMoreInfo([selectedId]);
     if (!Array.isArray(infoResult) || infoResult.length === 0) {
       throw new Error("TaleSpire no devolvió información de la miniatura seleccionada.");
     }
@@ -28,7 +30,7 @@ export class TaleSpireMiniatureAdapter {
     const morphs = Array.isArray(info.morphs) ? info.morphs.map(object) : [];
     const activeMorph = morphs[Number(info.activeMorphIndex ?? 0)] ?? {};
     return {
-      creatureId: String(info.id ?? selected[0]),
+      creatureId: String(info.id ?? selectedId),
       displayName: String(info.name ?? info.creatureName ?? "Miniatura vinculada"),
       boardAssetId: String(activeMorph.boardAssetId ?? ""),
     };

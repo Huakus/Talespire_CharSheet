@@ -65,6 +65,30 @@ describe("TaleSpire GM collaboration", () => {
     expect(initiatives).toEqual([{ clientId: "player-1", initiative: 17 }]);
   });
 
+  it("reads and forwards TaleSpire native initiative queue updates", async () => {
+    const queue = {
+      items: [
+        { id: "creature-1", name: "Goblin", kind: "creature" },
+        { id: "creature-2", name: "HeroÃ­na", kind: "creature" },
+      ],
+      activeItemIndex: 1,
+    };
+    const collaboration = new TaleSpireGmCollaboration({
+      sync: { send: async () => undefined },
+      clients: {
+        whoAmI: async () => ({ id: "gm" }),
+        getClientsInThisBoard: async () => [],
+        getMoreInfo: async () => [],
+      },
+      initiative: { getQueue: async () => queue },
+    });
+    expect(await collaboration.getNativeInitiative()).toEqual(queue);
+    const observed: unknown[] = [];
+    collaboration.subscribeNativeInitiative((value) => observed.push(value));
+    await collaboration.handleInitiativeEvent({ payload: { queue } });
+    expect(observed).toEqual([queue]);
+  });
+
   it("publishes the initiative view and a checksummed change notification", async () => {
     const sent: { message: string; target: string }[] = [];
     const collaboration = collaborationFixture(sent);

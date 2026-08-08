@@ -3,7 +3,7 @@
   "name": "Talespire CharSheet",
   "summary": "Hoja de personaje colaborativa para TaleSpire",
   "descriptionFilePath": "/README.md",
-  "version": "0.7.7",
+  "version": "0.7.9",
   "license": "MIT",
   "about": {
     "website": "",
@@ -35,6 +35,9 @@
       },
       "players": {
         "onCampaignPlayerEvent": "handlePlayerPermissionEvents"
+      },
+      "initiative": {
+        "onInitiativeEvent": "handleInitiativeEvents"
       },
       "chat":{
         "onChatMessage":"handleChatMessage"

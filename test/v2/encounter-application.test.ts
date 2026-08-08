@@ -80,7 +80,17 @@ describe("EncounterApplication", () => {
       updatedAt: time,
     });
     expect(conditioned.campaign.encounters[encounter.id]?.combatants[0]?.conditions[0]).toMatchObject({ key: "prone", label: "Derribado" });
-    const deleted = await encounters.deleteEncounter(encounter.id, conditioned.checksum, time);
+    const conditionedEncounter = conditioned.campaign.encounters[encounter.id]!;
+    const withoutCombatant = await encounters.apply({
+      encounterId: encounter.id,
+      expectedEncounterRevision: conditionedEncounter.revision,
+      expectedCampaignChecksum: conditioned.checksum,
+      updatedAt: time,
+      action: { kind: "remove-combatant", combatantId },
+    });
+    expect(withoutCombatant.snapshot.campaign.encounters[encounter.id]?.combatants).toEqual([]);
+    expect((await repository.load())?.campaign.encounters[encounter.id]?.combatants).toEqual([]);
+    const deleted = await encounters.deleteEncounter(encounter.id, withoutCombatant.snapshot.checksum, time);
     expect(deleted.campaign.encounters).toEqual({});
   });
 
@@ -101,6 +111,48 @@ describe("EncounterApplication", () => {
     const repeated = await application.migratePreservedLegacyEncounters(time);
     expect(repeated?.checksum).toBe(upgraded?.checksum);
     expect(Object.values(repeated!.campaign.encounters)[0]?.id).toBe(encounter.id);
+  });
+
+  it("persists the TaleSpire initiative link through the campaign repository", async () => {
+    const repository = new InMemoryCampaignRepository();
+    const campaigns = new CampaignApplication(repository);
+    const application = new EncounterApplication(repository);
+    const empty = await campaigns.createCampaign(time);
+    const created = await application.createEncounter("Cola nativa", empty.checksum, time);
+    const encounter = Object.values(created.campaign.encounters)[0]!;
+    const withGoblin = await application.addCombatant({
+      encounterId: encounter.id,
+      expectedEncounterRevision: encounter.revision,
+      expectedCampaignChecksum: created.checksum,
+      updatedAt: time,
+      combatant: {
+        kind: "custom",
+        name: "Goblin",
+        initiative: 14,
+        armorClass: 15,
+        hitPoints: { current: 7, maximum: 7, temporary: 0 },
+        conditions: [],
+        visibleToPlayers: true,
+      },
+    });
+    const current = withGoblin.campaign.encounters[encounter.id]!;
+    await application.synchronizeTaleSpireInitiative({
+      encounterId: encounter.id,
+      expectedEncounterRevision: current.revision,
+      expectedCampaignChecksum: withGoblin.checksum,
+      updatedAt: time,
+      queue: {
+        items: [{ id: "creature-goblin", name: "Goblin", kind: "creature" }],
+        activeItemIndex: 0,
+      },
+    });
+    const persisted = (await repository.load())!.campaign.encounters[encounter.id]!;
+    expect(persisted.activeCombatantId).toBe(persisted.combatants[0]?.id);
+    expect(persisted.combatants[0]).toMatchObject({
+      taleSpireCreatureId: "creature-goblin",
+      initiative: 14,
+      hitPoints: { current: 7, maximum: 7, temporary: 0 },
+    });
   });
 
   it("restores encounter and GM workspace state for GM undo/redo", async () => {

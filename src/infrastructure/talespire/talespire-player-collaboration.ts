@@ -90,6 +90,9 @@ export interface TaleSpireCollaborationApi {
     getMoreInfo(clients: unknown[]): Promise<unknown>;
     isMe?(clientId: string): Promise<boolean>;
   };
+  initiative?: {
+    getQueue(): Promise<unknown>;
+  };
 }
 
 const TRANSPORT_PROTOCOL = "talespire-5e-toolset-sync";

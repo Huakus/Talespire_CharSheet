@@ -28,3 +28,7 @@ Supabase connectivity probe while keeping the current persistence authoritative.
 
 The implemented safety contract for the next migration stage is described in
 [`docs/DUAL_PERSISTENCE.md`](docs/DUAL_PERSISTENCE.md).
+
+The campaign-scoped Supabase content catalog, provenance model and explicit
+legacy import are documented in
+[`docs/CAMPAIGN_CONTENT.md`](docs/CAMPAIGN_CONTENT.md).

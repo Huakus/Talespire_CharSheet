@@ -33,6 +33,11 @@ export interface EncounterTransferStatus {
   updatedAt: string;
 }
 
+export interface TaleSpireNativeInitiativeQueue {
+  items: { id: string; name: string; kind: string }[];
+  activeItemIndex: number;
+}
+
 interface PendingEncounterTransfer {
   clientId: string;
   encounter: Encounter;
@@ -60,6 +65,32 @@ function label(value: ClientFragment): string {
     if (typeof candidate === "string" && candidate.trim()) return candidate.trim();
   }
   return value.id;
+}
+
+function nativeInitiativeQueue(value: unknown): TaleSpireNativeInitiativeQueue | null {
+  if (value === null || typeof value !== "object") return null;
+  const rawItems = Reflect.get(value, "items");
+  const activeItemIndex = Number(Reflect.get(value, "activeItemIndex"));
+  if (!Array.isArray(rawItems) || !Number.isSafeInteger(activeItemIndex)) return null;
+  const items = rawItems.flatMap((item) => {
+    if (item === null || typeof item !== "object") return [];
+    const id = Reflect.get(item, "id");
+    const name = Reflect.get(item, "name");
+    const kind = Reflect.get(item, "kind");
+    return typeof id === "string" && id.trim() && typeof name === "string" && name.trim() && typeof kind === "string"
+      ? [{ id: id.trim(), name: name.trim(), kind }]
+      : [];
+  });
+  return { items, activeItemIndex };
+}
+
+function initiativeQueueFromEvent(event: unknown): TaleSpireNativeInitiativeQueue | null {
+  if (event === null || typeof event !== "object") return null;
+  const payload = Reflect.get(event, "payload");
+  if (payload !== null && typeof payload === "object") {
+    return nativeInitiativeQueue(Reflect.get(payload, "queue")) ?? nativeInitiativeQueue(payload);
+  }
+  return nativeInitiativeQueue(Reflect.get(event, "queue"));
 }
 
 function eventPayload(event: unknown): { from: ClientFragment; raw: string; value: Record<string, unknown> } | null {
@@ -107,6 +138,7 @@ export class TaleSpireGmCollaboration {
   private playersListener: ((players: TaleSpireGmPlayer[]) => void) | null = null;
   private summaryListener: ((summary: ReceivedCharacterSummary) => void) | null = null;
   private initiativeListener: ((clientId: string, initiative: number) => void) | null = null;
+  private nativeInitiativeListener: ((queue: TaleSpireNativeInitiativeQueue) => void) | null = null;
   private transferStatusListener: ((status: EncounterTransferStatus) => void) | null = null;
   private latestEncounter: Encounter | null = null;
   private latestCustomContent: PlayerCustomContent | null = null;
@@ -183,6 +215,21 @@ export class TaleSpireGmCollaboration {
         checksum,
       })), "board")),
     ]);
+  }
+
+  subscribeNativeInitiative(listener: (queue: TaleSpireNativeInitiativeQueue) => void): () => void {
+    this.nativeInitiativeListener = listener;
+    return () => { if (this.nativeInitiativeListener === listener) this.nativeInitiativeListener = null; };
+  }
+
+  async getNativeInitiative(): Promise<TaleSpireNativeInitiativeQueue | null> {
+    if (!this.api.initiative) return null;
+    return nativeInitiativeQueue(await this.api.initiative.getQueue());
+  }
+
+  async handleInitiativeEvent(event: unknown): Promise<void> {
+    const queue = initiativeQueueFromEvent(event) ?? await this.getNativeInitiative();
+    if (queue) this.nativeInitiativeListener?.(structuredClone(queue));
   }
 
   async publishCustomContent(content: PlayerCustomContent): Promise<void> {

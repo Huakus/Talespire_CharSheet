@@ -58,6 +58,15 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
     const { order: _order, group: _group, ...definition } = existing.data;
     return { ...definition, rarity };
   }
+  const normalizedDraft = CharacterInventoryItemDraftSchema.safeParse({
+    ...raw,
+    order: raw.order ?? 0,
+    group: raw.group ?? "backpack",
+  });
+  if (normalizedDraft.success) {
+    const { order: _order, group: _group, ...definition } = normalizedDraft.data;
+    return { ...definition, rarity };
+  }
   const data = cloneJson(input as JsonObject);
   const category = object(data.equipment_category);
   const cost = object(data.cost);

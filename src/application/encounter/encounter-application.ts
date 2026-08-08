@@ -31,6 +31,11 @@ export interface RestoreGmControlStateCommand {
   updatedAt?: string;
 }
 
+export interface TaleSpireInitiativeQueueInput {
+  items: { id: string; name: string; kind: string }[];
+  activeItemIndex: number;
+}
+
 export class EncounterApplication {
   constructor(private readonly repository: CampaignRepository) {}
 
@@ -93,7 +98,9 @@ export class EncounterApplication {
 
   async addCombatant(
     command: Omit<EncounterMutationCommand, "action"> & {
-      combatant: Omit<EncounterCombatant, "id" | "order">;
+      combatant: Omit<EncounterCombatant, "id" | "order" | "taleSpireCreatureId"> & {
+        taleSpireCreatureId?: string | null;
+      };
     },
   ): Promise<CampaignSnapshot> {
     const current = await this.requireCurrent(command.expectedCampaignChecksum);
@@ -101,6 +108,7 @@ export class EncounterApplication {
     const combatant = {
       ...command.combatant,
       id: await createRandomId("cmb"),
+      taleSpireCreatureId: command.combatant.taleSpireCreatureId ?? null,
       order: encounter.combatants.reduce((maximum, entry) => Math.max(maximum, entry.order), -1) + 1,
     } as EncounterCombatant;
     return (await this.apply({ ...command, action: { kind: "add-combatant", combatant } })).snapshot;
@@ -171,6 +179,30 @@ export class EncounterApplication {
           level: command.level ?? null,
           addedAt,
         },
+      },
+    })).snapshot;
+  }
+
+  async synchronizeTaleSpireInitiative(
+    command: Omit<EncounterMutationCommand, "action"> & { queue: TaleSpireInitiativeQueueInput },
+  ): Promise<CampaignSnapshot> {
+    const items = await Promise.all(command.queue.items
+      .filter((item) => item.kind === "creature" && item.id.trim() && item.name.trim())
+      .map(async (item) => ({
+        creatureId: item.id.trim(),
+        name: item.name.trim(),
+        combatantId: await createRandomId("cmb"),
+      })));
+    const active = command.queue.items[command.queue.activeItemIndex];
+    return (await this.apply({
+      encounterId: command.encounterId,
+      expectedEncounterRevision: command.expectedEncounterRevision,
+      expectedCampaignChecksum: command.expectedCampaignChecksum,
+      ...(command.updatedAt === undefined ? {} : { updatedAt: command.updatedAt }),
+      action: {
+        kind: "synchronize-talespire-initiative",
+        items,
+        activeCreatureId: active?.kind === "creature" ? active.id : null,
       },
     })).snapshot;
   }

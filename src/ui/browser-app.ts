@@ -73,6 +73,7 @@ import type {
   TaleSpireTransportDiagnostics,
 } from "../infrastructure/talespire/talespire-player-collaboration";
 import type { PlayerCustomContent } from "../infrastructure/talespire/custom-content-transfer";
+import { bindViewportConstrainedDetails } from "./floating-panel";
 import {
   canOpenPersistencePanel,
   openPersistencePanel,
@@ -100,6 +101,7 @@ export interface BrowserAppRuntime {
   respondToCharacterSummaryRequest?: (character: CharacterV2, request: CharacterSummaryRequest) => Promise<void>;
   subscribeEncounterSync?: (listener: (state: TaleSpireEncounterSyncState) => void) => () => void;
   loadCustomContent?: () => Promise<{ spells: SpellDefinition[]; equipment: EquipmentCatalogDraft[]; monsters: MonsterDefinition[] }>;
+  contentCatalogIsComplete?: boolean;
   subscribeCustomContent?: (listener: (content: PlayerCustomContent) => void) => () => void;
   requestCustomContent?: () => Promise<void>;
   saveCustomSpell?: (definition: SpellDefinition) => Promise<void>;
@@ -630,7 +632,8 @@ export class BrowserApp {
 
   private spellCatalog(): readonly SpellDefinition[] {
     const unique = new Map<string, SpellDefinition>();
-    for (const spell of [...this.customSpells, ...spellDefinitionsForLanguage("es")]) {
+    const bundled = this.runtime.contentCatalogIsComplete ? [] : spellDefinitionsForLanguage("es");
+    for (const spell of [...this.customSpells, ...bundled]) {
       if ((spell.year || "2014") !== "2014") continue;
       const key = normalizedSearchText(spell.name);
       if (!unique.has(key)) unique.set(key, spell);
@@ -641,17 +644,17 @@ export class BrowserApp {
   private findSpell(name: string): SpellDefinition | null {
     const normalized = name.trim().toLocaleLowerCase();
     return this.customSpells.find((spell) => spell.name.toLocaleLowerCase() === normalized) ??
-      findSpellDefinitionByName(name);
+      (this.runtime.contentCatalogIsComplete ? null : findSpellDefinitionByName(name));
   }
 
   private equipmentCatalog(): readonly EquipmentCatalogDraft[] {
-    return [...this.customEquipment, ...equipmentDefinitionsForLanguage("es")];
+    return this.runtime.contentCatalogIsComplete ? this.customEquipment : [...this.customEquipment, ...equipmentDefinitionsForLanguage("es")];
   }
 
   private findEquipment(name: string): EquipmentCatalogDraft | null {
     const normalized = name.trim().toLocaleLowerCase();
     return this.customEquipment.find((item) => item.name.toLocaleLowerCase() === normalized) ??
-      findEquipmentDefinitionByName(name);
+      (this.runtime.contentCatalogIsComplete ? null : findEquipmentDefinitionByName(name));
   }
 
   private renderStorageUsage(): string {
@@ -907,7 +910,8 @@ export class BrowserApp {
 
   private monsterCatalogNames(): readonly string[] {
     const names = new Map<string, string>();
-    for (const name of [...this.customMonsters.map((monster) => monster.name), ...allMonsterNames()]) {
+    const bundled = this.runtime.contentCatalogIsComplete ? [] : allMonsterNames();
+    for (const name of [...this.customMonsters.map((monster) => monster.name), ...bundled]) {
       const key = normalizedSearchText(name);
       if (key && !names.has(key)) names.set(key, name);
     }
@@ -917,7 +921,7 @@ export class BrowserApp {
   private findMonster(name: string) {
     const key = normalizedSearchText(name);
     const custom = this.customMonsters.find((monster) => normalizedSearchText(monster.name) === key);
-    return custom?.legacyData ?? findMonsterByName(name);
+    return custom?.legacyData ?? (this.runtime.contentCatalogIsComplete ? null : findMonsterByName(name));
   }
 
   private refreshConnectionIndicators(): void {
@@ -1957,10 +1961,11 @@ export class BrowserApp {
   private renderLevelProgress(character: CharacterV2): string {
     const progress = experienceProgress(character.identity.level, character.identity.experience);
     const current = progress.current.toLocaleString("es-AR");
-    const target = progress.next === null ? "Nivel máximo" : `${progress.next.toLocaleString("es-AR")} PX para el próximo nivel`;
+    const remaining = progress.next === null ? null : Math.max(0, progress.next - progress.current);
+    const target = remaining === null ? "nivel máximo" : `faltan ${remaining.toLocaleString("es-AR")} PX para el nivel ${progress.level + 1}`;
     const tooltip = `${current} PX actuales · ${target}`;
     return `<details class="level-progress-card">
-      <summary class="level-progress-ring has-tooltip" data-tooltip="${tooltip}" aria-label="Nivel ${progress.level}. ${tooltip}" style="--level-progress:${progress.percent * 3.6}deg"><div><small>Nivel</small><strong>${progress.level}</strong></div></summary>
+      <summary class="level-progress-ring" title="${tooltip}" aria-label="Nivel ${progress.level}. ${tooltip}" style="--level-progress:${progress.percent * 3.6}deg"><div><small>Nivel</small><strong>${progress.level}</strong></div></summary>
       <form data-gain-experience><label>Experiencia ganada<input name="amount" type="number" min="1" step="1" value="100" required></label><button type="submit">Agregar</button></form>
     </details>`;
   }
@@ -2047,6 +2052,7 @@ export class BrowserApp {
   }
 
   private bindEvents(): void {
+    bindViewportConstrainedDetails(this.root, ".level-progress-card", ":scope > form");
     this.root.querySelector<HTMLButtonElement>("[data-open-persistence]")?.addEventListener("click", openPersistencePanel);
     this.root.querySelector<HTMLFormElement>("[data-gain-experience]")?.addEventListener("submit", (event) => void this.gainExperience(event));
     this.root.querySelectorAll<HTMLDetailsElement>(".notification-center").forEach((center) => {
@@ -3861,7 +3867,7 @@ export class BrowserApp {
         expectedCampaignChecksum: this.snapshot.checksum,
         item: draft,
       }), `Guardar objeto: ${draft.name}`);
-      if (!findEquipmentDefinitionByName(draft.name) && this.runtime.saveCustomEquipment) {
+      if (!this.findEquipment(draft.name) && this.runtime.saveCustomEquipment) {
         const { order: _order, group: _group, ...definition } = draft;
         const catalogDefinition: EquipmentCatalogDraft = { ...definition, rarity: "none" };
         await this.runtime.saveCustomEquipment(catalogDefinition);

@@ -257,7 +257,7 @@ describe("player interface shell", () => {
     expect(inactive).toContain('<span>Percepción</span><strong>10</strong>');
     expect(inactive).toContain('class="level-progress-card"');
     expect(inactive).toContain('data-gain-experience');
-    expect(inactive).toContain('data-tooltip="0 PX actuales · 300 PX para el próximo nivel"');
+    expect(inactive).toContain('title="0 PX actuales · faltan 300 PX para el nivel 2"');
     expect(inactive).not.toContain('class="level-experience"');
     expect(inactive.indexOf('class="level-progress-card"')).toBeLessThan(inactive.indexOf('class="health-control"'));
     expect(inactive.indexOf('class="health-control"')).toBeLessThan(inactive.indexOf('class="death-save-control"'));

@@ -5,6 +5,8 @@ import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence
 import { GmToolsPanel } from "../../src/ui/gm-tools-panel";
 import { removeGmNoteGroup } from "../../src/domain/gm/gm-workspace";
 import { calculateFloatingPanelPosition, GmApp } from "../../src/ui/gm-app";
+import { createCharacter } from "../../src/domain/character/create-character";
+import { renderCheckboxGroup } from "../../src/ui/checkbox-group";
 
 describe("GM workspace", () => {
   it("persists notes, tables and Google Docs URL with optimistic concurrency", async () => {
@@ -83,6 +85,31 @@ describe("GM workspace", () => {
       { width: 300, height: 250 },
     );
     expect(normal).toMatchObject({ left: 100, top: 154 });
+  });
+
+  it("renders independent visual checkboxes for multiple values", () => {
+    const html = renderCheckboxGroup("Inmunidades", "immunities", ["fire", "cold"], ["cold"]);
+    expect(html).toContain('class="gm-checkbox-group"');
+    expect(html).toContain('type="checkbox" name="immunities" value="fire"');
+    expect(html).toContain('type="checkbox" name="immunities" value="cold" checked');
+    expect(html).not.toContain("<select");
+  });
+
+  it("renders linked character state without player actions or inventory", () => {
+    const character = createCharacter("chr_44444444444444444444444444444444", "Delerion", "2026-08-08T12:00:00.000Z");
+    character.combat.hitPoints = { current: 7, maximum: 12, temporary: 3 };
+    character.combat.exhaustion = 1;
+    const view = Object.create(GmApp.prototype) as unknown as { renderCharacterDetails(value: typeof character): string };
+    const html = view.renderCharacterDetails(character);
+    expect(html).toContain("gm-character-overview");
+    expect(html).toContain("gm-character-ability-strip");
+    expect(html).toContain("Percepción pasiva");
+    expect(html).toContain("Salv. muerte");
+    expect(html).toContain("Agotamiento");
+    expect(html).not.toContain("<header>");
+    expect(html).not.toContain("<h4>Acciones</h4>");
+    expect(html).not.toContain("<h4>Conjuros</h4>");
+    expect(html).not.toContain("<h4>Inventario</h4>");
   });
 
   it("renders persistent GM color controls and a scoped action log", () => {

@@ -42,6 +42,9 @@ export interface TaleSpireApiSubset {
     getMoreInfo(clients: unknown[]): Promise<unknown>;
     isMe?(clientId: string): Promise<boolean>;
   };
+  initiative?: {
+    getQueue(): Promise<unknown>;
+  };
 }
 
 export class TaleSpireCampaignBlobStore implements StringBlobStore {

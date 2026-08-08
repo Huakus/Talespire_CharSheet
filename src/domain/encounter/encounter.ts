@@ -20,6 +20,7 @@ export type EncounterCommand =
   | { kind: "set-active-combatant"; combatantId: string }
   | { kind: "set-initiative"; combatantId: string; initiative: number | null }
   | { kind: "set-visibility"; combatantId: string; visibleToPlayers: boolean }
+  | { kind: "set-talespire-creature"; combatantId: string; creatureId: string | null }
   | { kind: "add-condition"; combatantId: string; condition: EncounterCondition }
   | { kind: "remove-condition"; combatantId: string; conditionId: string }
   | {
@@ -32,7 +33,12 @@ export type EncounterCommand =
     }
   | { kind: "damage"; combatantId: string; amount: number }
   | { kind: "heal"; combatantId: string; amount: number }
-  | { kind: "grant-temporary-hit-points"; combatantId: string; amount: number };
+  | { kind: "grant-temporary-hit-points"; combatantId: string; amount: number }
+  | {
+      kind: "synchronize-talespire-initiative";
+      items: { creatureId: string; name: string; combatantId: string }[];
+      activeCreatureId: string | null;
+    };
 
 export interface EncounterCommandResult {
   encounter: Encounter;
@@ -45,6 +51,12 @@ export interface EncounterCommandResult {
 
 export function orderedCombatants(encounter: Encounter): EncounterCombatant[] {
   return [...encounter.combatants].sort((left, right) => {
+    const leftLinked = typeof left.taleSpireCreatureId === "string";
+    const rightLinked = typeof right.taleSpireCreatureId === "string";
+    if (leftLinked || rightLinked) {
+      if (leftLinked !== rightLinked) return leftLinked ? -1 : 1;
+      if (left.order !== right.order) return left.order - right.order;
+    }
     if (left.initiative === null && right.initiative !== null) return 1;
     if (left.initiative !== null && right.initiative === null) return -1;
     if (left.initiative !== right.initiative) return (right.initiative ?? 0) - (left.initiative ?? 0);
@@ -82,6 +94,8 @@ export function applyEncounterCommand(
     requireCombatant(encounter, command.combatantId);
     encounter.combatants = encounter.combatants.filter((combatant) => combatant.id !== command.combatantId);
     if (encounter.activeCombatantId === command.combatantId) encounter.activeCombatantId = null;
+  } else if (command.kind === "synchronize-talespire-initiative") {
+    synchronizeTaleSpireInitiative(encounter, command.items, command.activeCreatureId);
   } else if (command.kind === "advance-turn" || command.kind === "previous-turn") {
     moveTurn(encounter, command.kind === "advance-turn" ? 1 : -1, effects);
   } else if (command.kind === "set-active-combatant") {
@@ -96,6 +110,14 @@ export function applyEncounterCommand(
       combatant.initiative = command.initiative;
     } else if (command.kind === "set-visibility") {
       combatant.visibleToPlayers = command.visibleToPlayers;
+    } else if (command.kind === "set-talespire-creature") {
+      const creatureId = command.creatureId?.trim() || null;
+      if (creatureId !== null) {
+        encounter.combatants.forEach((candidate) => {
+          if (candidate.id !== combatant.id && candidate.taleSpireCreatureId === creatureId) candidate.taleSpireCreatureId = null;
+        });
+      }
+      combatant.taleSpireCreatureId = creatureId;
     } else if (command.kind === "add-condition") {
       if (combatant.conditions.some((condition) => condition.key === command.condition.key)) {
         throw new Error(`CONDITION_ALREADY_EXISTS:${command.condition.key}`);
@@ -119,6 +141,61 @@ export function applyEncounterCommand(
   encounter.revision += 1;
   encounter.metadata.updatedAt = options.updatedAt;
   return { encounter, effects };
+}
+
+function synchronizeTaleSpireInitiative(
+  encounter: Encounter,
+  items: { creatureId: string; name: string; combatantId: string }[],
+  activeCreatureId: string | null,
+): void {
+  const linkedByCreatureId = new Map(
+    encounter.combatants
+      .filter((combatant) => typeof combatant.taleSpireCreatureId === "string")
+      .map((combatant) => [combatant.taleSpireCreatureId!, combatant]),
+  );
+  const unclaimed = new Set(encounter.combatants);
+  const synchronized: EncounterCombatant[] = [];
+  const synchronizedIds = new Map<string, string>();
+  const normalizedName = (value: string): string => value.trim().toLocaleLowerCase();
+
+  for (const [order, item] of items.entries()) {
+    let combatant = linkedByCreatureId.get(item.creatureId);
+    if (!combatant) {
+      combatant = [...unclaimed].find((candidate) => normalizedName(candidate.name) === normalizedName(item.name));
+    }
+    if (combatant) {
+      unclaimed.delete(combatant);
+      combatant.taleSpireCreatureId = item.creatureId;
+      combatant.order = order;
+      synchronized.push(combatant);
+      synchronizedIds.set(item.creatureId, combatant.id);
+      continue;
+    }
+    const created: EncounterCombatant = {
+      kind: "custom",
+      id: item.combatantId,
+      taleSpireCreatureId: item.creatureId,
+      name: item.name,
+      initiative: null,
+      order,
+      armorClass: null,
+      hitPoints: { current: 1, maximum: 1, temporary: 0 },
+      conditions: [],
+      visibleToPlayers: true,
+    };
+    synchronized.push(created);
+    synchronizedIds.set(item.creatureId, created.id);
+  }
+
+  const retained = [...unclaimed]
+    .map((combatant, index) => ({
+      ...combatant,
+      order: synchronized.length + index,
+    }));
+  encounter.combatants = [...synchronized, ...retained];
+  encounter.activeCombatantId = activeCreatureId === null
+    ? null
+    : synchronizedIds.get(activeCreatureId) ?? null;
 }
 
 function requireCombatant(encounter: Encounter, combatantId: string): EncounterCombatant {

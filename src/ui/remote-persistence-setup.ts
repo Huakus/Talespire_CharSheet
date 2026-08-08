@@ -14,6 +14,7 @@ import {
 } from "../infrastructure/remote/supabase-campaign-document-client";
 import { SupabaseCampaignReplica } from "../infrastructure/remote/supabase-campaign-replica";
 import { SupabaseCampaignRepository } from "../infrastructure/remote/supabase-campaign-repository";
+import { SupabaseCampaignContentStore } from "../infrastructure/remote/supabase-campaign-content-store";
 import {
   createRemoteCampaignBackup,
   parseRemoteCampaignBackup,
@@ -352,6 +353,7 @@ function mountRemoteControls(
 export async function configureRemotePersistence(
   primary: CampaignRepository,
   appRoot: HTMLElement,
+  onContentStore?: (store: SupabaseCampaignContentStore) => void,
 ): Promise<CampaignRepository> {
   const persistenceMode = loadPersistenceMode();
   try {
@@ -398,6 +400,7 @@ export async function configureRemotePersistence(
     }
 
     window.localStorage.setItem(bindingKey, campaign.id);
+    onContentStore?.(new SupabaseCampaignContentStore(client, campaign.id));
     panel.remove();
     const onStatus = mountRemoteControls(appRoot, user, campaign, client, bindingKey, signOut);
     if (persistenceMode === "remote") {

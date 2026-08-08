@@ -12,6 +12,7 @@ import {
   detectTaleSpireApi,
   TaleSpireCampaignBlobStore,
 } from "../../src/infrastructure/talespire/talespire-campaign-blob-store";
+import { TaleSpireMiniatureAdapter } from "../../src/infrastructure/talespire/talespire-miniature";
 
 class MemoryBlobStore implements StringBlobStore {
   writes = 0;
@@ -145,5 +146,21 @@ describe("TaleSpireCampaignBlobStore", () => {
   it("rejects objects without the required TaleSpire calls", () => {
     expect(detectTaleSpireApi(undefined)).toBeNull();
     expect(detectTaleSpireApi({ localStorage: { campaign: {} } })).toBeNull();
+  });
+});
+
+describe("TaleSpireMiniatureAdapter", () => {
+  it("links the creature fragment returned by the current TaleSpire API", async () => {
+    const adapter = new TaleSpireMiniatureAdapter({
+      creatures: {
+        getSelectedCreatures: async () => [{ id: "creature-selected" }],
+        getMoreInfo: async () => [{ id: "creature-selected", name: "Delerion", activeMorphIndex: 0, morphs: [{ boardAssetId: "asset-hero" }] }],
+      },
+    });
+    await expect(adapter.selectFirst()).resolves.toEqual({
+      creatureId: "creature-selected",
+      displayName: "Delerion",
+      boardAssetId: "asset-hero",
+    });
   });
 });

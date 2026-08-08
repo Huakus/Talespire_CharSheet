@@ -72,10 +72,55 @@ describe("encounter domain", () => {
     expect(reversed).toMatchObject({ round: 1, activeCombatantId: goblinId });
   });
 
+  it("links the native TaleSpire queue, preserves matched stats and follows its active turn", () => {
+    const source = fixture();
+    const heroName = source.combatants[0]!.name;
+    const synchronized = applyEncounterCommand(source, {
+      kind: "synchronize-talespire-initiative",
+      items: [
+        { creatureId: "creature-goblin", name: "Goblin", combatantId: "cmb_55555555555555555555555555555555" },
+        { creatureId: "creature-hero", name: heroName, combatantId: "cmb_66666666666666666666666666666666" },
+        { creatureId: "creature-orc", name: "Orco", combatantId: "cmb_77777777777777777777777777777777" },
+      ],
+      activeCreatureId: "creature-hero",
+    }, { expectedRevision: 0, updatedAt: now }).encounter;
+
+    expect(synchronized.combatants.map((combatant) => combatant.name)).toEqual(["Goblin", heroName, "Orco"]);
+    expect(synchronized.combatants[0]).toMatchObject({
+      id: goblinId,
+      taleSpireCreatureId: "creature-goblin",
+      hitPoints: { current: 3, maximum: 7, temporary: 0 },
+    });
+    expect(synchronized.combatants[2]).toMatchObject({
+      id: "cmb_77777777777777777777777777777777",
+      kind: "custom",
+      hitPoints: { current: 1, maximum: 1, temporary: 0 },
+    });
+    expect(synchronized.activeCombatantId).toBe(heroId);
+    expect(synchronized.combatants.slice(0, 2).map((combatant) => combatant.initiative)).toEqual([12, 18]);
+    expect(orderedCombatants(synchronized).map((combatant) => combatant.name)).toEqual(["Goblin", heroName, "Orco"]);
+  });
+
   it("spends temporary hit points before current hit points", () => {
     const result = applyEncounterCommand(fixture(), { kind: "damage", combatantId: heroId, amount: 8 }, { expectedRevision: 0, updatedAt: now });
     expect(result.encounter.combatants[0]!.hitPoints).toEqual({ current: 17, maximum: 20, temporary: 0 });
     expect(result.effects).toMatchObject({ hitPointsChangedBy: -3, temporaryHitPointsChangedBy: -5 });
+  });
+
+  it("associates one selected TaleSpire miniature with exactly one combatant", () => {
+    const linkedHero = applyEncounterCommand(
+      fixture(),
+      { kind: "set-talespire-creature", combatantId: heroId, creatureId: "creature-selected" },
+      { expectedRevision: 0, updatedAt: now },
+    ).encounter;
+    expect(linkedHero.combatants[0]?.taleSpireCreatureId).toBe("creature-selected");
+    const movedToGoblin = applyEncounterCommand(
+      linkedHero,
+      { kind: "set-talespire-creature", combatantId: goblinId, creatureId: "creature-selected" },
+      { expectedRevision: 1, updatedAt: now },
+    ).encounter;
+    expect(movedToGoblin.combatants[0]?.taleSpireCreatureId).toBeNull();
+    expect(movedToGoblin.combatants[1]?.taleSpireCreatureId).toBe("creature-selected");
   });
 
   it("derives bloodied and rejects stale commands", () => {

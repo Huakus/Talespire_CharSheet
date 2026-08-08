@@ -17,6 +17,19 @@ const CampaignSummaryRowSchema = z.object({
   updated_at: z.string().min(1),
 });
 
+const CampaignContentRowSchema = z.object({
+  campaign_id: z.string().uuid(),
+  kind: z.enum(["spell", "equipment", "monster", "shop", "checklist"]),
+  content_key: z.string().min(1),
+  name: z.string().min(1),
+  origin: z.enum(["official", "gm", "imported"]),
+  tags: z.array(z.string()),
+  payload: z.record(z.string(), z.unknown()),
+  revision: z.coerce.number().int().nonnegative(),
+  updated_at: z.string().min(1),
+  deleted_at: z.string().nullable(),
+});
+
 export interface RemoteCampaignDocument {
   campaignId: string;
   revision: number;
@@ -31,6 +44,20 @@ export interface RemoteCampaignSummary {
   id: string;
   name: string;
   ownerUserId: string;
+  updatedAt: string;
+}
+
+export type CampaignContentKind = "spell" | "equipment" | "monster" | "shop" | "checklist";
+export type CampaignContentOrigin = "official" | "gm" | "imported";
+export interface RemoteCampaignContentEntry {
+  campaignId: string;
+  kind: CampaignContentKind;
+  contentKey: string;
+  name: string;
+  origin: CampaignContentOrigin;
+  tags: string[];
+  payload: Record<string, unknown>;
+  revision: number;
   updatedAt: string;
 }
 
@@ -84,6 +111,11 @@ function parseDocument(data: unknown): RemoteCampaignDocument {
     updatedBy: row.updated_by,
     updatedAt: row.updated_at,
   };
+}
+
+function parseContentEntry(value: unknown): RemoteCampaignContentEntry {
+  const row = CampaignContentRowSchema.parse(Array.isArray(value) ? value[0] : value);
+  return { campaignId: row.campaign_id, kind: row.kind, contentKey: row.content_key, name: row.name, origin: row.origin, tags: row.tags, payload: row.payload, revision: row.revision, updatedAt: row.updated_at };
 }
 
 export function createRemoteSupabaseClient(
@@ -188,6 +220,37 @@ export class SupabaseCampaignDocumentClient {
       p_campaign_id: campaignId,
     });
     if (result.error) throwRpcError(result.error);
+  }
+
+  async listCampaignContent(campaignId: string): Promise<RemoteCampaignContentEntry[]> {
+    const result = await this.client.from("campaign_content_entries")
+      .select("campaign_id,kind,content_key,name,origin,tags,payload,revision,updated_at,deleted_at")
+      .eq("campaign_id", campaignId).is("deleted_at", null).order("kind").order("name");
+    if (result.error) throwRpcError(result.error);
+    return z.array(CampaignContentRowSchema).parse(result.data).map(parseContentEntry);
+  }
+
+  async seedCampaignContent(campaignId: string): Promise<number> {
+    const result = await this.client.rpc("seed_campaign_content", { p_campaign_id: campaignId });
+    if (result.error) throwRpcError(result.error);
+    return z.coerce.number().int().nonnegative().parse(result.data);
+  }
+
+  async saveCampaignContentEntry(input: Omit<RemoteCampaignContentEntry, "campaignId" | "revision" | "updatedAt"> & { campaignId: string; expectedRevision: number | null }): Promise<RemoteCampaignContentEntry> {
+    const result = await this.client.rpc("save_campaign_content_entry", {
+      p_campaign_id: input.campaignId, p_kind: input.kind, p_content_key: input.contentKey,
+      p_name: input.name, p_origin: input.origin, p_tags: input.tags, p_payload: input.payload,
+      p_expected_revision: input.expectedRevision,
+    });
+    if (result.error) throwRpcError(result.error, input.expectedRevision ?? undefined);
+    return parseContentEntry(result.data);
+  }
+
+  async deleteCampaignContentEntry(campaignId: string, kind: CampaignContentKind, contentKey: string, expectedRevision: number): Promise<void> {
+    const result = await this.client.rpc("delete_campaign_content_entry", {
+      p_campaign_id: campaignId, p_kind: kind, p_content_key: contentKey, p_expected_revision: expectedRevision,
+    });
+    if (result.error) throwRpcError(result.error, expectedRevision);
   }
 
   subscribeCampaign(
