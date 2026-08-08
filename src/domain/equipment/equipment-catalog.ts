@@ -6,7 +6,28 @@ import {
 } from "../character/character-inventory-model";
 import { cloneJson, type JsonObject, type JsonValue } from "../../shared/json";
 
-export type EquipmentCatalogDraft = Omit<CharacterInventoryItemDraft, "order" | "group">;
+export const EQUIPMENT_RARITIES = [
+  "none", "common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies",
+] as const;
+
+export const EQUIPMENT_CATEGORIES = [
+  "adventuring-gear", "weapon", "armor", "shield", "tool", "ammunition",
+  "potion", "scroll", "wand", "staff", "rod", "ring", "wondrous-item",
+] as const;
+
+export const EQUIPMENT_PROPERTIES = [
+  "ammunition", "finesse", "heavy", "light", "loading", "reach", "special",
+  "thrown", "two-handed", "versatile", "silvered", "magic", "cursed",
+] as const;
+
+export const DAMAGE_TYPES = [
+  "acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic",
+  "piercing", "poison", "psychic", "radiant", "slashing", "thunder",
+] as const;
+
+export type EquipmentCatalogDraft = Omit<CharacterInventoryItemDraft, "order" | "group"> & {
+  rarity: string;
+};
 
 function object(value: JsonValue | undefined): JsonObject {
   return value !== null && value !== undefined && !Array.isArray(value) && typeof value === "object"
@@ -24,10 +45,18 @@ function number(value: JsonValue | undefined): number {
 }
 
 export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDraft {
+  const raw = input !== null && typeof input === "object" && !Array.isArray(input)
+    ? input as Record<string, unknown>
+    : {};
+  const rawRarity = raw.rarity !== null && typeof raw.rarity === "object" && !Array.isArray(raw.rarity)
+    ? raw.rarity as Record<string, unknown>
+    : {};
+  const rarity = String(rawRarity.index ?? rawRarity.name ?? raw.rarity ?? raw.Rarity ?? "none")
+    .trim().toLocaleLowerCase().replaceAll(" ", "-") || "none";
   const existing = CharacterInventoryItemDraftSchema.safeParse(input);
   if (existing.success) {
     const { order: _order, group: _group, ...definition } = existing.data;
-    return definition;
+    return { ...definition, rarity };
   }
   const data = cloneJson(input as JsonObject);
   const category = object(data.equipment_category);
@@ -60,6 +89,7 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
     unitWeight: number(data.weight),
     cost: { quantity: number(cost.quantity), unit: text(cost.unit) },
     category: categoryKey || "adventuring-gear",
+    rarity,
     description: text(data.description ?? data.desc),
     properties,
     equipped: false,

@@ -69,12 +69,13 @@ describe("TaleSpire global custom content", () => {
       saves: [], skills: ["Sigilo +5"], senses: ["visión en la oscuridad 60 pies"], languages: [],
       damageVulnerabilities: [], damageResistances: ["ácido"], damageImmunities: [], conditionImmunities: [],
       traits: [{ name: "Forma falsa", content: "Parece un objeto.", usage: "" }],
-      actions: [{ name: "Mordisco", content: "Impacto: 1d8+3.", usage: "" }], reactions: [], legendaryActions: [], legacyData: {},
+      actions: [{ name: "Mordisco", content: "Impacto: 1d8+3.", usage: "" }], reactions: [], legendaryActions: [],
+      spells: ["Burla cruel"], inventory: ["Poción de curación"], legacyData: {},
     };
     await store.saveMonster(monster);
     expect(JSON.parse(blob)).toMatchObject({
       language: { "Preferred Language": "es" },
-      "Custom Monsters": { "Mímico menor": { Name: "Mímico menor", CR: "2", HP: { Value: 30 }, Actions: [{ Name: "Mordisco" }] } },
+      "Custom Monsters": { "Mímico menor": { Name: "Mímico menor", CR: "2", HP: { Value: 30 }, Actions: [{ Name: "Mordisco" }], Spells: ["Burla cruel"], Inventory: ["Poción de curación"] } },
     });
     await store.saveMonster({ ...monster, id: "Mímico", name: "Mímico" }, "Mímico menor");
     expect(JSON.parse(blob)["Custom Monsters"]["Mímico menor"]).toBeUndefined();

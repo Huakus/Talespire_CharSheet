@@ -18,6 +18,8 @@ export interface MonsterDefinition {
   id: string;
   name: string;
   type: string;
+  size?: string;
+  alignment?: string;
   challenge: string;
   armorClass: number;
   hitPoints: number;
@@ -38,8 +40,22 @@ export interface MonsterDefinition {
   actions: MonsterFeature[];
   reactions: MonsterFeature[];
   legendaryActions: MonsterFeature[];
+  spells: string[];
+  inventory: string[];
   legacyData: JsonObject;
 }
+
+export const MONSTER_TYPES = [
+  "Aberración", "Bestia", "Celestial", "Constructo", "Dragón", "Elemental",
+  "Feérico", "Gigante", "Humanoide", "Limo", "Monstruosidad", "No muerto",
+  "Planta", "Infernal",
+] as const;
+export const MONSTER_SIZES = ["Diminuto", "Pequeño", "Mediano", "Grande", "Enorme", "Gargantuesco"] as const;
+export const CHALLENGE_RATINGS = [
+  "0", "1/8", "1/4", "1/2", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+  "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+  "22", "23", "24", "25", "26", "27", "28", "29", "30",
+] as const;
 
 function object(value: unknown): JsonObject {
   return value !== null && typeof value === "object" && !Array.isArray(value) ? value as JsonObject : {};
@@ -96,6 +112,8 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     id: String(source.Id ?? source.id ?? source.Name ?? source.name ?? "").trim(),
     name: String(source.Name ?? source.name ?? "").trim(),
     type: String(source.Type ?? source.type ?? "").trim(),
+    size: String(source.Size ?? source.size ?? "").trim(),
+    alignment: String(source.Alignment ?? source.alignment ?? "").trim(),
     challenge: String(source.Challenge ?? source.challenge ?? source.CR ?? source.cr ?? "").trim(),
     armorClass: integer(ac.Value ?? ac.value ?? source.AC ?? source.ac),
     hitPoints: Math.max(0, integer(hp.Value ?? hp.value ?? source.HP ?? source.hp)),
@@ -116,6 +134,8 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     actions: [...quickActions(source.QuickAction ?? source.quickAction), ...features(source.Actions ?? source.actions)],
     reactions: features(source.Reactions ?? source.reactions),
     legendaryActions: features(source.LegendaryActions ?? source.legendaryActions),
+    spells: strings(source.Spells ?? source.spells),
+    inventory: strings(source.Inventory ?? source.inventory),
     legacyData: cloneJson(source),
   };
 }

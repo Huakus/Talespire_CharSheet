@@ -55,7 +55,7 @@ import {
   normalizeSpellDefinition,
   spellDefinitionsForLanguage,
 } from "../domain/spells/spell-catalog";
-import { allMonsterNames, findMonsterByName } from "../domain/monsters/monster-catalog";
+import { allMonsterNames, findMonsterByName, type MonsterDefinition } from "../domain/monsters/monster-catalog";
 import {
   equipmentDefinitionsForLanguage,
   findEquipmentDefinitionByName,
@@ -72,6 +72,7 @@ import type {
   TaleSpireInitiativeState,
   TaleSpireTransportDiagnostics,
 } from "../infrastructure/talespire/talespire-player-collaboration";
+import type { PlayerCustomContent } from "../infrastructure/talespire/custom-content-transfer";
 import {
   canOpenPersistencePanel,
   openPersistencePanel,
@@ -98,7 +99,9 @@ export interface BrowserAppRuntime {
   subscribeCharacterSummaryRequests?: (listener: (request: CharacterSummaryRequest) => void) => () => void;
   respondToCharacterSummaryRequest?: (character: CharacterV2, request: CharacterSummaryRequest) => Promise<void>;
   subscribeEncounterSync?: (listener: (state: TaleSpireEncounterSyncState) => void) => () => void;
-  loadCustomContent?: () => Promise<{ spells: SpellDefinition[]; equipment: EquipmentCatalogDraft[] }>;
+  loadCustomContent?: () => Promise<{ spells: SpellDefinition[]; equipment: EquipmentCatalogDraft[]; monsters: MonsterDefinition[] }>;
+  subscribeCustomContent?: (listener: (content: PlayerCustomContent) => void) => () => void;
+  requestCustomContent?: () => Promise<void>;
   saveCustomSpell?: (definition: SpellDefinition) => Promise<void>;
   saveCustomEquipment?: (definition: EquipmentCatalogDraft) => Promise<void>;
 }
@@ -495,6 +498,7 @@ export class BrowserApp {
   private encounterSyncState: TaleSpireEncounterSyncState | null = null;
   private customSpells: SpellDefinition[] = [];
   private customEquipment: EquipmentCatalogDraft[] = [];
+  private customMonsters: MonsterDefinition[] = [];
   private theme: "dark" | "light" = preference("theme", "dark") as "dark" | "light";
   private sheetMode: CharacterSheetMode = sheetModePreference();
   private activeSheetTab: CharacterSheetTab = sheetTabPreference();
@@ -550,11 +554,19 @@ export class BrowserApp {
         const content = await this.runtime.loadCustomContent();
         this.customSpells = content.spells;
         this.customEquipment = content.equipment;
+        this.customMonsters = content.monsters;
       } catch (error) {
         this.message = { kind: "error", text: `No se pudo cargar el contenido global: ${formatError(error)}` };
       }
     }
+    this.runtime.subscribeCustomContent?.((content) => {
+      this.customSpells = content.spells;
+      this.customEquipment = content.equipment;
+      this.customMonsters = content.monsters;
+      this.render();
+    });
     await this.reload();
+    void this.runtime.requestCustomContent?.().catch(() => undefined);
     if (this.runtime.storageEventKey !== undefined) {
       window.addEventListener("storage", (event) => {
         if (event.key === this.runtime.storageEventKey) void this.handleExternalChange();
@@ -893,6 +905,21 @@ export class BrowserApp {
     return `<div class="action-history-controls" aria-label="Historial de acciones del personaje"><button type="button" data-history-action="undo" title="Deshacer última acción de este personaje" aria-label="Deshacer última acción de este personaje" ${undoStack.length ? "" : "disabled"}>↶</button><button type="button" data-history-action="redo" title="Rehacer última acción de este personaje" aria-label="Rehacer última acción de este personaje" ${redoStack.length ? "" : "disabled"}>↷</button><details class="action-log"><summary title="Abrir historial de este personaje"><span>${latest ? escapeHtml(latest.label) : "Sin actividad en esta sesión"}</span></summary><div>${entries.length ? `<ol>${entries.map((entry) => `<li data-log-kind="${entry.kind}"><time>${entry.occurredAt.slice(11, 19)}</time><span>${escapeHtml(entry.label)}</span></li>`).join("")}</ol>` : '<p>Sin acciones registradas para este personaje.</p>'}</div></details></div>`;
   }
 
+  private monsterCatalogNames(): readonly string[] {
+    const names = new Map<string, string>();
+    for (const name of [...this.customMonsters.map((monster) => monster.name), ...allMonsterNames()]) {
+      const key = normalizedSearchText(name);
+      if (key && !names.has(key)) names.set(key, name);
+    }
+    return [...names.values()];
+  }
+
+  private findMonster(name: string) {
+    const key = normalizedSearchText(name);
+    const custom = this.customMonsters.find((monster) => normalizedSearchText(monster.name) === key);
+    return custom?.legacyData ?? findMonsterByName(name);
+  }
+
   private refreshConnectionIndicators(): void {
     const current = this.root.querySelector<HTMLElement>(".connection-indicators");
     if (current) current.outerHTML = renderAppConnectionIndicators();
@@ -1125,8 +1152,9 @@ export class BrowserApp {
 
   private visibleSpellEntries(character: CharacterV2): SpellViewEntry[] {
     const knownNames = new Set(character.spellcasting.spells.map((spell) => normalizedSearchText(spell.name)));
-    const unknownSpells: CharacterSpellV2[] = this.includeUnknownSpells
-      ? this.spellCatalog()
+    const customNames = new Set(this.customSpells.map((spell) => normalizedSearchText(spell.name)));
+    const availableCatalog = this.includeUnknownSpells ? this.spellCatalog() : this.customSpells;
+    const unknownSpells: CharacterSpellV2[] = availableCatalog
         .filter((definition) => !knownNames.has(normalizedSearchText(definition.name)))
         .map((definition, index) => ({
           id: `catalog_${String(index).padStart(24, "0")}`,
@@ -1134,11 +1162,10 @@ export class BrowserApp {
           name: definition.name,
           level: definition.level,
           prepared: false,
-          source: "bundled" as const,
+          source: customNames.has(normalizedSearchText(definition.name)) ? "custom" as const : "bundled" as const,
           definition,
           effect: { description: "", active: false },
-        }))
-      : [];
+        }));
     const query = normalizedSearchText(this.spellSearch);
     return [...character.spellcasting.spells.map((spell) => ({ spell, known: true })), ...unknownSpells.map((spell) => ({ spell, known: false }))]
       .filter(({ spell }) => this.spellFilter === "all" || spell.level === Number(this.spellFilter))
@@ -1210,10 +1237,10 @@ export class BrowserApp {
   }
 
   private inventoryCatalogEntries(character: CharacterV2): EquipmentCatalogDraft[] {
-    if (!this.includeUnownedInventory) return [];
+    const availableCatalog = this.includeUnownedInventory ? this.equipmentCatalog() : this.customEquipment;
     const owned = new Set(character.inventory.map((item) => normalizedSearchText(item.name)));
     const unique = new Map<string, EquipmentCatalogDraft>();
-    for (const definition of this.equipmentCatalog()) {
+    for (const definition of availableCatalog) {
       const key = normalizedSearchText(definition.name);
       if (!owned.has(key) && !unique.has(key) && this.inventoryIsVisible(definition)) unique.set(key, definition);
     }
@@ -1755,7 +1782,7 @@ export class BrowserApp {
 
   private renderExtras(character: CharacterV2): string {
     return `<fieldset aria-label="Extras, mascotas y formas">
-      <datalist id="monster-catalog-names">${allMonsterNames().map((name) => `<option value="${escapeHtml(name)}"></option>`).join("")}</datalist>
+      <datalist id="monster-catalog-names">${this.monsterCatalogNames().map((name) => `<option value="${escapeHtml(name)}"></option>`).join("")}</datalist>
       <div class="extra-cards">
       ${character.extras.map((extra) => this.renderExtraCard(extra)).join("")}
       ${this.renderExtraCard(null)}
@@ -3617,7 +3644,7 @@ export class BrowserApp {
       const card = button.closest<HTMLElement>("[data-extra-card]");
       if (!card) return;
       const input = (name: string) => this.contentField<HTMLInputElement>(card, `[data-extra-field="${name}"]`);
-      const monster = findMonsterByName(input("name").value);
+      const monster = this.findMonster(input("name").value);
       if (!monster) throw new Error(`No se encontró “${input("name").value}” en el bestiario.`);
       const hp = monster.HP;
       const hpObject = hp !== null && !Array.isArray(hp) && typeof hp === "object" ? hp : {};
@@ -3836,10 +3863,11 @@ export class BrowserApp {
       }), `Guardar objeto: ${draft.name}`);
       if (!findEquipmentDefinitionByName(draft.name) && this.runtime.saveCustomEquipment) {
         const { order: _order, group: _group, ...definition } = draft;
-        await this.runtime.saveCustomEquipment(definition);
+        const catalogDefinition: EquipmentCatalogDraft = { ...definition, rarity: "none" };
+        await this.runtime.saveCustomEquipment(catalogDefinition);
         this.customEquipment = [
           ...this.customEquipment.filter((item) => item.name.toLocaleLowerCase() !== draft.name.toLocaleLowerCase()),
-          definition,
+          catalogDefinition,
         ];
       }
       await this.refreshStorageUsage();

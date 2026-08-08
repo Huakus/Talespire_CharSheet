@@ -138,6 +138,8 @@ export class TaleSpireGlobalContentStore {
       Name: definition.name,
       Source: "Homebrew",
       Type: definition.type,
+      Size: definition.size ?? "",
+      Alignment: definition.alignment ?? "",
       Challenge: definition.challenge,
       CR: definition.challenge,
       HP: { Value: definition.hitPoints, Notes: definition.hitPointFormula ? `(${definition.hitPointFormula})` : "" },
@@ -158,6 +160,8 @@ export class TaleSpireGlobalContentStore {
       Actions: definition.actions.map((entry) => ({ Name: entry.name, Content: entry.content, Usage: entry.usage })),
       Reactions: definition.reactions.map((entry) => ({ Name: entry.name, Content: entry.content, Usage: entry.usage })),
       LegendaryActions: definition.legendaryActions.map((entry) => ({ Name: entry.name, Content: entry.content, Usage: entry.usage })),
+      Spells: definition.spells,
+      Inventory: definition.inventory,
     };
   }
 

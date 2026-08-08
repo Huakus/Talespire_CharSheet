@@ -6,7 +6,7 @@ import { checksumJson } from "../../shared/hash";
 export const ENCOUNTER_TRANSFER_PROTOCOL = "t5e-encounter-xfer";
 export const ENCOUNTER_TRANSFER_VERSION = 1;
 export const TALESPIRE_MESSAGE_CHARACTER_LIMIT = 500;
-const CHUNK_DATA_CHARACTERS = 320;
+export const CHUNK_DATA_CHARACTERS = 320;
 
 const base = {
   p: z.literal(ENCOUNTER_TRANSFER_PROTOCOL),
@@ -89,7 +89,7 @@ export type EncounterTransferAssemblyResult =
   | { kind: "complete"; transferId: string; encounter: PublicEncounterSnapshot; checksum: string }
   | { kind: "rejected"; transferId: string; reason: string };
 
-function randomTransferId(): string {
+export function randomTransferId(): string {
   const bytes = new Uint8Array(8);
   globalThis.crypto.getRandomValues(bytes);
   return `x_${[...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
@@ -112,7 +112,7 @@ function arrayBuffer(bytes: Uint8Array): ArrayBuffer {
   return buffer;
 }
 
-async function encodePayload(value: string): Promise<{ encoding: "gzip" | "raw"; data: string }> {
+export async function encodeTransferPayload(value: string): Promise<{ encoding: "gzip" | "raw"; data: string }> {
   const input = new TextEncoder().encode(value);
   if (typeof CompressionStream !== "undefined") {
     try {
@@ -123,7 +123,7 @@ async function encodePayload(value: string): Promise<{ encoding: "gzip" | "raw";
   return { encoding: "raw", data: bytesToBase64(input) };
 }
 
-async function decodePayload(value: string, encoding: "gzip" | "raw"): Promise<string> {
+export async function decodeTransferPayload(value: string, encoding: "gzip" | "raw"): Promise<string> {
   const input = base64ToBytes(value);
   if (encoding === "gzip") {
     if (typeof DecompressionStream === "undefined") throw new Error("GZIP_NOT_SUPPORTED");
@@ -161,7 +161,7 @@ export async function buildEncounterTransfer(encounter: Encounter): Promise<Buil
   const normalized = EncounterSchema.parse(encounter);
   const snapshot = projectPublicEncounter(normalized);
   const checksum = await checksumJson(JSON.parse(JSON.stringify(snapshot)));
-  const encoded = await encodePayload(JSON.stringify(snapshot));
+  const encoded = await encodeTransferPayload(JSON.stringify(snapshot));
   const transferId = randomTransferId();
   const chunks = Array.from(
     { length: Math.max(1, Math.ceil(encoded.data.length / CHUNK_DATA_CHARACTERS)) },
@@ -232,7 +232,7 @@ export class EncounterTransferAssembler {
     }
     try {
       const encoded = Array.from({ length: assembly.start.n }, (_, index) => assembly.chunks.get(index) ?? "").join("");
-      const raw = await decodePayload(encoded, assembly.start.z);
+      const raw = await decodeTransferPayload(encoded, assembly.start.z);
       const encounter = PublicEncounterSnapshotSchema.parse(JSON.parse(raw));
       const checksum = await checksumJson(JSON.parse(JSON.stringify(encounter)));
       if (encounter.id !== assembly.start.e || encounter.revision !== assembly.start.r || checksum !== assembly.start.c) {

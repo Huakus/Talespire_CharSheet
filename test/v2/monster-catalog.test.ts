@@ -7,6 +7,8 @@ describe("monster catalog", () => {
       Id: "Lobo",
       Name: "Lobo",
       Type: "Bestia",
+      Size: "Mediano",
+      Alignment: "Sin alineamiento",
       Challenge: "1/4",
       HP: { Value: 11, Notes: "(2d8+2)" },
       AC: { Value: 13, Notes: "" },
@@ -21,6 +23,8 @@ describe("monster catalog", () => {
       hitPoints: 11,
       hitPointFormula: "2d8+2",
       armorClass: 13,
+      size: "Mediano",
+      alignment: "Sin alineamiento",
       initiativeModifier: 2,
       actions: [{ name: "Mordisco", content: expect.stringContaining("2d4+2") }],
     });

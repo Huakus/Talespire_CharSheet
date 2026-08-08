@@ -10,6 +10,7 @@ import {
   ENCOUNTER_TRANSFER_VERSION,
   type PublicEncounterSnapshot,
 } from "./encounter-transfer";
+import { CustomContentTransferAssembler, customContentTransferRequest, parseCustomContentTransferMessage, type PlayerCustomContent } from "./custom-content-transfer";
 
 export interface TaleSpireInitiativeEntry {
   name: string;
@@ -167,6 +168,8 @@ export class TaleSpirePlayerCollaboration {
   private readonly encounterAssembler = new EncounterTransferAssembler();
   private remoteEncounter: PublicEncounterSnapshot | null = null;
   private encounterSyncListener: ((state: TaleSpireEncounterSyncState) => void) | null = null;
+  private customContentListener: ((content: PlayerCustomContent) => void) | null = null;
+  private readonly customContentAssembler = new CustomContentTransferAssembler();
   private encounterSyncState: TaleSpireEncounterSyncState = {
     encounterId: null, revision: null, checksum: null, status: "idle", error: null, updatedAt: null,
   };
@@ -195,6 +198,9 @@ export class TaleSpirePlayerCollaboration {
     listener(structuredClone(this.encounterSyncState));
     return () => { if (this.encounterSyncListener === listener) this.encounterSyncListener = null; };
   }
+
+  subscribeCustomContent(listener: (content: PlayerCustomContent) => void): () => void { this.customContentListener = listener; return () => { if (this.customContentListener === listener) this.customContentListener = null; }; }
+  async requestCustomContent(): Promise<void> { if (!this.gm) await this.refreshClients(); if (!this.gm) throw new Error("No se encontró un cliente GM en este tablero."); await this.api.sync.send(customContentTransferRequest(), this.gm.id); }
 
   async initialize(): Promise<void> {
     this.me = clientFragment(await this.api.clients.whoAmI());
@@ -284,6 +290,13 @@ export class TaleSpirePlayerCollaboration {
     }
     if (type === "toolset-sync-probe-ack") {
       this.handleTransportProbeAck(incoming, data);
+      return;
+    }
+    const contentTransfer = parseCustomContentTransferMessage(incoming.raw);
+    if (contentTransfer) {
+      if (!incoming.fromClient || incoming.fromClient.id !== this.gm?.id || contentTransfer.t === "req") return;
+      const content = await this.customContentAssembler.accept(contentTransfer);
+      if (content) this.customContentListener?.(structuredClone(content));
       return;
     }
     const transfer = parseEncounterTransferMessage(incoming.raw);

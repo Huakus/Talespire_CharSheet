@@ -91,6 +91,8 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
       : null;
     activeGmCollaboration = collaboration;
     if (collaboration) await collaboration.initialize();
+    const publishPlayerContent = async (): Promise<void> => { if (collaboration && globalContent) await collaboration.publishCustomContent(await globalContent.load()); };
+    if (collaboration && globalContent) void publishPlayerContent();
     const gmWorkspace = new GmWorkspaceApplication(repository);
     void new GmApp(appRoot, new EncounterApplication(repository), {
       diceRoller,
@@ -99,12 +101,12 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
       ...(globalContent ? {
         loadGmContent: () => globalContent.load(),
         loadCustomMonsters: async () => (await globalContent.load()).monsters,
-        saveCustomMonster: (definition, previousKey) => globalContent.saveMonster(definition, previousKey),
-        deleteCustomMonster: (key) => globalContent.deleteMonster(key),
-        saveCustomSpell: (definition, previousKey) => globalContent.saveSpell(definition, previousKey),
-        deleteCustomSpell: (key) => globalContent.deleteSpell(key),
-        saveCustomEquipment: (definition, previousKey) => globalContent.saveEquipment(definition, previousKey),
-        deleteCustomEquipment: (key) => globalContent.deleteEquipment(key),
+        saveCustomMonster: async (definition, previousKey) => { await globalContent.saveMonster(definition, previousKey); await publishPlayerContent(); },
+        deleteCustomMonster: async (key) => { await globalContent.deleteMonster(key); await publishPlayerContent(); },
+        saveCustomSpell: async (definition, previousKey) => { await globalContent.saveSpell(definition, previousKey); await publishPlayerContent(); },
+        deleteCustomSpell: async (key) => { await globalContent.deleteSpell(key); await publishPlayerContent(); },
+        saveCustomEquipment: async (definition, previousKey) => { await globalContent.saveEquipment(definition, previousKey); await publishPlayerContent(); },
+        deleteCustomEquipment: async (key) => { await globalContent.deleteEquipment(key); await publishPlayerContent(); },
         saveShop: (shop, previousKey) => globalContent.saveShop(shop, previousKey),
         deleteShop: (key) => globalContent.deleteShop(key),
         saveChecklistItem: (item) => globalContent.saveChecklistItem(item),
@@ -152,6 +154,8 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
           subscribeCharacterSummaryRequests: (listener: Parameters<typeof collaboration.subscribeCharacterSummaryRequests>[0]) => collaboration.subscribeCharacterSummaryRequests(listener),
           respondToCharacterSummaryRequest: (character: Parameters<typeof collaboration.respondToCharacterSummaryRequest>[0], request: Parameters<typeof collaboration.respondToCharacterSummaryRequest>[1]) => collaboration.respondToCharacterSummaryRequest(character, request),
           subscribeEncounterSync: (listener: Parameters<typeof collaboration.subscribeEncounterSync>[0]) => collaboration.subscribeEncounterSync(listener),
+          subscribeCustomContent: (listener: Parameters<typeof collaboration.subscribeCustomContent>[0]) => collaboration.subscribeCustomContent(listener),
+          requestCustomContent: () => collaboration.requestCustomContent(),
         }
       : {}),
     ...(globalContent

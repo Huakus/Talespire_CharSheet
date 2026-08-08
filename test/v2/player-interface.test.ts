@@ -718,7 +718,7 @@ describe("player interface shell", () => {
     expect(searched).toContain("Limpiar filtros");
   });
 
-  it("includes unknown catalog spells on demand and preserves their favorite state", () => {
+  it("always includes GM-created spells and preserves their favorite state", () => {
     const view = harness();
     const character = createCharacter(
       "chr_55555555555555555555555555555555",
@@ -731,7 +731,7 @@ describe("player interface shell", () => {
     view.customSpells = [catalogSpell];
 
     const normallyHidden = view.renderCharacterForm(character);
-    expect(normallyHidden).not.toContain("Secreto del catálogo");
+    expect(normallyHidden).toContain("Secreto del catálogo");
     expect(normallyHidden).toContain('data-include-unknown-spells aria-pressed="false"');
 
     view.includeUnknownSpells = true;

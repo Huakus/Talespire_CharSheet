@@ -5,9 +5,12 @@ import {
   projectCharacterStatistics,
   projectInventory,
 } from "../../src/domain/character/character-projection";
-import { findEquipmentDefinitionByName } from "../../src/domain/equipment/equipment-catalog";
+import { findEquipmentDefinitionByName, normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 
 describe("equipment catalog and bonuses", () => {
+  it("normalizes rarity into a selectable catalog value", () => {
+    expect(normalizeEquipmentDefinition({ name: "Reliquia", rarity: { index: "very-rare" } }).rarity).toBe("very-rare");
+  });
   it("normalizes bundled magic equipment and applies active bonuses", () => {
     const cloak = findEquipmentDefinitionByName("Cloak of Protection");
     expect(cloak).not.toBeNull();

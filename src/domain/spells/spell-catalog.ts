@@ -6,6 +6,17 @@ import {
 } from "../character/character-spell-model";
 import { cloneJson, type JsonObject, type JsonValue } from "../../shared/json";
 
+export const SPELL_SCHOOLS = [
+  "Abjuración", "Adivinación", "Conjuración", "Encantamiento",
+  "Evocación", "Ilusión", "Nigromancia", "Transmutación",
+] as const;
+export const SPELL_COMPONENTS = ["V", "S", "M"] as const;
+export const SPELL_CLASSES = [
+  "Artífice", "Bardo", "Brujo", "Clérigo", "Druida", "Explorador",
+  "Hechicero", "Mago", "Paladín",
+] as const;
+export const SPELL_SAVE_ABILITIES = ["", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"] as const;
+
 function object(value: unknown): JsonObject {
   return value !== null && !Array.isArray(value) && typeof value === "object"
     ? cloneJson(value as JsonObject)

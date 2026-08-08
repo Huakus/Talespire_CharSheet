@@ -3,9 +3,14 @@ import type { CampaignSnapshot } from "../application/ports/campaign-repository"
 import { isBloodied, orderedCombatants } from "../domain/encounter/encounter";
 import type { Encounter, EncounterCombatant } from "../domain/encounter/encounter-model";
 import type { DiceRoller } from "../application/ports/dice-roller";
-import { normalizeMonsterDefinition, type MonsterDefinition } from "../domain/monsters/monster-catalog";
+import { CHALLENGE_RATINGS, MONSTER_SIZES, MONSTER_TYPES, normalizeMonsterDefinition, type MonsterDefinition } from "../domain/monsters/monster-catalog";
 import type { EncounterTransferStatus, ReceivedCharacterSummary, TaleSpireGmPlayer } from "../infrastructure/talespire/talespire-gm-collaboration";
-import { projectCharacterStatistics } from "../domain/character/character-projection";
+import { projectActionAttackModifier, projectActionDamageBonus, projectCharacterStatistics, projectInventory, projectSpellDamageExpression, projectSpellcasting } from "../domain/character/character-projection";
+import type { CharacterV2 } from "../domain/character/character-v2";
+import { DAMAGE_TYPES } from "../domain/equipment/equipment-catalog";
+import { equipmentDefinitionsForLanguage, type EquipmentCatalogDraft } from "../domain/equipment/equipment-catalog";
+import { spellDefinitionsForLanguage } from "../domain/spells/spell-catalog";
+import type { SpellDefinition } from "../domain/character/character-spell-model";
 import { GmToolsPanel, type GmContentSection, type GmSection, type GmToolsRuntime } from "./gm-tools-panel";
 import type { GmWorkspace } from "../domain/gm/gm-workspace";
 import {
@@ -69,6 +74,21 @@ interface GmLogEntry {
   kind: "action" | "roll" | "undo" | "redo" | "system";
 }
 
+function normalizedSearch(value: string): string {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
+}
+
+function fixedOptions(values: readonly string[], selected: string, emptyLabel = "—"): string {
+  const all = [...new Set(["", ...values, ...(selected && !values.includes(selected) ? [selected] : [])])];
+  return all.map((value) => `<option value="${escapeHtml(value)}" ${value === selected ? "selected" : ""}>${escapeHtml(value || emptyLabel)}</option>`).join("");
+}
+
+function fixedMultiOptions(values: readonly string[], selected: readonly string[]): string {
+  const selectedKeys = new Set(selected.map(normalizedSearch));
+  const all = [...new Set([...values, ...selected.filter((value) => !values.includes(value))])];
+  return all.map((value) => `<option value="${escapeHtml(value)}" ${selectedKeys.has(normalizedSearch(value)) ? "selected" : ""}>${escapeHtml(value)}</option>`).join("");
+}
+
 interface GmNotification {
   id: number;
   kind: "success" | "error";
@@ -123,6 +143,9 @@ export class GmApp {
   private playerSummaries = new Map<string, ReceivedCharacterSummary["summary"]>();
   private transferStatuses = new Map<string, EncounterTransferStatus>();
   private customMonsters: MonsterDefinition[] = [];
+  private customSpells: SpellDefinition[] = [];
+  private customEquipment: EquipmentCatalogDraft[] = [];
+  private monsterTemplate: MonsterDefinition | null = null;
   private selectedCustomMonsterKey: string | null = null;
   private editingCustomMonsterKey: string | null = null;
   private activeSection: GmSection = "encounter";
@@ -188,6 +211,10 @@ export class GmApp {
     }
     try { await this.toolsPanel.load(); } catch (error) {
       this.message = { kind: "error", text: `No se pudo cargar el contenido GM: ${this.formatError(error)}` };
+    }
+    if (this.runtime.loadGmContent) {
+      try { const content = await this.runtime.loadGmContent(); this.customSpells = content.spells; this.customEquipment = content.equipment; }
+      catch { /* The content panel already reports the actionable load error. */ }
     }
     try {
       this.snapshot = await this.application.migratePreservedLegacyEncounters();
@@ -276,73 +303,98 @@ export class GmApp {
 
   private renderEncounter(encounter: Encounter): string {
     const combatants = orderedCombatants(encounter);
-    const suggestions = [
-      ...this.players.map((player) => player.label),
-      ...Object.values(this.snapshot?.campaign.characters ?? {}).map((character) => character.name),
-      ...this.monsterCatalog().map((monster) => monster.name),
+    const candidates = [
+      ...Object.values(this.snapshot?.campaign.characters ?? {}).map((character) => ({ kind: "player", key: `character:${character.id}`, name: character.name, detail: "Personaje de campaña" })),
+      ...this.monsterCatalog().map((monster) => ({ kind: "monster", key: `monster:${monster.id}`, name: monster.name, detail: `${monster.type || "Monstruo"} · VD ${monster.challenge || "—"}` })),
     ];
     return `
+      <section class="gm-encounter-board">
       <div class="gm-turn-bar">
         <button type="button" data-command="previous-turn">Anterior</button>
         <strong>Ronda ${encounter.round}</strong>
         <button type="button" data-command="advance-turn">Siguiente</button>
         <details class="gm-popover gm-add-combatant-popover"><summary>+ Combatiente</summary><div>
           <form data-action="add-combatant" class="gm-add-combatant">
-            <select name="kind" aria-label="Tipo"><option value="custom">Personalizado</option><option value="monster">Monstruo</option><option value="player">Jugador</option></select>
-            <input name="name" required placeholder="Nombre" list="gm-combatant-suggestions" autocomplete="off">
-            <datalist id="gm-combatant-suggestions">${[...new Set(suggestions)].map((name) => `<option value="${escapeHtml(name)}"></option>`).join("")}</datalist>
-            <label>INI<input name="initiative" type="number" step="1" placeholder="—"></label>
-            <label>PG máximos<input name="maximumHitPoints" type="number" min="0" step="1" value="1"></label>
-            <label>CA<input name="armorClass" type="number" min="0" step="1" placeholder="—"></label>
-            <button type="submit">Agregar</button>
+            <input data-gm-combatant-search type="search" placeholder="Buscar monstruo, personaje o jugador…" autocomplete="off">
+            <input name="kind" type="hidden"><input name="name" type="hidden">
+            <input name="sourceKey" type="hidden">
+            <div class="gm-combatant-search-results">${candidates.map((candidate) => `<button type="button" data-gm-combatant-candidate data-kind="${candidate.kind}" data-key="${escapeHtml(candidate.key)}" data-name="${escapeHtml(candidate.name)}" data-search="${escapeHtml(normalizedSearch(`${candidate.name} ${candidate.detail}`))}"><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(candidate.detail)}</small></button>`).join("")}</div>
+            <input name="maximumHitPoints" type="hidden" value="1"><input name="armorClass" type="hidden">
+            <label>INI opcional<input name="initiative" type="number" step="1" placeholder="—"></label>
+            <button type="submit" data-add-selected-combatant disabled>Agregar seleccionado</button>
           </form>
         </div></details>
       </div>
       <div class="gm-combatants">
         ${combatants.length ? combatants.map((combatant) => this.renderCombatant(encounter, combatant)).join("") : '<div class="sheet-empty"><strong>Iniciativa vacía</strong><p>Agregá jugadores, monstruos o combatientes personalizados.</p></div>'}
-      </div>`;
+      </div></section>`;
   }
 
   private renderCombatant(encounter: Encounter, combatant: EncounterCombatant): string {
     const active = encounter.activeCombatantId === combatant.id;
     const monster = combatant.kind === "monster" ? this.findMonster(combatant.monsterDefinitionId) : null;
+    const character = combatant.kind === "player" && combatant.characterId ? this.snapshot?.campaign.characters[combatant.characterId] ?? null : null;
     const currentPercent = combatant.hitPoints.maximum > 0 ? Math.min(100, combatant.hitPoints.current / combatant.hitPoints.maximum * 100) : 0;
     const temporaryPercent = combatant.hitPoints.maximum > 0 ? Math.min(100, combatant.hitPoints.temporary / combatant.hitPoints.maximum * 100) : 0;
     const temporaryBottom = Math.min(currentPercent, 100 - temporaryPercent);
     const hitPointHue = Math.round(currentPercent / 100 * 112);
     const conditions = [...combatant.conditions];
     const bloodied = isBloodied(combatant) && !conditions.some((condition) => condition.key === "bloodied");
-    return `<details class="gm-combatant ${active ? "active" : ""}" data-combatant-id="${combatant.id}">
+    return `<details class="gm-combatant ${active ? "active" : ""} ${character ? "linked-character" : ""}" data-combatant-id="${combatant.id}">
       <summary class="gm-combatant-summary">
-        <span class="gm-combatant-identity"><strong>${escapeHtml(combatant.name)}</strong><small>${combatant.kind === "player" ? "Jugador" : combatant.kind === "monster" ? "Monstruo" : "Personalizado"}</small></span>
+        <span class="gm-combatant-identity"><strong>${escapeHtml(combatant.name)}</strong><small>${character ? "Hoja vinculada · solo lectura" : combatant.kind === "monster" ? "Monstruo" : "Personalizado"}</small></span>
         <span><small>INI</small><strong>${combatant.initiative ?? "—"}</strong></span>
         <span><small>CA</small><strong>${combatant.armorClass ?? "—"}</strong></span>
         <div class="hp-readout gm-combatant-hp-readout" style="--hp-level:${Math.round(currentPercent)}%;--hp-temp-level:${Math.round(temporaryPercent)}%;--hp-temp-bottom:${Math.round(temporaryBottom)}%;--hp-tone:hsl(${hitPointHue} 38% 43%)" role="meter" aria-label="Puntos de golpe" aria-valuemin="0" aria-valuemax="${combatant.hitPoints.maximum}" aria-valuenow="${combatant.hitPoints.current}"><span>PG</span><strong>${combatant.hitPoints.current}${combatant.hitPoints.temporary ? `<b> + ${combatant.hitPoints.temporary}</b>` : ""}<small> / ${combatant.hitPoints.maximum}</small></strong><em>${combatant.hitPoints.temporary ? "Temp. en azul" : "Actuales"}</em></div>
         <span class="gm-summary-conditions">${conditions.map((condition) => escapeHtml(condition.label)).join(" · ")}${bloodied ? `${conditions.length ? " · " : ""}Herido` : ""}</span>
       </summary>
       <div class="gm-combatant-popover">
-        <div class="gm-combatant-control-row"><button type="button" data-action="activate-combatant">Hacer activo</button><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}"></label><button type="button" data-action="save-initiative">Guardar INI</button><button type="button" data-action="roll-initiative">Tirar INI</button></div>
-        <div class="gm-card-actions"><input data-action="hp-amount" type="number" min="1" step="1" value="1" aria-label="Cantidad de puntos de golpe"><button type="button" data-action="damage">Daño</button><button type="button" data-action="heal">Curar</button><button type="button" data-action="temporary-hit-points">PG temp.</button></div>
-        <div class="gm-condition-pills">${conditions.map((condition) => `<button type="button" data-action="remove-condition" data-condition-id="${condition.id}" title="Quitar condición">${escapeHtml(condition.label)} ×</button>`).join("")}${bloodied ? '<span class="bloodied">Herido</span>' : ""}</div>
-        <div class="gm-condition-control"><select data-action="condition-select" aria-label="Condición">${GM_CONDITIONS.filter(([key]) => !conditions.some((condition) => condition.key === key)).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select><button type="button" data-action="add-condition" ${GM_CONDITIONS.every(([key]) => conditions.some((condition) => condition.key === key)) ? "disabled" : ""}>Agregar</button></div>
-        <div class="gm-card-actions gm-card-danger"><button type="button" data-action="toggle-visibility" class="${combatant.visibleToPlayers ? "visible" : "hidden"}">${combatant.visibleToPlayers ? "Visible" : "Oculto"}</button><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>
+        ${character ? `<p class="gm-linked-character-notice">Estado sincronizado desde la hoja. El GM no puede modificar sus recursos.</p><div class="gm-condition-pills">${conditions.map((condition) => `<span>${escapeHtml(condition.label)}</span>`).join("") || '<span class="muted">Sin condiciones</span>'}</div><div class="gm-card-actions gm-card-danger"><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>` : `<div class="gm-combatant-control-row"><button type="button" data-action="activate-combatant">Hacer activo</button><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}"></label><button type="button" data-action="save-initiative">Guardar INI</button><button type="button" data-action="roll-initiative">Tirar INI</button></div><div class="gm-card-actions"><input data-action="hp-amount" type="number" min="1" step="1" value="1" aria-label="Cantidad de puntos de golpe"><button type="button" data-action="damage">Daño</button><button type="button" data-action="heal">Curar</button><button type="button" data-action="temporary-hit-points">PG temp.</button></div><div class="gm-condition-pills">${conditions.map((condition) => `<button type="button" data-action="remove-condition" data-condition-id="${condition.id}" title="Quitar condición">${escapeHtml(condition.label)} ×</button>`).join("")}${bloodied ? '<span class="bloodied">Herido</span>' : ""}</div><div class="gm-condition-control"><select data-action="condition-select" aria-label="Condición">${GM_CONDITIONS.filter(([key]) => !conditions.some((condition) => condition.key === key)).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select><button type="button" data-action="add-condition" ${GM_CONDITIONS.every(([key]) => conditions.some((condition) => condition.key === key)) ? "disabled" : ""}>Agregar</button></div><div class="gm-card-actions gm-card-danger"><button type="button" data-action="toggle-visibility" class="${combatant.visibleToPlayers ? "visible" : "hidden"}">${combatant.visibleToPlayers ? "Visible" : "Oculto"}</button><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>`}
         ${monster ? this.renderMonsterDetails(monster) : ""}
+        ${character ? this.renderCharacterDetails(character) : ""}
       </div>
     </details>`;
   }
 
+  private renderCharacterDetails(character: CharacterV2): string {
+    const statistics = projectCharacterStatistics(character);
+    const spellcasting = projectSpellcasting(character);
+    const modifier = (score: number): number => Math.floor((score - 10) / 2);
+    const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
+    const abilities = Object.entries(character.abilities).map(([key, score]) => `<span><small>${escapeHtml(key.slice(0, 3).toUpperCase())}</small><strong>${score}</strong><em>${signed(modifier(score))}</em></span>`).join("");
+    const actions = character.actions.map((action) => { const attack = projectActionAttackModifier(character, action); const bonus = projectActionDamageBonus(character, action); const damage = `${action.damageExpression}${bonus > 0 ? `+${bonus}` : bonus < 0 ? bonus : ""}`; return `<article><strong>${escapeHtml(action.name)}</strong><small>Ataque ${signed(attack)}${action.damageExpression ? ` · Daño ${escapeHtml(damage)}` : ""}</small></article>`; }).join("");
+    const spells = character.spellcasting.spells.map((spell) => { const damage = projectSpellDamageExpression(character, spell); return `<article><strong>${escapeHtml(spell.name)}</strong><small>Nivel ${spell.level}${spell.prepared ? " · preparado" : ""}${spell.definition?.attackType === "attack" ? ` · ataque ${signed(spellcasting.attackModifier)}` : ""}${damage ? ` · daño ${escapeHtml(damage)}` : ""}</small></article>`; }).join("");
+    const slots = Object.entries(character.spellcasting.slots).filter(([, slot]) => slot.maximum > 0).map(([level, slot]) => `<span>N${level}: <strong>${Math.max(0, slot.maximum - slot.used)}/${slot.maximum}</strong></span>`).join("");
+    const inventory = character.inventory.map((item) => `<span>${escapeHtml(item.name)} <small>×${item.quantity}${item.equipped ? " · equipado" : ""}${item.charges ? ` · ${item.charges.current}/${item.charges.maximum} cargas` : ""}</small></span>`).join("");
+    return `<details class="gm-participant-sheet"><summary>Hoja de ${escapeHtml(character.name)}</summary><div class="gm-abilities">${abilities}</div><p><b>CA:</b> ${projectInventory(character).calculatedArmorClass} · <b>INI:</b> ${signed(statistics.initiativeModifier)} · <b>Percepción pasiva:</b> ${statistics.passives.perception}</p>${actions ? `<section><h4>Acciones</h4><div class="gm-sheet-action-list">${actions}</div></section>` : ""}${spells ? `<section><h4>Conjuros</h4><div class="gm-spell-slots">${slots || "Sin espacios configurados"}</div><div class="gm-sheet-action-list">${spells}</div></section>` : ""}<section><h4>Inventario</h4><div class="gm-sheet-inventory">${inventory || "Sin objetos"}</div></section></details>`;
+  }
+
   private renderMonsterDetails(monster: MonsterDefinition): string {
+    const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
+    const abilityButtons = Object.entries(monster.abilities).map(([key, value]) => {
+      const modifier = Math.floor((value - 10) / 2);
+      return `<button type="button" class="gm-roll" data-roll-name="${escapeHtml(monster.name)} · ${escapeHtml(key.toUpperCase())}" data-roll-expression="1d20${signed(modifier)}"><small>${escapeHtml(key.toUpperCase())}</small><strong>${value}</strong><em>${signed(modifier)}</em></button>`;
+    }).join("");
+    const spellCatalog = [...this.customSpells, ...spellDefinitionsForLanguage("es")];
+    const spells = monster.spells.map((name) => {
+      const definition = spellCatalog.find((entry) => normalizedSearch(entry.name) === normalizedSearch(name));
+      const diceText = [definition?.damageExpression, definition?.description].filter(Boolean).join(" ");
+      return `<p><b>${escapeHtml(name)}</b>${definition ? ` <small>Nivel ${definition.level}${definition.school ? ` · ${escapeHtml(definition.school)}` : ""}</small>` : ""} ${this.renderDiceButtons(name, diceText)}</p>`;
+    }).join("");
     const sections = [
       ["Rasgos", monster.traits], ["Acciones", monster.actions],
       ["Reacciones", monster.reactions], ["Acciones legendarias", monster.legendaryActions],
     ] as const;
     return `<details class="gm-monster-details"><summary>${escapeHtml(monster.type || "Estadísticas")} · VD ${escapeHtml(monster.challenge || "—")} · ${escapeHtml(monster.speed.join(", "))}</summary>
-      <div class="gm-abilities">${Object.entries(monster.abilities).map(([key, value]) => `<span>${escapeHtml(key.toUpperCase())} <strong>${value}</strong></span>`).join("")}</div>
+      <div class="gm-monster-roll-toolbar"><label>Modo <select data-monster-roll-mode><option value="normal">Normal</option><option value="advantage">Ventaja</option><option value="disadvantage">Desventaja</option></select></label></div>
+      <div class="gm-abilities gm-monster-rolls">${abilityButtons}</div>
       ${this.monsterFact("Salvaciones", monster.saves)}${this.monsterFact("Habilidades", monster.skills)}
       ${this.monsterFact("Vulnerabilidades", monster.damageVulnerabilities)}${this.monsterFact("Resistencias", monster.damageResistances)}
       ${this.monsterFact("Inmunidades", monster.damageImmunities)}${this.monsterFact("Inmunidad a condiciones", monster.conditionImmunities)}
       ${this.monsterFact("Sentidos", monster.senses)}${this.monsterFact("Idiomas", monster.languages)}
       ${sections.filter(([, entries]) => entries.length).map(([title, entries]) => `<section><strong>${title}</strong>${entries.map((entry) => `<p><b>${escapeHtml(entry.name)}</b> ${escapeHtml(entry.content)} ${this.renderDiceButtons(entry.name, entry.content)}</p>`).join("")}</section>`).join("")}
+      ${spells ? `<section><strong>Conjuros</strong>${spells}</section>` : ""}
+      ${monster.inventory.length ? `<section><strong>Inventario</strong><div class="gm-sheet-inventory">${monster.inventory.map((name) => `<span>${escapeHtml(name)}</span>`).join("")}</div></section>` : ""}
     </details>`;
   }
 
@@ -351,7 +403,8 @@ export class GmApp {
     const selected = this.selectedCustomMonsterKey ? this.customMonsters.find((monster) => monster.name === this.selectedCustomMonsterKey) ?? null : null;
     const editing = selected !== null && this.editingCustomMonsterKey === selected.name;
     if (editing || !selected && this.editingCustomMonsterKey === "__new__") {
-      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${selected?.name ?? "Nuevo monstruo"}</strong><button type="button" data-action="cancel-custom-monster">Volver</button></div>${this.renderCustomMonsterForm(selected)}</section>`;
+      const draft = this.editingCustomMonsterKey === "__new__" ? this.monsterTemplate : selected;
+      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${draft?.name ?? "Nuevo monstruo"}</strong><button type="button" data-action="cancel-custom-monster">Volver</button></div>${this.renderCustomMonsterForm(draft)}</section>`;
     }
     const filterValues = [...new Set(this.customMonsters.flatMap((monster) => [monster.type ? `tipo:${monster.type}` : "", monster.challenge ? `vd:${monster.challenge}` : ""]).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     const monsters = this.customMonsters.filter((monster) => [...this.monsterFilters].every((filter) => filter === `tipo:${monster.type}` || filter === `vd:${monster.challenge}`));
@@ -360,7 +413,7 @@ export class GmApp {
 
   private renderCustomMonsterCard(monster: MonsterDefinition): string {
     const search = [monster.name, monster.type, monster.challenge, ...monster.traits.flatMap((entry) => [entry.name, entry.content]), ...monster.actions.flatMap((entry) => [entry.name, entry.content])].join(" ").toLocaleLowerCase();
-    return `<article class="play-card gm-catalog-card gm-monster-card" data-gm-content-card data-search="${escapeHtml(search)}"><header><div><span class="card-kicker">${escapeHtml(monster.type || "Sin tipo")} · VD ${escapeHtml(monster.challenge || "—")}</span><h3>${escapeHtml(monster.name)}</h3></div><div class="card-buttons"><button type="button" data-action="edit-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Editar</button><button type="button" data-action="delete-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Eliminar</button></div></header><div class="gm-card-facts"><span>CA ${monster.armorClass}</span><span>PG ${monster.hitPoints}</span><span>${escapeHtml(monster.speed.join(", ") || "—")}</span></div>${this.showMonsterDescriptions ? `<div class="gm-card-description">${monster.traits.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || monster.actions.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || "<p>Sin descripción.</p>"}</div>` : ""}</article>`;
+    return `<article class="play-card gm-catalog-card gm-monster-card" data-gm-content-card data-search="${escapeHtml(search)}"><header><div><span class="card-kicker">${escapeHtml(monster.type || "Sin tipo")} · VD ${escapeHtml(monster.challenge || "—")}</span><h3>${escapeHtml(monster.name)}</h3></div><div class="card-buttons"><button type="button" data-action="template-custom-monster" data-monster-key="${escapeHtml(monster.name)}" title="Crear una copia editable">Usar como template</button><button type="button" data-action="edit-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Editar</button><button type="button" data-action="delete-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Eliminar</button></div></header><div class="gm-card-facts"><span>CA ${monster.armorClass}</span><span>PG ${monster.hitPoints}</span><span>${escapeHtml(monster.speed.join(", ") || "—")}</span></div>${this.showMonsterDescriptions ? `<div class="gm-card-description">${monster.traits.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || monster.actions.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || "<p>Sin descripción.</p>"}</div>` : ""}</article>`;
   }
 
   private renderCustomMonsterView(monster: MonsterDefinition): string {
@@ -373,11 +426,15 @@ export class GmApp {
     const ability = (key: string): number => monster?.abilities[key] ?? monster?.abilities[key.toLocaleLowerCase()] ?? 10;
     const list = (values: string[]): string => escapeHtml(values.join(", "));
     const featureText = (values: MonsterDefinition["traits"]): string => escapeHtml(values.map((entry) => `${entry.name} | ${entry.content}${entry.usage ? ` | ${entry.usage}` : ""}`).join("\n"));
+    const spellNames = [...new Set([...this.customSpells, ...spellDefinitionsForLanguage("es")].map((entry) => entry.name))].sort((a, b) => a.localeCompare(b, "es"));
+    const equipmentNames = [...new Set([...this.customEquipment, ...equipmentDefinitionsForLanguage("es")].map((entry) => entry.name))].sort((a, b) => a.localeCompare(b, "es"));
     return `<form data-action="save-custom-monster" class="gm-custom-monster-form">
       <div class="gm-monster-core-fields">
         <label>Nombre<input name="name" required value="${escapeHtml(monster?.name ?? "")}"></label>
-        <label>Tipo<input name="type" value="${escapeHtml(monster?.type ?? "")}"></label>
-        <label>VD<input name="challenge" value="${escapeHtml(monster?.challenge ?? "0")}"></label>
+        <label>Tipo<select name="type">${fixedOptions(MONSTER_TYPES, monster?.type ?? "", "Sin tipo")}</select></label>
+        <label>Tamaño<select name="size">${fixedOptions(MONSTER_SIZES, monster?.size ?? "", "Sin tamaño")}</select></label>
+        <label>Alineamiento<select name="alignment">${fixedOptions(["Legal bueno", "Neutral bueno", "Caótico bueno", "Legal neutral", "Neutral", "Caótico neutral", "Legal malvado", "Neutral malvado", "Caótico malvado", "Sin alineamiento"], monster?.alignment ?? "", "Sin alineamiento")}</select></label>
+        <label>VD<select name="challenge">${fixedOptions(CHALLENGE_RATINGS, monster?.challenge ?? "0")}</select></label>
         <label>CA<input name="armorClass" type="number" min="0" step="1" value="${monster?.armorClass ?? 10}"></label>
         <label>PG<input name="hitPoints" type="number" min="0" step="1" value="${monster?.hitPoints ?? 10}"></label>
         <label>Dados de PG<input name="hitPointFormula" value="${escapeHtml(monster?.hitPointFormula ?? "")}" placeholder="2d8+2"></label>
@@ -391,16 +448,20 @@ export class GmApp {
         <label>Habilidades<input name="skills" value="${list(monster?.skills ?? [])}"></label>
         <label>Sentidos<input name="senses" value="${list(monster?.senses ?? [])}"></label>
         <label>Idiomas<input name="languages" value="${list(monster?.languages ?? [])}"></label>
-        <label>Vulnerabilidades<input name="vulnerabilities" value="${list(monster?.damageVulnerabilities ?? [])}"></label>
-        <label>Resistencias<input name="resistances" value="${list(monster?.damageResistances ?? [])}"></label>
-        <label>Inmunidades<input name="immunities" value="${list(monster?.damageImmunities ?? [])}"></label>
-        <label>Inmunidad a condiciones<input name="conditionImmunities" value="${list(monster?.conditionImmunities ?? [])}"></label>
+        <label>Vulnerabilidades<select name="vulnerabilities" multiple size="5">${fixedMultiOptions(DAMAGE_TYPES, monster?.damageVulnerabilities ?? [])}</select></label>
+        <label>Resistencias<select name="resistances" multiple size="5">${fixedMultiOptions(DAMAGE_TYPES, monster?.damageResistances ?? [])}</select></label>
+        <label>Inmunidades<select name="immunities" multiple size="5">${fixedMultiOptions(DAMAGE_TYPES, monster?.damageImmunities ?? [])}</select></label>
+        <label>Inmunidad a condiciones<select name="conditionImmunities" multiple size="5">${fixedMultiOptions(GM_CONDITIONS.slice(0, 14).map(([key]) => key), monster?.conditionImmunities ?? [])}</select></label>
       </div>
       <p class="gm-editor-help">Una entrada por línea: Nombre | descripción | uso opcional</p>
       <label>Rasgos<textarea name="traits">${featureText(monster?.traits ?? [])}</textarea></label>
       <label>Acciones<textarea name="actions">${featureText(monster?.actions ?? [])}</textarea></label>
       <label>Reacciones<textarea name="reactions">${featureText(monster?.reactions ?? [])}</textarea></label>
       <label>Acciones legendarias<textarea name="legendaryActions">${featureText(monster?.legendaryActions ?? [])}</textarea></label>
+      <div class="gm-monster-list-fields">
+        <label>Conjuros<select name="spells" multiple size="8">${fixedMultiOptions(spellNames, monster?.spells ?? [])}</select></label>
+        <label>Inventario<select name="inventory" multiple size="8">${fixedMultiOptions(equipmentNames, monster?.inventory ?? [])}</select></label>
+      </div>
       <div class="gm-custom-form-actions"><button type="submit">${monster ? "Guardar monstruo" : "Crear monstruo"}</button><button type="button" data-action="cancel-custom-monster">Limpiar</button></div>
     </form>`;
   }
@@ -439,7 +500,15 @@ export class GmApp {
       this.activeContentKind = button.dataset.gmContentKind as GmContentKind;
       this.render();
     }));
-    this.root.querySelector('[data-action="new-custom-monster"]')?.addEventListener("click", () => { this.selectedCustomMonsterKey = null; this.editingCustomMonsterKey = "__new__"; this.render(); });
+    this.root.querySelector('[data-action="new-custom-monster"]')?.addEventListener("click", () => { this.monsterTemplate = null; this.selectedCustomMonsterKey = null; this.editingCustomMonsterKey = "__new__"; this.render(); });
+    this.root.querySelectorAll<HTMLElement>('[data-action="template-custom-monster"]').forEach((button) => button.addEventListener("click", () => {
+      const source = this.customMonsters.find((monster) => monster.name === button.dataset.monsterKey);
+      if (!source) return;
+      this.monsterTemplate = { ...structuredClone(source), id: `copy_${source.id}`, name: `COPIA DE ${source.name}` };
+      this.selectedCustomMonsterKey = null;
+      this.editingCustomMonsterKey = "__new__";
+      this.render();
+    }));
     this.root.querySelectorAll<HTMLElement>('[data-action="edit-custom-monster"]').forEach((button) => button.addEventListener("click", () => {
       this.selectedCustomMonsterKey = button.dataset.monsterKey ?? this.selectedCustomMonsterKey;
       this.editingCustomMonsterKey = this.selectedCustomMonsterKey;
@@ -447,6 +516,7 @@ export class GmApp {
     }));
     this.root.querySelectorAll<HTMLElement>('[data-action="delete-custom-monster"]').forEach((button) => button.addEventListener("click", () => { this.selectedCustomMonsterKey = button.dataset.monsterKey ?? this.selectedCustomMonsterKey; void this.deleteCustomMonster(); }));
     this.root.querySelector('[data-action="cancel-custom-monster"]')?.addEventListener("click", () => {
+      this.monsterTemplate = null;
       this.editingCustomMonsterKey = null;
       this.render();
     });
@@ -478,6 +548,35 @@ export class GmApp {
       this.message = { kind: "error", text: this.formatError(error) };
       this.render();
     }));
+    this.root.querySelector<HTMLInputElement>("[data-gm-combatant-search]")?.addEventListener("input", () => {
+      const form = this.root.querySelector<HTMLFormElement>('[data-action="add-combatant"]');
+      const source = form?.elements.namedItem("sourceKey") as HTMLInputElement | null;
+      const submit = form?.querySelector<HTMLButtonElement>("[data-add-selected-combatant]");
+      if (source) source.value = "";
+      if (submit) submit.disabled = true;
+      form?.querySelectorAll("[data-gm-combatant-candidate].selected").forEach((entry) => entry.classList.remove("selected"));
+      this.applyCombatantSearch();
+    });
+    const combatantForm = this.root.querySelector<HTMLFormElement>('[data-action="add-combatant"]');
+    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-combatant-candidate]").forEach((button) => button.addEventListener("click", () => {
+      const form = button.closest<HTMLFormElement>('[data-action="add-combatant"]'); if (!form) return;
+      const kind = form.elements.namedItem("kind") as HTMLSelectElement | null;
+      const name = form.elements.namedItem("name") as HTMLInputElement | null;
+      const sourceKey = form.elements.namedItem("sourceKey") as HTMLInputElement | null;
+      if (kind) kind.value = button.dataset.kind ?? "custom"; if (name) name.value = button.dataset.name ?? ""; if (sourceKey) sourceKey.value = button.dataset.key ?? "";
+      const monster = button.dataset.kind === "monster" ? this.findMonster((button.dataset.key ?? "").replace(/^monster:/, "")) : null;
+      const character = button.dataset.key?.startsWith("character:") ? this.snapshot?.campaign.characters[button.dataset.key.slice("character:".length)] ?? null : null;
+      const player = button.dataset.key?.startsWith("client:") ? this.players.find((entry) => entry.id === button.dataset.key?.slice("client:".length)) ?? null : null;
+      const summary = player ? this.playerSummaries.get(player.id) ?? null : null;
+      const maximum = form.elements.namedItem("maximumHitPoints") as HTMLInputElement | null;
+      const armorClass = form.elements.namedItem("armorClass") as HTMLInputElement | null;
+      if (maximum) maximum.value = String(monster?.hitPoints ?? character?.combat.hitPoints.maximum ?? summary?.maximumHitPoints ?? 1);
+      if (armorClass) armorClass.value = String(monster?.armorClass ?? character?.combat.armorClass ?? summary?.armorClass ?? "");
+      const submit = form.querySelector<HTMLButtonElement>("[data-add-selected-combatant]");
+      if (submit) submit.disabled = !sourceKey?.value;
+      button.parentElement?.querySelectorAll("button").forEach((entry) => entry.classList.toggle("selected", entry === button));
+    }));
+    this.applyCombatantSearch();
     this.root.querySelector<HTMLButtonElement>('[data-action="delete-encounter"]')?.addEventListener("click", () => {
       const encounter = this.requireEncounter();
       if (globalThis.confirm && !globalThis.confirm(`¿Eliminar ${encounter.name}?`)) return;
@@ -487,8 +586,13 @@ export class GmApp {
       event.preventDefault();
       const data = new FormData(event.currentTarget as HTMLFormElement);
       const encounter = this.requireEncounter();
-      const kind = String(data.get("kind"));
       const name = String(data.get("name") ?? "").trim();
+      const sourceKey = String(data.get("sourceKey") ?? "");
+      if (!sourceKey.startsWith("monster:") && !sourceKey.startsWith("character:")) {
+        this.message = { kind: "error", text: "Seleccioná un monstruo o personaje existente de la lista." };
+        this.render();
+        return;
+      }
       const maximum = Math.max(0, integer(data.get("maximumHitPoints"), 1));
       const initiativeText = String(data.get("initiative") ?? "").trim();
       const base = {
@@ -499,28 +603,25 @@ export class GmApp {
         conditions: [],
         visibleToPlayers: true,
       };
-      const monster = this.findMonster(name);
-      const connectedPlayer = this.players.find((player) => player.label === name) ?? null;
-      const summary = connectedPlayer ? this.playerSummaries.get(connectedPlayer.id) ?? null : null;
-      const character = Object.values(this.requireSnapshot().campaign.characters).find((entry) => entry.name === name) ?? null;
-      const combatant = kind === "monster" && monster
+      const monster = sourceKey.startsWith("monster:") ? this.findMonster(sourceKey.slice("monster:".length)) : null;
+      const character = sourceKey.startsWith("character:") ? this.requireSnapshot().campaign.characters[sourceKey.slice("character:".length)] ?? null : null;
+      if (!monster && !character) {
+        this.message = { kind: "error", text: "El contenido seleccionado ya no existe. Actualizá la búsqueda." };
+        this.render();
+        return;
+      }
+      const combatant = monster
         ? { ...base, name: monster.name, armorClass: monster.armorClass, hitPoints: { current: monster.hitPoints, maximum: monster.hitPoints, temporary: 0 }, kind: "monster" as const, monsterDefinitionId: monster.id }
-        : kind === "monster"
-          ? { ...base, kind: "monster" as const, monsterDefinitionId: name }
-          : kind === "player"
-            ? {
+        : {
                 ...base,
-                name: summary?.name ?? character?.name ?? name,
-                armorClass: summary?.armorClass ?? character?.combat.armorClass ?? base.armorClass,
-                hitPoints: summary
-                  ? { current: summary.currentHitPoints, maximum: summary.maximumHitPoints, temporary: summary.temporaryHitPoints }
-                  : character?.combat.hitPoints ?? base.hitPoints,
+                name: character!.name,
+                armorClass: character!.combat.armorClass,
+                hitPoints: character!.combat.hitPoints,
                 initiative: base.initiative,
                 kind: "player" as const,
-                characterId: character?.id ?? summary?.characterId ?? null,
-                taleSpireClientId: connectedPlayer?.id ?? null,
-              }
-          : { ...base, kind: "custom" as const };
+                characterId: character!.id,
+                taleSpireClientId: null,
+              };
       void this.execute(() => this.application.addCombatant({
         encounterId: encounter.id,
         expectedEncounterRevision: encounter.revision,
@@ -582,11 +683,23 @@ export class GmApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-roll-expression]").forEach((button) => button.addEventListener("click", () => {
       const expression = button.dataset.rollExpression;
       if (!expression) return;
-      void this.runtime.diceRoller.roll({ name: button.dataset.rollName || "Monstruo", expressions: [expression], mode: "normal" })
+      const mode = button.closest(".gm-monster-details")?.querySelector<HTMLSelectElement>("[data-monster-roll-mode]")?.value;
+      const rollMode = mode === "advantage" || mode === "disadvantage" ? mode : "normal";
+      void this.runtime.diceRoller.roll({ name: button.dataset.rollName || "Monstruo", expressions: [expression], mode: rollMode })
         .then((result) => { this.appendActionLog(`${button.dataset.rollName || "Tirada"}: ${result.summary}`, "roll"); this.message = { kind: "success", text: result.summary }; this.render(); })
         .catch((error) => { this.message = { kind: "error", text: this.formatError(error) }; this.render(); });
     }));
     this.applyMonsterSearch();
+    this.applyCombatantSearch();
+  }
+
+  private applyCombatantSearch(): void {
+    const input = this.root.querySelector<HTMLInputElement>("[data-gm-combatant-search]"); if (!input) return;
+    const query = normalizedSearch(input.value); let visible = 0;
+    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-combatant-candidate]").forEach((button) => {
+      const matches = !query || (button.dataset.search ?? "").includes(query);
+      button.hidden = !matches || visible >= 40; if (matches) visible += 1;
+    });
   }
 
   private applyMonsterSearch(): void {
@@ -764,12 +877,14 @@ export class GmApp {
       const [entryName = "", content = "", usage = ""] = line.split("|").map((part) => part.trim());
       return { Name: entryName, Content: content, Usage: usage };
     });
-    const list = (key: string): string[] => String(data.get(key) ?? "").split(/[,\r\n]+/).map((entry) => entry.trim()).filter(Boolean);
+    const list = (key: string): string[] => data.getAll(key).flatMap((value) => String(value).split(/[,\r\n]+/)).map((entry) => entry.trim()).filter(Boolean);
     const definition = normalizeMonsterDefinition({
       Id: name,
       Name: name,
       Source: "Homebrew",
       Type: String(data.get("type") ?? "").trim(),
+      Size: String(data.get("size") ?? "").trim(),
+      Alignment: String(data.get("alignment") ?? "").trim(),
       Challenge: String(data.get("challenge") ?? "0").trim(),
       HP: { Value: Math.max(0, integer(data.get("hitPoints"), 10)), Notes: String(data.get("hitPointFormula") ?? "").trim() },
       AC: { Value: Math.max(0, integer(data.get("armorClass"), 10)), Notes: "" },
@@ -782,6 +897,7 @@ export class GmApp {
       DamageImmunities: list("immunities"), ConditionImmunities: list("conditionImmunities"),
       Traits: featureData("traits"), Actions: featureData("actions"), Reactions: featureData("reactions"),
       LegendaryActions: featureData("legendaryActions"),
+      Spells: list("spells"), Inventory: list("inventory"),
     });
     try {
       const previousKey = this.editingCustomMonsterKey === "__new__" ? null : this.editingCustomMonsterKey ?? this.selectedCustomMonsterKey ?? duplicate?.name ?? null;
@@ -790,6 +906,7 @@ export class GmApp {
         monster.name !== previousKey && monster.name.toLocaleLowerCase() !== definition.name.toLocaleLowerCase()), definition];
       this.selectedCustomMonsterKey = definition.name;
       this.editingCustomMonsterKey = null;
+      this.monsterTemplate = null;
       this.appendActionLog(`Guardar monstruo: ${definition.name}`);
       this.message = { kind: "success", text: `${definition.name} guardado en el contenido global.` };
     } catch (error) {

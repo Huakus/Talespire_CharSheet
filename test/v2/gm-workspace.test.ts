@@ -35,6 +35,7 @@ describe("GM workspace", () => {
     expect(shops).toContain('data-gm-content-search="shop"');
     expect(shops).toContain('data-gm-content-filter="categoría:General"');
     expect(shops).toContain('class="play-card gm-catalog-card gm-shop-card"');
+    expect(shops).toContain('data-gm-template="shop" data-gm-content-key="Mercado"');
     expect(shops).toContain('data-gm-edit="shop" data-gm-content-key="Mercado"');
     expect(shops).not.toContain('data-gm-form="shop"');
     expect(panel.render("notes", workspace)).toContain("Nuevo grupo de notas");
@@ -48,6 +49,16 @@ describe("GM workspace", () => {
     expect(tools).not.toContain('data-gm-add="table"');
     (panel as unknown as { activeTool: string }).activeTool = "tables";
     expect(panel.render("tools", workspace)).toContain('data-gm-add="table"');
+
+    const editable = panel as unknown as {
+      editingContent: "shop";
+      contentTemplate: { section: "shop"; value: { name: string; categories: Record<string, string[]> } };
+    };
+    editable.editingContent = "shop";
+    editable.contentTemplate = { section: "shop", value: { name: "COPIA DE Mercado", categories: { General: ["rope"] } } };
+    const templateForm = panel.render("content", workspace, "shop");
+    expect(templateForm).toContain('value="COPIA DE Mercado"');
+    expect(templateForm).toContain("General | rope");
   });
 
   it("removes a complete note group without altering the other groups", () => {

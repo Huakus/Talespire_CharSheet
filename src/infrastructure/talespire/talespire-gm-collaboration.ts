@@ -12,6 +12,7 @@ import {
   parseEncounterTransferMessage,
   projectPublicEncounter,
 } from "./encounter-transfer";
+import { buildCustomContentTransfer, parseCustomContentTransferMessage, type PlayerCustomContent } from "./custom-content-transfer";
 
 export interface TaleSpireGmPlayer {
   id: string;
@@ -108,6 +109,7 @@ export class TaleSpireGmCollaboration {
   private initiativeListener: ((clientId: string, initiative: number) => void) | null = null;
   private transferStatusListener: ((status: EncounterTransferStatus) => void) | null = null;
   private latestEncounter: Encounter | null = null;
+  private latestCustomContent: PlayerCustomContent | null = null;
   private pendingTransfers = new Map<string, PendingEncounterTransfer>();
 
   constructor(private readonly api: TaleSpireCollaborationApi) {}
@@ -183,9 +185,19 @@ export class TaleSpireGmCollaboration {
     ]);
   }
 
+  async publishCustomContent(content: PlayerCustomContent): Promise<void> {
+    this.latestCustomContent = structuredClone(content);
+    for (const message of await buildCustomContentTransfer(content)) await this.api.sync.send(message, "board");
+  }
+
   async handleSyncEvent(event: unknown): Promise<void> {
     const incoming = eventPayload(event);
     if (!incoming || incoming.from.id === this.me?.id) return;
+    const contentTransfer = parseCustomContentTransferMessage(incoming.raw);
+    if (contentTransfer?.t === "req" && this.latestCustomContent) {
+      for (const message of await buildCustomContentTransfer(this.latestCustomContent)) await this.api.sync.send(message, incoming.from.id);
+      return;
+    }
     const transfer = parseEncounterTransferMessage(incoming.raw);
     if (transfer) {
       if (transfer.t === "req" && this.latestEncounter?.id === transfer.e) {

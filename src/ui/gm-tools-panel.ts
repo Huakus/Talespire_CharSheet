@@ -1,7 +1,10 @@
 import type { CampaignSnapshot } from "../application/ports/campaign-repository";
 import type { SpellDefinition } from "../domain/character/character-spell-model";
-import type { EquipmentCatalogDraft } from "../domain/equipment/equipment-catalog";
-import { normalizeEquipmentDefinition } from "../domain/equipment/equipment-catalog";
+import {
+  DAMAGE_TYPES, EQUIPMENT_CATEGORIES, EQUIPMENT_PROPERTIES, EQUIPMENT_RARITIES,
+  normalizeEquipmentDefinition, type EquipmentCatalogDraft,
+} from "../domain/equipment/equipment-catalog";
+import { SPELL_CLASSES, SPELL_COMPONENTS, SPELL_SAVE_ABILITIES, SPELL_SCHOOLS } from "../domain/spells/spell-catalog";
 import type { GmChecklistItem, GmShop } from "../domain/gm/gm-global-content";
 import { removeGmNoteGroup, type GmWorkspace } from "../domain/gm/gm-workspace";
 import type { GlobalCustomContent } from "../infrastructure/talespire/talespire-global-content";
@@ -35,6 +38,15 @@ function number(value: FormDataEntryValue | null, fallback = 0): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function selectOptions(values: readonly string[], selected: string, emptyLabel?: string): string {
+  return [...new Set([...(emptyLabel === undefined ? [] : [""]), ...values, ...(selected && !values.includes(selected) ? [selected] : [])])]
+    .map((value) => `<option value="${escapeHtml(value)}" ${value === selected ? "selected" : ""}>${escapeHtml(value || emptyLabel || "—")}</option>`).join("");
+}
+
+function multiSelectOptions(values: readonly string[], selected: readonly string[]): string {
+  return [...new Set([...values, ...selected])].map((value) => `<option value="${escapeHtml(value)}" ${selected.includes(value) ? "selected" : ""}>${escapeHtml(value)}</option>`).join("");
+}
+
 export class GmToolsPanel {
   private content: GlobalCustomContent = { spells: [], equipment: [], monsters: [], shops: [], checklist: [] };
   private selectedSpell = "";
@@ -42,6 +54,7 @@ export class GmToolsPanel {
   private selectedShop = "";
   private activeTool: GmToolSection = "checklist";
   private editingContent: GmContentSection | null = null;
+  private contentTemplate: { section: GmContentSection; value: SpellDefinition | EquipmentCatalogDraft | GmShop } | null = null;
   private contentSearch: Record<GmContentSection, string> = { spell: "", equipment: "", shop: "" };
   private contentFilters: Record<GmContentSection, Set<string>> = { spell: new Set(), equipment: new Set(), shop: new Set() };
   private showContentDescriptions = true;
@@ -81,9 +94,10 @@ export class GmToolsPanel {
   }
 
   private renderContent(section: GmContentSection): string {
-    const spell = this.content.spells.find((entry) => entry.name === this.selectedSpell) ?? null;
-    const equipment = this.content.equipment.find((entry) => entry.name === this.selectedEquipment) ?? null;
-    const shop = this.content.shops.find((entry) => entry.name === this.selectedShop) ?? null;
+    const template = this.contentTemplate?.section === section ? this.contentTemplate.value : null;
+    const spell = (section === "spell" && template ? template as SpellDefinition : this.content.spells.find((entry) => entry.name === this.selectedSpell)) ?? null;
+    const equipment = (section === "equipment" && template ? template as EquipmentCatalogDraft : this.content.equipment.find((entry) => entry.name === this.selectedEquipment)) ?? null;
+    const shop = (section === "shop" && template ? template as GmShop : this.content.shops.find((entry) => entry.name === this.selectedShop)) ?? null;
     const editing = this.editingContent === section;
     if (editing) {
       const form = section === "spell" ? this.renderSpellForm(spell) : section === "equipment" ? this.renderEquipmentForm(equipment) : this.renderShopForm(shop);
@@ -126,18 +140,18 @@ export class GmToolsPanel {
 
   private renderSpellCard(spell: SpellDefinition): string {
     const search = [spell.name, spell.school, spell.description, spell.damageType, spell.classes].join(" ").toLocaleLowerCase();
-    return `<article class="play-card spell-play-card gm-catalog-card" data-gm-content-card data-search="${escapeHtml(search)}"><header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="school-badge">${escapeHtml(spell.school || "Sin escuela")}</span><span class="action-kind-label">Nivel ${spell.level}</span></div><div class="spell-name-line"><h3>${escapeHtml(spell.name)}</h3></div></div><div class="card-buttons"><button type="button" data-gm-edit="spell" data-gm-content-key="${escapeHtml(spell.name)}">Editar</button><button type="button" data-gm-delete="spell" data-gm-content-key="${escapeHtml(spell.name)}">Eliminar</button></div></header><div class="gm-card-facts"><span>${escapeHtml(spell.castingTime || "—")}</span><span>${escapeHtml(spell.range || "—")}</span><span>${escapeHtml(spell.duration || "—")}</span>${spell.ritual ? "<span>Ritual</span>" : ""}${spell.concentration ? "<span>Concentración</span>" : ""}</div>${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(spell.description || "Sin descripción.")}</p>` : ""}</article>`;
+    return `<article class="play-card spell-play-card gm-catalog-card" data-gm-content-card data-search="${escapeHtml(search)}"><header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="school-badge">${escapeHtml(spell.school || "Sin escuela")}</span><span class="action-kind-label">Nivel ${spell.level}</span></div><div class="spell-name-line"><h3>${escapeHtml(spell.name)}</h3></div></div><div class="card-buttons"><button type="button" data-gm-template="spell" data-gm-content-key="${escapeHtml(spell.name)}" title="Crear una copia editable">Usar como template</button><button type="button" data-gm-edit="spell" data-gm-content-key="${escapeHtml(spell.name)}">Editar</button><button type="button" data-gm-delete="spell" data-gm-content-key="${escapeHtml(spell.name)}">Eliminar</button></div></header><div class="gm-card-facts"><span>${escapeHtml(spell.castingTime || "—")}</span><span>${escapeHtml(spell.range || "—")}</span><span>${escapeHtml(spell.duration || "—")}</span>${spell.ritual ? "<span>Ritual</span>" : ""}${spell.concentration ? "<span>Concentración</span>" : ""}</div>${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(spell.description || "Sin descripción.")}</p>` : ""}</article>`;
   }
 
   private renderEquipmentCard(item: EquipmentCatalogDraft): string {
     const search = [item.name, item.category, item.description, ...item.properties].join(" ").toLocaleLowerCase();
-    return `<article class="inventory-row gm-catalog-card" data-gm-content-card data-search="${escapeHtml(search)}"><header class="inventory-row-header"><div class="inventory-row-main"><strong>${escapeHtml(item.name)}</strong><span class="inventory-category">${escapeHtml(item.category)}</span></div><div class="card-buttons"><button type="button" data-gm-edit="equipment" data-gm-content-key="${escapeHtml(item.name)}">Editar</button><button type="button" data-gm-delete="equipment" data-gm-content-key="${escapeHtml(item.name)}">Eliminar</button></div></header><div class="inventory-row-stats"><span>${item.unitWeight} lb</span><span>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span>${item.weapon ? `<span>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.consumable ? "<span>Consumible</span>" : ""}</div>${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(item.description || "Sin descripción.")}</p>` : ""}</article>`;
+    return `<article class="inventory-row gm-catalog-card" data-gm-content-card data-search="${escapeHtml(search)}"><header class="inventory-row-header"><div class="inventory-row-main"><strong>${escapeHtml(item.name)}</strong><span class="inventory-category">${escapeHtml(item.category)}</span></div><div class="card-buttons"><button type="button" data-gm-template="equipment" data-gm-content-key="${escapeHtml(item.name)}" title="Crear una copia editable">Usar como template</button><button type="button" data-gm-edit="equipment" data-gm-content-key="${escapeHtml(item.name)}">Editar</button><button type="button" data-gm-delete="equipment" data-gm-content-key="${escapeHtml(item.name)}">Eliminar</button></div></header><div class="inventory-row-stats"><span>${item.unitWeight} lb</span><span>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span>${item.weapon ? `<span>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.consumable ? "<span>Consumible</span>" : ""}</div>${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(item.description || "Sin descripción.")}</p>` : ""}</article>`;
   }
 
   private renderShopCard(shop: GmShop): string {
     const items = Object.values(shop.categories).flat();
     const search = [shop.name, ...Object.keys(shop.categories), ...items].join(" ").toLocaleLowerCase();
-    return `<article class="play-card gm-catalog-card gm-shop-card" data-gm-content-card data-search="${escapeHtml(search)}"><header><div><span class="card-kicker">${Object.keys(shop.categories).length} categorías · ${items.length} objetos</span><h3>${escapeHtml(shop.name)}</h3></div><div class="card-buttons"><button type="button" data-gm-edit="shop" data-gm-content-key="${escapeHtml(shop.name)}">Editar</button><button type="button" data-gm-delete="shop" data-gm-content-key="${escapeHtml(shop.name)}">Eliminar</button></div></header><div class="gm-shop-category-tags">${Object.keys(shop.categories).map((category) => `<span>${escapeHtml(category)}</span>`).join("")}</div>${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(items.slice(0, 8).join(" · ") || "Sin objetos")}${items.length > 8 ? "…" : ""}</p>` : ""}</article>`;
+    return `<article class="play-card gm-catalog-card gm-shop-card" data-gm-content-card data-search="${escapeHtml(search)}"><header><div><span class="card-kicker">${Object.keys(shop.categories).length} categorías · ${items.length} objetos</span><h3>${escapeHtml(shop.name)}</h3></div><div class="card-buttons"><button type="button" data-gm-template="shop" data-gm-content-key="${escapeHtml(shop.name)}" title="Crear una copia editable">Usar como template</button><button type="button" data-gm-edit="shop" data-gm-content-key="${escapeHtml(shop.name)}">Editar</button><button type="button" data-gm-delete="shop" data-gm-content-key="${escapeHtml(shop.name)}">Eliminar</button></div></header><div class="gm-shop-category-tags">${Object.keys(shop.categories).map((category) => `<span>${escapeHtml(category)}</span>`).join("")}</div>${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(items.slice(0, 8).join(" · ") || "Sin objetos")}${items.length > 8 ? "…" : ""}</p>` : ""}</article>`;
   }
 
   private renderSpellView(spell: SpellDefinition): string {
@@ -154,18 +168,25 @@ export class GmToolsPanel {
   }
 
   private renderSpellForm(spell: SpellDefinition | null): string {
+    const components = spell?.components.split(/[, ]+/).filter(Boolean) ?? [];
+    const classes = spell?.classes.split(/[,;]+/).map((value) => value.trim()).filter(Boolean) ?? [];
     return `<form data-gm-form="spell" class="gm-editor-form">
       <input type="hidden" name="previousKey" value="${escapeHtml(spell?.name ?? "")}">
-      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(spell?.name ?? "")}"></label><label>Nivel<input name="level" type="number" min="0" max="9" step="1" value="${spell?.level ?? 0}"></label><label>Escuela<input name="school" value="${escapeHtml(spell?.school ?? "")}"></label><label>Tiempo<input name="castingTime" value="${escapeHtml(spell?.castingTime ?? "1 acción")}"></label><label>Alcance<input name="range" value="${escapeHtml(spell?.range ?? "")}"></label><label>Duración<input name="duration" value="${escapeHtml(spell?.duration ?? "")}"></label><label>Componentes<input name="components" value="${escapeHtml(spell?.components ?? "")}"></label><label>Clases<input name="classes" value="${escapeHtml(spell?.classes ?? "")}"></label><label>Daño<input name="damageExpression" value="${escapeHtml(spell?.damageExpression ?? "")}" placeholder="2d6"></label><label>Daño al escalar<input name="upcastDamageExpression" value="${escapeHtml(spell?.upcastDamageExpression ?? "")}" placeholder="1d6"></label><label>Tipo de daño<input name="damageType" value="${escapeHtml(spell?.damageType ?? "")}"></label><label>Tipo de ataque<select name="attackType"><option value="none">Ninguno</option><option value="attack" ${spell?.attackType === "attack" ? "selected" : ""}>Ataque</option><option value="save" ${spell?.attackType === "save" ? "selected" : ""}>Salvación</option></select></label></div>
-      <div class="gm-check-row"><label><input name="ritual" type="checkbox" ${spell?.ritual ? "checked" : ""}> Ritual</label><label><input name="concentration" type="checkbox" ${spell?.concentration ? "checked" : ""}> Concentración</label></div>
-      <label>Descripción<textarea name="description">${escapeHtml(spell?.description ?? "")}</textarea></label><label>A niveles superiores<textarea name="higherLevels">${escapeHtml(spell?.higherLevels ?? "")}</textarea></label><button type="submit">Guardar conjuro</button>
+      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(spell?.name ?? "")}"></label><label>Nivel<select name="level">${Array.from({ length: 10 }, (_, level) => `<option value="${level}" ${spell?.level === level ? "selected" : ""}>${level === 0 ? "Truco" : `Nivel ${level}`}</option>`).join("")}</select></label><label>Escuela<select name="school">${selectOptions(SPELL_SCHOOLS, spell?.school ?? "", "Sin escuela")}</select></label><label>Tiempo<input name="castingTime" value="${escapeHtml(spell?.castingTime ?? "1 acción")}"></label><label>Alcance<input name="range" value="${escapeHtml(spell?.range ?? "")}"></label><label>Duración<input name="duration" value="${escapeHtml(spell?.duration ?? "")}"></label><label>Componentes<select name="components" multiple size="3">${multiSelectOptions(SPELL_COMPONENTS, components)}</select></label><label>Clases<select name="classes" multiple size="5">${multiSelectOptions(SPELL_CLASSES, classes)}</select></label><label>Daño<input name="damageExpression" value="${escapeHtml(spell?.damageExpression ?? "")}" placeholder="2d6"></label><label>Daño al escalar<input name="upcastDamageExpression" value="${escapeHtml(spell?.upcastDamageExpression ?? "")}" placeholder="1d6"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, spell?.damageType ?? "", "Sin daño")}</select></label><label>Resolución<select name="attackType"><option value="none">Ninguna</option><option value="attack" ${spell?.attackType === "attack" ? "selected" : ""}>Ataque</option><option value="save" ${spell?.attackType === "save" ? "selected" : ""}>Salvación</option></select></label><label>Salvación<select name="saveAbility">${selectOptions(SPELL_SAVE_ABILITIES, spell?.saveAbility ?? "", "No aplica")}</select></label><label>Edición<select name="year">${selectOptions(["2014", "2024"], spell?.year ?? "2014")}</select></label></div>
+      <div class="gm-check-row"><label><input name="ritual" type="checkbox" ${spell?.ritual ? "checked" : ""}> Ritual</label><label><input name="concentration" type="checkbox" ${spell?.concentration ? "checked" : ""}> Concentración</label><label><input name="addAbilityModifier" type="checkbox" ${spell?.addAbilityModifier ? "checked" : ""}> Sumar característica al daño</label></div>
+      <label>Material<input name="material" value="${escapeHtml(spell?.material ?? "")}"></label><label>Descripción<textarea name="description">${escapeHtml(spell?.description ?? "")}</textarea></label><label>A niveles superiores<textarea name="higherLevels">${escapeHtml(spell?.higherLevels ?? "")}</textarea></label><button type="submit">Guardar conjuro</button>
     </form>`;
   }
 
   private renderEquipmentForm(item: EquipmentCatalogDraft | null): string {
+    const kind = item?.weapon ? "weapon" : item?.armor ? "armor" : "gear";
+    const bonusText = item?.bonuses.map((bonus) => `${bonus.category} | ${bonus.key} | ${bonus.value} | ${bonus.advantage ? "ventaja" : ""} | ${bonus.disadvantage ? "desventaja" : ""}`).join("\n") ?? "";
     return `<form data-gm-form="equipment" class="gm-editor-form"><input type="hidden" name="previousKey" value="${escapeHtml(item?.name ?? "")}">
-      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(item?.name ?? "")}"></label><label>Categoría<input name="category" value="${escapeHtml(item?.category ?? "adventuring-gear")}"></label><label>Peso<input name="weight" type="number" min="0" step="0.01" value="${item?.unitWeight ?? 0}"></label><label>Costo<input name="costQuantity" type="number" min="0" step="0.01" value="${item?.cost.quantity ?? 0}"></label><label>Moneda<select name="costUnit">${["cp","sp","ep","gp","pp"].map((unit) => `<option ${item?.cost.unit === unit ? "selected" : ""}>${unit}</option>`).join("")}</select></label><label>Propiedades<input name="properties" value="${escapeHtml(item?.properties.join(", ") ?? "")}"></label><label>Daño<input name="damageExpression" value="${escapeHtml(item?.weapon?.damageExpression ?? "")}"></label><label>Tipo de daño<input name="damageType" value="${escapeHtml(item?.weapon?.damageType ?? "")}"></label></div>
-      <div class="gm-check-row"><label><input name="usable" type="checkbox" ${item?.usable ? "checked" : ""}> Usable</label><label><input name="consumable" type="checkbox" ${item?.consumable ? "checked" : ""}> Consumible</label><label><input name="requiresAttunement" type="checkbox" ${item?.requiresAttunement ? "checked" : ""}> Requiere sintonización</label></div>
+      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(item?.name ?? "")}"></label><label>Tipo<select name="itemKind">${[["gear","Objeto"],["weapon","Arma"],["armor","Armadura"]].map(([value,label]) => `<option value="${value}" ${kind === value ? "selected" : ""}>${label}</option>`).join("")}</select></label><label>Categoría<select name="category">${selectOptions(EQUIPMENT_CATEGORIES, item?.category ?? "adventuring-gear")}</select></label><label>Rareza<select name="rarity">${selectOptions(EQUIPMENT_RARITIES, item?.rarity ?? "none")}</select></label><label>Peso<input name="weight" type="number" min="0" step="0.01" value="${item?.unitWeight ?? 0}"></label><label>Costo<input name="costQuantity" type="number" min="0" step="0.01" value="${item?.cost.quantity ?? 0}"></label><label>Moneda<select name="costUnit">${selectOptions(["cp","sp","ep","gp","pp"], item?.cost.unit ?? "gp")}</select></label><label>Propiedades<select name="properties" multiple size="6">${multiSelectOptions(EQUIPMENT_PROPERTIES, item?.properties ?? [])}</select></label></div>
+      <fieldset><legend>Arma</legend><div class="gm-form-grid"><label>Categoría de arma<input name="weaponCategory" value="${escapeHtml(item?.weapon?.category ?? "")}"></label><label>Alcance/tipo<input name="weaponRange" value="${escapeHtml(item?.weapon?.range ?? "")}"></label><label>Alcance normal<input name="normalRange" type="number" min="0" value="${item?.weapon?.normalRange ?? ""}"></label><label>Alcance largo<input name="longRange" type="number" min="0" value="${item?.weapon?.longRange ?? ""}"></label><label>Daño<input name="damageExpression" value="${escapeHtml(item?.weapon?.damageExpression ?? "")}"></label><label>Daño versátil<input name="versatileDamageExpression" value="${escapeHtml(item?.weapon?.versatileDamageExpression ?? "")}"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, item?.weapon?.damageType ?? "", "Sin daño")}</select></label><label>Bono ataque<input name="attackBonus" type="number" step="1" value="${item?.weapon?.attackBonus ?? 0}"></label><label>Bono daño<input name="damageBonus" type="number" step="1" value="${item?.weapon?.damageBonus ?? 0}"></label></div></fieldset>
+      <fieldset><legend>Armadura</legend><div class="gm-form-grid"><label>CA base<input name="armorBase" type="number" step="1" value="${item?.armor?.base ?? 10}"></label><label>Categoría<select name="armorCategory">${selectOptions(["light", "medium", "heavy", "shield"], item?.armor?.armorCategory ?? "", "Sin categoría")}</select></label><label>Máx. DES<input name="maximumDexterityBonus" type="number" min="0" value="${item?.armor?.maximumDexterityBonus ?? ""}"></label></div><div class="gm-check-row"><label><input name="dexterityBonus" type="checkbox" ${item?.armor?.dexterityBonus ? "checked" : ""}> Suma DES</label><label><input name="stealthDisadvantage" type="checkbox" ${item?.armor?.stealthDisadvantage ? "checked" : ""}> Desventaja en sigilo</label></div></fieldset>
+      <fieldset><legend>Uso y cargas</legend><div class="gm-check-row"><label><input name="usable" type="checkbox" ${item?.usable ? "checked" : ""}> Usable</label><label><input name="consumable" type="checkbox" ${item?.consumable ? "checked" : ""}> Consumible</label><label><input name="requiresAttunement" type="checkbox" ${item?.requiresAttunement ? "checked" : ""}> Requiere sintonización</label><label><input name="hasCharges" type="checkbox" ${item?.charges ? "checked" : ""}> Usa cargas</label></div><div class="gm-form-grid"><label>Cargas actuales<input name="chargesCurrent" type="number" min="0" value="${item?.charges?.current ?? 0}"></label><label>Cargas máximas<input name="chargesMaximum" type="number" min="0" value="${item?.charges?.maximum ?? 0}"></label><label>Recuperación<select name="chargesReset">${selectOptions(["none", "short-rest", "long-rest", "dawn", "daily", "never"], item?.charges?.reset ?? "none")}</select></label></div></fieldset>
+      <label>Bonificadores <small>categoría | clave | valor | ventaja | desventaja</small><textarea name="bonuses">${escapeHtml(bonusText)}</textarea></label><label>Efecto activable<input name="effectDescription" value="${escapeHtml(item?.effect.description ?? "")}"></label><label class="checkbox"><input name="effectActive" type="checkbox" ${item?.effect.active ? "checked" : ""}> Efecto activo por defecto</label>
       <label>Descripción<textarea name="description">${escapeHtml(item?.description ?? "")}</textarea></label><button type="submit">Guardar objeto</button>
     </form>`;
   }
@@ -204,6 +225,7 @@ export class GmToolsPanel {
   private bindContent(): void {
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-new]").forEach((button) => button.addEventListener("click", () => {
       const section = button.dataset.gmNew as GmContentSection;
+      this.contentTemplate = null;
       if (section === "spell") this.selectedSpell = "";
       if (section === "equipment") this.selectedEquipment = "";
       if (section === "shop") this.selectedShop = "";
@@ -212,6 +234,7 @@ export class GmToolsPanel {
     }));
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-edit]").forEach((button) => button.addEventListener("click", () => {
       const section = button.dataset.gmEdit as GmContentSection;
+      this.contentTemplate = null;
       const key = button.dataset.gmContentKey ?? "";
       if (section === "spell") this.selectedSpell = key;
       if (section === "equipment") this.selectedEquipment = key;
@@ -219,7 +242,18 @@ export class GmToolsPanel {
       this.editingContent = section;
       this.rerender();
     }));
-    this.root.querySelector("[data-gm-cancel-edit]")?.addEventListener("click", () => { this.editingContent = null; this.rerender(); });
+    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-template]").forEach((button) => button.addEventListener("click", () => {
+      const section = button.dataset.gmTemplate as GmContentSection;
+      const key = button.dataset.gmContentKey ?? "";
+      const source = section === "spell" ? this.content.spells.find((entry) => entry.name === key)
+        : section === "equipment" ? this.content.equipment.find((entry) => entry.name === key)
+          : this.content.shops.find((entry) => entry.name === key);
+      if (!source) return;
+      this.contentTemplate = { section, value: { ...structuredClone(source), name: `COPIA DE ${source.name}` } };
+      this.editingContent = section;
+      this.rerender();
+    }));
+    this.root.querySelector("[data-gm-cancel-edit]")?.addEventListener("click", () => { this.contentTemplate = null; this.editingContent = null; this.rerender(); });
     this.root.querySelector<HTMLInputElement>("[data-gm-content-search]")?.addEventListener("input", (event) => {
       const input = event.currentTarget as HTMLInputElement;
       const section = input.dataset.gmContentSearch as GmContentSection;
@@ -292,23 +326,37 @@ export class GmToolsPanel {
 
   private async saveSpell(data: FormData): Promise<void> {
     if (!this.runtime.saveCustomSpell) return;
-    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: String(data.get("components") ?? ""), material: "", ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: String(data.get("classes") ?? ""), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: "", damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: false, damageType: String(data.get("damageType") ?? ""), year: "2014", legacyData: {} };
-    try { await this.runtime.saveCustomSpell(definition, String(data.get("previousKey") ?? "") || null); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== String(data.get("previousKey") ?? "") && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
+    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String).join(", "), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), legacyData: {} };
+    try { await this.runtime.saveCustomSpell(definition, String(data.get("previousKey") ?? "") || null); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== String(data.get("previousKey") ?? "") && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveEquipment(data: FormData): Promise<void> {
     if (!this.runtime.saveCustomEquipment) return;
-    const base = normalizeEquipmentDefinition({ name: String(data.get("name") ?? "").trim(), weight: number(data.get("weight")), cost: { quantity: number(data.get("costQuantity")), unit: String(data.get("costUnit") ?? "gp") }, equipment_category: { index: String(data.get("category") ?? "adventuring-gear") }, description: String(data.get("description") ?? "") });
-    const damageExpression = String(data.get("damageExpression") ?? "");
-    const definition: EquipmentCatalogDraft = { ...base, properties: String(data.get("properties") ?? "").split(",").map((entry) => entry.trim()).filter(Boolean), usable: data.get("usable") === "on", consumable: data.get("consumable") === "on", requiresAttunement: data.get("requiresAttunement") === "on", weapon: damageExpression ? { category: "", range: "", normalRange: null, longRange: null, damageExpression, versatileDamageExpression: "", damageType: String(data.get("damageType") ?? ""), attackBonus: 0, damageBonus: 0 } : null };
-    try { const previous = String(data.get("previousKey") ?? "") || null; await this.runtime.saveCustomEquipment(definition, previous); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
+    const base = normalizeEquipmentDefinition({ name: String(data.get("name") ?? "").trim(), rarity: String(data.get("rarity") ?? "none"), weight: number(data.get("weight")), cost: { quantity: number(data.get("costQuantity")), unit: String(data.get("costUnit") ?? "gp") }, equipment_category: { index: String(data.get("category") ?? "adventuring-gear") }, description: String(data.get("description") ?? "") });
+    const kind = String(data.get("itemKind") ?? "gear");
+    const nullableInteger = (key: string): number | null => String(data.get(key) ?? "").trim() === "" ? null : Math.max(0, Math.trunc(number(data.get(key))));
+    const bonuses = String(data.get("bonuses") ?? "").split(/\r?\n/).flatMap((line) => {
+      const [category = "", key = "", value = "0", advantage = "", disadvantage = ""] = line.split("|").map((entry) => entry.trim());
+      return category && key ? [{ category, key, value: Number(value) || 0, advantage: advantage.toLocaleLowerCase().startsWith("vent"), disadvantage: disadvantage.toLocaleLowerCase().startsWith("desvent") }] : [];
+    });
+    const maximumCharges = Math.max(0, Math.trunc(number(data.get("chargesMaximum"))));
+    const definition: EquipmentCatalogDraft = {
+      ...base,
+      rarity: String(data.get("rarity") ?? "none"), properties: data.getAll("properties").map(String),
+      usable: data.get("usable") === "on", consumable: data.get("consumable") === "on", requiresAttunement: data.get("requiresAttunement") === "on",
+      charges: data.get("hasCharges") === "on" ? { current: Math.min(maximumCharges, Math.max(0, Math.trunc(number(data.get("chargesCurrent"))))), maximum: maximumCharges, reset: String(data.get("chargesReset") ?? "none") } : null,
+      weapon: kind === "weapon" ? { category: String(data.get("weaponCategory") ?? ""), range: String(data.get("weaponRange") ?? ""), normalRange: nullableInteger("normalRange"), longRange: nullableInteger("longRange"), damageExpression: String(data.get("damageExpression") ?? ""), versatileDamageExpression: String(data.get("versatileDamageExpression") ?? ""), damageType: String(data.get("damageType") ?? ""), attackBonus: Math.trunc(number(data.get("attackBonus"))), damageBonus: Math.trunc(number(data.get("damageBonus"))) } : null,
+      armor: kind === "armor" ? { base: Math.trunc(number(data.get("armorBase"), 10)), dexterityBonus: data.get("dexterityBonus") === "on", maximumDexterityBonus: nullableInteger("maximumDexterityBonus"), armorCategory: String(data.get("armorCategory") ?? ""), stealthDisadvantage: data.get("stealthDisadvantage") === "on" } : null,
+      bonuses, effect: { description: String(data.get("effectDescription") ?? ""), active: data.get("effectActive") === "on" },
+    };
+    try { const previous = String(data.get("previousKey") ?? "") || null; await this.runtime.saveCustomEquipment(definition, previous); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveShop(data: FormData): Promise<void> {
     if (!this.runtime.saveShop) return;
     const categories: Record<string, string[]> = {}; for (const row of String(data.get("categories") ?? "").split(/\r?\n/)) { const [category, items = ""] = row.split("|"); const name = category?.trim(); if (name) categories[name] = items.split(",").map((entry) => entry.trim()).filter(Boolean); }
     const shop = { name: String(data.get("name") ?? "").trim(), categories };
-    try { const previous = String(data.get("previousKey") ?? "") || null; await this.runtime.saveShop(shop, previous); this.content.shops = [...this.content.shops.filter((entry) => entry.name !== previous && entry.name !== shop.name), shop].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedShop = shop.name; this.editingContent = null; this.recordAction(`Guardar tienda: ${shop.name}`); this.success("Tienda guardada."); } catch (error) { this.failure(error); }
+    try { const previous = String(data.get("previousKey") ?? "") || null; await this.runtime.saveShop(shop, previous); this.content.shops = [...this.content.shops.filter((entry) => entry.name !== previous && entry.name !== shop.name), shop].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedShop = shop.name; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar tienda: ${shop.name}`); this.success("Tienda guardada."); } catch (error) { this.failure(error); }
   }
 
   private async deleteContent(kind: string): Promise<void> {
