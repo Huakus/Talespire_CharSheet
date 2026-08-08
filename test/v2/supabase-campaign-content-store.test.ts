@@ -22,10 +22,11 @@ function entry(input: Partial<RemoteCampaignContentEntry> & Pick<RemoteCampaignC
 
 function fakeClient(initial: RemoteCampaignContentEntry[]) {
   let entries = structuredClone(initial);
+  let loads = 0;
   const saves: Array<Record<string, unknown>> = [];
   const deletes: Array<Record<string, unknown>> = [];
   const client = {
-    listCampaignContent: async () => structuredClone(entries),
+    listCampaignContent: async () => { loads += 1; return structuredClone(entries); },
     saveCampaignContentEntry: async (input: Record<string, unknown>) => {
       saves.push(structuredClone(input));
       const previous = entries.find((item) => item.kind === input.kind && item.contentKey === input.contentKey);
@@ -46,7 +47,7 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
       entries = entries.filter((item) => !(item.kind === kind && item.contentKey === contentKey));
     },
   } as unknown as SupabaseCampaignDocumentClient;
-  return { client, saves, deletes, current: () => entries };
+  return { client, saves, deletes, current: () => entries, loads: () => loads };
 }
 
 describe("Supabase campaign content store", () => {
@@ -99,6 +100,16 @@ describe("Supabase campaign content store", () => {
     }, "Escudo");
 
     expect(remote.saves[0]).toMatchObject({ contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa"], expectedRevision: 0 });
+  });
+
+  it("reuses one campaign catalog download across the GM panels", async () => {
+    const remote = fakeClient([entry({ kind: "spell", contentKey: "official:spell:test", name: "Prueba", payload: { name: "Prueba", level: 1 } })]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    const [first, second, third] = await Promise.all([store.load(), store.load(), store.load()]);
+    expect(first.spells[0]?.name).toBe("Prueba");
+    expect(second.spells[0]?.name).toBe("Prueba");
+    expect(third.spells[0]?.name).toBe("Prueba");
+    expect(remote.loads()).toBe(1);
   });
 
   it("round-trips normalized equipment and monster values without losing combat fields", async () => {

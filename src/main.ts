@@ -16,7 +16,7 @@ import { BrowserDiceRoller } from "./infrastructure/dice/browser-dice-roller";
 import { TaleSpireDiceRoller } from "./infrastructure/talespire/talespire-dice-roller";
 import { TaleSpireMiniatureAdapter } from "./infrastructure/talespire/talespire-miniature";
 import { TaleSpirePlayerCollaboration } from "./infrastructure/talespire/talespire-player-collaboration";
-import { TaleSpireGlobalContentStore } from "./infrastructure/talespire/talespire-global-content";
+import { parseLegacyGlobalContentText, TaleSpireGlobalContentStore } from "./infrastructure/talespire/talespire-global-content";
 import { resolveTaleSpireClientRole } from "./infrastructure/talespire/talespire-client-role";
 import { EncounterApplication } from "./application/encounter/encounter-application";
 import { GmApp } from "./ui/gm-app";
@@ -53,6 +53,18 @@ let activeCollaboration: TaleSpirePlayerCollaboration | null = null;
 let activeGmCollaboration: TaleSpireGmCollaboration | null = null;
 let activeTaleSpireDiceRoller: TaleSpireDiceRoller | null = null;
 
+function reportStartupFailure(error: unknown): void {
+  const panel = document.createElement("section");
+  panel.className = "sheet-empty startup-failure";
+  const title = document.createElement("strong");
+  title.textContent = "No se pudo iniciar el Symbiote";
+  const message = document.createElement("p");
+  message.textContent = error instanceof Error ? error.message : String(error);
+  panel.append(title, message);
+  appRoot.replaceChildren(panel);
+  console.error("SYMBIOTE_STARTUP_FAILED", error);
+}
+
 async function startBrowserDevelopment(): Promise<void> {
   if (started) return;
   started = true;
@@ -70,7 +82,7 @@ async function startBrowserDevelopment(): Promise<void> {
     storageEventKey: primaryRepository.storageKey,
     diceRoller: new BrowserDiceRoller(),
     ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), contentCatalogIsComplete: true } : {}),
-  }).start();
+  }).start().catch(reportStartupFailure);
 }
 
 async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
@@ -135,6 +147,16 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
           return { ...result, total: result.spells + result.equipment + result.monsters + result.shops + result.checklist };
         },
         importLegacyGmContent: async () => campaignContent.importLegacy(await legacyGlobalContent.load()),
+        previewLegacyGmContentFile: async (raw: string) => {
+          const parsed = parseLegacyGlobalContentText(raw);
+          const legacy = { ...parsed, checklist: [] };
+          const result = { spells: legacy.spells.length, equipment: legacy.equipment.length, monsters: legacy.monsters.length, shops: legacy.shops.length, checklist: legacy.checklist.length };
+          return { ...result, total: result.spells + result.equipment + result.monsters + result.shops + result.checklist };
+        },
+        importLegacyGmContentFile: async (raw: string) => {
+          const parsed = parseLegacyGlobalContentText(raw);
+          return campaignContent.importLegacy({ ...parsed, checklist: [] });
+        },
       } : {}),
       saveGmWorkspace: (workspace, checksum) => gmWorkspace.save(workspace, checksum),
       ...(collaboration ? {
@@ -149,7 +171,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
         subscribeTransferStatus: (listener) => collaboration.subscribeTransferStatus(listener),
       } : {}),
       ...(api.creatures ? { selectMiniature: () => miniature.selectFirst() } : {}),
-    }).start();
+    }).start().catch(reportStartupFailure);
     return;
   }
   const collaboration = api.sync && api.clients
@@ -200,7 +222,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
           createMiniatureThumbnail: (link: Parameters<typeof miniature.createThumbnail>[0]) => miniature.createThumbnail(link),
         }
       : {}),
-  }).start();
+  }).start().catch(reportStartupFailure);
 }
 
 const taleSpireApi = detectTaleSpireApi(window.TS);

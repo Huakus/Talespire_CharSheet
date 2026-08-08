@@ -28,20 +28,34 @@ function safeNormalize<T>(values: JsonValue[], normalize: (value: unknown) => T)
   return output;
 }
 
+export function parseLegacyGlobalContent(input: unknown): GlobalCustomContent {
+  const parsed = JsonObjectSchema.safeParse(input);
+  if (!parsed.success) throw new Error("El archivo legado no contiene un objeto JSON válido.");
+  const root = parsed.data;
+  return {
+    spells: safeNormalize(Object.values(object(root["Custom Spells"])), normalizeSpellDefinition),
+    equipment: safeNormalize(Object.values(object(root["Custom Equipment"])), normalizeEquipmentDefinition),
+    monsters: safeNormalize(Object.values(object(root["Custom Monsters"])), normalizeMonsterDefinition).filter((monster) => monster.name),
+    shops: Object.entries(object(root["Shop Data"])).map(([name, value]) => normalizeShop(name, value)),
+    checklist: Object.entries(object(root.checklists)).flatMap(([id, value]) => {
+      try { return [normalizeChecklistItem(id, value)]; } catch { return []; }
+    }),
+  };
+}
+
+export function parseLegacyGlobalContentText(raw: string): GlobalCustomContent {
+  try { return parseLegacyGlobalContent(JSON.parse(raw)); }
+  catch (error) {
+    if (error instanceof SyntaxError) throw new Error("El archivo legado no es JSON válido.");
+    throw error;
+  }
+}
+
 export class TaleSpireGlobalContentStore {
   constructor(private readonly api: TaleSpireBlobApi, private readonly lock: ExclusiveLock = defaultExclusiveLock) {}
 
   async load(): Promise<GlobalCustomContent> {
-    const root = await this.readRoot();
-    return {
-      spells: safeNormalize(Object.values(object(root["Custom Spells"])), normalizeSpellDefinition),
-      equipment: safeNormalize(Object.values(object(root["Custom Equipment"])), normalizeEquipmentDefinition),
-      monsters: safeNormalize(Object.values(object(root["Custom Monsters"])), normalizeMonsterDefinition).filter((monster) => monster.name),
-      shops: Object.entries(object(root["Shop Data"])).map(([name, value]) => normalizeShop(name, value)),
-      checklist: Object.entries(object(root.checklists)).flatMap(([id, value]) => {
-        try { return [normalizeChecklistItem(id, value)]; } catch { return []; }
-      }),
-    };
+    return parseLegacyGlobalContent(await this.readRoot());
   }
 
   async saveSpell(definition: SpellDefinition, previousKey: string | null = null): Promise<void> {

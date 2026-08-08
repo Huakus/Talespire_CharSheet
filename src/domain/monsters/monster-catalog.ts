@@ -103,17 +103,34 @@ function strings(value: unknown): string[] {
   }).filter(Boolean);
 }
 
+function inferredSize(type: string): string {
+  const normalized = type.toLocaleLowerCase();
+  return ["Diminuto", "Pequeño", "Mediano", "Grande", "Enorme", "Gargantuesco", "Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan"]
+    .find((size) => normalized.includes(size.toLocaleLowerCase())) ?? "";
+}
+
+function inferredAlignment(type: string): string {
+  return type.includes(",") ? type.slice(type.indexOf(",") + 1).trim() : "";
+}
+
+function mergedActions(source: JsonObject): MonsterFeature[] {
+  const complete = features(source.Actions ?? source.actions);
+  const completeNames = new Set(complete.map((entry) => entry.name.trim().toLocaleLowerCase()).filter(Boolean));
+  return [...complete, ...quickActions(source.QuickAction ?? source.quickAction).filter((entry) => !completeNames.has(entry.name.trim().toLocaleLowerCase()))];
+}
+
 export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
   const source = object(value);
   const hp = object(source.HP ?? source.hp);
   const ac = object(source.AC ?? source.ac);
   const abilityData = object(source.Abilities ?? source.abilities);
+  const type = String(source.Type ?? source.type ?? "").trim();
   return {
     id: String(source.Id ?? source.id ?? source.Name ?? source.name ?? "").trim(),
     name: String(source.Name ?? source.name ?? "").trim(),
-    type: String(source.Type ?? source.type ?? "").trim(),
-    size: String(source.Size ?? source.size ?? "").trim(),
-    alignment: String(source.Alignment ?? source.alignment ?? "").trim(),
+    type,
+    size: String(source.Size ?? source.size ?? "").trim() || inferredSize(type),
+    alignment: String(source.Alignment ?? source.alignment ?? "").trim() || inferredAlignment(type),
     challenge: String(source.Challenge ?? source.challenge ?? source.CR ?? source.cr ?? "").trim(),
     armorClass: integer(ac.Value ?? ac.value ?? source.armorClass ?? source.AC ?? source.ac),
     hitPoints: Math.max(0, integer(hp.Value ?? hp.value ?? source.hitPoints ?? source.HP ?? source.hp)),
@@ -131,7 +148,7 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     damageImmunities: strings(source.DamageImmunities ?? source.damageImmunities),
     conditionImmunities: strings(source.ConditionImmunities ?? source.conditionImmunities),
     traits: features(source.Traits ?? source.traits),
-    actions: [...quickActions(source.QuickAction ?? source.quickAction), ...features(source.Actions ?? source.actions)],
+    actions: mergedActions(source),
     reactions: features(source.Reactions ?? source.reactions),
     legendaryActions: features(source.LegendaryActions ?? source.legendaryActions),
     spells: strings(source.Spells ?? source.spells),

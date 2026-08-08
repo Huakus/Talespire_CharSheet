@@ -25,6 +25,7 @@ function createSupabaseTransport(config: RemoteBackendConfig): BackendRpcTranspo
       autoRefreshToken: false,
       detectSessionInUrl: false,
       persistSession: false,
+      storageKey: "talespire-charsheet:backend-health",
     },
   });
   return {

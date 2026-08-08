@@ -29,11 +29,16 @@ function normalizedName(value: string): string { return value.trim().toLocaleLow
 
 export class SupabaseCampaignContentStore {
   private entries: RemoteCampaignContentEntry[] | null = null;
+  private loadingEntries: Promise<RemoteCampaignContentEntry[]> | null = null;
 
   constructor(private readonly client: SupabaseCampaignDocumentClient, private readonly campaignId: string) {}
 
   async load(): Promise<GlobalCustomContent> {
-    this.entries = await this.client.listCampaignContent(this.campaignId);
+    if (this.entries === null) {
+      this.loadingEntries ??= this.client.listCampaignContent(this.campaignId);
+      try { this.entries = await this.loadingEntries; }
+      finally { this.loadingEntries = null; }
+    }
     return this.project(this.entries);
   }
 

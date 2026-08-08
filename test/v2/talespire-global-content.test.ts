@@ -1,7 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { TaleSpireGlobalContentStore } from "../../src/infrastructure/talespire/talespire-global-content";
+import { parseLegacyGlobalContentText, TaleSpireGlobalContentStore } from "../../src/infrastructure/talespire/talespire-global-content";
 
 describe("TaleSpire global custom content", () => {
+  it("parses an exported extensionless global file and keeps every legacy field", () => {
+    const loaded = parseLegacyGlobalContentText(JSON.stringify({
+      "Custom Spells": { Eco: { name: "Eco", level: "2nd-level", class: "Mago, Bardo", components: "V, S", customField: "preserved" } },
+      "Custom Equipment": { Capa: { name: "Capa", rarity: { index: "rare" }, description: ["Primera línea", "Segunda línea"], properties: [{ name: "magic" }], hasCharges: true, chargesOptions: { maxCharges: 3, chargeReset: "at-dawn" }, customField: 7 } },
+      "Custom Monsters": { Guardián: { Name: "Guardián", Type: "Mediano no muerto, legal maligno", HP: { Value: 30 }, QuickAction: [{ Name: "Golpe", Damage: "1d8" }], Actions: [{ Name: "Golpe", Content: "Impacto: 1d8" }], DamageResistances: ["frío"], customField: true } },
+    }));
+    expect(loaded).toMatchObject({
+      spells: [{ name: "Eco", level: 2, classes: "Mago, Bardo", legacyData: { customField: "preserved" } }],
+      equipment: [{ name: "Capa", rarity: "rare", description: "Primera línea\n\nSegunda línea", properties: ["magic"], charges: { current: 3, maximum: 3, reset: "at-dawn" }, legacyData: { customField: 7 } }],
+      monsters: [{ name: "Guardián", size: "Mediano", alignment: "legal maligno", hitPoints: 30, damageResistances: ["frío"], actions: [{ name: "Golpe", content: "Impacto: 1d8" }], legacyData: { customField: true } }],
+    });
+  });
+
   it("loads legacy collections and preserves unrelated global settings on write", async () => {
     let blob = JSON.stringify({
       language: { "Preferred Language": "es" },

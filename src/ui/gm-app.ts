@@ -46,6 +46,21 @@ export interface GmAppRuntime extends GmToolsRuntime {
   deleteCustomMonster?: (key: string) => Promise<void>;
   previewLegacyGmContent?: () => Promise<{ spells: number; equipment: number; monsters: number; shops: number; checklist: number; total: number }>;
   importLegacyGmContent?: () => Promise<{ imported: number }>;
+  previewLegacyGmContentFile?: (raw: string) => Promise<{ spells: number; equipment: number; monsters: number; shops: number; checklist: number; total: number }>;
+  importLegacyGmContentFile?: (raw: string) => Promise<{ imported: number }>;
+}
+
+function readSelectedFile(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      if (typeof reader.result === "string") resolve(reader.result);
+      else reject(new Error("TaleSpire no pudo leer el archivo como texto."));
+    }, { once: true });
+    reader.addEventListener("error", () => reject(reader.error ?? new Error("No se pudo leer el archivo seleccionado.")), { once: true });
+    reader.addEventListener("abort", () => reject(new Error("La lectura del archivo fue cancelada.")), { once: true });
+    reader.readAsText(file, "utf-8");
+  });
 }
 
 function escapeHtml(value: string): string {
@@ -222,6 +237,7 @@ export class GmApp {
   private previousTaleSpireInitiativeQueue: TaleSpireNativeInitiativeQueue | null = null;
   private taleSpireInitiativeSync: Promise<void> = Promise.resolve();
   private readonly toolsPanel: GmToolsPanel;
+  private legacyImportStatus = "";
 
   constructor(
     private readonly root: HTMLElement,
@@ -239,6 +255,7 @@ export class GmApp {
   }
 
   async start(): Promise<void> {
+    this.root.innerHTML = '<section class="sheet-empty gm-startup-status"><strong>Cargando control GM…</strong><p>Recuperando campaña y catálogo compartido.</p></section>';
     subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
     this.runtime.subscribeDiceResults?.((result) => {
       this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
@@ -331,7 +348,7 @@ export class GmApp {
         ${this.snapshot ? `
           ${selected ? this.renderEncounter(selected) : '<div class="sheet-empty"><strong>No hay encuentros</strong><p>Creá uno para comenzar.</p></div>'}
         ` : '<div class="sheet-empty"><strong>No hay una campaña v2 cargada</strong><p>Importá o creá la campaña desde la hoja de personaje antes de abrir el control GM.</p></div>'}` : ""}
-        ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span>${this.runtime.importLegacyGmContent ? '<button type="button" data-action="import-legacy-gm-content">Importar contenido local legado</button>' : ""}</div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
+        ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span>${this.legacyImportStatus ? `<small class="gm-legacy-import-status">${escapeHtml(this.legacyImportStatus)}</small>` : ""}${this.runtime.importLegacyGmContent ? '<button type="button" data-action="import-legacy-gm-content">Importar almacenamiento local</button>' : ""}${this.runtime.importLegacyGmContentFile ? '<button type="button" data-action="choose-legacy-gm-content-file">Importar archivo…</button><input type="file" data-legacy-gm-content-file hidden>' : ""}</div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
         ${this.activeSection === "notes" && this.snapshot ? this.toolsPanel.render("notes", this.snapshot.campaign.gm) : ""}
         ${this.activeSection === "tools" && this.snapshot ? this.toolsPanel.render("tools", this.snapshot.campaign.gm) : ""}
       </section>`;
@@ -622,6 +639,17 @@ export class GmApp {
       this.render();
     }));
     this.root.querySelector('[data-action="import-legacy-gm-content"]')?.addEventListener("click", () => { void this.importLegacyGmContent(); });
+    const legacyFileInput = this.root.querySelector<HTMLInputElement>("[data-legacy-gm-content-file]");
+    this.root.querySelector('[data-action="choose-legacy-gm-content-file"]')?.addEventListener("click", () => legacyFileInput?.click());
+    legacyFileInput?.addEventListener("change", () => {
+      const file = legacyFileInput.files?.[0];
+      if (!file) return;
+      const status = this.root.querySelector<HTMLElement>(".gm-legacy-import-status") ?? document.createElement("small");
+      status.className = "gm-legacy-import-status";
+      status.textContent = `Leyendo ${file.name}…`;
+      if (!status.isConnected) this.root.querySelector(".gm-content-source-bar span")?.after(status);
+      void this.importLegacyGmContentFile(file).finally(() => { legacyFileInput.value = ""; });
+    });
     this.root.querySelectorAll<HTMLElement>('[data-action="edit-custom-monster"]').forEach((button) => button.addEventListener("click", () => {
       this.selectedCustomMonsterKey = button.dataset.monsterKey ?? this.selectedCustomMonsterKey;
       this.editingCustomMonsterKey = this.selectedCustomMonsterKey;
@@ -1022,6 +1050,35 @@ export class GmApp {
       this.message = { kind: "success", text: `${result.imported} entradas importadas a Supabase. El almacenamiento legado no fue modificado.` };
     } catch (error) {
       this.message = { kind: "error", text: this.formatError(error) };
+    }
+    this.render();
+  }
+
+  private async importLegacyGmContentFile(file: File): Promise<void> {
+    if (!this.runtime.importLegacyGmContentFile) return;
+    try {
+      const raw = await readSelectedFile(file);
+      const preview = await this.runtime.previewLegacyGmContentFile?.(raw);
+      const detail = preview ? `\n\n${preview.spells} conjuros · ${preview.equipment} objetos · ${preview.monsters} monstruos · ${preview.shops} tiendas · ${preview.checklist} tareas.\nTotal: ${preview.total}.` : "";
+      if (globalThis.confirm && !globalThis.confirm(`¿Importar “${file.name}” a esta campaña?${detail}\n\nLos nombres duplicados se conservarán como copias importadas. El archivo original no se modificará.`)) {
+        this.legacyImportStatus = "Importación cancelada.";
+        this.render();
+        return;
+      }
+      this.legacyImportStatus = `Importando ${preview?.total ?? ""} entradas…`;
+      const liveStatus = this.root.querySelector<HTMLElement>(".gm-legacy-import-status");
+      if (liveStatus) liveStatus.textContent = this.legacyImportStatus;
+      const result = await this.runtime.importLegacyGmContentFile(raw);
+      const content = await this.runtime.loadGmContent?.();
+      if (content) { this.customSpells = content.spells; this.customEquipment = content.equipment; this.customMonsters = content.monsters; }
+      await this.toolsPanel.load();
+      this.selectedCustomMonsterKey = this.customMonsters[0]?.name ?? null;
+      this.legacyImportStatus = `${result.imported} entradas importadas correctamente.`;
+      this.message = { kind: "success", text: `${result.imported} entradas de “${file.name}” importadas a Supabase.` };
+    } catch (error) {
+      const detail = this.formatError(error);
+      this.legacyImportStatus = `Error: ${detail}`;
+      this.message = { kind: "error", text: detail };
     }
     this.render();
   }

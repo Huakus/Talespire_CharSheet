@@ -44,6 +44,14 @@ function number(value: JsonValue | undefined): number {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
 }
 
+function boolean(value: JsonValue | undefined): boolean {
+  return value === true || value === 1 || ["true", "yes", "sí", "si"].includes(String(value ?? "").trim().toLocaleLowerCase());
+}
+
+function description(value: JsonValue | undefined): string {
+  return Array.isArray(value) ? value.map((entry) => text(entry)).filter(Boolean).join("\n\n") : text(value);
+}
+
 export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDraft {
   const raw = input !== null && typeof input === "object" && !Array.isArray(input)
     ? input as Record<string, unknown>
@@ -74,6 +82,7 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
   const damageType = object(damage.damage_type);
   const range = object(data.throw_range ?? data.range);
   const armorClass = object(data.armor_class);
+  const chargeOptions = object(data.chargesOptions);
   const properties = Array.isArray(data.properties)
     ? data.properties.map((entry) => text(object(entry).name || object(entry).index)).filter(Boolean)
     : [];
@@ -99,15 +108,19 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
     cost: { quantity: number(cost.quantity), unit: text(cost.unit) },
     category: categoryKey || "adventuring-gear",
     rarity,
-    description: text(data.description ?? data.desc),
+    description: description(data.description ?? data.desc),
     properties,
     equipped: false,
     attuned: false,
-    requiresAttunement: Boolean(data.requires_attunement ?? data.requiresAttunement) ||
+    requiresAttunement: boolean(data.requires_attunement ?? data.requiresAttunement) ||
       properties.some((property) => property.toLowerCase().includes("attun")),
-    usable: Boolean(data.usable) || categoryKey.includes("potion") || categoryKey.includes("scroll"),
-    consumable: Boolean(data.consumable) || categoryKey.includes("potion") || categoryKey.includes("scroll"),
-    charges: null,
+    usable: boolean(data.usable) || boolean(data.hasCharges) || categoryKey.includes("potion") || categoryKey.includes("scroll"),
+    consumable: boolean(data.consumable) || categoryKey.includes("potion") || categoryKey.includes("scroll"),
+    charges: boolean(data.hasCharges) && number(chargeOptions.maxCharges) > 0 ? {
+      current: Math.trunc(number(chargeOptions.maxCharges)),
+      maximum: Math.trunc(number(chargeOptions.maxCharges)),
+      reset: text(chargeOptions.chargeReset),
+    } : null,
     armor: isArmor ? {
       base: Math.trunc(number(armorClass.base)),
       dexterityBonus: Boolean(armorClass.dex_bonus),
