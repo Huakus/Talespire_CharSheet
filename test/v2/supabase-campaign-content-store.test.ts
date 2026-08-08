@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import { SupabaseCampaignContentStore } from "../../src/infrastructure/remote/supabase-campaign-content-store";
-import type {
+import {
   RemoteCampaignContentEntry,
   SupabaseCampaignDocumentClient,
 } from "../../src/infrastructure/remote/supabase-campaign-document-client";
@@ -50,6 +50,36 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
 }
 
 describe("Supabase campaign content store", () => {
+  it("loads every content page instead of stopping at Supabase's first 1000 rows", async () => {
+    const rows = Array.from({ length: 1001 }, (_, index) => ({
+      campaign_id: campaignId,
+      kind: "equipment",
+      content_key: `official:equipment:${String(index).padStart(4, "0")}`,
+      name: `Objeto ${index}`,
+      origin: "official",
+      tags: ["official"],
+      payload: { name: `Objeto ${index}` },
+      revision: 0,
+      updated_at: "2026-08-08T00:00:00.000Z",
+      deleted_at: null,
+    }));
+    const ranges: Array<[number, number]> = [];
+    const builder = {
+      select() { return this; },
+      eq() { return this; },
+      is() { return this; },
+      order() { return this; },
+      range(from: number, to: number) {
+        ranges.push([from, to]);
+        return Promise.resolve({ data: rows.slice(from, to + 1), error: null });
+      },
+    };
+    const client = new SupabaseCampaignDocumentClient({ from: () => builder } as never);
+    const loaded = await client.listCampaignContent(campaignId);
+    expect(loaded).toHaveLength(1001);
+    expect(ranges).toEqual([[0, 999], [1000, 1999]]);
+  });
+
   it("projects official rows and preserves their provenance while the GM edits tags", async () => {
     const remote = fakeClient([entry({
       kind: "spell",

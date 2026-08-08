@@ -30,6 +30,7 @@ export type EncounterCommand =
       armorClass: number;
       hitPoints: EncounterCombatant["hitPoints"];
       conditions: EncounterCombatant["conditions"];
+      taleSpireClientId?: string;
     }
   | { kind: "damage"; combatantId: string; amount: number }
   | { kind: "heal"; combatantId: string; amount: number }
@@ -38,6 +39,7 @@ export type EncounterCommand =
       kind: "synchronize-talespire-initiative";
       items: { creatureId: string; name: string; combatantId: string }[];
       activeCreatureId: string | null;
+      roundDelta: number;
     };
 
 export interface EncounterCommandResult {
@@ -96,6 +98,10 @@ export function applyEncounterCommand(
     if (encounter.activeCombatantId === command.combatantId) encounter.activeCombatantId = null;
   } else if (command.kind === "synchronize-talespire-initiative") {
     synchronizeTaleSpireInitiative(encounter, command.items, command.activeCreatureId);
+    const roundDelta = Math.max(-1, Math.min(1, Math.trunc(command.roundDelta)));
+    const previousRound = encounter.round;
+    encounter.round = Math.max(1, encounter.round + roundDelta);
+    effects.roundChangedBy = encounter.round - previousRound;
   } else if (command.kind === "advance-turn" || command.kind === "previous-turn") {
     moveTurn(encounter, command.kind === "advance-turn" ? 1 : -1, effects);
   } else if (command.kind === "set-active-combatant") {
@@ -133,6 +139,7 @@ export function applyEncounterCommand(
       combatant.armorClass = command.armorClass;
       combatant.hitPoints = structuredClone(command.hitPoints);
       combatant.conditions = structuredClone(command.conditions);
+      if (command.taleSpireClientId && combatant.kind === "player") combatant.taleSpireClientId = command.taleSpireClientId;
     } else {
       applyHitPointCommand(combatant, command, effects);
     }

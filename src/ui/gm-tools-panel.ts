@@ -39,6 +39,31 @@ function number(value: FormDataEntryValue | null, fallback = 0): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function normalizedSearch(value: string): string {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
+}
+
+interface ContentFilterGroup { key: string; label: string; values: string[] }
+
+function filterToken(group: string, value: string): string { return `${group}\u0000${value}`; }
+function selectedFilterValues(filters: ReadonlySet<string>, group: string): string[] {
+  const prefix = `${group}\u0000`;
+  return [...filters].filter((filter) => filter.startsWith(prefix)).map((filter) => filter.slice(prefix.length));
+}
+export function matchesGroupedFilters(filters: ReadonlySet<string>, values: Record<string, readonly string[]>): boolean {
+  const groups = new Set([...filters].map((filter) => filter.slice(0, filter.indexOf("\u0000"))));
+  return [...groups].every((group) => {
+    const selected = new Set(selectedFilterValues(filters, group).map(normalizedSearch));
+    return (values[group] ?? []).some((value) => selected.has(normalizedSearch(value)));
+  });
+}
+function splitValues(value: string): string[] {
+  return value.split(/[,;]+/).map((entry) => entry.trim()).filter(Boolean);
+}
+function uniqueValues(values: readonly string[]): string[] {
+  return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right, "es", { numeric: true, sensitivity: "base" }));
+}
+
 function catalogMetadata(value: { legacyData?: unknown } | null): { origin: string; tags: string[]; contentKey: string; revision: number } {
   const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData) ? value.legacyData as Record<string, unknown> : {};
   const raw = legacy.__catalog && typeof legacy.__catalog === "object" && !Array.isArray(legacy.__catalog) ? legacy.__catalog as Record<string, unknown> : {};
@@ -67,6 +92,8 @@ export class GmToolsPanel {
   private contentTemplate: { section: GmContentSection; value: SpellDefinition | EquipmentCatalogDraft | GmShop } | null = null;
   private contentSearch: Record<GmContentSection, string> = { spell: "", equipment: "", shop: "" };
   private contentFilters: Record<GmContentSection, Set<string>> = { spell: new Set(), equipment: new Set(), shop: new Set() };
+  private contentShowAll: Record<GmContentSection, boolean> = { spell: false, equipment: false, shop: false };
+  private openContentFilterGroup: Record<GmContentSection, string | null> = { spell: null, equipment: null, shop: null };
   private showContentDescriptions = true;
 
   constructor(
@@ -113,13 +140,15 @@ export class GmToolsPanel {
       const form = section === "spell" ? this.renderSpellForm(spell) : section === "equipment" ? this.renderEquipmentForm(equipment) : this.renderShopForm(shop);
       return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${spell?.name ?? equipment?.name ?? shop?.name ?? (section === "spell" ? "Nuevo conjuro" : section === "equipment" ? "Nuevo objeto" : "Nueva tienda")}</strong><button type="button" data-gm-cancel-edit>Volver</button></div>${form}</section>`;
     }
-    const cards = section === "spell"
-      ? this.content.spells.filter((entry) => this.matchesSpellFilters(entry)).map((entry) => this.renderSpellCard(entry)).join("")
+    const query = normalizedSearch(this.contentSearch[section]);
+    const hasCriteria = this.contentShowAll[section] || Boolean(query) || this.contentFilters[section].size > 0;
+    const cards = !hasCriteria ? "" : section === "spell"
+      ? this.content.spells.filter((entry) => this.matchesSpellFilters(entry) && (!query || normalizedSearch([entry.name, entry.school, entry.description, entry.damageType, entry.classes].join(" ")).includes(query))).map((entry) => this.renderSpellCard(entry)).join("")
       : section === "equipment"
-        ? this.content.equipment.filter((entry) => this.matchesEquipmentFilters(entry)).map((entry) => this.renderEquipmentCard(entry)).join("")
-        : this.content.shops.filter((entry) => this.matchesShopFilters(entry)).map((entry) => this.renderShopCard(entry)).join("");
+        ? this.content.equipment.filter((entry) => this.matchesEquipmentFilters(entry) && (!query || normalizedSearch([entry.name, entry.category, entry.description, ...entry.properties].join(" ")).includes(query))).map((entry) => this.renderEquipmentCard(entry)).join("")
+        : this.content.shops.filter((entry) => this.matchesShopFilters(entry) && (!query || normalizedSearch([entry.name, ...Object.keys(entry.categories), ...Object.values(entry.categories).flat()].join(" ")).includes(query))).map((entry) => this.renderShopCard(entry)).join("");
     const label = section === "spell" ? "conjuro" : section === "equipment" ? "objeto" : "tienda";
-    return `<section class="gm-content-catalog">${this.renderContentDiscovery(section, label)}${this.renderContentFilterBar(section)}<div class="gm-catalog-grid">${cards}</div><div class="sheet-empty gm-content-empty" ${cards ? "hidden" : ""}><strong>Sin resultados</strong><p>No hay ${label}s que coincidan con los filtros.</p></div></section>`;
+    return `<section class="gm-content-catalog">${this.renderContentDiscovery(section, label)}${this.renderContentFilterBar(section)}<div class="gm-catalog-grid">${cards}</div><div class="sheet-empty gm-content-empty" ${cards ? "hidden" : ""}><strong>${hasCriteria ? "Sin resultados" : "Catálogo en espera"}</strong><p>${hasCriteria ? `No hay ${label}s que coincidan con los filtros.` : `Buscá, elegí un filtro o activá Todos para mostrar los ${label}s.`}</p></div></section>`;
   }
 
   private renderContentDiscovery(section: GmContentSection, label: string): string {
@@ -127,27 +156,51 @@ export class GmToolsPanel {
   }
 
   private renderContentFilterBar(section: GmContentSection): string {
-    const values = section === "spell"
-      ? [...new Set(this.content.spells.flatMap((spell) => { const meta = catalogMetadata(spell); return [`origen:${meta.origin}`, ...meta.tags.map((tag) => `tag:${tag}`), `nivel:${spell.level}`, spell.school ? `escuela:${spell.school}` : "", spell.ritual ? "ritual" : "", spell.concentration ? "concentración" : ""]; }).filter(Boolean))]
-      : section === "equipment"
-        ? [...new Set(this.content.equipment.flatMap((item) => { const meta = catalogMetadata(item); return [`origen:${meta.origin}`, ...meta.tags.map((tag) => `tag:${tag}`), `categoría:${item.category}`, item.weapon ? "arma" : "", item.armor ? "armadura" : "", item.consumable ? "consumible" : "", item.requiresAttunement ? "sintonización" : ""]; }).filter(Boolean))]
-        : [...new Set(this.content.shops.flatMap((entry) => Object.keys(entry.categories).map((category) => `categoría:${category}`)))];
+    const groups = this.contentFilterGroups(section);
     const active = this.contentFilters[section];
-    return `<nav class="filter-bar property-filter gm-content-filter-bar"><button type="button" data-gm-clear-content-filters="${section}" class="${active.size ? "" : "active"}">Sin filtros</button>${values.sort((a, b) => a.localeCompare(b, "es")).map((value) => `<button type="button" data-gm-content-filter="${escapeHtml(value)}" data-gm-filter-section="${section}" class="${active.has(value) ? "active" : ""}">${escapeHtml(value.includes(":") ? value.slice(value.indexOf(":") + 1) : value)}</button>`).join("")}</nav>`;
+    return `<nav class="filter-bar property-filter gm-content-filter-bar gm-grouped-filters"><button type="button" data-gm-show-all-content="${section}" class="${this.contentShowAll[section] ? "active" : ""}">Todos</button>${groups.map((group) => { const selected = selectedFilterValues(active, group.key); return `<details class="gm-filter-group ${selected.length ? "active" : ""}" ${this.openContentFilterGroup[section] === group.key ? "open" : ""}><summary>${escapeHtml(group.label)}${selected.length ? `<strong>${selected.length}</strong>` : ""}</summary><div>${group.values.map((value) => { const token = filterToken(group.key, value); return `<button type="button" data-gm-content-filter-value="${escapeHtml(value)}" data-gm-filter-group="${escapeHtml(group.key)}" data-gm-filter-section="${section}" class="${active.has(token) ? "active" : ""}">${escapeHtml(value)}</button>`; }).join("")}</div></details>`; }).join("")}</nav>`;
+  }
+
+  private contentFilterGroups(section: GmContentSection): ContentFilterGroup[] {
+    if (section === "spell") return [
+      { key: "level", label: "Nivel", values: uniqueValues(this.content.spells.map((spell) => String(spell.level))) },
+      { key: "school", label: "Escuela", values: uniqueValues(this.content.spells.map((spell) => spell.school)) },
+      { key: "class", label: "Clase", values: uniqueValues(this.content.spells.flatMap((spell) => splitValues(spell.classes))) },
+      { key: "component", label: "Componente", values: uniqueValues(this.content.spells.flatMap((spell) => spell.components.split(/[,;\s]+/).filter(Boolean))) },
+      { key: "damage", label: "Tipo de daño", values: uniqueValues(this.content.spells.map((spell) => spell.damageType)) },
+      { key: "resolution", label: "Resolución", values: uniqueValues(this.content.spells.map((spell) => spell.attackType === "attack" ? "Ataque" : spell.attackType === "save" ? "Salvación" : "")) },
+      { key: "edition", label: "Edición", values: uniqueValues(this.content.spells.map((spell) => spell.year)) },
+    ].filter((group) => group.values.length);
+    if (section === "equipment") return [
+      { key: "category", label: "Categoría", values: uniqueValues(this.content.equipment.map((item) => item.category)) },
+      { key: "rarity", label: "Rareza", values: uniqueValues(this.content.equipment.map((item) => item.rarity)) },
+      { key: "property", label: "Propiedad", values: uniqueValues(this.content.equipment.flatMap((item) => item.properties)) },
+      { key: "kind", label: "Tipo", values: uniqueValues(this.content.equipment.map((item) => item.weapon ? "Arma" : item.armor ? "Armadura" : "Equipo")) },
+      { key: "damage", label: "Tipo de daño", values: uniqueValues(this.content.equipment.map((item) => item.weapon?.damageType ?? "")) },
+      { key: "weaponCategory", label: "Categoría de arma", values: uniqueValues(this.content.equipment.map((item) => item.weapon?.category ?? "")) },
+      { key: "armorCategory", label: "Categoría de armadura", values: uniqueValues(this.content.equipment.map((item) => item.armor?.armorCategory ?? "")) },
+    ].filter((group) => group.values.length);
+    return [{ key: "category", label: "Categoría", values: uniqueValues(this.content.shops.flatMap((shop) => Object.keys(shop.categories))) }].filter((group) => group.values.length);
   }
 
   private matchesSpellFilters(spell: SpellDefinition): boolean {
-    const meta = catalogMetadata(spell);
-    return [...this.contentFilters.spell].every((filter) => filter === `origen:${meta.origin}` || filter.startsWith("tag:") && meta.tags.includes(filter.slice(4)) || filter === `nivel:${spell.level}` || filter === `escuela:${spell.school}` || filter === "ritual" && spell.ritual || filter === "concentración" && spell.concentration);
+    return matchesGroupedFilters(this.contentFilters.spell, {
+      level: [String(spell.level)], school: [spell.school], class: splitValues(spell.classes),
+      component: spell.components.split(/[,;\s]+/).filter(Boolean), damage: [spell.damageType],
+      resolution: [spell.attackType === "attack" ? "Ataque" : spell.attackType === "save" ? "Salvación" : ""], edition: [spell.year],
+    });
   }
 
   private matchesEquipmentFilters(item: EquipmentCatalogDraft): boolean {
-    const meta = catalogMetadata(item);
-    return [...this.contentFilters.equipment].every((filter) => filter === `origen:${meta.origin}` || filter.startsWith("tag:") && meta.tags.includes(filter.slice(4)) || filter === `categoría:${item.category}` || filter === "arma" && item.weapon !== null || filter === "armadura" && item.armor !== null || filter === "consumible" && item.consumable || filter === "sintonización" && item.requiresAttunement);
+    return matchesGroupedFilters(this.contentFilters.equipment, {
+      category: [item.category], rarity: [item.rarity], property: item.properties,
+      kind: [item.weapon ? "Arma" : item.armor ? "Armadura" : "Equipo"], damage: [item.weapon?.damageType ?? ""],
+      weaponCategory: [item.weapon?.category ?? ""], armorCategory: [item.armor?.armorCategory ?? ""],
+    });
   }
 
   private matchesShopFilters(shop: GmShop): boolean {
-    return [...this.contentFilters.shop].every((filter) => filter.startsWith("categoría:") && Object.hasOwn(shop.categories, filter.slice("categoría:".length)));
+    return matchesGroupedFilters(this.contentFilters.shop, { category: Object.keys(shop.categories) });
   }
 
   private renderSpellCard(spell: SpellDefinition): string {
@@ -278,16 +331,32 @@ export class GmToolsPanel {
       const input = event.currentTarget as HTMLInputElement;
       const section = input.dataset.gmContentSearch as GmContentSection;
       this.contentSearch[section] = input.value;
-      this.applyContentSearch();
+      this.contentShowAll[section] = false;
+      this.rerender();
+      const replacement = this.root.querySelector<HTMLInputElement>(`[data-gm-content-search="${section}"]`);
+      replacement?.focus();
+      replacement?.setSelectionRange(replacement.value.length, replacement.value.length);
     });
     this.root.querySelector("[data-gm-toggle-descriptions]")?.addEventListener("click", () => { this.showContentDescriptions = !this.showContentDescriptions; this.rerender(); });
-    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-content-filter]").forEach((button) => button.addEventListener("click", () => {
+    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-content-filter-value]").forEach((button) => button.addEventListener("click", () => {
       const section = button.dataset.gmFilterSection as GmContentSection;
-      const filter = button.dataset.gmContentFilter!;
+      const group = button.dataset.gmFilterGroup ?? "";
+      const filter = filterToken(group, button.dataset.gmContentFilterValue ?? "");
+      this.openContentFilterGroup[section] = group;
+      this.contentShowAll[section] = false;
       if (this.contentFilters[section].has(filter)) this.contentFilters[section].delete(filter); else this.contentFilters[section].add(filter);
       this.rerender();
     }));
-    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-clear-content-filters]").forEach((button) => button.addEventListener("click", () => { this.contentFilters[button.dataset.gmClearContentFilters as GmContentSection].clear(); this.rerender(); }));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-show-all-content]").forEach((button) => button.addEventListener("click", () => {
+      const section = button.dataset.gmShowAllContent as GmContentSection;
+      this.contentShowAll[section] = !this.contentShowAll[section];
+      if (this.contentShowAll[section]) {
+        this.contentFilters[section].clear();
+        this.contentSearch[section] = "";
+        this.openContentFilterGroup[section] = null;
+      }
+      this.rerender();
+    }));
     this.root.querySelector<HTMLFormElement>('[data-gm-form="spell"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveSpell(new FormData(event.currentTarget as HTMLFormElement)); });
     this.root.querySelector<HTMLFormElement>('[data-gm-form="equipment"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveEquipment(new FormData(event.currentTarget as HTMLFormElement)); });
     this.root.querySelector<HTMLFormElement>('[data-gm-form="shop"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveShop(new FormData(event.currentTarget as HTMLFormElement)); });
@@ -299,21 +368,6 @@ export class GmToolsPanel {
       if (section === "shop") this.selectedShop = key;
       void this.deleteContent(section);
     }));
-    this.applyContentSearch();
-  }
-
-  private applyContentSearch(): void {
-    const input = this.root.querySelector<HTMLInputElement>("[data-gm-content-search]");
-    if (!input) return;
-    const query = input.value.trim().toLocaleLowerCase();
-    let visible = 0;
-    this.root.querySelectorAll<HTMLElement>("[data-gm-content-card]").forEach((card) => {
-      const matches = !query || (card.dataset.search ?? "").includes(query);
-      card.hidden = !matches;
-      if (matches) visible += 1;
-    });
-    const empty = this.root.querySelector<HTMLElement>(".gm-content-empty");
-    if (empty) empty.hidden = visible > 0;
   }
 
   private bindNotes(workspace: GmWorkspace, checksum: string): void {
@@ -349,7 +403,7 @@ export class GmToolsPanel {
     const previous = String(data.get("previousKey") ?? "") || null;
     const existing = previous ? this.content.spells.find((entry) => entry.name === previous) ?? null : null;
     const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String).join(", "), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), legacyData: catalogLegacyData(existing, data) as SpellDefinition["legacyData"] };
-    try { await this.runtime.saveCustomSpell(definition, previous); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
+    try { await this.runtime.saveCustomSpell(definition, previous); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveEquipment(data: FormData): Promise<void> {
@@ -374,14 +428,14 @@ export class GmToolsPanel {
       bonuses, effect: { description: String(data.get("effectDescription") ?? ""), active: data.get("effectActive") === "on" },
       legacyData: catalogLegacyData(existing, data) as EquipmentCatalogDraft["legacyData"],
     };
-    try { await this.runtime.saveCustomEquipment(definition, previous); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
+    try { await this.runtime.saveCustomEquipment(definition, previous); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentSearch.equipment = definition.name; this.contentShowAll.equipment = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveShop(data: FormData): Promise<void> {
     if (!this.runtime.saveShop) return;
     const categories: Record<string, string[]> = {}; for (const row of String(data.get("categories") ?? "").split(/\r?\n/)) { const [category, items = ""] = row.split("|"); const name = category?.trim(); if (name) categories[name] = items.split(",").map((entry) => entry.trim()).filter(Boolean); }
     const shop = { name: String(data.get("name") ?? "").trim(), categories };
-    try { const previous = String(data.get("previousKey") ?? "") || null; await this.runtime.saveShop(shop, previous); this.content.shops = [...this.content.shops.filter((entry) => entry.name !== previous && entry.name !== shop.name), shop].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedShop = shop.name; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar tienda: ${shop.name}`); this.success("Tienda guardada."); } catch (error) { this.failure(error); }
+    try { const previous = String(data.get("previousKey") ?? "") || null; await this.runtime.saveShop(shop, previous); this.content.shops = [...this.content.shops.filter((entry) => entry.name !== previous && entry.name !== shop.name), shop].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedShop = shop.name; this.contentSearch.shop = shop.name; this.contentShowAll.shop = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar tienda: ${shop.name}`); this.success("Tienda guardada."); } catch (error) { this.failure(error); }
   }
 
   private async deleteContent(kind: string): Promise<void> {

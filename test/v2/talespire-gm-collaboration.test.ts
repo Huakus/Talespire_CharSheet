@@ -43,7 +43,7 @@ describe("TaleSpire GM collaboration", () => {
     const summaries: unknown[] = [];
     const initiatives: unknown[] = [];
     collaboration.subscribeCharacterSummaries((summary) => summaries.push(summary));
-    collaboration.subscribeInitiative((clientId, initiative) => initiatives.push({ clientId, initiative }));
+    collaboration.subscribeInitiative((clientId, initiative, characterId) => initiatives.push({ clientId, initiative, characterId }));
     const message = createGmProtocolMessage({
       type: "player/character-summary",
       requestId: null,
@@ -60,9 +60,9 @@ describe("TaleSpire GM collaboration", () => {
       },
     });
     await collaboration.handleSyncEvent({ payload: { fromClient: { id: "player-1" }, str: JSON.stringify(message) } });
-    await collaboration.handleSyncEvent({ payload: { fromClient: { id: "player-1" }, str: JSON.stringify({ type: "update-init", data: { Initiative: 17 } }) } });
+    await collaboration.handleSyncEvent({ payload: { fromClient: { id: "player-1" }, str: JSON.stringify({ type: "update-init", data: { Initiative: 17, CharacterId: "chr_11111111111111111111111111111111" } }) } });
     expect(summaries).toEqual([expect.objectContaining({ clientId: "player-1", summary: expect.objectContaining({ name: "Heroína" }) })]);
-    expect(initiatives).toEqual([{ clientId: "player-1", initiative: 17 }]);
+    expect(initiatives).toEqual([{ clientId: "player-1", initiative: 17, characterId: "chr_11111111111111111111111111111111" }]);
   });
 
   it("reads and forwards TaleSpire native initiative queue updates", async () => {

@@ -223,11 +223,19 @@ export class SupabaseCampaignDocumentClient {
   }
 
   async listCampaignContent(campaignId: string): Promise<RemoteCampaignContentEntry[]> {
-    const result = await this.client.from("campaign_content_entries")
-      .select("campaign_id,kind,content_key,name,origin,tags,payload,revision,updated_at,deleted_at")
-      .eq("campaign_id", campaignId).is("deleted_at", null).order("kind").order("name");
-    if (result.error) throwRpcError(result.error);
-    return z.array(CampaignContentRowSchema).parse(result.data).map(parseContentEntry);
+    const pageSize = 1000;
+    const entries: RemoteCampaignContentEntry[] = [];
+    for (let from = 0; ; from += pageSize) {
+      const result = await this.client.from("campaign_content_entries")
+        .select("campaign_id,kind,content_key,name,origin,tags,payload,revision,updated_at,deleted_at")
+        .eq("campaign_id", campaignId).is("deleted_at", null)
+        .order("kind").order("name").order("content_key")
+        .range(from, from + pageSize - 1);
+      if (result.error) throwRpcError(result.error);
+      const page = z.array(CampaignContentRowSchema).parse(result.data);
+      entries.push(...page.map(parseContentEntry));
+      if (page.length < pageSize) return entries;
+    }
   }
 
   async seedCampaignContent(campaignId: string): Promise<number> {

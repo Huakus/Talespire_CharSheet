@@ -144,10 +144,12 @@ describe("EncounterApplication", () => {
       queue: {
         items: [{ id: "creature-goblin", name: "Goblin", kind: "creature" }],
         activeItemIndex: 0,
+        roundDelta: 1,
       },
     });
     const persisted = (await repository.load())!.campaign.encounters[encounter.id]!;
     expect(persisted.activeCombatantId).toBe(persisted.combatants[0]?.id);
+    expect(persisted.round).toBe(2);
     expect(persisted.combatants[0]).toMatchObject({
       taleSpireCreatureId: "creature-goblin",
       initiative: 14,

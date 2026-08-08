@@ -171,7 +171,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     ...(collaboration
       ? {
           requestInitiativeList: () => collaboration.requestInitiativeList(),
-          sendInitiative: (value: number) => collaboration.sendInitiative(value),
+          sendInitiative: (value: number, characterId?: string) => collaboration.sendInitiative(value, characterId ?? null),
           sendCharacterSummary: (character: Parameters<typeof collaboration.sendCharacterSummary>[0]) => collaboration.sendCharacterSummary(character),
           subscribeInitiative: (listener: Parameters<typeof collaboration.subscribe>[0]) => collaboration.subscribe(listener),
           runSyncTransportProbe: (messageCharacters: number) => collaboration.runTransportProbe(messageCharacters),

@@ -34,6 +34,7 @@ export interface RestoreGmControlStateCommand {
 export interface TaleSpireInitiativeQueueInput {
   items: { id: string; name: string; kind: string }[];
   activeItemIndex: number;
+  roundDelta?: number;
 }
 
 export class EncounterApplication {
@@ -131,7 +132,7 @@ export class EncounterApplication {
   }
 
   async updateConnectedPlayer(
-    command: Omit<EncounterMutationCommand, "action"> & { combatantId: string; summary: CharacterSummary },
+    command: Omit<EncounterMutationCommand, "action"> & { combatantId: string; summary: CharacterSummary; taleSpireClientId?: string },
   ): Promise<CampaignSnapshot> {
     const conditions = await Promise.all(command.summary.conditionKeys.map(async (key) => ({
       id: await createDeterministicId("cnd", command.combatantId, key),
@@ -156,6 +157,7 @@ export class EncounterApplication {
           temporary: command.summary.temporaryHitPoints,
         },
         conditions,
+        ...(command.taleSpireClientId ? { taleSpireClientId: command.taleSpireClientId } : {}),
       },
     })).snapshot;
   }
@@ -203,6 +205,7 @@ export class EncounterApplication {
         kind: "synchronize-talespire-initiative",
         items,
         activeCreatureId: active?.kind === "creature" ? active.id : null,
+        roundDelta: command.queue.roundDelta ?? 0,
       },
     })).snapshot;
   }

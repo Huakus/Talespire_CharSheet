@@ -91,7 +91,7 @@ export interface BrowserAppRuntime {
   selectMiniature?: () => Promise<NonNullable<CharacterV2["taleSpire"]>>;
   createMiniatureThumbnail?: (link: NonNullable<CharacterV2["taleSpire"]>) => Promise<HTMLElement | null>;
   requestInitiativeList?: () => Promise<void>;
-  sendInitiative?: (value: number) => Promise<void>;
+  sendInitiative?: (value: number, characterId?: string) => Promise<void>;
   sendCharacterSummary?: (character: CharacterV2) => Promise<void>;
   subscribeInitiative?: (listener: (state: TaleSpireInitiativeState) => void) => () => void;
   runSyncTransportProbe?: (messageCharacters: number) => Promise<void>;
@@ -2913,7 +2913,7 @@ export class BrowserApp {
       this.appendActionLog(`Iniciativa: ${character.name}: ${result.summary}`, "roll");
       const total = result.totals[0];
       if (total !== undefined) {
-        await this.runtime.sendInitiative?.(total);
+        await this.runtime.sendInitiative?.(total, character.id);
         this.message = { kind: "success", text: `${result.summary}.${useInspiration ? " Inspiración usada." : ""} Resultado enviado al GM.` };
       } else {
         this.message = { kind: "success", text: `${result.summary}${useInspiration ? " · Inspiración usada." : ""} El resultado se enviará automáticamente al GM al completarse la tirada; también podés ingresarlo manualmente.` };
@@ -2929,7 +2929,8 @@ export class BrowserApp {
     const value = Number(input?.value);
     try {
       if (!Number.isInteger(value)) throw new Error("Ingresá un resultado entero de iniciativa.");
-      await this.runtime.sendInitiative?.(value);
+      const characterId = this.selectedCharacterId ?? undefined;
+      await this.runtime.sendInitiative?.(value, characterId);
       this.appendActionLog(`Enviar iniciativa: ${value}`);
       this.message = { kind: "success", text: `Iniciativa ${value} enviada al GM.` };
     } catch (error) {

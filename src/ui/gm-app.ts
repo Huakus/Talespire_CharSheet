@@ -33,7 +33,7 @@ export interface GmAppRuntime extends GmToolsRuntime {
   contentCatalogIsComplete?: boolean;
   subscribePlayers?: (listener: (players: TaleSpireGmPlayer[]) => void) => () => void;
   subscribeCharacterSummaries?: (listener: (summary: ReceivedCharacterSummary) => void) => () => void;
-  subscribeInitiative?: (listener: (clientId: string, initiative: number) => void) => () => void;
+  subscribeInitiative?: (listener: (clientId: string, initiative: number, characterId: string | null) => void) => () => void;
   subscribeNativeInitiative?: (listener: (queue: TaleSpireNativeInitiativeQueue) => void) => () => void;
   getNativeInitiative?: () => Promise<TaleSpireNativeInitiativeQueue | null>;
   refreshPlayers?: () => Promise<void>;
@@ -101,6 +101,62 @@ function normalizedSearch(value: string): string {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
 }
 
+function monsterFilterToken(group: string, value: string): string { return `${group}\u0000${value}`; }
+function selectedMonsterFilterValues(filters: ReadonlySet<string>, group: string): string[] {
+  const prefix = `${group}\u0000`;
+  return [...filters].filter((filter) => filter.startsWith(prefix)).map((filter) => filter.slice(prefix.length));
+}
+function uniqueFacetValues(values: readonly string[]): string[] {
+  return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right, "es", { numeric: true, sensitivity: "base" }));
+}
+function monsterFacets(monster: MonsterDefinition): Record<string, string[]> {
+  const combinedType = normalizedSearch(monster.type);
+  const inferredType = MONSTER_TYPES.find((value) => combinedType.includes(normalizedSearch(value))) ?? monster.type.split(/[ ,]/)[0] ?? "";
+  const inferredSize = monster.size || MONSTER_SIZES.find((value) => combinedType.includes(normalizedSearch(value))) || "";
+  const inferredAlignment = monster.alignment || monster.type.split(",").slice(1).join(",").trim();
+  return {
+    type: [inferredType], size: [inferredSize], alignment: [inferredAlignment], challenge: [monster.challenge],
+    resistance: monster.damageResistances, vulnerability: monster.damageVulnerabilities,
+    immunity: monster.damageImmunities, conditionImmunity: monster.conditionImmunities,
+  };
+}
+function matchesMonsterFilters(filters: ReadonlySet<string>, monster: MonsterDefinition): boolean {
+  const facets = monsterFacets(monster);
+  const groups = new Set([...filters].map((filter) => filter.slice(0, filter.indexOf("\u0000"))));
+  return [...groups].every((group) => {
+    const selected = new Set(selectedMonsterFilterValues(filters, group).map(normalizedSearch));
+    return (facets[group] ?? []).some((value) => selected.has(normalizedSearch(value)));
+  });
+}
+
+export function calculateTaleSpireRoundDelta(
+  previous: TaleSpireNativeInitiativeQueue | null,
+  current: TaleSpireNativeInitiativeQueue,
+): number {
+  if (!previous || current.items.length < 2 || previous.items.length !== current.items.length) return 0;
+  if (previous.items.some((item, index) => item.id !== current.items[index]?.id)) return 0;
+  const count = current.items.length;
+  const previousIndex = previous.activeItemIndex;
+  const currentIndex = current.activeItemIndex;
+  if (previousIndex < 0 || previousIndex >= count || currentIndex < 0 || currentIndex >= count || previousIndex === currentIndex) return 0;
+  if ((previousIndex + 1) % count === currentIndex) return currentIndex === 0 ? 1 : 0;
+  if ((previousIndex - 1 + count) % count === currentIndex) return previousIndex === 0 ? -1 : 0;
+  return 0;
+}
+
+export function findPlayerInitiativeCombatant(
+  encounter: Pick<Encounter, "combatants">,
+  clientId: string,
+  characterId: string | null,
+  summaryCharacterId: string | null,
+): EncounterCombatant | null {
+  return encounter.combatants.find((entry) => entry.kind === "player" && (
+    entry.taleSpireClientId === clientId
+    || characterId !== null && entry.characterId === characterId
+    || summaryCharacterId !== null && entry.characterId === summaryCharacterId
+  )) ?? null;
+}
+
 function fixedOptions(values: readonly string[], selected: string, emptyLabel = "—"): string {
   const all = [...new Set(["", ...values, ...(selected && !values.includes(selected) ? [selected] : [])])];
   return all.map((value) => `<option value="${escapeHtml(value)}" ${value === selected ? "selected" : ""}>${escapeHtml(value || emptyLabel)}</option>`).join("");
@@ -127,6 +183,7 @@ const GM_CONDITIONS = [
 export class GmApp {
   private snapshot: CampaignSnapshot | null = null;
   private selectedEncounterId: string | null = null;
+  private pendingDeleteEncounterId: string | null = null;
   private expandedCombatantId: string | null = null;
   private notifications: GmNotification[] = [];
   private unreadImportantNotifications = 0;
@@ -153,6 +210,8 @@ export class GmApp {
   private activeContentKind: GmContentKind = "monster";
   private monsterSearch = "";
   private monsterFilters = new Set<string>();
+  private monsterShowAll = false;
+  private openMonsterFilterGroup: string | null = null;
   private showMonsterDescriptions = true;
   private gmColor = gmPreference("color", "#c5ad6a");
   private undoStack: ReversibleGmAction[] = [];
@@ -160,6 +219,7 @@ export class GmApp {
   private actionLog: GmLogEntry[] = [];
   private nextHistoryId = 1;
   private taleSpireLinkedEncounterId: string | null = null;
+  private previousTaleSpireInitiativeQueue: TaleSpireNativeInitiativeQueue | null = null;
   private taleSpireInitiativeSync: Promise<void> = Promise.resolve();
   private readonly toolsPanel: GmToolsPanel;
 
@@ -189,7 +249,7 @@ export class GmApp {
       this.playerSummaries.set(received.clientId, received.summary);
       void this.applyReceivedSummary(received);
     });
-    this.runtime.subscribeInitiative?.((clientId, initiative) => { void this.applyReceivedInitiative(clientId, initiative); });
+    this.runtime.subscribeInitiative?.((clientId, initiative, characterId) => { void this.applyReceivedInitiative(clientId, initiative, characterId); });
     this.runtime.subscribeNativeInitiative?.((queue) => {
       if (this.selectedEncounterId === this.taleSpireLinkedEncounterId) void this.enqueueTaleSpireInitiativeSync(queue);
     });
@@ -259,7 +319,7 @@ export class GmApp {
             ${encounters.length ? encounters.map((encounter) => `<option value="${encounter.id}" ${encounter.id === selected?.id ? "selected" : ""}>${escapeHtml(encounter.name)}</option>`).join("") : '<option>Sin encuentros</option>'}
           </select>
           <details class="gm-popover gm-new-encounter"><summary>+ Encuentro</summary><div><form data-action="create-encounter" class="gm-compact-popup-form"><input name="name" required placeholder="Nombre del encuentro" aria-label="Nombre del encuentro"><button type="submit">Crear</button></form></div></details>
-          <button type="button" data-action="delete-encounter" ${selected ? "" : "disabled"}>Eliminar</button>
+          <button type="button" data-action="delete-encounter" class="${selected && this.pendingDeleteEncounterId === selected.id ? "danger-confirm" : ""}" ${selected ? "" : "disabled"}>${selected && this.pendingDeleteEncounterId === selected.id ? "Confirmar eliminación" : "Eliminar"}</button>
           <span class="gm-connected-count">${this.players.length} conectado${this.players.length === 1 ? "" : "s"}</span>
           <button type="button" data-action="refresh-players" ${this.runtime.refreshPlayers ? "" : "disabled"}>Actualizar</button>
           <button type="button" data-action="request-summaries" ${this.players.length && this.runtime.requestCharacterSummaries ? "" : "disabled"}>Pedir estadísticas</button>
@@ -321,9 +381,7 @@ export class GmApp {
     return `
       <section class="gm-encounter-board">
       <div class="gm-turn-bar">
-        <button type="button" data-command="previous-turn">Anterior</button>
         <strong>Ronda ${encounter.round}</strong>
-        <button type="button" data-command="advance-turn">Siguiente</button>
         <details class="gm-popover gm-add-combatant-popover"><summary>+ Combatiente</summary><div>
           <form data-action="add-combatant" class="gm-add-combatant">
             <input data-gm-combatant-search type="search" placeholder="Buscar monstruo, personaje o jugador…" autocomplete="off">
@@ -377,7 +435,7 @@ export class GmApp {
       </summary>
       <div class="gm-combatant-popover">
         <div class="gm-talespire-association"><span>${combatant.taleSpireCreatureId ? "Miniatura de TaleSpire vinculada" : "Sin miniatura asociada"}</span><button type="button" data-action="link-selected-miniature" ${this.runtime.selectMiniature ? "" : "disabled"}>${combatant.taleSpireCreatureId ? "Cambiar por seleccionada" : "Vincular seleccionada"}</button>${combatant.taleSpireCreatureId ? '<button type="button" data-action="unlink-miniature">Desvincular</button>' : ""}</div>
-        ${character ? `<p class="gm-linked-character-notice">Estado sincronizado desde la hoja. El GM no puede modificar sus recursos.</p>` : `<div class="gm-combatant-control-row"><button type="button" data-action="activate-combatant">Hacer activo</button><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}"></label><button type="button" data-action="save-initiative">Guardar INI</button><button type="button" data-action="roll-initiative">Tirar INI</button></div><div class="gm-card-actions"><input data-action="hp-amount" type="number" min="1" step="1" value="1" aria-label="Cantidad de puntos de golpe"><button type="button" data-action="damage">Daño</button><button type="button" data-action="heal">Curar</button><button type="button" data-action="temporary-hit-points">PG temp.</button></div><div class="gm-condition-pills">${conditions.map((condition) => `<button type="button" data-action="remove-condition" data-condition-id="${condition.id}" title="Quitar condición">${escapeHtml(condition.label)} ×</button>`).join("")}${bloodied ? '<span class="bloodied">Herido</span>' : ""}</div><div class="gm-condition-control"><select data-action="condition-select" aria-label="Condición">${GM_CONDITIONS.filter(([key]) => !conditions.some((condition) => condition.key === key)).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select><button type="button" data-action="add-condition" ${GM_CONDITIONS.every(([key]) => conditions.some((condition) => condition.key === key)) ? "disabled" : ""}>Agregar</button></div><div class="gm-card-actions gm-card-danger"><button type="button" data-action="toggle-visibility" class="${combatant.visibleToPlayers ? "visible" : "hidden"}">${combatant.visibleToPlayers ? "Visible" : "Oculto"}</button><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>`}
+        ${character ? `<p class="gm-linked-character-notice">Estado sincronizado desde la hoja. El GM sólo puede asignar su iniciativa.</p><div class="gm-combatant-control-row gm-character-initiative-control"><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}" placeholder="—"></label><button type="button" data-action="save-initiative">Guardar INI</button></div>` : `<div class="gm-combatant-control-row"><button type="button" data-action="activate-combatant">Hacer activo</button><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}"></label><button type="button" data-action="save-initiative">Guardar INI</button><button type="button" data-action="roll-initiative">Tirar INI</button></div><div class="gm-card-actions"><input data-action="hp-amount" type="number" min="1" step="1" value="1" aria-label="Cantidad de puntos de golpe"><button type="button" data-action="damage">Daño</button><button type="button" data-action="heal">Curar</button><button type="button" data-action="temporary-hit-points">PG temp.</button></div><div class="gm-condition-pills">${conditions.map((condition) => `<button type="button" data-action="remove-condition" data-condition-id="${condition.id}" title="Quitar condición">${escapeHtml(condition.label)} ×</button>`).join("")}${bloodied ? '<span class="bloodied">Herido</span>' : ""}</div><div class="gm-condition-control"><select data-action="condition-select" aria-label="Condición">${GM_CONDITIONS.filter(([key]) => !conditions.some((condition) => condition.key === key)).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select><button type="button" data-action="add-condition" ${GM_CONDITIONS.every(([key]) => conditions.some((condition) => condition.key === key)) ? "disabled" : ""}>Agregar</button></div><div class="gm-card-actions gm-card-danger"><button type="button" data-action="toggle-visibility" class="${combatant.visibleToPlayers ? "visible" : "hidden"}">${combatant.visibleToPlayers ? "Visible" : "Oculto"}</button><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>`}
         ${monster ? this.renderMonsterDetails(monster) : ""}
         ${character ? this.renderCharacterDetails(character) : ""}
         ${character ? '<div class="gm-card-actions gm-card-danger"><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>' : ""}
@@ -440,9 +498,20 @@ export class GmApp {
       const draft = this.editingCustomMonsterKey === "__new__" ? this.monsterTemplate : selected;
       return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${draft?.name ?? "Nuevo monstruo"}</strong><button type="button" data-action="cancel-custom-monster">Volver</button></div>${this.renderCustomMonsterForm(draft)}</section>`;
     }
-    const filterValues = [...new Set(this.customMonsters.flatMap((monster) => { const meta = catalogMetadata(monster); return [`origen:${meta.origin}`, ...meta.tags.map((tag) => `tag:${tag}`), monster.type ? `tipo:${monster.type}` : "", monster.challenge ? `vd:${monster.challenge}` : ""]; }).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
-    const monsters = this.customMonsters.filter((monster) => { const meta = catalogMetadata(monster); return [...this.monsterFilters].every((filter) => filter === `origen:${meta.origin}` || filter.startsWith("tag:") && meta.tags.includes(filter.slice(4)) || filter === `tipo:${monster.type}` || filter === `vd:${monster.challenge}`); });
-    return `<section class="gm-content-catalog"><div class="spell-search-row gm-content-search-row"><label class="spell-search"><span>Buscar</span><input data-gm-monster-search type="search" value="${escapeHtml(this.monsterSearch)}" placeholder="Nombre, tipo, rasgo, acción…"></label><button type="button" class="description-toggle" data-gm-toggle-monster-descriptions>${this.showMonsterDescriptions ? "Ocultar descripciones" : "Mostrar descripciones"}</button><button type="button" data-action="new-custom-monster">+ monstruo</button></div><nav class="filter-bar property-filter gm-content-filter-bar"><button type="button" data-gm-clear-monster-filters class="${this.monsterFilters.size ? "" : "active"}">Sin filtros</button>${filterValues.map((filter) => `<button type="button" data-gm-monster-filter="${escapeHtml(filter)}" class="${this.monsterFilters.has(filter) ? "active" : ""}">${escapeHtml(filter.replace(/^\w+:/, ""))}</button>`).join("")}</nav><div class="gm-catalog-grid">${monsters.map((monster) => this.renderCustomMonsterCard(monster)).join("")}</div><div class="sheet-empty gm-content-empty" ${monsters.length ? "hidden" : ""}><strong>Sin resultados</strong><p>No hay monstruos que coincidan con los filtros.</p></div></section>`;
+    const filterGroups = [
+      { key: "type", label: "Tipo", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monsterFacets(monster).type ?? [])) },
+      { key: "size", label: "Tamaño", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monsterFacets(monster).size ?? [])) },
+      { key: "alignment", label: "Alineamiento", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monsterFacets(monster).alignment ?? [])) },
+      { key: "challenge", label: "VD", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monsterFacets(monster).challenge ?? [])) },
+      { key: "resistance", label: "Resistencia", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.damageResistances)) },
+      { key: "vulnerability", label: "Vulnerabilidad", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.damageVulnerabilities)) },
+      { key: "immunity", label: "Inmunidad", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.damageImmunities)) },
+      { key: "conditionImmunity", label: "Inmunidad a condición", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.conditionImmunities)) },
+    ].filter((group) => group.values.length);
+    const query = normalizedSearch(this.monsterSearch);
+    const hasCriteria = this.monsterShowAll || Boolean(query) || this.monsterFilters.size > 0;
+    const monsters = hasCriteria ? this.customMonsters.filter((monster) => { const meta = catalogMetadata(monster); const matchesSearch = !query || normalizedSearch([monster.name, monster.type, monster.challenge, meta.origin, ...meta.tags, ...monster.traits.flatMap((entry) => [entry.name, entry.content]), ...monster.actions.flatMap((entry) => [entry.name, entry.content])].join(" ")).includes(query); return matchesMonsterFilters(this.monsterFilters, monster) && matchesSearch; }) : [];
+    return `<section class="gm-content-catalog"><div class="spell-search-row gm-content-search-row"><label class="spell-search"><span>Buscar</span><input data-gm-monster-search type="search" value="${escapeHtml(this.monsterSearch)}" placeholder="Nombre, tipo, rasgo, acción…"></label><button type="button" class="description-toggle" data-gm-toggle-monster-descriptions>${this.showMonsterDescriptions ? "Ocultar descripciones" : "Mostrar descripciones"}</button><button type="button" data-action="new-custom-monster">+ monstruo</button></div><nav class="filter-bar property-filter gm-content-filter-bar gm-grouped-filters"><button type="button" data-gm-show-all-monsters class="${this.monsterShowAll ? "active" : ""}">Todos</button>${filterGroups.map((group) => { const selected = selectedMonsterFilterValues(this.monsterFilters, group.key); return `<details class="gm-filter-group ${selected.length ? "active" : ""}" ${this.openMonsterFilterGroup === group.key ? "open" : ""}><summary>${escapeHtml(group.label)}${selected.length ? `<strong>${selected.length}</strong>` : ""}</summary><div>${group.values.map((value) => `<button type="button" data-gm-monster-filter-value="${escapeHtml(value)}" data-gm-monster-filter-group="${escapeHtml(group.key)}" class="${this.monsterFilters.has(monsterFilterToken(group.key, value)) ? "active" : ""}">${escapeHtml(value)}</button>`).join("")}</div></details>`; }).join("")}</nav><div class="gm-catalog-grid">${monsters.map((monster) => this.renderCustomMonsterCard(monster)).join("")}</div><div class="sheet-empty gm-content-empty" ${monsters.length ? "hidden" : ""}><strong>${hasCriteria ? "Sin resultados" : "Catálogo en espera"}</strong><p>${hasCriteria ? "No hay monstruos que coincidan con los filtros." : "Buscá, elegí un filtro o activá Todos para mostrar los monstruos."}</p></div></section>`;
   }
 
   private renderCustomMonsterCard(monster: MonsterDefinition): string {
@@ -564,10 +633,17 @@ export class GmApp {
       this.editingCustomMonsterKey = null;
       this.render();
     });
-    this.root.querySelector<HTMLInputElement>("[data-gm-monster-search]")?.addEventListener("input", (event) => { this.monsterSearch = (event.currentTarget as HTMLInputElement).value; this.applyMonsterSearch(); });
+    this.root.querySelector<HTMLInputElement>("[data-gm-monster-search]")?.addEventListener("input", (event) => {
+      this.monsterSearch = (event.currentTarget as HTMLInputElement).value;
+      this.monsterShowAll = false;
+      this.render();
+      const replacement = this.root.querySelector<HTMLInputElement>("[data-gm-monster-search]");
+      replacement?.focus();
+      replacement?.setSelectionRange(replacement.value.length, replacement.value.length);
+    });
     this.root.querySelector("[data-gm-toggle-monster-descriptions]")?.addEventListener("click", () => { this.showMonsterDescriptions = !this.showMonsterDescriptions; this.render(); });
-    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-monster-filter]").forEach((button) => button.addEventListener("click", () => { const filter = button.dataset.gmMonsterFilter!; if (this.monsterFilters.has(filter)) this.monsterFilters.delete(filter); else this.monsterFilters.add(filter); this.render(); }));
-    this.root.querySelector("[data-gm-clear-monster-filters]")?.addEventListener("click", () => { this.monsterFilters.clear(); this.render(); });
+    this.root.querySelectorAll<HTMLButtonElement>("[data-gm-monster-filter-value]").forEach((button) => button.addEventListener("click", () => { const group = button.dataset.gmMonsterFilterGroup ?? ""; const filter = monsterFilterToken(group, button.dataset.gmMonsterFilterValue ?? ""); this.openMonsterFilterGroup = group; this.monsterShowAll = false; if (this.monsterFilters.has(filter)) this.monsterFilters.delete(filter); else this.monsterFilters.add(filter); this.render(); }));
+    this.root.querySelector("[data-gm-show-all-monsters]")?.addEventListener("click", () => { this.monsterShowAll = !this.monsterShowAll; if (this.monsterShowAll) { this.monsterFilters.clear(); this.monsterSearch = ""; this.openMonsterFilterGroup = null; } this.render(); });
     this.root.querySelector<HTMLFormElement>('[data-action="save-custom-monster"]')?.addEventListener("submit", (event) => {
       event.preventDefault();
       void this.saveCustomMonster(new FormData(event.currentTarget as HTMLFormElement));
@@ -583,6 +659,7 @@ export class GmApp {
     });
     this.root.querySelector<HTMLSelectElement>('[data-action="select-encounter"]')?.addEventListener("change", (event) => {
       this.selectedEncounterId = (event.currentTarget as HTMLSelectElement).value;
+      this.pendingDeleteEncounterId = null;
       this.expandedCombatantId = null;
       this.render();
       const selected = this.requireEncounter();
@@ -624,7 +701,17 @@ export class GmApp {
     this.applyCombatantSearch();
     this.root.querySelector<HTMLButtonElement>('[data-action="delete-encounter"]')?.addEventListener("click", () => {
       const encounter = this.requireEncounter();
-      if (globalThis.confirm && !globalThis.confirm(`¿Eliminar ${encounter.name}?`)) return;
+      if (this.pendingDeleteEncounterId !== encounter.id) {
+        this.pendingDeleteEncounterId = encounter.id;
+        this.message = { kind: "success", text: `Volvé a presionar para eliminar “${encounter.name}”.` };
+        this.render();
+        return;
+      }
+      this.pendingDeleteEncounterId = null;
+      if (this.taleSpireLinkedEncounterId === encounter.id) {
+        this.taleSpireLinkedEncounterId = null;
+        this.previousTaleSpireInitiativeQueue = null;
+      }
       void this.execute(() => this.application.deleteEncounter(encounter.id, this.requireSnapshot().checksum), "Encuentro eliminado.");
     });
     this.root.querySelector<HTMLFormElement>('[data-action="add-combatant"]')?.addEventListener("submit", (event) => {
@@ -650,6 +737,9 @@ export class GmApp {
       };
       const monster = sourceKey.startsWith("monster:") ? this.findMonster(sourceKey.slice("monster:".length)) : null;
       const character = sourceKey.startsWith("character:") ? this.requireSnapshot().campaign.characters[sourceKey.slice("character:".length)] ?? null : null;
+      const connectedClientId = character
+        ? this.players.find((player) => this.playerSummaries.get(player.id)?.characterId === character.id)?.id ?? null
+        : null;
       if (!monster && !character) {
         this.message = { kind: "error", text: "El contenido seleccionado ya no existe. Actualizá la búsqueda." };
         this.render();
@@ -665,7 +755,7 @@ export class GmApp {
                 initiative: base.initiative,
                 kind: "player" as const,
                 characterId: character!.id,
-                taleSpireClientId: null,
+                taleSpireClientId: connectedClientId,
               };
       void this.execute(() => this.application.addCombatant({
         encounterId: encounter.id,
@@ -674,10 +764,6 @@ export class GmApp {
         combatant,
       }), "Combatiente agregado.");
     });
-    this.root.querySelectorAll<HTMLElement>("[data-command]").forEach((button) => button.addEventListener("click", () => {
-      const command = button.dataset.command;
-      if (command === "advance-turn" || command === "previous-turn") void this.apply({ kind: command });
-    }));
     this.root.querySelector<HTMLButtonElement>('[data-action="connect-talespire-initiative"]')?.addEventListener("click", () => {
       void this.connectTaleSpireInitiative();
     });
@@ -734,7 +820,6 @@ export class GmApp {
         .then((result) => { this.appendActionLog(`${button.dataset.rollName || "Tirada"}: ${result.summary}`, "roll"); this.message = { kind: "success", text: result.summary }; this.render(); })
         .catch((error) => { this.message = { kind: "error", text: this.formatError(error) }; this.render(); });
     }));
-    this.applyMonsterSearch();
     this.applyCombatantSearch();
   }
 
@@ -745,20 +830,6 @@ export class GmApp {
       const matches = !query || (button.dataset.search ?? "").includes(query);
       button.hidden = !matches || visible >= 40; if (matches) visible += 1;
     });
-  }
-
-  private applyMonsterSearch(): void {
-    const input = this.root.querySelector<HTMLInputElement>("[data-gm-monster-search]");
-    if (!input) return;
-    const query = input.value.trim().toLocaleLowerCase();
-    let visible = 0;
-    this.root.querySelectorAll<HTMLElement>(".gm-monster-card[data-gm-content-card]").forEach((card) => {
-      const matches = !query || (card.dataset.search ?? "").includes(query);
-      card.hidden = !matches;
-      if (matches) visible += 1;
-    });
-    const empty = this.root.querySelector<HTMLElement>(".gm-content-empty");
-    if (empty) empty.hidden = visible > 0;
   }
 
   private async linkSelectedMiniature(combatantId: string): Promise<void> {
@@ -790,6 +861,7 @@ export class GmApp {
       const queue = await this.runtime.getNativeInitiative();
       if (!queue) throw new Error("TaleSpire no expuso una cola de iniciativa válida.");
       this.taleSpireLinkedEncounterId = this.requireEncounter().id;
+      this.previousTaleSpireInitiativeQueue = null;
       await this.enqueueTaleSpireInitiativeSync(queue, "Encuentro conectado con la iniciativa de TaleSpire.");
     } catch (error) {
       this.message = { kind: "error", text: this.formatError(error) };
@@ -804,11 +876,13 @@ export class GmApp {
       if (!encounterId) return;
       const encounter = this.snapshot.campaign.encounters[encounterId];
       if (!encounter) return;
+      const roundDelta = calculateTaleSpireRoundDelta(this.previousTaleSpireInitiativeQueue, queue);
+      this.previousTaleSpireInitiativeQueue = structuredClone(queue);
       await this.execute(() => this.application.synchronizeTaleSpireInitiative({
         encounterId: encounter.id,
         expectedEncounterRevision: encounter.revision,
         expectedCampaignChecksum: this.requireSnapshot().checksum,
-        queue,
+        queue: { ...queue, roundDelta },
       }), success);
     });
     return this.taleSpireInitiativeSync;
@@ -994,6 +1068,8 @@ export class GmApp {
       this.selectedCustomMonsterKey = definition.name;
       this.editingCustomMonsterKey = null;
       this.monsterTemplate = null;
+      this.monsterSearch = definition.name;
+      this.monsterShowAll = false;
       this.appendActionLog(`Guardar monstruo: ${definition.name}`);
       this.message = { kind: "success", text: `${definition.name} guardado en el catálogo de esta campaña.` };
     } catch (error) {
@@ -1021,20 +1097,24 @@ export class GmApp {
 
   private async applyReceivedSummary(received: ReceivedCharacterSummary): Promise<void> {
     const encounter = this.selectedEncounterId ? this.snapshot?.campaign.encounters[this.selectedEncounterId] : null;
-    const combatant = encounter?.combatants.find((entry) => entry.kind === "player" && entry.taleSpireClientId === received.clientId);
+    const combatant = encounter?.combatants.find((entry) => entry.kind === "player" && (
+      entry.taleSpireClientId === received.clientId || entry.characterId === received.summary.characterId
+    ));
     if (!encounter || !combatant || !this.snapshot) { this.render(); return; }
     await this.execute(() => this.application.updateConnectedPlayer({
       encounterId: encounter.id,
       combatantId: combatant.id,
       summary: received.summary,
+      taleSpireClientId: received.clientId,
       expectedEncounterRevision: encounter.revision,
       expectedCampaignChecksum: this.snapshot!.checksum,
     }), `Estadísticas de ${received.summary.name} actualizadas.`);
   }
 
-  private async applyReceivedInitiative(clientId: string, initiative: number): Promise<void> {
+  private async applyReceivedInitiative(clientId: string, initiative: number, characterId: string | null): Promise<void> {
     const encounter = this.selectedEncounterId ? this.snapshot?.campaign.encounters[this.selectedEncounterId] : null;
-    const combatant = encounter?.combatants.find((entry) => entry.kind === "player" && entry.taleSpireClientId === clientId);
+    const summaryCharacterId = this.playerSummaries.get(clientId)?.characterId ?? null;
+    const combatant = encounter ? findPlayerInitiativeCombatant(encounter, clientId, characterId, summaryCharacterId) : null;
     if (encounter && combatant) await this.apply({ kind: "set-initiative", combatantId: combatant.id, initiative });
   }
 

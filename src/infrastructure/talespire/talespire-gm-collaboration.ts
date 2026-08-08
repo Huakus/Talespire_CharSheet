@@ -137,7 +137,7 @@ export class TaleSpireGmCollaboration {
   private players: TaleSpireGmPlayer[] = [];
   private playersListener: ((players: TaleSpireGmPlayer[]) => void) | null = null;
   private summaryListener: ((summary: ReceivedCharacterSummary) => void) | null = null;
-  private initiativeListener: ((clientId: string, initiative: number) => void) | null = null;
+  private initiativeListener: ((clientId: string, initiative: number, characterId: string | null) => void) | null = null;
   private nativeInitiativeListener: ((queue: TaleSpireNativeInitiativeQueue) => void) | null = null;
   private transferStatusListener: ((status: EncounterTransferStatus) => void) | null = null;
   private latestEncounter: Encounter | null = null;
@@ -162,7 +162,7 @@ export class TaleSpireGmCollaboration {
     return () => { if (this.summaryListener === listener) this.summaryListener = null; };
   }
 
-  subscribeInitiative(listener: (clientId: string, initiative: number) => void): () => void {
+  subscribeInitiative(listener: (clientId: string, initiative: number, characterId: string | null) => void): () => void {
     this.initiativeListener = listener;
     return () => { if (this.initiativeListener === listener) this.initiativeListener = null; };
   }
@@ -269,7 +269,9 @@ export class TaleSpireGmCollaboration {
     if (incoming.value.type === "update-init") {
       const data = incoming.value.data;
       const initiative = data !== null && typeof data === "object" ? Number(Reflect.get(data, "Initiative")) : NaN;
-      if (Number.isSafeInteger(initiative)) this.initiativeListener?.(incoming.from.id, initiative);
+      const rawCharacterId = data !== null && typeof data === "object" ? Reflect.get(data, "CharacterId") : null;
+      const characterId = typeof rawCharacterId === "string" && rawCharacterId.trim() ? rawCharacterId.trim() : null;
+      if (Number.isSafeInteger(initiative)) this.initiativeListener?.(incoming.from.id, initiative, characterId);
     } else if (incoming.value.type === "request-init-list" && this.latestEncounter) {
       await this.publishEncounter(this.latestEncounter);
     }

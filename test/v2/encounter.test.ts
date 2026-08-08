@@ -83,6 +83,7 @@ describe("encounter domain", () => {
         { creatureId: "creature-orc", name: "Orco", combatantId: "cmb_77777777777777777777777777777777" },
       ],
       activeCreatureId: "creature-hero",
+      roundDelta: 0,
     }, { expectedRevision: 0, updatedAt: now }).encounter;
 
     expect(synchronized.combatants.map((combatant) => combatant.name)).toEqual(["Goblin", heroName, "Orco"]);
@@ -99,6 +100,17 @@ describe("encounter domain", () => {
     expect(synchronized.activeCombatantId).toBe(heroId);
     expect(synchronized.combatants.slice(0, 2).map((combatant) => combatant.initiative)).toEqual([12, 18]);
     expect(orderedCombatants(synchronized).map((combatant) => combatant.name)).toEqual(["Goblin", heroName, "Orco"]);
+  });
+
+  it("applies round changes inferred from the native TaleSpire queue", () => {
+    const result = applyEncounterCommand(fixture(), {
+      kind: "synchronize-talespire-initiative",
+      items: [],
+      activeCreatureId: null,
+      roundDelta: 1,
+    }, { expectedRevision: 0, updatedAt: now });
+    expect(result.encounter.round).toBe(2);
+    expect(result.effects.roundChangedBy).toBe(1);
   });
 
   it("spends temporary hit points before current hit points", () => {

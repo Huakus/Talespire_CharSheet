@@ -389,8 +389,8 @@ export class TaleSpirePlayerCollaboration {
     await this.sendToGm({ type: "request-init-list", playerId: await this.identity(), data: {} });
   }
 
-  async sendInitiative(value: number): Promise<void> {
-    await this.sendToGm({ type: "update-init", playerId: await this.identity(), data: { Initiative: value } });
+  async sendInitiative(value: number, characterId: string | null = this.latestCharacter?.id ?? null): Promise<void> {
+    await this.sendToGm({ type: "update-init", playerId: await this.identity(), data: { Initiative: value, CharacterId: characterId } });
   }
 
   async sendCharacterSummary(character: CharacterV2, requestId: string | null = null): Promise<void> {

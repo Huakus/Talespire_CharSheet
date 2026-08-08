@@ -2,13 +2,44 @@ import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
 import { GmWorkspaceApplication } from "../../src/application/gm/gm-workspace-application";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
-import { GmToolsPanel } from "../../src/ui/gm-tools-panel";
+import { GmToolsPanel, matchesGroupedFilters } from "../../src/ui/gm-tools-panel";
 import { removeGmNoteGroup } from "../../src/domain/gm/gm-workspace";
-import { calculateFloatingPanelPosition, GmApp } from "../../src/ui/gm-app";
+import { calculateFloatingPanelPosition, calculateTaleSpireRoundDelta, findPlayerInitiativeCombatant, GmApp } from "../../src/ui/gm-app";
 import { createCharacter } from "../../src/domain/character/create-character";
 import { renderCheckboxGroup } from "../../src/ui/checkbox-group";
 
 describe("GM workspace", () => {
+  it("combines values inside a filter group with OR and different groups with AND", () => {
+    const filters = new Set(["resistance\u0000Fuego", "resistance\u0000Frío", "type\u0000Dragón"]);
+    expect(matchesGroupedFilters(filters, { resistance: ["Frío"], type: ["Dragón"] })).toBe(true);
+    expect(matchesGroupedFilters(filters, { resistance: ["Ácido"], type: ["Dragón"] })).toBe(false);
+    expect(matchesGroupedFilters(filters, { resistance: ["Fuego"], type: ["Bestia"] })).toBe(false);
+  });
+
+  it("detects native TaleSpire round boundaries without counting queue edits", () => {
+    const items = [
+      { id: "a", name: "A", kind: "creature" },
+      { id: "b", name: "B", kind: "creature" },
+      { id: "c", name: "C", kind: "creature" },
+    ];
+    expect(calculateTaleSpireRoundDelta({ items, activeItemIndex: 2 }, { items, activeItemIndex: 0 })).toBe(1);
+    expect(calculateTaleSpireRoundDelta({ items, activeItemIndex: 0 }, { items, activeItemIndex: 2 })).toBe(-1);
+    expect(calculateTaleSpireRoundDelta({ items, activeItemIndex: 0 }, { items, activeItemIndex: 1 })).toBe(0);
+    expect(calculateTaleSpireRoundDelta({ items, activeItemIndex: 2 }, { items: items.slice(0, 2), activeItemIndex: 0 })).toBe(0);
+  });
+
+  it("matches a rolled initiative to a character even before a client link was persisted", () => {
+    const characterCombatant = {
+      id: "cmb_11111111111111111111111111111111",
+      kind: "player" as const,
+      characterId: "chr_11111111111111111111111111111111",
+      taleSpireClientId: null,
+    };
+    const encounter = { combatants: [characterCombatant] } as unknown as Parameters<typeof findPlayerInitiativeCombatant>[0];
+    expect(findPlayerInitiativeCombatant(encounter, "client-1", characterCombatant.characterId, null)?.id).toBe(characterCombatant.id);
+    expect(findPlayerInitiativeCombatant(encounter, "client-1", null, characterCombatant.characterId)?.id).toBe(characterCombatant.id);
+  });
+
   it("persists notes, tables and Google Docs URL with optimistic concurrency", async () => {
     const repository = new InMemoryCampaignRepository();
     const snapshot = await new CampaignApplication(repository).createCampaign("2026-08-02T12:00:00.000Z");
@@ -35,11 +66,17 @@ describe("GM workspace", () => {
     const shops = panel.render("content", workspace, "shop");
     expect(shops).toContain('data-gm-new="shop"');
     expect(shops).toContain('data-gm-content-search="shop"');
-    expect(shops).toContain('data-gm-content-filter="categoría:General"');
-    expect(shops).toContain('class="play-card gm-catalog-card gm-shop-card"');
-    expect(shops).toContain('data-gm-template="shop" data-gm-content-key="Mercado"');
-    expect(shops).toContain('data-gm-edit="shop" data-gm-content-key="Mercado"');
-    expect(shops).not.toContain('data-gm-form="shop"');
+    expect(shops).toContain('data-gm-filter-group="category"');
+    expect(shops).toContain('data-gm-content-filter-value="General"');
+    expect(shops).toContain('data-gm-show-all-content="shop"');
+    expect(shops).toContain("Catálogo en espera");
+    expect(shops).not.toContain('class="play-card gm-catalog-card gm-shop-card"');
+    (panel as unknown as { contentShowAll: { shop: boolean } }).contentShowAll.shop = true;
+    const allShops = panel.render("content", workspace, "shop");
+    expect(allShops).toContain('class="play-card gm-catalog-card gm-shop-card"');
+    expect(allShops).toContain('data-gm-template="shop" data-gm-content-key="Mercado"');
+    expect(allShops).toContain('data-gm-edit="shop" data-gm-content-key="Mercado"');
+    expect(allShops).not.toContain('data-gm-form="shop"');
     expect(panel.render("notes", workspace)).toContain("Nuevo grupo de notas");
     const tools = panel.render("tools", workspace);
     expect(tools).toContain("Checklist");

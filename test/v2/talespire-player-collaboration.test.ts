@@ -92,6 +92,11 @@ describe("TaleSpire player collaboration", () => {
       type: "request-init-list",
       playerId: { id: "player" },
     });
+    await collaboration.sendInitiative(19, "chr_11111111111111111111111111111111");
+    expect(JSON.parse(sent[1]!.message)).toMatchObject({
+      type: "update-init",
+      data: { Initiative: 19, CharacterId: "chr_11111111111111111111111111111111" },
+    });
 
     const observed: unknown[] = [];
     collaboration.subscribe((state) => observed.push(state));
