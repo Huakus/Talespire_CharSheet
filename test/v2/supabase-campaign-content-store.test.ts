@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { merchantAfterPersuasion, normalizeMerchantInteraction } from "../../src/domain/commerce/merchant-interaction";
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import { SupabaseCampaignContentStore } from "../../src/infrastructure/remote/supabase-campaign-content-store";
 import {
@@ -125,21 +126,43 @@ describe("Supabase campaign content store", () => {
     expect(loaded.monsters[0]).toMatchObject({ name: "Bestia de prueba", armorClass: 14, hitPoints: 37, hitPointFormula: "5d8+15" });
   });
 
-  it("imports duplicate legacy names as campaign copies and deletes by persistent key", async () => {
-    const remote = fakeClient([entry({ kind: "spell", contentKey: "official:spell:es:luz", name: "Luz", payload: { name: "Luz", level: "Cantrip" } })]);
+  it("keeps merchant stock solely in the linked NPC inventory", async () => {
+    const monster = normalizeMonsterDefinition({ Id: "npc_mirna", Name: "Mirna", Type: "Humanoide", Inventory: ["Vieja moneda"] });
+    const dagger = normalizeEquipmentDefinition({ name: "Daga", cost: { quantity: 2, unit: "gp" }, equipment_category: { index: "weapon" } });
+    const remote = fakeClient([
+      entry({ kind: "monster", contentKey: "gm:monster:mirna", name: monster.name, origin: "gm", tags: ["gm"], payload: monster as unknown as Record<string, unknown> }),
+      entry({ kind: "equipment", contentKey: "gm:equipment:dagger", name: dagger.name, origin: "gm", tags: ["gm"], payload: dagger as unknown as Record<string, unknown> }),
+    ]);
     const store = new SupabaseCampaignContentStore(remote.client, campaignId);
-    await store.load();
-    const legacySpell = {
-      name: "Luz", level: 0, description: "", higherLevels: "", range: "", components: "V", material: "", ritual: false,
-      duration: "", concentration: false, castingTime: "1 acción", school: "Evocación", classes: "Mago", attackType: "none" as const,
-      saveAbility: "", damageExpression: "", upcastDamageExpression: "", addAbilityModifier: false, damageType: "", year: "2014", legacyData: {},
-    };
-    const result = await store.importLegacy({ spells: [legacySpell], equipment: [], monsters: [], shops: [], checklist: [] });
-    expect(result.imported).toBe(1);
-    expect(remote.saves[0]).toMatchObject({ name: "Luz (importado)", origin: "imported", tags: ["imported", "gm"] });
+    await store.saveMonster(normalizeMonsterDefinition({
+      ...monster,
+      Inventory: [
+        { ...dagger, id: "inv_33333333333333333333333333333333", order: 0, group: "backpack", quantity: 1 },
+        { ...normalizeEquipmentDefinition({ name: "Cuerda" }), id: "inv_44444444444444444444444444444444", order: 1, group: "backpack", quantity: 2 },
+      ],
+    }));
+    await store.saveShop({
+      name: "Curiosidades de Mirna",
+      npcId: "npc_mirna",
+      categories: {},
+      interactions: merchantAfterPersuasion(normalizeMerchantInteraction({ commissionPercent: 20, fundsCopper: 5_000 }), true),
+    });
 
-    await store.deleteSpell("Luz (importado)");
-    expect(remote.deletes[0]).toMatchObject({ kind: "spell", contentKey: remote.saves[0]!.contentKey, expectedRevision: 0 });
-    expect(remote.current()).toHaveLength(1);
+    const savedMonster = remote.saves.find((save) => save.kind === "monster");
+    expect(savedMonster?.payload).toMatchObject({ inventory: [
+      expect.objectContaining({ name: "Daga", quantity: 1 }),
+      expect.objectContaining({ name: "Cuerda", quantity: 2 }),
+    ] });
+    const savedShop = remote.saves.find((save) => save.kind === "shop");
+    expect(savedShop?.payload).toMatchObject({ npcId: "npc_mirna", categories: {} });
+    expect(savedShop?.payload).not.toHaveProperty("inventory");
+    const loaded = await store.load();
+    expect(loaded.monsters.find((value) => value.id === "npc_mirna")?.inventory).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: expect.stringMatching(/^inv_[a-f0-9]{32}$/), name: "Daga", quantity: 1, cost: { quantity: 2, unit: "gp" } }),
+      expect.objectContaining({ name: "Cuerda", quantity: 2 }),
+    ]));
+    expect(loaded.shops[0]?.inventory).toBeUndefined();
+    expect(loaded.shops[0]?.interactions).toMatchObject({ commissionPercent: 15, fundsCopper: 5_000 });
   });
+
 });

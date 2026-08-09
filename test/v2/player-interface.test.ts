@@ -3,22 +3,34 @@ import { CampaignApplication } from "../../src/application/campaign/campaign-app
 import { createCharacter } from "../../src/domain/character/create-character";
 import type { CharacterSpellV2, SpellDefinition } from "../../src/domain/character/character-spell-model";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import type { CampaignSnapshot } from "../../src/application/ports/campaign-repository";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
-import { BrowserApp, describeCharacterChanges, experienceProgress, inspiredRollMode, isValidHitPointAmount, type BrowserAppRuntime } from "../../src/ui/browser-app";
+import { BrowserApp, describeCharacterChanges, experienceProgress, inspiredRollMode, isValidHitPointAmount, strengthBasedIntimidationModifier, type BrowserAppRuntime } from "../../src/ui/browser-app";
 import type { TaleSpireTransportDiagnostics } from "../../src/infrastructure/talespire/talespire-player-collaboration";
+import type { GmShop } from "../../src/domain/gm/gm-global-content";
+import type { MerchantDifficultyBreakdown } from "../../src/domain/commerce/merchant-interaction";
 
 interface BrowserAppViewHarness {
   sheetMode: "play" | "edit";
-  activeSheetTab: "summary" | "actions" | "spells" | "inventory" | "extras";
+  activeSheetTab: "summary" | "actions" | "spells" | "inventory" | "interactions" | "extras";
   customSpells: SpellDefinition[];
   customEquipment: ReturnType<typeof normalizeEquipmentDefinition>[];
+  customShops: GmShop[];
+  customMonsters: ReturnType<typeof normalizeMonsterDefinition>[];
+  activeMerchantName: string | null;
+  merchantMode: "buy" | "sell";
+  preparedMerchantRoll: { shopName: string; label: string; rollExpression: string; breakdown: MerchantDifficultyBreakdown; execute: () => Promise<void> } | null;
   includeUnknownSpells: boolean;
   spellPropertyFilters: Set<string>;
+  spellTagFilters: Set<string>;
+  spellClassFilters: Set<string>;
   spellSearch: string;
   showSpellDescriptions: boolean;
   expandedSpellDescriptions: Set<string>;
   inventoryFilters: Set<string>;
+  inventoryTagFilters: Set<string>;
+  inventoryRarityFilters: Set<string>;
   inventorySearch: string;
   includeUnownedInventory: boolean;
   showInventoryDescriptions: boolean;
@@ -336,6 +348,10 @@ describe("player interface shell", () => {
     expect(inspiredRollMode("normal")).toBe("advantage");
     expect(inspiredRollMode("advantage")).toBe("advantage");
     expect(inspiredRollMode("disadvantage")).toBe("normal");
+    expect(strengthBasedIntimidationModifier({
+      abilityModifiers: { strength: 4, charisma: 1 },
+      skills: { intimidation: 5 },
+    })).toBe(8);
     expect(isValidHitPointAmount("1")).toBe(true);
     expect(isValidHitPointAmount("0")).toBe(false);
     expect(isValidHitPointAmount("-2")).toBe(false);
@@ -442,8 +458,12 @@ describe("player interface shell", () => {
     view.customEquipment = [normalizeEquipmentDefinition({
       name: "Elixir de prueba",
       equipment_category: { index: "potion" },
+      rarity: { index: "rare" },
+      __catalog: { tags: ["alquimia", "curación"] },
       description: "Recupera vitalidad temporal.",
     })];
+    const hiddenCatalog = view.renderCharacterForm(character);
+    expect(hiddenCatalog).not.toContain('data-add-catalog-inventory="Elixir de prueba"');
     view.includeUnownedInventory = true;
     view.inventorySearch = "elixir";
     view.inventoryFilters = new Set(["consumable", "usable"]);
@@ -453,6 +473,15 @@ describe("player interface shell", () => {
     expect(matching).toContain('data-add-catalog-inventory="Elixir de prueba"');
     expect(matching).toContain("Recupera vitalidad temporal.");
     expect(matching).toContain('data-inventory-tone="consumable"');
+    expect(matching).toContain('data-inventory-tag-filter="alquimia"');
+    expect(matching).toContain('data-inventory-rarity-filter="rare"');
+    expect(matching).toContain('data-rarity="rare">Raro</em>');
+
+    view.inventoryTagFilters.add("alquimia");
+    view.inventoryRarityFilters.add("rare");
+    expect(view.renderCharacterForm(character)).toContain('data-add-catalog-inventory="Elixir de prueba"');
+    view.inventoryTagFilters.clear();
+    view.inventoryRarityFilters.clear();
 
     view.inventoryFilters.add("weapon");
     const excludedByAnd = view.renderCharacterForm(character);
@@ -718,6 +747,38 @@ describe("player interface shell", () => {
     expect(searched).toContain("Limpiar filtros");
   });
 
+  it("shows and applies campaign tags to player spell filters", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_45454545454545454545454545454545",
+      "Tagged Mage",
+      "2026-07-26T00:00:00.000Z",
+    );
+    const taggedDefinition: SpellDefinition = {
+      ...ritualDefinition,
+      legacyData: { __catalog: { tags: ["defensa", "arcano"] } },
+    };
+    character.spellcasting.spells = [spell("spl_56565656565656565656565656565656", taggedDefinition.name, true, taggedDefinition)];
+    view.customSpells = [taggedDefinition];
+    view.activeSheetTab = "spells";
+
+    const visible = view.renderCharacterForm(character);
+    expect(visible).toContain('data-spell-tag-filter="defensa"');
+    expect(visible).toContain('data-spell-class-filter="Mago"');
+    expect(visible).toContain('<span>defensa</span>');
+
+    view.spellTagFilters.add("divino");
+    expect(view.renderCharacterForm(character)).toContain("No hay conjuros con las características seleccionadas");
+    view.spellTagFilters.clear();
+    view.spellTagFilters.add("defensa");
+    expect(view.renderCharacterForm(character)).toContain(taggedDefinition.name);
+    view.spellClassFilters.add("Clérigo");
+    expect(view.renderCharacterForm(character)).toContain("No hay conjuros con las características seleccionadas");
+    view.spellClassFilters.clear();
+    view.spellClassFilters.add("Mago");
+    expect(view.renderCharacterForm(character)).toContain(taggedDefinition.name);
+  });
+
   it("always includes GM-created spells and preserves their favorite state", () => {
     const view = harness();
     const character = createCharacter(
@@ -747,5 +808,83 @@ describe("player interface shell", () => {
     expect(editable).toContain('data-spell-action="learn"');
     expect(editable).toContain('data-spell-action="favorite" aria-pressed="true"');
     expect(editable).toContain('class="preparation-toggle catalog-preparation">No conocido</span>');
+  });
+
+  it("renders merchant actions and situational difficulty in the player sheet", () => {
+    const view = harness();
+    const { rarity: _rarity, ...dagger } = normalizeEquipmentDefinition({
+      name: "Daga",
+      weight: 1,
+      cost: { quantity: 2, unit: "gp" },
+      equipment_category: { index: "weapon" },
+      damage: { damage_dice: "1d4", damage_type: { index: "piercing" } },
+    });
+    const character = createCharacter(
+      "chr_66666666666666666666666666666666",
+      "Silver Tongue",
+      "2026-08-08T00:00:00.000Z",
+    );
+    character.inventory = [{ ...dagger, id: "inv_33333333333333333333333333333333", order: 0, group: "backpack", quantity: 1, equipped: false, attuned: false }];
+    view.activeSheetTab = "interactions";
+    view.customShops = [{
+      name: "Mirna",
+      npcId: "npc_mirna",
+      categories: {},
+      interactions: { interaction: true, negotiation: true, intimidation: true, barter: true, loot: true, steal: true, assault: true, plantEvidence: true, reputation: 2, difficulty: 1, commissionPercent: 20, negotiationStep: 5, intimidationReputationLoss: 1, fundsCopper: 10_000, theftsThisInteraction: 0, assaultMaxItems: 3, assaultMaxWeight: 20, state: "active" },
+    }];
+    view.customMonsters = [normalizeMonsterDefinition({
+      Id: "npc_mirna",
+      Name: "Mirna",
+      Abilities: { Cha: 16, Wis: 12 },
+      Skills: ["Percepción +4"],
+      Inventory: [{ ...dagger, id: "inv_22222222222222222222222222222222", order: 0, group: "backpack", quantity: 2 }],
+    })];
+
+    const list = view.renderCharacterForm(character);
+    expect(list).toContain('data-active-sheet-tab="interactions"');
+    expect(list).toContain('data-merchant-card="Mirna"');
+    expect(list).toContain('data-merchant-action="interact"');
+    view.activeMerchantName = "Mirna";
+    const html = view.renderCharacterForm(character);
+    expect(html).toContain("Reputación <strong>2</strong>");
+    expect(html).toContain("Fondos <strong>10000 PC</strong>");
+    expect(html).toContain("Penalización por sospecha <strong>+0 a CD</strong>");
+    expect(html).toContain("Persuadir · CD 12");
+    expect(html).toContain("Intimidar · CD 12");
+    expect(html).toContain('data-merchant-action="assault-selected"');
+    expect(html).toContain("Asaltar (Intimidación con FUE) · CD 12");
+    expect(html).toContain("Asalto (FUE)");
+    expect(html).toContain('data-merchant-action="pilfer-item"');
+    expect(html).toContain("Hurtar · CD 15");
+    expect(html).not.toContain('data-merchant-action="loot-selected"');
+    expect(html).toContain('data-merchant-mode="buy" class="active"');
+    expect(html).toContain('data-merchant-difficulty type="number"');
+    expect(html).toContain('id="inventory-search"');
+    expect(html).not.toContain('data-include-unowned-inventory');
+    view.merchantMode = "sell";
+    const sellHtml = view.renderCharacterForm(character);
+    expect(sellHtml).toContain('data-merchant-action="plant-item"');
+    expect(sellHtml).toContain("Implantar · CD 15");
+    view.preparedMerchantRoll = {
+      shopName: "Mirna",
+      label: "Persuadir",
+      rollExpression: "1d20+5",
+      breakdown: {
+        parts: [
+          { label: "Base", value: 10, explanation: "Base de toda interacción" },
+          { label: "Reputación", value: -2, explanation: "La confianza reduce la CD" },
+          { label: "Defensa del NPC", value: 3, explanation: "CAR del NPC" },
+          { label: "Dificultad del comerciante", value: 1, explanation: "Configuración del GM" },
+          { label: "Dificultad de este intento", value: 0, explanation: "Modificador puntual" },
+        ],
+        total: 12,
+      },
+      execute: async () => undefined,
+    };
+    const prepared = view.renderCharacterForm(character);
+    expect(prepared).toContain('data-merchant-action="roll-prepared"');
+    expect(prepared).toContain("Tirada del personaje: <strong>1d20+5</strong> contra <strong>CD 12</strong>");
+    expect(prepared).toContain("Reputación");
+    expect(prepared).toContain("Ningún efecto se aplica antes del resultado");
   });
 });

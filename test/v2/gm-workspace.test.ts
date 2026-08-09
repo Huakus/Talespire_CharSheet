@@ -7,6 +7,9 @@ import { removeGmNoteGroup } from "../../src/domain/gm/gm-workspace";
 import { calculateFloatingPanelPosition, calculateTaleSpireRoundDelta, findPlayerInitiativeCombatant, GmApp } from "../../src/ui/gm-app";
 import { createCharacter } from "../../src/domain/character/create-character";
 import { renderCheckboxGroup } from "../../src/ui/checkbox-group";
+import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
+import type { GmShop } from "../../src/domain/gm/gm-global-content";
 
 describe("GM workspace", () => {
   it("combines values inside a filter group with OR and different groups with AND", () => {
@@ -56,8 +59,17 @@ describe("GM workspace", () => {
   });
 
   it("renders every non-combat GM surface", async () => {
+    let savedShopTags: string[] = [];
+    const ropeDefinition = normalizeEquipmentDefinition({ name: "Cuerda", weight: 10, cost: { quantity: 1, unit: "gp" }, description: "Una cuerda resistente." });
+    const { rarity: _rarity, ...rope } = ropeDefinition;
+    const merchant = normalizeMonsterDefinition({
+      Id: "npc_mercado",
+      Name: "Mercader del mercado",
+      Inventory: [{ ...rope, id: "inv_11111111111111111111111111111111", order: 0, group: "backpack", quantity: 2 }],
+    });
     const panel = new GmToolsPanel({} as HTMLElement, {
-      loadGmContent: async () => ({ spells: [], equipment: [], monsters: [], shops: [{ name: "Mercado", categories: { General: ["rope"] } }], checklist: [{ id: "task", text: "Preparar mapa", checked: false }] }),
+      loadGmContent: async () => ({ spells: [], equipment: [ropeDefinition], monsters: [merchant], shops: [{ name: "Mercado", npcId: merchant.id, categories: {}, tags: ["ciudad", "favorite"] }], checklist: [{ id: "task", text: "Preparar mapa", checked: false }] }),
+      saveShop: async (shop) => { savedShopTags = shop.tags ?? []; },
     }, () => undefined, () => undefined, () => undefined);
     await panel.load();
     const workspace = { noteGroups: [], randomTables: [], googleDocsUrl: "" };
@@ -66,17 +78,24 @@ describe("GM workspace", () => {
     const shops = panel.render("content", workspace, "shop");
     expect(shops).toContain('data-gm-new="shop"');
     expect(shops).toContain('data-gm-content-search="shop"');
-    expect(shops).toContain('data-gm-filter-group="category"');
-    expect(shops).toContain('data-gm-content-filter-value="General"');
+    expect(shops).toContain('data-gm-filter-group="tag"');
+    expect(shops).toContain('data-gm-content-filter-value="ciudad"');
     expect(shops).toContain('data-gm-show-all-content="shop"');
-    expect(shops).toContain("Catálogo en espera");
-    expect(shops).not.toContain('class="play-card gm-catalog-card gm-shop-card"');
-    (panel as unknown as { contentShowAll: { shop: boolean } }).contentShowAll.shop = true;
-    const allShops = panel.render("content", workspace, "shop");
-    expect(allShops).toContain('class="play-card gm-catalog-card gm-shop-card"');
-    expect(allShops).toContain('data-gm-template="shop" data-gm-content-key="Mercado"');
+    expect(shops).not.toContain('data-gm-content-filter-value="favorite"');
+    expect(shops).toContain('data-gm-favorites-only="shop"');
+    expect(shops).toContain('class="favorite-toggle active"');
+    expect(shops).toContain("CD negociación");
+    expect(shops).toContain("Fondos");
+    expect(shops).toContain('class="play-card gm-catalog-card gm-shop-card favorite"');
+    const allShops = shops;
+    expect(allShops).toContain('data-gm-template="shop" data-gm-content-key="Mercado" title="Crear una copia editable">Clonar</button>');
     expect(allShops).toContain('data-gm-edit="shop" data-gm-content-key="Mercado"');
+    expect(allShops).toContain('<span>ciudad</span>');
     expect(allShops).not.toContain('data-gm-form="shop"');
+    await (panel as unknown as { toggleFavorite(section: "shop", key: string): Promise<void> }).toggleFavorite("shop", "Mercado");
+    expect(savedShopTags).toEqual(["ciudad"]);
+    (panel as unknown as { pendingDeleteContent: { section: "shop"; key: string } }).pendingDeleteContent = { section: "shop", key: "Mercado" };
+    expect(panel.render("content", workspace, "shop")).toContain("Confirmar eliminación");
     expect(panel.render("notes", workspace)).toContain("Nuevo grupo de notas");
     const tools = panel.render("tools", workspace);
     expect(tools).toContain("Checklist");
@@ -91,13 +110,26 @@ describe("GM workspace", () => {
 
     const editable = panel as unknown as {
       editingContent: "shop";
-      contentTemplate: { section: "shop"; value: { name: string; categories: Record<string, string[]> } };
+      contentTemplate: { section: "shop"; value: GmShop };
     };
     editable.editingContent = "shop";
-    editable.contentTemplate = { section: "shop", value: { name: "COPIA DE Mercado", categories: { General: ["rope"] } } };
+    editable.contentTemplate = { section: "shop", value: { name: "COPIA DE Mercado", npcId: merchant.id, categories: {} } };
     const templateForm = panel.render("content", workspace, "shop");
     expect(templateForm).toContain('value="COPIA DE Mercado"');
-    expect(templateForm).toContain("General | rope");
+    expect(templateForm).not.toContain('name="categories"');
+    expect(templateForm).toContain("Acciones habilitadas");
+    expect(templateForm).toContain('name="commissionPercent"');
+    expect(templateForm).toContain('name="intimidationReputationLoss"');
+    expect(templateForm).toContain('name="fundsCopper"');
+    expect(templateForm).toContain('name="assaultMaxItems"');
+    expect(templateForm).toContain('name="assaultMaxWeight"');
+    expect(templateForm).toContain("Inventario del comerciante");
+    expect(templateForm).toContain('data-gm-shop-inventory-search');
+    expect(templateForm).toContain('data-gm-shop-inventory-catalog');
+    expect(templateForm).toContain("Cuerda");
+    expect(templateForm).toContain('<strong>2</strong>');
+    expect(templateForm).toContain("20.0 lb");
+    expect(templateForm).toContain("Estadísticas del NPC asociado");
   });
 
   it("removes a complete note group without altering the other groups", () => {
@@ -147,6 +179,26 @@ describe("GM workspace", () => {
     expect(html).not.toContain("<h4>Acciones</h4>");
     expect(html).not.toContain("<h4>Conjuros</h4>");
     expect(html).not.toContain("<h4>Inventario</h4>");
+  });
+
+  it("never exposes merchant stock in monster views or the monster editor", () => {
+    const { rarity: _rarity, ...dagger } = normalizeEquipmentDefinition({ name: "Daga de Mirna" });
+    const monster = normalizeMonsterDefinition({
+      Id: "npc_mirna",
+      Name: "Mirna",
+      Inventory: [{ ...dagger, id: "inv_55555555555555555555555555555555", order: 0, group: "backpack", quantity: 1 }],
+    });
+    const view = Object.create(GmApp.prototype) as unknown as {
+      runtime: { contentCatalogIsComplete: boolean };
+      customSpells: never[];
+      renderCustomMonsterView(value: typeof monster): string;
+      renderCustomMonsterForm(value: typeof monster): string;
+    };
+    view.runtime = { contentCatalogIsComplete: true };
+    view.customSpells = [];
+    const html = `${view.renderCustomMonsterView(monster)}${view.renderCustomMonsterForm(monster)}`;
+    expect(html).not.toContain("Daga de Mirna");
+    expect(html).not.toContain("Inventario");
   });
 
   it("renders persistent GM color controls and a scoped action log", () => {

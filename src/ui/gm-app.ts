@@ -8,7 +8,6 @@ import type { EncounterTransferStatus, ReceivedCharacterSummary, TaleSpireGmPlay
 import { projectCharacterStatistics } from "../domain/character/character-projection";
 import type { CharacterV2 } from "../domain/character/character-v2";
 import { DAMAGE_TYPES } from "../domain/equipment/equipment-catalog";
-import { equipmentDefinitionsForLanguage, type EquipmentCatalogDraft } from "../domain/equipment/equipment-catalog";
 import { spellDefinitionsForLanguage } from "../domain/spells/spell-catalog";
 import type { SpellDefinition } from "../domain/character/character-spell-model";
 import { GmToolsPanel, type GmContentSection, type GmSection, type GmToolsRuntime } from "./gm-tools-panel";
@@ -44,23 +43,6 @@ export interface GmAppRuntime extends GmToolsRuntime {
   loadCustomMonsters?: () => Promise<MonsterDefinition[]>;
   saveCustomMonster?: (definition: MonsterDefinition, previousKey: string | null) => Promise<void>;
   deleteCustomMonster?: (key: string) => Promise<void>;
-  previewLegacyGmContent?: () => Promise<{ spells: number; equipment: number; monsters: number; shops: number; checklist: number; total: number }>;
-  importLegacyGmContent?: () => Promise<{ imported: number }>;
-  previewLegacyGmContentFile?: (raw: string) => Promise<{ spells: number; equipment: number; monsters: number; shops: number; checklist: number; total: number }>;
-  importLegacyGmContentFile?: (raw: string) => Promise<{ imported: number }>;
-}
-
-function readSelectedFile(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      if (typeof reader.result === "string") resolve(reader.result);
-      else reject(new Error("TaleSpire no pudo leer el archivo como texto."));
-    }, { once: true });
-    reader.addEventListener("error", () => reject(reader.error ?? new Error("No se pudo leer el archivo seleccionado.")), { once: true });
-    reader.addEventListener("abort", () => reject(new Error("La lectura del archivo fue cancelada.")), { once: true });
-    reader.readAsText(file, "utf-8");
-  });
 }
 
 function escapeHtml(value: string): string {
@@ -78,6 +60,7 @@ function gmPreference(key: string, fallback: string): string {
 }
 
 const GM_COLORS = ["#c98282", "#d09a68", "#c5ad6a", "#79a879", "#6fae9f", "#6f96c4", "#8f83bc", "#c982a6", "#9a73ad", "#9da79a"];
+const FAVORITE_TAG = "favorite";
 
 interface GmHistoryState {
   encounters: CampaignSnapshot["campaign"]["encounters"];
@@ -105,10 +88,19 @@ function catalogMetadata(value: { legacyData?: unknown } | null): { origin: stri
   return { origin: String(raw.origin ?? "gm"), tags: Array.isArray(raw.tags) ? raw.tags.map(String) : ["gm"], contentKey: String(raw.contentKey ?? ""), revision: Number(raw.revision) || 0 };
 }
 
+function visibleCatalogTags(tags: readonly string[]): string[] {
+  return tags.filter((tag) => normalizedSearch(tag) !== FAVORITE_TAG);
+}
+
+function isCatalogFavorite(value: { legacyData?: unknown } | null): boolean {
+  return catalogMetadata(value).tags.some((tag) => normalizedSearch(tag) === FAVORITE_TAG);
+}
+
 function catalogLegacyData(value: { legacyData?: unknown } | null, data: FormData): Record<string, unknown> {
   const current = catalogMetadata(value);
   const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData) ? value.legacyData as Record<string, unknown> : {};
   const tags = String(data.get("catalogTags") ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
+  if (current.tags.some((tag) => normalizedSearch(tag) === FAVORITE_TAG)) tags.push(FAVORITE_TAG);
   return { ...legacy, __catalog: { ...current, tags } };
 }
 
@@ -133,6 +125,7 @@ function monsterFacets(monster: MonsterDefinition): Record<string, string[]> {
     type: [inferredType], size: [inferredSize], alignment: [inferredAlignment], challenge: [monster.challenge],
     resistance: monster.damageResistances, vulnerability: monster.damageVulnerabilities,
     immunity: monster.damageImmunities, conditionImmunity: monster.conditionImmunities,
+    tag: visibleCatalogTags(catalogMetadata(monster).tags),
   };
 }
 function matchesMonsterFilters(filters: ReadonlySet<string>, monster: MonsterDefinition): boolean {
@@ -217,7 +210,6 @@ export class GmApp {
   private transferStatuses = new Map<string, EncounterTransferStatus>();
   private customMonsters: MonsterDefinition[] = [];
   private customSpells: SpellDefinition[] = [];
-  private customEquipment: EquipmentCatalogDraft[] = [];
   private monsterTemplate: MonsterDefinition | null = null;
   private selectedCustomMonsterKey: string | null = null;
   private editingCustomMonsterKey: string | null = null;
@@ -225,7 +217,9 @@ export class GmApp {
   private activeContentKind: GmContentKind = "monster";
   private monsterSearch = "";
   private monsterFilters = new Set<string>();
-  private monsterShowAll = false;
+  private monsterShowAll = true;
+  private monsterFavoritesOnly = false;
+  private pendingDeleteMonsterKey: string | null = null;
   private openMonsterFilterGroup: string | null = null;
   private showMonsterDescriptions = true;
   private gmColor = gmPreference("color", "#c5ad6a");
@@ -237,16 +231,16 @@ export class GmApp {
   private previousTaleSpireInitiativeQueue: TaleSpireNativeInitiativeQueue | null = null;
   private taleSpireInitiativeSync: Promise<void> = Promise.resolve();
   private readonly toolsPanel: GmToolsPanel;
-  private legacyImportStatus = "";
 
   constructor(
     private readonly root: HTMLElement,
     private readonly application: EncounterApplication,
     private readonly runtime: GmAppRuntime,
   ) {
+    const toolsRuntime: GmToolsRuntime = runtime;
     this.toolsPanel = new GmToolsPanel(
       root,
-      runtime,
+      toolsRuntime,
       (snapshot, label) => this.acceptSnapshot(snapshot, label ?? "Actualizar espacio GM"),
       (message) => { this.message = message; },
       () => this.render(),
@@ -286,7 +280,7 @@ export class GmApp {
       this.message = { kind: "error", text: `No se pudo cargar el contenido GM: ${this.formatError(error)}` };
     }
     if (this.runtime.loadGmContent) {
-      try { const content = await this.runtime.loadGmContent(); this.customSpells = content.spells; this.customEquipment = content.equipment; }
+      try { const content = await this.runtime.loadGmContent(); this.customSpells = content.spells; }
       catch { /* The content panel already reports the actionable load error. */ }
     }
     try {
@@ -348,7 +342,7 @@ export class GmApp {
         ${this.snapshot ? `
           ${selected ? this.renderEncounter(selected) : '<div class="sheet-empty"><strong>No hay encuentros</strong><p>Creá uno para comenzar.</p></div>'}
         ` : '<div class="sheet-empty"><strong>No hay una campaña v2 cargada</strong><p>Importá o creá la campaña desde la hoja de personaje antes de abrir el control GM.</p></div>'}` : ""}
-        ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span>${this.legacyImportStatus ? `<small class="gm-legacy-import-status">${escapeHtml(this.legacyImportStatus)}</small>` : ""}${this.runtime.importLegacyGmContent ? '<button type="button" data-action="import-legacy-gm-content">Importar almacenamiento local</button>' : ""}${this.runtime.importLegacyGmContentFile ? '<button type="button" data-action="choose-legacy-gm-content-file">Importar archivo…</button><input type="file" data-legacy-gm-content-file hidden>' : ""}</div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
+        ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span></div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
         ${this.activeSection === "notes" && this.snapshot ? this.toolsPanel.render("notes", this.snapshot.campaign.gm) : ""}
         ${this.activeSection === "tools" && this.snapshot ? this.toolsPanel.render("tools", this.snapshot.campaign.gm) : ""}
       </section>`;
@@ -384,7 +378,7 @@ export class GmApp {
       ["monster", "Monstruos", this.customMonsters.length],
       ["spell", "Conjuros", this.toolsPanel.contentCount("spell")],
       ["equipment", "Equipo", this.toolsPanel.contentCount("equipment")],
-      ["shop", "Tiendas", this.toolsPanel.contentCount("shop")],
+      ["shop", "Comerciantes", this.toolsPanel.contentCount("shop")],
     ];
     return `<nav class="filter-bar gm-subsection-nav" aria-label="Tipo de contenido">${options.map(([key, label, count]) => `<button type="button" data-gm-content-kind="${key}" class="${this.activeContentKind === key ? "active" : ""}"><span>${label}</span><strong>${count}</strong></button>`).join("")}</nav>`;
   }
@@ -503,7 +497,6 @@ export class GmApp {
       ${this.monsterFact("Sentidos", monster.senses)}${this.monsterFact("Idiomas", monster.languages)}
       ${sections.filter(([, entries]) => entries.length).map(([title, entries]) => `<section><strong>${title}</strong>${entries.map((entry) => `<p><b>${escapeHtml(entry.name)}</b> ${escapeHtml(entry.content)} ${this.renderDiceButtons(entry.name, entry.content)}</p>`).join("")}</section>`).join("")}
       ${spells ? `<section><strong>Conjuros</strong>${spells}</section>` : ""}
-      ${monster.inventory.length ? `<section><strong>Inventario</strong><div class="gm-sheet-inventory">${monster.inventory.map((name) => `<span>${escapeHtml(name)}</span>`).join("")}</div></section>` : ""}
     </details>`;
   }
 
@@ -524,17 +517,21 @@ export class GmApp {
       { key: "vulnerability", label: "Vulnerabilidad", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.damageVulnerabilities)) },
       { key: "immunity", label: "Inmunidad", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.damageImmunities)) },
       { key: "conditionImmunity", label: "Inmunidad a condición", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monster.conditionImmunities)) },
+      { key: "tag", label: "Etiquetas", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => visibleCatalogTags(catalogMetadata(monster).tags))) },
     ].filter((group) => group.values.length);
     const query = normalizedSearch(this.monsterSearch);
-    const hasCriteria = this.monsterShowAll || Boolean(query) || this.monsterFilters.size > 0;
-    const monsters = hasCriteria ? this.customMonsters.filter((monster) => { const meta = catalogMetadata(monster); const matchesSearch = !query || normalizedSearch([monster.name, monster.type, monster.challenge, meta.origin, ...meta.tags, ...monster.traits.flatMap((entry) => [entry.name, entry.content]), ...monster.actions.flatMap((entry) => [entry.name, entry.content])].join(" ")).includes(query); return matchesMonsterFilters(this.monsterFilters, monster) && matchesSearch; }) : [];
-    return `<section class="gm-content-catalog"><div class="spell-search-row gm-content-search-row"><label class="spell-search"><span>Buscar</span><input data-gm-monster-search type="search" value="${escapeHtml(this.monsterSearch)}" placeholder="Nombre, tipo, rasgo, acción…"></label><button type="button" class="description-toggle" data-gm-toggle-monster-descriptions>${this.showMonsterDescriptions ? "Ocultar descripciones" : "Mostrar descripciones"}</button><button type="button" data-action="new-custom-monster">+ monstruo</button></div><nav class="filter-bar property-filter gm-content-filter-bar gm-grouped-filters"><button type="button" data-gm-show-all-monsters class="${this.monsterShowAll ? "active" : ""}">Todos</button>${filterGroups.map((group) => { const selected = selectedMonsterFilterValues(this.monsterFilters, group.key); return `<details class="gm-filter-group ${selected.length ? "active" : ""}" ${this.openMonsterFilterGroup === group.key ? "open" : ""}><summary>${escapeHtml(group.label)}${selected.length ? `<strong>${selected.length}</strong>` : ""}</summary><div>${group.values.map((value) => `<button type="button" data-gm-monster-filter-value="${escapeHtml(value)}" data-gm-monster-filter-group="${escapeHtml(group.key)}" class="${this.monsterFilters.has(monsterFilterToken(group.key, value)) ? "active" : ""}">${escapeHtml(value)}</button>`).join("")}</div></details>`; }).join("")}</nav><div class="gm-catalog-grid">${monsters.map((monster) => this.renderCustomMonsterCard(monster)).join("")}</div><div class="sheet-empty gm-content-empty" ${monsters.length ? "hidden" : ""}><strong>${hasCriteria ? "Sin resultados" : "Catálogo en espera"}</strong><p>${hasCriteria ? "No hay monstruos que coincidan con los filtros." : "Buscá, elegí un filtro o activá Todos para mostrar los monstruos."}</p></div></section>`;
+    const showingAll = !this.monsterSearch.trim() && this.monsterFilters.size === 0 && !this.monsterFavoritesOnly;
+    const monsters = this.customMonsters.filter((monster) => { const meta = catalogMetadata(monster); const matchesSearch = !query || normalizedSearch([monster.name, monster.type, monster.challenge, meta.origin, ...visibleCatalogTags(meta.tags), ...monster.traits.flatMap((entry) => [entry.name, entry.content]), ...monster.actions.flatMap((entry) => [entry.name, entry.content])].join(" ")).includes(query); return (!this.monsterFavoritesOnly || isCatalogFavorite(monster)) && matchesMonsterFilters(this.monsterFilters, monster) && matchesSearch; }).sort((left, right) => Number(isCatalogFavorite(right)) - Number(isCatalogFavorite(left)) || left.name.localeCompare(right.name, "es", { sensitivity: "base" }));
+    return `<section class="gm-content-catalog"><div class="spell-search-row gm-content-search-row"><label class="spell-search"><span>Buscar</span><input data-gm-monster-search type="search" value="${escapeHtml(this.monsterSearch)}" placeholder="Nombre, tipo, rasgo, acción…"></label><button type="button" class="description-toggle" data-gm-toggle-monster-descriptions>${this.showMonsterDescriptions ? "Ocultar descripciones" : "Mostrar descripciones"}</button><button type="button" data-action="new-custom-monster">+ monstruo</button></div><nav class="filter-bar property-filter gm-content-filter-bar gm-grouped-filters"><button type="button" data-gm-show-all-monsters class="${showingAll ? "active" : ""}" aria-pressed="${showingAll}">Todos</button><button type="button" data-gm-favorite-monsters class="gm-favorites-filter ${this.monsterFavoritesOnly ? "active" : ""}" aria-pressed="${this.monsterFavoritesOnly}">★ Favoritos</button>${filterGroups.map((group) => { const selected = selectedMonsterFilterValues(this.monsterFilters, group.key); return `<details class="gm-filter-group ${selected.length ? "active" : ""}" ${this.openMonsterFilterGroup === group.key ? "open" : ""}><summary>${escapeHtml(group.label)}${selected.length ? `<strong>${selected.length}</strong>` : ""}</summary><div>${group.values.map((value) => { const active = this.monsterFilters.has(monsterFilterToken(group.key, value)); return `<button type="button" data-gm-monster-filter-value="${escapeHtml(value)}" data-gm-monster-filter-group="${escapeHtml(group.key)}" class="${active ? "active" : ""}" aria-pressed="${active}">${escapeHtml(value)}</button>`; }).join("")}</div></details>`; }).join("")}</nav><div class="gm-catalog-grid">${monsters.map((monster) => this.renderCustomMonsterCard(monster)).join("")}</div><div class="sheet-empty gm-content-empty" ${monsters.length ? "hidden" : ""}><strong>Sin resultados</strong><p>No hay monstruos que coincidan con los filtros.</p></div></section>`;
   }
 
   private renderCustomMonsterCard(monster: MonsterDefinition): string {
     const meta = catalogMetadata(monster);
-    const search = [monster.name, monster.type, monster.challenge, meta.origin, ...meta.tags, ...monster.traits.flatMap((entry) => [entry.name, entry.content]), ...monster.actions.flatMap((entry) => [entry.name, entry.content])].join(" ").toLocaleLowerCase();
-    return `<article class="play-card gm-catalog-card gm-monster-card" data-gm-content-card data-search="${escapeHtml(search)}"><header><div><span class="card-kicker">${escapeHtml(monster.type || "Sin tipo")} · VD ${escapeHtml(monster.challenge || "—")}</span><h3>${escapeHtml(monster.name)}</h3><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span></div><div class="card-buttons"><button type="button" data-action="template-custom-monster" data-monster-key="${escapeHtml(monster.name)}" title="Crear una copia editable">Usar como template</button><button type="button" data-action="edit-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Editar</button><button type="button" data-action="delete-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Eliminar</button></div></header><div class="gm-card-facts"><span>CA ${monster.armorClass}</span><span>PG ${monster.hitPoints}</span><span>${escapeHtml(monster.speed.join(", ") || "—")}</span></div>${meta.tags.length ? `<div class="catalog-tags">${meta.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${this.showMonsterDescriptions ? `<div class="gm-card-description">${monster.traits.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || monster.actions.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || "<p>Sin descripción.</p>"}</div>` : ""}</article>`;
+    const tags = visibleCatalogTags(meta.tags);
+    const favorite = isCatalogFavorite(monster);
+    const confirming = this.pendingDeleteMonsterKey === monster.name;
+    const search = [monster.name, monster.type, monster.challenge, meta.origin, ...tags, ...monster.traits.flatMap((entry) => [entry.name, entry.content]), ...monster.actions.flatMap((entry) => [entry.name, entry.content])].join(" ").toLocaleLowerCase();
+    return `<article class="play-card gm-catalog-card gm-monster-card ${favorite ? "favorite" : ""}" data-gm-content-card data-search="${escapeHtml(search)}"><header><div><span class="card-kicker">${escapeHtml(monster.type || "Sin tipo")} · VD ${escapeHtml(monster.challenge || "—")}</span><div class="gm-card-title-row"><h3>${escapeHtml(monster.name)}</h3><button type="button" class="favorite-toggle ${favorite ? "active" : ""}" data-action="favorite-custom-monster" data-monster-key="${escapeHtml(monster.name)}" aria-pressed="${favorite}" title="${favorite ? "Quitar de favoritos" : "Agregar a favoritos"}">${favorite ? "★" : "☆"}</button></div><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span></div><div class="gm-content-card-actions"><div><button type="button" data-action="edit-custom-monster" data-monster-key="${escapeHtml(monster.name)}">Editar</button><button type="button" data-action="delete-custom-monster" data-monster-key="${escapeHtml(monster.name)}" class="${confirming ? "danger-confirm" : ""}">${confirming ? "Confirmar eliminación" : "Eliminar"}</button></div><button type="button" data-action="template-custom-monster" data-monster-key="${escapeHtml(monster.name)}" title="Crear una copia editable">Clonar</button></div></header><div class="gm-card-facts"><span><small>CA</small>${monster.armorClass}</span><span><small>PG</small>${monster.hitPoints}</span><span><small>Velocidad</small>${escapeHtml(monster.speed.join(", ") || "—")}</span><span><small>Tamaño</small>${escapeHtml(monster.size || "—")}</span></div>${tags.length ? `<div class="catalog-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${this.showMonsterDescriptions ? `<div class="gm-card-description">${monster.traits.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || monster.actions.slice(0, 2).map((entry) => `<p><b>${escapeHtml(entry.name)}.</b> ${escapeHtml(entry.content)}</p>`).join("") || "<p>Sin descripción.</p>"}</div>` : ""}</article>`;
   }
 
   private renderCustomMonsterView(monster: MonsterDefinition): string {
@@ -548,12 +545,10 @@ export class GmApp {
     const list = (values: string[]): string => escapeHtml(values.join(", "));
     const featureText = (values: MonsterDefinition["traits"]): string => escapeHtml(values.map((entry) => `${entry.name} | ${entry.content}${entry.usage ? ` | ${entry.usage}` : ""}`).join("\n"));
     const spellCatalog = this.runtime.contentCatalogIsComplete ? this.customSpells : [...this.customSpells, ...spellDefinitionsForLanguage("es")];
-    const equipmentCatalog = this.runtime.contentCatalogIsComplete ? this.customEquipment : [...this.customEquipment, ...equipmentDefinitionsForLanguage("es")];
     const spellNames = [...new Set(spellCatalog.map((entry) => entry.name))].sort((a, b) => a.localeCompare(b, "es"));
-    const equipmentNames = [...new Set(equipmentCatalog.map((entry) => entry.name))].sort((a, b) => a.localeCompare(b, "es"));
     const meta = catalogMetadata(monster);
     return `<form data-action="save-custom-monster" class="gm-custom-monster-form">
-      <div class="catalog-editor-meta"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span><label>Etiquetas de campaña<input name="catalogTags" value="${escapeHtml(meta.tags.join(", "))}" placeholder="oficial, jefe, no-muerto"></label></div>
+      <div class="catalog-editor-meta"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span><label>Etiquetas de campaña<input name="catalogTags" value="${escapeHtml(visibleCatalogTags(meta.tags).join(", "))}" placeholder="oficial, jefe, no-muerto"></label></div>
       <div class="gm-monster-core-fields">
         <label>Nombre<input name="name" required value="${escapeHtml(monster?.name ?? "")}"></label>
         <label>Tipo<select name="type">${fixedOptions(MONSTER_TYPES, monster?.type ?? "", "Sin tipo")}</select></label>
@@ -585,7 +580,6 @@ export class GmApp {
       <label>Acciones legendarias<textarea name="legendaryActions">${featureText(monster?.legendaryActions ?? [])}</textarea></label>
       <div class="gm-monster-list-fields">
         ${renderCheckboxGroup("Conjuros", "spells", spellNames, monster?.spells ?? [])}
-        ${renderCheckboxGroup("Inventario", "inventory", equipmentNames, monster?.inventory ?? [])}
       </div>
       <div class="gm-custom-form-actions"><button type="submit">${monster ? "Guardar monstruo" : "Crear monstruo"}</button><button type="button" data-action="cancel-custom-monster">Limpiar</button></div>
     </form>`;
@@ -602,6 +596,7 @@ export class GmApp {
 
   private bindEvents(): void {
     bindViewportConstrainedDetails(this.root, ".gm-popover", ":scope > div");
+    bindViewportConstrainedDetails(this.root, ".gm-filter-group", ":scope > div");
     this.root.querySelector<HTMLButtonElement>("[data-open-persistence]")?.addEventListener("click", openPersistencePanel);
     this.root.querySelectorAll<HTMLDetailsElement>(".notification-center").forEach((center) => {
       center.addEventListener("toggle", () => {
@@ -638,24 +633,24 @@ export class GmApp {
       this.editingCustomMonsterKey = "__new__";
       this.render();
     }));
-    this.root.querySelector('[data-action="import-legacy-gm-content"]')?.addEventListener("click", () => { void this.importLegacyGmContent(); });
-    const legacyFileInput = this.root.querySelector<HTMLInputElement>("[data-legacy-gm-content-file]");
-    this.root.querySelector('[data-action="choose-legacy-gm-content-file"]')?.addEventListener("click", () => legacyFileInput?.click());
-    legacyFileInput?.addEventListener("change", () => {
-      const file = legacyFileInput.files?.[0];
-      if (!file) return;
-      const status = this.root.querySelector<HTMLElement>(".gm-legacy-import-status") ?? document.createElement("small");
-      status.className = "gm-legacy-import-status";
-      status.textContent = `Leyendo ${file.name}…`;
-      if (!status.isConnected) this.root.querySelector(".gm-content-source-bar span")?.after(status);
-      void this.importLegacyGmContentFile(file).finally(() => { legacyFileInput.value = ""; });
-    });
     this.root.querySelectorAll<HTMLElement>('[data-action="edit-custom-monster"]').forEach((button) => button.addEventListener("click", () => {
       this.selectedCustomMonsterKey = button.dataset.monsterKey ?? this.selectedCustomMonsterKey;
       this.editingCustomMonsterKey = this.selectedCustomMonsterKey;
       this.render();
     }));
-    this.root.querySelectorAll<HTMLElement>('[data-action="delete-custom-monster"]').forEach((button) => button.addEventListener("click", () => { this.selectedCustomMonsterKey = button.dataset.monsterKey ?? this.selectedCustomMonsterKey; void this.deleteCustomMonster(); }));
+    this.root.querySelectorAll<HTMLElement>('[data-action="favorite-custom-monster"]').forEach((button) => button.addEventListener("click", () => { void this.toggleMonsterFavorite(button.dataset.monsterKey ?? ""); }));
+    this.root.querySelectorAll<HTMLElement>('[data-action="delete-custom-monster"]').forEach((button) => button.addEventListener("click", () => {
+      const key = button.dataset.monsterKey ?? "";
+      if (this.pendingDeleteMonsterKey !== key) {
+        this.pendingDeleteMonsterKey = key;
+        this.message = { kind: "success", text: `Volvé a presionar para eliminar “${key}”.` };
+        this.render();
+        return;
+      }
+      this.pendingDeleteMonsterKey = null;
+      this.selectedCustomMonsterKey = key || this.selectedCustomMonsterKey;
+      void this.deleteCustomMonster();
+    }));
     this.root.querySelector('[data-action="cancel-custom-monster"]')?.addEventListener("click", () => {
       this.monsterTemplate = null;
       this.editingCustomMonsterKey = null;
@@ -671,7 +666,8 @@ export class GmApp {
     });
     this.root.querySelector("[data-gm-toggle-monster-descriptions]")?.addEventListener("click", () => { this.showMonsterDescriptions = !this.showMonsterDescriptions; this.render(); });
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-monster-filter-value]").forEach((button) => button.addEventListener("click", () => { const group = button.dataset.gmMonsterFilterGroup ?? ""; const filter = monsterFilterToken(group, button.dataset.gmMonsterFilterValue ?? ""); this.openMonsterFilterGroup = group; this.monsterShowAll = false; if (this.monsterFilters.has(filter)) this.monsterFilters.delete(filter); else this.monsterFilters.add(filter); this.render(); }));
-    this.root.querySelector("[data-gm-show-all-monsters]")?.addEventListener("click", () => { this.monsterShowAll = !this.monsterShowAll; if (this.monsterShowAll) { this.monsterFilters.clear(); this.monsterSearch = ""; this.openMonsterFilterGroup = null; } this.render(); });
+    this.root.querySelector("[data-gm-favorite-monsters]")?.addEventListener("click", () => { this.monsterFavoritesOnly = !this.monsterFavoritesOnly; this.monsterShowAll = false; this.render(); });
+    this.root.querySelector("[data-gm-show-all-monsters]")?.addEventListener("click", () => { this.monsterShowAll = true; this.monsterFavoritesOnly = false; this.monsterFilters.clear(); this.monsterSearch = ""; this.openMonsterFilterGroup = null; this.render(); });
     this.root.querySelector<HTMLFormElement>('[data-action="save-custom-monster"]')?.addEventListener("submit", (event) => {
       event.preventDefault();
       void this.saveCustomMonster(new FormData(event.currentTarget as HTMLFormElement));
@@ -1036,53 +1032,6 @@ export class GmApp {
     return [...catalog.values()].sort((left, right) => left.name.localeCompare(right.name, "es", { sensitivity: "base" }));
   }
 
-  private async importLegacyGmContent(): Promise<void> {
-    if (!this.runtime.importLegacyGmContent) return;
-    try {
-      const preview = await this.runtime.previewLegacyGmContent?.();
-      const detail = preview ? `\n\n${preview.spells} conjuros · ${preview.equipment} objetos · ${preview.monsters} monstruos · ${preview.shops} tiendas · ${preview.checklist} tareas.\nTotal: ${preview.total}.` : "";
-      if (globalThis.confirm && !globalThis.confirm(`¿Importar el contenido local legado a esta campaña?${detail}\n\nLos nombres duplicados se conservarán como copias importadas. El origen no se modificará.`)) return;
-      const result = await this.runtime.importLegacyGmContent();
-      const content = await this.runtime.loadGmContent?.();
-      if (content) { this.customSpells = content.spells; this.customEquipment = content.equipment; this.customMonsters = content.monsters; }
-      await this.toolsPanel.load();
-      this.selectedCustomMonsterKey = this.customMonsters[0]?.name ?? null;
-      this.message = { kind: "success", text: `${result.imported} entradas importadas a Supabase. El almacenamiento legado no fue modificado.` };
-    } catch (error) {
-      this.message = { kind: "error", text: this.formatError(error) };
-    }
-    this.render();
-  }
-
-  private async importLegacyGmContentFile(file: File): Promise<void> {
-    if (!this.runtime.importLegacyGmContentFile) return;
-    try {
-      const raw = await readSelectedFile(file);
-      const preview = await this.runtime.previewLegacyGmContentFile?.(raw);
-      const detail = preview ? `\n\n${preview.spells} conjuros · ${preview.equipment} objetos · ${preview.monsters} monstruos · ${preview.shops} tiendas · ${preview.checklist} tareas.\nTotal: ${preview.total}.` : "";
-      if (globalThis.confirm && !globalThis.confirm(`¿Importar “${file.name}” a esta campaña?${detail}\n\nLos nombres duplicados se conservarán como copias importadas. El archivo original no se modificará.`)) {
-        this.legacyImportStatus = "Importación cancelada.";
-        this.render();
-        return;
-      }
-      this.legacyImportStatus = `Importando ${preview?.total ?? ""} entradas…`;
-      const liveStatus = this.root.querySelector<HTMLElement>(".gm-legacy-import-status");
-      if (liveStatus) liveStatus.textContent = this.legacyImportStatus;
-      const result = await this.runtime.importLegacyGmContentFile(raw);
-      const content = await this.runtime.loadGmContent?.();
-      if (content) { this.customSpells = content.spells; this.customEquipment = content.equipment; this.customMonsters = content.monsters; }
-      await this.toolsPanel.load();
-      this.selectedCustomMonsterKey = this.customMonsters[0]?.name ?? null;
-      this.legacyImportStatus = `${result.imported} entradas importadas correctamente.`;
-      this.message = { kind: "success", text: `${result.imported} entradas de “${file.name}” importadas a Supabase.` };
-    } catch (error) {
-      const detail = this.formatError(error);
-      this.legacyImportStatus = `Error: ${detail}`;
-      this.message = { kind: "error", text: detail };
-    }
-    this.render();
-  }
-
   private async saveCustomMonster(data: FormData): Promise<void> {
     if (!this.runtime.saveCustomMonster) return;
     const name = String(data.get("name") ?? "").trim();
@@ -1115,13 +1064,14 @@ export class GmApp {
       DamageImmunities: list("immunities"), ConditionImmunities: list("conditionImmunities"),
       Traits: featureData("traits"), Actions: featureData("actions"), Reactions: featureData("reactions"),
       LegendaryActions: featureData("legendaryActions"),
-      Spells: list("spells"), Inventory: list("inventory"),
+      Spells: list("spells"), Inventory: existing?.inventory ?? [],
       __catalog: catalogLegacyData(existing, data).__catalog,
     });
     try {
       await this.runtime.saveCustomMonster(definition, previousKey);
       this.customMonsters = [...this.customMonsters.filter((monster) =>
         monster.name !== previousKey && monster.name.toLocaleLowerCase() !== definition.name.toLocaleLowerCase()), definition];
+      this.toolsPanel.syncMonsterInventory(definition);
       this.selectedCustomMonsterKey = definition.name;
       this.editingCustomMonsterKey = null;
       this.monsterTemplate = null;
@@ -1135,10 +1085,28 @@ export class GmApp {
     this.render();
   }
 
+  private async toggleMonsterFavorite(key: string): Promise<void> {
+    if (!this.runtime.saveCustomMonster) return;
+    const current = this.customMonsters.find((monster) => monster.name === key);
+    if (!current) return;
+    const meta = catalogMetadata(current);
+    const tags = visibleCatalogTags(meta.tags);
+    if (!isCatalogFavorite(current)) tags.push(FAVORITE_TAG);
+    const updated = { ...current, legacyData: { ...current.legacyData, __catalog: { ...meta, tags } } };
+    try {
+      await this.runtime.saveCustomMonster(updated, key);
+      this.customMonsters = this.customMonsters.map((monster) => monster.name === key ? updated : monster);
+      this.appendActionLog(`Favorito: ${key}`);
+      this.message = { kind: "success", text: "Favoritos actualizados." };
+    } catch (error) {
+      this.message = { kind: "error", text: this.formatError(error) };
+    }
+    this.render();
+  }
+
   private async deleteCustomMonster(): Promise<void> {
     const key = this.selectedCustomMonsterKey;
     if (!key || !this.runtime.deleteCustomMonster) return;
-    if (globalThis.confirm && !globalThis.confirm(`¿Eliminar definitivamente ${key}?`)) return;
     try {
       await this.runtime.deleteCustomMonster(key);
       this.customMonsters = this.customMonsters.filter((monster) => monster.name !== key);

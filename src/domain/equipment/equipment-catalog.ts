@@ -10,6 +10,42 @@ export const EQUIPMENT_RARITIES = [
   "none", "common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies",
 ] as const;
 
+const EQUIPMENT_RARITY_ALIASES: Record<string, typeof EQUIPMENT_RARITIES[number]> = {
+  "": "none",
+  none: "none",
+  ninguna: "none",
+  "sin-rareza": "none",
+  common: "common",
+  comun: "common",
+  uncommon: "uncommon",
+  "poco-comun": "uncommon",
+  rare: "rare",
+  raro: "rare",
+  rara: "rare",
+  "very-rare": "very-rare",
+  "muy-raro": "very-rare",
+  "muy-rara": "very-rare",
+  legendary: "legendary",
+  legendario: "legendary",
+  legendaria: "legendary",
+  artifact: "artifact",
+  artefacto: "artifact",
+  varies: "varies",
+  variable: "varies",
+  varia: "varies",
+};
+
+const EQUIPMENT_RARITY_LABELS: Record<typeof EQUIPMENT_RARITIES[number], string> = {
+  none: "Sin rareza",
+  common: "Común",
+  uncommon: "Poco común",
+  rare: "Raro",
+  "very-rare": "Muy raro",
+  legendary: "Legendario",
+  artifact: "Artefacto",
+  varies: "Variable",
+};
+
 export const EQUIPMENT_CATEGORIES = [
   "adventuring-gear", "weapon", "armor", "shield", "tool", "ammunition",
   "potion", "scroll", "wand", "staff", "rod", "ring", "wondrous-item",
@@ -52,6 +88,20 @@ function description(value: JsonValue | undefined): string {
   return Array.isArray(value) ? value.map((entry) => text(entry)).filter(Boolean).join("\n\n") : text(value);
 }
 
+export function normalizeEquipmentRarity(value: unknown): typeof EQUIPMENT_RARITIES[number] {
+  const normalized = String(value ?? "none")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase()
+    .replace(/[\s_]+/g, "-");
+  return EQUIPMENT_RARITY_ALIASES[normalized] ?? "none";
+}
+
+export function equipmentRarityLabel(value: unknown): string {
+  return EQUIPMENT_RARITY_LABELS[normalizeEquipmentRarity(value)];
+}
+
 export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDraft {
   const raw = input !== null && typeof input === "object" && !Array.isArray(input)
     ? input as Record<string, unknown>
@@ -59,8 +109,7 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
   const rawRarity = raw.rarity !== null && typeof raw.rarity === "object" && !Array.isArray(raw.rarity)
     ? raw.rarity as Record<string, unknown>
     : {};
-  const rarity = String(rawRarity.index ?? rawRarity.name ?? raw.rarity ?? raw.Rarity ?? "none")
-    .trim().toLocaleLowerCase().replaceAll(" ", "-") || "none";
+  const rarity = normalizeEquipmentRarity(rawRarity.index ?? rawRarity.name ?? raw.rarity ?? raw.Rarity);
   const existing = CharacterInventoryItemDraftSchema.safeParse(input);
   if (existing.success) {
     const { order: _order, group: _group, ...definition } = existing.data;

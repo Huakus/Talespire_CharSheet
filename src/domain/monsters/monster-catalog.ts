@@ -1,5 +1,7 @@
 import englishMonsters from "../../../Monster_Manual-eng.json";
 import spanishMonsters from "../../../Monster_Manual-es.json";
+import { CharacterInventoryItemV2Schema, type CharacterInventoryItemV2 } from "../character/character-inventory-model";
+import { normalizeEquipmentDefinition } from "../equipment/equipment-catalog";
 import { cloneJson, type JsonObject } from "../../shared/json";
 
 const monsters = [
@@ -41,7 +43,7 @@ export interface MonsterDefinition {
   reactions: MonsterFeature[];
   legendaryActions: MonsterFeature[];
   spells: string[];
-  inventory: string[];
+  inventory: CharacterInventoryItemV2[];
   legacyData: JsonObject;
 }
 
@@ -103,6 +105,40 @@ function strings(value: unknown): string[] {
   }).filter(Boolean);
 }
 
+function stableInventoryId(value: string): string {
+  const hashes = [0x811c9dc5, 0x9e3779b9, 0x85ebca6b, 0xc2b2ae35];
+  for (const character of value) for (let index = 0; index < hashes.length; index += 1) {
+    hashes[index] = Math.imul(hashes[index]! ^ (character.charCodeAt(0) + index * 31), 0x01000193) >>> 0;
+  }
+  return `inv_${hashes.map((hash) => hash.toString(16).padStart(8, "0")).join("")}`;
+}
+
+function inventory(value: unknown, owner: string): CharacterInventoryItemV2[] {
+  if (!Array.isArray(value)) return [];
+  const parsed: CharacterInventoryItemV2[] = [];
+  const legacy = new Map<string, { name: string; quantity: number }>();
+  for (const entry of value) {
+    const structured = CharacterInventoryItemV2Schema.safeParse(entry);
+    if (structured.success) {
+      parsed.push(structured.data);
+      continue;
+    }
+    const name = typeof entry === "string" || typeof entry === "number"
+      ? String(entry).trim()
+      : String(object(entry).Name ?? object(entry).name ?? "").trim();
+    if (!name) continue;
+    const key = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
+    const current = legacy.get(key);
+    if (current) current.quantity += 1;
+    else legacy.set(key, { name, quantity: 1 });
+  }
+  for (const entry of legacy.values()) {
+    const { rarity: _rarity, ...draft } = normalizeEquipmentDefinition({ name: entry.name, category: "adventuring-gear" });
+    parsed.push({ ...draft, id: stableInventoryId(`${owner}:${entry.name}:${parsed.length}`), order: parsed.length, group: "backpack", quantity: entry.quantity });
+  }
+  return parsed.map((item, order) => ({ ...item, order }));
+}
+
 function inferredSize(type: string): string {
   const normalized = type.toLocaleLowerCase();
   return ["Diminuto", "Pequeño", "Mediano", "Grande", "Enorme", "Gargantuesco", "Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan"]
@@ -152,7 +188,7 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     reactions: features(source.Reactions ?? source.reactions),
     legendaryActions: features(source.LegendaryActions ?? source.legendaryActions),
     spells: strings(source.Spells ?? source.spells),
-    inventory: strings(source.Inventory ?? source.inventory),
+    inventory: inventory(source.Inventory ?? source.inventory, String(source.Id ?? source.id ?? source.Name ?? source.name ?? "monster")),
     legacyData: cloneJson(source),
   };
 }

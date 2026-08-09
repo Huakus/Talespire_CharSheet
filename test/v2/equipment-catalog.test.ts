@@ -5,11 +5,14 @@ import {
   projectCharacterStatistics,
   projectInventory,
 } from "../../src/domain/character/character-projection";
-import { findEquipmentDefinitionByName, normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { equipmentRarityLabel, findEquipmentDefinitionByName, normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 
 describe("equipment catalog and bonuses", () => {
   it("normalizes rarity into a selectable catalog value", () => {
     expect(normalizeEquipmentDefinition({ name: "Reliquia", rarity: { index: "very-rare" } }).rarity).toBe("very-rare");
+    expect(normalizeEquipmentDefinition({ name: "Reliquia", rarity: { index: "raro" } }).rarity).toBe("rare");
+    expect(normalizeEquipmentDefinition({ name: "Reliquia", rarity: { name: "Muy Raro" } }).rarity).toBe("very-rare");
+    expect(equipmentRarityLabel("uncommon")).toBe("Poco común");
   });
   it("normalizes bundled magic equipment and applies active bonuses", () => {
     const cloak = findEquipmentDefinitionByName("Cloak of Protection");

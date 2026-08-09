@@ -16,7 +16,6 @@ import { BrowserDiceRoller } from "./infrastructure/dice/browser-dice-roller";
 import { TaleSpireDiceRoller } from "./infrastructure/talespire/talespire-dice-roller";
 import { TaleSpireMiniatureAdapter } from "./infrastructure/talespire/talespire-miniature";
 import { TaleSpirePlayerCollaboration } from "./infrastructure/talespire/talespire-player-collaboration";
-import { parseLegacyGlobalContentText, TaleSpireGlobalContentStore } from "./infrastructure/talespire/talespire-global-content";
 import { resolveTaleSpireClientRole } from "./infrastructure/talespire/talespire-client-role";
 import { EncounterApplication } from "./application/encounter/encounter-application";
 import { GmApp } from "./ui/gm-app";
@@ -81,7 +80,7 @@ async function startBrowserDevelopment(): Promise<void> {
     storageLabel: "Almacenamiento de desarrollo del navegador",
     storageEventKey: primaryRepository.storageKey,
     diceRoller: new BrowserDiceRoller(),
-    ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), contentCatalogIsComplete: true } : {}),
+    ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), contentCatalogIsComplete: true, saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null) } : {}),
   }).start().catch(reportStartupFailure);
 }
 
@@ -100,10 +99,6 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   const application = new CampaignApplication(repository);
   const clientRole = api.clients ? await resolveTaleSpireClientRole(api.clients) : "player";
   const diceRoller = api.dice ? new TaleSpireDiceRoller(api.dice) : new BrowserDiceRoller();
-  const legacyGlobalContent = api.localStorage.global
-    ? new TaleSpireGlobalContentStore(api.localStorage.global, createBrowserExclusiveLock())
-    : null;
-  const contentStore = campaignContent ?? legacyGlobalContent;
   const miniature = new TaleSpireMiniatureAdapter(api);
   if (diceRoller instanceof TaleSpireDiceRoller) activeTaleSpireDiceRoller = diceRoller;
   if (clientRole === "gm") {
@@ -116,47 +111,25 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
       : null;
     activeGmCollaboration = collaboration;
     if (collaboration) await collaboration.initialize();
-    const publishPlayerContent = async (): Promise<void> => {
-      if (collaboration && contentStore && !campaignContent) await collaboration.publishCustomContent(await contentStore.load());
-    };
-    if (collaboration && contentStore && !campaignContent) void publishPlayerContent();
     const gmWorkspace = new GmWorkspaceApplication(repository);
     void new GmApp(appRoot, new EncounterApplication(repository), {
       diceRoller,
       contentCatalogIsComplete: campaignContent !== null,
       ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
       monsters: campaignContent ? [] : monsterDefinitions(),
-      ...(contentStore ? {
-        loadGmContent: () => contentStore.load(),
-        loadCustomMonsters: async () => (await contentStore.load()).monsters,
-        saveCustomMonster: async (definition, previousKey) => { await contentStore.saveMonster(definition, previousKey); await publishPlayerContent(); },
-        deleteCustomMonster: async (key) => { await contentStore.deleteMonster(key); await publishPlayerContent(); },
-        saveCustomSpell: async (definition, previousKey) => { await contentStore.saveSpell(definition, previousKey); await publishPlayerContent(); },
-        deleteCustomSpell: async (key) => { await contentStore.deleteSpell(key); await publishPlayerContent(); },
-        saveCustomEquipment: async (definition, previousKey) => { await contentStore.saveEquipment(definition, previousKey); await publishPlayerContent(); },
-        deleteCustomEquipment: async (key) => { await contentStore.deleteEquipment(key); await publishPlayerContent(); },
-        saveShop: (shop, previousKey) => contentStore.saveShop(shop, previousKey),
-        deleteShop: (key) => contentStore.deleteShop(key),
-        saveChecklistItem: (item) => contentStore.saveChecklistItem(item),
-        deleteChecklistItem: (key) => contentStore.deleteChecklistItem(key),
-      } : {}),
-      ...(campaignContent && legacyGlobalContent ? {
-        previewLegacyGmContent: async () => {
-          const legacy = await legacyGlobalContent.load();
-          const result = { spells: legacy.spells.length, equipment: legacy.equipment.length, monsters: legacy.monsters.length, shops: legacy.shops.length, checklist: legacy.checklist.length };
-          return { ...result, total: result.spells + result.equipment + result.monsters + result.shops + result.checklist };
-        },
-        importLegacyGmContent: async () => campaignContent.importLegacy(await legacyGlobalContent.load()),
-        previewLegacyGmContentFile: async (raw: string) => {
-          const parsed = parseLegacyGlobalContentText(raw);
-          const legacy = { ...parsed, checklist: [] };
-          const result = { spells: legacy.spells.length, equipment: legacy.equipment.length, monsters: legacy.monsters.length, shops: legacy.shops.length, checklist: legacy.checklist.length };
-          return { ...result, total: result.spells + result.equipment + result.monsters + result.shops + result.checklist };
-        },
-        importLegacyGmContentFile: async (raw: string) => {
-          const parsed = parseLegacyGlobalContentText(raw);
-          return campaignContent.importLegacy({ ...parsed, checklist: [] });
-        },
+      ...(campaignContent ? {
+        loadGmContent: () => campaignContent.load(),
+        loadCustomMonsters: async () => (await campaignContent.load()).monsters,
+        saveCustomMonster: (definition, previousKey) => campaignContent.saveMonster(definition, previousKey),
+        deleteCustomMonster: (key) => campaignContent.deleteMonster(key),
+        saveCustomSpell: (definition, previousKey) => campaignContent.saveSpell(definition, previousKey),
+        deleteCustomSpell: (key) => campaignContent.deleteSpell(key),
+        saveCustomEquipment: (definition, previousKey) => campaignContent.saveEquipment(definition, previousKey),
+        deleteCustomEquipment: (key) => campaignContent.deleteEquipment(key),
+        saveShop: (shop, previousKey) => campaignContent.saveShop(shop, previousKey),
+        deleteShop: (key) => campaignContent.deleteShop(key),
+        saveChecklistItem: (item) => campaignContent.saveChecklistItem(item),
+        deleteChecklistItem: (key) => campaignContent.deleteChecklistItem(key),
       } : {}),
       saveGmWorkspace: (workspace, checksum) => gmWorkspace.save(workspace, checksum),
       ...(collaboration ? {
@@ -202,18 +175,16 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
           subscribeCharacterSummaryRequests: (listener: Parameters<typeof collaboration.subscribeCharacterSummaryRequests>[0]) => collaboration.subscribeCharacterSummaryRequests(listener),
           respondToCharacterSummaryRequest: (character: Parameters<typeof collaboration.respondToCharacterSummaryRequest>[0], request: Parameters<typeof collaboration.respondToCharacterSummaryRequest>[1]) => collaboration.respondToCharacterSummaryRequest(character, request),
           subscribeEncounterSync: (listener: Parameters<typeof collaboration.subscribeEncounterSync>[0]) => collaboration.subscribeEncounterSync(listener),
-          ...(!campaignContent ? {
-            subscribeCustomContent: (listener: Parameters<typeof collaboration.subscribeCustomContent>[0]) => collaboration.subscribeCustomContent(listener),
-            requestCustomContent: () => collaboration.requestCustomContent(),
-          } : {}),
         }
       : {}),
-    ...(contentStore
+    ...(campaignContent
       ? {
-          loadCustomContent: () => contentStore.load(),
-          contentCatalogIsComplete: campaignContent !== null,
-          saveCustomSpell: (definition: Parameters<typeof contentStore.saveSpell>[0]) => contentStore.saveSpell(definition),
-          saveCustomEquipment: (definition: Parameters<typeof contentStore.saveEquipment>[0]) => contentStore.saveEquipment(definition),
+          loadCustomContent: () => campaignContent.load(),
+          contentCatalogIsComplete: true,
+          saveCustomSpell: (definition: Parameters<typeof campaignContent.saveSpell>[0]) => campaignContent.saveSpell(definition),
+          saveCustomEquipment: (definition: Parameters<typeof campaignContent.saveEquipment>[0]) => campaignContent.saveEquipment(definition),
+          saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null),
+          saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null),
         }
       : {}),
     ...(api.creatures
