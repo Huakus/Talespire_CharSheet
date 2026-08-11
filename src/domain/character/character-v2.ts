@@ -115,6 +115,9 @@ export const CharacterV2Schema = z.object({
   traits: z.array(CharacterTraitGroupV2Schema).default([]),
   notes: z.array(CharacterNoteGroupV2Schema).default([]),
   extras: z.array(CharacterExtraV2Schema).default([]),
+  commerce: z.object({
+    suspicionByMerchant: z.record(z.string(), z.number().int().nonnegative()).default({}),
+  }).default({ suspicionByMerchant: {} }),
   taleSpire: z.object({
     creatureId: z.string().min(1),
     displayName: z.string(),

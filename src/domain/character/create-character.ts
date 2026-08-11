@@ -42,7 +42,8 @@ export function createCharacter(
     },
     proficiencies: { weapons: [], armor: [], languages: [], tools: [] },
     checks: createDefaultCharacterChecks(),
-    actions: [], inventory: [], traits: [], notes: [], extras: [], taleSpire: null,
+    actions: [], inventory: [], traits: [], notes: [], extras: [],
+    commerce: { suspicionByMerchant: {} }, taleSpire: null,
     currency: { copper: 0, silver: 0, electrum: 0, gold: 0, platinum: 0 },
     spellcasting: {
       ability: null, selectedLevel: null, levels: {}, showUpcast: false,

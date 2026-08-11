@@ -29,11 +29,24 @@ describe("character lifecycle", () => {
     const newHero = Object.values(created.campaign.characters).find((character) => character.name === "New Hero")!;
     expect(newHero.metadata.migratedFrom).toBe("native");
     expect(newHero.identity.level).toBe(1);
+    expect(newHero.commerce.suspicionByMerchant).toEqual({});
+
+    const suspicious = await application.restoreCharacterState({
+      characterId: newHero.id,
+      expectedCharacterRevision: newHero.revision,
+      expectedCampaignChecksum: created.checksum,
+      character: {
+        ...newHero,
+        commerce: { suspicionByMerchant: { npc_mirna: 2 } },
+      },
+      updatedAt: "2026-07-25T21:01:30.000Z",
+    });
+    expect(suspicious.campaign.characters[newHero.id]?.commerce.suspicionByMerchant).toEqual({ npc_mirna: 2 });
 
     const imported = await application.importCharacter({
       input: { Imported: { playerClass: "Wizard", characterLevel: "3", intelligenceScore: "16" } },
       fallbackName: "Imported",
-      expectedCampaignChecksum: created.checksum,
+      expectedCampaignChecksum: suspicious.checksum,
       importedAt: "2026-07-25T21:02:00.000Z",
     });
     expect(Object.values(imported.campaign.characters).some((character) => character.name === "Imported")).toBe(true);

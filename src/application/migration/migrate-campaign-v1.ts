@@ -789,6 +789,7 @@ async function migrateCharacter(
     traits: typedTraitGroups(migratedTraits),
     notes: typedNoteGroups(migratedNotes),
     extras: typedExtras(migratedExtras),
+    commerce: { suspicionByMerchant: {} },
     taleSpire: null,
     currency: {
       copper: asInteger(coins.cp),

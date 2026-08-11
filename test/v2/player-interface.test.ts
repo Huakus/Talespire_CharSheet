@@ -6,7 +6,7 @@ import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipme
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import type { CampaignSnapshot } from "../../src/application/ports/campaign-repository";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
-import { BrowserApp, describeCharacterChanges, experienceProgress, inspiredRollMode, isValidHitPointAmount, strengthBasedIntimidationModifier, type BrowserAppRuntime } from "../../src/ui/browser-app";
+import { BrowserApp, describeCharacterChanges, experienceProgress, formatCurrencyInLargestDenominations, inspiredRollMode, isValidHitPointAmount, merchantBalancePreview, strengthBasedIntimidationModifier, type BrowserAppRuntime } from "../../src/ui/browser-app";
 import type { TaleSpireTransportDiagnostics } from "../../src/infrastructure/talespire/talespire-player-collaboration";
 import type { GmShop } from "../../src/domain/gm/gm-global-content";
 import type { MerchantDifficultyBreakdown } from "../../src/domain/commerce/merchant-interaction";
@@ -20,7 +20,7 @@ interface BrowserAppViewHarness {
   customMonsters: ReturnType<typeof normalizeMonsterDefinition>[];
   activeMerchantName: string | null;
   merchantMode: "buy" | "sell";
-  preparedMerchantRoll: { shopName: string; label: string; rollExpression: string; breakdown: MerchantDifficultyBreakdown; execute: () => Promise<void> } | null;
+  preparedMerchantRoll: { shopName: string; label: string; challenge: "persuasion" | "intimidation" | "pilfer" | "assault" | "plant-evidence"; difficulty: number; rollExpression: string; breakdown: MerchantDifficultyBreakdown; selections: { item: ReturnType<typeof createCharacter>["inventory"][number]; quantity: number; unitPriceCopper: number }[]; execute: (difficulty: number, selections: { item: ReturnType<typeof createCharacter>["inventory"][number]; quantity: number; unitPriceCopper: number }[]) => Promise<void> } | null;
   includeUnknownSpells: boolean;
   spellPropertyFilters: Set<string>;
   spellTagFilters: Set<string>;
@@ -130,11 +130,12 @@ describe("player interface shell", () => {
     expect(html).not.toContain('id="miniature-thumbnail"');
     expect(html.indexOf('class="sheet-menu"')).toBeLessThan(html.indexOf('class="mode-switch"'));
     expect(html).toContain('data-active-sheet-tab="summary"');
-    for (const tab of ["summary", "actions", "inventory", "traits", "notes", "extras", "initiative"]) {
+    for (const tab of ["summary", "actions", "spells", "inventory", "traits", "notes", "extras", "initiative"]) {
       expect(html).toContain(`data-sheet-tab="${tab}"`);
     }
-    expect(html).not.toContain('data-sheet-tab="spells"');
-    expect(html).toContain('<span>Acciones y conjuros</span>');
+    expect(html).toContain('<span>Acciones</span>');
+    expect(html).toContain('<span>Conjuros</span>');
+    expect(html.indexOf('data-sheet-tab="actions"')).toBeLessThan(html.indexOf('data-sheet-tab="spells"'));
     expect(html).toContain('aria-label="Características, habilidades y salvaciones"');
     expect(html).toContain('class="character-facts"');
     expect(html).toContain('class="character-fact placeholder" aria-label="Clase: sin configurar">Clase</span>');
@@ -370,6 +371,27 @@ describe("player interface shell", () => {
     expect(deathSaves).not.toContain("2✓ · 1✕");
   });
 
+  it("formats commerce values with the largest denominations and previews proportional balances", () => {
+    expect(formatCurrencyInLargestDenominations(1_299)).toBe("1 PPL · 2 PO · 1 PE · 4 PP · 9 PC");
+    expect(formatCurrencyInLargestDenominations(240)).toBe("2 PO · 4 PP");
+    expect(formatCurrencyInLargestDenominations(0)).toBe("0 PC");
+    expect(merchantBalancePreview(4, 1, "sell")).toEqual({
+      currentAmount: 4,
+      adjustmentAmount: 1,
+      resultingAmount: 5,
+      currentShare: 80,
+      adjustmentShare: 20,
+    });
+    expect(merchantBalancePreview(4, 1, "buy")).toEqual({
+      currentAmount: 3,
+      adjustmentAmount: 1,
+      resultingAmount: 3,
+      currentShare: 75,
+      adjustmentShare: 25,
+    });
+    expect(merchantBalancePreview(0, 0, "buy")).toMatchObject({ currentShare: 100, adjustmentShare: 0 });
+  });
+
   it("calculates circular experience progress between 5e levels", () => {
     expect(experienceProgress(3, 1_800)).toEqual({ level: 3, current: 1_800, next: 2_700, percent: 50 });
     expect(experienceProgress(20, 355_000)).toEqual({ level: 20, current: 355_000, next: null, percent: 100 });
@@ -430,8 +452,8 @@ describe("player interface shell", () => {
     expect(sourceHtml).toContain('data-item-transfer-target');
     expect(sourceHtml).toContain('data-item-transfer-quantity');
     expect(sourceHtml).toContain('data-transfer-inventory-item disabled');
-    expect(sourceHtml).toContain('data-inventory-quantity="-1"');
-    expect(sourceHtml).toContain('data-inventory-quantity="1"');
+    expect(sourceHtml).toContain('data-inventory-quantity-input type="number"');
+    expect(sourceHtml).toContain('class="inventory-state-toggle " data-inventory-action="equip"');
     expect(sourceHtml).toContain('class="inventory-dense-list"');
     expect(sourceHtml).toContain('class="spell-description inventory-description');
     expect(sourceHtml).toContain('data-inventory-tone="gear"');
@@ -521,15 +543,21 @@ describe("player interface shell", () => {
     view.activeSheetTab = "actions";
     const executionKey = `action:${character.id}:${character.actions[0]!.id}`;
     const disabled = view.renderCharacterForm(character);
-    expect(disabled).toContain('class="play-section collection-play actions-spells-workspace"');
+    expect(disabled).toContain('class="play-section collection-play"');
     expect(disabled).toContain('class="play-card spell-play-card action-play-card"');
-    expect(disabled).toContain('data-spell-name="Chispa"');
-    expect(disabled.indexOf('id="spell-search"')).toBeLessThan(disabled.indexOf('data-action-filter="all"'));
-    expect(disabled.indexOf('data-toggle-spell-descriptions')).toBeLessThan(disabled.indexOf('data-action-filter="all"'));
+    expect(disabled).not.toContain('data-spell-name="Chispa"');
+    expect(disabled).not.toContain('id="spell-search"');
     expect(disabled).toContain('data-arm-combat-action>Lanzar</button>');
     expect(disabled).toMatch(/data-combat-roll="attack"[^>]*disabled>Ataque<\/button>/);
     expect(disabled).toMatch(/data-combat-roll="damage"[^>]*disabled>Daño<\/button>/);
 
+    view.activeSheetTab = "spells";
+    const spells = view.renderCharacterForm(character);
+    expect(spells).toContain('data-spell-name="Chispa"');
+    expect(spells).toContain('id="spell-search"');
+    expect(spells).not.toContain('data-combat-name="Espadazo"');
+
+    view.activeSheetTab = "actions";
     view.combatExecutions.set(executionKey, new Set(["attack", "damage"]));
     const armed = view.renderCharacterForm(character);
     expect(armed).not.toMatch(/data-combat-roll="attack"[^>]*disabled>Ataque<\/button>/);
@@ -609,6 +637,12 @@ describe("player interface shell", () => {
     expect(alphaIndex).toBeLessThan(ritualIndex);
     expect(html).toContain('id="spell-search"');
     expect(html).toContain('data-spell-property-filter="ritual"');
+    expect(html).toContain('data-spell-property-filter="prepared" class="" aria-pressed="false"><span>Preparados</span><strong>2</strong>');
+    expect(html).toContain('data-spell-property-filter="ritual" class="" aria-pressed="false"><span>Ritual</span><strong>1</strong>');
+    expect(html).toContain('data-spell-property-filter="save" class="" aria-pressed="false"><span>Salvación</span><strong>0</strong>');
+    expect(html).toContain('<span>Catálogo</span>');
+    expect(html).not.toContain("Mostrar catálogo");
+    expect(html).not.toContain("Ocultar catálogo");
     expect(html).not.toContain("spell-combat-readout");
     expect(html).toContain(">5/2</strong>");
     expect(html).toContain('<i class="available">O</i><i class="available">O</i><i class="used">X</i>');
@@ -779,7 +813,7 @@ describe("player interface shell", () => {
     expect(view.renderCharacterForm(character)).toContain(taggedDefinition.name);
   });
 
-  it("always includes GM-created spells and preserves their favorite state", () => {
+  it("hides every unknown spell by default and preserves catalog favorite state", () => {
     const view = harness();
     const character = createCharacter(
       "chr_55555555555555555555555555555555",
@@ -792,7 +826,7 @@ describe("player interface shell", () => {
     view.customSpells = [catalogSpell];
 
     const normallyHidden = view.renderCharacterForm(character);
-    expect(normallyHidden).toContain("Secreto del catálogo");
+    expect(normallyHidden).not.toContain("Secreto del catálogo");
     expect(normallyHidden).toContain('data-include-unknown-spells aria-pressed="false"');
 
     view.includeUnknownSpells = true;
@@ -846,29 +880,45 @@ describe("player interface shell", () => {
     expect(list).toContain('data-merchant-action="interact"');
     view.activeMerchantName = "Mirna";
     const html = view.renderCharacterForm(character);
-    expect(html).toContain("Reputación <strong>2</strong>");
-    expect(html).toContain("Fondos <strong>10000 PC</strong>");
-    expect(html).toContain("Penalización por sospecha <strong>+0 a CD</strong>");
-    expect(html).toContain("Persuadir · CD 12");
-    expect(html).toContain("Intimidar · CD 12");
+    expect(html).toContain("<b>Reputación</b><strong>2</strong>");
+    expect(html).toContain('aria-label="Fondos comerciante: 10 PPL"');
+    expect(html).toContain("<b>Sospecha</b><strong>+0 CD</strong>");
+    expect(html).toContain("<span>Persuadir</span><strong>CD 12</strong>");
+    expect(html).toContain("<span>Intimidar</span><strong>CD 12</strong>");
     expect(html).toContain('data-merchant-action="assault-selected"');
-    expect(html).toContain("Asaltar (Intimidación con FUE) · CD 12");
+    expect(html).toContain("<span>Asaltar</span><strong>CD 12</strong>");
     expect(html).toContain("Asalto (FUE)");
+    expect(html).not.toContain("Asaltar transfiere objetos");
     expect(html).toContain('data-merchant-action="pilfer-item"');
-    expect(html).toContain("Hurtar · CD 15");
+    expect(html).toContain("<span>Hurtar</span><strong>CD 15</strong>");
+    expect(html).toContain('data-merchant-select-item="inv_22222222222222222222222222222222" aria-pressed="false"');
+    expect(html).toContain('data-merchant-select-quantity min="1" max="2"');
+    expect(html).toContain("2 PO · 4 PP c/u");
+    expect(html).toContain('data-merchant-balance-preview data-mode="buy"');
+    expect(html).toContain('--merchant-current-share:100%;--merchant-adjustment-share:0%');
+    expect(html.indexOf('data-merchant-balance-preview')).toBeLessThan(html.indexOf('data-merchant-action="transact"'));
     expect(html).not.toContain('data-merchant-action="loot-selected"');
-    expect(html).toContain('data-merchant-mode="buy" class="active"');
-    expect(html).toContain('data-merchant-difficulty type="number"');
+    expect(html).toContain('data-merchant-mode="buy" class="merchant-mode-action active"');
+    expect(html.indexOf('data-merchant-mode="buy"')).toBeLessThan(html.indexOf('data-merchant-action="persuade"'));
+    expect(html).not.toContain('data-merchant-difficulty type="number"');
     expect(html).toContain('id="inventory-search"');
     expect(html).not.toContain('data-include-unowned-inventory');
+    character.commerce.suspicionByMerchant.npc_mirna = 2;
+    const suspiciousHtml = view.renderCharacterForm(character);
+    expect(suspiciousHtml).toContain("<b>Sospecha</b><strong>+4 CD</strong>");
+    expect(suspiciousHtml).toContain("<span>Hurtar</span><strong>CD 19</strong>");
+    delete character.commerce.suspicionByMerchant.npc_mirna;
     view.merchantMode = "sell";
     const sellHtml = view.renderCharacterForm(character);
     expect(sellHtml).toContain('data-merchant-action="plant-item"');
-    expect(sellHtml).toContain("Implantar · CD 15");
+    expect(sellHtml).toContain("<span>Implantar</span><strong>CD 15</strong>");
     view.preparedMerchantRoll = {
       shopName: "Mirna",
       label: "Persuadir",
+      challenge: "pilfer",
+      difficulty: 0,
       rollExpression: "1d20+5",
+      selections: [{ item: view.customMonsters[0]!.inventory[0]!, quantity: 1, unitPriceCopper: 240 }],
       breakdown: {
         parts: [
           { label: "Base", value: 10, explanation: "Base de toda interacción" },
@@ -883,8 +933,11 @@ describe("player interface shell", () => {
     };
     const prepared = view.renderCharacterForm(character);
     expect(prepared).toContain('data-merchant-action="roll-prepared"');
-    expect(prepared).toContain("Tirada del personaje: <strong>1d20+5</strong> contra <strong>CD 12</strong>");
+    expect(prepared).toContain('class="merchant-roll-dialog" open');
+    expect(prepared).toContain('data-merchant-difficulty type="number"');
+    expect(prepared).toContain('data-merchant-roll-item-id="inv_22222222222222222222222222222222" type="number" min="1" max="2"');
+    expect(prepared).toContain('data-merchant-roll-expression>1d20+5</strong> contra <strong data-merchant-roll-dc>CD 12</strong>');
     expect(prepared).toContain("Reputación");
-    expect(prepared).toContain("Ningún efecto se aplica antes del resultado");
+    expect(prepared).not.toContain("Ningún efecto se aplica antes del resultado");
   });
 });
