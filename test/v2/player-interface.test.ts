@@ -56,7 +56,6 @@ function spell(id: string, name: string, prepared: boolean, definition: SpellDef
     name,
     level,
     prepared,
-    source: definition ? "custom" : "legacy-unresolved",
     definition,
     effect: { description: "", active: false },
   };
@@ -83,7 +82,7 @@ const ritualDefinition: SpellDefinition = {
   addAbilityModifier: false,
   damageType: "",
   year: "2014",
-  legacyData: {},
+  catalog: null,
 };
 
 function harness(runtime: Partial<BrowserAppRuntime> = {}): BrowserAppViewHarness {
@@ -427,8 +426,7 @@ describe("player interface shell", () => {
         characters: { [source.id]: source, [target.id]: target },
         encounters: {},
         gm: { noteGroups: [], randomTables: [], googleDocsUrl: "" },
-        legacy: { dmNotes: null, encounterData: null, unmapped: {} },
-        metadata: { createdAt: "2026-07-26T00:00:00.000Z", updatedAt: "2026-07-26T00:00:00.000Z", migratedFrom: "native" },
+        metadata: { createdAt: "2026-07-26T00:00:00.000Z", updatedAt: "2026-07-26T00:00:00.000Z" },
       },
     };
     view.selectedCharacterId = source.id;
@@ -477,13 +475,15 @@ describe("player interface shell", () => {
       "2026-07-26T00:00:00.000Z",
     );
     view.activeSheetTab = "inventory";
-    view.customEquipment = [normalizeEquipmentDefinition({
+    view.customEquipment = [{ ...normalizeEquipmentDefinition({
       name: "Elixir de prueba",
-      equipment_category: { index: "potion" },
+      category: "potion",
       rarity: { index: "rare" },
-      __catalog: { tags: ["alquimia", "curación"] },
       description: "Recupera vitalidad temporal.",
-    })];
+    }), catalog: {
+      contentKey: "equipment:test-elixir", origin: "gm",
+      tags: ["alquimia", "curación"], revision: 0,
+    } }];
     const hiddenCatalog = view.renderCharacterForm(character);
     expect(hiddenCatalog).not.toContain('data-add-catalog-inventory="Elixir de prueba"');
     view.includeUnownedInventory = true;
@@ -790,7 +790,7 @@ describe("player interface shell", () => {
     );
     const taggedDefinition: SpellDefinition = {
       ...ritualDefinition,
-      legacyData: { __catalog: { tags: ["defensa", "arcano"] } },
+      catalog: { contentKey: "spell:omega-ritual", origin: "gm", tags: ["defensa", "arcano"], revision: 0 },
     };
     character.spellcasting.spells = [spell("spl_56565656565656565656565656565656", taggedDefinition.name, true, taggedDefinition)];
     view.customSpells = [taggedDefinition];

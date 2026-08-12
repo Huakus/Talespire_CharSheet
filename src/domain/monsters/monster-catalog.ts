@@ -1,14 +1,7 @@
-import englishMonsters from "../../../Monster_Manual-eng.json";
-import spanishMonsters from "../../../Monster_Manual-es.json";
 import { CharacterInventoryItemV2Schema, type CharacterInventoryItemV2 } from "../character/character-inventory-model";
 import { normalizeEquipmentDefinition } from "../equipment/equipment-catalog";
-import { cloneJson, type JsonObject } from "../../shared/json";
-
-const monsters = [
-  ...Object.values(englishMonsters as Record<string, unknown>),
-  ...Object.values(spanishMonsters as Record<string, unknown>),
-].filter((value): value is JsonObject => value !== null && !Array.isArray(value) && typeof value === "object")
-  .map(cloneJson);
+import type { JsonObject } from "../../shared/json";
+import type { CatalogMetadata } from "../content/catalog-metadata";
 
 export interface MonsterFeature {
   name: string;
@@ -44,7 +37,7 @@ export interface MonsterDefinition {
   legendaryActions: MonsterFeature[];
   spells: string[];
   inventory: CharacterInventoryItemV2[];
-  legacyData: JsonObject;
+  catalog: CatalogMetadata | null;
 }
 
 export const MONSTER_TYPES = [
@@ -116,7 +109,7 @@ function stableInventoryId(value: string): string {
 function inventory(value: unknown, owner: string): CharacterInventoryItemV2[] {
   if (!Array.isArray(value)) return [];
   const parsed: CharacterInventoryItemV2[] = [];
-  const legacy = new Map<string, { name: string; quantity: number }>();
+  const unstructured = new Map<string, { name: string; quantity: number }>();
   for (const entry of value) {
     const structured = CharacterInventoryItemV2Schema.safeParse(entry);
     if (structured.success) {
@@ -128,11 +121,11 @@ function inventory(value: unknown, owner: string): CharacterInventoryItemV2[] {
       : String(object(entry).Name ?? object(entry).name ?? "").trim();
     if (!name) continue;
     const key = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
-    const current = legacy.get(key);
+    const current = unstructured.get(key);
     if (current) current.quantity += 1;
-    else legacy.set(key, { name, quantity: 1 });
+    else unstructured.set(key, { name, quantity: 1 });
   }
-  for (const entry of legacy.values()) {
+  for (const entry of unstructured.values()) {
     const { rarity: _rarity, ...draft } = normalizeEquipmentDefinition({ name: entry.name, category: "adventuring-gear" });
     parsed.push({ ...draft, id: stableInventoryId(`${owner}:${entry.name}:${parsed.length}`), order: parsed.length, group: "backpack", quantity: entry.quantity });
   }
@@ -189,28 +182,6 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     legendaryActions: features(source.LegendaryActions ?? source.legendaryActions),
     spells: strings(source.Spells ?? source.spells),
     inventory: inventory(source.Inventory ?? source.inventory, String(source.Id ?? source.id ?? source.Name ?? source.name ?? "monster")),
-    legacyData: cloneJson(source),
+    catalog: null,
   };
-}
-
-const definitions = monsters.map(normalizeMonsterDefinition).filter((monster) => monster.name);
-
-export function allMonsterNames(): readonly string[] {
-  return definitions.map((monster) => monster.name);
-}
-
-export function findMonsterByName(name: string): JsonObject | null {
-  const normalized = name.trim().toLocaleLowerCase();
-  return monsters.find((monster) =>
-    String(monster.Name ?? monster.name ?? "").toLocaleLowerCase() === normalized,
-  ) ?? null;
-}
-
-export function monsterDefinitions(): readonly MonsterDefinition[] {
-  return definitions;
-}
-
-export function findMonsterDefinition(nameOrId: string): MonsterDefinition | null {
-  const normalized = nameOrId.trim().toLocaleLowerCase();
-  return definitions.find((monster) => monster.id.toLocaleLowerCase() === normalized || monster.name.toLocaleLowerCase() === normalized) ?? null;
 }

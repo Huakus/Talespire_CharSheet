@@ -8,8 +8,8 @@ import type { EncounterTransferStatus, ReceivedCharacterSummary, TaleSpireGmPlay
 import { projectCharacterStatistics } from "../domain/character/character-projection";
 import type { CharacterV2 } from "../domain/character/character-v2";
 import { DAMAGE_TYPES } from "../domain/equipment/equipment-catalog";
-import { spellDefinitionsForLanguage } from "../domain/spells/spell-catalog";
 import type { SpellDefinition } from "../domain/character/character-spell-model";
+import type { CatalogMetadata } from "../domain/content/catalog-metadata";
 import { GmToolsPanel, type GmContentSection, type GmSection, type GmToolsRuntime } from "./gm-tools-panel";
 import type { GmWorkspace } from "../domain/gm/gm-workspace";
 import {
@@ -29,7 +29,6 @@ export interface GmAppRuntime extends GmToolsRuntime {
   diceRoller: DiceRoller;
   subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
   monsters: readonly MonsterDefinition[];
-  contentCatalogIsComplete?: boolean;
   subscribePlayers?: (listener: (players: TaleSpireGmPlayer[]) => void) => () => void;
   subscribeCharacterSummaries?: (listener: (summary: ReceivedCharacterSummary) => void) => () => void;
   subscribeInitiative?: (listener: (clientId: string, initiative: number, characterId: string | null) => void) => () => void;
@@ -82,26 +81,23 @@ interface GmLogEntry {
   kind: "action" | "roll" | "undo" | "redo" | "system";
 }
 
-function catalogMetadata(value: { legacyData?: unknown } | null): { origin: string; tags: string[]; contentKey: string; revision: number } {
-  const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData) ? value.legacyData as Record<string, unknown> : {};
-  const raw = legacy.__catalog && typeof legacy.__catalog === "object" && !Array.isArray(legacy.__catalog) ? legacy.__catalog as Record<string, unknown> : {};
-  return { origin: String(raw.origin ?? "gm"), tags: Array.isArray(raw.tags) ? raw.tags.map(String) : ["gm"], contentKey: String(raw.contentKey ?? ""), revision: Number(raw.revision) || 0 };
+function catalogMetadata(value: { catalog?: CatalogMetadata | null } | null): CatalogMetadata {
+  return value?.catalog ?? { origin: "gm", tags: ["gm"], contentKey: "", revision: 0 };
 }
 
 function visibleCatalogTags(tags: readonly string[]): string[] {
   return tags.filter((tag) => normalizedSearch(tag) !== FAVORITE_TAG);
 }
 
-function isCatalogFavorite(value: { legacyData?: unknown } | null): boolean {
+function isCatalogFavorite(value: { catalog?: CatalogMetadata | null } | null): boolean {
   return catalogMetadata(value).tags.some((tag) => normalizedSearch(tag) === FAVORITE_TAG);
 }
 
-function catalogLegacyData(value: { legacyData?: unknown } | null, data: FormData): Record<string, unknown> {
+function catalogFormMetadata(value: { catalog?: CatalogMetadata | null } | null, data: FormData): CatalogMetadata {
   const current = catalogMetadata(value);
-  const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData) ? value.legacyData as Record<string, unknown> : {};
   const tags = String(data.get("catalogTags") ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
   if (current.tags.some((tag) => normalizedSearch(tag) === FAVORITE_TAG)) tags.push(FAVORITE_TAG);
-  return { ...legacy, __catalog: { ...current, tags } };
+  return { ...current, tags };
 }
 
 function normalizedSearch(value: string): string {
@@ -283,12 +279,7 @@ export class GmApp {
       try { const content = await this.runtime.loadGmContent(); this.customSpells = content.spells; }
       catch { /* The content panel already reports the actionable load error. */ }
     }
-    try {
-      this.snapshot = await this.application.migratePreservedLegacyEncounters();
-    } catch (error) {
-      this.message = { kind: "error", text: this.formatError(error) };
-      this.snapshot = await this.application.loadCampaign();
-    }
+    this.snapshot = await this.application.loadCampaign();
     this.selectAvailableEncounter();
     const selected = this.selectedEncounterId ? this.snapshot?.campaign.encounters[this.selectedEncounterId] : null;
     if (selected?.combatants.some((combatant) => typeof combatant.taleSpireCreatureId === "string") && this.runtime.getNativeInitiative) {
@@ -478,7 +469,7 @@ export class GmApp {
       const modifier = Math.floor((value - 10) / 2);
       return `<button type="button" class="gm-roll" data-roll-name="${escapeHtml(monster.name)} · ${escapeHtml(key.toUpperCase())}" data-roll-expression="1d20${signed(modifier)}"><small>${escapeHtml(key.toUpperCase())}</small><strong>${value}</strong><em>${signed(modifier)}</em></button>`;
     }).join("");
-    const spellCatalog = this.runtime.contentCatalogIsComplete ? this.customSpells : [...this.customSpells, ...spellDefinitionsForLanguage("es")];
+    const spellCatalog = this.customSpells;
     const spells = monster.spells.map((name) => {
       const definition = spellCatalog.find((entry) => normalizedSearch(entry.name) === normalizedSearch(name));
       const diceText = [definition?.damageExpression, definition?.description].filter(Boolean).join(" ");
@@ -544,7 +535,7 @@ export class GmApp {
     const ability = (key: string): number => monster?.abilities[key] ?? monster?.abilities[key.toLocaleLowerCase()] ?? 10;
     const list = (values: string[]): string => escapeHtml(values.join(", "));
     const featureText = (values: MonsterDefinition["traits"]): string => escapeHtml(values.map((entry) => `${entry.name} | ${entry.content}${entry.usage ? ` | ${entry.usage}` : ""}`).join("\n"));
-    const spellCatalog = this.runtime.contentCatalogIsComplete ? this.customSpells : [...this.customSpells, ...spellDefinitionsForLanguage("es")];
+    const spellCatalog = this.customSpells;
     const spellNames = [...new Set(spellCatalog.map((entry) => entry.name))].sort((a, b) => a.localeCompare(b, "es"));
     const meta = catalogMetadata(monster);
     return `<form data-action="save-custom-monster" class="gm-custom-monster-form">
@@ -626,9 +617,8 @@ export class GmApp {
       const source = this.customMonsters.find((monster) => monster.name === button.dataset.monsterKey);
       if (!source) return;
       const copy = { ...structuredClone(source), id: `copy_${source.id}`, name: `COPIA DE ${source.name}` };
-      const legacy = { ...copy.legacyData };
-      delete legacy.__catalog;
-      this.monsterTemplate = { ...copy, legacyData: legacy };
+      copy.catalog = null;
+      this.monsterTemplate = copy;
       this.selectedCustomMonsterKey = null;
       this.editingCustomMonsterKey = "__new__";
       this.render();
@@ -1065,8 +1055,8 @@ export class GmApp {
       Traits: featureData("traits"), Actions: featureData("actions"), Reactions: featureData("reactions"),
       LegendaryActions: featureData("legendaryActions"),
       Spells: list("spells"), Inventory: existing?.inventory ?? [],
-      __catalog: catalogLegacyData(existing, data).__catalog,
     });
+    definition.catalog = catalogFormMetadata(existing, data);
     try {
       await this.runtime.saveCustomMonster(definition, previousKey);
       this.customMonsters = [...this.customMonsters.filter((monster) =>
@@ -1092,7 +1082,7 @@ export class GmApp {
     const meta = catalogMetadata(current);
     const tags = visibleCatalogTags(meta.tags);
     if (!isCatalogFavorite(current)) tags.push(FAVORITE_TAG);
-    const updated = { ...current, legacyData: { ...current.legacyData, __catalog: { ...meta, tags } } };
+    const updated = { ...current, catalog: { ...meta, tags } };
     try {
       await this.runtime.saveCustomMonster(updated, key);
       this.customMonsters = this.customMonsters.map((monster) => monster.name === key ? updated : monster);

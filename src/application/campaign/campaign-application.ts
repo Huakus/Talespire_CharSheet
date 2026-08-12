@@ -78,14 +78,9 @@ import {
   type CharacterTraitDraft,
   type CharacterTraitGroupDraft,
 } from "../../domain/character/character-content";
-import {
-  previewCampaignMigration,
-  type MigrationReport,
-} from "../migration/migrate-campaign-v1";
 import type {
   CampaignRepository,
   CampaignSnapshot,
-  SaveExpectation,
 } from "../ports/campaign-repository";
 import { CampaignRepositoryConflictError, loadCampaignVersion } from "../ports/campaign-repository";
 
@@ -108,25 +103,6 @@ export class CampaignAlreadyExistsError extends Error {
     super("A campaign already exists; replacement must be explicit");
     this.name = "CampaignAlreadyExistsError";
   }
-}
-
-export class CampaignImportError extends Error {
-  constructor(readonly issues: string[]) {
-    super(`Campaign import failed: ${issues.join("; ")}`);
-    this.name = "CampaignImportError";
-  }
-}
-
-export interface ImportCampaignCommand {
-  input: unknown;
-  campaignId: string;
-  migratedAt?: string;
-  replaceExisting?: boolean;
-}
-
-export interface ImportCampaignResult {
-  snapshot: CampaignSnapshot;
-  report: MigrationReport;
 }
 
 export interface EditCharacterCommand {
@@ -338,13 +314,6 @@ export interface DeleteCharacterCommand {
   updatedAt?: string;
 }
 
-export interface ImportCharacterCommand {
-  input: unknown;
-  fallbackName: string;
-  expectedCampaignChecksum: string;
-  importedAt?: string;
-}
-
 export interface LinkCharacterMiniatureCommand extends CharacterContentCommandBase {
   miniature: CampaignV2["characters"][string]["taleSpire"];
 }
@@ -363,8 +332,7 @@ export class CampaignApplication {
       id: await createRandomId("cmp"),
       revision: 0,
       characters: {},
-      legacy: { dmNotes: null, encounterData: null, unmapped: {} },
-      metadata: { createdAt, updatedAt: createdAt, migratedFrom: "native" },
+      metadata: { createdAt, updatedAt: createdAt },
     });
     return this.repository.save(campaign, { kind: "empty" });
   }
@@ -395,41 +363,6 @@ export class CampaignApplication {
     return this.repository.save(campaign, { kind: "checksum", checksum: command.expectedCampaignChecksum });
   }
 
-  async importCharacter(command: ImportCharacterCommand): Promise<CampaignSnapshot> {
-    const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
-    if (!current) throw new CampaignNotFoundError();
-    this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
-    const importedAt = command.importedAt ?? new Date().toISOString();
-    const direct = CampaignV2Schema.shape.characters.valueType.safeParse(command.input);
-    let character: CampaignV2["characters"][string];
-    if (direct.success) {
-      character = CampaignV2Schema.shape.characters.valueType.parse({
-        ...cloneJson(direct.data),
-        id: await createRandomId("chr"),
-        revision: 0,
-        metadata: { createdAt: importedAt, updatedAt: importedAt, migratedFrom: "native" },
-      });
-    } else {
-      const input = command.input !== null && typeof command.input === "object" &&
-        Object.hasOwn(command.input, "characters")
-        ? command.input
-        : command.input !== null && typeof command.input === "object" &&
-            Object.values(command.input).some((value) => value !== null && typeof value === "object") &&
-            !Object.hasOwn(command.input, "playerClass")
-          ? { characters: command.input }
-          : { characters: { [command.fallbackName || "Personaje importado"]: command.input } };
-      const preview = await previewCampaignMigration(input, {
-        campaignId: `character-import-${await createRandomId("src")}`,
-        migratedAt: importedAt,
-      });
-      if (!preview.ok) throw new CampaignImportError(preview.issues);
-      const migrated = Object.values(preview.data.characters)[0];
-      if (!migrated) throw new CampaignImportError(["No character was found in the imported document"]);
-      character = { ...migrated, id: await createRandomId("chr") };
-    }
-    return this.persistUpdatedCharacter(current, character, command.expectedCampaignChecksum, importedAt);
-  }
-
   async linkCharacterMiniature(command: LinkCharacterMiniatureCommand): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command, (character, updatedAt) => {
       if (character.revision !== command.expectedCharacterRevision) {
@@ -442,34 +375,6 @@ export class CampaignApplication {
         metadata: { ...character.metadata, updatedAt },
       });
     });
-  }
-
-  async importCampaign(
-    command: ImportCampaignCommand,
-  ): Promise<ImportCampaignResult> {
-    const current = await this.repository.load();
-    if (current !== null && command.replaceExisting !== true) {
-      throw new CampaignAlreadyExistsError();
-    }
-
-    const migrationOptions =
-      command.migratedAt === undefined
-        ? { campaignId: command.campaignId }
-        : {
-            campaignId: command.campaignId,
-            migratedAt: command.migratedAt,
-          };
-    const preview = await previewCampaignMigration(command.input, migrationOptions);
-    if (!preview.ok) {
-      throw new CampaignImportError(preview.issues);
-    }
-
-    const expectation: SaveExpectation =
-      current === null
-        ? { kind: "empty" }
-        : { kind: "checksum", checksum: current.checksum };
-    const snapshot = await this.repository.save(preview.data, expectation);
-    return { snapshot, report: preview.report };
   }
 
   async editCharacter(

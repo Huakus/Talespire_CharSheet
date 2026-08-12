@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { CampaignRepositoryConflictError } from "../../src/application/ports/campaign-repository";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import {
   createCampaignSnapshot,
   encodeCampaignEnvelope,
@@ -13,6 +12,7 @@ import {
   SupabaseCampaignDocumentClient,
 } from "../../src/infrastructure/remote/supabase-campaign-document-client";
 import { SupabaseCampaignRepository } from "../../src/infrastructure/remote/supabase-campaign-repository";
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 const backendConfig = resolveRemoteBackendConfig(import.meta.env);
 const integrationPassword = "Integration-Only-123!";
@@ -145,12 +145,10 @@ describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
 
   it("implements the campaign repository contract with Supabase as authority", async () => {
     const owner = await createActor("remote-repository-owner");
-    const preview = await previewCampaignMigration(
-      { characters: { RemoteHero: { playerClass: "Cleric", characterLevel: "4" } } },
-      { campaignId: "remote-repository", migratedAt: "2026-08-04T15:00:00.000Z" },
-    );
-    if (!preview.ok) throw new Error(preview.issues.join("; "));
-    const initial = await createCampaignSnapshot(preview.data);
+    const initial = await createCampaignSnapshot(createTestCampaign({
+      id: "remote-repository",
+      character: createTestCharacter({ name: "RemoteHero" }),
+    }));
     const created = await owner.campaigns.createCampaign(
       "Remote repository integration",
       JSON.parse(encodeCampaignEnvelope(initial)) as Record<string, unknown>,

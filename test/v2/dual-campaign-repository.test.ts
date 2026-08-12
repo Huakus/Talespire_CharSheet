@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import {
   DualCampaignRepository,
@@ -11,6 +10,7 @@ import {
   decodeCampaignEnvelope,
   encodeCampaignEnvelope,
 } from "../../src/infrastructure/persistence/campaign-snapshot";
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 class FakeReplica implements CampaignReplica {
   saveCalls = 0;
@@ -39,12 +39,10 @@ class FakeReplica implements CampaignReplica {
 }
 
 async function campaignFixture() {
-  const preview = await previewCampaignMigration(
-    { characters: { DualHero: { playerClass: "Wizard", characterLevel: "3" } } },
-    { campaignId: "dual-test", migratedAt: "2026-08-04T12:00:00.000Z" },
-  );
-  if (!preview.ok) throw new Error(preview.issues.join("; "));
-  return preview.data;
+  return createTestCampaign({
+    id: "dual-test",
+    character: createTestCharacter({ name: "DualHero" }),
+  });
 }
 
 async function replicaDocument(campaign: Awaited<ReturnType<typeof campaignFixture>>): Promise<CampaignReplicaDocument> {

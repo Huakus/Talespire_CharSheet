@@ -36,7 +36,7 @@ describe("TaleSpire GM collaboration", () => {
     });
   });
 
-  it("receives modern character summaries and legacy initiative updates", async () => {
+  it("receives character summaries and initiative updates", async () => {
     const sent: { message: string; target: string }[] = [];
     const collaboration = collaborationFixture(sent);
     await collaboration.initialize();
@@ -60,7 +60,11 @@ describe("TaleSpire GM collaboration", () => {
       },
     });
     await collaboration.handleSyncEvent({ payload: { fromClient: { id: "player-1" }, str: JSON.stringify(message) } });
-    await collaboration.handleSyncEvent({ payload: { fromClient: { id: "player-1" }, str: JSON.stringify({ type: "update-init", data: { Initiative: 17, CharacterId: "chr_11111111111111111111111111111111" } }) } });
+    await collaboration.handleSyncEvent({ payload: { fromClient: { id: "player-1" }, str: JSON.stringify(createGmProtocolMessage({
+      type: "player/set-character-initiative",
+      initiative: 17,
+      characterId: "chr_11111111111111111111111111111111",
+    })) } });
     expect(summaries).toEqual([expect.objectContaining({ clientId: "player-1", summary: expect.objectContaining({ name: "Heroína" }) })]);
     expect(initiatives).toEqual([{ clientId: "player-1", initiative: 17, characterId: "chr_11111111111111111111111111111111" }]);
   });
@@ -117,9 +121,8 @@ describe("TaleSpire GM collaboration", () => {
       metadata: { createdAt: "2026-08-01T12:00:00.000Z", updatedAt: "2026-08-01T12:01:00.000Z" },
     });
     await collaboration.publishEncounter(encounter);
-    expect(sent).toHaveLength(4);
+    expect(sent).toHaveLength(1);
     expect(sent.every((entry) => entry.target === "board")).toBe(true);
-    expect(sent.map((entry) => JSON.parse(entry.message).type)).toContain("player-init-list");
     expect(sent.map((entry) => JSON.parse(entry.message).payload?.type)).toContain("gm/encounter-changed");
   });
 

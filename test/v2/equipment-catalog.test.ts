@@ -5,7 +5,7 @@ import {
   projectCharacterStatistics,
   projectInventory,
 } from "../../src/domain/character/character-projection";
-import { equipmentRarityLabel, findEquipmentDefinitionByName, normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { equipmentRarityLabel, normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 
 describe("equipment catalog and bonuses", () => {
   it("normalizes rarity into a selectable catalog value", () => {
@@ -14,14 +14,14 @@ describe("equipment catalog and bonuses", () => {
     expect(normalizeEquipmentDefinition({ name: "Reliquia", rarity: { name: "Muy Raro" } }).rarity).toBe("very-rare");
     expect(equipmentRarityLabel("uncommon")).toBe("Poco común");
   });
-  it("normalizes bundled magic equipment and applies active bonuses", () => {
-    const cloak = findEquipmentDefinitionByName("Cloak of Protection");
-    expect(cloak).not.toBeNull();
-    expect(cloak?.requiresAttunement).toBe(true);
-    expect(cloak?.bonuses).toEqual(expect.arrayContaining([
-      expect.objectContaining({ category: "saves", key: "All", value: 1 }),
-      expect.objectContaining({ category: "combatStats", key: "AC", value: 1 }),
-    ]));
+  it("applies active bonuses from normalized equipment", () => {
+    const cloak = normalizeEquipmentDefinition({
+      name: "Cloak of Protection", requiresAttunement: true,
+      bonuses: [
+        { category: "saves", key: "All", value: 1 },
+        { category: "combatStats", key: "AC", value: 1 },
+      ],
+    });
 
     const base = createCharacter(
       "chr_11111111111111111111111111111111",
@@ -31,7 +31,7 @@ describe("equipment catalog and bonuses", () => {
     const character = {
       ...base,
       inventory: [{
-        ...cloak!,
+        ...cloak,
         id: "inv_22222222222222222222222222222222",
         order: 0,
         group: "equipment",
@@ -49,7 +49,7 @@ describe("equipment catalog and bonuses", () => {
       "Hero",
       "2026-07-25T18:00:00.000Z",
     );
-    const definition = findEquipmentDefinitionByName("Dagger")!;
+    const definition = normalizeEquipmentDefinition({ name: "Dagger", category: "weapon" });
     const character = {
       ...base,
       inventory: [{

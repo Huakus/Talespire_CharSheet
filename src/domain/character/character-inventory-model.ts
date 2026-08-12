@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { STABLE_ID_PATTERN } from "../../shared/id";
-import { JsonObjectSchema } from "../../shared/json";
 import { ActivatableEffectSchema } from "./character-effect-model";
+import { CatalogMetadataSchema } from "../content/catalog-metadata";
 
 export const InventoryCostSchema = z.object({
   quantity: z.number().finite().nonnegative(),
@@ -66,7 +66,7 @@ export const CharacterInventoryItemV2Schema = z.object({
   weapon: InventoryWeaponSchema.nullable(),
   bonuses: z.array(InventoryBonusSchema),
   effect: ActivatableEffectSchema,
-  legacyData: JsonObjectSchema,
+  catalog: CatalogMetadataSchema.nullable().default(null),
 });
 
 export const CharacterInventoryItemDraftSchema = CharacterInventoryItemV2Schema.omit({

@@ -26,9 +26,8 @@ boundaries behind narrow ports.
 - `domain/gm`: typed GM workspace, shops and checklist content;
 - `domain/character/edit-character.ts`: immutable core character edits and
   character-level optimistic revision checks;
-- `application/campaign`: import, load and edit use cases;
+- `application/campaign`: create, load and edit use cases;
 - `application/ports`: persistence contracts with checksum expectations;
-- `application/migration`: tolerant v1 reader and pure migration preview;
 - `infrastructure/persistence`: checked localStorage and in-memory repository
   adapters plus a namespaced string-blob repository;
 - `infrastructure/talespire`: narrow wrappers around the injected TaleSpire API;
@@ -37,18 +36,12 @@ boundaries behind narrow ports.
   campaign/global GM workspaces;
 - `shared/json.ts`: JSON cloning and canonical serialization;
 - `shared/hash.ts`: SHA-256 checksums over canonical JSON;
-- `shared/id.ts`: deterministic stable IDs generated from migration identity.
-
-## Deliberate transitional choice
-
-Collections have typed runtime models and stable IDs. Their original payloads
-remain in `legacyData`/`collections` only as a lossless compatibility record;
-runtime behavior does not depend on legacy positions.
+- `shared/id.ts`: random and deterministic stable ID helpers.
 
 ## Persistence concurrency
 
 Every loaded campaign is returned with a checksum. Saving requires either an
-explicit `empty` expectation for the initial import, or the exact checksum that
+explicit `empty` expectation for initial creation, or the exact checksum that
 was loaded. Character and campaign revisions provide readable monotonic
 versions; the checksum protects the complete persisted value, including fields
 that are not part of the current editor.
@@ -67,4 +60,4 @@ different values by both clients are rejected and reported as conflicts.
 
 The database still commits the complete campaign document atomically. The
 granularity comes from deterministic client-side reconciliation followed by a
-revision-checked retry, so existing remote campaigns require no schema migration.
+revision-checked retry.

@@ -91,13 +91,13 @@ describe("Supabase campaign content store", () => {
     })]);
     const store = new SupabaseCampaignContentStore(remote.client, campaignId);
     const loaded = await store.load();
-    expect(loaded.spells[0]).toMatchObject({ name: "Escudo", level: 1, legacyData: { __catalog: { origin: "official", tags: ["official", "es"] } } });
+    expect(loaded.spells[0]).toMatchObject({ name: "Escudo", level: 1, catalog: { origin: "official", tags: ["official", "es"] } });
 
     const spell = loaded.spells[0]!;
     await store.saveSpell({
       ...spell,
       description: "Protección editada",
-      legacyData: { ...spell.legacyData, __catalog: { contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa"], revision: 0 } },
+      catalog: { contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa"], revision: 0 },
     }, "Escudo");
 
     expect(remote.saves[0]).toMatchObject({ contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa"], expectedRevision: 0 });

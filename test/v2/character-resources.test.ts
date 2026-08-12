@@ -1,41 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import { projectCharacterStatistics } from "../../src/domain/character/character-projection";
 import {
   applyCharacterResourceCommand,
   InsufficientHitDiceError,
 } from "../../src/domain/character/character-resources";
 import type { CharacterV2 } from "../../src/domain/character/character-v2";
+import { createTestCharacter } from "../fixtures/native-campaign";
 
 const time = "2026-07-25T16:00:00.000Z";
 
 async function characterFixture(): Promise<CharacterV2> {
-  const preview = await previewCampaignMigration(
-    {
-      characters: {
-        Hero: {
-          characterLevel: "4",
-          currentCharacterHP: "10",
-          maxCharacterHP: "20",
-          characterTempHp: "5",
-          currentHitDice: "1",
-          hitDiceButton: "1d10",
-          strengthScore: "8",
-          dexterityScore: "14",
-          constitutionScore: "12",
-          intelligenceScore: "16",
-          wisdomScore: "10",
-          charismaScore: "18",
-          conditions: [{ text: "Concentration", value: "concentration" }],
-        },
-      },
-    },
-    { campaignId: "resource-test", migratedAt: time },
-  );
-  if (!preview.ok) throw new Error(preview.issues.join("; "));
-  const character = Object.values(preview.data.characters)[0];
-  if (!character) throw new Error("missing fixture character");
-  return character;
+  return createTestCharacter({ configure(character) {
+    character.identity.level = 4;
+    character.combat.hitPoints = { current: 10, maximum: 20, temporary: 5 };
+    character.combat.hitDice = { current: "1", formula: "1d10", remaining: 1, maximum: 4, dieSize: 10 };
+    character.abilities = { strength: 8, dexterity: 14, constitution: 12, intelligence: 16, wisdom: 10, charisma: 18 };
+    character.combat.conditions = [{
+      id: "condition-concentration", key: "concentration", label: "Concentration",
+      level: null, addedAt: time,
+    }];
+  } });
 }
 
 describe("character statistics projection", () => {
@@ -127,7 +111,7 @@ describe("character resource commands", () => {
     ).toThrow(InsufficientHitDiceError);
   });
 
-  it("restores long-rest resources according to the legacy half-dice rule", async () => {
+  it("restores long-rest resources according to the half-dice rule", async () => {
     const character = await characterFixture();
     character.combat.hitDice.remaining = 0;
     character.combat.hitDice.current = "0";

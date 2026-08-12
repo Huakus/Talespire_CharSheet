@@ -1,5 +1,3 @@
-import englishSpells from "../../../spells-eng.json";
-import spanishSpells from "../../../spells-es.json";
 import {
   SpellDefinitionSchema,
   type SpellDefinition,
@@ -65,23 +63,5 @@ export function normalizeSpellDefinition(input: unknown): SpellDefinition {
     addAbilityModifier: ["yes", "true", "sí", "si"].includes(text(data.ability_modifier).toLowerCase()),
     damageType: text(data.damage_type_01),
     year: text(data.year || "2014"),
-    legacyData: data,
   });
-}
-
-const englishDefinitions = (englishSpells as unknown[]).map(normalizeSpellDefinition);
-const spanishDefinitions = (spanishSpells as unknown[]).map(normalizeSpellDefinition);
-const definitions = [...englishDefinitions, ...spanishDefinitions];
-
-export function allSpellDefinitions(): readonly SpellDefinition[] {
-  return definitions;
-}
-
-export function spellDefinitionsForLanguage(language: "eng" | "es" | "both"): readonly SpellDefinition[] {
-  return language === "eng" ? englishDefinitions : language === "es" ? spanishDefinitions : definitions;
-}
-
-export function findSpellDefinitionByName(name: string): SpellDefinition | null {
-  const normalized = name.trim().toLocaleLowerCase();
-  return definitions.find((spell) => spell.name.toLocaleLowerCase() === normalized) ?? null;
 }

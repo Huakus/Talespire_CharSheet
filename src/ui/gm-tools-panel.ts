@@ -11,6 +11,7 @@ import { SPELL_CLASSES, SPELL_COMPONENTS, SPELL_SAVE_ABILITIES, SPELL_SCHOOLS } 
 import { type GmChecklistItem, type GmShop } from "../domain/gm/gm-global-content";
 import { removeGmNoteGroup, type GmWorkspace } from "../domain/gm/gm-workspace";
 import type { CampaignContent } from "../domain/content/campaign-content";
+import type { CatalogMetadata } from "../domain/content/catalog-metadata";
 import { createRandomId } from "../shared/id";
 import { renderCheckboxGroup } from "./checkbox-group";
 import { inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
@@ -70,33 +71,30 @@ function uniqueValues(values: readonly string[]): string[] {
   return [...new Set(values.filter(Boolean))].sort((left, right) => left.localeCompare(right, "es", { numeric: true, sensitivity: "base" }));
 }
 
-function catalogMetadata(value: { legacyData?: unknown } | null): { origin: string; tags: string[]; contentKey: string; revision: number } {
-  const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData) ? value.legacyData as Record<string, unknown> : {};
-  const raw = legacy.__catalog && typeof legacy.__catalog === "object" && !Array.isArray(legacy.__catalog) ? legacy.__catalog as Record<string, unknown> : {};
-  return { origin: String(raw.origin ?? "gm"), tags: Array.isArray(raw.tags) ? raw.tags.map(String) : ["gm"], contentKey: String(raw.contentKey ?? ""), revision: Number(raw.revision) || 0 };
+function catalogMetadata(value: { catalog?: CatalogMetadata | null } | null): CatalogMetadata {
+  return value?.catalog ?? { origin: "gm", tags: ["gm"], contentKey: "", revision: 0 };
 }
 
 function visibleCatalogTags(tags: readonly string[]): string[] {
   return tags.filter((tag) => normalizedSearch(tag) !== FAVORITE_TAG);
 }
 
-function isCatalogFavorite(value: { legacyData?: unknown } | null): boolean {
+function isCatalogFavorite(value: { catalog?: CatalogMetadata | null } | null): boolean {
   return catalogMetadata(value).tags.some((tag) => normalizedSearch(tag) === FAVORITE_TAG);
 }
 
-function withFavoriteTag<T extends { legacyData: Record<string, unknown> }>(value: T, favorite: boolean): T {
+function withFavoriteTag<T extends { catalog?: CatalogMetadata | null }>(value: T, favorite: boolean): T {
   const metadata = catalogMetadata(value);
   const tags = visibleCatalogTags(metadata.tags);
   if (favorite) tags.push(FAVORITE_TAG);
-  return { ...value, legacyData: { ...value.legacyData, __catalog: { ...metadata, tags } } };
+  return { ...value, catalog: { ...metadata, tags } };
 }
 
-function catalogLegacyData(value: { legacyData?: unknown } | null, data: FormData): Record<string, unknown> {
+function catalogFormMetadata(value: { catalog?: CatalogMetadata | null } | null, data: FormData): CatalogMetadata {
   const current = catalogMetadata(value);
-  const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData) ? value.legacyData as Record<string, unknown> : {};
   const tags = String(data.get("catalogTags") ?? "").split(",").map((tag) => tag.trim()).filter(Boolean);
   if (current.tags.some((tag) => normalizedSearch(tag) === FAVORITE_TAG)) tags.push(FAVORITE_TAG);
-  return { ...legacy, __catalog: { ...current, tags } };
+  return { ...current, tags };
 }
 
 function selectOptions(values: readonly string[], selected: string, emptyLabel?: string): string {
@@ -502,7 +500,7 @@ export class GmToolsPanel {
           : this.content.shops.find((entry) => entry.name === key);
       if (!source) return;
       const value = { ...structuredClone(source), name: `COPIA DE ${source.name}` } as SpellDefinition | EquipmentCatalogDraft | GmShop;
-      if ("legacyData" in value) { const legacy = { ...value.legacyData }; delete legacy.__catalog; value.legacyData = legacy; }
+      if ("catalog" in value) value.catalog = null;
       else value.tags = visibleCatalogTags(value.tags ?? []);
       this.contentTemplate = { section, value };
       if (section === "shop") { const shop = source as GmShop; this.shopInventoryNpcId = shop.npcId ?? ""; this.shopInventoryDraft = this.linkedMerchantNpc(shop)?.inventory.map((item) => structuredClone(item)) ?? []; }
@@ -664,7 +662,7 @@ export class GmToolsPanel {
     if (!this.runtime.saveCustomSpell) return;
     const previous = String(data.get("previousKey") ?? "") || null;
     const existing = previous ? this.content.spells.find((entry) => entry.name === previous) ?? null : null;
-    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String).join(", "), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), legacyData: catalogLegacyData(existing, data) as SpellDefinition["legacyData"] };
+    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String).join(", "), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), catalog: catalogFormMetadata(existing, data) };
     try { await this.runtime.saveCustomSpell(definition, previous); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
@@ -688,7 +686,7 @@ export class GmToolsPanel {
       weapon: kind === "weapon" ? { category: String(data.get("weaponCategory") ?? ""), range: String(data.get("weaponRange") ?? ""), normalRange: nullableInteger("normalRange"), longRange: nullableInteger("longRange"), damageExpression: String(data.get("damageExpression") ?? ""), versatileDamageExpression: String(data.get("versatileDamageExpression") ?? ""), damageType: String(data.get("damageType") ?? ""), attackBonus: Math.trunc(number(data.get("attackBonus"))), damageBonus: Math.trunc(number(data.get("damageBonus"))) } : null,
       armor: kind === "armor" ? { base: Math.trunc(number(data.get("armorBase"), 10)), dexterityBonus: data.get("dexterityBonus") === "on", maximumDexterityBonus: nullableInteger("maximumDexterityBonus"), armorCategory: String(data.get("armorCategory") ?? ""), stealthDisadvantage: data.get("stealthDisadvantage") === "on" } : null,
       bonuses, effect: { description: String(data.get("effectDescription") ?? ""), active: data.get("effectActive") === "on" },
-      legacyData: catalogLegacyData(existing, data) as EquipmentCatalogDraft["legacyData"],
+      catalog: catalogFormMetadata(existing, data),
     };
     try { await this.runtime.saveCustomEquipment(definition, previous); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentSearch.equipment = definition.name; this.contentShowAll.equipment = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
   }

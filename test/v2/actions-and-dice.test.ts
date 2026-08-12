@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import {
   normalizeDiceExpression,
   parseDiceExpression,
@@ -9,71 +8,31 @@ import { projectActionAttackModifier } from "../../src/domain/character/characte
 import { BrowserDiceRoller } from "../../src/infrastructure/dice/browser-dice-roller";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import { TaleSpireDiceRoller } from "../../src/infrastructure/talespire/talespire-dice-roller";
-
-const migratedAt = "2026-07-25T17:00:00.000Z";
-const legacy = {
-  characters: {
-    Hero: {
-      characterLevel: "3",
-      dexterityScore: "14",
-      actionTable: [
-        {
-          1: {
-            proficiencyButton: "1",
-            secondColumn: "Estocada",
-            thirdColumn: "5 ft",
-            fourthColumn: "+4",
-            fifthColumn: "1d6+2",
-            seventhColumn: "DES",
-            weaponType: "Cuerpo a cuerpo",
-            tenthColumn: "Finesse",
-            elventhColumn: "Ataque de prueba",
-            twelvethColumn: "Perforante",
-            ninthColumn: { attacks: true, actions: true },
-          },
-        },
-      ],
-    },
-  },
-};
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 describe("actions", () => {
-  it("migrates positional action rows into named fields", async () => {
-    const preview = await previewCampaignMigration(legacy, {
-      campaignId: "actions-test",
-      migratedAt,
-    });
-    if (!preview.ok) throw new Error(preview.issues.join("; "));
-    const character = Object.values(preview.data.characters)[0]!;
-    const action = character.actions[0]!;
-
-    expect(action).toMatchObject({
-      name: "Estocada",
-      categories: ["attack", "action"],
-      reach: "5 ft",
-      ability: "dexterity",
-      proficient: true,
-      attackBonus: 0,
-      damageExpression: "1d6+2",
-      damageType: "Perforante",
-      properties: "Finesse",
-    });
-    expect(projectActionAttackModifier(character, action)).toBe(4);
-  });
-
   it("creates, updates and removes actions through the application", async () => {
     const repository = new InMemoryCampaignRepository();
     const application = new CampaignApplication(repository);
-    const imported = await application.importCampaign({
-      input: legacy,
-      campaignId: "action-crud",
-      migratedAt,
+    const character = createTestCharacter({ configure(value) {
+      value.identity.level = 3;
+      value.abilities.dexterity = 14;
+      value.actions = [{
+        id: "action-thrust", order: 0, name: "Estocada", categories: ["attack", "action"],
+        activation: "Acción", reach: "5 ft", ability: "dexterity", proficient: true,
+        attackBonus: 0, damageExpression: "1d6+2", damageBonus: 0,
+        damageType: "Perforante", weaponType: "Cuerpo a cuerpo", properties: "Finesse",
+        description: "Ataque de prueba", inventoryItemId: null, rollMode: "normal",
+      }];
+    } });
+    expect(projectActionAttackModifier(character, character.actions[0]!)).toBe(4);
+    const initial = await repository.save(createTestCampaign({ id: "action-crud", character }), {
+      kind: "empty",
     });
-    const character = Object.values(imported.snapshot.campaign.characters)[0]!;
     const created = await application.upsertCharacterAction({
       characterId: character.id,
       expectedCharacterRevision: character.revision,
-      expectedCampaignChecksum: imported.snapshot.checksum,
+      expectedCampaignChecksum: initial.checksum,
       updatedAt: "2026-07-25T17:01:00.000Z",
       action: {
         order: 1,

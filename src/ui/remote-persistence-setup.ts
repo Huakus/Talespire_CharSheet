@@ -4,7 +4,9 @@ import {
   DualCampaignRepository,
   type CampaignReplicationStatus,
 } from "../infrastructure/persistence/dual-campaign-repository";
-import { encodeCampaignEnvelope } from "../infrastructure/persistence/campaign-snapshot";
+import { createCampaignSnapshot, encodeCampaignEnvelope } from "../infrastructure/persistence/campaign-snapshot";
+import { CampaignV2Schema } from "../domain/character/character-v2";
+import { createRandomId } from "../shared/id";
 import { loadRemoteBackendConfig } from "../infrastructure/remote/backend-config";
 import { loadPersistenceMode } from "../infrastructure/remote/persistence-mode";
 import {
@@ -16,16 +18,11 @@ import { SupabaseCampaignReplica } from "../infrastructure/remote/supabase-campa
 import { SupabaseCampaignRepository } from "../infrastructure/remote/supabase-campaign-repository";
 import { SupabaseCampaignContentStore } from "../infrastructure/remote/supabase-campaign-content-store";
 import {
-  createRemoteCampaignBackup,
-  parseRemoteCampaignBackup,
-} from "../infrastructure/remote/remote-campaign-backup";
-import {
   registerPersistencePanelOpener,
   setAppConnectionStatus,
 } from "./app-chrome";
 
 const bindingKeyPrefix = "talespire-charsheet:remote-campaign:";
-const pendingBackupKey = "talespire-charsheet:pending-remote-backup";
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -102,7 +99,6 @@ async function requestCampaign(
   panel: HTMLElement,
   user: User,
   client: SupabaseCampaignDocumentClient,
-  primary: CampaignRepository,
   bindingKey: string,
   signOut: () => Promise<void>,
   allowLocalFallback: boolean,
@@ -112,11 +108,6 @@ async function requestCampaign(
   const bound = campaigns.find((campaign) => campaign.id === boundId);
   if (bound) return bound;
 
-  const localSnapshot = await primary.load();
-  const pendingBackupRaw = window.localStorage.getItem(pendingBackupKey);
-  const pendingBackup = pendingBackupRaw === null
-    ? null
-    : await parseRemoteCampaignBackup(pendingBackupRaw).catch(() => null);
   return new Promise((resolve) => {
     panel.innerHTML = `
       <p class="eyebrow">Persistencia compartida</p>
@@ -125,13 +116,8 @@ async function requestCampaign(
       <div class="remote-campaign-list"></div>
       <form class="remote-create-form">
         <label>Nombre de la campaña<input name="name" maxlength="120" required></label>
-        <button type="submit">Crear desde la campaña local</button>
+        <button type="submit">Crear campaña</button>
       </form>
-      <form class="remote-import-form">
-        <label>Respaldo remoto JSON<input name="backup" type="file" accept="application/json,.json" required></label>
-        <button type="submit">Crear desde respaldo</button>
-      </form>
-      <button type="button" class="remote-prepared-backup"></button>
       <div class="remote-actions">
         <button type="button" class="secondary-button" data-campaign-action="local">Continuar solo local</button>
         <button type="button" class="secondary-button" data-campaign-action="signout">Cerrar sesión</button>
@@ -140,10 +126,8 @@ async function requestCampaign(
     const account = panel.querySelector<HTMLElement>(".remote-account");
     const list = panel.querySelector<HTMLElement>(".remote-campaign-list");
     const form = panel.querySelector<HTMLFormElement>(".remote-create-form");
-    const importForm = panel.querySelector<HTMLFormElement>(".remote-import-form");
-    const preparedBackup = panel.querySelector<HTMLButtonElement>(".remote-prepared-backup");
     const feedback = panel.querySelector<HTMLElement>(".remote-feedback");
-    if (!account || !list || !form || !importForm || !preparedBackup || !feedback) {
+    if (!account || !list || !form || !feedback) {
       throw new Error("REMOTE_CAMPAIGN_FORM_NOT_FOUND");
     }
     account.textContent = user.email ?? user.id;
@@ -154,28 +138,6 @@ async function requestCampaign(
       empty.textContent = "Todavía no tenés campañas remotas.";
       list.append(empty);
     }
-    preparedBackup.hidden = pendingBackup === null;
-    if (pendingBackup !== null) {
-      preparedBackup.textContent = `Crear ${pendingBackup.campaignName} desde el respaldo preparado · revisión ${pendingBackup.sourceRevision}`;
-      preparedBackup.addEventListener("click", () => {
-        preparedBackup.disabled = true;
-        feedback.textContent = "Creando campaña desde el respaldo preparado…";
-        void client.createCampaign(pendingBackup.campaignName, pendingBackup.payload)
-          .then((document) => {
-            window.localStorage.removeItem(pendingBackupKey);
-            resolve({
-              id: document.campaignId,
-              name: pendingBackup.campaignName,
-              ownerUserId: user.id,
-              updatedAt: document.updatedAt,
-            });
-          })
-          .catch((error: unknown) => {
-            preparedBackup.disabled = false;
-            feedback.textContent = `No se pudo importar el respaldo: ${errorMessage(error)}`;
-          });
-      });
-    }
     for (const campaign of campaigns) {
       const button = document.createElement("button");
       button.type = "button";
@@ -185,20 +147,23 @@ async function requestCampaign(
       list.append(button);
     }
 
-    const createButton = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-    if (createButton) createButton.disabled = localSnapshot === null;
-    if (localSnapshot === null) {
-      feedback.textContent = "Creá o importá primero una campaña local y luego volvé a vincularla.";
-    }
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      if (localSnapshot === null) return;
       const name = String(new FormData(form).get("name") ?? "").trim();
       feedback.textContent = "Creando campaña remota…";
-      void client.createCampaign(
-        name,
-        JSON.parse(encodeCampaignEnvelope(localSnapshot)) as Record<string, unknown>,
-      ).then((document) => resolve({
+      void (async () => {
+        const createdAt = new Date().toISOString();
+        const snapshot = await createCampaignSnapshot(CampaignV2Schema.parse({
+          schemaVersion: 2,
+          id: await createRandomId("cmp"),
+          revision: 0,
+          characters: {},
+          encounters: {},
+          gm: { noteGroups: [], randomTables: [], googleDocsUrl: "" },
+          metadata: { createdAt, updatedAt: createdAt },
+        }));
+        return client.createCampaign(name, JSON.parse(encodeCampaignEnvelope(snapshot)) as Record<string, unknown>);
+      })().then((document) => resolve({
         id: document.campaignId,
         name,
         ownerUserId: user.id,
@@ -206,30 +171,6 @@ async function requestCampaign(
       })).catch((error: unknown) => {
         feedback.textContent = errorMessage(error);
       });
-    });
-    importForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const file = new FormData(importForm).get("backup");
-      if (!(file instanceof File) || file.size === 0) {
-        feedback.textContent = "Elegí un archivo de respaldo JSON.";
-        return;
-      }
-      feedback.textContent = "Validando respaldo…";
-      void file.text()
-        .then((raw) => parseRemoteCampaignBackup(raw))
-        .then(async (backup) => {
-          feedback.textContent = `Creando ${backup.campaignName} desde la revisión ${backup.sourceRevision}…`;
-          const document = await client.createCampaign(backup.campaignName, backup.payload);
-          resolve({
-            id: document.campaignId,
-            name: backup.campaignName,
-            ownerUserId: user.id,
-            updatedAt: document.updatedAt,
-          });
-        })
-        .catch((error: unknown) => {
-          feedback.textContent = `No se pudo importar el respaldo: ${errorMessage(error)}`;
-        });
     });
     panel.querySelector('[data-campaign-action="local"]')?.addEventListener("click", () => resolve(null));
     const localButton = panel.querySelector<HTMLButtonElement>('[data-campaign-action="local"]');
@@ -272,7 +213,6 @@ function mountRemoteControls(
       </form>
       <div class="remote-panel-actions">
         <button type="button" class="secondary-button" data-remote-action="change">Cambiar campaña</button>
-        <button type="button" class="secondary-button" data-remote-action="backup">Respaldar</button>
         <button type="button" class="secondary-button" data-remote-action="signout">Cerrar sesión</button>
       </div>
       <small class="remote-feedback" role="status"></small>
@@ -313,29 +253,6 @@ function mountRemoteControls(
   controls.querySelector('[data-remote-action="change"]')?.addEventListener("click", () => {
     window.localStorage.removeItem(bindingKey);
     window.location.reload();
-  });
-  controls.querySelector('[data-remote-action="backup"]')?.addEventListener("click", () => {
-    feedback.textContent = "Generando respaldo…";
-    void client.readCampaign(campaign.id).then(async (campaignDocument) => {
-      if (campaignDocument === null) throw new Error("La campaña remota no tiene documento.");
-      const raw = await createRemoteCampaignBackup(campaign.name, campaignDocument);
-      window.localStorage.setItem(pendingBackupKey, raw);
-      if (window.TS === undefined) {
-        const url = URL.createObjectURL(new Blob([raw], { type: "application/json" }));
-        const link = window.document.createElement("a");
-        link.href = url;
-        link.download = `talespire-campaign-${campaign.id}-r${campaignDocument.revision}.json`;
-        window.document.body.append(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(url);
-        feedback.textContent = `Respaldo preparado y descargado · revisión ${campaignDocument.revision}.`;
-        return;
-      }
-      feedback.textContent = `Respaldo preparado para migrar · revisión ${campaignDocument.revision}.`;
-    }).catch((error: unknown) => {
-      feedback.textContent = `No se pudo generar el respaldo: ${errorMessage(error)}`;
-    });
   });
   controls.querySelector('[data-remote-action="signout"]')?.addEventListener("click", () => {
     window.localStorage.removeItem(bindingKey);
@@ -388,7 +305,6 @@ export async function configureRemotePersistence(
       panel,
       user,
       client,
-      primary,
       bindingKey,
       signOut,
       allowLocalFallback,

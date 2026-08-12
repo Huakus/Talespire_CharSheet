@@ -8,7 +8,7 @@ import {
   CampaignRepositoryCorruptionError,
 } from "../../application/ports/campaign-repository";
 import type { CampaignV2 } from "../../domain/character/character-v2";
-import { cloneJson, JsonObjectSchema, type JsonObject } from "../../shared/json";
+import { JsonObjectSchema, type JsonObject } from "../../shared/json";
 import {
   assertSaveExpectation,
   CampaignEnvelopeSchema,
@@ -94,12 +94,6 @@ export class BlobCampaignRepository implements CampaignRepository {
 
   async load(): Promise<CampaignSnapshot | null> {
     return snapshotFromRoot(parseBlobRoot(await this.store.getBlob()));
-  }
-
-  async readLegacySource(): Promise<JsonObject> {
-    const root = cloneJson(parseBlobRoot(await this.store.getBlob()));
-    delete root[V2_CAMPAIGN_BLOB_PROPERTY];
-    return root;
   }
 
   async getStorageUsage(): Promise<CampaignStorageUsage> {

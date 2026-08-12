@@ -3,10 +3,9 @@ import {
   CampaignRepositoryConflictError,
   CampaignRepositoryCorruptionError,
 } from "../../src/application/ports/campaign-repository";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import { LocalStorageCampaignRepository } from "../../src/infrastructure/persistence/local-storage-campaign-repository";
 import { checksumJson } from "../../src/shared/hash";
-import { characterColorForId } from "../../src/domain/character/create-character";
+import { createTestCampaign } from "../fixtures/native-campaign";
 
 class FakeStorage {
   readonly values = new Map<string, string>();
@@ -21,15 +20,7 @@ class FakeStorage {
 }
 
 async function campaignFixture() {
-  const preview = await previewCampaignMigration(
-    { characters: { Test: {} } },
-    {
-      campaignId: "repository-test",
-      migratedAt: "2026-07-25T12:00:00.000Z",
-    },
-  );
-  if (!preview.ok) throw new Error(preview.issues.join("; "));
-  return preview.data;
+  return createTestCampaign({ id: "repository-test" });
 }
 
 describe("LocalStorageCampaignRepository", () => {
@@ -93,49 +84,29 @@ describe("LocalStorageCampaignRepository", () => {
     });
   });
 
-  it("normalizes envelopes written before resource fields were introduced", async () => {
+  it("discards fields that are not part of the current campaign model", async () => {
     const storage = new FakeStorage();
-    const campaign = await campaignFixture();
-    const character = Object.values(campaign.characters)[0];
-    if (!character) throw new Error("fixture has no character");
-    const oldCampaign = structuredClone(campaign);
-    const mutableOldCampaign = oldCampaign as unknown as {
-      characters: Record<string, { combat: Record<string, unknown> }>;
-    };
-    const oldCharacter = Object.values(mutableOldCampaign.characters)[0];
-    if (!oldCharacter) throw new Error("fixture has no old character");
-    const hitDice = oldCharacter.combat.hitDice as Record<string, unknown>;
-    delete hitDice.remaining;
-    delete hitDice.maximum;
-    delete hitDice.dieSize;
-    delete oldCharacter.combat.deathSaves;
-    delete oldCharacter.combat.conditions;
-    delete (oldCharacter as { checks?: unknown }).checks;
-    delete (oldCharacter as { color?: unknown }).color;
-    const oldChecksum = await checksumJson(oldCampaign);
-    storage.setItem(
-      "test-key",
-      JSON.stringify({
-        format: "talespire-toolset-campaign-v2",
-        checksum: oldChecksum,
-        campaign: oldCampaign,
-      }),
-    );
-
     const repository = new LocalStorageCampaignRepository(storage, "test-key");
-    const loaded = await repository.load();
-    const normalized = loaded
-      ? Object.values(loaded.campaign.characters)[0]
-      : undefined;
-    expect(normalized?.combat.deathSaves).toEqual({ successes: 0, failures: 0 });
-    expect(normalized?.combat.conditions).toEqual([]);
-    expect(normalized?.combat.hitDice.dieSize).toBe(8);
-    expect(normalized?.checks.skills.perception).toEqual({
-      proficiency: 0,
-      bonus: 0,
-      rollMode: "normal",
-    });
-    expect(normalized?.color).toBe(characterColorForId(character.id));
-    expect(loaded?.checksum).not.toBe(oldChecksum);
+    const campaign = await campaignFixture();
+    const character = Object.values(campaign.characters)[0]!;
+    character.spellcasting.spells = [{
+      id: "spell_11111111111111111111111111111111",
+      order: 0,
+      name: "Prueba",
+      level: 1,
+      prepared: false,
+      definition: null,
+      effect: { description: "", active: false },
+    }];
+    const saved = await repository.save(campaign, { kind: "empty" });
+    const envelope = JSON.parse(storage.values.get("test-key") ?? "{}");
+    envelope.campaign.characters[character.id].spellcasting.spells[0].source = "unused-value";
+    envelope.checksum = await checksumJson(envelope.campaign);
+    storage.values.set("test-key", JSON.stringify(envelope));
+
+    expect((await repository.load())?.campaign.characters[character.id]?.spellcasting.spells[0]).toEqual(
+      saved.campaign.characters[character.id]?.spellcasting.spells[0],
+    );
   });
+
 });

@@ -38,7 +38,6 @@ export const CharacterTraitV2Schema = z.object({
   }),
   adjustment: TraitAdjustmentSchema.nullable(),
   effect: ActivatableEffectSchema,
-  legacyData: JsonObjectSchema,
 });
 
 export const CharacterTraitGroupV2Schema = z.object({
@@ -47,7 +46,6 @@ export const CharacterTraitGroupV2Schema = z.object({
   title: z.string().min(1),
   collapsed: z.boolean(),
   traits: z.array(CharacterTraitV2Schema),
-  legacyData: JsonObjectSchema,
 });
 
 export const CharacterNoteV2Schema = z.object({
@@ -56,7 +54,6 @@ export const CharacterNoteV2Schema = z.object({
   title: z.string().min(1),
   content: z.string(),
   tags: z.array(z.string()),
-  legacyData: JsonObjectSchema,
 });
 
 export const CharacterNoteGroupV2Schema = z.object({
@@ -65,7 +62,6 @@ export const CharacterNoteGroupV2Schema = z.object({
   title: z.string().min(1),
   collapsed: z.boolean(),
   notes: z.array(CharacterNoteV2Schema),
-  legacyData: JsonObjectSchema,
 });
 
 export const CharacterExtraV2Schema = z.object({
@@ -79,7 +75,6 @@ export const CharacterExtraV2Schema = z.object({
   }),
   conditions: z.array(ExtraConditionSchema),
   statBlock: JsonObjectSchema,
-  legacyData: JsonObjectSchema,
 });
 
 export const CharacterTraitDraftSchema = CharacterTraitV2Schema.omit({ id: true });

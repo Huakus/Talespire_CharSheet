@@ -23,7 +23,7 @@ export const CharacterSummarySchema = z.object({
 const PayloadSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("gm/request-character-summary"), requestId: MessageIdSchema }),
   z.object({ type: z.literal("player/character-summary"), requestId: MessageIdSchema.nullable(), summary: CharacterSummarySchema }),
-  z.object({ type: z.literal("player/set-initiative"), combatantId: StableIdSchema, initiative: z.number().int(), expectedRevision: z.number().int().nonnegative() }),
+  z.object({ type: z.literal("player/set-character-initiative"), characterId: StableIdSchema.nullable(), initiative: z.number().int() }),
   z.object({ type: z.literal("player/request-encounter"), knownRevision: z.number().int().nonnegative().nullable() }),
   z.object({
     type: z.literal("gm/encounter-changed"),

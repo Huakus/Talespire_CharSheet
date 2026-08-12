@@ -6,37 +6,6 @@ import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence
 const time = "2026-08-01T12:00:00.000Z";
 
 describe("EncounterApplication", () => {
-  it("migrates legacy encounter cards into typed encounters during campaign import", async () => {
-    const repository = new InMemoryCampaignRepository();
-    const campaigns = new CampaignApplication(repository);
-    const result = await campaigns.importCampaign({
-      campaignId: "legacy-encounters",
-      migratedAt: time,
-      input: {
-        characters: {},
-        "Encounter Data": {
-          "Puente en ruinas": [
-            { isMonster: 1, name: "Goblin", init: "14", currentHp: "3", maxHp: "7", tempHp: "2", conditions: ["Bloodied"], isClosed: 1 },
-            { isMonster: 0, isCustom: true, name: "Aliado", init: "11", hp: { current: 8, max: 10 }, ac: 13 },
-          ],
-        },
-      },
-    });
-
-    const encounter = Object.values(result.snapshot.campaign.encounters)[0];
-    expect(encounter).toMatchObject({ name: "Puente en ruinas", round: 1, activeCombatantId: null });
-    expect(encounter?.combatants[0]).toMatchObject({
-      kind: "monster",
-      name: "Goblin",
-      initiative: 14,
-      hitPoints: { current: 3, maximum: 7, temporary: 2 },
-      visibleToPlayers: false,
-    });
-    expect(encounter?.combatants[0]?.conditions[0]).toMatchObject({ key: "bloodied", label: "Bloodied" });
-    expect(encounter?.combatants[1]).toMatchObject({ kind: "custom", name: "Aliado" });
-    expect(result.snapshot.campaign.legacy.encounterData).not.toBeNull();
-  });
-
   it("creates, mutates and deletes persisted encounters with checksum expectations", async () => {
     const repository = new InMemoryCampaignRepository();
     const campaigns = new CampaignApplication(repository);
@@ -92,25 +61,6 @@ describe("EncounterApplication", () => {
     expect((await repository.load())?.campaign.encounters[encounter.id]?.combatants).toEqual([]);
     const deleted = await encounters.deleteEncounter(encounter.id, withoutCombatant.snapshot.checksum, time);
     expect(deleted.campaign.encounters).toEqual({});
-  });
-
-  it("upgrades preserved legacy encounters in an existing v2 campaign only once", async () => {
-    const repository = new InMemoryCampaignRepository();
-    const campaigns = new CampaignApplication(repository);
-    const imported = await campaigns.importCampaign({
-      campaignId: "upgrade",
-      migratedAt: time,
-      input: { characters: {}, "Encounter Data": { Viejo: [{ isMonster: 1, name: "Ogro", currentHp: 20, maxHp: 20 }] } },
-    });
-    const encounter = Object.values(imported.snapshot.campaign.encounters)[0]!;
-    const campaignWithoutTypedEncounters = { ...imported.snapshot.campaign, encounters: {} };
-    await repository.save(campaignWithoutTypedEncounters, { kind: "checksum", checksum: imported.snapshot.checksum });
-    const application = new EncounterApplication(repository);
-    const upgraded = await application.migratePreservedLegacyEncounters(time);
-    expect(Object.values(upgraded!.campaign.encounters)[0]?.name).toBe("Viejo");
-    const repeated = await application.migratePreservedLegacyEncounters(time);
-    expect(repeated?.checksum).toBe(upgraded?.checksum);
-    expect(Object.values(repeated!.campaign.encounters)[0]?.id).toBe(encounter.id);
   });
 
   it("persists the TaleSpire initiative link through the campaign repository", async () => {

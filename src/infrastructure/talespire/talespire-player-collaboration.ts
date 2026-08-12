@@ -52,7 +52,7 @@ export interface TaleSpireTransportDiagnostics {
 }
 
 export interface CharacterSummaryRequest {
-  kind: "modern" | "legacy";
+  kind: "modern";
   requestId: string | null;
 }
 
@@ -360,70 +360,31 @@ export class TaleSpirePlayerCollaboration {
       ), incoming.fromClient.id);
       return;
     }
-    if (type === "request-info") {
-      if (this.latestCharacter) await this.sendLegacyCharacterSummary(this.latestCharacter);
-      else this.summaryRequestListener?.({ kind: "legacy", requestId: null });
-      return;
-    }
-    const legacyData = Reflect.get(incoming.value, "data");
-    if (type === "player-init-list" && Array.isArray(legacyData)) {
-      this.state.entries = legacyData.map((entry) => ({
-        name: String(entry?.n ?? ""),
-        player: Boolean(entry?.p),
-        visible: Boolean(entry?.v),
-        bloodied: Boolean(entry?.b),
-      }));
-    } else if (type === "player-init-turn") {
-      const turn = Number(legacyData);
-      this.state.activeTurn = Number.isInteger(turn) ? turn : null;
-    } else if (type === "player-init-round") {
-      const round = Number(legacyData);
-      this.state.round = Number.isInteger(round) ? round : null;
-    } else {
-      return;
-    }
-    this.initiativeListener?.(structuredClone(this.state));
   }
 
   async requestInitiativeList(): Promise<void> {
-    await this.sendToGm({ type: "request-init-list", playerId: await this.identity(), data: {} });
+    await this.sendToGm(createGmProtocolMessage({
+      type: "player/request-encounter",
+      knownRevision: this.remoteEncounter?.revision ?? null,
+    }));
   }
 
   async sendInitiative(value: number, characterId: string | null = this.latestCharacter?.id ?? null): Promise<void> {
-    await this.sendToGm({ type: "update-init", playerId: await this.identity(), data: { Initiative: value, CharacterId: characterId } });
+    await this.sendToGm(createGmProtocolMessage({
+      type: "player/set-character-initiative",
+      characterId,
+      initiative: value,
+    }));
   }
 
   async sendCharacterSummary(character: CharacterV2, requestId: string | null = null): Promise<void> {
     this.latestCharacter = structuredClone(character);
-    await this.sendLegacyCharacterSummary(character);
     await this.sendModernCharacterSummary(character, requestId);
   }
 
   async respondToCharacterSummaryRequest(character: CharacterV2, request: CharacterSummaryRequest): Promise<void> {
     this.latestCharacter = structuredClone(character);
-    if (request.kind === "modern") await this.sendModernCharacterSummary(character, request.requestId);
-    else await this.sendLegacyCharacterSummary(character);
-  }
-
-  private async sendLegacyCharacterSummary(character: CharacterV2): Promise<void> {
-    const statistics = projectCharacterStatistics(character);
-    const spellcasting = projectSpellcasting(character);
-    const legacy = {
-      type: "request-stats",
-      playerId: await this.identity(),
-      data: {
-        characterName: character.name,
-        hp: { current: String(character.combat.hitPoints.current), max: String(character.combat.hitPoints.maximum) },
-        tempHp: String(character.combat.hitPoints.temporary),
-        ac: String(character.combat.armorClass),
-        passivePerception: String(statistics.passives.perception),
-        spellSave: String(spellcasting.saveDc),
-        conditions: [],
-        conditionKeys: character.combat.conditions.map((condition) => condition.key),
-        language: "eng",
-      },
-    };
-    await this.sendToGm(legacy);
+    await this.sendModernCharacterSummary(character, request.requestId);
   }
 
   private async sendModernCharacterSummary(character: CharacterV2, requestId: string | null): Promise<void> {

@@ -1,2 +1,0 @@
--- Intentionally empty for the connectivity milestone.
--- Test users and campaigns are introduced with the authentication layer.

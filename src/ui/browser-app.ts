@@ -73,21 +73,13 @@ import {
   type MerchantDifficultyBreakdown,
 } from "../domain/commerce/merchant-interaction";
 import type { GmShop } from "../domain/gm/gm-global-content";
-import {
-  findSpellDefinitionByName,
-  normalizeSpellDefinition,
-  spellDefinitionsForLanguage,
-} from "../domain/spells/spell-catalog";
-import { allMonsterNames, findMonsterByName, type MonsterDefinition } from "../domain/monsters/monster-catalog";
+import type { MonsterDefinition } from "../domain/monsters/monster-catalog";
 import {
   equipmentRarityLabel,
-  equipmentDefinitionsForLanguage,
-  findEquipmentDefinitionByName,
   normalizeEquipmentDefinition,
   normalizeEquipmentRarity,
   type EquipmentCatalogDraft,
 } from "../domain/equipment/equipment-catalog";
-import { convertDndBeyondCharacter } from "../application/import/dnd-beyond";
 import { CampaignStorageCapacityError } from "../infrastructure/persistence/blob-campaign-repository";
 import type { CampaignStorageUsage } from "../infrastructure/persistence/blob-campaign-repository";
 import type { DiceRoller } from "../application/ports/dice-roller";
@@ -110,7 +102,6 @@ import {
 export interface BrowserAppRuntime {
   storageLabel: string;
   storageEventKey?: string;
-  loadCurrentCampaignSource?: () => Promise<unknown>;
   loadStorageUsage?: () => Promise<CampaignStorageUsage>;
   diceRoller: DiceRoller;
   subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
@@ -127,7 +118,6 @@ export interface BrowserAppRuntime {
   respondToCharacterSummaryRequest?: (character: CharacterV2, request: CharacterSummaryRequest) => Promise<void>;
   subscribeEncounterSync?: (listener: (state: TaleSpireEncounterSyncState) => void) => () => void;
   loadCustomContent?: () => Promise<{ spells: SpellDefinition[]; equipment: EquipmentCatalogDraft[]; monsters: MonsterDefinition[]; shops: GmShop[] }>;
-  contentCatalogIsComplete?: boolean;
   subscribeCustomContent?: (listener: (content: PlayerCustomContent) => void) => () => void;
   requestCustomContent?: () => Promise<void>;
   saveCustomSpell?: (definition: SpellDefinition) => Promise<void>;
@@ -298,14 +288,8 @@ function normalizedSearchText(value: string): string {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
 }
 
-function catalogTags(value: { legacyData?: unknown } | null | undefined): string[] {
-  const legacy = value?.legacyData && typeof value.legacyData === "object" && !Array.isArray(value.legacyData)
-    ? value.legacyData as Record<string, unknown>
-    : {};
-  const metadata = legacy.__catalog && typeof legacy.__catalog === "object" && !Array.isArray(legacy.__catalog)
-    ? legacy.__catalog as Record<string, unknown>
-    : {};
-  return [...new Set((Array.isArray(metadata.tags) ? metadata.tags : []).map(String).map((tag) => tag.trim()).filter((tag) => tag && normalizedSearchText(tag) !== "favorite"))];
+function catalogTags(value: { catalog?: { tags: string[] } | null } | null | undefined): string[] {
+  return [...new Set((value?.catalog?.tags ?? []).map((tag) => tag.trim()).filter((tag) => tag && normalizedSearchText(tag) !== "favorite"))];
 }
 
 function uniqueLabels(values: readonly string[]): string[] {
@@ -524,7 +508,7 @@ function objectIdentity(value: unknown): string | null {
 
 export function describeCharacterChanges(before: CharacterV2, after: CharacterV2): string[] {
   const changes: string[] = [];
-  const ignoredRootFields = new Set(["schemaVersion", "id", "revision", "metadata", "legacy", "collections"]);
+  const ignoredRootFields = new Set(["schemaVersion", "id", "revision", "metadata"]);
   const visit = (previous: unknown, next: unknown, path: string[]): void => {
     if (Object.is(previous, next)) return;
     if (path.length === 1 && ignoredRootFields.has(path[0]!)) return;
@@ -737,15 +721,14 @@ export class BrowserApp {
 
     this.root.innerHTML = snapshot
       ? this.renderWorkspace(snapshot, selected)
-      : `<div class="standalone-notifications">${this.renderNotificationCenter()}</div>${this.renderCampaignImport(false)}${this.renderWelcome()}`;
+      : `<div class="standalone-notifications">${this.renderNotificationCenter()}</div>${this.renderWelcome()}`;
     this.bindEvents();
     if (selected) void this.refreshMiniatureThumbnail(selected);
   }
 
   private spellCatalog(): readonly SpellDefinition[] {
     const unique = new Map<string, SpellDefinition>();
-    const bundled = this.runtime.contentCatalogIsComplete ? [] : spellDefinitionsForLanguage("es");
-    for (const spell of [...this.customSpells, ...bundled]) {
+    for (const spell of this.customSpells) {
       if ((spell.year || "2014") !== "2014") continue;
       const key = normalizedSearchText(spell.name);
       if (!unique.has(key)) unique.set(key, spell);
@@ -755,18 +738,16 @@ export class BrowserApp {
 
   private findSpell(name: string): SpellDefinition | null {
     const normalized = name.trim().toLocaleLowerCase();
-    return this.customSpells.find((spell) => spell.name.toLocaleLowerCase() === normalized) ??
-      (this.runtime.contentCatalogIsComplete ? null : findSpellDefinitionByName(name));
+    return this.customSpells.find((spell) => spell.name.toLocaleLowerCase() === normalized) ?? null;
   }
 
   private equipmentCatalog(): readonly EquipmentCatalogDraft[] {
-    return this.runtime.contentCatalogIsComplete ? this.customEquipment : [...this.customEquipment, ...equipmentDefinitionsForLanguage("es")];
+    return this.customEquipment;
   }
 
   private findEquipment(name: string): EquipmentCatalogDraft | null {
     const normalized = name.trim().toLocaleLowerCase();
-    return this.customEquipment.find((item) => item.name.toLocaleLowerCase() === normalized) ??
-      (this.runtime.contentCatalogIsComplete ? null : findEquipmentDefinitionByName(name));
+    return this.customEquipment.find((item) => item.name.toLocaleLowerCase() === normalized) ?? null;
   }
 
   private renderStorageUsage(): string {
@@ -835,19 +816,6 @@ export class BrowserApp {
     }
   }
 
-  private exportCharacter(): void {
-    if (!this.snapshot || !this.selectedCharacterId) return;
-    const character = this.snapshot.campaign.characters[this.selectedCharacterId];
-    if (!character) return;
-    const blob = new Blob([JSON.stringify(character, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${character.name.replace(/[^a-z0-9_-]+/gi, "-").replace(/^-|-$/g, "") || "character"}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-  }
-
   private async deleteCharacter(): Promise<void> {
     if (!this.snapshot || !this.selectedCharacterId) return;
     const character = this.snapshot.campaign.characters[this.selectedCharacterId];
@@ -866,64 +834,8 @@ export class BrowserApp {
     }
   }
 
-  private async importCharacterFile(event: Event, fromDndBeyond: boolean): Promise<void> {
-    if (!this.snapshot) return;
-    const input = event.currentTarget;
-    if (!(input instanceof HTMLInputElement) || !input.files?.[0]) return;
-    try {
-      const raw = JSON.parse(await input.files[0].text()) as unknown;
-      const source = fromDndBeyond ? convertDndBeyondCharacter(raw) : raw;
-      const previousIds = new Set(Object.keys(this.snapshot.campaign.characters));
-      this.snapshot = await this.application.importCharacter({
-        input: source,
-        fallbackName: input.files[0].name.replace(/\.[^.]+$/, "") || "Personaje importado",
-        expectedCampaignChecksum: this.snapshot.checksum,
-      });
-      const imported = Object.values(this.snapshot.campaign.characters).find((character) => !previousIds.has(character.id));
-      this.selectedCharacterId = imported?.id ?? this.selectedCharacterId;
-      this.message = { kind: "success", text: fromDndBeyond ? "Personaje de D&D Beyond convertido e importado." : "Personaje importado." };
-      this.render();
-    } catch (error) {
-      this.message = { kind: "error", text: formatError(error) };
-      this.render();
-    }
-  }
-
-  private async importCharacterClipboard(): Promise<void> {
-    if (!this.snapshot) return;
-    try {
-      const source = JSON.parse(await navigator.clipboard.readText()) as unknown;
-      const previousIds = new Set(Object.keys(this.snapshot.campaign.characters));
-      this.snapshot = await this.application.importCharacter({
-        input: source,
-        fallbackName: "Personaje del creador",
-        expectedCampaignChecksum: this.snapshot.checksum,
-      });
-      const imported = Object.values(this.snapshot.campaign.characters).find((character) => !previousIds.has(character.id));
-      this.selectedCharacterId = imported?.id ?? this.selectedCharacterId;
-      this.message = { kind: "success", text: "Personaje importado desde el portapapeles." };
-      this.render();
-    } catch (error) {
-      this.message = { kind: "error", text: `No se pudo importar el portapapeles: ${formatError(error)}` };
-      this.render();
-    }
-  }
-
   private renderWelcome(): string {
-    return `<section class="welcome"><h2>La aplicación está vacía</h2><p>Podés comenzar una campaña nueva o importar una copia JSON del almacenamiento legado.</p><button type="button" id="create-empty-campaign">Crear campaña nueva</button></section>`;
-  }
-
-  private renderCampaignImport(replacing: boolean): string {
-    return `<details class="import-panel" ${replacing ? "" : "open"}>
-      <summary>${replacing ? "Reemplazar campaña" : "Importar backup legado"}</summary>
-      <form id="import-form" class="import-form">
-        ${textInput("campaignId", "Identificador", "campaña-local")}
-        <label>Archivo JSON<input name="campaignFile" type="file" required></label>
-        ${replacing ? '<label class="checkbox"><input name="replaceExisting" type="checkbox"> Confirmo el reemplazo</label>' : ""}
-        <button type="submit">Importar</button>
-        ${this.runtime.loadCurrentCampaignSource ? '<button id="import-current-campaign" class="secondary-button" type="button">Migrar campaña actual</button>' : ""}
-      </form>
-    </details>`;
+    return `<section class="welcome"><h2>La aplicación está vacía</h2><p>Creá una campaña nueva para comenzar.</p><button type="button" id="create-empty-campaign">Crear campaña nueva</button></section>`;
   }
 
   private renderWorkspace(snapshot: CampaignSnapshot, selected: CharacterV2 | null): string {
@@ -934,9 +846,6 @@ export class BrowserApp {
     return `<div class="character-management">
       <label>Nuevo personaje<input id="new-character-name" placeholder="Nombre"></label>
       <button type="button" class="secondary-button" id="create-character">Crear</button>
-      <label>Importar personaje<input id="import-character-file" type="file" accept="application/json,.json"></label>
-      <label>Importar D&D Beyond<input id="import-ddb-file" type="file" accept="application/json,.json"></label>
-      <button type="button" class="secondary-button" id="import-character-clipboard">Pegar JSON</button>
     </div>`;
   }
 
@@ -972,11 +881,9 @@ export class BrowserApp {
               <details class="color-picker menu-color-picker"><summary title="Cambiar color del personaje"><span>Color</span><i style="--swatch-color:${character.color}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${characterColors.map((color) => `<button type="button" class="color-swatch ${color.toLowerCase() === character.color.toLowerCase() ? "active" : ""}" style="--swatch-color:${color}" data-character-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color.toLowerCase() === character.color.toLowerCase()}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="character-color" type="text" value="${character.color}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal" placeholder="#RRGGBB"></label><button type="button" id="apply-character-color">Aplicar</button></div></div></details>
               <label>Tema<select id="theme"><option value="dark" ${this.theme === "dark" ? "selected" : ""}>Oscuro</option><option value="light" ${this.theme === "light" ? "selected" : ""}>Claro</option></select></label>
               ${this.runtime.selectMiniature ? '<button type="button" class="secondary-button" id="link-miniature">Vincular mini</button>' : ""}
-              <button type="button" class="secondary-button" id="export-character">Exportar personaje</button>
               <button type="button" class="secondary-button danger" id="delete-character">Eliminar personaje</button>
               <details class="menu-section"><summary>Administrar personajes</summary>${this.renderCharacterManagement()}</details>
               ${this.renderTransportDiagnostics()}
-              ${this.renderCampaignImport(true)}
             </div></details>
           </div>
         </header>
@@ -1012,8 +919,7 @@ export class BrowserApp {
 
   private monsterCatalogNames(): readonly string[] {
     const names = new Map<string, string>();
-    const bundled = this.runtime.contentCatalogIsComplete ? [] : allMonsterNames();
-    for (const name of [...this.customMonsters.map((monster) => monster.name), ...bundled]) {
+    for (const name of this.customMonsters.map((monster) => monster.name)) {
       const key = normalizedSearchText(name);
       if (key && !names.has(key)) names.set(key, name);
     }
@@ -1022,8 +928,7 @@ export class BrowserApp {
 
   private findMonster(name: string) {
     const key = normalizedSearchText(name);
-    const custom = this.customMonsters.find((monster) => normalizedSearchText(monster.name) === key);
-    return custom?.legacyData ?? (this.runtime.contentCatalogIsComplete ? null : findMonsterByName(name));
+    return this.customMonsters.find((monster) => normalizedSearchText(monster.name) === key) ?? null;
   }
 
   private refreshConnectionIndicators(): void {
@@ -1380,7 +1285,6 @@ export class BrowserApp {
 
   private spellSourceEntries(character: CharacterV2): { spell: CharacterSpellV2; known: boolean }[] {
     const knownNames = new Set(character.spellcasting.spells.map((spell) => normalizedSearchText(spell.name)));
-    const customNames = new Set(this.customSpells.map((spell) => normalizedSearchText(spell.name)));
     const availableCatalog = this.includeUnknownSpells ? this.spellCatalog() : [];
     const unknownSpells: CharacterSpellV2[] = availableCatalog
         .filter((definition) => !knownNames.has(normalizedSearchText(definition.name)))
@@ -1390,7 +1294,6 @@ export class BrowserApp {
           name: definition.name,
           level: definition.level,
           prepared: false,
-          source: customNames.has(normalizedSearchText(definition.name)) ? "custom" as const : "bundled" as const,
           definition,
           effect: { description: "", active: false },
         }));
@@ -1483,14 +1386,7 @@ export class BrowserApp {
   private inventoryRarity(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string {
     const definition = this.inventoryDefinition(item);
     if (definition) return normalizeEquipmentRarity(definition.rarity);
-    const legacy = item.legacyData && typeof item.legacyData === "object" && !Array.isArray(item.legacyData)
-      ? item.legacyData as Record<string, unknown>
-      : {};
-    const raw = legacy.rarity ?? legacy.Rarity;
-    const rarity = raw && typeof raw === "object" && !Array.isArray(raw)
-      ? raw as Record<string, unknown>
-      : {};
-    return normalizeEquipmentRarity(rarity.index ?? rarity.name ?? raw);
+    return normalizeEquipmentRarity("none");
   }
 
   private inventoryIsVisible(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): boolean {
@@ -1814,7 +1710,6 @@ export class BrowserApp {
       <fieldset aria-label="Inventario y equipo">
         <div class="inventory-toolbar">
           <span>${visibleItems.length} de ${character.inventory.length} objetos visibles</span>
-          <label>Importar equipo JSON<input id="import-equipment-file" type="file" accept="application/json,.json"></label>
           <button type="button" class="secondary-button" data-reset-inventory-charges="short-rest">Recuperar cargas de descanso corto</button>
           <button type="button" class="secondary-button" data-reset-inventory-charges="long-rest">Recuperar cargas de descanso largo</button>
           <button type="button" class="secondary-button" data-reset-inventory-charges="at-dawn">Recuperar cargas al amanecer</button>
@@ -1857,7 +1752,6 @@ export class BrowserApp {
         </div></details>
         ${includeSearchRow ? this.renderSpellDiscoveryTools(character, true, false) : `<div class="spell-discovery spell-property-tools">${this.renderSpellPropertyFilters(character)}</div>`}${this.renderSpellFilterBar(character)}
         <div class="collection-toolbar spell-toolbar">
-          <label>Importar conjuro JSON<input id="import-spell-file" type="file" accept="application/json,.json"></label>
           <span>${entries.length} conjuros visibles</span>
         </div>
         <datalist id="spell-catalog-names">${this.spellCatalog().map((spell) => `<option value="${escapeHtml(spell.name)}"></option>`).join("")}</datalist>
@@ -1932,7 +1826,7 @@ export class BrowserApp {
         <div class="editor-card-body">
         <div class="spell-card-heading">
           <label>Nombre${field("name", spell?.name ?? "", 'list="spell-catalog-names" placeholder="Nuevo conjuro"')}</label>
-          ${spell ? `<span>Nivel ${spell.level} · ${spell.prepared ? "Preparado" : "No preparado"} · ${spell.source}</span>` : ""}
+          ${spell ? `<span>Nivel ${spell.level} · ${spell.prepared ? "Preparado" : "No preparado"}</span>` : ""}
         </div>
         <div class="field-grid">
           <label>Nivel${field("level", spell?.level ?? 0, 'type="number" min="0" max="9" step="1"')}</label>
@@ -1961,7 +1855,7 @@ export class BrowserApp {
         <div class="card-buttons">
           ${spell && definition?.attackType === "attack" ? `<button type="button" class="roll-button" data-roll-name="Ataque de conjuro: ${escapeHtml(spell.name)}" data-roll-expression="1d20${projection.attackModifier >= 0 ? "+" : ""}${projection.attackModifier}" data-roll-mode="${attackRollMode}">Tirar ataque</button>` : ""}
           ${spell && damage ? `<button type="button" class="roll-button" data-roll-name="Daño de ${escapeHtml(spell.name)}" data-roll-expression="${escapeHtml(damage)}" data-roll-mode="normal">Tirar daño</button>` : ""}
-          ${spell ? `<label>Nivel de lanzamiento<select data-cast-slot-level size="1">${slotOptions}</select></label><button type="button" data-spell-cast-control data-spell-action="cast" ${canLaunch ? "" : "disabled"}>Lanzar/gastar espacio</button><button type="button" data-spell-action="prepare">${spell.prepared ? "Despreparar" : "Preparar"}</button><button type="button" data-spell-action="export">Exportar</button>` : ""}
+          ${spell ? `<label>Nivel de lanzamiento<select data-cast-slot-level size="1">${slotOptions}</select></label><button type="button" data-spell-cast-control data-spell-action="cast" ${canLaunch ? "" : "disabled"}>Lanzar/gastar espacio</button><button type="button" data-spell-action="prepare">${spell.prepared ? "Despreparar" : "Preparar"}</button>` : ""}
           <button type="button" data-load-spell-catalog>Cargar datos del catálogo</button>
           <button type="button" data-save-spell>${spell ? "Guardar conjuro" : "Agregar conjuro"}</button>
           ${spell ? '<button type="button" class="danger" data-spell-action="delete">Eliminar</button>' : ""}
@@ -2159,7 +2053,6 @@ export class BrowserApp {
           ${item ? `<button type="button" data-inventory-action="equip">${item.equipped ? "Desequipar" : "Equipar"}</button>` : ""}
           ${item?.requiresAttunement && item.equipped ? `<button type="button" data-inventory-action="attune">${item.attuned ? "Romper sintonización" : "Sintonizar"}</button>` : ""}
           <button type="button" data-save-inventory>${item ? "Guardar objeto" : "Agregar objeto"}</button>
-          ${item ? '<button type="button" class="secondary-button" data-inventory-action="export">Exportar JSON</button>' : ""}
           ${item ? '<button type="button" class="danger" data-inventory-action="delete">Eliminar</button>' : ""}
         </div>
         </div>
@@ -2438,8 +2331,6 @@ export class BrowserApp {
         this.renderAfterSavingSummaryEditor();
       });
     });
-    this.root.querySelector<HTMLFormElement>("#import-form")
-      ?.addEventListener("submit", (event) => void this.importCampaign(event));
     this.root.querySelector<HTMLButtonElement>("#create-empty-campaign")
       ?.addEventListener("click", () => void this.createEmptyCampaign());
     const characterForm = this.root.querySelector<HTMLFormElement>("#character-form");
@@ -2453,22 +2344,12 @@ export class BrowserApp {
           if (characterForm.isConnected) characterForm.requestSubmit();
         }, 700);
       });
-    this.root.querySelector<HTMLButtonElement>("#import-current-campaign")
-      ?.addEventListener("click", () => void this.importCurrentCampaign());
     this.root.querySelector<HTMLButtonElement>("#link-miniature")
       ?.addEventListener("click", () => void this.linkSelectedMiniature());
     this.root.querySelector<HTMLButtonElement>("#create-character")
       ?.addEventListener("click", () => void this.createCharacter());
-    this.root.querySelector<HTMLButtonElement>("#export-character")
-      ?.addEventListener("click", () => this.exportCharacter());
     this.root.querySelector<HTMLButtonElement>("#delete-character")
       ?.addEventListener("click", () => void this.deleteCharacter());
-    this.root.querySelector<HTMLInputElement>("#import-character-file")
-      ?.addEventListener("change", (event) => void this.importCharacterFile(event, false));
-    this.root.querySelector<HTMLInputElement>("#import-ddb-file")
-      ?.addEventListener("change", (event) => void this.importCharacterFile(event, true));
-    this.root.querySelector<HTMLButtonElement>("#import-character-clipboard")
-      ?.addEventListener("click", () => void this.importCharacterClipboard());
     this.root.querySelector<HTMLButtonElement>("#request-initiative-list")
       ?.addEventListener("click", () => void this.requestInitiativeList());
     this.root.querySelector<HTMLButtonElement>("#send-character-summary")
@@ -2534,8 +2415,6 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-load-inventory-catalog]").forEach((button) => {
       button.addEventListener("click", () => this.loadInventoryCardFromCatalog(button));
     });
-    this.root.querySelector<HTMLInputElement>("#import-equipment-file")
-      ?.addEventListener("change", (event) => void this.importEquipment(event));
     this.root.querySelectorAll<HTMLButtonElement>("[data-inventory-action]").forEach((button) => {
       button.addEventListener("click", () => void this.handleInventoryAction(button));
     });
@@ -2777,8 +2656,6 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-load-spell-catalog]").forEach((button) => {
       button.addEventListener("click", () => this.loadSpellCardFromCatalog(button));
     });
-    this.root.querySelector<HTMLInputElement>("#import-spell-file")
-      ?.addEventListener("change", (event) => void this.importSpell(event));
     this.root.querySelectorAll<HTMLButtonElement>("[data-save-trait-group]").forEach((button) => button.addEventListener("click", () => void this.saveTraitGroup(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-delete-trait-group]").forEach((button) => button.addEventListener("click", () => void this.deleteTraitGroup(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-save-trait]").forEach((button) => button.addEventListener("click", () => void this.saveTrait(button)));
@@ -3931,14 +3808,13 @@ export class BrowserApp {
       addAbilityModifier: checkbox("addAbilityModifier"),
       damageType: this.spellCardField<HTMLInputElement>(card, "damageType").value,
       year: this.spellCardField<HTMLInputElement>(card, "year").value,
-      legacyData: existing?.definition?.legacyData ?? catalog?.legacyData ?? {},
+      catalog: catalog?.catalog ?? null,
     };
     return {
       order: existing?.order ?? this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""]?.spellcasting.spells.length ?? 0,
       name,
       level: definition.level,
       prepared: checkbox("prepared"),
-      source: existing?.source ?? (catalog ? "bundled" : "custom"),
       definition,
       effect: {
         description: this.spellCardField<HTMLInputElement>(card, "effectDescription").value,
@@ -4004,7 +3880,7 @@ export class BrowserApp {
         spell: draft,
       });
       this.acceptCharacterSnapshot(snapshot, `Guardar conjuro: ${draft.name}`);
-      if (draft.source === "custom" && draft.definition && this.runtime.saveCustomSpell) {
+      if (draft.definition?.catalog?.origin !== "official" && draft.definition && this.runtime.saveCustomSpell) {
         await this.runtime.saveCustomSpell(draft.definition);
         this.customSpells = [
           ...this.customSpells.filter((spell) => spell.name.toLocaleLowerCase() !== draft.name.toLocaleLowerCase()),
@@ -4052,7 +3928,6 @@ export class BrowserApp {
       const definition = this.findSpell(spellName);
       if (!definition) return;
       try {
-        const isCustom = this.customSpells.some((spell) => normalizedSearchText(spell.name) === normalizedSearchText(definition.name));
         const snapshot = await this.application.upsertCharacterSpell({
           characterId: character.id,
           expectedCharacterRevision: character.revision,
@@ -4062,7 +3937,6 @@ export class BrowserApp {
             name: definition.name,
             level: definition.level,
             prepared: false,
-            source: isCustom ? "custom" : "bundled",
             definition,
             effect: { description: "", active: false },
           },
@@ -4078,10 +3952,6 @@ export class BrowserApp {
     }
     const spell = character.spellcasting.spells.find((entry) => entry.id === card.dataset.spellId);
     if (!spell) return;
-    if (action === "export") {
-      this.exportSpell(spell);
-      return;
-    }
     const command = {
       characterId: character.id,
       spellId: spell.id,
@@ -4212,52 +4082,6 @@ export class BrowserApp {
     }
   }
 
-  private exportSpell(spell: CharacterSpellV2): void {
-    const blob = new Blob([JSON.stringify(spell.definition ?? spell, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${spell.name.replace(/[^a-z0-9_-]+/gi, "-").replace(/^-|-$/g, "") || "spell"}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-  }
-
-  private async importSpell(event: Event): Promise<void> {
-    if (!this.snapshot || !this.selectedCharacterId) return;
-    const input = event.currentTarget;
-    if (!(input instanceof HTMLInputElement) || !input.files?.[0]) return;
-    const character = this.snapshot.campaign.characters[this.selectedCharacterId];
-    if (!character) return;
-    try {
-      const definition = normalizeSpellDefinition(JSON.parse(await input.files[0].text()));
-      this.acceptCharacterSnapshot(await this.application.upsertCharacterSpell({
-        characterId: character.id,
-        expectedCharacterRevision: character.revision,
-        expectedCampaignChecksum: this.snapshot.checksum,
-        spell: {
-          order: character.spellcasting.spells.length,
-          name: definition.name,
-          level: definition.level,
-          prepared: false,
-          source: "custom",
-          definition,
-          effect: { description: "", active: false },
-        },
-      }), `Importar conjuro: ${definition.name}`);
-      if (this.runtime.saveCustomSpell) await this.runtime.saveCustomSpell(definition);
-      this.customSpells = [
-        ...this.customSpells.filter((spell) => spell.name.toLocaleLowerCase() !== definition.name.toLocaleLowerCase()),
-        definition,
-      ];
-      await this.refreshStorageUsage();
-      this.message = { kind: "success", text: `Conjuro ${definition.name} importado.` };
-      this.render();
-    } catch (error) {
-      this.message = { kind: "error", text: formatError(error) };
-      this.render();
-    }
-  }
-
   private contentField<T extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
     card: HTMLElement,
     selector: string,
@@ -4347,7 +4171,7 @@ export class BrowserApp {
       const snapshot = await this.application.upsertTraitGroup({
         ...this.contentCommand(character),
         ...(existing ? { groupId: existing.id } : {}),
-        group: { title, order, collapsed, legacyData: existing?.legacyData ?? {} },
+        group: { title, order, collapsed },
       });
       this.finishContent(snapshot, "Grupo de rasgos guardado.");
     } catch (error) { this.contentFailure(error); }
@@ -4399,7 +4223,6 @@ export class BrowserApp {
           description: input("effectDescription").value,
           active: select("effectActive").value === "on",
         },
-        legacyData: existing?.legacyData ?? {},
       };
       const snapshot = await this.application.upsertTrait({
         ...this.contentCommand(character), groupId,
@@ -4448,7 +4271,6 @@ export class BrowserApp {
           title: this.contentField<HTMLInputElement>(container, '[data-group-field="title"]').value,
           order: Number(this.contentField<HTMLInputElement>(container, '[data-group-field="order"]').value),
           collapsed: this.contentField<HTMLInputElement>(container, '[data-group-field="collapsed"]').checked,
-          legacyData: existing?.legacyData ?? {},
         },
       });
       this.finishContent(snapshot, "Grupo de notas guardado.");
@@ -4478,7 +4300,6 @@ export class BrowserApp {
         order: Number(input("order").value), title: input("title").value,
         content: this.contentField<HTMLTextAreaElement>(card, '[data-note-field="content"]').value,
         tags: input("tags").value.split(",").map((tag) => tag.trim()).filter(Boolean),
-        legacyData: existing?.legacyData ?? {},
       };
       const snapshot = await this.application.upsertNote({ ...this.contentCommand(character), groupId, ...(existing ? { noteId: existing.id } : {}), note });
       this.finishContent(snapshot, "Nota guardada.");
@@ -4510,7 +4331,6 @@ export class BrowserApp {
         order: Number(input("order").value), name: input("name").value,
         hitPoints: { current: Number(input("current").value), maximum: Number(input("maximum").value), temporary: Number(input("temporary").value) },
         conditions: existing?.conditions ?? [], statBlock: statBlock as CharacterExtraDraft["statBlock"],
-        legacyData: existing?.legacyData ?? {},
       };
       const snapshot = await this.application.upsertExtra({ ...this.contentCommand(character), ...(existing ? { extraId: existing.id } : {}), extra });
       this.finishContent(snapshot, "Extra guardado.");
@@ -4524,10 +4344,7 @@ export class BrowserApp {
       const input = (name: string) => this.contentField<HTMLInputElement>(card, `[data-extra-field="${name}"]`);
       const monster = this.findMonster(input("name").value);
       if (!monster) throw new Error(`No se encontró “${input("name").value}” en el bestiario.`);
-      const hp = monster.HP;
-      const hpObject = hp !== null && !Array.isArray(hp) && typeof hp === "object" ? hp : {};
-      const maximum = Number(hpObject.Value ?? 0);
-      input("maximum").value = String(Number.isFinite(maximum) ? maximum : 0);
+      input("maximum").value = String(monster.hitPoints);
       input("current").value = input("maximum").value;
       this.contentField<HTMLTextAreaElement>(card, '[data-extra-field="statBlock"]').value = JSON.stringify(monster, null, 2);
     } catch (error) {
@@ -4730,7 +4547,7 @@ export class BrowserApp {
           description: this.inventoryCardField<HTMLInputElement>(card, "effectDescription").value,
           active: this.inventoryCardField<HTMLSelectElement>(card, "effectActive").value === "on",
         },
-        legacyData: existing?.legacyData ?? {},
+        catalog: existing?.catalog ?? null,
       };
       this.acceptCharacterSnapshot(await this.application.upsertInventoryItem({
         characterId: character.id,
@@ -4949,9 +4766,6 @@ export class BrowserApp {
     try {
       if (action === "delete") {
         this.acceptCharacterSnapshot(await this.application.removeInventoryItem(command), `Eliminar objeto: ${item.name}`);
-      } else if (action === "export") {
-        this.exportInventoryItem(item);
-        return;
       } else if (action === "equip") {
         this.acceptCharacterSnapshot(await this.application.setInventoryItemEquipped({
           ...command,
@@ -4973,53 +4787,6 @@ export class BrowserApp {
     } catch (error) {
       this.message = { kind: "error", text: formatError(error) };
       this.render();
-    }
-  }
-
-  private exportInventoryItem(item: CharacterInventoryItemV2): void {
-    const blob = new Blob([JSON.stringify(item, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${item.name.replace(/[^a-z0-9_-]+/gi, "-").replace(/^-|-$/g, "") || "equipment"}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-  }
-
-  private async importEquipment(event: Event): Promise<void> {
-    if (!this.snapshot || !this.selectedCharacterId) return;
-    const input = event.currentTarget;
-    if (!(input instanceof HTMLInputElement) || !input.files?.[0]) return;
-    try {
-      const parsed = JSON.parse(await input.files[0].text()) as unknown;
-      const records = Array.isArray(parsed) ? parsed : [parsed];
-      for (const record of records) {
-        const definition = normalizeEquipmentDefinition(record);
-        const character = this.snapshot.campaign.characters[this.selectedCharacterId];
-        if (!character) throw new Error("El personaje ya no está disponible.");
-        this.acceptCharacterSnapshot(await this.application.upsertInventoryItem({
-          characterId: character.id,
-          expectedCharacterRevision: character.revision,
-          expectedCampaignChecksum: this.snapshot.checksum,
-          item: {
-            ...definition,
-            order: character.inventory.length,
-            group: "backpack",
-          },
-        }), `Importar objeto: ${definition.name}`);
-        if (this.runtime.saveCustomEquipment) await this.runtime.saveCustomEquipment(definition);
-        this.customEquipment = [
-          ...this.customEquipment.filter((item) => item.name.toLocaleLowerCase() !== definition.name.toLocaleLowerCase()),
-          definition,
-        ];
-      }
-      this.message = { kind: "success", text: `${records.length} objeto(s) importado(s).` };
-      this.render();
-    } catch (error) {
-      this.message = { kind: "error", text: formatError(error) };
-      this.render();
-    } finally {
-      input.value = "";
     }
   }
 
@@ -5203,71 +4970,6 @@ export class BrowserApp {
       this.message = { kind: "error", text: formatError(error) };
       this.render();
     }
-  }
-
-  private async importCampaign(event: SubmitEvent): Promise<void> {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (!(form instanceof HTMLFormElement)) return;
-    try {
-      const data = new FormData(form);
-      const file = data.get("campaignFile");
-      if (!(file instanceof File) || file.size === 0) throw new Error("Seleccioná un archivo JSON de campaña.");
-      const replaceExisting = data.get("replaceExisting") === "on";
-      if (this.snapshot !== null && !replaceExisting) {
-        throw new Error("Para reemplazar la campaña local tenés que confirmarlo explícitamente.");
-      }
-      await this.persistImportedCampaign(
-        JSON.parse(await file.text()),
-        readText(data, "campaignId"),
-        replaceExisting,
-      );
-    } catch (error) {
-      this.message = { kind: "error", text: formatError(error) };
-      this.render();
-    }
-  }
-
-  private async importCurrentCampaign(): Promise<void> {
-    const loader = this.runtime.loadCurrentCampaignSource;
-    const form = this.root.querySelector<HTMLFormElement>("#import-form");
-    if (!loader || !form) return;
-
-    try {
-      const data = new FormData(form);
-      const replaceExisting = data.get("replaceExisting") === "on";
-      if (this.snapshot !== null && !replaceExisting) {
-        throw new Error("Para reemplazar la campaña v2 tenés que confirmarlo explícitamente.");
-      }
-      await this.persistImportedCampaign(
-        await loader(),
-        readText(data, "campaignId"),
-        replaceExisting,
-      );
-    } catch (error) {
-      this.message = { kind: "error", text: formatError(error) };
-      this.render();
-    }
-  }
-
-  private async persistImportedCampaign(
-    input: unknown,
-    campaignId: string,
-    replaceExisting: boolean,
-  ): Promise<void> {
-    const result = await this.application.importCampaign({
-      input,
-      campaignId,
-      replaceExisting,
-    });
-    this.snapshot = result.snapshot;
-    await this.refreshStorageUsage();
-    this.selectedCharacterId = Object.values(result.snapshot.campaign.characters)[0]?.id ?? null;
-    this.message = {
-      kind: "success",
-      text: `Importación completa: ${result.report.migratedCharacters} personajes, ${result.report.generatedEntityIds} identificadores generados.`,
-    };
-    this.render();
   }
 
   private async saveCharacter(event: SubmitEvent): Promise<void> {

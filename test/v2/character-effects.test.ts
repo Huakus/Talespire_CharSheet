@@ -1,28 +1,32 @@
 import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
-
-const migratedAt = "2026-07-26T12:00:00.000Z";
-const legacy = {
-  characters: {
-    Hero: {
-      spellData: {
-        "1st-level": { spells: [{ name: "Absorb Elements*", prepared: true }], slots: [false] },
-      },
-      inventoryData: { equipment: [{ name: "Ring", quantity: 1, equipment_category: { index: "wondrous-item" } }] },
-      groupTraitData: [{
-        "group-title": "Features",
-        traits: [{ traitName: "Aura", traitDescription: "An aura.", numberOfUses: 0 }],
-      }],
-    },
-  },
-};
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 describe("character colors and activatable effects", () => {
   it("persists color and independent spell, inventory and trait effects", async () => {
-    const application = new CampaignApplication(new InMemoryCampaignRepository());
-    const imported = await application.importCampaign({ input: legacy, campaignId: "effects", migratedAt });
-    const original = Object.values(imported.snapshot.campaign.characters)[0]!;
+    const repository = new InMemoryCampaignRepository();
+    const application = new CampaignApplication(repository);
+    const original = createTestCharacter({ configure(character) {
+      character.spellcasting.spells = [{
+        id: "spell-absorb-elements", order: 0, name: "Absorb Elements", level: 1,
+        prepared: true, definition: null, effect: { description: "", active: false },
+      }];
+      character.inventory = [{
+        id: "item-ring", order: 0, group: "equipment", name: "Ring", quantity: 1,
+        unitWeight: 0, cost: { quantity: 0, unit: "" }, category: "wondrous-item",
+        description: "", properties: [], equipped: false, attuned: false,
+        requiresAttunement: false, usable: false, consumable: false, charges: null,
+        armor: null, weapon: null, bonuses: [], effect: { description: "", active: false }, catalog: null,
+      }];
+      character.traits = [{
+        id: "trait-group-features", order: 0, title: "Features", collapsed: false,
+        traits: [{ id: "trait-aura", order: 0, name: "Aura", description: "An aura.", collapsed: false,
+          uses: { maximum: 0, used: 0, reset: "none" }, adjustment: null,
+          effect: { description: "", active: false } }],
+      }];
+    } });
+    const initial = await repository.save(createTestCampaign({ id: "effects", character: original }), { kind: "empty" });
     expect(original.color).toMatch(/^#[0-9a-f]{6}$/i);
     expect(original.spellcasting.spells[0]?.effect).toEqual({ description: "", active: false });
     expect(original.inventory[0]?.effect).toEqual({ description: "", active: false });
@@ -31,7 +35,7 @@ describe("character colors and activatable effects", () => {
     const colored = await application.editCharacter({
       characterId: original.id,
       expectedCharacterRevision: original.revision,
-      expectedCampaignChecksum: imported.snapshot.checksum,
+      expectedCampaignChecksum: initial.checksum,
       patch: { color: "#336699" },
       updatedAt: "2026-07-26T12:01:00.000Z",
     });

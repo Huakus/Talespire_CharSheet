@@ -1,65 +1,40 @@
 import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import { projectInventory } from "../../src/domain/character/character-projection";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
-const migratedAt = "2026-07-25T18:00:00.000Z";
-const legacy = {
-  characters: {
-    Hero: {
-      characterLevel: "4",
-      strengthScore: "10",
-      dexterityScore: "16",
-      playerWeaponProficiency: ["Simple"],
-      inventoryData: {
-        equipment: [
-          {
-            name: "Dagger",
-            uniqueId: "legacy-dagger",
-            quantity: 2,
-            weight: 2,
-            cost: "2 gp",
-            equipped: false,
-            equipment_category: { index: "weapon" },
-            weapon_category: "Simple",
-            weapon_range: "Melee",
-            damage: {
-              damage_dice: "1d4",
-              damage_type: { name: "Piercing" },
-            },
-            range: { normal: 5 },
-            properties: [{ index: "finesse", name: "Finesse" }],
-          },
-          {
-            name: "Ring",
-            uniqueId: "legacy-ring",
-            quantity: 1,
-            weight: 0.2,
-            cost: { quantity: 50, unit: "gp" },
-            equipped: true,
-            attuned: true,
-            equipment_category: { index: "wondrous-item" },
-            properties: [{ index: "attunement" }],
-            hasCharges: true,
-            currentCharges: 2,
-            chargesOptions: { maxCharges: 3, chargeReset: "long-rest" },
-          },
-        ],
-        backpack: [],
+function characterFixture() {
+  return createTestCharacter({ configure(character) {
+    character.identity.level = 4;
+    character.abilities.dexterity = 16;
+    character.proficiencies.weapons = ["Simple"];
+    character.inventory = [
+      {
+        id: "item-dagger", order: 0, group: "equipment", name: "Dagger", quantity: 2,
+        unitWeight: 1, cost: { quantity: 2, unit: "gp" }, category: "weapon",
+        description: "", properties: ["finesse"], equipped: false, attuned: false,
+        requiresAttunement: false, usable: false, consumable: false, charges: null, armor: null,
+        weapon: { category: "Simple", range: "Melee", normalRange: 5, longRange: null,
+          damageExpression: "1d4", versatileDamageExpression: "", damageType: "Piercing",
+          attackBonus: 0, damageBonus: 0 },
+        bonuses: [], effect: { description: "", active: false }, catalog: null,
       },
-    },
-  },
-};
+      {
+        id: "item-ring", order: 1, group: "equipment", name: "Ring", quantity: 1,
+        unitWeight: 0.2, cost: { quantity: 50, unit: "gp" }, category: "wondrous-item",
+        description: "", properties: ["attunement"], equipped: true, attuned: true,
+        requiresAttunement: true, usable: true, consumable: false,
+        charges: { current: 2, maximum: 3, reset: "long-rest" }, armor: null, weapon: null,
+        bonuses: [], effect: { description: "", active: false }, catalog: null,
+      },
+    ];
+  } });
+}
 
 describe("inventory", () => {
-  it("migrates unit weight, costs, equipment metadata and charges", async () => {
-    const preview = await previewCampaignMigration(legacy, {
-      campaignId: "inventory-migration",
-      migratedAt,
-    });
-    if (!preview.ok) throw new Error(preview.issues.join("; "));
-    const character = Object.values(preview.data.characters)[0]!;
+  it("stores unit weight, costs, equipment metadata and charges", () => {
+    const character = characterFixture();
     const dagger = character.inventory.find((item) => item.name === "Dagger")!;
     const ring = character.inventory.find((item) => item.name === "Ring")!;
 
@@ -79,12 +54,8 @@ describe("inventory", () => {
   it("supports CRUD, use, attunement and weapon action linkage atomically", async () => {
     const repository = new InMemoryCampaignRepository();
     const application = new CampaignApplication(repository);
-    const imported = await application.importCampaign({
-      input: legacy,
-      campaignId: "inventory-commands",
-      migratedAt,
-    });
-    const character = Object.values(imported.snapshot.campaign.characters)[0]!;
+    const character = characterFixture();
+    const initial = await repository.save(createTestCampaign({ id: "inventory-commands", character }), { kind: "empty" });
     const dagger = character.inventory.find((item) => item.name === "Dagger")!;
     const ring = character.inventory.find((item) => item.name === "Ring")!;
 
@@ -93,7 +64,7 @@ describe("inventory", () => {
       itemId: dagger.id,
       value: true,
       expectedCharacterRevision: character.revision,
-      expectedCampaignChecksum: imported.snapshot.checksum,
+      expectedCampaignChecksum: initial.checksum,
       updatedAt: "2026-07-25T18:01:00.000Z",
     });
     const afterEquip = equipped.campaign.characters[character.id]!;
@@ -165,15 +136,15 @@ describe("inventory", () => {
   it("only uses non-consumable objects while they are equipped", async () => {
     const repository = new InMemoryCampaignRepository();
     const application = new CampaignApplication(repository);
-    const imported = await application.importCampaign({ input: legacy, campaignId: "inventory-use", migratedAt });
-    const character = Object.values(imported.snapshot.campaign.characters)[0]!;
+    const character = characterFixture();
+    const initial = await repository.save(createTestCampaign({ id: "inventory-use", character }), { kind: "empty" });
     const ring = character.inventory.find((item) => item.name === "Ring")!;
     const unequipped = await application.setInventoryItemEquipped({
       characterId: character.id,
       itemId: ring.id,
       value: false,
       expectedCharacterRevision: character.revision,
-      expectedCampaignChecksum: imported.snapshot.checksum,
+      expectedCampaignChecksum: initial.checksum,
       updatedAt: "2026-07-25T18:04:00.000Z",
     });
     const current = unequipped.campaign.characters[character.id]!;

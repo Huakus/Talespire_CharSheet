@@ -61,8 +61,10 @@ export async function decodeCampaignEnvelope(
 
   const normalized = CampaignV2Schema.safeParse(parsed.data.campaign);
   if (!normalized.success) {
+    const issue = normalized.error.issues[0];
+    const location = issue?.path.length ? `${issue.path.join(".")}: ` : "";
     throw new CampaignRepositoryCorruptionError(
-      `Stored campaign is invalid: ${normalized.error.issues[0]?.message ?? "unknown error"}`,
+      `Stored campaign is invalid: ${location}${issue?.message ?? "unknown error"}`,
     );
   }
   const rawCharacters = parsed.data.campaign.characters;

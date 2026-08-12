@@ -75,7 +75,7 @@ describe("TaleSpire player collaboration", () => {
     expect(JSON.parse(sent.at(-1)!.message)).toMatchObject({ t: "ack", e: encounter.id, r: 4, c: transfer.checksum });
   });
 
-  it("discovers the GM, sends legacy-compatible requests and receives initiative state", async () => {
+  it("discovers the GM and sends versioned encounter and initiative messages", async () => {
     const sent: { message: string; target: string }[] = [];
     const collaboration = new TaleSpirePlayerCollaboration({
       sync: { send: async (message, target) => { sent.push({ message, target }); } },
@@ -89,27 +89,16 @@ describe("TaleSpire player collaboration", () => {
     await collaboration.requestInitiativeList();
     expect(sent[0]?.target).toBe("gm");
     expect(JSON.parse(sent[0]!.message)).toMatchObject({
-      type: "request-init-list",
-      playerId: { id: "player" },
+      protocol: "talespire-5e-toolset-gm",
+      version: 1,
+      payload: { type: "player/request-encounter", knownRevision: null },
     });
     await collaboration.sendInitiative(19, "chr_11111111111111111111111111111111");
     expect(JSON.parse(sent[1]!.message)).toMatchObject({
-      type: "update-init",
-      data: { Initiative: 19, CharacterId: "chr_11111111111111111111111111111111" },
+      protocol: "talespire-5e-toolset-gm",
+      version: 1,
+      payload: { type: "player/set-character-initiative", initiative: 19, characterId: "chr_11111111111111111111111111111111" },
     });
-
-    const observed: unknown[] = [];
-    collaboration.subscribe((state) => observed.push(state));
-    await collaboration.handleSyncEvent({
-      payload: {
-        fromClient: { id: "gm" },
-        str: JSON.stringify({ type: "player-init-list", data: [{ n: "Hero", p: 1, v: 1, b: 0 }] }),
-      },
-    });
-    await collaboration.handleSyncEvent({
-      payload: { fromClient: { id: "gm" }, str: JSON.stringify({ type: "player-init-round", data: 3 }) },
-    });
-    expect(observed.at(-1)).toMatchObject({ round: 3, entries: [{ name: "Hero", player: true }] });
   });
 
   it("discovers peers and confirms the exact payload size with a targeted acknowledgement", async () => {

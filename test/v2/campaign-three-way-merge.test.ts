@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
-import { previewCampaignMigration } from "../../src/application/migration/migrate-campaign-v1";
 import type { CampaignV2, CharacterV2 } from "../../src/domain/character/character-v2";
 import { mergeCampaignChanges } from "../../src/infrastructure/remote/campaign-three-way-merge";
 import {
@@ -14,22 +13,18 @@ import {
   type SupabaseCampaignDocumentClient,
 } from "../../src/infrastructure/remote/supabase-campaign-document-client";
 import { SupabaseCampaignRepository } from "../../src/infrastructure/remote/supabase-campaign-repository";
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 const baseTime = "2026-08-07T12:00:00.000Z";
 const localTime = "2026-08-07T12:01:00.000Z";
 const remoteTime = "2026-08-07T12:02:00.000Z";
 
 async function fixture(): Promise<{ campaign: CampaignV2; adler: CharacterV2; delerion: CharacterV2 }> {
-  const preview = await previewCampaignMigration(
-    { characters: { Adler: {}, Delerion: {} } },
-    { campaignId: "granular-merge", migratedAt: baseTime },
-  );
-  if (!preview.ok) throw new Error(preview.issues.join("; "));
-  const characters = Object.values(preview.data.characters);
-  const adler = characters.find((character) => character.name === "Adler");
-  const delerion = characters.find((character) => character.name === "Delerion");
-  if (!adler || !delerion) throw new Error("Missing merge fixture characters");
-  return { campaign: preview.data, adler, delerion };
+  const adler = createTestCharacter({ id: "character-adler", name: "Adler", createdAt: baseTime });
+  const delerion = createTestCharacter({ id: "character-delerion", name: "Delerion", createdAt: baseTime });
+  const campaign = createTestCampaign({ id: "granular-merge", createdAt: baseTime, character: adler });
+  campaign.characters[delerion.id] = delerion;
+  return { campaign, adler, delerion };
 }
 
 function updateCharacter(

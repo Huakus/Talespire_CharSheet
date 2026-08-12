@@ -20,7 +20,6 @@ import { resolveTaleSpireClientRole } from "./infrastructure/talespire/talespire
 import { EncounterApplication } from "./application/encounter/encounter-application";
 import { GmApp } from "./ui/gm-app";
 import { TaleSpireGmCollaboration } from "./infrastructure/talespire/talespire-gm-collaboration";
-import { monsterDefinitions } from "./domain/monsters/monster-catalog";
 import { GmWorkspaceApplication } from "./application/gm/gm-workspace-application";
 import { mountBackendStatus } from "./ui/backend-status";
 import { configureRemotePersistence } from "./ui/remote-persistence-setup";
@@ -80,7 +79,7 @@ async function startBrowserDevelopment(): Promise<void> {
     storageLabel: "Almacenamiento de desarrollo del navegador",
     storageEventKey: primaryRepository.storageKey,
     diceRoller: new BrowserDiceRoller(),
-    ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), contentCatalogIsComplete: true, saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null) } : {}),
+    ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null) } : {}),
   }).start().catch(reportStartupFailure);
 }
 
@@ -114,9 +113,8 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     const gmWorkspace = new GmWorkspaceApplication(repository);
     void new GmApp(appRoot, new EncounterApplication(repository), {
       diceRoller,
-      contentCatalogIsComplete: campaignContent !== null,
       ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
-      monsters: campaignContent ? [] : monsterDefinitions(),
+      monsters: [],
       ...(campaignContent ? {
         loadGmContent: () => campaignContent.load(),
         loadCustomMonsters: async () => (await campaignContent.load()).monsters,
@@ -159,7 +157,6 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   }
   void new BrowserApp(appRoot, application, {
     storageLabel: "Almacenamiento de campaña de TaleSpire",
-    loadCurrentCampaignSource: () => primaryRepository.readLegacySource(),
     loadStorageUsage: () => primaryRepository.getStorageUsage(),
     diceRoller,
     ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
@@ -180,7 +177,6 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     ...(campaignContent
       ? {
           loadCustomContent: () => campaignContent.load(),
-          contentCatalogIsComplete: true,
           saveCustomSpell: (definition: Parameters<typeof campaignContent.saveSpell>[0]) => campaignContent.saveSpell(definition),
           saveCustomEquipment: (definition: Parameters<typeof campaignContent.saveEquipment>[0]) => campaignContent.saveEquipment(definition),
           saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null),

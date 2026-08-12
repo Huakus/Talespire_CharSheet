@@ -4,7 +4,6 @@ import { CampaignV2Schema } from "../../domain/character/character-v2";
 import { EncounterSchema, type Encounter, type EncounterCombatant } from "../../domain/encounter/encounter-model";
 import { applyEncounterCommand, type EncounterCommand, type EncounterCommandResult } from "../../domain/encounter/encounter";
 import { createRandomId } from "../../shared/id";
-import { migrateLegacyEncounters } from "../migration/migrate-encounters-v1";
 import { createDeterministicId } from "../../shared/id";
 import type { CharacterSummary } from "../../domain/encounter/encounter-protocol";
 import { GmWorkspaceSchema, type GmWorkspace } from "../../domain/gm/gm-workspace";
@@ -42,20 +41,6 @@ export class EncounterApplication {
 
   loadCampaign(): Promise<CampaignSnapshot | null> {
     return this.repository.load();
-  }
-
-  async migratePreservedLegacyEncounters(migratedAt = new Date().toISOString()): Promise<CampaignSnapshot | null> {
-    const current = await this.repository.load();
-    if (!current || Object.keys(current.campaign.encounters).length > 0 || current.campaign.legacy.encounterData === null) return current;
-    const encounters = await migrateLegacyEncounters(current.campaign.id, current.campaign.legacy.encounterData, migratedAt);
-    if (!Object.keys(encounters).length) return current;
-    const campaign = CampaignV2Schema.parse({
-      ...current.campaign,
-      revision: current.campaign.revision + 1,
-      encounters,
-      metadata: { ...current.campaign.metadata, updatedAt: migratedAt },
-    });
-    return this.repository.save(campaign, { kind: "checksum", checksum: current.checksum });
   }
 
   async createEncounter(name: string, expectedCampaignChecksum: string, createdAt = new Date().toISOString()): Promise<CampaignSnapshot> {

@@ -7,11 +7,6 @@
   "scripts": {
     "dev:v2": "vite --open /v2.html",
     "build:v2": "vite build",
-    "backend:start": "cross-env SUPABASE_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 supabase start",
-    "backend:stop": "cross-env SUPABASE_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 supabase stop",
-    "backend:status": "cross-env SUPABASE_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 supabase status",
-    "backend:migrate": "cross-env SUPABASE_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 supabase migration up --local",
-    "backend:reset": "cross-env SUPABASE_TELEMETRY_DISABLED=1 DO_NOT_TRACK=1 supabase db reset",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:v2",
     "test:v2": "vitest run test/v2",
@@ -25,8 +20,6 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "cross-env": "^10.1.0",
-    "supabase": "^2.111.0",
     "typescript": "^7.0.2",
     "vite": "^8.1.5",
     "vitest": "^4.1.10"

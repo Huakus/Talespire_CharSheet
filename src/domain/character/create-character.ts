@@ -49,8 +49,6 @@ export function createCharacter(
       ability: null, selectedLevel: null, levels: {}, showUpcast: false,
       attackBonus: 0, saveDcBonus: 0, favoriteSpells: [], spells: [], slots: createDefaultSpellSlots(),
     },
-    collections: { conditions: [], actions: [], spells: [], inventory: [], traits: [], notes: [], extras: [] },
-    legacy: { sourceKey: name, unmapped: {} },
-    metadata: { createdAt, updatedAt: createdAt, migratedFrom: "native" },
+    metadata: { createdAt, updatedAt: createdAt },
   });
 }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { STABLE_ID_PATTERN } from "../../shared/id";
-import { JsonObjectSchema } from "../../shared/json";
 import { ActivatableEffectSchema } from "./character-effect-model";
+import { CatalogMetadataSchema } from "../content/catalog-metadata";
 
 export const SpellcastingAbilitySchema = z.enum([
   "strength",
@@ -35,7 +35,7 @@ export const SpellDefinitionSchema = z.object({
   addAbilityModifier: z.boolean(),
   damageType: z.string(),
   year: z.string(),
-  legacyData: JsonObjectSchema,
+  catalog: CatalogMetadataSchema.nullable().default(null),
 });
 
 export const CharacterSpellV2Schema = z.object({
@@ -44,7 +44,6 @@ export const CharacterSpellV2Schema = z.object({
   name: z.string().min(1),
   level: SpellLevelSchema,
   prepared: z.boolean(),
-  source: z.enum(["bundled", "custom", "legacy-unresolved"]),
   definition: SpellDefinitionSchema.nullable(),
   effect: ActivatableEffectSchema,
 });

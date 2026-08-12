@@ -1,40 +1,37 @@
-import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 import {
-  CampaignAlreadyExistsError,
   CampaignApplication,
 } from "../../src/application/campaign/campaign-application";
 import { CampaignRepositoryConflictError } from "../../src/application/ports/campaign-repository";
 import { CharacterRevisionConflictError } from "../../src/domain/character/edit-character";
 import { currencyFromCopper, currencyTotalInCopper } from "../../src/domain/character/character-currency";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
+import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
-const fixtureUrl = new URL(
-  "../fixtures/legacy/campaign-storage-v1.anonymized.json",
-  import.meta.url,
-);
-
-async function legacyFixture(): Promise<unknown> {
-  return JSON.parse(await readFile(fixtureUrl, "utf8"));
-}
-
-async function importedApplication(): Promise<{
+async function applicationFixture(): Promise<{
   application: CampaignApplication;
   repository: InMemoryCampaignRepository;
 }> {
   const repository = new InMemoryCampaignRepository();
   const application = new CampaignApplication(repository);
-  await application.importCampaign({
-    input: await legacyFixture(),
-    campaignId: "test-campaign",
-    migratedAt: "2026-07-25T12:00:00.000Z",
-  });
+  const character = createTestCharacter({ configure(value) {
+    value.combat.hitPoints = { current: 20, maximum: 20, temporary: 2 };
+    value.inventory = [{
+      id: "item-test", order: 0, group: "Equipo", name: "Daga", quantity: 1,
+      unitWeight: 1, cost: { quantity: 2, unit: "gp" }, category: "weapon",
+      description: "", properties: [], equipped: false, attuned: false,
+      requiresAttunement: false, usable: false, consumable: false, charges: null,
+      armor: null, weapon: null, bonuses: [], effect: { description: "", active: false },
+      catalog: null,
+    }];
+  } });
+  await repository.save(createTestCampaign({ id: "test-campaign", character }), { kind: "empty" });
   return { application, repository };
 }
 
 describe("CampaignApplication vertical slice", () => {
-  it("imports, loads, edits and persists one character", async () => {
-    const { application } = await importedApplication();
+  it("loads, edits and persists one character", async () => {
+    const { application } = await applicationFixture();
     const before = await application.loadCampaign();
     expect(before).not.toBeNull();
     if (before === null) return;
@@ -69,9 +66,9 @@ describe("CampaignApplication vertical slice", () => {
   });
 
   it("rejects a stale campaign checksum without losing the winning edit", async () => {
-    const { application } = await importedApplication();
+    const { application } = await applicationFixture();
     const sharedSnapshot = await application.loadCampaign();
-    if (sharedSnapshot === null) throw new Error("fixture was not imported");
+    if (sharedSnapshot === null) throw new Error("fixture was not created");
     const character = Object.values(sharedSnapshot.campaign.characters)[0];
     if (character === undefined) throw new Error("fixture has no characters");
 
@@ -97,9 +94,9 @@ describe("CampaignApplication vertical slice", () => {
   });
 
   it("rejects a stale character revision", async () => {
-    const { application } = await importedApplication();
+    const { application } = await applicationFixture();
     const snapshot = await application.loadCampaign();
-    if (snapshot === null) throw new Error("fixture was not imported");
+    if (snapshot === null) throw new Error("fixture was not created");
     const character = Object.values(snapshot.campaign.characters)[0];
     if (character === undefined) throw new Error("fixture has no characters");
 
@@ -113,20 +110,10 @@ describe("CampaignApplication vertical slice", () => {
     ).rejects.toBeInstanceOf(CharacterRevisionConflictError);
   });
 
-  it("requires explicit replacement when a campaign exists", async () => {
-    const { application } = await importedApplication();
-    await expect(
-      application.importCampaign({
-        input: await legacyFixture(),
-        campaignId: "replacement",
-      }),
-    ).rejects.toBeInstanceOf(CampaignAlreadyExistsError);
-  });
-
   it("persists resource commands through the same optimistic boundary", async () => {
-    const { application } = await importedApplication();
+    const { application } = await applicationFixture();
     const before = await application.loadCampaign();
-    if (!before) throw new Error("fixture was not imported");
+    if (!before) throw new Error("fixture was not created");
     const character = Object.values(before.campaign.characters)[0];
     if (!character) throw new Error("fixture has no characters");
 
@@ -149,9 +136,9 @@ describe("CampaignApplication vertical slice", () => {
   });
 
   it("persists normalized currency adjustments through the optimistic boundary", async () => {
-    const { application } = await importedApplication();
+    const { application } = await applicationFixture();
     const before = await application.loadCampaign();
-    if (!before) throw new Error("fixture was not imported");
+    if (!before) throw new Error("fixture was not created");
     const character = Object.values(before.campaign.characters)[0];
     if (!character) throw new Error("fixture has no characters");
 
@@ -169,9 +156,9 @@ describe("CampaignApplication vertical slice", () => {
   });
 
   it("restores a previous character state without rolling revisions backwards", async () => {
-    const { application } = await importedApplication();
+    const { application } = await applicationFixture();
     const before = await application.loadCampaign();
-    if (!before) throw new Error("fixture was not imported");
+    if (!before) throw new Error("fixture was not created");
     const character = Object.values(before.campaign.characters)[0];
     if (!character) throw new Error("fixture has no characters");
 
@@ -199,9 +186,9 @@ describe("CampaignApplication vertical slice", () => {
   });
 
   it("transfers currency and inventory atomically between two characters", async () => {
-    const { application } = await importedApplication();
+    const { application } = await applicationFixture();
     const initial = await application.loadCampaign();
-    if (!initial) throw new Error("fixture was not imported");
+    if (!initial) throw new Error("fixture was not created");
     const originalSource = Object.values(initial.campaign.characters)[0];
     if (!originalSource) throw new Error("fixture has no characters");
 

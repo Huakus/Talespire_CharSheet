@@ -1,5 +1,4 @@
 import type { Encounter } from "../../domain/encounter/encounter-model";
-import { isBloodied, orderedCombatants } from "../../domain/encounter/encounter";
 import {
   createGmProtocolMessage,
   parseGmProtocolMessage,
@@ -108,30 +107,6 @@ function eventPayload(event: unknown): { from: ClientFragment; raw: string; valu
   }
 }
 
-function legacySummary(value: Record<string, unknown>, clientId: string): ReceivedCharacterSummary | null {
-  if (value.type !== "request-stats") return null;
-  const data = value.data;
-  if (data === null || typeof data !== "object") return null;
-  const hp = Reflect.get(data, "hp");
-  const hpData = hp !== null && typeof hp === "object" ? hp : {};
-  const conditionKeys = Reflect.get(data, "conditionKeys");
-  const characterName = String(Reflect.get(data, "characterName") ?? "Jugador");
-  return {
-    clientId,
-    summary: {
-      characterId: "chr_00000000000000000000000000000000",
-      name: characterName,
-      currentHitPoints: Math.max(0, Number(Reflect.get(hpData, "current")) || 0),
-      maximumHitPoints: Math.max(0, Number(Reflect.get(hpData, "max")) || 0),
-      temporaryHitPoints: Math.max(0, Number(Reflect.get(data, "tempHp")) || 0),
-      armorClass: Math.max(0, Number(Reflect.get(data, "ac")) || 0),
-      passivePerception: Number(Reflect.get(data, "passivePerception")) || 0,
-      spellSaveDc: Number(Reflect.get(data, "spellSave")) || 0,
-      conditionKeys: Array.isArray(conditionKeys) ? conditionKeys.map(String) : [],
-    },
-  };
-}
-
 export class TaleSpireGmCollaboration {
   private me: ClientFragment | null = null;
   private players: TaleSpireGmPlayer[] = [];
@@ -196,18 +171,7 @@ export class TaleSpireGmCollaboration {
 
   async publishEncounter(encounter: Encounter): Promise<void> {
     this.latestEncounter = structuredClone(encounter);
-    const ordered = orderedCombatants(encounter);
-    const activeTurn = ordered.findIndex((combatant) => combatant.id === encounter.activeCombatantId);
-    const legacyList = ordered.map((combatant) => ({
-      n: combatant.kind === "player" ? combatant.name : "",
-      p: combatant.kind === "player" ? 1 : 0,
-      v: combatant.visibleToPlayers ? 1 : 0,
-      b: combatant.kind === "monster" && isBloodied(combatant) ? 1 : 0,
-    }));
     await Promise.allSettled([
-      this.api.sync.send(JSON.stringify({ type: "player-init-list", data: legacyList }), "board"),
-      this.api.sync.send(JSON.stringify({ type: "player-init-turn", data: activeTurn < 0 ? 0 : activeTurn }), "board"),
-      this.api.sync.send(JSON.stringify({ type: "player-init-round", data: encounter.round }), "board"),
       checksumJson(JSON.parse(JSON.stringify(projectPublicEncounter(encounter)))).then((checksum) => this.api.sync.send(JSON.stringify(createGmProtocolMessage({
         type: "gm/encounter-changed",
         encounterId: encounter.id,
@@ -261,18 +225,9 @@ export class TaleSpireGmCollaboration {
       this.summaryListener?.({ clientId: incoming.from.id, summary: protocol.payload.summary });
       return;
     }
-    const legacy = legacySummary(incoming.value, incoming.from.id);
-    if (legacy) {
-      this.summaryListener?.(legacy);
-      return;
-    }
-    if (incoming.value.type === "update-init") {
-      const data = incoming.value.data;
-      const initiative = data !== null && typeof data === "object" ? Number(Reflect.get(data, "Initiative")) : NaN;
-      const rawCharacterId = data !== null && typeof data === "object" ? Reflect.get(data, "CharacterId") : null;
-      const characterId = typeof rawCharacterId === "string" && rawCharacterId.trim() ? rawCharacterId.trim() : null;
-      if (Number.isSafeInteger(initiative)) this.initiativeListener?.(incoming.from.id, initiative, characterId);
-    } else if (incoming.value.type === "request-init-list" && this.latestEncounter) {
+    if (protocol?.payload.type === "player/set-character-initiative") {
+      this.initiativeListener?.(incoming.from.id, protocol.payload.initiative, protocol.payload.characterId);
+    } else if (protocol?.payload.type === "player/request-encounter" && this.latestEncounter) {
       await this.publishEncounter(this.latestEncounter);
     }
   }

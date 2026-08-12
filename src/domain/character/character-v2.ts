@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { STABLE_ID_PATTERN } from "../../shared/id";
-import { JsonObjectSchema, JsonValueSchema } from "../../shared/json";
+import { JsonValueSchema } from "../../shared/json";
 import {
   CharacterChecksSchema,
   createDefaultCharacterChecks,
@@ -28,23 +28,6 @@ export const ConditionV2Schema = z.object({
   label: z.string().min(1),
   level: z.number().int().positive().nullable(),
   addedAt: IsoTimestampSchema,
-});
-
-export const LegacyEntityV2Schema = z.object({
-  id: StableIdSchema,
-  order: z.number().int().nonnegative(),
-  group: z.string().nullable(),
-  legacyId: z.string().nullable(),
-  data: JsonObjectSchema,
-});
-
-export const LegacyGroupV2Schema = z.object({
-  id: StableIdSchema,
-  order: z.number().int().nonnegative(),
-  title: z.string(),
-  collapsed: z.boolean(),
-  data: JsonObjectSchema,
-  items: z.array(LegacyEntityV2Schema),
 });
 
 export const CharacterV2Schema = z.object({
@@ -141,23 +124,9 @@ export const CharacterV2Schema = z.object({
     spells: z.array(CharacterSpellV2Schema).default([]),
     slots: SpellSlotsSchema,
   }),
-  collections: z.object({
-    conditions: z.array(LegacyEntityV2Schema),
-    actions: z.array(LegacyEntityV2Schema),
-    spells: z.array(LegacyEntityV2Schema),
-    inventory: z.array(LegacyEntityV2Schema),
-    traits: z.array(LegacyGroupV2Schema),
-    notes: z.array(LegacyGroupV2Schema),
-    extras: z.array(LegacyEntityV2Schema),
-  }),
-  legacy: z.object({
-    sourceKey: z.string(),
-    unmapped: JsonObjectSchema,
-  }),
   metadata: z.object({
     createdAt: IsoTimestampSchema,
     updatedAt: IsoTimestampSchema,
-    migratedFrom: z.enum(["v1", "native"]),
   }),
 });
 
@@ -168,20 +137,12 @@ export const CampaignV2Schema = z.object({
   characters: z.record(StableIdSchema, CharacterV2Schema),
   encounters: z.record(StableIdSchema, EncounterSchema).default({}),
   gm: GmWorkspaceSchema.default({ noteGroups: [], randomTables: [], googleDocsUrl: "" }),
-  legacy: z.object({
-    dmNotes: JsonValueSchema.nullable(),
-    encounterData: JsonValueSchema.nullable(),
-    unmapped: JsonObjectSchema,
-  }),
   metadata: z.object({
     createdAt: IsoTimestampSchema,
     updatedAt: IsoTimestampSchema,
-    migratedFrom: z.enum(["v1", "native"]),
   }),
 });
 
-export type LegacyEntityV2 = z.infer<typeof LegacyEntityV2Schema>;
-export type LegacyGroupV2 = z.infer<typeof LegacyGroupV2Schema>;
 export type ConditionV2 = z.infer<typeof ConditionV2Schema>;
 export type CharacterV2 = z.infer<typeof CharacterV2Schema>;
 export type CampaignV2 = z.infer<typeof CampaignV2Schema>;

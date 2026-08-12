@@ -1,5 +1,3 @@
-import englishEquipment from "../../../equipment-eng.json";
-import spanishEquipment from "../../../equipment-es.json";
 import {
   CharacterInventoryItemDraftSchema,
   type CharacterInventoryItemDraft,
@@ -190,23 +188,6 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
     } : null,
     bonuses,
     effect: { description: "", active: false },
-    legacyData: data,
+    catalog: null,
   };
-}
-
-const englishDefinitions = (englishEquipment as unknown[]).map(normalizeEquipmentDefinition);
-const spanishDefinitions = (spanishEquipment as unknown[]).map(normalizeEquipmentDefinition);
-const definitions = [...englishDefinitions, ...spanishDefinitions];
-
-export function allEquipmentDefinitions(): readonly EquipmentCatalogDraft[] {
-  return definitions;
-}
-
-export function equipmentDefinitionsForLanguage(language: "eng" | "es" | "both"): readonly EquipmentCatalogDraft[] {
-  return language === "eng" ? englishDefinitions : language === "es" ? spanishDefinitions : definitions;
-}
-
-export function findEquipmentDefinitionByName(name: string): EquipmentCatalogDraft | null {
-  const normalized = name.trim().toLocaleLowerCase();
-  return definitions.find((item) => item.name.toLocaleLowerCase() === normalized) ?? null;
 }
