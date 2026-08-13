@@ -16,7 +16,7 @@ import { createRandomId } from "../shared/id";
 import { renderCheckboxGroup } from "./checkbox-group";
 import { inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
 
-export type GmSection = "encounter" | "content" | "notes" | "tools";
+export type GmSection = "encounter" | "content" | "lore" | "notes" | "tools";
 export type GmContentSection = "spell" | "equipment" | "shop";
 export type GmToolSection = "checklist" | "tables" | "travel" | "npc" | "reference" | "docs";
 

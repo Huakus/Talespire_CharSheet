@@ -20,6 +20,8 @@ import {
 } from "./app-chrome";
 import { bindViewportConstrainedDetails } from "./floating-panel";
 import { renderCheckboxGroup } from "./checkbox-group";
+import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
+import { CampaignLoreBrowser } from "./campaign-lore-browser";
 
 export { calculateFloatingPanelPosition } from "./floating-panel";
 
@@ -42,6 +44,7 @@ export interface GmAppRuntime extends GmToolsRuntime {
   loadCustomMonsters?: () => Promise<MonsterDefinition[]>;
   saveCustomMonster?: (definition: MonsterDefinition, previousKey: string | null) => Promise<void>;
   deleteCustomMonster?: (key: string) => Promise<void>;
+  loreReader?: CampaignLoreReader;
 }
 
 function escapeHtml(value: string): string {
@@ -227,12 +230,14 @@ export class GmApp {
   private previousTaleSpireInitiativeQueue: TaleSpireNativeInitiativeQueue | null = null;
   private taleSpireInitiativeSync: Promise<void> = Promise.resolve();
   private readonly toolsPanel: GmToolsPanel;
+  private readonly loreBrowser: CampaignLoreBrowser | null;
 
   constructor(
     private readonly root: HTMLElement,
     private readonly application: EncounterApplication,
     private readonly runtime: GmAppRuntime,
   ) {
+    this.loreBrowser = runtime.loreReader ? new CampaignLoreBrowser(runtime.loreReader, () => this.render()) : null;
     const toolsRuntime: GmToolsRuntime = runtime;
     this.toolsPanel = new GmToolsPanel(
       root,
@@ -286,6 +291,7 @@ export class GmApp {
       this.taleSpireLinkedEncounterId = selected.id;
     }
     this.render();
+    void this.loreBrowser?.load();
     if (selected && this.taleSpireLinkedEncounterId === selected.id && this.runtime.getNativeInitiative) {
       try {
         const queue = await this.runtime.getNativeInitiative();
@@ -309,13 +315,16 @@ export class GmApp {
   private render(): void {
     const encounters = this.snapshot ? Object.values(this.snapshot.campaign.encounters) : [];
     const selected = this.snapshot && this.selectedEncounterId ? this.snapshot.campaign.encounters[this.selectedEncounterId] ?? null : null;
+    const sections: readonly GmSection[] = this.loreBrowser
+      ? ["encounter", "content", "lore", "notes", "tools"]
+      : ["encounter", "content", "notes", "tools"];
     this.root.innerHTML = `
       <section class="gm-shell" style="--character-color:${this.gmColor}">
         <header class="gm-header">
           <strong class="gm-header-title">Control de GM</strong>
           <div class="gm-header-controls">${this.renderActionHistoryControls()}${renderAppConnectionIndicators()}${this.renderNotificationCenter()}<details class="sheet-menu gm-menu"><summary>⋯</summary><div><button type="button" class="secondary-button" data-open-persistence ${canOpenPersistencePanel() ? "" : "disabled"}>Persistencia</button>${this.renderColorPicker()}</div></details></div>
         </header>
-        <nav class="sheet-tabs gm-section-nav">${(["encounter", "content", "notes", "tools"] as const).map((section) => `<button type="button" data-gm-section="${section}" class="sheet-tab-button ${this.activeSection === section ? "active" : ""}">${section === "encounter" ? "Encuentro" : section === "content" ? "Contenido" : section === "notes" ? "Notas" : "Herramientas"}</button>`).join("")}</nav>
+        <nav class="sheet-tabs gm-section-nav" style="--gm-section-count:${sections.length}">${sections.map((section) => `<button type="button" data-gm-section="${section}" class="sheet-tab-button ${this.activeSection === section ? "active" : ""}">${section === "encounter" ? "Encuentro" : section === "content" ? "Contenido" : section === "lore" ? "Campaña" : section === "notes" ? "Notas" : "Herramientas"}</button>`).join("")}</nav>
         ${this.activeSection === "encounter" ? `<div class="gm-encounter-management">
           <select data-action="select-encounter" aria-label="Encuentro activo" ${encounters.length ? "" : "disabled"}>
             ${encounters.length ? encounters.map((encounter) => `<option value="${encounter.id}" ${encounter.id === selected?.id ? "selected" : ""}>${escapeHtml(encounter.name)}</option>`).join("") : '<option>Sin encuentros</option>'}
@@ -334,6 +343,7 @@ export class GmApp {
           ${selected ? this.renderEncounter(selected) : '<div class="sheet-empty"><strong>No hay encuentros</strong><p>Creá uno para comenzar.</p></div>'}
         ` : '<div class="sheet-empty"><strong>No hay una campaña v2 cargada</strong><p>Importá o creá la campaña desde la hoja de personaje antes de abrir el control GM.</p></div>'}` : ""}
         ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span></div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
+        ${this.activeSection === "lore" ? this.loreBrowser?.render() ?? "" : ""}
         ${this.activeSection === "notes" && this.snapshot ? this.toolsPanel.render("notes", this.snapshot.campaign.gm) : ""}
         ${this.activeSection === "tools" && this.snapshot ? this.toolsPanel.render("tools", this.snapshot.campaign.gm) : ""}
       </section>`;
@@ -586,6 +596,7 @@ export class GmApp {
   }
 
   private bindEvents(): void {
+    this.loreBrowser?.bind(this.root);
     bindViewportConstrainedDetails(this.root, ".gm-popover", ":scope > div");
     bindViewportConstrainedDetails(this.root, ".gm-filter-group", ":scope > div");
     this.root.querySelector<HTMLButtonElement>("[data-open-persistence]")?.addEventListener("click", openPersistencePanel);

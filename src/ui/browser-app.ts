@@ -98,6 +98,8 @@ import {
   renderAppConnectionIndicators,
   subscribeAppConnectionStatus,
 } from "./app-chrome";
+import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
+import { CampaignLoreBrowser } from "./campaign-lore-browser";
 
 export interface BrowserAppRuntime {
   storageLabel: string;
@@ -124,6 +126,7 @@ export interface BrowserAppRuntime {
   saveCustomEquipment?: (definition: EquipmentCatalogDraft) => Promise<void>;
   saveShop?: (shop: GmShop, previousKey?: string | null) => Promise<void>;
   saveMonster?: (monster: MonsterDefinition, previousKey?: string | null) => Promise<void>;
+  loreReader?: CampaignLoreReader;
 }
 
 function escapeHtml(value: string): string {
@@ -259,6 +262,7 @@ type CharacterSheetTab =
   | "traits"
   | "notes"
   | "extras"
+  | "lore"
   | "initiative";
 
 const characterSheetTabs: readonly { id: CharacterSheetTab; label: string; shortLabel: string }[] = [
@@ -270,6 +274,7 @@ const characterSheetTabs: readonly { id: CharacterSheetTab; label: string; short
   { id: "traits", label: "Rasgos", shortLabel: "Rasgos" },
   { id: "notes", label: "Notas", shortLabel: "Notas" },
   { id: "extras", label: "Extras", shortLabel: "Extras" },
+  { id: "lore", label: "Campaña", shortLabel: "Lore" },
   { id: "initiative", label: "Iniciativa", shortLabel: "Iniciativa" },
 ];
 
@@ -599,6 +604,7 @@ export class BrowserApp {
   private unreadImportantNotifications = 0;
   private nextNotificationId = 1;
   private currentMessage: { kind: "success" | "error"; text: string } | null = null;
+  private readonly loreBrowser: CampaignLoreBrowser | null;
 
   private get message(): { kind: "success" | "error"; text: string } | null {
     return this.currentMessage;
@@ -621,7 +627,10 @@ export class BrowserApp {
     private readonly root: HTMLElement,
     private readonly application: CampaignApplication,
     private readonly runtime: BrowserAppRuntime,
-  ) {}
+  ) {
+    this.loreBrowser = runtime.loreReader ? new CampaignLoreBrowser(runtime.loreReader, () => this.render()) : null;
+    if (this.activeSheetTab === "lore" && !this.loreBrowser) this.activeSheetTab = "summary";
+  }
 
   async start(): Promise<void> {
     subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
@@ -664,6 +673,7 @@ export class BrowserApp {
       this.render();
     });
     await this.reload();
+    void this.loreBrowser?.load();
     void this.runtime.requestCustomContent?.().catch(() => undefined);
     if (this.runtime.storageEventKey !== undefined) {
       window.addEventListener("storage", (event) => {
@@ -888,7 +898,7 @@ export class BrowserApp {
           </div>
         </header>
         <nav class="sheet-tabs" aria-label="Secciones de la hoja">
-          ${characterSheetTabs.map((tab) => `<button type="button" data-sheet-tab="${tab.id}" class="sheet-tab-button ${this.activeSheetTab === tab.id ? "active" : ""}" aria-current="${this.activeSheetTab === tab.id ? "page" : "false"}"><span>${tab.label}</span><small>${tab.shortLabel}</small></button>`).join("")}
+          ${this.availableCharacterSheetTabs().map((tab) => `<button type="button" data-sheet-tab="${tab.id}" class="sheet-tab-button ${this.activeSheetTab === tab.id ? "active" : ""}" aria-current="${this.activeSheetTab === tab.id ? "page" : "false"}"><span>${tab.label}</span><small>${tab.shortLabel}</small></button>`).join("")}
         </nav>
         <div class="sheet-panel" data-active-sheet-tab="${this.activeSheetTab}">
           ${this.renderActiveCharacterTab(character, projection)}
@@ -1032,6 +1042,7 @@ export class BrowserApp {
     if (this.activeSheetTab === "traits") return this.sheetMode === "edit" ? this.renderTraits(character) : this.renderTraitsPlay(character);
     if (this.activeSheetTab === "notes") return this.sheetMode === "edit" ? this.renderNotes(character) : this.renderNotesPlay(character);
     if (this.activeSheetTab === "extras") return this.sheetMode === "edit" ? this.renderExtras(character) : this.renderExtrasPlay(character);
+    if (this.activeSheetTab === "lore") return this.loreBrowser?.render() ?? this.renderEmptyPanel("La biblioteca de campaña requiere una conexión con Supabase.");
     return this.renderInitiativePanel(character, projection) || this.renderEmptyPanel("La colaboración de iniciativa no está disponible en este entorno.");
   }
 
@@ -2193,6 +2204,10 @@ export class BrowserApp {
       </section>`;
   }
 
+  private availableCharacterSheetTabs(): typeof characterSheetTabs {
+    return characterSheetTabs.filter((tab) => tab.id !== "lore" || this.loreBrowser !== null);
+  }
+
   private async gainExperience(event: SubmitEvent): Promise<void> {
     event.preventDefault();
     const form = event.currentTarget;
@@ -2226,6 +2241,7 @@ export class BrowserApp {
   }
 
   private bindEvents(): void {
+    this.loreBrowser?.bind(this.root);
     bindViewportConstrainedDetails(this.root, ".level-progress-card", ":scope > form");
     bindViewportConstrainedDetails(this.root, ".player-filter-group", ":scope > div");
     this.root.querySelector<HTMLButtonElement>("[data-open-persistence]")?.addEventListener("click", openPersistencePanel);
@@ -2252,11 +2268,12 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-sheet-tab]").forEach((button) => {
       button.addEventListener("click", () => {
         const tab = button.dataset.sheetTab;
-        if (!characterSheetTabs.some((candidate) => candidate.id === tab)) return;
+        if (!this.availableCharacterSheetTabs().some((candidate) => candidate.id === tab)) return;
         this.activeSheetTab = tab as CharacterSheetTab;
         this.storeSheetPreference("sheet-tab", this.activeSheetTab);
         this.message = null;
         this.renderAfterSavingSummaryEditor();
+        if (tab === "lore") void this.loreBrowser?.load();
       });
     });
     this.root.querySelectorAll<HTMLSelectElement>("#theme").forEach((select) => {

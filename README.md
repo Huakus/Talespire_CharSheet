@@ -24,3 +24,5 @@ from Git.
 
 Campaign documents and campaign-scoped content are stored in Supabase. The
 catalog model is documented in [`docs/CAMPAIGN_CONTENT.md`](docs/CAMPAIGN_CONTENT.md).
+The read-only campaign lore browser is documented in
+[`docs/CAMPAIGN_LORE.md`](docs/CAMPAIGN_LORE.md).

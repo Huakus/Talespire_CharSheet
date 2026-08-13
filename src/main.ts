@@ -22,8 +22,7 @@ import { GmApp } from "./ui/gm-app";
 import { TaleSpireGmCollaboration } from "./infrastructure/talespire/talespire-gm-collaboration";
 import { GmWorkspaceApplication } from "./application/gm/gm-workspace-application";
 import { mountBackendStatus } from "./ui/backend-status";
-import { configureRemotePersistence } from "./ui/remote-persistence-setup";
-import type { SupabaseCampaignContentStore } from "./infrastructure/remote/supabase-campaign-content-store";
+import { configureRemotePersistence, type RemoteCampaignServices } from "./ui/remote-persistence-setup";
 
 declare global {
   interface Window {
@@ -71,14 +70,16 @@ async function startBrowserDevelopment(): Promise<void> {
     DEFAULT_CAMPAIGN_STORAGE_KEY,
     createBrowserExclusiveLock(),
   );
-  let remoteContent: SupabaseCampaignContentStore | null = null;
-  const repository = await configureRemotePersistence(primaryRepository, appRoot, (store) => { remoteContent = store; });
-  const campaignContent = remoteContent as SupabaseCampaignContentStore | null;
+  let remoteServices: RemoteCampaignServices | null = null;
+  const repository = await configureRemotePersistence(primaryRepository, appRoot, (services) => { remoteServices = services; });
+  const services = remoteServices as RemoteCampaignServices | null;
+  const campaignContent = services?.content ?? null;
   const application = new CampaignApplication(repository);
   void new BrowserApp(appRoot, application, {
     storageLabel: "Almacenamiento de desarrollo del navegador",
     storageEventKey: primaryRepository.storageKey,
     diceRoller: new BrowserDiceRoller(),
+    ...(services ? { loreReader: services.lore } : {}),
     ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null) } : {}),
   }).start().catch(reportStartupFailure);
 }
@@ -92,9 +93,10 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     undefined,
     createBrowserExclusiveLock(),
   );
-  let remoteContent: SupabaseCampaignContentStore | null = null;
-  const repository = await configureRemotePersistence(primaryRepository, appRoot, (store) => { remoteContent = store; });
-  const campaignContent = remoteContent as SupabaseCampaignContentStore | null;
+  let remoteServices: RemoteCampaignServices | null = null;
+  const repository = await configureRemotePersistence(primaryRepository, appRoot, (services) => { remoteServices = services; });
+  const services = remoteServices as RemoteCampaignServices | null;
+  const campaignContent = services?.content ?? null;
   const application = new CampaignApplication(repository);
   const clientRole = api.clients ? await resolveTaleSpireClientRole(api.clients) : "player";
   const diceRoller = api.dice ? new TaleSpireDiceRoller(api.dice) : new BrowserDiceRoller();
@@ -113,6 +115,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     const gmWorkspace = new GmWorkspaceApplication(repository);
     void new GmApp(appRoot, new EncounterApplication(repository), {
       diceRoller,
+      ...(services ? { loreReader: services.lore } : {}),
       ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
       monsters: [],
       ...(campaignContent ? {
@@ -159,6 +162,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     storageLabel: "Almacenamiento de campaña de TaleSpire",
     loadStorageUsage: () => primaryRepository.getStorageUsage(),
     diceRoller,
+    ...(services ? { loreReader: services.lore } : {}),
     ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
     ...(collaboration
       ? {
