@@ -79,6 +79,7 @@ async function startBrowserDevelopment(): Promise<void> {
     storageLabel: "Almacenamiento de desarrollo del navegador",
     storageEventKey: primaryRepository.storageKey,
     diceRoller: new BrowserDiceRoller(),
+    ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges } : {}),
     ...(services ? { loreReader: services.lore } : {}),
     ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null) } : {}),
   }).start().catch(reportStartupFailure);
@@ -115,6 +116,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     const gmWorkspace = new GmWorkspaceApplication(repository);
     void new GmApp(appRoot, new EncounterApplication(repository), {
       diceRoller,
+      ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges } : {}),
       ...(services ? { loreReader: services.lore } : {}),
       ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
       monsters: [],
@@ -162,6 +164,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     storageLabel: "Almacenamiento de campaña de TaleSpire",
     loadStorageUsage: () => primaryRepository.getStorageUsage(),
     diceRoller,
+    ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges } : {}),
     ...(services ? { loreReader: services.lore } : {}),
     ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
     ...(collaboration

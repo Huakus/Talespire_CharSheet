@@ -104,6 +104,7 @@ import { CampaignLoreBrowser } from "./campaign-lore-browser";
 export interface BrowserAppRuntime {
   storageLabel: string;
   storageEventKey?: string;
+  subscribeCampaignChanges?: (listener: () => void) => () => void;
   loadStorageUsage?: () => Promise<CampaignStorageUsage>;
   diceRoller: DiceRoller;
   subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
@@ -634,6 +635,7 @@ export class BrowserApp {
 
   async start(): Promise<void> {
     subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
+    this.runtime.subscribeCampaignChanges?.(() => { void this.handleExternalChange("remota"); });
     this.runtime.subscribeDiceResults?.((result) => {
       this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
       if (this.pendingMerchantChallenges.has(result.name)) {
@@ -677,21 +679,23 @@ export class BrowserApp {
     void this.runtime.requestCustomContent?.().catch(() => undefined);
     if (this.runtime.storageEventKey !== undefined) {
       window.addEventListener("storage", (event) => {
-        if (event.key === this.runtime.storageEventKey) void this.handleExternalChange();
+        if (event.key === this.runtime.storageEventKey) void this.handleExternalChange("local");
       });
     }
   }
 
-  private async handleExternalChange(): Promise<void> {
+  private async handleExternalChange(source: "local" | "remota"): Promise<void> {
     this.undoStacks.clear();
     this.redoStacks.clear();
-    this.actionLogs.clear();
-    this.combatExecutions.clear();
-    this.combatExecutionDamage.clear();
+    if (source === "local") {
+      this.actionLogs.clear();
+      this.combatExecutions.clear();
+      this.combatExecutionDamage.clear();
+    }
     this.appendActionLog("Historial reversible reiniciado por una actualización externa.", "system");
     this.message = {
       kind: "success",
-      text: "Se detectó una actualización local y se recargó la campaña.",
+      text: `Se detectó una actualización ${source} y se refrescaron los datos de la campaña.`,
     };
     await this.reload();
   }

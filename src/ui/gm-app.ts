@@ -29,6 +29,7 @@ type GmContentKind = "monster" | GmContentSection;
 
 export interface GmAppRuntime extends GmToolsRuntime {
   diceRoller: DiceRoller;
+  subscribeCampaignChanges?: (listener: () => void) => () => void;
   subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
   monsters: readonly MonsterDefinition[];
   subscribePlayers?: (listener: (players: TaleSpireGmPlayer[]) => void) => () => void;
@@ -252,6 +253,7 @@ export class GmApp {
   async start(): Promise<void> {
     this.root.innerHTML = '<section class="sheet-empty gm-startup-status"><strong>Cargando control GM…</strong><p>Recuperando campaña y catálogo compartido.</p></section>';
     subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
+    this.runtime.subscribeCampaignChanges?.(() => { void this.handleExternalChange(); });
     this.runtime.subscribeDiceResults?.((result) => {
       this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
       this.render();
@@ -305,6 +307,20 @@ export class GmApp {
       }
     }
     if (selected) await this.runtime.publishEncounter?.(selected);
+  }
+
+  private async handleExternalChange(): Promise<void> {
+    this.undoStack = [];
+    this.redoStack = [];
+    this.appendActionLog("Historial reversible reiniciado por una actualización remota.", "system");
+    try {
+      this.snapshot = await this.application.loadCampaign();
+      this.message = { kind: "success", text: "Se refrescaron los datos compartidos de la campaña." };
+    } catch (error) {
+      this.message = { kind: "error", text: this.formatError(error) };
+    }
+    this.selectAvailableEncounter();
+    this.render();
   }
 
   private selectAvailableEncounter(): void {

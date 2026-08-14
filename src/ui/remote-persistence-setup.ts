@@ -271,6 +271,7 @@ function mountRemoteControls(
 export interface RemoteCampaignServices {
   content: SupabaseCampaignContentStore;
   lore: SupabaseCampaignLoreClient;
+  subscribeCampaignChanges(listener: () => void): () => void;
 }
 
 export async function configureRemotePersistence(
@@ -322,9 +323,14 @@ export async function configureRemotePersistence(
     }
 
     window.localStorage.setItem(bindingKey, campaign.id);
+    const campaignChangeListeners = new Set<() => void>();
     onServices?.({
       content: new SupabaseCampaignContentStore(client, campaign.id),
       lore: new SupabaseCampaignLoreClient(supabase, campaign.id),
+      subscribeCampaignChanges: (listener) => {
+        campaignChangeListeners.add(listener);
+        return () => campaignChangeListeners.delete(listener);
+      },
     });
     panel.remove();
     const onStatus = mountRemoteControls(appRoot, user, campaign, client, bindingKey, signOut);
@@ -340,7 +346,10 @@ export async function configureRemotePersistence(
       if (document === null) throw new Error("La campaña remota no tiene documento.");
       reportRemoteRevision(document.revision);
       const subscription = client.subscribeCampaign(campaign.id, (updated) => {
-        if (updated.updatedBy !== user.id) window.location.reload();
+        reportRemoteRevision(updated.revision);
+        if (updated.updatedBy !== user.id) {
+          for (const listener of campaignChangeListeners) listener();
+        }
       });
       void subscription.ready.catch((error: unknown) => {
         onStatus({
