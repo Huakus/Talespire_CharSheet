@@ -279,6 +279,7 @@ export class SupabaseCampaignDocumentClient {
           event: "UPDATE",
           schema: "public",
           table: "campaign_documents",
+          filter: `campaign_id=eq.${campaignId}`,
         },
         (event) => {
           const document = parseDocument(event.new);

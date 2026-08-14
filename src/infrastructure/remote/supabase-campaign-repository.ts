@@ -16,11 +16,13 @@ import {
 import {
   RemoteCampaignRevisionConflictError,
   SupabaseCampaignDocumentClient,
+  type RemoteCampaignDocument,
 } from "./supabase-campaign-document-client";
 import { mergeCampaignChanges } from "./campaign-three-way-merge";
 
 export class SupabaseCampaignRepository implements CampaignRepository {
   private readonly versions = new Map<string, CampaignSnapshot>();
+  private latestRemoteRevision = -1;
 
   constructor(
     private readonly client: SupabaseCampaignDocumentClient,
@@ -30,11 +32,17 @@ export class SupabaseCampaignRepository implements CampaignRepository {
 
   async load(): Promise<CampaignSnapshot | null> {
     const document = await this.client.readCampaign(this.campaignId);
-    if (document !== null) this.onRemoteRevision(document.revision);
-    const snapshot = document === null
-      ? null
-      : await decodeCampaignEnvelope(JSON.stringify(document.payload));
-    if (snapshot !== null) this.remember(snapshot);
+    return document === null ? null : this.acceptRemoteDocument(document);
+  }
+
+  async acceptRemoteDocument(document: RemoteCampaignDocument): Promise<CampaignSnapshot> {
+    if (document.campaignId !== this.campaignId) {
+      throw new CampaignRepositoryCorruptionError(
+        `Received campaign ${document.campaignId} for repository ${this.campaignId}`,
+      );
+    }
+    const snapshot = await decodeCampaignEnvelope(JSON.stringify(document.payload));
+    this.rememberRemoteSnapshot(snapshot, document.revision);
     return snapshot;
   }
 
@@ -86,8 +94,7 @@ export class SupabaseCampaignRepository implements CampaignRepository {
             `Remote campaign verification failed: expected ${candidate.checksum}, found ${verified.checksum}`,
           );
         }
-        this.remember(verified);
-        this.onRemoteRevision(saved.revision);
+        this.rememberRemoteSnapshot(verified, saved.revision);
         return verified;
       } catch (error) {
         if (!(error instanceof RemoteCampaignRevisionConflictError)) throw error;
@@ -122,5 +129,12 @@ export class SupabaseCampaignRepository implements CampaignRepository {
       if (oldest === undefined) break;
       this.versions.delete(oldest);
     }
+  }
+
+  private rememberRemoteSnapshot(snapshot: CampaignSnapshot, revision: number): void {
+    if (revision < this.latestRemoteRevision) return;
+    this.latestRemoteRevision = revision;
+    this.remember(snapshot);
+    this.onRemoteRevision(revision);
   }
 }

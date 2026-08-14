@@ -1,5 +1,5 @@
 import type { User } from "@supabase/supabase-js";
-import type { CampaignRepository } from "../application/ports/campaign-repository";
+import type { CampaignRepository, CampaignSnapshot } from "../application/ports/campaign-repository";
 import {
   DualCampaignRepository,
   type CampaignReplicationStatus,
@@ -271,7 +271,7 @@ function mountRemoteControls(
 export interface RemoteCampaignServices {
   content: SupabaseCampaignContentStore;
   lore: SupabaseCampaignLoreClient;
-  subscribeCampaignChanges(listener: () => void): () => void;
+  subscribeCampaignChanges(listener: (snapshot: CampaignSnapshot) => void): () => void;
 }
 
 export async function configureRemotePersistence(
@@ -323,7 +323,7 @@ export async function configureRemotePersistence(
     }
 
     window.localStorage.setItem(bindingKey, campaign.id);
-    const campaignChangeListeners = new Set<() => void>();
+    const campaignChangeListeners = new Set<(snapshot: CampaignSnapshot) => void>();
     onServices?.({
       content: new SupabaseCampaignContentStore(client, campaign.id),
       lore: new SupabaseCampaignLoreClient(supabase, campaign.id),
@@ -342,14 +342,28 @@ export async function configureRemotePersistence(
           remoteRevision: revision,
         });
       };
+      const repository = new SupabaseCampaignRepository(client, campaign.id, reportRemoteRevision);
       const document = await client.readCampaign(campaign.id);
       if (document === null) throw new Error("La campaña remota no tiene documento.");
-      reportRemoteRevision(document.revision);
+      await repository.acceptRemoteDocument(document);
+      let latestReceivedRevision = document.revision;
       const subscription = client.subscribeCampaign(campaign.id, (updated) => {
-        reportRemoteRevision(updated.revision);
-        if (updated.updatedBy !== user.id) {
-          for (const listener of campaignChangeListeners) listener();
+        if (updated.revision <= latestReceivedRevision) return;
+        latestReceivedRevision = updated.revision;
+        if (updated.updatedBy === user.id) {
+          reportRemoteRevision(updated.revision);
+          return;
         }
+        void repository.acceptRemoteDocument(updated).then((snapshot) => {
+          if (updated.revision !== latestReceivedRevision) return;
+          for (const listener of campaignChangeListeners) listener(snapshot);
+        }).catch((error: unknown) => {
+          onStatus({
+            state: "unavailable",
+            localChecksum: "remote-authoritative",
+            message: errorMessage(error),
+          });
+        });
       });
       void subscription.ready.catch((error: unknown) => {
         onStatus({
@@ -358,7 +372,7 @@ export async function configureRemotePersistence(
           message: errorMessage(error),
         });
       });
-      return new SupabaseCampaignRepository(client, campaign.id, reportRemoteRevision);
+      return repository;
     }
     const repository = new DualCampaignRepository(
       primary,

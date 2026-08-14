@@ -45,6 +45,7 @@ interface BrowserAppViewHarness {
   notifications: { id: number; kind: "success" | "error"; text: string; occurredAt: string }[];
   unreadImportantNotifications: number;
   transportDiagnostics: TaleSpireTransportDiagnostics | null;
+  handleRemoteCampaignChange(snapshot: CampaignSnapshot): void;
   renderCharacterForm(character: ReturnType<typeof createCharacter>): string;
   renderNotificationCenter(): string;
 }
@@ -465,6 +466,60 @@ describe("player interface shell", () => {
     expect(targetHtml).toContain("Acción de Destino");
     expect(targetHtml).not.toContain("Acción de Origen");
     expect(targetHtml).toMatch(/data-history-action="undo"[^>]*disabled/);
+  });
+
+  it("applies another player's campaign update without remounting or changing the selected character", () => {
+    const view = harness();
+    const other = createCharacter(
+      "chr_17171717171717171717171717171717",
+      "Otro jugador",
+      "2026-07-26T00:00:00.000Z",
+    );
+    const selected = createCharacter(
+      "chr_18181818181818181818181818181818",
+      "Seleccionado",
+      "2026-07-26T00:00:00.000Z",
+    );
+    const base: CampaignSnapshot = {
+      checksum: "base-checksum",
+      campaign: {
+        schemaVersion: 2,
+        id: "cmp_17171717171717171717171717171717",
+        revision: 0,
+        characters: { [other.id]: other, [selected.id]: selected },
+        encounters: {},
+        gm: { noteGroups: [], randomTables: [], googleDocsUrl: "" },
+        metadata: { createdAt: "2026-07-26T00:00:00.000Z", updatedAt: "2026-07-26T00:00:00.000Z" },
+      },
+    };
+    view.snapshot = base;
+    view.selectedCharacterId = selected.id;
+    view.activeSheetTab = "inventory";
+    let renders = 0;
+    (view as unknown as { render: () => void }).render = () => { renders += 1; };
+
+    const otherUpdated = structuredClone(base);
+    otherUpdated.checksum = "other-updated-checksum";
+    otherUpdated.campaign.revision += 1;
+    otherUpdated.campaign.characters[other.id]!.revision += 1;
+    otherUpdated.campaign.characters[other.id]!.name = "Otro jugador actualizado";
+    view.handleRemoteCampaignChange(otherUpdated);
+
+    expect(view.snapshot).toBe(otherUpdated);
+    expect(view.selectedCharacterId).toBe(selected.id);
+    expect(view.activeSheetTab).toBe("inventory");
+    expect(renders).toBe(0);
+
+    const selectedUpdated = structuredClone(otherUpdated);
+    selectedUpdated.checksum = "selected-updated-checksum";
+    selectedUpdated.campaign.revision += 1;
+    selectedUpdated.campaign.characters[selected.id]!.revision += 1;
+    selectedUpdated.campaign.characters[selected.id]!.name = "Seleccionado actualizado";
+    view.handleRemoteCampaignChange(selectedUpdated);
+
+    expect(view.snapshot).toBe(selectedUpdated);
+    expect(view.selectedCharacterId).toBe(selected.id);
+    expect(renders).toBe(1);
   });
 
   it("combines inventory filters with AND and exposes unowned catalog objects as add-only cards", () => {

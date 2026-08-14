@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
+import type { CampaignSnapshot } from "../../src/application/ports/campaign-repository";
 import type { CampaignV2, CharacterV2 } from "../../src/domain/character/character-v2";
 import { mergeCampaignChanges } from "../../src/infrastructure/remote/campaign-three-way-merge";
 import {
@@ -109,6 +110,36 @@ async function applicationsFor(campaign: CampaignV2): Promise<{
 }
 
 describe("campaign three-way merge", () => {
+  it("accepts realtime snapshots atomically and ignores an older revision that finishes later", async () => {
+    const { campaign, adler } = await fixture();
+    const older = await createCampaignSnapshot(campaign);
+    const newer = await createCampaignSnapshot(updateCharacter(
+      campaign,
+      adler,
+      { name: "Adler remoto" },
+      remoteTime,
+    ));
+    const reportedRevisions: number[] = [];
+    const repository = new SupabaseCampaignRepository(
+      {} as SupabaseCampaignDocumentClient,
+      "campaign-id",
+      (revision) => reportedRevisions.push(revision),
+    );
+    const document = (snapshot: CampaignSnapshot, revision: number): RemoteCampaignDocument => ({
+      campaignId: "campaign-id",
+      revision,
+      payload: JSON.parse(encodeCampaignEnvelope(snapshot)) as Record<string, unknown>,
+      updatedBy: null,
+      updatedAt: remoteTime,
+    });
+
+    await repository.acceptRemoteDocument(document(newer, 2));
+    await repository.acceptRemoteDocument(document(older, 1));
+
+    expect(reportedRevisions).toEqual([2]);
+    await expect(repository.loadVersion(newer.checksum)).resolves.toMatchObject({ checksum: newer.checksum });
+  });
+
   it("combines concurrent edits to Adler and Delerion", async () => {
     const { campaign, adler, delerion } = await fixture();
     const local = updateCharacter(campaign, adler, { name: "Adler local" }, localTime);

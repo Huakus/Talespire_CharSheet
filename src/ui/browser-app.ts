@@ -104,7 +104,7 @@ import { CampaignLoreBrowser } from "./campaign-lore-browser";
 export interface BrowserAppRuntime {
   storageLabel: string;
   storageEventKey?: string;
-  subscribeCampaignChanges?: (listener: () => void) => () => void;
+  subscribeCampaignChanges?: (listener: (snapshot: CampaignSnapshot) => void) => () => void;
   loadStorageUsage?: () => Promise<CampaignStorageUsage>;
   diceRoller: DiceRoller;
   subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
@@ -635,7 +635,7 @@ export class BrowserApp {
 
   async start(): Promise<void> {
     subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
-    this.runtime.subscribeCampaignChanges?.(() => { void this.handleExternalChange("remota"); });
+    this.runtime.subscribeCampaignChanges?.((snapshot) => this.handleRemoteCampaignChange(snapshot));
     this.runtime.subscribeDiceResults?.((result) => {
       this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
       if (this.pendingMerchantChallenges.has(result.name)) {
@@ -679,23 +679,49 @@ export class BrowserApp {
     void this.runtime.requestCustomContent?.().catch(() => undefined);
     if (this.runtime.storageEventKey !== undefined) {
       window.addEventListener("storage", (event) => {
-        if (event.key === this.runtime.storageEventKey) void this.handleExternalChange("local");
+        if (event.key === this.runtime.storageEventKey) void this.handleLocalExternalChange();
       });
     }
   }
 
-  private async handleExternalChange(source: "local" | "remota"): Promise<void> {
+  private handleRemoteCampaignChange(snapshot: CampaignSnapshot): void {
+    const selectedCharacterId = this.selectedCharacterId;
+    const previousCharacter = selectedCharacterId
+      ? this.snapshot?.campaign.characters[selectedCharacterId]
+      : undefined;
+    const updatedCharacter = selectedCharacterId
+      ? snapshot.campaign.characters[selectedCharacterId]
+      : undefined;
+    const selectedCharacterIsUnchanged = previousCharacter !== undefined
+      && updatedCharacter !== undefined
+      && previousCharacter.revision === updatedCharacter.revision;
+
+    if (!selectedCharacterIsUnchanged) {
+      this.undoStacks.clear();
+      this.redoStacks.clear();
+    }
+    this.appendActionLog("Cambios de otro jugador sincronizados.", "system");
+    this.message = {
+      kind: "success",
+      text: "Se sincronizaron cambios de otro jugador.",
+    };
+    this.snapshot = snapshot;
+    if (!updatedCharacter) {
+      this.selectedCharacterId = Object.values(snapshot.campaign.characters)[0]?.id ?? null;
+    }
+    if (!selectedCharacterIsUnchanged) this.render();
+  }
+
+  private async handleLocalExternalChange(): Promise<void> {
     this.undoStacks.clear();
     this.redoStacks.clear();
-    if (source === "local") {
-      this.actionLogs.clear();
-      this.combatExecutions.clear();
-      this.combatExecutionDamage.clear();
-    }
+    this.actionLogs.clear();
+    this.combatExecutions.clear();
+    this.combatExecutionDamage.clear();
     this.appendActionLog("Historial reversible reiniciado por una actualización externa.", "system");
     this.message = {
       kind: "success",
-      text: `Se detectó una actualización ${source} y se refrescaron los datos de la campaña.`,
+      text: "Se detectó una actualización local y se recargó la campaña.",
     };
     await this.reload();
   }
