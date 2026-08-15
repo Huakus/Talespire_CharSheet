@@ -55,6 +55,8 @@ import type {
 import {
   merchantCanBeLooted,
   merchantCanPay,
+  merchantBarterTotals,
+  inventoryCostInCopper,
   merchantChallengeBreakdown,
   merchantAfterAssaultAttempt,
   merchantAfterIntimidation,
@@ -122,6 +124,8 @@ export interface BrowserAppRuntime {
   respondToCharacterSummaryRequest?: (character: CharacterV2, request: CharacterSummaryRequest) => Promise<void>;
   subscribeEncounterSync?: (listener: (state: TaleSpireEncounterSyncState) => void) => () => void;
   loadCustomContent?: () => Promise<{ spells: SpellDefinition[]; equipment: EquipmentCatalogDraft[]; monsters: MonsterDefinition[]; shops: GmShop[] }>;
+  refreshCustomContent?: () => Promise<{ spells: SpellDefinition[]; equipment: EquipmentCatalogDraft[]; monsters: MonsterDefinition[]; shops: GmShop[] }>;
+  subscribeCustomContentChanges?: (listener: () => void) => () => void;
   subscribeCustomContent?: (listener: (content: PlayerCustomContent) => void) => () => void;
   requestCustomContent?: () => Promise<void>;
   saveCustomSpell?: (definition: SpellDefinition) => Promise<void>;
@@ -380,6 +384,12 @@ export function formatCurrencyInLargestDenominations(value: number): string {
   return parts.length ? parts.join(" · ") : "0 PC";
 }
 
+export function clampMerchantQuantity(value: number, maximum: number): number {
+  const upperBound = Number.isFinite(maximum) ? Math.max(0, Math.trunc(maximum)) : 0;
+  if (!Number.isFinite(value)) return 0;
+  return Math.min(upperBound, Math.max(0, Math.trunc(value)));
+}
+
 export function merchantBalancePreview(currentCopper: number, adjustmentCopper: number, mode: "buy" | "sell"): {
   currentAmount: number;
   adjustmentAmount: number;
@@ -463,6 +473,12 @@ interface MerchantTradeSelection {
   item: CharacterInventoryItemV2;
   quantity: number;
   unitPriceCopper: number;
+}
+
+interface MerchantCartSelection {
+  buy: MerchantTradeSelection[];
+  sell: MerchantTradeSelection[];
+  totals: ReturnType<typeof merchantBarterTotals>;
 }
 
 interface PreparedMerchantRoll {
@@ -598,6 +614,9 @@ export class BrowserApp {
   private customShops: GmShop[] = [];
   private activeMerchantName: string | null = null;
   private merchantMode: "buy" | "sell" = "buy";
+  private merchantCartQuantities = new Map<string, number>();
+  private merchantCartReviewShopName: string | null = null;
+  private customContentRefreshPromise: ReturnType<NonNullable<BrowserAppRuntime["refreshCustomContent"]>> | null = null;
   private pendingMerchantChallenges = new Map<string, { dc: number; label: string; onSuccess?: () => Promise<void>; onResolved?: (success: boolean) => Promise<string | void> }>();
   private preparedMerchantRoll: PreparedMerchantRoll | null = null;
   private theme: "dark" | "light" = preference("theme", "dark") as "dark" | "light";
@@ -676,6 +695,7 @@ export class BrowserApp {
       this.customMonsters = content.monsters;
       this.render();
     });
+    this.runtime.subscribeCustomContentChanges?.(() => { void this.refreshCustomContent(); });
     await this.reload();
     void this.loreBrowser?.load();
     void this.runtime.requestCustomContent?.().catch(() => undefined);
@@ -1095,11 +1115,94 @@ export class BrowserApp {
     return formatCurrencyInLargestDenominations(value);
   }
 
-  private renderMerchantBalancePreview(currentCopper: number, adjustmentCopper = 0): string {
-    const preview = merchantBalancePreview(currentCopper, adjustmentCopper, this.merchantMode);
-    const currentLabel = this.formatCurrencyValue(preview.currentAmount);
-    const adjustmentLabel = `${this.merchantMode === "buy" ? "−" : "+"}${this.formatCurrencyValue(preview.adjustmentAmount)}`;
-    return `<div class="merchant-balance-preview" data-merchant-balance-preview data-mode="${this.merchantMode}" role="img" aria-label="Saldo ${currentLabel}; ${this.merchantMode === "buy" ? "se restan" : "se suman"} ${this.formatCurrencyValue(preview.adjustmentAmount)}" style="--merchant-current-share:${preview.currentShare}%;--merchant-adjustment-share:${preview.adjustmentShare}%"><div class="merchant-balance-segments" aria-hidden="true"><i class="merchant-balance-current"></i><i class="merchant-balance-adjustment"></i></div><span data-merchant-balance-current>${currentLabel}</span><strong data-merchant-balance-adjustment data-merchant-selection-total>${adjustmentLabel}</strong></div>`;
+  private merchantCartKey(characterId: string, shopName: string, mode: "buy" | "sell", itemId: string): string {
+    return JSON.stringify([characterId, shopName, mode, itemId]);
+  }
+
+  private merchantCartQuantity(character: CharacterV2, shop: GmShop, mode: "buy" | "sell", item: CharacterInventoryItemV2): number {
+    const key = this.merchantCartKey(character.id, shop.name, mode, item.id);
+    const quantity = clampMerchantQuantity(this.merchantCartQuantities.get(key) ?? 0, item.quantity);
+    if (quantity > 0) this.merchantCartQuantities.set(key, quantity); else this.merchantCartQuantities.delete(key);
+    return quantity;
+  }
+
+  private setMerchantCartQuantity(character: CharacterV2, shop: GmShop, mode: "buy" | "sell", itemId: string, quantity: number, maximum: number): void {
+    const key = this.merchantCartKey(character.id, shop.name, mode, itemId);
+    const normalized = clampMerchantQuantity(quantity, maximum);
+    if (normalized > 0) this.merchantCartQuantities.set(key, normalized); else this.merchantCartQuantities.delete(key);
+  }
+
+  private merchantCartSelection(shop: GmShop, character: CharacterV2): MerchantCartSelection {
+    const interaction = this.merchantInteractionForCharacter(shop, character);
+    const selections = (mode: "buy" | "sell", source: readonly CharacterInventoryItemV2[]): MerchantTradeSelection[] => source.flatMap((item) => {
+      if (mode === "sell" && item.equipped) {
+        this.setMerchantCartQuantity(character, shop, mode, item.id, 0, item.quantity);
+        return [];
+      }
+      const quantity = this.merchantCartQuantity(character, shop, mode, item);
+      return quantity > 0 ? [{ item, quantity, unitPriceCopper: inventoryCostInCopper(item.cost) }] : [];
+    });
+    const buy = selections("buy", this.merchantInventory(shop));
+    const sell = selections("sell", character.inventory);
+    const buySubtotal = buy.reduce((sum, entry) => sum + entry.unitPriceCopper * entry.quantity, 0);
+    const sellSubtotal = sell.reduce((sum, entry) => sum + entry.unitPriceCopper * entry.quantity, 0);
+    return { buy, sell, totals: merchantBarterTotals(buySubtotal, sellSubtotal, interaction.commissionPercent) };
+  }
+
+  private projectedMerchantCartCharacter(character: CharacterV2, cart: MerchantCartSelection): CharacterV2 {
+    const inventory = character.inventory.map((item) => structuredClone(item));
+    for (const selection of cart.sell) {
+      const item = inventory.find((entry) => entry.id === selection.item.id);
+      if (item) item.quantity = Math.max(0, item.quantity - selection.quantity);
+    }
+    for (const selection of cart.buy) {
+      const transferable = { ...selection.item, equipped: false, attuned: false };
+      const stack = inventory.find((entry) => inventoryItemsCanStack({ ...transferable, group: entry.group }, entry));
+      if (stack) stack.quantity += selection.quantity;
+      else inventory.push({ ...structuredClone(transferable), id: `cart:${selection.item.id}`, order: inventory.length, group: "backpack", quantity: selection.quantity });
+    }
+    return { ...character, inventory: inventory.filter((item) => item.quantity > 0) };
+  }
+
+  private renderMerchantMoneyMeter(owner: "character" | "merchant", currentCopper: number, deltaCopper: number): string {
+    const projected = Math.max(0, currentCopper + deltaCopper);
+    const scale = Math.max(1, currentCopper, projected);
+    const percentage = projected / scale * 100;
+    const label = owner === "character" ? "Tus monedas" : "Monedas comerciante";
+    const adjustment = `${deltaCopper >= 0 ? "+" : "−"}${this.formatCurrencyValue(Math.abs(deltaCopper))}`;
+    return `<div class="inventory-weight-meter merchant-money-meter ${owner === "merchant" ? "secondary" : "primary"}" data-merchant-money-meter data-balance-owner="${owner}" role="meter" aria-label="${label}: ${this.formatCurrencyValue(projected)} (${adjustment})" aria-valuemin="0" aria-valuemax="${scale}" aria-valuenow="${projected}" style="--merchant-money-share:${percentage}%"><div class="merchant-money-composition" aria-hidden="true"><i></i></div><span>${label}</span><strong>${this.formatCurrencyValue(projected)}</strong><em>${adjustment}</em></div>`;
+  }
+
+  private async refreshCustomContent(renderAfter = true): Promise<void> {
+    if (!this.runtime.refreshCustomContent) return;
+    const refresh = this.customContentRefreshPromise ?? this.runtime.refreshCustomContent();
+    this.customContentRefreshPromise = refresh;
+    const content = await refresh.finally(() => {
+      if (this.customContentRefreshPromise === refresh) this.customContentRefreshPromise = null;
+    });
+    this.customSpells = content.spells;
+    this.customEquipment = content.equipment;
+    this.customMonsters = content.monsters;
+    this.customShops = content.shops;
+    if (renderAfter) this.render();
+  }
+
+  private renderMerchantWeightPreview(character: CharacterV2, cart: MerchantCartSelection): string {
+    const projected = this.projectedMerchantCartCharacter(character, cart);
+    return this.renderInventoryWeightMeter(projected, projectInventory(projected), {
+      label: "Peso proyectado",
+      className: "merchant-weight-preview",
+      attributes: "data-merchant-weight-preview",
+    });
+  }
+
+  private renderMerchantPrice(value: number): string {
+    const currency = currencyFromCopper(Math.max(0, Math.trunc(value)));
+    const visible = CURRENCY_DENOMINATIONS.filter((denomination) => currency[denomination.key] > 0);
+    const denominations = visible.length ? visible : [CURRENCY_DENOMINATIONS.at(-1)!];
+    return `<span class="merchant-price" aria-label="${escapeHtml(this.formatCurrencyValue(value))}">${denominations.map((denomination) =>
+      `<span data-coin-kind="${denomination.key}" title="${denomination.label}"><strong>${currency[denomination.key]}</strong><small>${denomination.abbreviation}</small></span>`,
+    ).join('<i aria-hidden="true">·</i>')}</span>`;
   }
 
   private renderCopperIndicator(value: number, label: string, className = ""): string {
@@ -1139,6 +1242,32 @@ export class BrowserApp {
     </dialog>`;
   }
 
+  private renderMerchantCartReview(shop: GmShop, character: CharacterV2, cart: MerchantCartSelection): string {
+    const interaction = this.merchantInteractionForCharacter(shop, character);
+    const playerFunds = currencyTotalInCopper(character.currency);
+    const projectedPlayerFunds = playerFunds + cart.totals.characterCurrencyDeltaCopper;
+    const projectedMerchantFunds = interaction.fundsCopper + cart.totals.merchantCurrencyDeltaCopper;
+    const currentWeight = projectInventory(character).totalWeight;
+    const projectedWeight = projectInventory(this.projectedMerchantCartCharacter(character, cart)).totalWeight;
+    const lines = (entries: readonly MerchantTradeSelection[], mode: "buy" | "sell"): string => entries.map((entry) =>
+      `<li><span><b>${escapeHtml(entry.item.name)}</b><small>${mode === "buy" ? "Recibís" : "Entregás"} ${entry.quantity} × ${this.formatCurrencyValue(entry.unitPriceCopper)}</small></span><strong>${this.formatCurrencyValue(entry.unitPriceCopper * entry.quantity)}</strong><button type="button" data-merchant-action="remove-cart-entry" data-cart-mode="${mode}" data-cart-item-id="${escapeHtml(entry.item.id)}" aria-label="Quitar ${escapeHtml(entry.item.name)} del carrito">×</button></li>`,
+    ).join("");
+    const settlement = cart.totals.characterCurrencyDeltaCopper < 0
+      ? `Pagás ${this.formatCurrencyValue(-cart.totals.characterCurrencyDeltaCopper)}`
+      : cart.totals.characterCurrencyDeltaCopper > 0
+        ? `Recibís ${this.formatCurrencyValue(cart.totals.characterCurrencyDeltaCopper)}`
+        : "No se intercambian monedas";
+    const valid = cart.buy.length + cart.sell.length > 0 && projectedPlayerFunds >= 0 && projectedMerchantFunds >= 0 && interaction.barter && interaction.state === "active";
+    return `<dialog class="merchant-cart-dialog merchant-roll-dialog" open aria-labelledby="merchant-cart-title"><div class="merchant-cart-review">
+      <header><div><small>Confirmación del carrito</small><strong id="merchant-cart-title">Intercambio con ${escapeHtml(shop.name)}</strong></div><button type="button" class="icon-button" data-merchant-action="close-cart-review" aria-label="Cerrar">×</button></header>
+      <div class="merchant-cart-columns"><section><h3>Comprás</h3>${cart.buy.length ? `<ul>${lines(cart.buy, "buy")}</ul>` : "<p>Sin objetos.</p>"}<footer>Valor <strong>${this.formatCurrencyValue(cart.totals.buySubtotalCopper)}</strong></footer></section><section><h3>Vendés</h3>${cart.sell.length ? `<ul>${lines(cart.sell, "sell")}</ul>` : "<p>Sin objetos.</p>"}<footer>Valor <strong>${this.formatCurrencyValue(cart.totals.sellSubtotalCopper)}</strong></footer></section></div>
+      <section class="merchant-cart-settlement"><h3>Detalle del intercambio</h3><div><span>Diferencia de valor real<strong>${this.formatCurrencyValue(Math.abs(cart.totals.netBaseCopper))}</strong></span><span>Comisión ${interaction.commissionPercent}% sólo sobre la diferencia<strong>${this.formatCurrencyValue(cart.totals.commissionCopper)}</strong></span><span class="merchant-cart-final">Resultado<strong>${settlement}</strong></span></div></section>
+      <div class="merchant-cart-projections"><span><small>Tus monedas</small><b>${this.formatCurrencyValue(playerFunds)} → ${projectedPlayerFunds >= 0 ? this.formatCurrencyValue(projectedPlayerFunds) : "Fondos insuficientes"}</b></span><span><small>Monedas comerciante</small><b>${this.formatCurrencyValue(interaction.fundsCopper)} → ${projectedMerchantFunds >= 0 ? this.formatCurrencyValue(projectedMerchantFunds) : "Fondos insuficientes"}</b></span><span><small>Peso del inventario</small><b>${currentWeight.toFixed(1)} → ${projectedWeight.toFixed(1)} lb</b></span></div>
+      ${valid ? "" : '<p class="merchant-cart-warning">El intercambio cambió o no tiene fondos suficientes. Revisá el carrito antes de confirmar.</p>'}
+      <footer class="merchant-cart-actions"><button type="button" class="secondary-button" data-merchant-action="clear-cart">Vaciar carrito</button><button type="button" class="secondary-button" data-merchant-action="close-cart-review">Seguir editando</button><button type="button" data-merchant-action="confirm-cart" ${valid ? "" : "disabled"}>Confirmar intercambio</button></footer>
+    </div></dialog>`;
+  }
+
   private renderMerchantInteractions(character: CharacterV2, projection: CharacterStatisticsProjection): string {
     const shops = this.customShops.filter((shop) => normalizeMerchantInteraction(shop.interactions).interaction && this.linkedMerchantNpc(shop));
     if (!shops.length) return this.renderEmptyPanel("No hay comerciantes con un NPC válido disponibles para interactuar.");
@@ -1153,13 +1282,19 @@ export class BrowserApp {
     const interaction = this.merchantInteractionForCharacter(active, character);
     const npc = this.linkedMerchantNpc(active)!;
     const statistics = merchantNpcStatistics(npc);
+    const cart = this.merchantCartSelection(active, character);
     const merchantInventory = this.merchantInventory(active);
     const availableItems = this.merchantMode === "buy" ? merchantInventory : character.inventory;
     const shownItems = availableItems.filter((item) => this.inventoryIsVisible(item));
+    const canUseBuyMode = (interaction.state === "active" && (interaction.barter || interaction.steal || interaction.assault)) || merchantCanBeLooted(interaction);
+    const canUseSellMode = interaction.state === "active" && (interaction.barter || interaction.plantEvidence);
+    const canSelectInCurrentMode = this.merchantMode === "buy" ? canUseBuyMode : canUseSellMode;
     let commerceCards = shownItems.map((item) => this.renderInventoryPlayCard(character, item, false, {
       mode: this.merchantMode,
-      unitPriceCopper: merchantUnitPriceInCopper(item.cost, this.merchantMode, interaction.commissionPercent),
-      disabled: this.merchantMode === "sell" && item.equipped,
+      unitPriceCopper: inventoryCostInCopper(item.cost),
+      selectedQuantity: this.merchantCartQuantity(character, active, this.merchantMode, item),
+      ownedQuantity: this.merchantMode === "buy" ? character.inventory.filter((owned) => normalizedSearchText(owned.name) === normalizedSearchText(item.name)).reduce((sum, owned) => sum + owned.quantity, 0) : 0,
+      disabled: !canSelectInCurrentMode || (this.merchantMode === "sell" && item.equipped),
       ...(this.merchantMode === "buy" && interaction.steal && interaction.state === "active"
         ? { itemChallenge: { action: "pilfer-item" as const, label: "Hurtar", dc: merchantPilferTarget(interaction, statistics.perception, item) } }
         : this.merchantMode === "sell" && interaction.plantEvidence && interaction.state === "active"
@@ -1169,14 +1304,22 @@ export class BrowserApp {
     const challengeDc = merchantChallengeTarget(interaction, statistics.charisma);
     const assaultModifier = strengthBasedIntimidationModifier(projection);
     const prepared = this.preparedMerchantRoll?.shopName === active.name ? this.preparedMerchantRoll : null;
-    const actionButton = (action: string, label: string, dc: number): string => `<button type="button" data-merchant-action="${action}" data-merchant-base-dc="${dc}" data-merchant-dc-label="${escapeHtml(label)}"><span>${escapeHtml(label)}</span><strong>CD ${dc}</strong></button>`;
+    const cartUnits = [...cart.buy, ...cart.sell].reduce((sum, entry) => sum + entry.quantity, 0);
+    const playerFunds = currencyTotalInCopper(character.currency);
+    const projectedPlayerFunds = playerFunds + cart.totals.characterCurrencyDeltaCopper;
+    const projectedMerchantFunds = interaction.fundsCopper + cart.totals.merchantCurrencyDeltaCopper;
+    const cartValid = cartUnits > 0 && interaction.barter && interaction.state === "active" && projectedPlayerFunds >= 0 && projectedMerchantFunds >= 0;
+    const actionButton = (action: string, label: string, dc: number): string => `<button type="button" data-merchant-action="${action}" data-merchant-base-dc="${dc}" data-merchant-dc-label="${escapeHtml(label)}" ${interaction.state === "active" ? "" : "disabled"}><span>${escapeHtml(label)}</span><strong>CD ${dc}</strong></button>`;
     return `<section class="play-section merchant-interactions" data-merchant-card="${escapeHtml(active.name)}">
-      <div class="section-heading merchant-detail-heading"><div><p class="eyebrow">NPC asociado · ${escapeHtml(npc.name)}</p><h2>${escapeHtml(active.name)}</h2></div><div class="merchant-heading-tools">${this.renderCopperIndicator(interaction.fundsCopper, "Fondos comerciante", "merchant-funds-indicator")}<span class="merchant-state" data-state="${interaction.state}">${stateLabel[interaction.state]}</span><button type="button" class="secondary-button merchant-back-button" data-merchant-action="back">Volver</button></div></div>
+      <div class="section-heading merchant-detail-heading"><div><p class="eyebrow">NPC asociado · ${escapeHtml(npc.name)}</p><h2>${escapeHtml(active.name)}</h2></div><div class="merchant-heading-tools"><span class="merchant-state" data-state="${interaction.state}">${stateLabel[interaction.state]}</span><button type="button" class="secondary-button merchant-back-button" data-merchant-action="back">Volver</button></div></div>
       <div class="merchant-stat-ledger"><section><small>Trato</small><span><b>Reputación</b><strong>${interaction.reputation}</strong></span><span><b>Comisión</b><strong>${interaction.commissionPercent}%</strong></span><span><b>Sospecha</b><strong>+${merchantSuspicionDifficulty(interaction)} CD</strong></span></section><section><small>Defensas del NPC</small><span><b>CAR</b><strong>${statistics.charisma >= 0 ? "+" : ""}${statistics.charisma}</strong></span><span><b>PER</b><strong>${statistics.perception >= 0 ? "+" : ""}${statistics.perception}</strong></span></section><section><small>Tus pruebas</small><span><b>Persuasión</b><strong>${projection.skills.persuasion >= 0 ? "+" : ""}${projection.skills.persuasion}</strong></span><span><b>Intimidación</b><strong>${projection.skills.intimidation >= 0 ? "+" : ""}${projection.skills.intimidation}</strong></span><span><b>Asalto (FUE)</b><strong>${assaultModifier >= 0 ? "+" : ""}${assaultModifier}</strong></span><span><b>Juego de manos</b><strong>${projection.skills.sleightOfHand >= 0 ? "+" : ""}${projection.skills.sleightOfHand}</strong></span></section></div>
-      <nav class="merchant-action-bar" aria-label="Acciones del comerciante">${interaction.barter ? `<button type="button" data-merchant-mode="buy" class="merchant-mode-action ${this.merchantMode === "buy" ? "active" : ""}" aria-pressed="${this.merchantMode === "buy"}">Comprar</button><button type="button" data-merchant-mode="sell" class="merchant-mode-action ${this.merchantMode === "sell" ? "active" : ""}" aria-pressed="${this.merchantMode === "sell"}">Vender</button>` : ""}${interaction.negotiation ? actionButton("persuade", "Persuadir", challengeDc) : ""}${interaction.intimidation ? actionButton("intimidate", "Intimidar", challengeDc) : ""}${interaction.assault && interaction.state === "active" ? actionButton("assault-selected", "Asaltar", challengeDc) : ""}${merchantCanBeLooted(interaction) ? '<button type="button" data-merchant-action="loot-selected"><span>Saquear</span></button>' : ""}</nav>
-      ${interaction.barter ? `${this.renderInventoryDiscoveryTools(character, { allowCatalog: false, showResources: false, source: availableItems })}<div class="merchant-operation-summary">${this.renderMerchantBalancePreview(currencyTotalInCopper(character.currency))}<button type="button" data-merchant-action="transact" disabled>${this.merchantMode === "buy" ? "Comprar" : "Vender"}</button></div>` : ""}
+      <nav class="merchant-commerce-mode-switch" aria-label="Sección del intercambio">${canUseBuyMode ? `<button type="button" data-merchant-mode="buy" class="buy ${this.merchantMode === "buy" ? "active" : ""}" aria-pressed="${this.merchantMode === "buy"}"><span>Comprar</span><small>${cart.buy.reduce((sum, entry) => sum + entry.quantity, 0)} en carrito</small></button>` : ""}${canUseSellMode ? `<button type="button" data-merchant-mode="sell" class="sell ${this.merchantMode === "sell" ? "active" : ""}" aria-pressed="${this.merchantMode === "sell"}"><span>Vender</span><small>${cart.sell.reduce((sum, entry) => sum + entry.quantity, 0)} en carrito</small></button>` : ""}</nav>
+      <div class="merchant-operation-summary"><div class="merchant-resource-stack">${this.renderMerchantMoneyMeter("character", playerFunds, cart.totals.characterCurrencyDeltaCopper)}${this.renderMerchantMoneyMeter("merchant", interaction.fundsCopper, cart.totals.merchantCurrencyDeltaCopper)}${this.renderMerchantWeightPreview(character, cart)}</div>${interaction.barter ? `<button type="button" class="merchant-cart-button" data-merchant-action="open-cart-review" ${cartValid ? "" : "disabled"}><span>Revisar intercambio</span><strong>${cartUnits} objeto${cartUnits === 1 ? "" : "s"}</strong></button>` : ""}</div>
+      <nav class="merchant-action-bar merchant-secondary-actions" aria-label="Otras acciones del comerciante">${interaction.negotiation ? actionButton("persuade", "Persuadir", challengeDc) : ""}${interaction.intimidation ? actionButton("intimidate", "Intimidar", challengeDc) : ""}${interaction.assault && interaction.state === "active" ? `<button type="button" data-merchant-action="assault-selected" data-merchant-base-dc="${challengeDc}" data-merchant-dc-label="Asaltar" disabled><span>Asaltar</span><strong>CD ${challengeDc}</strong></button>` : ""}${merchantCanBeLooted(interaction) ? '<button type="button" data-merchant-action="loot-selected" disabled><span>Saquear</span></button>' : ""}</nav>
+      ${this.renderInventoryDiscoveryTools(character, { allowCatalog: false, showResources: false, source: availableItems })}
       <div class="inventory-dense-list merchant-inventory-list">${commerceCards || `<div class="sheet-empty"><p>No hay objetos que coincidan con la búsqueda y los filtros.</p></div>`}</div>
       ${prepared ? this.renderMerchantRollDialog(prepared) : ""}
+      ${this.merchantCartReviewShopName === active.name ? this.renderMerchantCartReview(active, character, cart) : ""}
     </section>`;
   }
 
@@ -1561,7 +1704,11 @@ export class BrowserApp {
     ${embedded ? "</div>" : "</section>"}`;
   }
 
-  private renderInventoryWeightMeter(character: CharacterV2, projection: InventoryProjection): string {
+  private renderInventoryWeightMeter(
+    character: CharacterV2,
+    projection: InventoryProjection,
+    options: { label?: string; className?: string; attributes?: string } = {},
+  ): string {
     const ratio = projection.carryingCapacity > 0 ? projection.totalWeight / projection.carryingCapacity : 0;
     const percentage = Math.max(0, Math.round(ratio * 100));
     const weightByTone = new Map<string, { label: string; weight: number }>();
@@ -1584,7 +1731,9 @@ export class BrowserApp {
       return `<i data-inventory-tone="${entry.tone}" style="--weight-segment:${segment}%" title="${escapeHtml(entry.label)}: ${entry.weight.toFixed(1)} lb"></i>`;
     }).join("");
     const breakdownLabel = breakdown.map((entry) => `${entry.label}: ${entry.weight.toFixed(1)} lb`).join(", ");
-    return `<div class="inventory-weight-meter ${projection.overCapacity ? "over-capacity" : ""}" role="meter" aria-label="Peso transportado" aria-valuemin="0" aria-valuemax="${projection.carryingCapacity}" aria-valuenow="${projection.totalWeight}" aria-valuetext="${projection.totalWeight.toFixed(1)} de ${projection.carryingCapacity.toFixed(0)} libras${breakdownLabel ? `. ${escapeHtml(breakdownLabel)}` : ""}"><div class="inventory-weight-composition" aria-hidden="true">${segments}</div><span>Peso</span><strong>${projection.totalWeight.toFixed(1)}<small>/${projection.carryingCapacity.toFixed(0)} lb</small></strong><em>${percentage}%</em></div>`;
+    const label = options.label ?? "Peso";
+    const ariaLabel = options.label ?? "Peso transportado";
+    return `<div class="inventory-weight-meter${options.className ? ` ${options.className}` : ""} ${projection.overCapacity ? "over-capacity" : ""}" ${options.attributes ?? ""} role="meter" aria-label="${escapeHtml(ariaLabel)}" aria-valuemin="0" aria-valuemax="${projection.carryingCapacity}" aria-valuenow="${projection.totalWeight}" aria-valuetext="${projection.totalWeight.toFixed(1)} de ${projection.carryingCapacity.toFixed(0)} libras${breakdownLabel ? `. ${escapeHtml(breakdownLabel)}` : ""}"><div class="inventory-weight-composition" aria-hidden="true">${segments}</div><span>${escapeHtml(label)}</span><strong>${projection.totalWeight.toFixed(1)}<small>/${projection.carryingCapacity.toFixed(0)} lb</small></strong><em>${percentage}%</em></div>`;
   }
 
   private renderInventoryPlay(character: CharacterV2): string {
@@ -1607,7 +1756,7 @@ export class BrowserApp {
     character: CharacterV2,
     item: CharacterInventoryItemV2 | EquipmentCatalogDraft,
     catalog = false,
-    commerce?: { mode: "buy" | "sell"; unitPriceCopper: number; disabled: boolean; itemChallenge?: { action: "pilfer-item" | "plant-item"; label: string; dc: number } },
+    commerce?: { mode: "buy" | "sell"; unitPriceCopper: number; selectedQuantity: number; ownedQuantity: number; disabled: boolean; itemChallenge?: { action: "pilfer-item" | "plant-item"; label: string; dc: number } },
   ): string {
     const owned = !catalog && "id" in item;
     const ownedItem = owned ? item as CharacterInventoryItemV2 : null;
@@ -1619,7 +1768,7 @@ export class BrowserApp {
     const quantity = ownedItem?.quantity ?? 0;
     const tags = this.inventoryTags(item);
     const rarity = this.inventoryRarity(item);
-    const commerceControl = commerce && ownedItem ? `<div class="inventory-card-controls merchant-item-controls"><div class="inventory-card-primary"><label class="inventory-card-quantity ${commerce.disabled ? "disabled" : ""}"><span>Cant.</span><input type="number" data-merchant-select-quantity min="1" max="${quantity}" step="1" value="1" ${commerce.disabled ? "disabled" : ""}></label><button type="button" class="inventory-state-toggle" data-merchant-select-item="${escapeHtml(ownedItem.id)}" aria-pressed="false" aria-label="Seleccionar ${escapeHtml(ownedItem.name)}" title="Seleccionar" ${commerce.disabled ? "disabled" : ""}>✕</button></div>${commerce.itemChallenge ? `<button type="button" class="secondary-button merchant-item-challenge-button" data-merchant-action="${commerce.itemChallenge.action}" data-merchant-item-id="${escapeHtml(ownedItem.id)}" data-base-item-dc="${commerce.itemChallenge.dc}"><span>${escapeHtml(commerce.itemChallenge.label)}</span><strong>CD ${commerce.itemChallenge.dc}</strong></button>` : ""}</div>` : "";
+    const commerceControl = commerce && ownedItem ? `<div class="inventory-card-controls merchant-item-controls"><div class="merchant-quantity-control ${commerce.disabled ? "disabled" : ""}" aria-label="Cantidad de ${escapeHtml(ownedItem.name)}"><div><button type="button" data-merchant-quantity-step="-1" aria-label="Quitar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity <= 0 ? "disabled" : ""}>−</button><button type="button" data-merchant-quantity-step="1" aria-label="Agregar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity >= quantity ? "disabled" : ""}>+</button></div><input type="number" inputmode="numeric" data-merchant-select-quantity min="0" max="${quantity}" step="1" value="${commerce.selectedQuantity}" aria-label="Cantidad a intercambiar de ${escapeHtml(ownedItem.name)}" ${commerce.disabled ? "disabled" : ""}><small>de ${quantity}</small></div>${commerce.itemChallenge ? `<button type="button" class="secondary-button merchant-item-challenge-button" data-merchant-action="${commerce.itemChallenge.action}" data-merchant-item-id="${escapeHtml(ownedItem.id)}" data-base-item-dc="${commerce.itemChallenge.dc}" ${commerce.selectedQuantity > 0 ? "" : "disabled"}><span>${escapeHtml(commerce.itemChallenge.label)}</span><strong>CD ${commerce.itemChallenge.dc}</strong></button>` : ""}</div>` : "";
     const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect"><span>${escapeHtml(ownedItem.effect.description)}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto"><option value="off" ${ownedItem.effect.active ? "" : "selected"}>Inactivo</option><option value="on" ${ownedItem.effect.active ? "selected" : ""}>Activo</option></select></div>` : "";
     const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`) : "";
     const transferControl = ownedItem ? `<details class="inventory-item-transfer"><summary>Transferir</summary><div><select data-item-transfer-target aria-label="Personaje destinatario"><option value="">Destinatario…</option>${targets}</select><div><input data-item-transfer-quantity type="number" min="1" max="${quantity}" step="1" value="1" aria-label="Cantidad a transferir"><button type="button" data-transfer-inventory-item disabled>Confirmar</button></div></div></details>` : "";
@@ -1630,7 +1779,7 @@ export class BrowserApp {
       catalog, commerce: !!commerce, ...(commerce ? { disabled: commerce.disabled } : {}),
       articleAttributes: ownedItem ? (commerce ? `data-merchant-commerce-item="${escapeHtml(ownedItem.id)}"` : "data-inventory-card") : "",
       headerControlHtml: commerceControl || inventoryHeaderControl,
-      statsHtml: `${commerce ? `<span><small>${commerce.mode === "buy" ? "Compra" : "Venta"}</small>${this.formatCurrencyValue(commerce.unitPriceCopper)} c/u</span>` : ""}${item.weapon?.damageExpression ? `<span>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} cargas</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
+      statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${item.weapon?.damageExpression ? `<span>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} cargas</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
       descriptionHtml: effectHtml + descriptionHtml, tags, actionsHtml,
     });
   }
@@ -2521,19 +2670,36 @@ export class BrowserApp {
         this.render();
       });
     });
-    this.root.querySelectorAll<HTMLButtonElement>("[data-merchant-select-item]").forEach((button) => {
+    this.root.querySelectorAll<HTMLButtonElement>("[data-merchant-quantity-step]").forEach((button) => {
       button.addEventListener("click", () => {
-        const selected = button.getAttribute("aria-pressed") !== "true";
-        button.setAttribute("aria-pressed", String(selected));
-        button.classList.toggle("active", selected);
-        button.textContent = selected ? "✓" : "✕";
-        button.title = selected ? "Quitar de la selección" : "Seleccionar";
-        this.updateMerchantSelectionUi();
+        const row = button.closest<HTMLElement>("[data-merchant-commerce-item]");
+        const input = row?.querySelector<HTMLInputElement>("[data-merchant-select-quantity]");
+        const shop = this.merchantFromElement(button);
+        const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
+        if (!input || !row || !shop || !character || !row.dataset.merchantCommerceItem) return;
+        const maximum = Number(input.max);
+        const step = Number(button.dataset.merchantQuantityStep);
+        this.setMerchantCartQuantity(character, shop, this.merchantMode, row.dataset.merchantCommerceItem, Number(input.value) + step, maximum);
+        this.render();
       });
     });
     this.root.querySelectorAll<HTMLInputElement>("[data-merchant-select-quantity]").forEach((input) => {
-      input.addEventListener("input", () => this.updateMerchantSelectionUi());
-      input.addEventListener("change", () => this.updateMerchantSelectionUi());
+      const normalize = (): void => {
+        const row = input.closest<HTMLElement>("[data-merchant-commerce-item]");
+        const shop = this.merchantFromElement(input);
+        const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
+        const itemId = row?.dataset.merchantCommerceItem;
+        if (!shop || !character || !itemId) return;
+        this.setMerchantCartQuantity(character, shop, this.merchantMode, itemId, Number(input.value), Number(input.max));
+        this.render();
+        const replacement = [...this.root.querySelectorAll<HTMLElement>("[data-merchant-commerce-item]")]
+          .find((candidate) => candidate.dataset.merchantCommerceItem === itemId)
+          ?.querySelector<HTMLInputElement>("[data-merchant-select-quantity]");
+        replacement?.focus();
+        replacement?.select();
+      };
+      input.addEventListener("input", normalize);
+      input.addEventListener("change", normalize);
     });
     this.root.querySelectorAll<HTMLInputElement>("[data-merchant-difficulty], [data-merchant-roll-item-id]").forEach((input) => {
       input.addEventListener("input", () => this.updatePreparedMerchantRollUi());
@@ -2828,73 +2994,57 @@ export class BrowserApp {
     const shop = this.activeMerchantName ? this.customShops.find((entry) => entry.name === this.activeMerchantName) : null;
     if (!shop || !this.snapshot || !this.selectedCharacterId) return [];
     const character = this.snapshot.campaign.characters[this.selectedCharacterId];
-    const source = this.merchantMode === "buy" ? this.merchantInventory(shop) : character?.inventory ?? [];
-    return [...this.root.querySelectorAll<HTMLElement>("[data-merchant-commerce-item]")].flatMap((row) => {
-      const selected = row.querySelector<HTMLButtonElement>("[data-merchant-select-item]");
-      const quantity = Number(row.querySelector<HTMLInputElement>("[data-merchant-select-quantity]")?.value);
-      const item = source.find((entry) => entry.id === row.dataset.merchantCommerceItem);
-      if (selected?.getAttribute("aria-pressed") !== "true" || !item || !Number.isSafeInteger(quantity) || quantity <= 0 || quantity > item.quantity) return [];
-      const interaction = normalizeMerchantInteraction(shop.interactions);
-      return [{ item, quantity, unitPriceCopper: merchantUnitPriceInCopper(item.cost, this.merchantMode, interaction.commissionPercent) }];
-    });
+    if (!character) return [];
+    const interaction = this.merchantInteractionForCharacter(shop, character);
+    const cart = this.merchantCartSelection(shop, character);
+    return (this.merchantMode === "buy" ? cart.buy : cart.sell).map((entry) => ({
+      ...entry,
+      unitPriceCopper: merchantUnitPriceInCopper(entry.item.cost, this.merchantMode, interaction.commissionPercent),
+    }));
   }
 
   private merchantItemSelection(element: HTMLElement): MerchantTradeSelection | null {
     const shop = this.merchantFromElement(element);
-    const row = element.closest<HTMLElement>("[data-merchant-commerce-item]");
     const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
     const source = shop ? (this.merchantMode === "buy" ? this.merchantInventory(shop) : character?.inventory ?? []) : [];
+    const row = element.closest<HTMLElement>("[data-merchant-commerce-item]");
     const item = row ? source.find((entry) => entry.id === row.dataset.merchantCommerceItem) : null;
-    const quantity = Number(row?.querySelector<HTMLInputElement>("[data-merchant-select-quantity]")?.value ?? 0);
-    if (!shop || !item || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > item.quantity) return null;
+    if (!shop || !character || !item) return null;
+    const quantity = this.merchantCartQuantity(character, shop, this.merchantMode, item);
+    if (quantity < 1) return null;
     const interaction = character ? this.merchantInteractionForCharacter(shop, character) : normalizeMerchantInteraction(shop.interactions);
     return { item, quantity, unitPriceCopper: merchantUnitPriceInCopper(item.cost, "buy", interaction.commissionPercent) };
   }
 
   private updateMerchantSelectionUi(): void {
     const selection = this.merchantSelection();
-    const total = selection.reduce((sum, entry) => sum + entry.unitPriceCopper * entry.quantity, 0);
     const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
-    const playerFunds = currencyTotalInCopper(character?.currency ?? { copper: 0, silver: 0, electrum: 0, gold: 0, platinum: 0 });
-    const output = this.root.querySelector<HTMLElement>("[data-merchant-selection-total]");
-    const balance = this.root.querySelector<HTMLElement>("[data-merchant-balance-preview]");
-    const preview = merchantBalancePreview(playerFunds, total, this.merchantMode);
-    const currentLabel = this.formatCurrencyValue(preview.currentAmount);
-    const adjustmentLabel = `${this.merchantMode === "buy" ? "−" : "+"}${this.formatCurrencyValue(preview.adjustmentAmount)}`;
-    if (output) output.textContent = adjustmentLabel;
-    if (balance) {
-      balance.style.setProperty("--merchant-current-share", `${preview.currentShare}%`);
-      balance.style.setProperty("--merchant-adjustment-share", `${preview.adjustmentShare}%`);
-      balance.setAttribute("aria-label", `Saldo ${currentLabel}; ${this.merchantMode === "buy" ? "se restan" : "se suman"} ${this.formatCurrencyValue(total)}`);
-      const currentOutput = balance.querySelector<HTMLElement>("[data-merchant-balance-current]");
-      if (currentOutput) currentOutput.textContent = currentLabel;
-    }
-    const button = this.root.querySelector<HTMLButtonElement>('[data-merchant-action="transact"]');
-    if (button) {
-      const shop = this.activeMerchantName ? this.customShops.find((entry) => entry.name === this.activeMerchantName) : null;
-      const interaction = normalizeMerchantInteraction(shop?.interactions);
-      const available = this.merchantMode === "buy"
-        ? playerFunds
-        : interaction.fundsCopper;
-      button.disabled = !selection.length || total > available;
-      if (balance) balance.dataset.insufficient = String(selection.length > 0 && total > available);
-      button.title = total > available
-        ? this.merchantMode === "buy" ? "No tenés fondos suficientes." : "El comerciante no tiene fondos suficientes."
-        : "";
-    }
     const shop = this.activeMerchantName ? this.customShops.find((entry) => entry.name === this.activeMerchantName) : null;
+    const interaction = character && shop ? this.merchantInteractionForCharacter(shop, character) : normalizeMerchantInteraction(shop?.interactions);
+    this.root.querySelectorAll<HTMLElement>("[data-merchant-commerce-item]").forEach((row) => {
+      const input = row.querySelector<HTMLInputElement>("[data-merchant-select-quantity]");
+      const quantity = Number(input?.value ?? 0);
+      const maximum = Number(input?.max ?? 0);
+      const decrease = row.querySelector<HTMLButtonElement>('[data-merchant-quantity-step="-1"]');
+      const increase = row.querySelector<HTMLButtonElement>('[data-merchant-quantity-step="1"]');
+      if (decrease) decrease.disabled = !input || input.disabled || quantity <= 0;
+      if (increase) increase.disabled = !input || input.disabled || quantity >= maximum;
+    });
     const npc = shop ? this.linkedMerchantNpc(shop) : null;
     if (shop && npc) {
-      const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
-      const interaction = character ? this.merchantInteractionForCharacter(shop, character) : normalizeMerchantInteraction(shop.interactions);
       const perception = merchantNpcStatistics(npc).perception;
       this.root.querySelectorAll<HTMLButtonElement>('[data-merchant-action="pilfer-item"], [data-merchant-action="plant-item"]').forEach((itemButton) => {
         const entry = this.merchantItemSelection(itemButton);
+        itemButton.disabled = !entry || interaction.state !== "active";
         if (!entry) return;
         const dc = merchantPilferTarget(interaction, perception, entry.item, entry.quantity);
         const label = itemButton.dataset.merchantAction === "plant-item" ? "Implantar" : "Hurtar";
         itemButton.innerHTML = `<span>${label}</span><strong>CD ${dc}</strong>`;
       });
+      const assaultButton = this.root.querySelector<HTMLButtonElement>('[data-merchant-action="assault-selected"]');
+      if (assaultButton) assaultButton.disabled = this.merchantMode !== "buy" || !merchantAssaultSelectionAllowed(interaction, selection);
+      const lootButton = this.root.querySelector<HTMLButtonElement>('[data-merchant-action="loot-selected"]');
+      if (lootButton) lootButton.disabled = this.merchantMode !== "buy" || !selection.length || !merchantCanBeLooted(interaction);
     }
   }
 
@@ -3000,6 +3150,110 @@ export class BrowserApp {
     return inventory;
   }
 
+  private clearMerchantCart(shop: GmShop, character: CharacterV2): void {
+    const prefix = JSON.stringify([character.id, shop.name]).slice(0, -1);
+    for (const key of this.merchantCartQuantities.keys()) {
+      if (key.startsWith(prefix)) this.merchantCartQuantities.delete(key);
+    }
+  }
+
+  private merchantCartValidationSignature(shop: GmShop, character: CharacterV2, cart: MerchantCartSelection): string {
+    const interaction = this.merchantInteractionForCharacter(shop, character);
+    const line = (entry: MerchantTradeSelection) => [entry.item.id, entry.item.quantity, entry.quantity, inventoryCostInCopper(entry.item.cost)];
+    return JSON.stringify({
+      buy: cart.buy.map(line),
+      sell: cart.sell.map(line),
+      commissionPercent: interaction.commissionPercent,
+      merchantFunds: interaction.fundsCopper,
+      characterFunds: currencyTotalInCopper(character.currency),
+    });
+  }
+
+  private async executeMerchantCartTransaction(shop: GmShop): Promise<void> {
+    if (!this.snapshot || !this.selectedCharacterId) throw new Error("No hay un personaje seleccionado.");
+    const beforeCharacter = this.snapshot.campaign.characters[this.selectedCharacterId];
+    if (!beforeCharacter) throw new Error("El personaje ya no está disponible.");
+    const beforeCart = this.merchantCartSelection(shop, beforeCharacter);
+    const beforeSignature = this.merchantCartValidationSignature(shop, beforeCharacter, beforeCart);
+    await this.refreshCustomContent(false);
+    const currentShop = this.customShops.find((entry) => entry.name === shop.name) ?? shop;
+    const character = this.snapshot.campaign.characters[this.selectedCharacterId];
+    if (!character) throw new Error("El personaje ya no está disponible.");
+    const cart = this.merchantCartSelection(currentShop, character);
+    if (beforeSignature !== this.merchantCartValidationSignature(currentShop, character, cart)) {
+      this.merchantCartReviewShopName = currentShop.name;
+      throw new Error("El inventario, los precios o los fondos cambiaron. El carrito fue actualizado; revisalo nuevamente.");
+    }
+    const interaction = this.merchantInteractionForCharacter(currentShop, character);
+    if (!interaction.barter || interaction.state !== "active") throw new Error("El comerciante no está disponible para comerciar.");
+    if (!cart.buy.length && !cart.sell.length) throw new Error("El carrito está vacío.");
+    const playerFunds = currencyTotalInCopper(character.currency);
+    const projectedPlayerFunds = playerFunds + cart.totals.characterCurrencyDeltaCopper;
+    const projectedMerchantFunds = interaction.fundsCopper + cart.totals.merchantCurrencyDeltaCopper;
+    if (projectedPlayerFunds < 0) throw new Error("No tenés fondos suficientes para completar el intercambio.");
+    if (projectedMerchantFunds < 0) throw new Error("El comerciante no tiene fondos suficientes para completar el intercambio.");
+
+    const originalMerchantInventory = this.merchantInventory(currentShop).map((item) => structuredClone(item));
+    const afterBuys = this.adjustMerchantInventory(currentShop, cart.buy, "remove");
+    const originalNpc = this.linkedMerchantNpc(currentShop);
+    if (!originalNpc) throw new Error("El comerciante no tiene un NPC asociado válido.");
+    const merchantInventoryAfterCart = (() => {
+      const inventory = afterBuys.map((item) => structuredClone(item));
+      for (const selection of cart.sell) {
+        const transferable = { ...selection.item, equipped: false, attuned: false };
+        const stack = inventory.find((entry) => inventoryItemsCanStack({ ...transferable, group: entry.group }, entry));
+        if (stack) stack.quantity += selection.quantity;
+        else inventory.push({ ...structuredClone(transferable), id: `inv_${crypto.randomUUID().replaceAll("-", "")}`, order: inventory.length, quantity: selection.quantity });
+      }
+      return inventory.map((item, order) => ({ ...item, order }));
+    })();
+    const projectedCharacter = this.projectedMerchantCartCharacter(character, cart);
+    const finalizedCharacter: CharacterV2 = {
+      ...projectedCharacter,
+      currency: currencyFromCopper(projectedPlayerFunds),
+      inventory: projectedCharacter.inventory.map((item, order) => ({
+        ...item,
+        id: item.id.startsWith("cart:") ? `inv_${crypto.randomUUID().replaceAll("-", "")}` : item.id,
+        order,
+      })),
+    };
+
+    let characterUpdated = false;
+    await this.persistMerchantInventory(currentShop, merchantInventoryAfterCart);
+    try {
+      this.acceptCharacterSnapshot(await this.application.restoreCharacterState({
+        characterId: character.id,
+        expectedCharacterRevision: character.revision,
+        expectedCampaignChecksum: this.snapshot.checksum,
+        character: finalizedCharacter,
+      }), `Intercambio con ${currentShop.name}`);
+      characterUpdated = true;
+      await this.persistMerchantShop({
+        ...currentShop,
+        interactions: { ...interaction, fundsCopper: projectedMerchantFunds },
+      });
+    } catch (error) {
+      this.customMonsters = this.customMonsters.map((entry) => entry.name === originalNpc.name ? originalNpc : entry);
+      await this.persistMerchantInventory(currentShop, originalMerchantInventory).catch(() => undefined);
+      if (characterUpdated && this.snapshot) {
+        const changedCharacter = this.snapshot.campaign.characters[character.id];
+        if (changedCharacter) {
+          await this.application.restoreCharacterState({
+            characterId: changedCharacter.id,
+            expectedCharacterRevision: changedCharacter.revision,
+            expectedCampaignChecksum: this.snapshot.checksum,
+            character,
+          }).then((snapshot) => { this.snapshot = snapshot; }).catch(() => undefined);
+        }
+      }
+      throw error;
+    }
+    const units = [...cart.buy, ...cart.sell].reduce((sum, entry) => sum + entry.quantity, 0);
+    this.clearMerchantCart(currentShop, character);
+    this.merchantCartReviewShopName = null;
+    this.appendActionLog(`Intercambio con ${currentShop.name}: ${units} objeto(s) · comisión neta ${this.formatCopper(cart.totals.commissionCopper)}`);
+  }
+
   private async executeMerchantTransaction(
     shop: GmShop,
     selection = this.merchantSelection(),
@@ -3010,6 +3264,18 @@ export class BrowserApp {
     const chargeCurrency = operation === "trade";
     const currentShop = this.customShops.find((entry) => entry.name === shop.name) ?? shop;
     const interaction = normalizeMerchantInteraction(currentShop.interactions);
+    if (operation === "trade" && (!interaction.barter || interaction.state !== "active")) {
+      throw new Error("El comerciante no está disponible para comerciar.");
+    }
+    if (operation === "loot" && !merchantCanBeLooted(interaction)) {
+      throw new Error("El comerciante no puede ser saqueado en su estado actual.");
+    }
+    if (operation === "pilfer" && (!interaction.steal || interaction.state !== "active")) {
+      throw new Error("No se puede hurtar al comerciante en su estado actual.");
+    }
+    if (operation === "assault" && (!interaction.assault || interaction.state !== "active" || !merchantAssaultSelectionAllowed(interaction, selection))) {
+      throw new Error(`El asalto admite hasta ${interaction.assaultMaxItems} objetos y ${interaction.assaultMaxWeight} lb.`);
+    }
     if (this.merchantMode === "buy") {
       const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
       if (!character || (chargeCurrency && currencyTotalInCopper(character.currency) < total)) throw new Error("El personaje no tiene suficientes monedas.");
@@ -3159,10 +3425,40 @@ export class BrowserApp {
       if (action === "back") {
         this.activeMerchantName = null;
         this.preparedMerchantRoll = null;
+        this.merchantCartReviewShopName = null;
         this.render();
         return;
       }
-      if ((action === "persuade" || action === "negotiate") && interaction.negotiation) {
+      if (action === "open-cart-review" || action === "transact") {
+        this.merchantCartReviewShopName = shop.name;
+        this.render();
+        return;
+      }
+      if (action === "close-cart-review") {
+        this.merchantCartReviewShopName = null;
+        this.render();
+        return;
+      }
+      if (action === "remove-cart-entry" && character) {
+        const mode = button.dataset.cartMode === "sell" ? "sell" : "buy";
+        const itemId = button.dataset.cartItemId;
+        if (itemId) this.setMerchantCartQuantity(character, shop, mode, itemId, 0, 0);
+        this.render();
+        return;
+      }
+      if (action === "clear-cart" && character) {
+        this.clearMerchantCart(shop, character);
+        this.merchantCartReviewShopName = null;
+        this.render();
+        return;
+      }
+      if (action === "confirm-cart") {
+        await this.executeMerchantCartTransaction(shop);
+        this.message = { kind: "success", text: "Intercambio completado." };
+        this.render();
+        return;
+      }
+      if ((action === "persuade" || action === "negotiate") && interaction.negotiation && interaction.state === "active") {
         const preview = this.merchantChallengePreview(shop, "persuasion", difficulty);
         this.preparedMerchantRoll = { shopName: shop.name, label: "Persuadir", challenge: "persuasion", difficulty, selections: [], rollExpression: preview.rollExpression, breakdown: preview.breakdown, execute: (nextDifficulty) => this.rollMerchantChallenge(shop, "persuasion", nextDifficulty, undefined, async (success) => {
           const current = this.customShops.find((entry) => entry.name === shop.name) ?? shop;
@@ -3176,7 +3472,7 @@ export class BrowserApp {
         this.render();
         return;
       }
-      if (action === "intimidate" && interaction.intimidation) {
+      if (action === "intimidate" && interaction.intimidation && interaction.state === "active") {
         const preview = this.merchantChallengePreview(shop, "intimidation", difficulty);
         this.preparedMerchantRoll = { shopName: shop.name, label: "Intimidar", challenge: "intimidation", difficulty, selections: [], rollExpression: preview.rollExpression, breakdown: preview.breakdown, execute: (nextDifficulty) => this.rollMerchantChallenge(shop, "intimidation", nextDifficulty, undefined, async (success) => {
           const current = this.customShops.find((entry) => entry.name === shop.name) ?? shop;
@@ -3187,12 +3483,6 @@ export class BrowserApp {
             ? `Comisión reducida de ${settings.commissionPercent}% a ${updated.commissionPercent}%; reputación ${settings.reputation} → ${updated.reputation}.`
             : `La comisión permanece en ${settings.commissionPercent}%; reputación ${settings.reputation} → ${updated.reputation}.`;
         }) };
-        this.render();
-        return;
-      }
-      if (action === "transact") {
-        await this.executeMerchantTransaction(shop);
-        this.message = { kind: "success", text: "Operación comercial completada." };
         this.render();
         return;
       }

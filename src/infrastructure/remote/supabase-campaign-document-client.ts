@@ -238,6 +238,46 @@ export class SupabaseCampaignDocumentClient {
     }
   }
 
+  subscribeCampaignContent(campaignId: string, listener: () => void): RemoteCampaignSubscription {
+    let resolveReady: (() => void) | undefined;
+    let rejectReady: ((error: Error) => void) | undefined;
+    const ready = new Promise<void>((resolve, reject) => {
+      resolveReady = resolve;
+      rejectReady = reject;
+    });
+    const channel = this.client
+      .channel(`campaign-content:${campaignId}:${crypto.randomUUID()}`)
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "campaign_content_entries",
+        filter: `campaign_id=eq.${campaignId}`,
+      }, () => listener())
+      .on("postgres_changes", {
+        event: "UPDATE",
+        schema: "public",
+        table: "campaign_content_entries",
+        filter: `campaign_id=eq.${campaignId}`,
+      }, () => listener())
+      .on("postgres_changes", {
+        event: "DELETE",
+        schema: "public",
+        table: "campaign_content_entries",
+      }, () => listener())
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") resolveReady?.();
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          rejectReady?.(new Error(`Realtime content subscription failed: ${status}`));
+        }
+      });
+    return {
+      ready,
+      unsubscribe: async () => {
+        await this.client.removeChannel(channel);
+      },
+    };
+  }
+
   async seedCampaignContent(campaignId: string): Promise<number> {
     const result = await this.client.rpc("seed_campaign_content", { p_campaign_id: campaignId });
     if (result.error) throwRpcError(result.error);

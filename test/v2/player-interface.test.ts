@@ -6,7 +6,7 @@ import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipme
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import type { CampaignSnapshot } from "../../src/application/ports/campaign-repository";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
-import { BrowserApp, describeCharacterChanges, experienceProgress, formatCurrencyInLargestDenominations, inspiredRollMode, isValidHitPointAmount, merchantBalancePreview, strengthBasedIntimidationModifier, type BrowserAppRuntime } from "../../src/ui/browser-app";
+import { BrowserApp, clampMerchantQuantity, describeCharacterChanges, experienceProgress, formatCurrencyInLargestDenominations, inspiredRollMode, isValidHitPointAmount, merchantBalancePreview, strengthBasedIntimidationModifier, type BrowserAppRuntime } from "../../src/ui/browser-app";
 import type { TaleSpireTransportDiagnostics } from "../../src/infrastructure/talespire/talespire-player-collaboration";
 import type { GmShop } from "../../src/domain/gm/gm-global-content";
 import type { MerchantDifficultyBreakdown } from "../../src/domain/commerce/merchant-interaction";
@@ -20,6 +20,8 @@ interface BrowserAppViewHarness {
   customMonsters: ReturnType<typeof normalizeMonsterDefinition>[];
   activeMerchantName: string | null;
   merchantMode: "buy" | "sell";
+  merchantCartQuantities: Map<string, number>;
+  merchantCartReviewShopName: string | null;
   preparedMerchantRoll: { shopName: string; label: string; challenge: "persuasion" | "intimidation" | "pilfer" | "assault" | "plant-evidence"; difficulty: number; rollExpression: string; breakdown: MerchantDifficultyBreakdown; selections: { item: ReturnType<typeof createCharacter>["inventory"][number]; quantity: number; unitPriceCopper: number }[]; execute: (difficulty: number, selections: { item: ReturnType<typeof createCharacter>["inventory"][number]; quantity: number; unitPriceCopper: number }[]) => Promise<void> } | null;
   includeUnknownSpells: boolean;
   spellPropertyFilters: Set<string>;
@@ -390,6 +392,10 @@ describe("player interface shell", () => {
       adjustmentShare: 25,
     });
     expect(merchantBalancePreview(0, 0, "buy")).toMatchObject({ currentShare: 100, adjustmentShare: 0 });
+    expect(clampMerchantQuantity(12, 5)).toBe(5);
+    expect(clampMerchantQuantity(-3, 5)).toBe(0);
+    expect(clampMerchantQuantity(3.8, 5)).toBe(3);
+    expect(clampMerchantQuantity(Number.NaN, 5)).toBe(0);
   });
 
   it("calculates circular experience progress between 5e levels", () => {
@@ -914,6 +920,7 @@ describe("player interface shell", () => {
       "2026-08-08T00:00:00.000Z",
     );
     character.inventory = [{ ...dagger, id: "inv_33333333333333333333333333333333", order: 0, group: "backpack", quantity: 1, equipped: false, attuned: false }];
+    character.currency.gold = 10;
     view.activeSheetTab = "interactions";
     view.customShops = [{
       name: "Mirna",
@@ -936,7 +943,10 @@ describe("player interface shell", () => {
     view.activeMerchantName = "Mirna";
     const html = view.renderCharacterForm(character);
     expect(html).toContain("<b>Reputación</b><strong>2</strong>");
-    expect(html).toContain('aria-label="Fondos comerciante: 10 PPL"');
+    expect(html).toContain('data-balance-owner="character"');
+    expect(html).toContain('data-balance-owner="merchant"');
+    expect(html).toContain('aria-label="Monedas comerciante: 10 PPL (+0 PC)"');
+    expect(html).toContain('data-merchant-weight-preview role="meter"');
     expect(html).toContain("<b>Sospecha</b><strong>+0 CD</strong>");
     expect(html).toContain("<span>Persuadir</span><strong>CD 12</strong>");
     expect(html).toContain("<span>Intimidar</span><strong>CD 12</strong>");
@@ -946,18 +956,41 @@ describe("player interface shell", () => {
     expect(html).not.toContain("Asaltar transfiere objetos");
     expect(html).toContain('data-merchant-action="pilfer-item"');
     expect(html).toContain("<span>Hurtar</span><strong>CD 15</strong>");
-    expect(html).toContain('data-merchant-select-item="inv_22222222222222222222222222222222" aria-pressed="false"');
-    expect(html).toContain('data-merchant-select-quantity min="1" max="2"');
-    expect(html).toContain("2 PO · 4 PP c/u");
-    expect(html).toContain('data-merchant-balance-preview data-mode="buy"');
-    expect(html).toContain('--merchant-current-share:100%;--merchant-adjustment-share:0%');
-    expect(html.indexOf('data-merchant-balance-preview')).toBeLessThan(html.indexOf('data-merchant-action="transact"'));
+    expect(html).not.toContain('data-merchant-select-item');
+    expect(html).toContain('data-merchant-select-quantity min="0" max="2" step="1" value="0"');
+    expect(html).toContain('data-merchant-quantity-step="-1"');
+    expect(html).toContain('data-merchant-quantity-step="1"');
+    expect(html).toContain('<small>de 2</small>');
+    expect(html).toContain('class="merchant-price"');
+    expect(html).toContain('data-coin-kind="gold"');
+    expect(html).toContain('class="merchant-commerce-mode-switch"');
+    expect(html).toContain('class="inventory-weight-meter merchant-money-meter primary"');
+    expect(html).toContain('class="inventory-weight-meter merchant-money-meter secondary"');
+    expect(html.indexOf('merchant-commerce-mode-switch')).toBeLessThan(html.indexOf('merchant-resource-stack'));
+    expect(html).toContain('data-merchant-action="open-cart-review" disabled');
     expect(html).not.toContain('data-merchant-action="loot-selected"');
-    expect(html).toContain('data-merchant-mode="buy" class="merchant-mode-action active"');
+    expect(html).toContain('data-merchant-action="assault-selected" data-merchant-base-dc="12" data-merchant-dc-label="Asaltar" disabled');
+    expect(html).toContain('data-merchant-mode="buy" class="buy active"');
     expect(html.indexOf('data-merchant-mode="buy"')).toBeLessThan(html.indexOf('data-merchant-action="persuade"'));
     expect(html).not.toContain('data-merchant-difficulty type="number"');
     expect(html).toContain('id="inventory-search"');
     expect(html).not.toContain('data-include-unowned-inventory');
+    view.merchantCartQuantities.set(JSON.stringify([character.id, "Mirna", "buy", "inv_22222222222222222222222222222222"]), 1);
+    view.merchantCartQuantities.set(JSON.stringify([character.id, "Mirna", "sell", "inv_33333333333333333333333333333333"]), 1);
+    const cartHtml = view.renderCharacterForm(character);
+    expect(cartHtml).toContain('data-merchant-select-quantity min="0" max="2" step="1" value="1"');
+    expect(cartHtml).toContain('data-merchant-action="open-cart-review" ><span>Revisar intercambio</span><strong>2 objetos</strong>');
+    expect(cartHtml).toContain('<small>1 en carrito</small></button><button type="button" data-merchant-mode="sell"');
+    view.inventorySearch = "sin coincidencias";
+    expect(view.renderCharacterForm(character)).not.toContain('data-merchant-commerce-item="inv_22222222222222222222222222222222"');
+    view.inventorySearch = "";
+    expect(view.renderCharacterForm(character)).toContain('data-merchant-select-quantity min="0" max="2" step="1" value="1"');
+    view.merchantCartReviewShopName = "Mirna";
+    const reviewHtml = view.renderCharacterForm(character);
+    expect(reviewHtml).toContain('class="merchant-cart-dialog merchant-roll-dialog"');
+    expect(reviewHtml).toContain('Comisión 20% sólo sobre la diferencia');
+    expect(reviewHtml).toContain('No se intercambian monedas');
+    expect(reviewHtml).toContain('Peso del inventario');
     character.commerce.suspicionByMerchant.npc_mirna = 2;
     const suspiciousHtml = view.renderCharacterForm(character);
     expect(suspiciousHtml).toContain("<b>Sospecha</b><strong>+4 CD</strong>");

@@ -52,6 +52,36 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
 }
 
 describe("Supabase campaign content store", () => {
+  it("subscribes to inserts and updates for this campaign and to unfiltered deletes", async () => {
+    const registrations: Array<Record<string, unknown>> = [];
+    let removed = false;
+    const channel = {
+      on: (_kind: string, config: Record<string, unknown>, _listener: () => void) => {
+        registrations.push(config);
+        return channel;
+      },
+      subscribe: (listener: (status: string) => void) => {
+        listener("SUBSCRIBED");
+        return channel;
+      },
+    };
+    const client = new SupabaseCampaignDocumentClient({
+      channel: () => channel,
+      removeChannel: async () => { removed = true; },
+    } as never);
+
+    const subscription = client.subscribeCampaignContent(campaignId, () => undefined);
+    await subscription.ready;
+    expect(registrations).toEqual([
+      expect.objectContaining({ event: "INSERT", table: "campaign_content_entries", filter: `campaign_id=eq.${campaignId}` }),
+      expect.objectContaining({ event: "UPDATE", table: "campaign_content_entries", filter: `campaign_id=eq.${campaignId}` }),
+      expect.objectContaining({ event: "DELETE", table: "campaign_content_entries" }),
+    ]);
+    expect(registrations[2]).not.toHaveProperty("filter");
+    await subscription.unsubscribe();
+    expect(removed).toBe(true);
+  });
+
   it("loads every content page instead of stopping at Supabase's first 1000 rows", async () => {
     const rows = Array.from({ length: 1001 }, (_, index) => ({
       campaign_id: campaignId,
@@ -111,6 +141,19 @@ describe("Supabase campaign content store", () => {
     expect(second.spells[0]?.name).toBe("Prueba");
     expect(third.spells[0]?.name).toBe("Prueba");
     expect(remote.loads()).toBe(1);
+  });
+
+  it("reloads changed merchant content once when realtime emits concurrent signals", async () => {
+    const remote = fakeClient([entry({ kind: "shop", contentKey: "gm:shop:mirna", name: "Mirna", payload: { name: "Mirna", interactions: { fundsCopper: 100 } } })]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    expect((await store.load()).shops[0]?.interactions?.fundsCopper).toBe(100);
+    remote.current()[0]!.payload = { name: "Mirna", interactions: { fundsCopper: 75 } };
+
+    const [first, second] = await Promise.all([store.reload(), store.reload()]);
+
+    expect(first.shops[0]?.interactions?.fundsCopper).toBe(75);
+    expect(second.shops[0]?.interactions?.fundsCopper).toBe(75);
+    expect(remote.loads()).toBe(2);
   });
 
   it("round-trips normalized equipment and monster values without losing combat fields", async () => {

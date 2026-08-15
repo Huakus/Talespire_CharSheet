@@ -192,6 +192,40 @@ export function merchantUnitPriceInCopper(cost: { quantity: number; unit: string
   return Math.max(0, mode === "buy" ? Math.ceil(base * multiplier) : Math.floor(base * multiplier));
 }
 
+export interface MerchantBarterTotals {
+  buySubtotalCopper: number;
+  sellSubtotalCopper: number;
+  netBaseCopper: number;
+  commissionCopper: number;
+  characterCurrencyDeltaCopper: number;
+  merchantCurrencyDeltaCopper: number;
+}
+
+export function merchantBarterTotals(
+  buySubtotalCopper: number,
+  sellSubtotalCopper: number,
+  commissionPercent: number,
+): MerchantBarterTotals {
+  const buys = Math.max(0, Math.trunc(buySubtotalCopper));
+  const sales = Math.max(0, Math.trunc(sellSubtotalCopper));
+  const netBaseCopper = buys - sales;
+  const rate = Math.min(100, Math.max(0, Number(commissionPercent) || 0)) / 100;
+  const commissionCopper = Math.round(Math.abs(netBaseCopper) * rate);
+  const characterCurrencyDeltaCopper = netBaseCopper > 0
+    ? -(netBaseCopper + commissionCopper)
+    : netBaseCopper < 0
+      ? Math.abs(netBaseCopper) - commissionCopper
+      : 0;
+  return {
+    buySubtotalCopper: buys,
+    sellSubtotalCopper: sales,
+    netBaseCopper,
+    commissionCopper,
+    characterCurrencyDeltaCopper,
+    merchantCurrencyDeltaCopper: -characterCurrencyDeltaCopper,
+  };
+}
+
 export function merchantCanPay(interaction: MerchantInteraction, amountCopper: number): boolean {
   return interaction.fundsCopper >= Math.max(0, Math.trunc(amountCopper));
 }

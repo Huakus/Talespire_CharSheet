@@ -273,6 +273,7 @@ export interface RemoteCampaignServices {
   content: SupabaseCampaignContentStore;
   lore: SupabaseCampaignLoreClient;
   subscribeCampaignChanges(listener: (snapshot: CampaignSnapshot) => void): () => void;
+  subscribeContentChanges(listener: () => void): () => void;
 }
 
 export async function configureRemotePersistence(
@@ -326,12 +327,18 @@ export async function configureRemotePersistence(
 
     window.localStorage.setItem(bindingKey, campaign.id);
     const campaignChangeListeners = new Set<(snapshot: CampaignSnapshot) => void>();
+    const content = new SupabaseCampaignContentStore(client, campaign.id);
     onServices?.({
-      content: new SupabaseCampaignContentStore(client, campaign.id),
+      content,
       lore: new SupabaseCampaignLoreClient(supabase, campaign.id),
       subscribeCampaignChanges: (listener) => {
         campaignChangeListeners.add(listener);
         return () => campaignChangeListeners.delete(listener);
+      },
+      subscribeContentChanges: (listener) => {
+        const subscription = client.subscribeCampaignContent(campaign.id, listener);
+        void subscription.ready.catch(() => undefined);
+        return () => { void subscription.unsubscribe(); };
       },
     });
     panel.remove();

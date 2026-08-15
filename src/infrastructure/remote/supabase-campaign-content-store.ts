@@ -24,6 +24,7 @@ function normalizedName(value: string): string { return value.trim().toLocaleLow
 export class SupabaseCampaignContentStore {
   private entries: RemoteCampaignContentEntry[] | null = null;
   private loadingEntries: Promise<RemoteCampaignContentEntry[]> | null = null;
+  private reloadingContent: Promise<CampaignContent> | null = null;
 
   constructor(private readonly client: SupabaseCampaignDocumentClient, private readonly campaignId: string) {}
 
@@ -34,6 +35,20 @@ export class SupabaseCampaignContentStore {
       finally { this.loadingEntries = null; }
     }
     return this.project(this.entries);
+  }
+
+  async reload(): Promise<CampaignContent> {
+    if (this.reloadingContent) return this.reloadingContent;
+    const reload = (async () => {
+      if (this.loadingEntries) await this.loadingEntries.catch(() => undefined);
+      this.entries = null;
+      return this.load();
+    })();
+    this.reloadingContent = reload;
+    try { return await reload; }
+    finally {
+      if (this.reloadingContent === reload) this.reloadingContent = null;
+    }
   }
 
   async seedOfficialContent(): Promise<number> {

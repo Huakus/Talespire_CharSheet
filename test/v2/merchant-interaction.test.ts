@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   merchantCanBeLooted,
   merchantCanPay,
+  merchantBarterTotals,
   merchantAfterAssaultAttempt,
   merchantAfterPlantAttempt,
   merchantAfterIntimidation,
@@ -83,6 +84,28 @@ describe("merchant interactions", () => {
     expect(merchantFundsAfterTrade(merchant, "buy", 120)).toBe(620);
     expect(merchantFundsAfterTrade(merchant, "sell", 120)).toBe(380);
     expect(() => merchantFundsAfterTrade(merchant, "sell", 501)).toThrow("Fondos insuficientes");
+  });
+
+  it("applies commission only to the net value of a mixed barter", () => {
+    expect(merchantBarterTotals(1_000, 600, 20)).toEqual({
+      buySubtotalCopper: 1_000,
+      sellSubtotalCopper: 600,
+      netBaseCopper: 400,
+      commissionCopper: 80,
+      characterCurrencyDeltaCopper: -480,
+      merchantCurrencyDeltaCopper: 480,
+    });
+    expect(merchantBarterTotals(600, 1_000, 20)).toMatchObject({
+      netBaseCopper: -400,
+      commissionCopper: 80,
+      characterCurrencyDeltaCopper: 320,
+      merchantCurrencyDeltaCopper: -320,
+    });
+    expect(merchantBarterTotals(1_000, 1_000, 20)).toMatchObject({
+      netBaseCopper: 0,
+      commissionCopper: 0,
+      characterCurrencyDeltaCopper: 0,
+    });
   });
 
   it("calculates pilfer difficulty from reputation, value, weight and prior attempts", () => {
