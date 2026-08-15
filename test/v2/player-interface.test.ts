@@ -157,6 +157,30 @@ describe("player interface shell", () => {
     expect(editor).not.toContain('name="playerName"');
   });
 
+  it("groups additional proficiencies by type instead of rendering one flat bag of tags", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_10101010101010101010101010101010",
+      "Grouped Hero",
+      "2026-08-15T00:00:00.000Z",
+    );
+    character.proficiencies.weapons = ["Armas simples", "Espadas largas"];
+    character.proficiencies.armor = ["Armaduras ligeras"];
+    character.proficiencies.tools = ["Herramientas de ladrón"];
+
+    const html = view.renderCharacterForm(character);
+
+    expect(html).toContain('class="play-section proficiency-section"');
+    expect(html).toContain('data-proficiency-group="weapons"');
+    expect(html).toContain('data-proficiency-group="armor"');
+    expect(html).toContain('data-proficiency-group="tools"');
+    expect(html).toContain('data-proficiency-group="languages"');
+    expect(html).toContain("Espadas largas");
+    expect(html).toContain("Herramientas de ladrón");
+    expect(html).toContain('<span class="muted">Ninguna</span>');
+    expect(html).not.toContain("Arma: Armas simples");
+  });
+
   it("shows every session message but counts only unread errors", () => {
     const view = harness();
     view.notifications = [

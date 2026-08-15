@@ -377,6 +377,20 @@ textarea { min-height: 76px; padding: 9px; color: var(--ui-text); background: va
 .passive-readouts strong { color: var(--ui-accent-hover); }
 .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag-list > span:not(.muted) { padding: 4px 7px; color: var(--ui-text-secondary); border: 1px solid var(--ui-border); border-radius: 999px; background: var(--ui-bg-sunken); font-size: .72rem; }
+.proficiency-section { display: grid; gap: var(--ui-space-3); }
+.proficiency-section > .section-heading { margin-bottom: 0; }
+.proficiency-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-2); }
+.proficiency-group { --proficiency-tone: var(--ui-item-other); display: grid; align-content: start; gap: var(--ui-space-2); min-width: 0; padding: var(--ui-space-3); background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-left: 3px solid var(--proficiency-tone); border-radius: var(--ui-radius-md); }
+.proficiency-group[data-proficiency-group="weapons"] { --proficiency-tone: var(--ui-item-weapon); }
+.proficiency-group[data-proficiency-group="armor"] { --proficiency-tone: var(--ui-item-armor); }
+.proficiency-group[data-proficiency-group="tools"] { --proficiency-tone: var(--ui-item-tool); }
+.proficiency-group[data-proficiency-group="languages"] { --proficiency-tone: var(--ui-info); }
+.proficiency-group > header { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-2); }
+.proficiency-group > header strong { color: var(--proficiency-tone); font: 800 .75rem var(--ui-font-display); }
+.proficiency-group > header span { display: inline-grid; min-width: 20px; min-height: 20px; place-items: center; padding: 1px 5px; color: var(--ui-text-secondary); background: var(--ui-bg-surface); border-radius: 999px; font-size: .58rem; font-weight: 850; }
+.proficiency-group .tag-list { align-content: start; }
+.proficiency-group .tag-list > span:not(.muted) { color: var(--ui-text-secondary); border-color: color-mix(in srgb, var(--proficiency-tone) 40%, var(--ui-border)); }
+.proficiency-group .muted { color: var(--ui-text-faint); font-size: .65rem; font-style: italic; }
 .currency-strip { display: flex; flex-wrap: wrap; gap: 8px; }
 .currency-strip span { min-width: 74px; padding: 8px 10px; border-radius: 6px; background: var(--ui-bg-sunken); color: var(--ui-text-muted); font-size: .75rem; }
 .currency-strip strong { color: var(--ui-accent-hover); font-size: 1rem; }
@@ -484,6 +498,7 @@ textarea { min-height: 76px; padding: 9px; color: var(--ui-text); background: va
   .ability-cards { grid-template-columns: repeat(2, 1fr); }
   .quick-roll-list { grid-template-columns: 1fr; }
   .play-section { padding: 12px; }
+  .proficiency-groups { grid-template-columns: 1fr; }
   .section-heading { align-items: start; flex-direction: column; }
 }
 

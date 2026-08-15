@@ -1370,12 +1370,13 @@ export class BrowserApp {
   private renderSummaryPlay(character: CharacterV2, projection: CharacterStatisticsProjection): string {
     const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
     const abilityLabels = ABILITY_ABBREVIATIONS;
-    const proficiencyTags = [
-      ...character.proficiencies.weapons.map((value) => `Arma: ${value}`),
-      ...character.proficiencies.armor.map((value) => `Armadura: ${value}`),
-      ...character.proficiencies.tools.map((value) => `Herramienta: ${value}`),
-      ...character.proficiencies.languages.map((value) => `Idioma: ${value}`),
-    ];
+    const proficiencyGroups = [
+      { key: "weapons", label: "Armas", values: character.proficiencies.weapons },
+      { key: "armor", label: "Armaduras", values: character.proficiencies.armor },
+      { key: "tools", label: "Herramientas", values: character.proficiencies.tools },
+      { key: "languages", label: "Idiomas", values: character.proficiencies.languages },
+    ] as const;
+    const proficiencyCount = proficiencyGroups.reduce((total, group) => total + group.values.length, 0);
     const activeEffects = [
       ...character.spellcasting.spells.filter((spell) => spell.effect.active && spell.effect.description.trim()).map((spell) => ({ source: spell.name, description: spell.effect.description, kind: "Conjuro" })),
       ...character.inventory.filter((item) => item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
@@ -1404,7 +1405,7 @@ export class BrowserApp {
         </div>
         ${this.renderConditionToggles(character)}
       </section>
-      <section class="play-section"><h2>Competencias</h2><div class="tag-list">${proficiencyTags.length ? proficiencyTags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("") : '<span class="muted">Sin competencias adicionales</span>'}</div></section>
+      <section class="play-section proficiency-section"><div class="section-heading"><h2>Competencias</h2><span>${proficiencyCount}</span></div><div class="proficiency-groups">${proficiencyGroups.map((group) => `<article class="proficiency-group" data-proficiency-group="${group.key}"><header><strong>${group.label}</strong><span>${group.values.length}</span></header><div class="tag-list">${group.values.length ? group.values.map((value) => `<span>${escapeHtml(value)}</span>`).join("") : '<span class="muted">Ninguna</span>'}</div></article>`).join("")}</div></section>
     </div>`;
   }
 
