@@ -24,6 +24,7 @@ import type { CampaignLoreReader } from "../application/ports/campaign-lore-read
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
 import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
 import { renderUiEmptyState } from "./design-system/primitives";
+import { FormDraftStore } from "./form-draft-store";
 
 export { calculateFloatingPanelPosition } from "./floating-panel";
 
@@ -194,6 +195,7 @@ const GM_CONDITIONS = [
 ] as const;
 
 export class GmApp {
+  private readonly formDrafts = new FormDraftStore();
   private snapshot: CampaignSnapshot | null = null;
   private selectedEncounterId: string | null = null;
   private pendingDeleteEncounterId: string | null = null;
@@ -528,7 +530,8 @@ export class GmApp {
     const editing = selected !== null && this.editingCustomMonsterKey === selected.name;
     if (editing || !selected && this.editingCustomMonsterKey === "__new__") {
       const draft = this.editingCustomMonsterKey === "__new__" ? this.monsterTemplate : selected;
-      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${draft?.name ?? "Nuevo monstruo"}</strong><button type="button" data-action="cancel-custom-monster">Volver</button></div>${this.renderCustomMonsterForm(draft)}</section>`;
+      const draftKey = this.customMonsterDraftKey();
+      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${draft?.name ?? "Nuevo monstruo"}</strong><small class="gm-draft-status" data-gm-draft-status ${draftKey && this.formDrafts.has(draftKey) ? "" : "hidden"}>Borrador sin guardar</small><button type="button" data-action="cancel-custom-monster">Descartar y volver</button></div>${this.renderCustomMonsterForm(draft)}</section>`;
     }
     const filterGroups = [
       { key: "type", label: "Tipo", values: uniqueFacetValues(this.customMonsters.flatMap((monster) => monsterFacets(monster).type ?? [])) },
@@ -674,6 +677,8 @@ export class GmApp {
       void this.deleteCustomMonster();
     }));
     this.root.querySelector('[data-action="cancel-custom-monster"]')?.addEventListener("click", () => {
+      const draftKey = this.customMonsterDraftKey();
+      if (draftKey) this.formDrafts.clear(draftKey);
       this.monsterTemplate = null;
       this.editingCustomMonsterKey = null;
       this.render();
@@ -694,6 +699,12 @@ export class GmApp {
       event.preventDefault();
       void this.saveCustomMonster(new FormData(event.currentTarget as HTMLFormElement));
     });
+    const monsterDraftKey = this.customMonsterDraftKey();
+    if (monsterDraftKey) this.formDrafts.bind(
+      this.root.querySelector<HTMLFormElement>('[data-action="save-custom-monster"]'),
+      monsterDraftKey,
+      () => { const status = this.root.querySelector<HTMLElement>("[data-gm-draft-status]"); if (status) status.hidden = false; },
+    );
     this.root.querySelector<HTMLFormElement>('[data-action="create-encounter"]')?.addEventListener("submit", (event) => {
       event.preventDefault();
       const name = String(new FormData(event.currentTarget as HTMLFormElement).get("name") ?? "").trim();
@@ -1091,6 +1102,8 @@ export class GmApp {
     definition.catalog = catalogFormMetadata(existing, data);
     try {
       await this.runtime.saveCustomMonster(definition, previousKey);
+      const draftKey = this.customMonsterDraftKey();
+      if (draftKey) this.formDrafts.clear(draftKey);
       this.customMonsters = [...this.customMonsters.filter((monster) =>
         monster.name !== previousKey && monster.name.toLocaleLowerCase() !== definition.name.toLocaleLowerCase()), definition];
       this.toolsPanel.syncMonsterInventory(definition);
@@ -1105,6 +1118,10 @@ export class GmApp {
       this.message = { kind: "error", text: this.formatError(error) };
     }
     this.render();
+  }
+
+  private customMonsterDraftKey(): string | null {
+    return this.editingCustomMonsterKey ? `monster:${this.editingCustomMonsterKey}` : null;
   }
 
   private async toggleMonsterFavorite(key: string): Promise<void> {

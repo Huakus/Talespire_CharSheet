@@ -105,6 +105,7 @@ import type { CampaignLoreReader } from "../application/ports/campaign-lore-read
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
 import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
 import { normalizeUiQuantity, renderUiEmptyState } from "./design-system/primitives";
+import { browserSymbiotePreferences } from "./symbiote-preferences";
 
 export interface BrowserAppRuntime {
   storageLabel: string;
@@ -577,6 +578,7 @@ interface SessionNotification {
 }
 
 export class BrowserApp {
+  private readonly preferences = browserSymbiotePreferences();
   private snapshot: CampaignSnapshot | null = null;
   private selectedCharacterId: string | null = null;
   private storageUsage: CampaignStorageUsage | null = null;
@@ -729,7 +731,11 @@ export class BrowserApp {
     };
     this.snapshot = snapshot;
     if (!updatedCharacter) {
-      this.selectedCharacterId = Object.values(snapshot.campaign.characters)[0]?.id ?? null;
+      const preferredCharacterId = this.preferences.lastCharacterId(snapshot.campaign.id);
+      this.selectedCharacterId = preferredCharacterId && snapshot.campaign.characters[preferredCharacterId]
+        ? preferredCharacterId
+        : Object.values(snapshot.campaign.characters)[0]?.id ?? null;
+      this.rememberSelectedCharacter();
     }
     if (!selectedCharacterIsUnchanged) this.render();
   }
@@ -757,12 +763,16 @@ export class BrowserApp {
       this.snapshot = snapshot;
       this.storageUsage = storageUsage;
       const characters = this.snapshot ? Object.values(this.snapshot.campaign.characters) : [];
+      const preferredCharacterId = this.snapshot ? this.preferences.lastCharacterId(this.snapshot.campaign.id) : null;
       if (
         this.selectedCharacterId === null ||
         !this.snapshot?.campaign.characters[this.selectedCharacterId]
       ) {
-        this.selectedCharacterId = characters[0]?.id ?? null;
+        this.selectedCharacterId = preferredCharacterId && this.snapshot?.campaign.characters[preferredCharacterId]
+          ? preferredCharacterId
+          : characters[0]?.id ?? null;
       }
+      this.rememberSelectedCharacter();
     } catch (error) {
       this.snapshot = null;
       this.message = { kind: "error", text: formatError(error) };
@@ -870,6 +880,7 @@ export class BrowserApp {
       });
       const created = Object.values(this.snapshot.campaign.characters).find((character) => !previousIds.has(character.id));
       this.selectedCharacterId = created?.id ?? this.selectedCharacterId;
+      this.rememberSelectedCharacter();
       this.message = { kind: "success", text: "Personaje creado." };
       this.render();
     } catch (error) {
@@ -888,6 +899,7 @@ export class BrowserApp {
         expectedCampaignChecksum: this.snapshot.checksum,
       });
       this.selectedCharacterId = Object.values(this.snapshot.campaign.characters)[0]?.id ?? null;
+      this.rememberSelectedCharacter();
       this.message = { kind: "success", text: "Personaje eliminado." };
       this.render();
     } catch (error) {
@@ -2467,6 +2479,7 @@ export class BrowserApp {
     });
     this.root.querySelector<HTMLSelectElement>("#character-title-select")?.addEventListener("change", (event) => {
       this.selectedCharacterId = (event.currentTarget as HTMLSelectElement).value;
+      this.rememberSelectedCharacter();
       this.message = null;
       this.renderAfterSavingSummaryEditor();
     });
@@ -2530,6 +2543,7 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLElement>("[data-select-character]").forEach((button) => {
       button.addEventListener("click", () => {
         this.selectedCharacterId = button.dataset.selectCharacter ?? null;
+        this.rememberSelectedCharacter();
         this.message = null;
         this.renderAfterSavingSummaryEditor();
       });
@@ -3878,6 +3892,11 @@ export class BrowserApp {
       return;
     }
     void this.saveCharacterColor(color);
+  }
+
+  private rememberSelectedCharacter(): void {
+    if (!this.snapshot) return;
+    this.preferences.rememberCharacter(this.snapshot.campaign.id, this.selectedCharacterId);
   }
 
   private async rollDice(button: HTMLButtonElement): Promise<void> {

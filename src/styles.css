@@ -156,6 +156,15 @@ button { cursor: pointer; }
 }
 .remote-setup h1 { font-size: 2rem; }
 .remote-auth-form, .remote-create-form { display: grid; gap: 12px; }
+.remote-auth-form > label { display: grid; gap: 4px; }
+.remote-password-control { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px; }
+.remote-password-control input { width: 100%; min-width: 0; }
+.remote-password-control button { min-width: 66px; }
+.remote-auth-form .remote-remember-user { display: flex; align-items: center; gap: 6px; color: var(--ui-text-secondary); font-size: .73rem; }
+.remote-remember-user input { width: auto; min-width: auto; }
+.remote-auth-help { display: flex; flex-wrap: wrap; gap: 5px; padding-top: 2px; border-top: 1px solid var(--ui-border-subtle); }
+.remote-auth-help button { flex: 1 1 135px; padding: 5px 7px; font-size: .68rem; }
+.remote-auth-form > small { color: var(--ui-text-muted); font-size: .68rem; line-height: 1.4; }
 .remote-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .remote-feedback { min-height: 1.2em; margin: 0; color: var(--ui-accent); font-size: .78rem; }
 .remote-campaign-list { display: grid; gap: 7px; }
@@ -592,6 +601,17 @@ input, select { padding: 5px 6px; }
 input[type="number"] { width: 4.75rem; max-width: 100%; justify-self: start; font-variant-numeric: tabular-nums; }
 textarea { min-height: 52px; padding: 6px; font-size: .75rem; }
 button[type="submit"], .secondary-button { padding: 6px 9px; font-size: .72rem; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor { display: grid; gap: 5px; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor fieldset { margin: 0; padding: 6px 7px; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor legend { padding: 0 3px; font-size: .7rem; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor .field-grid,
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor .field-grid.compact { grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 4px 5px; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor label { gap: 2px; font-size: .64rem; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor :is(input, select) { min-height: 27px; padding: 3px 5px; font-size: .7rem; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor textarea { min-height: 46px; padding: 5px; font-size: .7rem; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor :is(.action-cards, .spell-cards, .inventory-groups, .content-groups, .trait-cards, .extra-cards) { gap: 5px; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor :is(.action-card, .spell-card, .inventory-card, .content-card, .content-group) { gap: 4px; padding: 6px; }
+.character-sheet-shell[data-sheet-mode="edit"] .summary-editor .section-heading { margin-bottom: 5px; }
 .section-heading { gap: 7px; margin-bottom: 7px; }
 .section-heading .eyebrow { display: none; }
 .section-heading h2, .section-heading h3 { font-size: 1rem !important; }
@@ -1501,6 +1521,8 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .gm-cancel-edit { justify-self: start; margin-top: 4px; }
 .gm-edit-heading { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(--ui-border-subtle); }
 .gm-edit-heading strong { overflow: hidden; color: var(--character-color); font: 800 .82rem Georgia, serif; text-overflow: ellipsis; white-space: nowrap; }
+.gm-draft-status { margin-left: auto; color: #d6bd72; font-size: .62rem; font-weight: 800; white-space: nowrap; }
+.gm-draft-status[hidden] { display: none; }
 .gm-content-catalog { display: grid; gap: 5px; min-width: 0; }
 .gm-content-search-row { grid-template-columns: minmax(0, 1fr) auto auto; align-items: stretch; }
 .gm-content-search-row > button { min-height: 31px; white-space: nowrap; }
@@ -1538,18 +1560,21 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .gm-shop-category-tags span { padding: 2px 5px; color: var(--character-color); background: #1c2117; border-radius: 3px; font-size: .61rem; }
 .gm-content-empty { margin: 0; padding: 10px; }
 .gm-content-empty[hidden], .gm-catalog-card[hidden] { display: none !important; }
-.gm-editor-form, .gm-custom-monster-form { gap: 6px; margin: 0; padding: 0; border: 0; }
-.gm-form-grid, .gm-monster-core-fields, .gm-monster-list-fields { grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 5px; }
+.gm-editor-form, .gm-custom-monster-form { gap: 4px; margin: 0; padding: 0; border: 0; }
+.gm-editor-surface fieldset { margin: 0; padding: 5px 6px; }
+.gm-editor-surface legend { font-size: .68rem; }
+.gm-form-grid, .gm-monster-core-fields, .gm-monster-list-fields { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); gap: 4px; }
 .gm-form-grid label, .gm-custom-monster-form label, .gm-editor-form > label, .gm-calculators label { gap: 2px; color: var(--ui-text-secondary); font-size: .68rem; }
 .gm-form-grid input, .gm-form-grid select, .gm-custom-monster-form input, .gm-editor-form input, .gm-editor-form select { width: 100%; }
-.gm-editor-form textarea, .gm-custom-monster-form textarea { min-height: 52px; }
+.gm-editor-surface :is(input, select) { min-height: 27px; padding: 3px 5px; font-size: .69rem; }
+.gm-editor-form textarea, .gm-custom-monster-form textarea { min-height: 46px; padding: 5px; font-size: .69rem; }
 .gm-editor-form > button[type="submit"], .gm-custom-form-actions { justify-self: start; }
 .gm-custom-form-actions { display: flex; align-items: center; gap: 4px; }
 .gm-monster-abilities { gap: 4px; }
 .gm-monster-abilities label { justify-items: center; color: var(--ui-text-muted); font-size: .62rem; }
 .gm-monster-abilities input { width: 100%; max-width: 58px; text-align: center; }
 .gm-editor-help { padding: 4px 6px; color: var(--ui-text-muted); background: var(--ui-bg-sunken); border-radius: 4px; }
-.gm-check-row { padding: 3px 0; }
+.gm-check-row { gap: 6px; padding: 2px 0; }
 .gm-check-row input { min-width: auto; }
 .gm-encounter-management, .gm-turn-bar { padding: 5px 7px; background: var(--ui-bg-surface); border: 1px solid var(--ui-border-subtle); border-radius: 5px; }
 .gm-encounter-management { display: grid; grid-template-columns: minmax(90px, 1fr) auto auto auto auto auto; align-items: center; gap: 3px; min-width: 0; }

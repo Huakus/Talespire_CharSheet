@@ -16,6 +16,7 @@ import { createRandomId } from "../shared/id";
 import { renderCheckboxGroup } from "./checkbox-group";
 import { inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
 import { renderUiEmptyState } from "./design-system/primitives";
+import { FormDraftStore } from "./form-draft-store";
 
 export type GmSection = "encounter" | "content" | "lore" | "notes" | "tools";
 export type GmContentSection = "spell" | "equipment" | "shop";
@@ -104,6 +105,7 @@ function selectOptions(values: readonly string[], selected: string, emptyLabel?:
 }
 
 export class GmToolsPanel {
+  private readonly formDrafts = new FormDraftStore();
   private content: CampaignContent = { spells: [], equipment: [], monsters: [], shops: [], checklist: [] };
   private selectedSpell = "";
   private selectedEquipment = "";
@@ -168,7 +170,8 @@ export class GmToolsPanel {
     const editing = this.editingContent === section;
     if (editing) {
       const form = section === "spell" ? this.renderSpellForm(spell) : section === "equipment" ? this.renderEquipmentForm(equipment) : this.renderShopForm(shop);
-      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${spell?.name ?? equipment?.name ?? shop?.name ?? (section === "spell" ? "Nuevo conjuro" : section === "equipment" ? "Nuevo objeto" : "Nuevo comerciante")}</strong><button type="button" data-gm-cancel-edit>Volver</button></div>${form}</section>`;
+      const draftKey = this.contentDraftKey();
+      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${spell?.name ?? equipment?.name ?? shop?.name ?? (section === "spell" ? "Nuevo conjuro" : section === "equipment" ? "Nuevo objeto" : "Nuevo comerciante")}</strong><small class="gm-draft-status" data-gm-draft-status ${draftKey && this.formDrafts.has(draftKey) ? "" : "hidden"}>Borrador sin guardar</small><button type="button" data-gm-cancel-edit>Descartar y volver</button></div>${form}</section>`;
     }
     const query = normalizedSearch(this.contentSearch[section]);
     const favoriteFirst = <T,>(entries: T[], favorite: (entry: T) => boolean, name: (entry: T) => string): T[] => entries.sort((left, right) =>
@@ -430,6 +433,8 @@ export class GmToolsPanel {
 
   private rerenderPreservingShopForm(focusSelector?: string): void {
     const form = this.root.querySelector<HTMLFormElement>('[data-gm-form="shop"]');
+    const draftKey = this.contentDraftKey();
+    if (form && draftKey) this.formDrafts.capture(form, draftKey);
     const controls = form ? [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("[name]")].map((control) => ({
       name: control.name, value: control.value, checked: control instanceof HTMLInputElement && control.type === "checkbox" ? control.checked : null,
     })) : [];
@@ -508,7 +513,7 @@ export class GmToolsPanel {
       this.editingContent = section;
       this.rerender();
     }));
-    this.root.querySelector("[data-gm-cancel-edit]")?.addEventListener("click", () => { this.contentTemplate = null; this.editingContent = null; this.shopInventoryDraft = null; this.shopInventoryNpcId = ""; this.rerender(); });
+    this.root.querySelector("[data-gm-cancel-edit]")?.addEventListener("click", () => { const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.contentTemplate = null; this.editingContent = null; this.shopInventoryDraft = null; this.shopInventoryNpcId = ""; this.rerender(); });
     this.root.querySelector<HTMLInputElement>("[data-gm-content-search]")?.addEventListener("input", (event) => {
       const input = event.currentTarget as HTMLInputElement;
       const section = input.dataset.gmContentSearch as GmContentSection;
@@ -550,6 +555,12 @@ export class GmToolsPanel {
     this.root.querySelector<HTMLFormElement>('[data-gm-form="spell"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveSpell(new FormData(event.currentTarget as HTMLFormElement)); });
     this.root.querySelector<HTMLFormElement>('[data-gm-form="equipment"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveEquipment(new FormData(event.currentTarget as HTMLFormElement)); });
     this.root.querySelector<HTMLFormElement>('[data-gm-form="shop"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveShop(new FormData(event.currentTarget as HTMLFormElement)); });
+    const draftKey = this.contentDraftKey();
+    if (draftKey) this.formDrafts.bind(
+      this.root.querySelector<HTMLFormElement>("[data-gm-form]"),
+      draftKey,
+      () => { const status = this.root.querySelector<HTMLElement>("[data-gm-draft-status]"); if (status) status.hidden = false; },
+    );
     this.root.querySelector<HTMLSelectElement>('[data-gm-form="shop"] select[name="npcId"]')?.addEventListener("change", (event) => {
       this.shopInventoryNpcId = (event.currentTarget as HTMLSelectElement).value;
       const key = normalizedSearch(this.shopInventoryNpcId);
@@ -664,7 +675,7 @@ export class GmToolsPanel {
     const previous = String(data.get("previousKey") ?? "") || null;
     const existing = previous ? this.content.spells.find((entry) => entry.name === previous) ?? null : null;
     const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String).join(", "), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), catalog: catalogFormMetadata(existing, data) };
-    try { await this.runtime.saveCustomSpell(definition, previous); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
+    try { await this.runtime.saveCustomSpell(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveEquipment(data: FormData): Promise<void> {
@@ -689,7 +700,7 @@ export class GmToolsPanel {
       bonuses, effect: { description: String(data.get("effectDescription") ?? ""), active: data.get("effectActive") === "on" },
       catalog: catalogFormMetadata(existing, data),
     };
-    try { await this.runtime.saveCustomEquipment(definition, previous); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentSearch.equipment = definition.name; this.contentShowAll.equipment = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
+    try { await this.runtime.saveCustomEquipment(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentSearch.equipment = definition.name; this.contentShowAll.equipment = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveShop(data: FormData): Promise<void> {
@@ -727,6 +738,8 @@ export class GmToolsPanel {
       const updatedNpc = { ...npc, inventory };
       await this.runtime.saveCustomMonster(updatedNpc, npc.name);
       await this.runtime.saveShop(shop, previous);
+      const draftKey = this.contentDraftKey();
+      if (draftKey) this.formDrafts.clear(draftKey);
       this.content.monsters = this.content.monsters.map((entry) => entry.name === npc.name ? updatedNpc : entry);
       this.content.shops = [...this.content.shops.filter((entry) => entry.name !== previous && entry.name !== shop.name), shop].sort((a, b) => a.name.localeCompare(b.name, "es"));
       this.selectedShop = shop.name; this.contentSearch.shop = shop.name; this.contentShowAll.shop = false; this.contentTemplate = null; this.editingContent = null;
@@ -743,6 +756,12 @@ export class GmToolsPanel {
       this.recordAction(`Eliminar contenido: ${kind}`);
       this.success("Contenido eliminado.");
     } catch (error) { this.failure(error); }
+  }
+
+  private contentDraftKey(): string | null {
+    if (!this.editingContent) return null;
+    const selected = this.editingContent === "spell" ? this.selectedSpell : this.editingContent === "equipment" ? this.selectedEquipment : this.selectedShop;
+    return `${this.editingContent}:${this.contentTemplate ? "__template__" : selected || "__new__"}`;
   }
 
   private async saveWorkspace(workspace: GmWorkspace, checksum: string, message: string): Promise<void> { if (!this.runtime.saveGmWorkspace) return; try { this.updateSnapshot(await this.runtime.saveGmWorkspace(workspace, checksum), message.replace(/\.$/, "")); this.success(message); } catch (error) { this.failure(error); } }

@@ -23,11 +23,16 @@ import {
   registerPersistencePanelOpener,
   setAppConnectionStatus,
 } from "./app-chrome";
+import { browserSymbiotePreferences } from "./symbiote-preferences";
 
 const bindingKeyPrefix = "talespire-charsheet:remote-campaign:";
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+function escapeHtml(value: string): string {
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 
 function createSetupPanel(appRoot: HTMLElement): HTMLElement {
@@ -46,42 +51,92 @@ async function requestAuthentication(
   if (current.data.user) return current.data.user;
 
   return new Promise((resolve) => {
+    const preferences = browserSymbiotePreferences();
+    const rememberedEmail = preferences.rememberedAuthEmail();
     panel.innerHTML = `
       <p class="eyebrow">Persistencia compartida</p>
       <h1>Conectar con Supabase</h1>
       <p>Iniciá sesión o creá una cuenta para acceder a las campañas compartidas.</p>
       <form class="remote-auth-form">
-        <label>Email<input name="email" type="email" autocomplete="email" required></label>
-        <label>Contraseña<input name="password" type="password" autocomplete="current-password" minlength="6" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" value="${escapeHtml(rememberedEmail)}" required></label>
+        <label>Contraseña<span class="remote-password-control"><input name="password" type="password" autocomplete="current-password" minlength="6" required><button type="button" class="secondary-button" data-auth-action="toggle-password" aria-pressed="false">Mostrar</button></span></label>
+        <label class="remote-remember-user"><input name="rememberEmail" type="checkbox" ${rememberedEmail ? "checked" : ""}> Recordar email en este dispositivo</label>
         <div class="remote-actions">
           <button type="submit" data-auth-action="signin">Iniciar sesión</button>
           <button type="button" data-auth-action="signup">Crear cuenta</button>
           <button type="button" class="secondary-button" data-auth-action="local">Continuar solo local</button>
         </div>
-        <p class="remote-feedback" role="status"></p>
+        <div class="remote-auth-help">
+          <button type="button" class="secondary-button" data-auth-action="reset-password">Recuperar contraseña</button>
+          <button type="button" class="secondary-button" data-auth-action="magic-link">Enviar enlace de acceso</button>
+          <button type="button" class="secondary-button" data-auth-action="resend-confirmation">Reenviar confirmación</button>
+        </div>
+        <small>Supabase mantiene la sesión iniciada. Sólo se guarda el email si elegís recordarlo; nunca la contraseña.</small>
+        <p class="remote-feedback" role="status" aria-live="polite"></p>
       </form>`;
     const form = panel.querySelector<HTMLFormElement>("form");
     const feedback = panel.querySelector<HTMLElement>(".remote-feedback");
     if (!form || !feedback) throw new Error("REMOTE_AUTH_FORM_NOT_FOUND");
 
+    const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+    const passwordInput = form.elements.namedItem("password") as HTMLInputElement;
+    const rememberInput = form.elements.namedItem("rememberEmail") as HTMLInputElement;
+    const actionButtons = [...form.querySelectorAll<HTMLButtonElement>("button")];
+    const email = (): string => emailInput.value.trim().toLocaleLowerCase();
+    const rememberEmail = (): void => preferences.rememberAuthEmail(rememberInput.checked ? email() : null);
+    const setBusy = (busy: boolean): void => actionButtons.forEach((button) => {
+      if (button.dataset.authAction !== "local") button.disabled = busy;
+    });
+
     const authenticate = async (kind: "signin" | "signup"): Promise<void> => {
-      const values = new FormData(form);
-      const email = String(values.get("email") ?? "").trim();
-      const password = String(values.get("password") ?? "");
+      if (!form.reportValidity()) return;
+      setBusy(true);
       feedback.textContent = kind === "signin" ? "Iniciando sesión…" : "Creando cuenta…";
-      const result = kind === "signin"
-        ? await supabase.auth.signInWithPassword({ email, password })
-        : await supabase.auth.signUp({ email, password });
-      if (result.error) {
-        feedback.textContent = result.error.message;
-        return;
+      try {
+        const result = kind === "signin"
+          ? await supabase.auth.signInWithPassword({ email: email(), password: passwordInput.value })
+          : await supabase.auth.signUp({ email: email(), password: passwordInput.value });
+        if (result.error) {
+          feedback.textContent = result.error.message;
+          return;
+        }
+        rememberEmail();
+        const user = result.data.user;
+        if (!user || !result.data.session) {
+          feedback.textContent = "Revisá tu email para confirmar la cuenta antes de iniciar sesión.";
+          return;
+        }
+        resolve(user);
+      } catch (error) {
+        feedback.textContent = errorMessage(error);
+      } finally {
+        setBusy(false);
       }
-      const user = result.data.user;
-      if (!user || !result.data.session) {
-        feedback.textContent = "La cuenta requiere confirmación antes de iniciar sesión.";
-        return;
+    };
+
+    const sendEmailAction = async (action: "reset" | "magic" | "resend"): Promise<void> => {
+      if (!emailInput.reportValidity()) return;
+      setBusy(true);
+      feedback.textContent = "Enviando email…";
+      try {
+        const result = action === "reset"
+          ? await supabase.auth.resetPasswordForEmail(email())
+          : action === "magic"
+            ? await supabase.auth.signInWithOtp({ email: email(), options: { shouldCreateUser: false } })
+            : await supabase.auth.resend({ type: "signup", email: email() });
+        feedback.textContent = result.error
+          ? result.error.message
+          : action === "reset"
+            ? "Si la cuenta existe, vas a recibir instrucciones para cambiar la contraseña."
+            : action === "magic"
+              ? "Enlace de acceso enviado. Revisá tu email."
+              : "Email de confirmación reenviado.";
+        if (!result.error) rememberEmail();
+      } catch (error) {
+        feedback.textContent = errorMessage(error);
+      } finally {
+        setBusy(false);
       }
-      resolve(user);
     };
 
     form.addEventListener("submit", (event) => {
@@ -90,6 +145,20 @@ async function requestAuthentication(
     });
     panel.querySelector('[data-auth-action="signup"]')?.addEventListener("click", () => {
       void authenticate("signup");
+    });
+    panel.querySelector('[data-auth-action="toggle-password"]')?.addEventListener("click", (event) => {
+      const button = event.currentTarget as HTMLButtonElement;
+      const visible = passwordInput.type === "text";
+      passwordInput.type = visible ? "password" : "text";
+      button.textContent = visible ? "Mostrar" : "Ocultar";
+      button.setAttribute("aria-pressed", String(!visible));
+      passwordInput.focus();
+    });
+    panel.querySelector('[data-auth-action="reset-password"]')?.addEventListener("click", () => void sendEmailAction("reset"));
+    panel.querySelector('[data-auth-action="magic-link"]')?.addEventListener("click", () => void sendEmailAction("magic"));
+    panel.querySelector('[data-auth-action="resend-confirmation"]')?.addEventListener("click", () => void sendEmailAction("resend"));
+    rememberInput.addEventListener("change", () => {
+      if (!rememberInput.checked) preferences.rememberAuthEmail(null);
     });
     panel.querySelector('[data-auth-action="local"]')?.addEventListener("click", () => resolve(null));
     const localButton = panel.querySelector<HTMLButtonElement>('[data-auth-action="local"]');
