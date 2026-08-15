@@ -104,7 +104,7 @@ import {
 import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
 import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
-import { normalizeUiQuantity } from "./design-system/primitives";
+import { normalizeUiQuantity, renderUiEmptyState } from "./design-system/primitives";
 
 export interface BrowserAppRuntime {
   storageLabel: string;
@@ -1409,7 +1409,12 @@ export class BrowserApp {
   }
 
   private renderEmptyPanel(message: string): string {
-    return `<div class="sheet-empty"><strong>Nada que mostrar todavía</strong><p>${escapeHtml(message)}</p>${this.sheetMode === "play" ? '<button type="button" data-sheet-mode-choice="edit">Abrir modo Edición</button>' : ""}</div>`;
+    return renderUiEmptyState({
+      title: "Nada que mostrar todavía",
+      text: message,
+      className: "sheet-empty",
+      ...(this.sheetMode === "play" ? { action: { label: "Abrir modo Edición", attributes: { "data-sheet-mode-choice": "edit" } } } : {}),
+    });
   }
 
   private renderActionFilterBar(character: CharacterV2): string {

@@ -5,10 +5,15 @@ import {
   normalizeUiQuantity,
   renderUiBadge,
   renderUiButton,
+  renderUiEmptyState,
   renderUiField,
+  renderUiIconButton,
+  renderUiMessage,
   renderUiMeter,
   renderUiQuantityStepper,
+  renderUiSelect,
   renderUiSegmentedControl,
+  renderUiTextarea,
 } from "./primitives";
 import {
   deriveUiAccentTheme,
@@ -64,6 +69,7 @@ function render(): void {
       <section class="ui-lab-panel"><div class="ui-lab-heading"><div><small>Semántica</small><h2>Badges y estados</h2></div></div><div class="ui-lab-control-row">${renderUiBadge("Neutral")}${renderUiBadge("Acento", "accent")}${renderUiBadge("Sincronizado", "success")}${renderUiBadge("Pendiente", "warning")}${renderUiBadge("Conflicto", "danger")}</div><p class="ui-lab-state ui-lab-state--success"><strong>Guardado</strong><span>Los cambios fueron sincronizados.</span></p><p class="ui-lab-state ui-lab-state--danger"><strong>Error</strong><span>No se pudo completar la operación.</span></p></section>
 
       <section class="ui-lab-panel"><div class="ui-lab-heading"><div><small>Composición</small><h2>Diálogo</h2></div></div><div class="ui-lab-dialog"><header><div><small>Confirmación</small><strong>Intercambio con Mirna</strong></div>${renderUiButton({ label: "Cerrar", variant: "ghost", size: "compact", attributes: { "aria-label": "Cerrar diálogo" } })}</header><p>Los diálogos reutilizan superficie, encabezado, espaciado y jerarquía de acciones.</p><footer>${renderUiButton({ label: "Cancelar" })}${renderUiButton({ label: "Confirmar", variant: "primary" })}</footer></div></section>
+      <section class="ui-lab-panel"><div class="ui-lab-heading"><div><small>Primitivas</small><h2>Formularios y feedback</h2></div>${renderUiIconButton({ icon: "?", label: "Ayuda" })}</div><div class="ui-lab-fields">${renderUiSelect({ id: "lab-category", label: "Categoría", value: "weapon", options: [{ value: "weapon", label: "Arma" }, { value: "armor", label: "Armadura" }, { value: "tool", label: "Herramienta" }] })}${renderUiTextarea({ id: "lab-notes", label: "Notas", value: "Una descripción breve.", hint: "El mismo contrato se usa en editores y formularios." })}</div>${renderUiMessage({ tone: "success", title: "Sincronizado", text: "El estado remoto está actualizado." })}${renderUiMessage({ tone: "warning", title: "Revisión necesaria", text: "Hay cambios pendientes de confirmar." })}${renderUiEmptyState({ title: "Sin resultados", text: "Probá con otro nombre o limpiá los filtros." })}</section>
     </div>
   </div>`;
   bindEvents();

@@ -42,11 +42,13 @@ nuevo debe convertirse primero en un token con responsabilidad definida.
 `src/ui/design-system/primitives.ts` contiene representaciones compartidas de:
 
 - botones primary, secondary, ghost y danger;
-- campos de texto, número y búsqueda;
+- campos de texto, número y búsqueda, selects y textareas;
+- botones de icono con nombre accesible;
 - selectores segmentados;
 - controles de cantidad;
 - medidores;
-- badges.
+- badges;
+- mensajes semánticos y estados vacíos.
 
 Las primitivas controlan markup, clases, accesibilidad y estados visuales. La
 lógica de dominio permanece en la pantalla consumidora. Por ejemplo, el
@@ -63,6 +65,11 @@ cuáles son esos valores.
 - `:focus-visible`: foco de teclado obligatorio y visible.
 
 El color nunca es la única forma de comunicar un estado.
+
+Mientras termina la migración de markup, `styles.css` expone un contrato de
+compatibilidad para foco, campos, checkboxes y controles deshabilitados. No se
+debe ampliar esa capa con componentes nuevos: las nuevas pantallas consumen
+las primitivas directamente.
 
 ## Jerarquía de acciones
 

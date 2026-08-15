@@ -7,9 +7,14 @@ function escapeHtml(value: string): string {
 
 function renderAttributes(attributes: UiAttributes = {}): string {
   return Object.entries(attributes).flatMap(([name, value]) => {
-    if (!/^(aria-[a-z-]+|data-[a-z-]+|id|name|title|value|min|max|step|placeholder|inputmode|autocomplete)$/.test(name) || value === undefined || value === false) return [];
+    if (!/^(aria-[a-z-]+|data-[a-z-]+|id|name|title|value|min|max|step|rows|placeholder|inputmode|autocomplete|required|multiple)$/.test(name) || value === undefined || value === false) return [];
     return [value === true ? name : `${name}="${escapeHtml(String(value))}"`];
   }).join(" ");
+}
+
+function composeClassNames(base: string, additional?: string): string {
+  const safeAdditional = (additional ?? "").split(/\s+/).filter((name) => /^[a-z0-9_-]+$/i.test(name));
+  return [base, ...safeAdditional].join(" ");
 }
 
 export type UiButtonVariant = "primary" | "secondary" | "ghost" | "danger";
@@ -53,6 +58,87 @@ export function renderUiField(input: {
   });
   const description = input.error ?? input.hint;
   return `<label class="ui-field ${input.error ? "ui-field--error" : ""}" for="${escapeHtml(input.id)}"><span>${escapeHtml(input.label)}</span><input type="${input.type ?? "text"}" class="ui-input ui-control--${size}" ${attributes} ${input.disabled ? "disabled" : ""}>${description ? `<small id="${escapeHtml(descriptionId!)}">${escapeHtml(description)}</small>` : ""}</label>`;
+}
+
+export function renderUiSelect(input: {
+  id: string;
+  label: string;
+  value?: string;
+  options: readonly { value: string; label: string; disabled?: boolean }[];
+  size?: UiControlSize;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  attributes?: UiAttributes;
+}): string {
+  const size = input.size ?? "default";
+  const descriptionId = input.error || input.hint ? `${input.id}-description` : undefined;
+  const attributes = renderAttributes({
+    ...input.attributes,
+    id: input.id,
+    ...(descriptionId ? { "aria-describedby": descriptionId } : {}),
+    ...(input.error ? { "aria-invalid": "true" } : {}),
+  });
+  const description = input.error ?? input.hint;
+  const options = input.options.map((option) => `<option value="${escapeHtml(option.value)}" ${option.value === input.value ? "selected" : ""} ${option.disabled ? "disabled" : ""}>${escapeHtml(option.label)}</option>`).join("");
+  return `<label class="ui-field ${input.error ? "ui-field--error" : ""}" for="${escapeHtml(input.id)}"><span>${escapeHtml(input.label)}</span><select class="ui-select ui-control--${size}" ${attributes} ${input.disabled ? "disabled" : ""}>${options}</select>${description ? `<small id="${escapeHtml(descriptionId!)}">${escapeHtml(description)}</small>` : ""}</label>`;
+}
+
+export function renderUiTextarea(input: {
+  id: string;
+  label: string;
+  value?: string;
+  size?: UiControlSize;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  rows?: number;
+  attributes?: UiAttributes;
+}): string {
+  const size = input.size ?? "default";
+  const descriptionId = input.error || input.hint ? `${input.id}-description` : undefined;
+  const attributes = renderAttributes({
+    ...input.attributes,
+    id: input.id,
+    rows: Math.max(1, Math.trunc(input.rows ?? 3)),
+    ...(descriptionId ? { "aria-describedby": descriptionId } : {}),
+    ...(input.error ? { "aria-invalid": "true" } : {}),
+  });
+  const description = input.error ?? input.hint;
+  return `<label class="ui-field ${input.error ? "ui-field--error" : ""}" for="${escapeHtml(input.id)}"><span>${escapeHtml(input.label)}</span><textarea class="ui-textarea ui-control--${size}" ${attributes} ${input.disabled ? "disabled" : ""}>${escapeHtml(input.value ?? "")}</textarea>${description ? `<small id="${escapeHtml(descriptionId!)}">${escapeHtml(description)}</small>` : ""}</label>`;
+}
+
+export function renderUiIconButton(input: {
+  icon: string;
+  label: string;
+  variant?: UiButtonVariant;
+  size?: UiControlSize;
+  disabled?: boolean;
+  attributes?: UiAttributes;
+}): string {
+  const variant = input.variant ?? "ghost";
+  const size = input.size ?? "compact";
+  return `<button type="button" class="ui-button ui-icon-button ui-button--${variant} ui-control--${size}" aria-label="${escapeHtml(input.label)}" title="${escapeHtml(input.label)}" ${renderAttributes(input.attributes)} ${input.disabled ? "disabled" : ""}><span aria-hidden="true">${escapeHtml(input.icon)}</span></button>`;
+}
+
+export function renderUiMessage(input: { tone?: Exclude<UiTone, "accent" | "secondary" | "neutral">; title: string; text?: string }): string {
+  const tone = input.tone ?? "info";
+  return `<aside class="ui-message ui-message--${tone}" role="${tone === "danger" ? "alert" : "status"}"><strong>${escapeHtml(input.title)}</strong>${input.text ? `<p>${escapeHtml(input.text)}</p>` : ""}</aside>`;
+}
+
+export function renderUiEmptyState(input: {
+  title: string;
+  text?: string;
+  className?: string;
+  hidden?: boolean;
+  action?: { label: string; variant?: UiButtonVariant; attributes?: UiAttributes };
+}): string {
+  const action = input.action ? renderUiButton({
+    label: input.action.label,
+    variant: input.action.variant ?? "secondary",
+    ...(input.action.attributes ? { attributes: input.action.attributes } : {}),
+  }) : "";
+  return `<div class="${composeClassNames("ui-empty-state", input.className)}" ${input.hidden ? "hidden" : ""}><strong>${escapeHtml(input.title)}</strong>${input.text ? `<p>${escapeHtml(input.text)}</p>` : ""}${action}</div>`;
 }
 
 export function renderUiSegmentedControl(input: {

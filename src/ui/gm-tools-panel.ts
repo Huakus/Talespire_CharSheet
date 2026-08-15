@@ -15,6 +15,7 @@ import type { CatalogMetadata } from "../domain/content/catalog-metadata";
 import { createRandomId } from "../shared/id";
 import { renderCheckboxGroup } from "./checkbox-group";
 import { inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
+import { renderUiEmptyState } from "./design-system/primitives";
 
 export type GmSection = "encounter" | "content" | "lore" | "notes" | "tools";
 export type GmContentSection = "spell" | "equipment" | "shop";
@@ -178,7 +179,7 @@ export class GmToolsPanel {
         ? favoriteFirst(this.content.equipment.filter((entry) => { const meta = catalogMetadata(entry); return (!this.contentFavoritesOnly.equipment || isCatalogFavorite(entry)) && this.matchesEquipmentFilters(entry) && (!query || normalizedSearch([entry.name, entry.category, entry.rarity, entry.description, ...entry.properties, meta.origin, ...visibleCatalogTags(meta.tags)].join(" ")).includes(query)); }), isCatalogFavorite, (entry) => entry.name).map((entry) => this.renderEquipmentCard(entry)).join("")
         : favoriteFirst(this.content.shops.filter((entry) => (!this.contentFavoritesOnly.shop || this.isShopFavorite(entry)) && this.matchesShopFilters(entry) && (!query || normalizedSearch([entry.name, ...this.shopVisibleTags(entry), ...Object.keys(entry.categories), ...Object.values(entry.categories).flat()].join(" ")).includes(query))), (entry) => this.isShopFavorite(entry), (entry) => entry.name).map((entry) => this.renderShopCard(entry)).join("");
     const label = section === "spell" ? "conjuro" : section === "equipment" ? "objeto" : "comerciante";
-    return `<section class="gm-content-catalog">${this.renderContentDiscovery(section, label)}${this.renderContentFilterBar(section)}<div class="gm-catalog-grid">${cards}</div><div class="sheet-empty gm-content-empty" ${cards ? "hidden" : ""}><strong>Sin resultados</strong><p>No hay ${label}s que coincidan con los filtros.</p></div></section>`;
+    return `<section class="gm-content-catalog">${this.renderContentDiscovery(section, label)}${this.renderContentFilterBar(section)}<div class="gm-catalog-grid">${cards}</div>${renderUiEmptyState({ title: "Sin resultados", text: `No hay ${label}s que coincidan con los filtros.`, className: "sheet-empty gm-content-empty", hidden: Boolean(cards) })}</section>`;
   }
 
   syncMonsterInventory(monster: CampaignContent["monsters"][number]): void {

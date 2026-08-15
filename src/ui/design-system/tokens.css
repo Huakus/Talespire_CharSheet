@@ -25,12 +25,79 @@
 
   --ui-success: #79a879;
   --ui-success-surface: #17251a;
+  --ui-success-border: #4f7650;
   --ui-warning: #d9bd73;
   --ui-warning-surface: #28271c;
+  --ui-warning-border: #806d3d;
   --ui-danger: #c98282;
   --ui-danger-surface: #2a1715;
+  --ui-danger-border: #713a33;
   --ui-info: #6f96c4;
   --ui-info-surface: #151a23;
+  --ui-info-border: #46526c;
+
+  --ui-health: #4f9c5d;
+  --ui-temporary-health: #5b91b8;
+  --ui-control-disabled-opacity: .38;
+
+  /* Domain colors live here so representations stay consistent across views. */
+  --ui-coin-platinum: #9bcbd3;
+  --ui-coin-gold: #d7bd59;
+  --ui-coin-electrum: #91b28f;
+  --ui-coin-silver: #e1e5e7;
+  --ui-coin-copper: #aa704e;
+  --ui-item-weapon: #c98272;
+  --ui-item-shield: #7fa6c9;
+  --ui-item-armor: #9fa7b2;
+  --ui-item-consumable: #79a879;
+  --ui-item-tool: #c59d68;
+  --ui-item-vehicle: #a88769;
+  --ui-item-wondrous: #9a73ad;
+  --ui-item-gear: #6fae9f;
+  --ui-item-other: #9da79a;
+  --ui-school-abjuration: #7fa6c9;
+  --ui-school-conjuration: #6fae9f;
+  --ui-school-divination: #c5ad6a;
+  --ui-school-enchantment: #c1849e;
+  --ui-school-evocation: #c98669;
+  --ui-school-illusion: #8f83bc;
+  --ui-school-necromancy: #9a73ad;
+  --ui-school-transmutation: #79a879;
+  --ui-damage-acid: #9caf63;
+  --ui-damage-bludgeoning: #99958c;
+  --ui-damage-cold: #79b6c4;
+  --ui-damage-fire: #c66f5b;
+  --ui-damage-force: #ac78b8;
+  --ui-damage-lightning: #6f96c4;
+  --ui-damage-necrotic: #8e69a0;
+  --ui-damage-piercing: #a4adb3;
+  --ui-damage-poison: #6f9e72;
+  --ui-damage-psychic: #bd789f;
+  --ui-damage-radiant: #c6ad65;
+  --ui-damage-slashing: #b96c6c;
+  --ui-damage-thunder: #7781b1;
+
+  --ui-rarity-common-text: #d4dad1;
+  --ui-rarity-common-border: #657061;
+  --ui-rarity-common-surface: #31372f;
+  --ui-rarity-uncommon-text: #bce4b7;
+  --ui-rarity-uncommon-border: #527a4e;
+  --ui-rarity-uncommon-surface: #2d4a2b;
+  --ui-rarity-rare-text: #b9d8f6;
+  --ui-rarity-rare-border: #4c7091;
+  --ui-rarity-rare-surface: #27435c;
+  --ui-rarity-very-rare-text: #d7c4f3;
+  --ui-rarity-very-rare-border: #715c91;
+  --ui-rarity-very-rare-surface: #44365c;
+  --ui-rarity-legendary-text: #f1d39b;
+  --ui-rarity-legendary-border: #927044;
+  --ui-rarity-legendary-surface: #594425;
+  --ui-rarity-artifact-text: #f0b7a7;
+  --ui-rarity-artifact-border: #945445;
+  --ui-rarity-artifact-surface: #5a3028;
+  --ui-rarity-varies-text: #c6d7d2;
+  --ui-rarity-varies-border: #58736b;
+  --ui-rarity-varies-surface: #30443f;
 
   --ui-space-1: 3px;
   --ui-space-2: 5px;
@@ -61,7 +128,11 @@
   --ui-text-muted: #536050;
   --ui-text-faint: #6f7b6c;
   --ui-success-surface: #e5f1e4;
+  --ui-success-border: #6f966f;
   --ui-warning-surface: #f5eed8;
+  --ui-warning-border: #9a8248;
   --ui-danger-surface: #f5e4e2;
+  --ui-danger-border: #9a625c;
   --ui-info-surface: #e3ebf5;
+  --ui-info-border: #687d9f;
 }

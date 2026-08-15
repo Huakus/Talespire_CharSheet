@@ -7,6 +7,7 @@ import type {
   LoreSearchResult,
 } from "../application/ports/campaign-lore-reader";
 import { campaignMarkdownToPlainText, escapeCampaignHtml, renderCampaignMarkdown } from "./campaign-markdown";
+import { renderUiEmptyState, renderUiMessage } from "./design-system/primitives";
 
 const TYPE_LABELS: Record<LoreEntryType, { singular: string; plural: string }> = {
   chapter: { singular: "Capítulo", plural: "Capítulos" },
@@ -77,7 +78,7 @@ export class CampaignLoreBrowser {
 
   render(): string {
     if (this.loadingIndex && !this.index) return '<section class="lore-loading"><strong>Abriendo la biblioteca…</strong><p>Cargando los índices de campaña desde Supabase.</p></section>';
-    if (this.error && !this.index) return `<section class="sheet-empty lore-error"><strong>No se pudo abrir la biblioteca</strong><p>${escapeCampaignHtml(this.error)}</p><button type="button" data-lore-retry>Reintentar</button></section>`;
+    if (this.error && !this.index) return renderUiEmptyState({ title: "No se pudo abrir la biblioteca", text: this.error, className: "sheet-empty lore-error", action: { label: "Reintentar", attributes: { "data-lore-retry": true } } });
     const index = this.index ?? { entries: [] };
     return `<section class="lore-browser" aria-label="Biblioteca de campaña">
       <header class="lore-search-header">
@@ -89,7 +90,7 @@ export class CampaignLoreBrowser {
         <button type="submit" ${this.searching ? "disabled" : ""}>${this.searching ? "Buscando…" : "Buscar"}</button>
         ${this.results === null ? "" : '<button type="button" class="secondary-button" data-lore-clear-search>Limpiar</button>'}
       </form>
-      ${this.error ? `<p class="lore-inline-error" role="alert">${escapeCampaignHtml(this.error)}</p>` : ""}
+      ${this.error ? renderUiMessage({ tone: "danger", title: "No se pudo completar la consulta", text: this.error }) : ""}
       <div class="lore-layout">
         <aside class="lore-index">${this.renderIndex(index)}</aside>
         <main class="lore-main">${this.results === null ? this.renderDocument() : this.renderResults()}</main>
@@ -161,7 +162,7 @@ export class CampaignLoreBrowser {
   private renderResults(): string {
     if (this.searching) return '<section class="lore-loading"><strong>Buscando…</strong><p>Consultando los índices de texto de la campaña.</p></section>';
     const results = this.results ?? [];
-    if (!results.length) return `<section class="sheet-empty"><strong>Sin coincidencias</strong><p>No encontramos resultados para “${escapeCampaignHtml(this.query)}”. Probá menos palabras o revisá la sintaxis.</p></section>`;
+    if (!results.length) return renderUiEmptyState({ title: "Sin coincidencias", text: `No encontramos resultados para “${this.query}”. Probá menos palabras o revisá la sintaxis.`, className: "sheet-empty" });
     return `<section class="lore-results"><header><div><p class="eyebrow">Resultados</p><h3>${results.length} coincidencia${results.length === 1 ? "" : "s"}</h3></div><span>Ordenadas por relevancia</span></header><div>${results.map((result) => {
       const excerpt = campaignMarkdownToPlainText(result.excerpt);
       return `<details class="lore-result-card"><summary><span><small>${escapeCampaignHtml(resultContext(result))}</small><strong>${escapeCampaignHtml(result.title)}</strong></span><i>⌄</i></summary><div><p>${escapeCampaignHtml(excerpt)}</p><button type="button" data-lore-open="${result.type}:${result.id}">Abrir en el lector</button></div></details>`;
@@ -171,7 +172,7 @@ export class CampaignLoreBrowser {
   private renderDocument(): string {
     if (this.loadingDocument) return '<section class="lore-loading"><strong>Cargando documento…</strong><p>Recuperando el contenido completo desde Supabase.</p></section>';
     const document = this.document;
-    if (!document) return '<section class="sheet-empty"><strong>Elegí un documento</strong><p>Usá los índices o el buscador para abrir el lore de la campaña.</p></section>';
+    if (!document) return renderUiEmptyState({ title: "Elegí un documento", text: "Usá los índices o el buscador para abrir el lore de la campaña.", className: "sheet-empty" });
     const rendered = renderCampaignMarkdown(document.contentMarkdown);
     const source = sourceLabel(document.sourcePath);
     const facts = [

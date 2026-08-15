@@ -2,10 +2,15 @@ import { describe, expect, it } from "vitest";
 import {
   normalizeUiQuantity,
   renderUiButton,
+  renderUiEmptyState,
   renderUiField,
+  renderUiIconButton,
+  renderUiMessage,
   renderUiMeter,
   renderUiQuantityStepper,
+  renderUiSelect,
   renderUiSegmentedControl,
+  renderUiTextarea,
 } from "../../src/ui/design-system/primitives";
 import {
   deriveUiAccentTheme,
@@ -44,6 +49,11 @@ describe("UI design system", () => {
     expect(renderUiSegmentedControl({ label: "Modo", value: "buy", options: [{ value: "buy", label: "Comprar" }, { value: "sell", label: "Vender" }] })).toContain('aria-pressed="true"');
     expect(renderUiQuantityStepper({ id: "quantity", label: "Cantidad", value: 20, maximum: 5 })).toContain('value="5"');
     expect(renderUiMeter({ label: "Peso", value: 25, maximum: 100, displayValue: "25/100" })).toContain('role="meter"');
+    expect(renderUiSelect({ id: "kind", label: "Tipo", value: "b", options: [{ value: "a", label: "A" }, { value: "b", label: "B" }] })).toContain("selected");
+    expect(renderUiTextarea({ id: "notes", label: "Notas", value: "<script>" })).toContain("&lt;script&gt;");
+    expect(renderUiIconButton({ icon: "×", label: "Cerrar" })).toContain('aria-label="Cerrar"');
+    expect(renderUiMessage({ tone: "danger", title: "Error" })).toContain('role="alert"');
+    expect(renderUiEmptyState({ title: "Sin resultados" })).toContain("ui-empty-state");
   });
 
   it("uses one quantity normalization rule", () => {

@@ -1,4 +1,4 @@
-.ui-button, .ui-input, .ui-segmented button, .ui-quantity button, .ui-quantity input { min-width: 0; font: inherit; }
+.ui-button, .ui-input, .ui-select, .ui-textarea, .ui-segmented button, .ui-quantity button, .ui-quantity input { min-width: 0; font: inherit; }
 .ui-control--compact { min-height: var(--ui-control-compact); padding: var(--ui-space-1) var(--ui-space-2); }
 .ui-control--default { min-height: var(--ui-control-default); padding: var(--ui-space-2) var(--ui-space-3); }
 .ui-button { color: var(--ui-accent); background: var(--ui-accent-surface); border: 1px solid var(--ui-accent-border); border-radius: var(--ui-radius-md); font-weight: 800; }
@@ -8,15 +8,17 @@
 .ui-button--primary:hover:not(:disabled) { color: var(--ui-on-accent); background: var(--ui-accent-hover); border-color: var(--ui-accent-hover); }
 .ui-button--ghost { background: transparent; border-color: transparent; }
 .ui-button--danger { color: var(--ui-danger); background: var(--ui-danger-surface); border-color: color-mix(in srgb, var(--ui-danger) 60%, var(--ui-border)); }
-.ui-button:focus-visible, .ui-input:focus-visible, .ui-segmented button:focus-visible, .ui-quantity button:focus-visible, .ui-quantity input:focus-visible { outline: 2px solid var(--ui-focus-ring); outline-offset: 2px; }
-.ui-button:disabled, .ui-input:disabled, .ui-segmented button:disabled, .ui-quantity button:disabled, .ui-quantity input:disabled { cursor: not-allowed; filter: grayscale(.55); opacity: .38; }
+.ui-button:focus-visible, .ui-input:focus-visible, .ui-select:focus-visible, .ui-textarea:focus-visible, .ui-segmented button:focus-visible, .ui-quantity button:focus-visible, .ui-quantity input:focus-visible { outline: 2px solid var(--ui-focus-ring); outline-offset: 2px; }
+.ui-button:disabled, .ui-input:disabled, .ui-select:disabled, .ui-textarea:disabled, .ui-segmented button:disabled, .ui-quantity button:disabled, .ui-quantity input:disabled { cursor: not-allowed; filter: grayscale(.55); opacity: var(--ui-control-disabled-opacity); }
+.ui-icon-button { display: inline-grid; width: var(--ui-control-compact); place-items: center; padding: 0; aspect-ratio: 1; }
 
 .ui-field { display: grid; gap: var(--ui-space-1); color: var(--ui-text-secondary); font-size: .7rem; font-weight: 750; }
 .ui-field > span { color: inherit; }
-.ui-input { width: 100%; color: var(--ui-text); background: var(--ui-bg-sunken); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); }
+.ui-input, .ui-select, .ui-textarea { width: 100%; color: var(--ui-text); background: var(--ui-bg-sunken); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); }
+.ui-textarea { min-height: 68px; resize: vertical; }
 .ui-field small { color: var(--ui-text-faint); font-size: .6rem; font-weight: 600; }
 .ui-field--error { color: var(--ui-danger); }
-.ui-field--error .ui-input { border-color: var(--ui-danger); }
+.ui-field--error :is(.ui-input, .ui-select, .ui-textarea) { border-color: var(--ui-danger); }
 .ui-field--error small { color: var(--ui-danger); }
 
 .ui-segmented { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--ui-space-1); padding: var(--ui-space-1); background: var(--ui-bg-sunken); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-lg); }
@@ -52,3 +54,11 @@
 .ui-badge--success { color: var(--ui-success); border-color: color-mix(in srgb, var(--ui-success) 55%, var(--ui-border)); }
 .ui-badge--warning { color: var(--ui-warning); border-color: color-mix(in srgb, var(--ui-warning) 55%, var(--ui-border)); }
 .ui-badge--danger { color: var(--ui-danger); border-color: color-mix(in srgb, var(--ui-danger) 55%, var(--ui-border)); }
+
+.ui-message { display: grid; gap: var(--ui-space-1); padding: var(--ui-space-3); color: var(--ui-text-secondary); background: var(--ui-message-surface, var(--ui-info-surface)); border: 1px solid var(--ui-message-border, var(--ui-info-border)); border-left-width: 3px; border-radius: var(--ui-radius-md); }
+.ui-message strong { color: var(--ui-message-tone, var(--ui-info)); }
+.ui-message p, .ui-empty-state p { margin: 0; color: var(--ui-text-muted); font-size: .68rem; line-height: 1.4; }
+.ui-message--success { --ui-message-tone: var(--ui-success); --ui-message-surface: var(--ui-success-surface); --ui-message-border: var(--ui-success-border); }
+.ui-message--warning { --ui-message-tone: var(--ui-warning); --ui-message-surface: var(--ui-warning-surface); --ui-message-border: var(--ui-warning-border); }
+.ui-message--danger { --ui-message-tone: var(--ui-danger); --ui-message-surface: var(--ui-danger-surface); --ui-message-border: var(--ui-danger-border); }
+.ui-empty-state { display: grid; justify-items: center; gap: var(--ui-space-2); padding: calc(var(--ui-space-5) * 2) var(--ui-space-5); color: var(--ui-text-secondary); background: var(--ui-bg-sunken); border: 1px dashed var(--ui-border); border-radius: var(--ui-radius-lg); text-align: center; }
