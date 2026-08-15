@@ -11,7 +11,8 @@ import {
   RemoteCampaignRevisionConflictError,
   SupabaseCampaignDocumentClient,
 } from "../../src/infrastructure/remote/supabase-campaign-document-client";
-import { SupabaseCampaignRepository } from "../../src/infrastructure/remote/supabase-campaign-repository";
+import { SupabaseCampaignFragmentClient } from "../../src/infrastructure/remote/supabase-campaign-fragment-client";
+import { SupabaseGranularCampaignRepository } from "../../src/infrastructure/remote/supabase-granular-campaign-repository";
 import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 const backendConfig = resolveRemoteBackendConfig(import.meta.env);
@@ -22,6 +23,7 @@ interface TestActor {
   user: User;
   supabase: SupabaseClient;
   campaigns: SupabaseCampaignDocumentClient;
+  fragments: SupabaseCampaignFragmentClient;
 }
 
 async function within<T>(label: string, operation: Promise<T>, timeoutMs = 5_000): Promise<T> {
@@ -39,7 +41,7 @@ async function within<T>(label: string, operation: Promise<T>, timeoutMs = 5_000
 async function createActor(label: string): Promise<TestActor> {
   if (backendConfig === null) throw new Error("Integration backend is not configured");
   const supabase = createRemoteSupabaseClient(backendConfig);
-  const uniqueEmail = `${label}-${crypto.randomUUID()}@example.test`;
+  const uniqueEmail = `${label}-${crypto.randomUUID()}@example.com`;
   const result = await within(`sign up ${label}`, supabase.auth.signUp({
     email: uniqueEmail,
     password: integrationPassword,
@@ -53,6 +55,7 @@ async function createActor(label: string): Promise<TestActor> {
     user: result.data.user,
     supabase,
     campaigns: new SupabaseCampaignDocumentClient(supabase),
+    fragments: new SupabaseCampaignFragmentClient(supabase),
   };
 }
 
@@ -61,7 +64,8 @@ describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
     const owner = await createActor("owner");
     const member = await createActor("member");
     const outsider = await createActor("outsider");
-    const initialPayload = { format: "talespire-campaign", value: { round: 0 } };
+    const initialSnapshot = await createCampaignSnapshot(createTestCampaign({ id: "campaign-access" }));
+    const initialPayload = JSON.parse(encodeCampaignEnvelope(initialSnapshot)) as Record<string, unknown>;
     const created = await within(
       "create campaign",
       owner.campaigns.createCampaign("Integration campaign", initialPayload),
@@ -154,8 +158,8 @@ describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
       JSON.parse(encodeCampaignEnvelope(initial)) as Record<string, unknown>,
     );
     const reportedRevisions: number[] = [];
-    const repository = new SupabaseCampaignRepository(
-      owner.campaigns,
+    const repository = new SupabaseGranularCampaignRepository(
+      owner.fragments,
       created.campaignId,
       (revision) => reportedRevisions.push(revision),
     );
@@ -166,6 +170,10 @@ describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
         ...initial.campaign,
         revision: initial.campaign.revision + 1,
         metadata: { ...initial.campaign.metadata, updatedAt: "2026-08-04T15:01:00.000Z" },
+        gm: {
+          ...initial.campaign.gm,
+          googleDocsUrl: "https://docs.google.com/document/d/remote-repository/edit",
+        },
       };
       const saved = await repository.save(updatedCampaign, {
         kind: "checksum",
@@ -176,8 +184,13 @@ describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
       await expect(repository.load()).resolves.toEqual(saved);
 
       await expect(repository.save({
-        ...updatedCampaign,
-        revision: updatedCampaign.revision + 1,
+        ...initial.campaign,
+        revision: initial.campaign.revision + 1,
+        metadata: { ...initial.campaign.metadata, updatedAt: "2026-08-04T15:01:30.000Z" },
+        gm: {
+          ...initial.campaign.gm,
+          googleDocsUrl: "https://docs.google.com/document/d/stale-conflict/edit",
+        },
       }, {
         kind: "checksum",
         checksum: initial.checksum,
@@ -187,33 +200,40 @@ describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
     }
   }, 30_000);
 
-  it("delivers campaign document updates through Realtime", async () => {
+  it("delivers small granular campaign signals through Realtime", async () => {
     const owner = await createActor("realtime-owner");
     const member = await createActor("realtime-member");
-    const created = await owner.campaigns.createCampaign("Realtime integration", {
-      format: "realtime-probe",
-      value: 0,
-    });
+    const seed = await createCampaignSnapshot(createTestCampaign({ id: "realtime-granular" }));
+    const created = await owner.campaigns.createCampaign(
+      "Realtime integration",
+      JSON.parse(encodeCampaignEnvelope(seed)) as Record<string, unknown>,
+    );
     await owner.campaigns.addMemberByEmail(created.campaignId, member.email);
 
-    let receiveDocument: ((document: Awaited<ReturnType<typeof member.campaigns.readCampaign>>) => void) | undefined;
-    const received = new Promise<Awaited<ReturnType<typeof member.campaigns.readCampaign>>>((resolve) => {
-      receiveDocument = resolve;
+    const ownerRepository = new SupabaseGranularCampaignRepository(owner.fragments, created.campaignId);
+    const initial = (await ownerRepository.load())!;
+    let receiveSignal: ((signal: { campaignId: string; revision: number }) => void) | undefined;
+    const received = new Promise<{ campaignId: string; revision: number }>((resolve) => {
+      receiveSignal = resolve;
     });
-    const subscription = member.campaigns.subscribeCampaign(created.campaignId, (document) => {
-      receiveDocument?.(document);
+    const subscription = member.fragments.subscribeCampaign(created.campaignId, (signal) => {
+      receiveSignal?.(signal);
     });
 
     try {
       await within("Realtime subscribed", subscription.ready, 10_000);
-      await owner.campaigns.saveCampaign(created.campaignId, 0, {
-        format: "realtime-probe",
-        value: 1,
+      await ownerRepository.save({
+        ...initial.campaign,
+        revision: initial.campaign.revision + 1,
+        metadata: { ...initial.campaign.metadata, updatedAt: "2026-08-04T15:02:00.000Z" },
+        gm: { ...initial.campaign.gm, googleDocsUrl: "https://docs.google.com/document/d/realtime/edit" },
+      }, {
+        kind: "checksum",
+        checksum: initial.checksum,
       });
       await expect(within("Realtime update", received, 10_000)).resolves.toMatchObject({
         campaignId: created.campaignId,
         revision: 1,
-        payload: { format: "realtime-probe", value: 1 },
       });
     } finally {
       await subscription.unsubscribe();

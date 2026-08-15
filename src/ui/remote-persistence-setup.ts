@@ -14,10 +14,11 @@ import {
   SupabaseCampaignDocumentClient,
   type RemoteCampaignSummary,
 } from "../infrastructure/remote/supabase-campaign-document-client";
-import { SupabaseCampaignReplica } from "../infrastructure/remote/supabase-campaign-replica";
-import { SupabaseCampaignRepository } from "../infrastructure/remote/supabase-campaign-repository";
 import { SupabaseCampaignContentStore } from "../infrastructure/remote/supabase-campaign-content-store";
 import { SupabaseCampaignLoreClient } from "../infrastructure/remote/supabase-campaign-lore-client";
+import { SupabaseCampaignFragmentClient } from "../infrastructure/remote/supabase-campaign-fragment-client";
+import { SupabaseGranularCampaignRepository } from "../infrastructure/remote/supabase-granular-campaign-repository";
+import { SupabaseGranularCampaignReplica } from "../infrastructure/remote/supabase-granular-campaign-replica";
 import {
   registerPersistencePanelOpener,
   setAppConnectionStatus,
@@ -304,6 +305,7 @@ export async function configureRemotePersistence(
       return primary;
     }
     const client = new SupabaseCampaignDocumentClient(supabase);
+    const fragmentClient = new SupabaseCampaignFragmentClient(supabase);
     const bindingKey = `${bindingKeyPrefix}${config.url}`;
     const signOut = async (): Promise<void> => {
       await supabase.auth.signOut();
@@ -342,20 +344,19 @@ export async function configureRemotePersistence(
           remoteRevision: revision,
         });
       };
-      const repository = new SupabaseCampaignRepository(client, campaign.id, reportRemoteRevision);
-      const document = await client.readCampaign(campaign.id);
-      if (document === null) throw new Error("La campaña remota no tiene documento.");
-      await repository.acceptRemoteDocument(document);
-      let latestReceivedRevision = document.revision;
-      const subscription = client.subscribeCampaign(campaign.id, (updated) => {
-        if (updated.revision <= latestReceivedRevision) return;
-        latestReceivedRevision = updated.revision;
-        if (updated.updatedBy === user.id) {
-          reportRemoteRevision(updated.revision);
+      const repository = new SupabaseGranularCampaignRepository(fragmentClient, campaign.id, reportRemoteRevision);
+      const initial = await repository.load();
+      if (initial === null) throw new Error("La campaña remota no tiene estado granular.");
+      let latestReceivedRevision = repository.remoteRevision;
+      const subscription = fragmentClient.subscribeCampaign(campaign.id, (signal) => {
+        if (signal.revision <= latestReceivedRevision) return;
+        latestReceivedRevision = signal.revision;
+        if (signal.updatedBy === user.id) {
+          reportRemoteRevision(signal.revision);
           return;
         }
-        void repository.acceptRemoteDocument(updated).then((snapshot) => {
-          if (updated.revision !== latestReceivedRevision) return;
+        void repository.load().then((snapshot) => {
+          if (!snapshot || signal.revision !== latestReceivedRevision) return;
           for (const listener of campaignChangeListeners) listener(snapshot);
         }).catch((error: unknown) => {
           onStatus({
@@ -374,12 +375,13 @@ export async function configureRemotePersistence(
       });
       return repository;
     }
+    const granularRepository = new SupabaseGranularCampaignRepository(fragmentClient, campaign.id);
     const repository = new DualCampaignRepository(
       primary,
-      new SupabaseCampaignReplica(client, campaign.id),
+      new SupabaseGranularCampaignReplica(granularRepository),
       onStatus,
     );
-    const subscription = client.subscribeCampaign(campaign.id, () => {
+    const subscription = fragmentClient.subscribeCampaign(campaign.id, () => {
       void repository.checkReplication();
     });
     void subscription.ready.catch((error: unknown) => {

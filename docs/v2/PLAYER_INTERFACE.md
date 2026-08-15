@@ -48,9 +48,10 @@ repeated section titles. All remaining Play tabs use
 the same domain commands as their Edit equivalents for rolls, casting,
 preparation, equipment, charges, trait uses, extra HP and conditions.
 
-Leaving Summary/Edit, switching characters or entering Play mode submits the
-core form before navigation. This prevents the navigation shell from discarding
-a pending debounced autosave.
+Summary/Edit marks the form dirty only after an actual input change and uses a
+short debounced autosave. Leaving the form, switching characters or entering
+Play mode flushes it only when dirty. Semantically unchanged values are ignored,
+so navigation and resource actions do not create redundant server saves.
 
 ## Hit points, conditions and inspiration
 

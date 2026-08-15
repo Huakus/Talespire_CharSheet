@@ -86,6 +86,8 @@ async function snapshotFromRoot(root: JsonObject): Promise<CampaignSnapshot | nu
 }
 
 export class BlobCampaignRepository implements CampaignRepository {
+  private cachedUsedBytes: number | null = null;
+
   constructor(
     private readonly store: StringBlobStore,
     private readonly maximumBytes = TALESPIRE_CAMPAIGN_STORAGE_LIMIT_BYTES,
@@ -93,13 +95,19 @@ export class BlobCampaignRepository implements CampaignRepository {
   ) {}
 
   async load(): Promise<CampaignSnapshot | null> {
-    return snapshotFromRoot(parseBlobRoot(await this.store.getBlob()));
+    const raw = await this.store.getBlob();
+    this.cachedUsedBytes = raw === null ? 0 : textEncoder.encode(raw).byteLength;
+    return snapshotFromRoot(parseBlobRoot(raw));
   }
 
   async getStorageUsage(): Promise<CampaignStorageUsage> {
+    if (this.cachedUsedBytes !== null) {
+      return { usedBytes: this.cachedUsedBytes, maximumBytes: this.maximumBytes };
+    }
     const raw = await this.store.getBlob();
+    this.cachedUsedBytes = raw === null ? 0 : textEncoder.encode(raw).byteLength;
     return {
-      usedBytes: raw === null ? 0 : textEncoder.encode(raw).byteLength,
+      usedBytes: this.cachedUsedBytes,
       maximumBytes: this.maximumBytes,
     };
   }
@@ -124,6 +132,7 @@ export class BlobCampaignRepository implements CampaignRepository {
       }
 
       await this.store.setBlob(serialized);
+      this.cachedUsedBytes = byteLength;
 
       // TaleSpire's API does not provide compare-and-swap. Immediate read-back
       // catches failed, truncated and most externally overwritten writes. Full

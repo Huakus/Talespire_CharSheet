@@ -7,7 +7,8 @@ import {
   type CampaignSnapshot,
 } from "../application/ports/campaign-repository";
 import type { CharacterV2 } from "../domain/character/character-v2";
-import { CharacterRevisionConflictError } from "../domain/character/edit-character";
+import { CharacterRevisionConflictError, editCharacterCore } from "../domain/character/edit-character";
+import { canonicalJsonStringify, type JsonValue } from "../shared/json";
 import {
   projectActionAttackModifier,
   projectActionDamageBonus,
@@ -587,6 +588,7 @@ export class BrowserApp {
   private showInventoryDescriptions = preference("inventory-descriptions", "shown") !== "hidden";
   private expandedInventoryDescriptions = new Set<string>();
   private autoSaveTimer: number | null = null;
+  private characterFormDirty = false;
   private initiativeState: TaleSpireInitiativeState = { entries: [], activeTurn: null, round: null };
   private transportDiagnostics: TaleSpireTransportDiagnostics | null = null;
   private encounterSyncState: TaleSpireEncounterSyncState | null = null;
@@ -2381,15 +2383,31 @@ export class BrowserApp {
     this.root.querySelector<HTMLButtonElement>("#create-empty-campaign")
       ?.addEventListener("click", () => void this.createEmptyCampaign());
     const characterForm = this.root.querySelector<HTMLFormElement>("#character-form");
+    this.characterFormDirty = false;
     characterForm?.addEventListener("submit", (event) => void this.saveCharacter(event));
+    characterForm?.addEventListener("input", (event) => {
+      const target = event.target;
+      if (target instanceof HTMLElement && target.matches("input[name], select[name], textarea[name]")) {
+        this.characterFormDirty = true;
+      }
+    });
+    characterForm?.addEventListener("change", (event) => {
+      const target = event.target;
+      if (target instanceof HTMLElement && target.matches("input[name], select[name], textarea[name]")) {
+        this.characterFormDirty = true;
+      }
+    });
     characterForm?.addEventListener("focusout", (event) => {
         const target = event.target;
-        if (!(target instanceof HTMLElement) || !target.matches("input[name], select[name], textarea[name]")) return;
+        if (
+          !this.characterFormDirty || !(target instanceof HTMLElement) ||
+          !target.matches("input[name], select[name], textarea[name]")
+        ) return;
         if (this.autoSaveTimer !== null) window.clearTimeout(this.autoSaveTimer);
         this.autoSaveTimer = window.setTimeout(() => {
           this.autoSaveTimer = null;
           if (characterForm.isConnected) characterForm.requestSubmit();
-        }, 700);
+        }, 250);
       });
     this.root.querySelector<HTMLButtonElement>("#link-miniature")
       ?.addEventListener("click", () => void this.linkSelectedMiniature());
@@ -3525,7 +3543,8 @@ export class BrowserApp {
       window.clearTimeout(this.autoSaveTimer);
       this.autoSaveTimer = null;
     }
-    form.requestSubmit();
+    if (this.characterFormDirty) form.requestSubmit();
+    else this.render();
   }
 
   private updatePreferences(): void {
@@ -4962,7 +4981,7 @@ export class BrowserApp {
   private async applyResourceAction(action: CharacterResourceAction, successText?: string): Promise<void> {
     if (this.snapshot === null || this.selectedCharacterId === null) return;
     const summaryForm = this.root.querySelector<HTMLFormElement>("#character-form");
-    if (summaryForm) {
+    if (summaryForm && this.characterFormDirty) {
       if (this.autoSaveTimer !== null) {
         window.clearTimeout(this.autoSaveTimer);
         this.autoSaveTimer = null;
@@ -5033,58 +5052,76 @@ export class BrowserApp {
       const characterId = form.dataset.characterId ?? "";
       const editedCharacter = this.snapshot.campaign.characters[characterId];
       if (!editedCharacter) throw new Error("El personaje ya no está disponible.");
+      const patch = {
+        name: readText(data, "name"),
+        color: readText(data, "color"),
+        identity: {
+          className: readText(data, "className"),
+          subclass: readText(data, "subclass"),
+          species: readText(data, "species"),
+          subrace: readText(data, "subrace"),
+          background: readText(data, "background"),
+          level: readInteger(data, "level"),
+          experience: readInteger(data, "experience"),
+          alignment: readText(data, "alignment"),
+        },
+        abilities: {
+          strength: readInteger(data, "strength"),
+          dexterity: readInteger(data, "dexterity"),
+          constitution: readInteger(data, "constitution"),
+          intelligence: readInteger(data, "intelligence"),
+          wisdom: readInteger(data, "wisdom"),
+          charisma: readInteger(data, "charisma"),
+        },
+        checks: this.readChecks(data, editedCharacter.checks),
+        proficiencies: {
+          weapons: this.readStringList(data, "proficiencyWeapons"),
+          armor: this.readStringList(data, "proficiencyArmor"),
+          languages: this.readStringList(data, "proficiencyLanguages"),
+          tools: this.readStringList(data, "proficiencyTools"),
+        },
+        combat: {
+          armorClass: readInteger(data, "armorClass"),
+          speed: readText(data, "speed"),
+          initiative: readText(data, "initiative"),
+          hitPoints: {
+            current: readInteger(data, "hpCurrent"),
+            maximum: readInteger(data, "hpMaximum"),
+            temporary: readInteger(data, "hpTemporary"),
+          },
+          hitDice: {
+            current: String(readInteger(data, "hitDiceRemaining")),
+            formula: `${readInteger(data, "hitDiceRemaining")}d${readInteger(data, "hitDieSize")}`,
+            remaining: readInteger(data, "hitDiceRemaining"),
+            dieSize: readInteger(data, "hitDieSize") as 4 | 6 | 8 | 10 | 12 | 20,
+          },
+          inspiration: data.get("inspiration") === "on",
+          exhaustion: readInteger(data, "exhaustion"),
+        },
+      };
+      const preview = editCharacterCore(editedCharacter, patch, {
+        expectedRevision: editedCharacter.revision,
+        updatedAt: editedCharacter.metadata.updatedAt,
+      });
+      const comparablePreview = {
+        ...preview,
+        revision: editedCharacter.revision,
+        metadata: editedCharacter.metadata,
+      };
+      if (
+        canonicalJsonStringify(comparablePreview as unknown as JsonValue) ===
+        canonicalJsonStringify(editedCharacter as unknown as JsonValue)
+      ) {
+        this.characterFormDirty = false;
+        return true;
+      }
       this.acceptCharacterSnapshot(await this.application.editCharacter({
         characterId,
         expectedCharacterRevision: Number(form.dataset.characterRevision),
         expectedCampaignChecksum: this.snapshot.checksum,
-        patch: {
-          name: readText(data, "name"),
-          color: readText(data, "color"),
-          identity: {
-            className: readText(data, "className"),
-            subclass: readText(data, "subclass"),
-            species: readText(data, "species"),
-            subrace: readText(data, "subrace"),
-            background: readText(data, "background"),
-            level: readInteger(data, "level"),
-            experience: readInteger(data, "experience"),
-            alignment: readText(data, "alignment"),
-          },
-          abilities: {
-            strength: readInteger(data, "strength"),
-            dexterity: readInteger(data, "dexterity"),
-            constitution: readInteger(data, "constitution"),
-            intelligence: readInteger(data, "intelligence"),
-            wisdom: readInteger(data, "wisdom"),
-            charisma: readInteger(data, "charisma"),
-          },
-          checks: this.readChecks(data, editedCharacter.checks),
-          proficiencies: {
-            weapons: this.readStringList(data, "proficiencyWeapons"),
-            armor: this.readStringList(data, "proficiencyArmor"),
-            languages: this.readStringList(data, "proficiencyLanguages"),
-            tools: this.readStringList(data, "proficiencyTools"),
-          },
-          combat: {
-            armorClass: readInteger(data, "armorClass"),
-            speed: readText(data, "speed"),
-            initiative: readText(data, "initiative"),
-            hitPoints: {
-              current: readInteger(data, "hpCurrent"),
-              maximum: readInteger(data, "hpMaximum"),
-              temporary: readInteger(data, "hpTemporary"),
-            },
-            hitDice: {
-              current: String(readInteger(data, "hitDiceRemaining")),
-              formula: `${readInteger(data, "hitDiceRemaining")}d${readInteger(data, "hitDieSize")}`,
-              remaining: readInteger(data, "hitDiceRemaining"),
-              dieSize: readInteger(data, "hitDieSize") as 4 | 6 | 8 | 10 | 12 | 20,
-            },
-            inspiration: data.get("inspiration") === "on",
-            exhaustion: readInteger(data, "exhaustion"),
-          },
-        },
+        patch,
       }), `Guardar personaje: ${editedCharacter.name}`);
+      this.characterFormDirty = false;
       await this.refreshStorageUsage();
       this.message = { kind: "success", text: "Personaje guardado correctamente." };
       if (renderAfterSave) this.render();

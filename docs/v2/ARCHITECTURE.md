@@ -51,13 +51,15 @@ critical section. The browser adapter uses the Web Locks API to coordinate
 pages from the same origin when available, with a shared in-process mutex as a
 fallback.
 
-The remote Supabase repository additionally retains recently loaded checksums
-as merge bases. If another player saves first, it performs a three-way merge
-between the loaded base, the local candidate and the latest remote document.
-Independent JSON fields (including fields on different characters) are merged;
-arrays of entities with stable IDs are merged per entity. Only paths changed to
-different values by both clients are rejected and reported as conflicts.
+The remote Supabase repository decomposes campaign state into independently
+versioned fragments: campaign metadata, character core/runtime data, each
+collection entity, encounters and GM workspace entities. A save sends only the
+changed fragments in one transactional RPC. Each fragment uses compare-and-set
+revision checks, while a lightweight campaign revision is the Realtime signal.
 
-The database still commits the complete campaign document atomically. The
-granularity comes from deterministic client-side reconciliation followed by a
-revision-checked retry.
+Recently loaded checksums remain merge bases. If the same fragment was changed
+concurrently, the repository loads the latest state once and performs the
+existing three-way merge. Changes to independent fragments do not conflict.
+Character and campaign domain timestamps are kept separate from server audit
+timestamps so local and remote checksums remain stable in dual mode. See
+[`GRANULAR_PERSISTENCE.md`](GRANULAR_PERSISTENCE.md).
