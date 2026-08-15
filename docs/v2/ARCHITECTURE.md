@@ -34,6 +34,8 @@ boundaries behind narrow ports.
 - `ui/browser-app.ts`: the complete player-sheet browser adapter;
 - `ui/gm-app.ts` and `ui/gm-tools-panel.ts`: encounter operation and the
   campaign/global GM workspaces;
+- `ui/design-system`: tokens, theme derivation and reusable native UI
+  primitives. See [`UI_DESIGN_SYSTEM.md`](UI_DESIGN_SYSTEM.md);
 - `shared/json.ts`: JSON cloning and canonical serialization;
 - `shared/hash.ts`: SHA-256 checksums over canonical JSON;
 - `shared/id.ts`: random and deterministic stable ID helpers.

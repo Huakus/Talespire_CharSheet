@@ -1,0 +1,42 @@
+* { box-sizing: border-box; }
+html, body { min-width: 320px; min-height: 100%; margin: 0; }
+body { background: var(--ui-bg-canvas); font-family: var(--ui-font-body); }
+.ui-lab-shell { min-height: 100vh; padding: var(--ui-space-4); color: var(--ui-text); background: var(--ui-bg-canvas); }
+.ui-lab-header { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-4); max-width: 1180px; margin: 0 auto var(--ui-space-4); padding: var(--ui-space-4); background: var(--ui-bg-surface); border-top: 3px solid var(--ui-accent); border-radius: var(--ui-radius-lg); }
+.ui-lab-header h1, .ui-lab-heading h2 { margin: 0; font-family: var(--ui-font-display); }
+.ui-lab-header h1 { color: var(--ui-accent); font-size: 1.35rem; }
+.ui-lab-header small, .ui-lab-heading small { color: var(--ui-text-muted); font-size: .62rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.ui-lab-header p { margin: 3px 0 0; color: var(--ui-text-secondary); font-size: .72rem; }
+.ui-lab-theme-actions, .ui-lab-control-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--ui-space-2); }
+.ui-lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-3); max-width: 1180px; margin: var(--ui-space-3) auto 0; }
+.ui-lab-panel { display: grid; align-content: start; gap: var(--ui-space-3); min-width: 0; max-width: 1180px; margin: 0 auto; padding: var(--ui-space-4); color: var(--ui-text-secondary); background: var(--ui-bg-surface); border: 1px solid var(--ui-border-subtle); border-radius: var(--ui-radius-lg); }
+.ui-lab-grid > .ui-lab-panel { width: 100%; }
+.ui-lab-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-3); }
+.ui-lab-heading h2 { color: var(--ui-text); font-size: .9rem; }
+.ui-lab-heading code { color: var(--ui-accent); }
+.ui-lab-color-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: var(--ui-space-3); }
+.ui-lab-color-controls form { display: grid; grid-template-columns: 150px auto; align-items: end; gap: var(--ui-space-2); }
+.ui-lab-presets { display: flex; flex-wrap: wrap; gap: var(--ui-space-2); }
+.ui-lab-presets button { width: 28px; height: 28px; padding: 0; background: var(--lab-swatch); border: 2px solid var(--ui-bg-surface); border-radius: 50%; box-shadow: 0 0 0 1px var(--ui-border); }
+.ui-lab-presets button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ui-accent); }
+.ui-lab-swatches { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--ui-space-2); }
+.ui-lab-swatches article { display: grid; gap: 2px; min-height: 74px; align-content: end; padding: var(--ui-space-3); color: var(--lab-foreground); background: var(--lab-color); border-radius: var(--ui-radius-md); }
+.ui-lab-swatches span, .ui-lab-swatches small { font-size: .58rem; }
+.ui-lab-swatches strong { font-size: .68rem; }
+.ui-lab-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ui-space-3); }
+.ui-lab-quantity-row { display: flex; align-items: center; gap: var(--ui-space-3); }
+.ui-lab-quantity-row p { margin: 0; color: var(--ui-text-muted); font-size: .65rem; line-height: 1.4; }
+.ui-lab-meters { display: grid; gap: var(--ui-space-2); }
+.ui-lab-state { display: grid; gap: 2px; margin: 0; padding: var(--ui-space-3); border: 1px solid; border-radius: var(--ui-radius-md); font-size: .65rem; }
+.ui-lab-state--success { color: var(--ui-success); background: var(--ui-success-surface); }
+.ui-lab-state--danger { color: var(--ui-danger); background: var(--ui-danger-surface); }
+.ui-lab-state span { color: var(--ui-text-secondary); }
+.ui-lab-dialog { display: grid; gap: var(--ui-space-3); padding: var(--ui-space-3); background: var(--ui-bg-raised); border: 1px solid var(--ui-accent-border); border-radius: var(--ui-radius-lg); box-shadow: var(--ui-shadow-overlay); }
+.ui-lab-dialog header, .ui-lab-dialog footer { display: flex; align-items: center; justify-content: space-between; gap: var(--ui-space-2); }
+.ui-lab-dialog header > div { display: grid; }
+.ui-lab-dialog header small { color: var(--ui-text-muted); font-size: .58rem; text-transform: uppercase; }
+.ui-lab-dialog header strong { color: var(--ui-text); }
+.ui-lab-dialog p { margin: 0; color: var(--ui-text-secondary); font-size: .68rem; }
+.ui-lab-dialog footer { justify-content: flex-end; }
+@media (max-width: 760px) { .ui-lab-grid { grid-template-columns: 1fr; } .ui-lab-swatches { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .ui-lab-header, .ui-lab-color-controls { grid-template-columns: 1fr; align-items: stretch; } .ui-lab-header { display: grid; } .ui-lab-fields, .ui-lab-color-controls form { grid-template-columns: 1fr; } }

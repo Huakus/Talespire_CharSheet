@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev:v2": "vite --open /v2.html",
+    "dev:ui": "vite --open /ui-lab.html",
     "build:v2": "vite build",
     "typecheck": "tsc --noEmit",
     "test": "npm run test:v2",

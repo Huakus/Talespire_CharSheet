@@ -103,6 +103,8 @@ import {
 } from "./app-chrome";
 import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
+import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
+import { normalizeUiQuantity } from "./design-system/primitives";
 
 export interface BrowserAppRuntime {
   storageLabel: string;
@@ -385,9 +387,7 @@ export function formatCurrencyInLargestDenominations(value: number): string {
 }
 
 export function clampMerchantQuantity(value: number, maximum: number): number {
-  const upperBound = Number.isFinite(maximum) ? Math.max(0, Math.trunc(maximum)) : 0;
-  if (!Number.isFinite(value)) return 0;
-  return Math.min(upperBound, Math.max(0, Math.trunc(value)));
+  return normalizeUiQuantity(value, 0, Number.isFinite(maximum) ? maximum : 0);
 }
 
 export function merchantBalancePreview(currentCopper: number, adjustmentCopper: number, mode: "buy" | "sell"): {
@@ -916,9 +916,8 @@ export class BrowserApp {
     const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
     const initiativeMode = projectAdjustedRollMode(character, "skills", ["Initiative"], character.checks.initiative.rollMode);
     const characters = Object.values(this.snapshot?.campaign.characters ?? {}).sort((a, b) => a.name.localeCompare(b.name));
-    const characterColors = ["#c98282", "#d09a68", "#c5ad6a", "#79a879", "#6fae9f", "#6f96c4", "#8f83bc", "#c982a6", "#9a73ad", "#9da79a"];
     return `
-      <section class="character-sheet-shell" data-sheet-mode="${this.sheetMode}" style="--character-color:${character.color}">
+      <section class="character-sheet-shell" data-sheet-mode="${this.sheetMode}" style="${uiAccentStyle(character.color, this.theme)}">
         <header class="sheet-hero" style="border-top-color:${character.color}">
           <div class="sheet-identity">
             <select id="character-title-select" aria-label="Personaje seleccionado">${characters.map((entry) => `<option value="${entry.id}" ${entry.id === character.id ? "selected" : ""} style="color:${entry.color}">● ${escapeHtml(entry.name)}</option>`).join("")}</select>
@@ -940,7 +939,7 @@ export class BrowserApp {
                 <button type="button" data-sheet-mode-choice="play" class="${this.sheetMode === "play" ? "active" : ""}" aria-pressed="${this.sheetMode === "play"}">Juego</button>
                 <button type="button" data-sheet-mode-choice="edit" class="${this.sheetMode === "edit" ? "active" : ""}" aria-pressed="${this.sheetMode === "edit"}">Edición</button>
               </div></section>
-              <details class="color-picker menu-color-picker"><summary title="Cambiar color del personaje"><span>Color</span><i style="--swatch-color:${character.color}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${characterColors.map((color) => `<button type="button" class="color-swatch ${color.toLowerCase() === character.color.toLowerCase() ? "active" : ""}" style="--swatch-color:${color}" data-character-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color.toLowerCase() === character.color.toLowerCase()}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="character-color" type="text" value="${character.color}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal" placeholder="#RRGGBB"></label><button type="button" id="apply-character-color">Aplicar</button></div></div></details>
+              <details class="color-picker menu-color-picker"><summary title="Cambiar color del personaje"><span>Color</span><i style="--swatch-color:${character.color}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${UI_ACCENT_PRESETS.map((color) => `<button type="button" class="color-swatch ${color.toLowerCase() === character.color.toLowerCase() ? "active" : ""}" style="--swatch-color:${color}" data-character-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color.toLowerCase() === character.color.toLowerCase()}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="character-color" type="text" value="${character.color}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal" placeholder="#RRGGBB"></label><button type="button" id="apply-character-color">Aplicar</button></div></div></details>
               <label>Tema<select id="theme"><option value="dark" ${this.theme === "dark" ? "selected" : ""}>Oscuro</option><option value="light" ${this.theme === "light" ? "selected" : ""}>Claro</option></select></label>
               ${this.runtime.selectMiniature ? '<button type="button" class="secondary-button" id="link-miniature">Vincular mini</button>' : ""}
               <button type="button" class="secondary-button danger" id="delete-character">Eliminar personaje</button>
@@ -3866,14 +3865,13 @@ export class BrowserApp {
   }
 
   private applyCharacterColor(rawColor: string): void {
-    const candidate = rawColor.trim();
-    const color = candidate.startsWith("#") ? candidate : `#${candidate}`;
-    if (!/^#[0-9a-f]{6}$/i.test(color)) {
+    const color = normalizeUiHexColor(rawColor);
+    if (!color) {
       this.message = { kind: "error", text: "Ingresá un color hexadecimal válido, por ejemplo #6f96c4." };
       this.render();
       return;
     }
-    void this.saveCharacterColor(color.toLowerCase());
+    void this.saveCharacterColor(color);
   }
 
   private async rollDice(button: HTMLButtonElement): Promise<void> {

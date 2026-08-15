@@ -22,6 +22,7 @@ import { bindViewportConstrainedDetails } from "./floating-panel";
 import { renderCheckboxGroup } from "./checkbox-group";
 import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
+import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
 
 export { calculateFloatingPanelPosition } from "./floating-panel";
 
@@ -62,7 +63,6 @@ function gmPreference(key: string, fallback: string): string {
   catch { return fallback; }
 }
 
-const GM_COLORS = ["#c98282", "#d09a68", "#c5ad6a", "#79a879", "#6fae9f", "#6f96c4", "#8f83bc", "#c982a6", "#9a73ad", "#9da79a"];
 const FAVORITE_TAG = "favorite";
 
 interface GmHistoryState {
@@ -83,6 +83,10 @@ interface GmLogEntry {
   label: string;
   occurredAt: string;
   kind: "action" | "roll" | "undo" | "redo" | "system";
+}
+
+function currentUiThemeMode(): "dark" | "light" {
+  return typeof document !== "undefined" && document.documentElement.dataset.v2Theme === "light" ? "light" : "dark";
 }
 
 function catalogMetadata(value: { catalog?: CatalogMetadata | null } | null): CatalogMetadata {
@@ -222,7 +226,7 @@ export class GmApp {
   private pendingDeleteMonsterKey: string | null = null;
   private openMonsterFilterGroup: string | null = null;
   private showMonsterDescriptions = true;
-  private gmColor = gmPreference("color", "#c5ad6a");
+  private gmColor = normalizeUiHexColor(gmPreference("color", "#c5ad6a")) ?? "#c5ad6a";
   private undoStack: ReversibleGmAction[] = [];
   private redoStack: ReversibleGmAction[] = [];
   private actionLog: GmLogEntry[] = [];
@@ -335,7 +339,7 @@ export class GmApp {
       ? ["encounter", "content", "lore", "notes", "tools"]
       : ["encounter", "content", "notes", "tools"];
     this.root.innerHTML = `
-      <section class="gm-shell" style="--character-color:${this.gmColor}">
+      <section class="gm-shell" style="${uiAccentStyle(this.gmColor, currentUiThemeMode())}">
         <header class="gm-header">
           <strong class="gm-header-title">Control de GM</strong>
           <div class="gm-header-controls">${this.renderActionHistoryControls()}${renderAppConnectionIndicators()}${this.renderNotificationCenter()}<details class="sheet-menu gm-menu"><summary>⋯</summary><div><button type="button" class="secondary-button" data-open-persistence ${canOpenPersistencePanel() ? "" : "disabled"}>Persistencia</button>${this.renderColorPicker()}</div></details></div>
@@ -368,7 +372,7 @@ export class GmApp {
   }
 
   private renderColorPicker(): string {
-    return `<details class="color-picker"><summary title="Cambiar color de la interfaz GM"><span>Color</span><i style="--swatch-color:${this.gmColor}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${GM_COLORS.map((color) => `<button type="button" class="color-swatch ${color === this.gmColor ? "active" : ""}" style="--swatch-color:${color}" data-gm-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color === this.gmColor}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="gm-interface-color" value="${this.gmColor}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal"></label><button type="button" id="apply-gm-interface-color">Aplicar</button></div></div></details>`;
+    return `<details class="color-picker"><summary title="Cambiar color de la interfaz GM"><span>Color</span><i style="--swatch-color:${this.gmColor}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${UI_ACCENT_PRESETS.map((color) => `<button type="button" class="color-swatch ${color === this.gmColor ? "active" : ""}" style="--swatch-color:${color}" data-gm-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color === this.gmColor}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="gm-interface-color" value="${this.gmColor}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal"></label><button type="button" id="apply-gm-interface-color">Aplicar</button></div></div></details>`;
   }
 
   private renderActionHistoryControls(): string {
@@ -479,7 +483,7 @@ export class GmApp {
     const abilities = Object.entries(character.abilities).map(([key, score]) => `<span><small>${abilityLabels[key] ?? key.slice(0, 3).toUpperCase()}</small><strong>${score}</strong><em>${signed(modifier(score))}</em><i>Salv. ${signed(statistics.savingThrows[key as keyof typeof statistics.savingThrows])}</i></span>`).join("");
     const conditions = character.combat.conditions.map((condition) => `<span>${escapeHtml(condition.label)}${condition.level ? ` ${condition.level}` : ""}</span>`).join("") || '<span class="muted">Sin condiciones</span>';
     const hitDice = `${character.combat.hitDice.remaining}/${character.combat.hitDice.maximum} d${character.combat.hitDice.dieSize}`;
-    return `<section class="gm-participant-sheet gm-character-overview" style="--character-color:${escapeHtml(character.color)}">
+    return `<section class="gm-participant-sheet gm-character-overview" style="${uiAccentStyle(character.color, currentUiThemeMode())}">
       <div class="gm-character-state-grid">
         <span><small>Competencia</small><strong>${signed(statistics.proficiencyBonus)}</strong></span><span><small>Dados de golpe</small><strong>${hitDice}</strong></span><span><small>Agotamiento</small><strong>${character.combat.exhaustion}</strong></span><span><small>Inspiración</small><strong>${character.combat.inspiration ? "Sí" : "No"}</strong></span><span><small>Salv. muerte</small><strong>${character.combat.deathSaves.successes}✓ · ${character.combat.deathSaves.failures}✕</strong></span>
       </div>
@@ -1014,13 +1018,13 @@ export class GmApp {
   }
 
   private setGmColor(candidate: string): void {
-    const color = candidate.startsWith("#") ? candidate : `#${candidate}`;
-    if (!/^#[0-9a-f]{6}$/i.test(color)) {
+    const color = normalizeUiHexColor(candidate);
+    if (!color) {
       this.message = { kind: "error", text: "Ingresá un color hexadecimal válido, por ejemplo #6f96c4." };
       this.render();
       return;
     }
-    this.gmColor = color.toLowerCase();
+    this.gmColor = color;
     try { window.localStorage.setItem("talespire-5e-toolset:v2:gm:color", this.gmColor); } catch { /* Persiste durante la sesión. */ }
     this.appendActionLog(`Cambiar color GM a ${this.gmColor}`, "system");
     this.render();

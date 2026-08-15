@@ -1,0 +1,67 @@
+:root {
+  --ui-accent: var(--character-color, #d9bd73);
+  --ui-accent-hover: color-mix(in srgb, var(--ui-accent) 88%, white);
+  --ui-accent-active: color-mix(in srgb, var(--ui-accent) 78%, white);
+  --ui-accent-subtle: color-mix(in srgb, var(--ui-accent) 14%, #111610);
+  --ui-accent-surface: color-mix(in srgb, var(--ui-accent) 8%, #111610);
+  --ui-accent-border: color-mix(in srgb, var(--ui-accent) 48%, #111610);
+  --ui-accent-secondary: color-mix(in srgb, var(--ui-accent) 72%, #6f96c4);
+  --ui-on-accent: #101410;
+  --ui-on-accent-secondary: #101410;
+  --ui-focus-ring: color-mix(in srgb, var(--ui-accent) 76%, white);
+
+  --ui-bg-canvas: #121711;
+  --ui-bg-surface: #171d16;
+  --ui-bg-raised: #1f271e;
+  --ui-bg-sunken: #0e120e;
+  --ui-bg-overlay: #050805d9;
+  --ui-border-subtle: #354033;
+  --ui-border: #414d3f;
+  --ui-border-strong: #596554;
+  --ui-text: #edf1e8;
+  --ui-text-secondary: #bdc8b8;
+  --ui-text-muted: #8f9e89;
+  --ui-text-faint: #788573;
+
+  --ui-success: #79a879;
+  --ui-success-surface: #17251a;
+  --ui-warning: #d9bd73;
+  --ui-warning-surface: #28271c;
+  --ui-danger: #c98282;
+  --ui-danger-surface: #2a1715;
+  --ui-info: #6f96c4;
+  --ui-info-surface: #151a23;
+
+  --ui-space-1: 3px;
+  --ui-space-2: 5px;
+  --ui-space-3: 8px;
+  --ui-space-4: 12px;
+  --ui-space-5: 16px;
+  --ui-radius-sm: 3px;
+  --ui-radius-md: 5px;
+  --ui-radius-lg: 8px;
+  --ui-control-compact: 27px;
+  --ui-control-default: 34px;
+  --ui-shadow-overlay: 0 16px 38px #000d;
+  --ui-font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+  --ui-font-display: Georgia, serif;
+}
+
+:root[data-v2-theme="light"], [data-ui-theme="light"] {
+  --ui-bg-canvas: #e8ece5;
+  --ui-bg-surface: #f8faf6;
+  --ui-bg-raised: #ffffff;
+  --ui-bg-sunken: #eef2eb;
+  --ui-bg-overlay: #dfe5dccc;
+  --ui-border-subtle: #c9d1c6;
+  --ui-border: #aeb8aa;
+  --ui-border-strong: #879181;
+  --ui-text: #20251f;
+  --ui-text-secondary: #394337;
+  --ui-text-muted: #536050;
+  --ui-text-faint: #6f7b6c;
+  --ui-success-surface: #e5f1e4;
+  --ui-warning-surface: #f5eed8;
+  --ui-danger-surface: #f5e4e2;
+  --ui-info-surface: #e3ebf5;
+}
