@@ -13,6 +13,7 @@ import {
   type CampaignSnapshot,
   type SaveExpectation,
 } from "../../application/ports/campaign-repository";
+import { migrateLegacyCampaignSpellClasses } from "./legacy-spell-class-migration";
 
 export const CampaignEnvelopeSchema = z.object({
   format: z.literal("talespire-toolset-campaign-v2"),
@@ -59,7 +60,8 @@ export async function decodeCampaignEnvelope(
     );
   }
 
-  const normalized = CampaignV2Schema.safeParse(parsed.data.campaign);
+  const migratedCampaign = migrateLegacyCampaignSpellClasses(parsed.data.campaign);
+  const normalized = CampaignV2Schema.safeParse(migratedCampaign);
   if (!normalized.success) {
     const issue = normalized.error.issues[0];
     const location = issue?.path.length ? `${issue.path.join(".")}: ` : "";
@@ -67,7 +69,7 @@ export async function decodeCampaignEnvelope(
       `Stored campaign is invalid: ${location}${issue?.message ?? "unknown error"}`,
     );
   }
-  const rawCharacters = parsed.data.campaign.characters;
+  const rawCharacters = migratedCampaign.characters;
   const rawCharacterMap = rawCharacters !== null && rawCharacters !== undefined && !Array.isArray(rawCharacters) && typeof rawCharacters === "object"
     ? rawCharacters
     : {};

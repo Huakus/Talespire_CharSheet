@@ -83,7 +83,7 @@ import {
   normalizeEquipmentRarity,
   type EquipmentCatalogDraft,
 } from "../domain/equipment/equipment-catalog";
-import { spellClassNames } from "../domain/spells/spell-catalog";
+import { SPELL_CLASS_OPTIONS, spellClassLabel, spellClassLabels } from "../domain/spells/spell-catalog";
 import { CampaignStorageCapacityError } from "../infrastructure/persistence/blob-campaign-repository";
 import type { CampaignStorageUsage } from "../infrastructure/persistence/blob-campaign-repository";
 import type { DiceRoller } from "../application/ports/dice-roller";
@@ -814,6 +814,11 @@ export class BrowserApp {
     return this.customSpells.find((spell) => spell.name.toLocaleLowerCase() === normalized) ?? null;
   }
 
+  private spellWithCatalogDefinition(spell: CharacterSpellV2): CharacterSpellV2 {
+    const definition = this.findSpell(spell.name);
+    return definition ? { ...spell, level: definition.level, definition } : spell;
+  }
+
   private equipmentCatalog(): readonly EquipmentCatalogDraft[] {
     return this.customEquipment;
   }
@@ -1476,10 +1481,10 @@ export class BrowserApp {
     const definition = spell.definition;
     const matchesProperties = [...this.spellPropertyFilters].every((filter) => this.spellMatchesProperty(character, spell, filter));
     const tags = this.spellTags(definition);
-    const classes = spellClassNames(definition?.classes);
+    const classes = definition?.classes ?? [];
     return matchesProperties &&
       (this.spellTagFilters.size === 0 || tags.some((tag) => [...this.spellTagFilters].some((selected) => normalizedSearchText(selected) === normalizedSearchText(tag)))) &&
-      (this.spellClassFilters.size === 0 || classes.some((spellClass) => [...this.spellClassFilters].some((selected) => normalizedSearchText(selected) === normalizedSearchText(spellClass))));
+      (this.spellClassFilters.size === 0 || classes.some((spellClass) => this.spellClassFilters.has(spellClass)));
   }
 
   private spellTags(definition: SpellDefinition | null): string[] {
@@ -1501,7 +1506,10 @@ export class BrowserApp {
           definition,
           effect: { description: "", active: false },
         }));
-    return [...character.spellcasting.spells.map((spell) => ({ spell, known: true })), ...unknownSpells.map((spell) => ({ spell, known: false }))];
+    return [
+      ...character.spellcasting.spells.map((spell) => ({ spell: this.spellWithCatalogDefinition(spell), known: true })),
+      ...unknownSpells.map((spell) => ({ spell, known: false })),
+    ];
   }
 
   private visibleSpellEntries(character: CharacterV2): SpellViewEntry[] {
@@ -1522,7 +1530,7 @@ export class BrowserApp {
   private spellSearchValue(spell: CharacterSpellV2): string {
     const definition = spell.definition;
     return normalizedSearchText([
-      spell.name, definition?.school ?? "", definition?.classes ?? "",
+      spell.name, definition?.school ?? "", ...(definition?.classes ?? []), ...spellClassLabels(definition?.classes ?? []),
       definition?.description ?? "", definition?.components ?? "",
       definition?.damageType ?? "", definition?.castingTime ?? "",
       ...this.spellTags(definition),
@@ -1538,12 +1546,12 @@ export class BrowserApp {
     const sourceSpells = this.spellSourceEntries(character).map(({ spell }) => spell);
     const tags = uniqueLabels(this.spellCatalog().flatMap((spell) => catalogTags(spell)));
     const classes = uniqueLabels([
-      ...sourceSpells.flatMap((spell) => spellClassNames(spell.definition?.classes)),
-      ...this.spellCatalog().flatMap((spell) => spellClassNames(spell.classes)),
+      ...sourceSpells.flatMap((spell) => spell.definition?.classes ?? []),
+      ...this.spellCatalog().flatMap((spell) => spell.classes),
     ]);
     const noFilters = this.spellPropertyFilters.size === 0 && this.spellTagFilters.size === 0 && this.spellClassFilters.size === 0;
     const tagMenu = tags.length ? `<details class="gm-filter-group player-filter-group ${this.spellTagFilters.size ? "active" : ""}"><summary>Etiquetas${this.spellTagFilters.size ? `<strong>${this.spellTagFilters.size}</strong>` : ""}</summary><div>${tags.map((tag) => `<button type="button" data-spell-tag-filter="${escapeHtml(tag)}" class="${this.spellTagFilters.has(tag) ? "active" : ""}" aria-pressed="${this.spellTagFilters.has(tag)}">${escapeHtml(tag)}</button>`).join("")}</div></details>` : "";
-    const classMenu = classes.length ? `<details class="gm-filter-group player-filter-group ${this.spellClassFilters.size ? "active" : ""}"><summary>Clase${this.spellClassFilters.size ? `<strong>${this.spellClassFilters.size}</strong>` : ""}</summary><div>${classes.map((spellClass) => `<button type="button" data-spell-class-filter="${escapeHtml(spellClass)}" class="${this.spellClassFilters.has(spellClass) ? "active" : ""}" aria-pressed="${this.spellClassFilters.has(spellClass)}">${escapeHtml(spellClass)}</button>`).join("")}</div></details>` : "";
+    const classMenu = classes.length ? `<details class="gm-filter-group player-filter-group ${this.spellClassFilters.size ? "active" : ""}"><summary>Clase${this.spellClassFilters.size ? `<strong>${this.spellClassFilters.size}</strong>` : ""}</summary><div>${classes.map((spellClass) => `<button type="button" data-spell-class-filter="${escapeHtml(spellClass)}" class="${this.spellClassFilters.has(spellClass) ? "active" : ""}" aria-pressed="${this.spellClassFilters.has(spellClass)}">${escapeHtml(spellClassLabel(spellClass))}</button>`).join("")}</div></details>` : "";
     return `<nav class="filter-bar property-filter" aria-label="Filtros de conjuros"><button type="button" data-clear-spell-properties class="${noFilters ? "active" : ""}" aria-pressed="${noFilters}">Limpiar</button>${filters.map(([value, label]) => `<button type="button" data-spell-property-filter="${value}" class="${this.spellPropertyFilters.has(value) ? "active" : ""}" aria-pressed="${this.spellPropertyFilters.has(value)}"><span>${label}</span><strong>${sourceSpells.filter((spell) => this.spellMatchesProperty(character, spell, value)).length}</strong></button>`).join("")}${classMenu}${tagMenu}${includeCatalog ? `<button type="button" class="catalog-toggle ${this.includeUnknownSpells ? "active" : ""}" data-include-unknown-spells aria-pressed="${this.includeUnknownSpells}" title="${this.includeUnknownSpells ? "Ocultar" : "Mostrar"} conjuros que el personaje no conoce"><span>Catálogo</span></button>` : ""}</nav>`;
   }
 
@@ -2008,6 +2016,12 @@ export class BrowserApp {
     const damage = spell ? projectSpellDamageExpression(character, spell) : "";
     const field = (name: string, value: string | number, attributes = "") =>
       `<input data-spell-field="${name}" value="${escapeHtml(String(value))}" ${attributes}>`;
+    const selectedClasses = definition?.classes ?? [];
+    const knownClassKeys = new Set(SPELL_CLASS_OPTIONS.map((option) => option.value));
+    const classOptions = [
+      ...SPELL_CLASS_OPTIONS,
+      ...selectedClasses.filter((value) => !knownClassKeys.has(value as typeof SPELL_CLASS_OPTIONS[number]["value"])).map((value) => ({ value, label: spellClassLabel(value) })),
+    ].map((option) => `<option value="${escapeHtml(option.value)}" ${selectedClasses.includes(option.value) ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("");
     const minimumLevel = Math.max(1, spell?.level ?? 1);
     const availableSlotLevel = spell?.level === 0 ? 0 : spell
       ? Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).find((level) => {
@@ -2050,7 +2064,7 @@ export class BrowserApp {
           <label>Componentes${field("components", definition?.components ?? "")}</label>
           <label>Material${field("material", definition?.material ?? "")}</label>
           <label>Escuela${field("school", definition?.school ?? "")}</label>
-          <label>Clases${field("classes", definition?.classes ?? "")}</label>
+          <label>Clases<select data-spell-field="classes" multiple>${classOptions}</select></label>
           <label>Resolución<select data-spell-field="attackType">${[["none", "Sin ataque/CD"], ["attack", "Ataque"], ["save", "Salvación"]].map(([value, label]) => `<option value="${value}" ${definition?.attackType === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>
           <label>Salvación${field("saveAbility", definition?.saveAbility ?? "")}</label>
           <label>Daño base${field("damageExpression", definition?.damageExpression ?? "", 'placeholder="2d6"')}</label>
@@ -4183,7 +4197,7 @@ export class BrowserApp {
       concentration: checkbox("concentration"),
       castingTime: this.spellCardField<HTMLInputElement>(card, "castingTime").value,
       school: this.spellCardField<HTMLInputElement>(card, "school").value,
-      classes: this.spellCardField<HTMLInputElement>(card, "classes").value,
+      classes: [...this.spellCardField<HTMLSelectElement>(card, "classes").selectedOptions].map((option) => option.value),
       attackType: this.spellCardField<HTMLSelectElement>(card, "attackType").value as SpellDefinition["attackType"],
       saveAbility: this.spellCardField<HTMLInputElement>(card, "saveAbility").value,
       damageExpression: this.spellCardField<HTMLInputElement>(card, "damageExpression").value,
@@ -4226,7 +4240,8 @@ export class BrowserApp {
       value("components", definition.components);
       value("material", definition.material);
       value("school", definition.school);
-      value("classes", definition.classes);
+      const classSelect = this.spellCardField<HTMLSelectElement>(card, "classes");
+      for (const option of classSelect.options) option.selected = definition.classes.includes(option.value);
       value("saveAbility", definition.saveAbility);
       value("damageExpression", definition.damageExpression);
       value("upcastDamageExpression", definition.upcastDamageExpression);
@@ -4354,7 +4369,7 @@ export class BrowserApp {
       } else if (action === "cast") {
         const slot = card?.querySelector<HTMLSelectElement>("[data-cast-slot-level]");
         if (slot?.value === "ritual") {
-          if (!spell.definition?.ritual) throw new Error("Este conjuro no se puede lanzar como ritual.");
+          if (!this.spellWithCatalogDefinition(spell).definition?.ritual) throw new Error("Este conjuro no se puede lanzar como ritual.");
           const executionKey = card.dataset.combatExecutionKey;
           const before = executionKey ? [...(this.combatExecutions.get(executionKey) ?? [])] : [];
           const beforeDamage = executionKey ? this.combatExecutionDamage.get(executionKey) ?? null : null;

@@ -6,6 +6,7 @@ import {
   type CharacterV2,
 } from "../../domain/character/character-v2";
 import { canonicalJsonStringify, cloneJson, JsonObjectSchema, type JsonObject } from "../../shared/json";
+import { migrateLegacyCharacterSpellClasses } from "../persistence/legacy-spell-class-migration";
 
 export const CampaignFragmentKindSchema = z.enum([
   "campaign",
@@ -195,7 +196,7 @@ export function assembleCampaign(state: RemoteCampaignFragmentState): CampaignV2
       currency: runtime.payload.currency,
       spellcasting: {
         ...runtimeSpellcasting,
-        spells: payloads(state.fragments, "character-spell", version.characterId),
+        spells: payloads(state.fragments, "character-spell", version.characterId).map(migrateLegacyCharacterSpellClasses),
       },
       actions: payloads(state.fragments, "character-action", version.characterId),
       inventory: payloads(state.fragments, "character-inventory", version.characterId),

@@ -39,15 +39,26 @@ En particular, un conjuro representa sus características por separado:
 }
 ```
 
-`ritual` nunca se codifica dentro de `castingTime` en una escritura nueva. Del
-mismo modo, `classes`, `components` y `damageTypes` no son textos separados por
-comas. Los identificadores estándar se traducen a etiquetas españolas sólo al
-presentarlos en la interfaz.
+`classes` es la única fuente de clases de un conjuro. Contiene claves
+normalizadas (`wizard`, `cleric`, `druid`, etc.) y se usa directamente para
+editar, buscar y filtrar tanto en las interfaces de GM como de player. La UI
+traduce esas claves a etiquetas españolas, pero nunca reemplaza los valores del
+modelo con dichas etiquetas.
 
-El lector conserva adaptadores para datos anteriores: reconoce `class` como
-texto, claves snake_case, estructuras `HP`/`AC`, objetos de API de equipo y el
-marcador de ritual `R`. Estos formatos se aceptan únicamente al leer; una entrada
-que el GM vuelva a guardar se reescribe en el contrato canónico.
+`ritual` nunca se codifica dentro de `castingTime` en una escritura nueva. Del
+mismo modo, `components` y `damageTypes` no son textos separados por comas.
+
+El campo singular `class` ya no forma parte del contrato ni se consulta como
+respaldo. La migración `normalize_spell_classes` lo elimina de los catálogos
+oficial y de campaña después de completar sus arreglos normalizados. Los
+conjuros guardados previamente dentro de personajes se convierten
+una sola vez durante la carga y toda persistencia posterior conserva `classes`
+como arreglo. Cuando un conjuro conocido coincide con el catálogo cargado,
+player usa la definición normalizada del catálogo; la copia incluida en el
+personaje sólo actúa como respaldo si esa entrada ya no existe. Otros
+adaptadores aún necesarios para el catálogo existente
+—claves snake_case, estructuras `HP`/`AC` y objetos de API de equipo— permanecen
+en sus límites de importación y no intervienen en los filtros de UI.
 
 Equipo, monstruos, tiendas y checklist siguen el mismo encabezado. Sus datos
 normalizados usan camelCase y tipos JSON reales. Los estados de catálogo no se

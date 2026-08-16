@@ -10,6 +10,8 @@ import { renderCheckboxGroup } from "../../src/ui/checkbox-group";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import type { GmShop } from "../../src/domain/gm/gm-global-content";
+import { normalizeSpellDefinition } from "../../src/domain/spells/spell-catalog";
+import { migrateLegacyCharacterSpellClasses } from "../../src/infrastructure/persistence/legacy-spell-class-migration";
 
 describe("GM workspace", () => {
   it("combines values inside a filter group with OR and different groups with AND", () => {
@@ -17,6 +19,35 @@ describe("GM workspace", () => {
     expect(matchesGroupedFilters(filters, { resistance: ["Frío"], type: ["Dragón"] })).toBe(true);
     expect(matchesGroupedFilters(filters, { resistance: ["Ácido"], type: ["Dragón"] })).toBe(false);
     expect(matchesGroupedFilters(filters, { resistance: ["Fuego"], type: ["Bestia"] })).toBe(false);
+  });
+
+  it("builds and applies GM class filters from normalized class keys", async () => {
+    const wizard = normalizeSpellDefinition({ name: "Secreto arcano", level: 1, classes: ["wizard", "sorcerer"] });
+    const cleric = normalizeSpellDefinition({ name: "Plegaria", level: 1, classes: ["cleric"] });
+    const panel = new GmToolsPanel({} as HTMLElement, {
+      loadGmContent: async () => ({ spells: [wizard, cleric], equipment: [], monsters: [], shops: [], checklist: [] }),
+    }, () => undefined, () => undefined, () => undefined);
+    await panel.load();
+    const workspace = { noteGroups: [], randomTables: [], googleDocsUrl: "" };
+
+    const unfiltered = panel.render("content", workspace, "spell");
+    expect(unfiltered).toContain('data-gm-content-filter-value="wizard"');
+    expect(unfiltered).toContain('>Mago</button>');
+    expect(unfiltered).toContain(wizard.name);
+    expect(unfiltered).toContain(cleric.name);
+
+    (panel as unknown as { contentFilters: { spell: Set<string> } }).contentFilters.spell.add("class\u0000cleric");
+    const filtered = panel.render("content", workspace, "spell");
+    expect(filtered).toContain(cleric.name);
+    expect(filtered).not.toContain(`<h3>${wizard.name}</h3>`);
+  });
+
+  it("confines existing character spell class conversion to the persistence boundary", () => {
+    const migrated = migrateLegacyCharacterSpellClasses({
+      id: "spl_11111111111111111111111111111111",
+      definition: { classes: "Mago, Clérigo, Bruijo" },
+    });
+    expect((migrated.definition as { classes: string[] }).classes).toEqual(["wizard", "cleric", "warlock"]);
   });
 
   it("detects native TaleSpire round boundaries without counting queue edits", () => {

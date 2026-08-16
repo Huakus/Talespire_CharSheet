@@ -6,7 +6,6 @@ import { GmChecklistItemSchema, type GmChecklistItem, type GmShop } from "../gm/
 import { normalizeMerchantInteraction } from "../commerce/merchant-interaction";
 import type { MonsterDefinition } from "../monsters/monster-catalog";
 import {
-  spellClassKeys,
   spellComponentNames,
   spellDamageTypeKeys,
   spellSchoolKey,
@@ -162,7 +161,7 @@ export function serializeSpellContentPayload(value: SpellDefinition): Record<str
     ...value,
     catalog: undefined,
     components: spellComponentNames(value.components),
-    classes: spellClassKeys(value.classes),
+    classes: value.classes,
     school: spellSchoolKey(value.school),
     damageTypes: spellDamageTypeKeys(value.damageType),
     damageType: undefined,

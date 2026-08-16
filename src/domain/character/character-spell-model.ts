@@ -27,7 +27,7 @@ export const SpellDefinitionSchema = z.object({
   concentration: z.boolean(),
   castingTime: z.string(),
   school: z.string(),
-  classes: z.string(),
+  classes: z.array(z.string().min(1)),
   attackType: z.enum(["attack", "save", "none"]),
   saveAbility: z.string(),
   damageExpression: z.string(),

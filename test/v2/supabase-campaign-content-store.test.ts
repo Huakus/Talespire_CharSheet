@@ -117,11 +117,11 @@ describe("Supabase campaign content store", () => {
     const rows = [{
       campaign_id: campaignId,
       kind: "spell",
-      content_key: "imported:spell:es:legado",
-      name: "Conjuro legado",
+      content_key: "imported:spell:es:normalizado",
+      name: "Conjuro importado",
       origin: "imported",
       tags: ["imported", "es"],
-      payload: { name: "Conjuro legado", level: "1st-level", class: "Mago" },
+      payload: { name: "Conjuro importado", level: "1st-level", classes: ["wizard"] },
       revision: 0,
       updated_at: "2026-08-08T00:00:00.000Z",
       deleted_at: null,
@@ -164,14 +164,14 @@ describe("Supabase campaign content store", () => {
       entry({ kind: "equipment", contentKey: "official:equipment:untagged", name: "Rope", tags: ["official"], payload: { name: "Rope" } }),
       entry({ kind: "equipment", contentKey: "official:equipment:eng:chain", name: "Chain", tags: ["official", "eng"], payload: { name: "Chain" } }),
       entry({ kind: "monster", contentKey: "official:monster:oso", name: "Oso", tags: ["official", "español"], payload: { Name: "Oso", Type: "Bestia" } }),
-      entry({ kind: "spell", contentKey: "imported:spell:es:legado", name: "Legado", origin: "imported", tags: ["imported", "es"], payload: { name: "Legado", level: 1, class: "Mago" } }),
+      entry({ kind: "spell", contentKey: "imported:spell:es:normalizado", name: "Importado", origin: "imported", tags: ["imported", "es"], payload: { name: "Importado", level: 1, classes: ["wizard"] } }),
       entry({ kind: "shop", contentKey: "gm:shop:legacy", name: "La Posta", origin: "gm", tags: ["gm"], payload: { name: "La Posta" } }),
       entry({ kind: "checklist", contentKey: "gm:checklist:english", name: "Buy rope", origin: "gm", tags: ["gm", "english"], payload: { id: "english", text: "Buy rope" } }),
     ]);
 
     const loaded = await new SupabaseCampaignContentStore(remote.client, campaignId).load();
 
-    expect(loaded.spells.map((spell) => spell.name)).toEqual(["Escudo", "Legado"]);
+    expect(loaded.spells.map((spell) => spell.name)).toEqual(["Escudo", "Importado"]);
     expect(loaded.spells[1]?.catalog?.origin).toBe("imported");
     expect(loaded.equipment).toEqual([]);
     expect(loaded.monsters.map((monster) => monster.name)).toEqual(["Oso"]);

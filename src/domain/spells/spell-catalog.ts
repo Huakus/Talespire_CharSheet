@@ -10,9 +10,16 @@ export const SPELL_SCHOOLS = [
 ] as const;
 export const SPELL_COMPONENTS = ["V", "S", "M"] as const;
 export const SPELL_CLASSES = [
-  "Artífice", "Bardo", "Brujo", "Clérigo", "Druida", "Explorador",
-  "Hechicero", "Mago", "Paladín",
+  "artificer", "bard", "warlock", "cleric", "druid", "ranger",
+  "sorcerer", "wizard", "paladin",
 ] as const;
+export const SPELL_CLASS_OPTIONS = SPELL_CLASSES.map((value) => ({
+  value,
+  label: ({
+    artificer: "Artífice", bard: "Bardo", warlock: "Brujo", cleric: "Clérigo",
+    druid: "Druida", ranger: "Explorador", sorcerer: "Hechicero", wizard: "Mago", paladin: "Paladín",
+  } as Record<typeof SPELL_CLASSES[number], string>)[value],
+}));
 export const SPELL_SAVE_ABILITIES = ["", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"] as const;
 
 function object(value: unknown): JsonObject {
@@ -30,29 +37,15 @@ function normalizedKey(value: unknown): string {
 }
 
 const SPELL_CLASS_LABELS: Record<string, string> = {
-  artificer: "Artífice", artifice: "Artífice",
-  bard: "Bardo", bardo: "Bardo",
-  warlock: "Brujo", brujo: "Brujo",
-  cleric: "Clérigo", clerigo: "Clérigo",
-  druid: "Druida", druida: "Druida",
-  ranger: "Explorador", explorador: "Explorador",
-  sorcerer: "Hechicero", hechicero: "Hechicero",
-  wizard: "Mago", mago: "Mago",
+  artificer: "Artífice",
+  bard: "Bardo",
+  warlock: "Brujo",
+  cleric: "Clérigo",
+  druid: "Druida",
+  ranger: "Explorador",
+  sorcerer: "Hechicero",
+  wizard: "Mago",
   paladin: "Paladín",
-  "ritual caster": "Lanzador de rituales", "lanzador de rituales": "Lanzador de rituales",
-};
-
-const SPELL_CLASS_KEYS: Record<string, string> = {
-  artifice: "artificer", artificer: "artificer",
-  bardo: "bard", bard: "bard",
-  brujo: "warlock", warlock: "warlock",
-  clerigo: "cleric", cleric: "cleric",
-  druida: "druid", druid: "druid",
-  explorador: "ranger", ranger: "ranger",
-  hechicero: "sorcerer", sorcerer: "sorcerer",
-  mago: "wizard", wizard: "wizard",
-  paladin: "paladin",
-  "lanzador de rituales": "ritual-caster", "ritual caster": "ritual-caster", "ritual-caster": "ritual-caster",
 };
 
 const SPELL_SCHOOL_LABELS: Record<string, string> = {
@@ -95,26 +88,17 @@ const SPELL_DAMAGE_TYPE_LABELS: Record<string, string> = {
   choice: "A elección", aleatorio: "Aleatorio", random: "Aleatorio",
 };
 
-export function spellClassNames(value: unknown): string[] {
-  const entries = Array.isArray(value) ? value : [value];
-  const names = entries.flatMap((entry) => {
-    if (entry && typeof entry === "object" && !Array.isArray(entry)) {
-      const source = entry as Record<string, unknown>;
-      return [String(source.name ?? source.Name ?? source.index ?? "")];
-    }
-    return String(entry ?? "").split(/[,;]+/);
-  }).map((entry) => entry.trim()).filter(Boolean).map((name) => SPELL_CLASS_LABELS[normalizedKey(name)] ?? name);
-  const seen = new Set<string>();
-  return names.filter((name) => {
-    const key = normalizedKey(name);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+export function spellClasses(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.map((entry) => normalizedKey(entry)).filter(Boolean))];
 }
 
-export function spellClassKeys(value: unknown): string[] {
-  return spellClassNames(value).map((name) => SPELL_CLASS_KEYS[normalizedKey(name)] ?? name);
+export function spellClassLabel(value: string): string {
+  return SPELL_CLASS_LABELS[value] ?? value;
+}
+
+export function spellClassLabels(values: readonly string[]): string[] {
+  return values.map(spellClassLabel);
 }
 
 export function spellComponentNames(value: unknown): string[] {
@@ -174,7 +158,7 @@ export function normalizeSpellDefinition(input: unknown): SpellDefinition {
   if (normalized.success) return {
     ...normalized.data,
     school: spellSchoolName(normalized.data.school),
-    classes: spellClassNames(normalized.data.classes).join(", "),
+    classes: spellClasses(normalized.data.classes),
     damageType: spellDamageTypeName(normalized.data.damageType),
   };
   const data = object(input);
@@ -201,7 +185,7 @@ export function normalizeSpellDefinition(input: unknown): SpellDefinition {
     concentration: ["yes", "true", "sí", "si"].includes(text(data.concentration).toLowerCase()),
     castingTime: casting.castingTime,
     school: spellSchoolName(data.school),
-    classes: spellClassNames(data.classes ?? data.class).join(", "),
+    classes: spellClasses(data.classes),
     attackType,
     saveAbility: text(data.saveAbility ?? data.spell_save_dc_type),
     damageExpression: text(data.damageExpression ?? data.damage_dice),

@@ -21,7 +21,7 @@ describe("canonical campaign content payloads", () => {
       ritual: true,
       concentration: false,
       components: "V, S, M",
-      classes: "Clérigo, Mago",
+      classes: ["cleric", "wizard"],
       school: "Evocación",
       damageType: "Radiante/Fuego",
     }));

@@ -6,7 +6,7 @@ import {
 } from "../../src/domain/character/character-projection";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import type { CharacterSpellV2 } from "../../src/domain/character/character-spell-model";
-import { normalizeSpellDefinition, spellClassKeys, spellClassNames } from "../../src/domain/spells/spell-catalog";
+import { normalizeSpellDefinition, spellClassLabels, spellClasses } from "../../src/domain/spells/spell-catalog";
 import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 function spell(id: string, name: string, level: number, prepared: boolean, damageExpression: string): CharacterSpellV2 {
@@ -15,7 +15,7 @@ function spell(id: string, name: string, level: number, prepared: boolean, damag
     definition: {
       name, level, description: "", higherLevels: "", range: "", components: "",
       material: "", ritual: false, duration: "", concentration: false,
-      castingTime: "", school: "", classes: "", attackType: "none", saveAbility: "",
+      castingTime: "", school: "", classes: [], attackType: "none", saveAbility: "",
       damageExpression, upcastDamageExpression: level === 0 ? "1d6" : "", addAbilityModifier: false,
       damageType: "acid", year: "", catalog: null,
     },
@@ -41,16 +41,16 @@ function characterFixture() {
 }
 
 describe("spells", () => {
-  it("normalizes and preserves every class associated with a spell", () => {
+  it("preserves normalized class keys without converting them to display text", () => {
     const normalized = normalizeSpellDefinition({
       name: "Luz compartida",
       level: 1,
-      classes: ["Mago", { name: "Clérigo" }, { index: "Artífice" }, "mago"],
+      classes: ["wizard", "cleric", "artificer", "wizard"],
     });
 
-    expect(normalized.classes).toBe("Mago, Clérigo, Artífice");
-    expect(spellClassNames("Mago; Clérigo, Artífice")).toEqual(["Mago", "Clérigo", "Artífice"]);
-    expect(spellClassKeys(normalized.classes)).toEqual(["wizard", "cleric", "artificer"]);
+    expect(normalized.classes).toEqual(["wizard", "cleric", "artificer"]);
+    expect(spellClasses(normalized.classes)).toEqual(["wizard", "cleric", "artificer"]);
+    expect(spellClassLabels(normalized.classes)).toEqual(["Mago", "Clérigo", "Artífice"]);
   });
 
   it("normalizes the current Spanish Supabase spell payload shape", () => {
@@ -58,7 +58,6 @@ describe("spells", () => {
       name: "Ejemplo de base",
       level: "3rd-level",
       desc: "Contenido en español.",
-      class: "",
       classes: ["bard", "cleric", "wizard"],
       school: "Necromancy",
       ritual: ", R",
@@ -75,7 +74,7 @@ describe("spells", () => {
 
     expect(normalized).toMatchObject({
       level: 3,
-      classes: "Bardo, Clérigo, Mago",
+      classes: ["bard", "cleric", "wizard"],
       school: "Nigromancia",
       ritual: true,
       concentration: true,

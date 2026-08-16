@@ -77,7 +77,7 @@ const ritualDefinition: SpellDefinition = {
   concentration: false,
   castingTime: "1 acción",
   school: "Adivinación",
-  classes: "Mago",
+  classes: ["wizard"],
   attackType: "none",
   saveAbility: "",
   damageExpression: "",
@@ -883,7 +883,8 @@ describe("player interface shell", () => {
 
     const visible = view.renderCharacterForm(character);
     expect(visible).toContain('data-spell-tag-filter="defensa"');
-    expect(visible).toContain('data-spell-class-filter="Mago"');
+    expect(visible).toContain('data-spell-class-filter="wizard"');
+    expect(visible).toContain('>Mago</button>');
     expect(visible).toContain('<span>defensa</span>');
 
     view.spellTagFilters.add("divino");
@@ -891,11 +892,39 @@ describe("player interface shell", () => {
     view.spellTagFilters.clear();
     view.spellTagFilters.add("defensa");
     expect(view.renderCharacterForm(character)).toContain(taggedDefinition.name);
-    view.spellClassFilters.add("Clérigo");
+    view.spellClassFilters.add("cleric");
     expect(view.renderCharacterForm(character)).toContain("No hay conjuros con las características seleccionadas");
     view.spellClassFilters.clear();
-    view.spellClassFilters.add("Mago");
+    view.spellClassFilters.add("wizard");
     expect(view.renderCharacterForm(character)).toContain(taggedDefinition.name);
+  });
+
+  it("uses normalized catalog classes instead of stale classes embedded in a known spell", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_46464646464646464646464646464646",
+      "Catalog Source",
+      "2026-08-16T00:00:00.000Z",
+    );
+    const storedDefinition = { ...ritualDefinition, name: "Mano de mago", classes: ["warlock"] };
+    const catalogDefinition = {
+      ...storedDefinition,
+      classes: ["bard", "sorcerer", "warlock", "wizard"],
+      catalog: { contentKey: "official:spell:es:mage-hand", origin: "official" as const, tags: ["official", "es"], revision: 0 },
+    };
+    character.spellcasting.spells = [
+      spell("spl_47474747474747474747474747474747", storedDefinition.name, true, storedDefinition),
+    ];
+    view.customSpells = [catalogDefinition];
+    view.activeSheetTab = "spells";
+
+    const unfiltered = view.renderCharacterForm(character);
+    expect(unfiltered).toContain('data-spell-class-filter="bard"');
+    expect(unfiltered).toContain('data-spell-class-filter="sorcerer"');
+    expect(unfiltered).toContain('data-spell-class-filter="wizard"');
+
+    view.spellClassFilters.add("wizard");
+    expect(view.renderCharacterForm(character)).toContain(storedDefinition.name);
   });
 
   it("offers class filters from known spells even when the campaign catalog is unavailable", () => {
@@ -905,8 +934,8 @@ describe("player interface shell", () => {
       "Multiclase",
       "2026-07-26T00:00:00.000Z",
     );
-    const wizardSpell = { ...ritualDefinition, name: "Secreto arcano", classes: "Mago, Hechicero" };
-    const clericSpell = { ...ritualDefinition, name: "Plegaria", classes: "Clérigo" };
+    const wizardSpell = { ...ritualDefinition, name: "Secreto arcano", classes: ["wizard", "sorcerer"] };
+    const clericSpell = { ...ritualDefinition, name: "Plegaria", classes: ["cleric"] };
     character.spellcasting.spells = [
       spell("spl_48484848484848484848484848484848", wizardSpell.name, true, wizardSpell),
       spell("spl_49494949494949494949494949494949", clericSpell.name, true, clericSpell),
@@ -914,17 +943,17 @@ describe("player interface shell", () => {
     view.activeSheetTab = "spells";
 
     const unfiltered = view.renderCharacterForm(character);
-    expect(unfiltered).toContain('data-spell-class-filter="Mago"');
-    expect(unfiltered).toContain('data-spell-class-filter="Hechicero"');
-    expect(unfiltered).toContain('data-spell-class-filter="Clérigo"');
+    expect(unfiltered).toContain('data-spell-class-filter="wizard"');
+    expect(unfiltered).toContain('data-spell-class-filter="sorcerer"');
+    expect(unfiltered).toContain('data-spell-class-filter="cleric"');
 
-    view.spellClassFilters.add("Clérigo");
+    view.spellClassFilters.add("cleric");
     const filtered = view.renderCharacterForm(character);
     expect(filtered).toContain(clericSpell.name);
     expect(filtered).not.toContain(wizardSpell.name);
 
     view.spellClassFilters.clear();
-    view.spellClassFilters.add("Hechicero");
+    view.spellClassFilters.add("sorcerer");
     const multiclassFiltered = view.renderCharacterForm(character);
     expect(multiclassFiltered).toContain(wizardSpell.name);
     expect(multiclassFiltered).not.toContain(clericSpell.name);
