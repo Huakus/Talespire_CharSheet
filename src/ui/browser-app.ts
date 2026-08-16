@@ -83,6 +83,7 @@ import {
   normalizeEquipmentRarity,
   type EquipmentCatalogDraft,
 } from "../domain/equipment/equipment-catalog";
+import { spellClassNames } from "../domain/spells/spell-catalog";
 import { CampaignStorageCapacityError } from "../infrastructure/persistence/blob-campaign-repository";
 import type { CampaignStorageUsage } from "../infrastructure/persistence/blob-campaign-repository";
 import type { DiceRoller } from "../application/ports/dice-roller";
@@ -1475,7 +1476,7 @@ export class BrowserApp {
     const definition = spell.definition;
     const matchesProperties = [...this.spellPropertyFilters].every((filter) => this.spellMatchesProperty(character, spell, filter));
     const tags = this.spellTags(definition);
-    const classes = definition?.classes.split(/[,;]+/).map((entry) => entry.trim()).filter(Boolean) ?? [];
+    const classes = spellClassNames(definition?.classes);
     return matchesProperties &&
       (this.spellTagFilters.size === 0 || tags.some((tag) => [...this.spellTagFilters].some((selected) => normalizedSearchText(selected) === normalizedSearchText(tag)))) &&
       (this.spellClassFilters.size === 0 || classes.some((spellClass) => [...this.spellClassFilters].some((selected) => normalizedSearchText(selected) === normalizedSearchText(spellClass))));
@@ -1536,7 +1537,10 @@ export class BrowserApp {
     const filters: readonly [string, string][] = [["prepared", "Preparados"], ["favorite", "Favoritos"], ["ritual", "Ritual"], ["concentration", "Concentración"], ["attack", "Ataque"], ["save", "Salvación"]];
     const sourceSpells = this.spellSourceEntries(character).map(({ spell }) => spell);
     const tags = uniqueLabels(this.spellCatalog().flatMap((spell) => catalogTags(spell)));
-    const classes = uniqueLabels(this.spellCatalog().flatMap((spell) => spell.classes.split(/[,;]+/).map((entry) => entry.trim()).filter(Boolean)));
+    const classes = uniqueLabels([
+      ...sourceSpells.flatMap((spell) => spellClassNames(spell.definition?.classes)),
+      ...this.spellCatalog().flatMap((spell) => spellClassNames(spell.classes)),
+    ]);
     const noFilters = this.spellPropertyFilters.size === 0 && this.spellTagFilters.size === 0 && this.spellClassFilters.size === 0;
     const tagMenu = tags.length ? `<details class="gm-filter-group player-filter-group ${this.spellTagFilters.size ? "active" : ""}"><summary>Etiquetas${this.spellTagFilters.size ? `<strong>${this.spellTagFilters.size}</strong>` : ""}</summary><div>${tags.map((tag) => `<button type="button" data-spell-tag-filter="${escapeHtml(tag)}" class="${this.spellTagFilters.has(tag) ? "active" : ""}" aria-pressed="${this.spellTagFilters.has(tag)}">${escapeHtml(tag)}</button>`).join("")}</div></details>` : "";
     const classMenu = classes.length ? `<details class="gm-filter-group player-filter-group ${this.spellClassFilters.size ? "active" : ""}"><summary>Clase${this.spellClassFilters.size ? `<strong>${this.spellClassFilters.size}</strong>` : ""}</summary><div>${classes.map((spellClass) => `<button type="button" data-spell-class-filter="${escapeHtml(spellClass)}" class="${this.spellClassFilters.has(spellClass) ? "active" : ""}" aria-pressed="${this.spellClassFilters.has(spellClass)}">${escapeHtml(spellClass)}</button>`).join("")}</div></details>` : "";

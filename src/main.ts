@@ -104,6 +104,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   const miniature = new TaleSpireMiniatureAdapter(api);
   if (diceRoller instanceof TaleSpireDiceRoller) activeTaleSpireDiceRoller = diceRoller;
   if (clientRole === "gm") {
+    if (campaignContent) await campaignContent.seedOfficialContent().catch(() => 0);
     const collaboration = api.sync && api.clients
       ? new TaleSpireGmCollaboration({
           sync: api.sync,

@@ -6,6 +6,7 @@ import {
 } from "../../src/domain/character/character-projection";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import type { CharacterSpellV2 } from "../../src/domain/character/character-spell-model";
+import { normalizeSpellDefinition, spellClassKeys, spellClassNames } from "../../src/domain/spells/spell-catalog";
 import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 function spell(id: string, name: string, level: number, prepared: boolean, damageExpression: string): CharacterSpellV2 {
@@ -40,6 +41,70 @@ function characterFixture() {
 }
 
 describe("spells", () => {
+  it("normalizes and preserves every class associated with a spell", () => {
+    const normalized = normalizeSpellDefinition({
+      name: "Luz compartida",
+      level: 1,
+      classes: ["Mago", { name: "Clérigo" }, { index: "Artífice" }, "mago"],
+    });
+
+    expect(normalized.classes).toBe("Mago, Clérigo, Artífice");
+    expect(spellClassNames("Mago; Clérigo, Artífice")).toEqual(["Mago", "Clérigo", "Artífice"]);
+    expect(spellClassKeys(normalized.classes)).toEqual(["wizard", "cleric", "artificer"]);
+  });
+
+  it("normalizes the current Spanish Supabase spell payload shape", () => {
+    const normalized = normalizeSpellDefinition({
+      name: "Ejemplo de base",
+      level: "3rd-level",
+      desc: "Contenido en español.",
+      class: "",
+      classes: ["bard", "cleric", "wizard"],
+      school: "Necromancy",
+      ritual: ", R",
+      concentration: "sí",
+      damage_type_01: "Psychic",
+      higherLevels: "Escala con el nivel.",
+      castingTime: "1 acción",
+      attackType: "save",
+      saveAbility: "wisdom",
+      damageExpression: "3d6",
+      upcastDamageExpression: "1d6",
+      addAbilityModifier: true,
+    });
+
+    expect(normalized).toMatchObject({
+      level: 3,
+      classes: "Bardo, Clérigo, Mago",
+      school: "Nigromancia",
+      ritual: true,
+      concentration: true,
+      damageType: "Psíquico",
+      higherLevels: "Escala con el nivel.",
+      castingTime: "1 acción",
+      attackType: "save",
+      saveAbility: "wisdom",
+      damageExpression: "3d6",
+      upcastDamageExpression: "1d6",
+      addAbilityModifier: true,
+    });
+  });
+
+  it("separates the legacy ritual marker from casting time while explicit booleans win", () => {
+    expect(normalizeSpellDefinition({
+      name: "Rito legado",
+      level: 1,
+      casting_time: "1 acción, R",
+    })).toMatchObject({ castingTime: "1 acción", ritual: true });
+
+    expect(normalizeSpellDefinition({
+      name: "Conjuro moderno",
+      level: 1,
+      castingTime: "1 acción, R",
+      ritual: false,
+    })).toMatchObject({ castingTime: "1 acción", ritual: false });
+  });
+
   it("stores known/prepared spells and slot usage in typed state", () => {
     const character = characterFixture();
     expect(character.spellcasting.showUpcast).toBe(true);

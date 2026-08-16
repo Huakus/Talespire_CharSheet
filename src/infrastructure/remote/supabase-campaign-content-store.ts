@@ -5,6 +5,14 @@ import { normalizeMonsterDefinition, type MonsterDefinition } from "../../domain
 import { normalizeSpellDefinition } from "../../domain/spells/spell-catalog";
 import type { CampaignContent } from "../../domain/content/campaign-content";
 import type { CatalogMetadata } from "../../domain/content/catalog-metadata";
+import {
+  serializeChecklistContentPayload,
+  serializeEquipmentContentPayload,
+  serializeMonsterContentPayload,
+  parseCampaignContentPayload,
+  serializeShopContentPayload,
+  serializeSpellContentPayload,
+} from "../../domain/content/content-payload";
 import type { CampaignContentKind, CampaignContentOrigin, RemoteCampaignContentEntry, SupabaseCampaignDocumentClient } from "./supabase-campaign-document-client";
 
 function object(value: unknown): Record<string, unknown> {
@@ -21,8 +29,8 @@ function decorate<T>(value: T, entry: RemoteCampaignContentEntry): T & { catalog
 
 function normalizedName(value: string): string { return value.trim().toLocaleLowerCase(); }
 
-const SPANISH_LANGUAGE_MARKERS = new Set(["es", "espanol", "spanish"]);
-const ENGLISH_LANGUAGE_MARKERS = new Set(["en", "ingles", "english"]);
+const SPANISH_LANGUAGE_MARKERS = new Set(["es", "esp", "spa", "espanol", "spanish"]);
+const ENGLISH_LANGUAGE_MARKERS = new Set(["en", "eng", "ingles", "english"]);
 
 function normalizedMarker(value: unknown): string {
   return String(value ?? "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/_/g, "-");
@@ -103,26 +111,26 @@ export class SupabaseCampaignContentStore {
   deleteMonster(key: string): Promise<void> { return this.deleteByName("monster", key); }
 
   async saveShop(shop: GmShop, previousKey: string | null = null): Promise<void> {
-    await this.savePlain("shop", shop.name, shop as unknown as Record<string, unknown>, previousKey, undefined, shop.tags);
+    await this.savePlain("shop", shop.name, serializeShopContentPayload(shop), previousKey, undefined, shop.tags);
   }
   deleteShop(key: string): Promise<void> { return this.deleteByName("shop", key); }
 
   async saveChecklistItem(item: GmChecklistItem): Promise<void> {
-    await this.savePlain("checklist", item.text, item as unknown as Record<string, unknown>, item.id, `gm:checklist:${item.id}`);
+    await this.savePlain("checklist", item.text, serializeChecklistContentPayload(item), item.id, `gm:checklist:${item.id}`);
   }
   deleteChecklistItem(key: string): Promise<void> { return this.deleteByKeyOrName("checklist", `gm:checklist:${key}`, key); }
 
   private project(entries: RemoteCampaignContentEntry[]): CampaignContent {
     const spanishEntries = entries.filter(isSpanishCampaignContent);
-    const equipment = spanishEntries.filter((entry) => entry.kind === "equipment").flatMap((entry) => { try { return [decorate(normalizeEquipmentDefinition(entry.payload), entry)]; } catch { return []; } });
+    const equipment = spanishEntries.filter((entry) => entry.kind === "equipment").flatMap((entry) => { try { return [decorate(normalizeEquipmentDefinition(parseCampaignContentPayload(entry.kind, entry.payload)), entry)]; } catch { return []; } });
     const baseShops = spanishEntries.filter((entry) => entry.kind === "shop").flatMap((entry) => {
       try {
-        const value = object(entry.payload);
+        const value = parseCampaignContentPayload(entry.kind, entry.payload);
         return [{ ...normalizeShop(String(value.name ?? entry.name), value), tags: entry.tags }];
       } catch { return []; }
     });
     const monsters = spanishEntries.filter((entry) => entry.kind === "monster").flatMap((entry) => { try {
-      const value = decorate(normalizeMonsterDefinition(entry.payload), entry);
+      const value = decorate(normalizeMonsterDefinition(parseCampaignContentPayload(entry.kind, entry.payload)), entry);
       if (!value.name) return [];
       const inventory = value.inventory.map((item, order) => {
         const definition = equipment.find((entry) => normalizedName(entry.name) === normalizedName(item.name));
@@ -133,11 +141,11 @@ export class SupabaseCampaignContentStore {
       return [{ ...value, inventory }];
     } catch { return []; } });
     return {
-      spells: spanishEntries.filter((entry) => entry.kind === "spell").flatMap((entry) => { try { return [decorate(normalizeSpellDefinition(entry.payload), entry)]; } catch { return []; } }),
+      spells: spanishEntries.filter((entry) => entry.kind === "spell").flatMap((entry) => { try { return [decorate(normalizeSpellDefinition(parseCampaignContentPayload(entry.kind, entry.payload)), entry)]; } catch { return []; } }),
       equipment,
       monsters,
       shops: baseShops,
-      checklist: spanishEntries.filter((entry) => entry.kind === "checklist").flatMap((entry) => { try { const value = object(entry.payload); return [normalizeChecklistItem(String(value.id ?? entry.contentKey.replace(/^.*:/, "")), value)]; } catch { return []; } }),
+      checklist: spanishEntries.filter((entry) => entry.kind === "checklist").flatMap((entry) => { try { const value = parseCampaignContentPayload(entry.kind, entry.payload); return [normalizeChecklistItem(String(value.id ?? entry.contentKey.replace(/^.*:/, "")), value)]; } catch { return []; } }),
     };
   }
 
@@ -154,7 +162,11 @@ export class SupabaseCampaignContentStore {
     await this.persist({
       kind,
       name: value.name,
-      payload: value as unknown as Record<string, unknown>,
+      payload: kind === "spell"
+        ? serializeSpellContentPayload(value as SpellDefinition)
+        : kind === "equipment"
+          ? serializeEquipmentContentPayload(value as EquipmentCatalogDraft)
+          : serializeMonsterContentPayload(value as MonsterDefinition),
       ...(existing ? { existing } : {}),
       origin: existing?.origin ?? "gm",
       tags: spanishTags(embedded?.tags ?? existing?.tags ?? ["gm"]),

@@ -22,7 +22,7 @@ const CampaignContentRowSchema = z.object({
   kind: z.enum(["spell", "equipment", "monster", "shop", "checklist"]),
   content_key: z.string().min(1),
   name: z.string().min(1),
-  origin: z.string().transform((origin) => origin === "official" ? "official" as const : "gm" as const),
+  origin: z.enum(["official", "gm", "imported"]),
   tags: z.array(z.string()),
   payload: z.record(z.string(), z.unknown()),
   revision: z.coerce.number().int().nonnegative(),
@@ -48,7 +48,7 @@ export interface RemoteCampaignSummary {
 }
 
 export type CampaignContentKind = "spell" | "equipment" | "monster" | "shop" | "checklist";
-export type CampaignContentOrigin = "official" | "gm";
+export type CampaignContentOrigin = "official" | "gm" | "imported";
 export interface RemoteCampaignContentEntry {
   campaignId: string;
   kind: CampaignContentKind;

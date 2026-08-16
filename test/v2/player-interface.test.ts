@@ -898,6 +898,38 @@ describe("player interface shell", () => {
     expect(view.renderCharacterForm(character)).toContain(taggedDefinition.name);
   });
 
+  it("offers class filters from known spells even when the campaign catalog is unavailable", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_47474747474747474747474747474747",
+      "Multiclase",
+      "2026-07-26T00:00:00.000Z",
+    );
+    const wizardSpell = { ...ritualDefinition, name: "Secreto arcano", classes: "Mago, Hechicero" };
+    const clericSpell = { ...ritualDefinition, name: "Plegaria", classes: "Clérigo" };
+    character.spellcasting.spells = [
+      spell("spl_48484848484848484848484848484848", wizardSpell.name, true, wizardSpell),
+      spell("spl_49494949494949494949494949494949", clericSpell.name, true, clericSpell),
+    ];
+    view.activeSheetTab = "spells";
+
+    const unfiltered = view.renderCharacterForm(character);
+    expect(unfiltered).toContain('data-spell-class-filter="Mago"');
+    expect(unfiltered).toContain('data-spell-class-filter="Hechicero"');
+    expect(unfiltered).toContain('data-spell-class-filter="Clérigo"');
+
+    view.spellClassFilters.add("Clérigo");
+    const filtered = view.renderCharacterForm(character);
+    expect(filtered).toContain(clericSpell.name);
+    expect(filtered).not.toContain(wizardSpell.name);
+
+    view.spellClassFilters.clear();
+    view.spellClassFilters.add("Hechicero");
+    const multiclassFiltered = view.renderCharacterForm(character);
+    expect(multiclassFiltered).toContain(wizardSpell.name);
+    expect(multiclassFiltered).not.toContain(clericSpell.name);
+  });
+
   it("hides every unknown spell by default and preserves catalog favorite state", () => {
     const view = harness();
     const character = createCharacter(

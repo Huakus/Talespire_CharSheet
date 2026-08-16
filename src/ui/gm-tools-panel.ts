@@ -7,7 +7,7 @@ import {
   DAMAGE_TYPES, EQUIPMENT_CATEGORIES, EQUIPMENT_PROPERTIES, EQUIPMENT_RARITIES,
   equipmentRarityLabel, normalizeEquipmentDefinition, normalizeEquipmentRarity, type EquipmentCatalogDraft,
 } from "../domain/equipment/equipment-catalog";
-import { SPELL_CLASSES, SPELL_COMPONENTS, SPELL_SAVE_ABILITIES, SPELL_SCHOOLS } from "../domain/spells/spell-catalog";
+import { SPELL_CLASSES, SPELL_COMPONENTS, SPELL_SAVE_ABILITIES, SPELL_SCHOOLS, spellClassNames } from "../domain/spells/spell-catalog";
 import { type GmChecklistItem, type GmShop } from "../domain/gm/gm-global-content";
 import { removeGmNoteGroup, type GmWorkspace } from "../domain/gm/gm-workspace";
 import type { CampaignContent } from "../domain/content/campaign-content";
@@ -218,7 +218,7 @@ export class GmToolsPanel {
     if (section === "spell") return [
       { key: "level", label: "Nivel", values: uniqueValues(this.content.spells.map((spell) => String(spell.level))) },
       { key: "school", label: "Escuela", values: uniqueValues(this.content.spells.map((spell) => spell.school)) },
-      { key: "class", label: "Clase", values: uniqueValues(this.content.spells.flatMap((spell) => splitValues(spell.classes))) },
+      { key: "class", label: "Clase", values: uniqueValues(this.content.spells.flatMap((spell) => spellClassNames(spell.classes))) },
       { key: "component", label: "Componente", values: uniqueValues(this.content.spells.flatMap((spell) => spell.components.split(/[,;\s]+/).filter(Boolean))) },
       { key: "damage", label: "Tipo de daño", values: uniqueValues(this.content.spells.map((spell) => spell.damageType)) },
       { key: "resolution", label: "Resolución", values: uniqueValues(this.content.spells.map((spell) => spell.attackType === "attack" ? "Ataque" : spell.attackType === "save" ? "Salvación" : "")) },
@@ -243,7 +243,7 @@ export class GmToolsPanel {
 
   private matchesSpellFilters(spell: SpellDefinition): boolean {
     return matchesGroupedFilters(this.contentFilters.spell, {
-      level: [String(spell.level)], school: [spell.school], class: splitValues(spell.classes),
+      level: [String(spell.level)], school: [spell.school], class: spellClassNames(spell.classes),
       component: spell.components.split(/[,;\s]+/).filter(Boolean), damage: [spell.damageType],
       resolution: [spell.attackType === "attack" ? "Ataque" : spell.attackType === "save" ? "Salvación" : ""], edition: [spell.year],
       tag: visibleCatalogTags(catalogMetadata(spell).tags),
@@ -370,7 +370,7 @@ export class GmToolsPanel {
 
   private renderSpellForm(spell: SpellDefinition | null): string {
     const components = spell?.components.split(/[, ]+/).filter(Boolean) ?? [];
-    const classes = spell?.classes.split(/[,;]+/).map((value) => value.trim()).filter(Boolean) ?? [];
+    const classes = spellClassNames(spell?.classes);
     const meta = catalogMetadata(spell);
     return `<form data-gm-form="spell" class="gm-editor-form">
       <input type="hidden" name="previousKey" value="${escapeHtml(spell?.name ?? "")}">

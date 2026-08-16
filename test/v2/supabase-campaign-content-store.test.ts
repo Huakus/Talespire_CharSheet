@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 import { merchantAfterPersuasion, normalizeMerchantInteraction } from "../../src/domain/commerce/merchant-interaction";
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
+import { normalizeSpellDefinition } from "../../src/domain/spells/spell-catalog";
 import { SupabaseCampaignContentStore } from "../../src/infrastructure/remote/supabase-campaign-content-store";
 import {
   RemoteCampaignContentEntry,
@@ -112,6 +113,29 @@ describe("Supabase campaign content store", () => {
     expect(ranges).toEqual([[0, 999], [1000, 1999]]);
   });
 
+  it("preserves the imported origin returned by the current database schema", async () => {
+    const rows = [{
+      campaign_id: campaignId,
+      kind: "spell",
+      content_key: "imported:spell:es:legado",
+      name: "Conjuro legado",
+      origin: "imported",
+      tags: ["imported", "es"],
+      payload: { name: "Conjuro legado", level: "1st-level", class: "Mago" },
+      revision: 0,
+      updated_at: "2026-08-08T00:00:00.000Z",
+      deleted_at: null,
+    }];
+    const builder = {
+      select() { return this; }, eq() { return this; }, is() { return this; }, order() { return this; },
+      range() { return Promise.resolve({ data: rows, error: null }); },
+    };
+
+    const loaded = await new SupabaseCampaignDocumentClient({ from: () => builder } as never).listCampaignContent(campaignId);
+
+    expect(loaded[0]?.origin).toBe("imported");
+  });
+
   it("projects official rows and preserves their provenance while the GM edits tags", async () => {
     const remote = fakeClient([entry({
       kind: "spell",
@@ -138,14 +162,17 @@ describe("Supabase campaign content store", () => {
       entry({ kind: "spell", contentKey: "official:spell:es:escudo", name: "Escudo", payload: { name: "Escudo", level: 1 } }),
       entry({ kind: "spell", contentKey: "official:spell:en:shield", name: "Shield", tags: ["official", "en"], payload: { name: "Shield", level: 1 } }),
       entry({ kind: "equipment", contentKey: "official:equipment:untagged", name: "Rope", tags: ["official"], payload: { name: "Rope" } }),
+      entry({ kind: "equipment", contentKey: "official:equipment:eng:chain", name: "Chain", tags: ["official", "eng"], payload: { name: "Chain" } }),
       entry({ kind: "monster", contentKey: "official:monster:oso", name: "Oso", tags: ["official", "español"], payload: { Name: "Oso", Type: "Bestia" } }),
+      entry({ kind: "spell", contentKey: "imported:spell:es:legado", name: "Legado", origin: "imported", tags: ["imported", "es"], payload: { name: "Legado", level: 1, class: "Mago" } }),
       entry({ kind: "shop", contentKey: "gm:shop:legacy", name: "La Posta", origin: "gm", tags: ["gm"], payload: { name: "La Posta" } }),
       entry({ kind: "checklist", contentKey: "gm:checklist:english", name: "Buy rope", origin: "gm", tags: ["gm", "english"], payload: { id: "english", text: "Buy rope" } }),
     ]);
 
     const loaded = await new SupabaseCampaignContentStore(remote.client, campaignId).load();
 
-    expect(loaded.spells.map((spell) => spell.name)).toEqual(["Escudo"]);
+    expect(loaded.spells.map((spell) => spell.name)).toEqual(["Escudo", "Legado"]);
+    expect(loaded.spells[1]?.catalog?.origin).toBe("imported");
     expect(loaded.equipment).toEqual([]);
     expect(loaded.monsters.map((monster) => monster.name)).toEqual(["Oso"]);
     expect(loaded.shops.map((shop) => shop.name)).toEqual(["La Posta"]);
@@ -159,6 +186,26 @@ describe("Supabase campaign content store", () => {
     await store.saveShop({ name: "La Posta", categories: {} });
 
     expect(remote.saves[0]).toMatchObject({ origin: "gm", tags: ["gm", "es"] });
+  });
+
+  it("writes a versioned canonical spell payload without legacy duplicates", async () => {
+    const remote = fakeClient([]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    const spell = normalizeSpellDefinition({ name: "Luz compartida", level: 1, classes: ["wizard", "cleric"] });
+
+    await store.saveSpell(spell);
+
+    expect(remote.saves[0]?.payload).toEqual(expect.objectContaining({
+      schemaVersion: 1,
+      kind: "spell",
+      language: "es",
+      classes: ["wizard", "cleric"],
+      components: [],
+      ritual: false,
+      concentration: false,
+    }));
+    expect(remote.saves[0]?.payload).not.toHaveProperty("class");
+    expect(remote.saves[0]?.payload).not.toHaveProperty("catalog");
   });
 
   it("reuses one campaign catalog download across the GM panels", async () => {
