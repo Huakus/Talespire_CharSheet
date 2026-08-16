@@ -21,6 +21,44 @@ function decorate<T>(value: T, entry: RemoteCampaignContentEntry): T & { catalog
 
 function normalizedName(value: string): string { return value.trim().toLocaleLowerCase(); }
 
+const SPANISH_LANGUAGE_MARKERS = new Set(["es", "espanol", "spanish"]);
+const ENGLISH_LANGUAGE_MARKERS = new Set(["en", "ingles", "english"]);
+
+function normalizedMarker(value: unknown): string {
+  return String(value ?? "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/_/g, "-");
+}
+
+function languageMarkers(entry: RemoteCampaignContentEntry): Set<string> {
+  const payload = object(entry.payload);
+  return new Set([
+    ...entry.tags.map(normalizedMarker),
+    ...entry.contentKey.split(":").map(normalizedMarker),
+    ...[payload.language, payload.locale, payload.lang].map(normalizedMarker),
+  ].filter(Boolean));
+}
+
+/**
+ * Official catalog rows must identify themselves as Spanish. Existing GM rows
+ * predate language tags, so they remain available unless explicitly English.
+ */
+export function isSpanishCampaignContent(entry: RemoteCampaignContentEntry): boolean {
+  const markers = languageMarkers(entry);
+  const hasMarker = (expected: Set<string>): boolean => [...markers].some((marker) =>
+    [...expected].some((language) => marker === language || marker.startsWith(`${language}-`)));
+  const isSpanish = hasMarker(SPANISH_LANGUAGE_MARKERS);
+  const isEnglish = hasMarker(ENGLISH_LANGUAGE_MARKERS);
+  if (isEnglish) return false;
+  return isSpanish || entry.origin === "gm";
+}
+
+function spanishTags(tags: readonly string[]): string[] {
+  const retained = tags.filter((tag) => {
+    const marker = normalizedMarker(tag);
+    return !SPANISH_LANGUAGE_MARKERS.has(marker) && !ENGLISH_LANGUAGE_MARKERS.has(marker);
+  });
+  return [...new Set([...retained, "es"])];
+}
+
 export class SupabaseCampaignContentStore {
   private entries: RemoteCampaignContentEntry[] | null = null;
   private loadingEntries: Promise<RemoteCampaignContentEntry[]> | null = null;
@@ -75,14 +113,15 @@ export class SupabaseCampaignContentStore {
   deleteChecklistItem(key: string): Promise<void> { return this.deleteByKeyOrName("checklist", `gm:checklist:${key}`, key); }
 
   private project(entries: RemoteCampaignContentEntry[]): CampaignContent {
-    const equipment = entries.filter((entry) => entry.kind === "equipment").flatMap((entry) => { try { return [decorate(normalizeEquipmentDefinition(entry.payload), entry)]; } catch { return []; } });
-    const baseShops = entries.filter((entry) => entry.kind === "shop").flatMap((entry) => {
+    const spanishEntries = entries.filter(isSpanishCampaignContent);
+    const equipment = spanishEntries.filter((entry) => entry.kind === "equipment").flatMap((entry) => { try { return [decorate(normalizeEquipmentDefinition(entry.payload), entry)]; } catch { return []; } });
+    const baseShops = spanishEntries.filter((entry) => entry.kind === "shop").flatMap((entry) => {
       try {
         const value = object(entry.payload);
         return [{ ...normalizeShop(String(value.name ?? entry.name), value), tags: entry.tags }];
       } catch { return []; }
     });
-    const monsters = entries.filter((entry) => entry.kind === "monster").flatMap((entry) => { try {
+    const monsters = spanishEntries.filter((entry) => entry.kind === "monster").flatMap((entry) => { try {
       const value = decorate(normalizeMonsterDefinition(entry.payload), entry);
       if (!value.name) return [];
       const inventory = value.inventory.map((item, order) => {
@@ -94,11 +133,11 @@ export class SupabaseCampaignContentStore {
       return [{ ...value, inventory }];
     } catch { return []; } });
     return {
-      spells: entries.filter((entry) => entry.kind === "spell").flatMap((entry) => { try { return [decorate(normalizeSpellDefinition(entry.payload), entry)]; } catch { return []; } }),
+      spells: spanishEntries.filter((entry) => entry.kind === "spell").flatMap((entry) => { try { return [decorate(normalizeSpellDefinition(entry.payload), entry)]; } catch { return []; } }),
       equipment,
       monsters,
       shops: baseShops,
-      checklist: entries.filter((entry) => entry.kind === "checklist").flatMap((entry) => { try { const value = object(entry.payload); return [normalizeChecklistItem(String(value.id ?? entry.contentKey.replace(/^.*:/, "")), value)]; } catch { return []; } }),
+      checklist: spanishEntries.filter((entry) => entry.kind === "checklist").flatMap((entry) => { try { const value = object(entry.payload); return [normalizeChecklistItem(String(value.id ?? entry.contentKey.replace(/^.*:/, "")), value)]; } catch { return []; } }),
     };
   }
 
@@ -108,7 +147,7 @@ export class SupabaseCampaignContentStore {
   }
 
   private async saveDefinition(kind: Extract<CampaignContentKind, "spell" | "equipment" | "monster">, value: SpellDefinition | EquipmentCatalogDraft | MonsterDefinition, previousKey: string | null): Promise<void> {
-    const entries = await this.currentEntries();
+    const entries = (await this.currentEntries()).filter(isSpanishCampaignContent);
     const embedded = metadata(value);
     const embeddedEntry = embedded ? entries.find((entry) => entry.kind === kind && entry.contentKey === embedded.contentKey) : undefined;
     const existing = embeddedEntry?.name === previousKey ? embeddedEntry : entries.find((entry) => entry.kind === kind && normalizedName(entry.name) === normalizedName(previousKey ?? value.name));
@@ -118,12 +157,12 @@ export class SupabaseCampaignContentStore {
       payload: value as unknown as Record<string, unknown>,
       ...(existing ? { existing } : {}),
       origin: existing?.origin ?? "gm",
-      tags: embedded?.tags ?? existing?.tags ?? ["gm"],
+      tags: spanishTags(embedded?.tags ?? existing?.tags ?? ["gm"]),
     });
   }
 
   private async savePlain(kind: Extract<CampaignContentKind, "shop" | "checklist">, name: string, payload: Record<string, unknown>, previousKey: string | null, forcedKey?: string, requestedTags?: string[]): Promise<void> {
-    const entries = await this.currentEntries();
+    const entries = (await this.currentEntries()).filter(isSpanishCampaignContent);
     const existing = entries.find((entry) => entry.kind === kind && (entry.contentKey === forcedKey || normalizedName(entry.name) === normalizedName(previousKey ?? name)));
     await this.persist({
       kind,
@@ -131,7 +170,7 @@ export class SupabaseCampaignContentStore {
       payload,
       ...(existing ? { existing } : {}),
       origin: existing?.origin ?? "gm",
-      tags: requestedTags ?? existing?.tags ?? ["gm"],
+      tags: spanishTags(requestedTags ?? existing?.tags ?? ["gm"]),
       ...(forcedKey ? { forcedKey } : {}),
     });
   }
@@ -146,7 +185,7 @@ export class SupabaseCampaignContentStore {
   private async deleteByName(kind: CampaignContentKind, name: string): Promise<void> { return this.deleteByKeyOrName(kind, "", name); }
   private async deleteByKeyOrName(kind: CampaignContentKind, contentKey: string, name: string): Promise<void> {
     const entries = await this.currentEntries();
-    const existing = entries.find((entry) => entry.kind === kind && (entry.contentKey === contentKey || normalizedName(entry.name) === normalizedName(name)));
+    const existing = entries.find((entry) => isSpanishCampaignContent(entry) && entry.kind === kind && (entry.contentKey === contentKey || normalizedName(entry.name) === normalizedName(name)));
     if (!existing) return;
     await this.client.deleteCampaignContentEntry(this.campaignId, kind, existing.contentKey, existing.revision);
     this.entries = entries.filter((entry) => !(entry.kind === kind && entry.contentKey === existing.contentKey));

@@ -130,7 +130,35 @@ describe("Supabase campaign content store", () => {
       catalog: { contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa"], revision: 0 },
     }, "Escudo");
 
-    expect(remote.saves[0]).toMatchObject({ contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa"], expectedRevision: 0 });
+    expect(remote.saves[0]).toMatchObject({ contentKey: "official:spell:es:escudo", origin: "official", tags: ["oficial", "defensa", "es"], expectedRevision: 0 });
+  });
+
+  it("projects only Spanish catalog content and keeps legacy untagged GM entries", async () => {
+    const remote = fakeClient([
+      entry({ kind: "spell", contentKey: "official:spell:es:escudo", name: "Escudo", payload: { name: "Escudo", level: 1 } }),
+      entry({ kind: "spell", contentKey: "official:spell:en:shield", name: "Shield", tags: ["official", "en"], payload: { name: "Shield", level: 1 } }),
+      entry({ kind: "equipment", contentKey: "official:equipment:untagged", name: "Rope", tags: ["official"], payload: { name: "Rope" } }),
+      entry({ kind: "monster", contentKey: "official:monster:oso", name: "Oso", tags: ["official", "español"], payload: { Name: "Oso", Type: "Bestia" } }),
+      entry({ kind: "shop", contentKey: "gm:shop:legacy", name: "La Posta", origin: "gm", tags: ["gm"], payload: { name: "La Posta" } }),
+      entry({ kind: "checklist", contentKey: "gm:checklist:english", name: "Buy rope", origin: "gm", tags: ["gm", "english"], payload: { id: "english", text: "Buy rope" } }),
+    ]);
+
+    const loaded = await new SupabaseCampaignContentStore(remote.client, campaignId).load();
+
+    expect(loaded.spells.map((spell) => spell.name)).toEqual(["Escudo"]);
+    expect(loaded.equipment).toEqual([]);
+    expect(loaded.monsters.map((monster) => monster.name)).toEqual(["Oso"]);
+    expect(loaded.shops.map((shop) => shop.name)).toEqual(["La Posta"]);
+    expect(loaded.checklist).toEqual([]);
+  });
+
+  it("marks new GM content as Spanish", async () => {
+    const remote = fakeClient([]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+
+    await store.saveShop({ name: "La Posta", categories: {} });
+
+    expect(remote.saves[0]).toMatchObject({ origin: "gm", tags: ["gm", "es"] });
   });
 
   it("reuses one campaign catalog download across the GM panels", async () => {

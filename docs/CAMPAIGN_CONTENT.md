@@ -10,3 +10,10 @@ eliminar entradas mediante operaciones con control de revisión.
 
 `origin` identifica contenido oficial o creado por el GM. `tags` es una lista
 editable que se usa para búsqueda y organización.
+
+Por ahora el Symbiote trabaja exclusivamente en español. El contenido oficial
+debe declarar `es`, `español` o `spanish` en sus etiquetas, clave o metadatos
+de idioma; las entradas oficiales sin idioma y las marcadas en inglés se
+ignoran. El contenido creado por el GM se considera español por compatibilidad,
+salvo que esté marcado explícitamente en inglés. Toda entrada que el Symbiote
+guarda recibe la etiqueta canónica `es`.
