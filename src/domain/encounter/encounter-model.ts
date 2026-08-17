@@ -15,6 +15,8 @@ export const EncounterConditionSchema = z.object({
 const CombatantBaseSchema = z.object({
   id: StableIdSchema,
   taleSpireCreatureId: z.string().min(1).nullable().default(null),
+  taleSpireDisplayName: z.string().nullable().default(null),
+  taleSpireBoardAssetId: z.string().nullable().default(null),
   name: z.string().min(1),
   initiative: z.number().int().nullable(),
   order: z.number().int().nonnegative(),

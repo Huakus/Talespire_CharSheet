@@ -20,7 +20,18 @@ export type EncounterCommand =
   | { kind: "set-active-combatant"; combatantId: string }
   | { kind: "set-initiative"; combatantId: string; initiative: number | null }
   | { kind: "set-visibility"; combatantId: string; visibleToPlayers: boolean }
-  | { kind: "set-talespire-creature"; combatantId: string; creatureId: string | null }
+  | {
+      kind: "set-talespire-creature";
+      combatantId: string;
+      creatureId: string | null;
+      displayName?: string | null;
+      boardAssetId?: string | null;
+    }
+  | {
+      kind: "set-monster-association";
+      combatantId: string;
+      monster: { definitionId: string; name: string; armorClass: number; hitPoints: number };
+    }
   | { kind: "add-condition"; combatantId: string; condition: EncounterCondition }
   | { kind: "remove-condition"; combatantId: string; conditionId: string }
   | {
@@ -37,7 +48,7 @@ export type EncounterCommand =
   | { kind: "grant-temporary-hit-points"; combatantId: string; amount: number }
   | {
       kind: "synchronize-talespire-initiative";
-      items: { creatureId: string; name: string; combatantId: string }[];
+      items: { creatureId: string; name: string; combatantId: string; associatedCombatant?: EncounterCombatant }[];
       activeCreatureId: string | null;
       roundDelta: number;
     };
@@ -93,7 +104,8 @@ export function applyEncounterCommand(
     }
     encounter.combatants.push(structuredClone(command.combatant));
   } else if (command.kind === "remove-combatant") {
-    requireCombatant(encounter, command.combatantId);
+    const removed = requireCombatant(encounter, command.combatantId);
+    if (removed.taleSpireCreatureId) throw new Error("LINKED_COMBATANT_CANNOT_BE_REMOVED");
     encounter.combatants = encounter.combatants.filter((combatant) => combatant.id !== command.combatantId);
     if (encounter.activeCombatantId === command.combatantId) encounter.activeCombatantId = null;
   } else if (command.kind === "synchronize-talespire-initiative") {
@@ -107,6 +119,29 @@ export function applyEncounterCommand(
   } else if (command.kind === "set-active-combatant") {
     requireCombatant(encounter, command.combatantId);
     encounter.activeCombatantId = command.combatantId;
+  } else if (command.kind === "set-monster-association") {
+    const index = encounter.combatants.findIndex((candidate) => candidate.id === command.combatantId);
+    if (index < 0) throw new Error(`COMBATANT_NOT_FOUND:${command.combatantId}`);
+    const previous = encounter.combatants[index]!;
+    encounter.combatants[index] = {
+      kind: "monster",
+      id: previous.id,
+      taleSpireCreatureId: previous.taleSpireCreatureId,
+      taleSpireDisplayName: previous.taleSpireDisplayName,
+      taleSpireBoardAssetId: previous.taleSpireBoardAssetId,
+      name: command.monster.name,
+      initiative: previous.initiative,
+      order: previous.order,
+      monsterDefinitionId: command.monster.definitionId,
+      armorClass: command.monster.armorClass,
+      hitPoints: {
+        current: command.monster.hitPoints,
+        maximum: command.monster.hitPoints,
+        temporary: 0,
+      },
+      conditions: previous.conditions,
+      visibleToPlayers: previous.visibleToPlayers,
+    };
   } else {
     const combatant = requireCombatant(encounter, command.combatantId);
     if (command.kind === "set-initiative") {
@@ -120,10 +155,16 @@ export function applyEncounterCommand(
       const creatureId = command.creatureId?.trim() || null;
       if (creatureId !== null) {
         encounter.combatants.forEach((candidate) => {
-          if (candidate.id !== combatant.id && candidate.taleSpireCreatureId === creatureId) candidate.taleSpireCreatureId = null;
+          if (candidate.id !== combatant.id && candidate.taleSpireCreatureId === creatureId) {
+            candidate.taleSpireCreatureId = null;
+            candidate.taleSpireDisplayName = null;
+            candidate.taleSpireBoardAssetId = null;
+          }
         });
       }
       combatant.taleSpireCreatureId = creatureId;
+      combatant.taleSpireDisplayName = creatureId === null ? null : command.displayName?.trim() || combatant.taleSpireDisplayName;
+      combatant.taleSpireBoardAssetId = creatureId === null ? null : command.boardAssetId?.trim() || combatant.taleSpireBoardAssetId;
     } else if (command.kind === "add-condition") {
       if (combatant.conditions.some((condition) => condition.key === command.condition.key)) {
         throw new Error(`CONDITION_ALREADY_EXISTS:${command.condition.key}`);
@@ -152,7 +193,7 @@ export function applyEncounterCommand(
 
 function synchronizeTaleSpireInitiative(
   encounter: Encounter,
-  items: { creatureId: string; name: string; combatantId: string }[],
+  items: { creatureId: string; name: string; combatantId: string; associatedCombatant?: EncounterCombatant }[],
   activeCreatureId: string | null,
 ): void {
   const linkedByCreatureId = new Map(
@@ -163,25 +204,42 @@ function synchronizeTaleSpireInitiative(
   const unclaimed = new Set(encounter.combatants);
   const synchronized: EncounterCombatant[] = [];
   const synchronizedIds = new Map<string, string>();
-  const normalizedName = (value: string): string => value.trim().toLocaleLowerCase();
 
   for (const [order, item] of items.entries()) {
     let combatant = linkedByCreatureId.get(item.creatureId);
-    if (!combatant) {
-      combatant = [...unclaimed].find((candidate) => normalizedName(candidate.name) === normalizedName(item.name));
+    const associated = item.associatedCombatant;
+    if (!combatant && associated?.kind === "monster") {
+      combatant = [...unclaimed].find((candidate) => candidate.kind === "monster"
+        && candidate.monsterDefinitionId === associated.monsterDefinitionId
+        && candidate.taleSpireCreatureId === null);
+    }
+    if (!combatant && associated?.kind === "player") {
+      combatant = [...unclaimed].find((candidate) => candidate.kind === "player"
+        && candidate.characterId === associated.characterId
+        && candidate.taleSpireCreatureId === null);
     }
     if (combatant) {
       unclaimed.delete(combatant);
       combatant.taleSpireCreatureId = item.creatureId;
+      combatant.taleSpireDisplayName = item.name;
+      combatant.taleSpireBoardAssetId = item.associatedCombatant?.taleSpireBoardAssetId ?? combatant.taleSpireBoardAssetId;
       combatant.order = order;
       synchronized.push(combatant);
       synchronizedIds.set(item.creatureId, combatant.id);
       continue;
     }
-    const created: EncounterCombatant = {
+    const created: EncounterCombatant = item.associatedCombatant ? {
+      ...structuredClone(item.associatedCombatant),
+      id: item.combatantId,
+      taleSpireCreatureId: item.creatureId,
+      taleSpireDisplayName: item.name,
+      order,
+    } : {
       kind: "custom",
       id: item.combatantId,
       taleSpireCreatureId: item.creatureId,
+      taleSpireDisplayName: item.name,
+      taleSpireBoardAssetId: null,
       name: item.name,
       initiative: null,
       order,
@@ -197,6 +255,9 @@ function synchronizeTaleSpireInitiative(
   const retained = [...unclaimed]
     .map((combatant, index) => ({
       ...combatant,
+      taleSpireCreatureId: null,
+      taleSpireDisplayName: null,
+      taleSpireBoardAssetId: null,
       order: synchronized.length + index,
     }));
   encounter.combatants = [...synchronized, ...retained];

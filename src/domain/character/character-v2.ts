@@ -136,7 +136,7 @@ export const CampaignV2Schema = z.object({
   revision: z.number().int().nonnegative(),
   characters: z.record(StableIdSchema, CharacterV2Schema),
   encounters: z.record(StableIdSchema, EncounterSchema).default({}),
-  gm: GmWorkspaceSchema.default({ noteGroups: [], randomTables: [], googleDocsUrl: "" }),
+  gm: GmWorkspaceSchema.default({ noteGroups: [], randomTables: [], googleDocsUrl: "", miniatureAssociations: {} }),
   metadata: z.object({
     createdAt: IsoTimestampSchema,
     updatedAt: IsoTimestampSchema,

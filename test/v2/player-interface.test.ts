@@ -456,7 +456,7 @@ describe("player interface shell", () => {
         revision: 0,
         characters: { [source.id]: source, [target.id]: target },
         encounters: {},
-        gm: { noteGroups: [], randomTables: [], googleDocsUrl: "" },
+        gm: { noteGroups: [], randomTables: [], googleDocsUrl: "", miniatureAssociations: {} },
         metadata: { createdAt: "2026-07-26T00:00:00.000Z", updatedAt: "2026-07-26T00:00:00.000Z" },
       },
     };
@@ -518,7 +518,7 @@ describe("player interface shell", () => {
         revision: 0,
         characters: { [other.id]: other, [selected.id]: selected },
         encounters: {},
-        gm: { noteGroups: [], randomTables: [], googleDocsUrl: "" },
+        gm: { noteGroups: [], randomTables: [], googleDocsUrl: "", miniatureAssociations: {} },
         metadata: { createdAt: "2026-07-26T00:00:00.000Z", updatedAt: "2026-07-26T00:00:00.000Z" },
       },
     };

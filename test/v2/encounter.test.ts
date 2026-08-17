@@ -78,8 +78,8 @@ describe("encounter domain", () => {
     const synchronized = applyEncounterCommand(source, {
       kind: "synchronize-talespire-initiative",
       items: [
-        { creatureId: "creature-goblin", name: "Goblin", combatantId: "cmb_55555555555555555555555555555555" },
-        { creatureId: "creature-hero", name: heroName, combatantId: "cmb_66666666666666666666666666666666" },
+        { creatureId: "creature-goblin", name: "Goblin", combatantId: "cmb_55555555555555555555555555555555", associatedCombatant: structuredClone(source.combatants[1]!) },
+        { creatureId: "creature-hero", name: heroName, combatantId: "cmb_66666666666666666666666666666666", associatedCombatant: structuredClone(source.combatants[0]!) },
         { creatureId: "creature-orc", name: "Orco", combatantId: "cmb_77777777777777777777777777777777" },
       ],
       activeCreatureId: "creature-hero",
@@ -133,6 +133,32 @@ describe("encounter domain", () => {
     ).encounter;
     expect(movedToGoblin.combatants[0]?.taleSpireCreatureId).toBeNull();
     expect(movedToGoblin.combatants[1]?.taleSpireCreatureId).toBe("creature-selected");
+  });
+
+  it("keeps unassociated queue miniatures as warning cards and protects linked cards from deletion", () => {
+    const synchronized = applyEncounterCommand(fixture(), {
+      kind: "synchronize-talespire-initiative",
+      items: [{ creatureId: "creature-goblin", name: "Goblin", combatantId: "cmb_88888888888888888888888888888888" }],
+      activeCreatureId: "creature-goblin",
+      roundDelta: 0,
+    }, { expectedRevision: 0, updatedAt: now }).encounter;
+    expect(synchronized.combatants[0]).toMatchObject({
+      id: "cmb_88888888888888888888888888888888",
+      kind: "custom",
+      taleSpireCreatureId: "creature-goblin",
+    });
+    expect(synchronized.combatants).toHaveLength(3);
+    expect(() => applyEncounterCommand(synchronized, {
+      kind: "remove-combatant",
+      combatantId: "cmb_88888888888888888888888888888888",
+    }, { expectedRevision: 1, updatedAt: now })).toThrow("LINKED_COMBATANT_CANNOT_BE_REMOVED");
+    const removedFromQueue = applyEncounterCommand(synchronized, {
+      kind: "synchronize-talespire-initiative",
+      items: [],
+      activeCreatureId: null,
+      roundDelta: 0,
+    }, { expectedRevision: 1, updatedAt: now }).encounter;
+    expect(removedFromQueue.combatants.find((entry) => entry.id === "cmb_88888888888888888888888888888888")?.taleSpireCreatureId).toBeNull();
   });
 
   it("derives bloodied and rejects stale commands", () => {

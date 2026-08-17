@@ -140,7 +140,10 @@ export function fragmentCampaign(campaignInput: CampaignV2): CampaignFragmentDra
       parentId: "",
       entityId: "root",
       position: 0,
-      payload: object({ googleDocsUrl: campaign.gm.googleDocsUrl }, "GM settings"),
+      payload: object({
+        googleDocsUrl: campaign.gm.googleDocsUrl,
+        miniatureAssociations: campaign.gm.miniatureAssociations ?? {},
+      }, "GM settings"),
     },
     ...campaign.gm.noteGroups.map((payload, position) => ({
       kind: "gm-note-group" as const,
@@ -217,6 +220,7 @@ export function assembleCampaign(state: RemoteCampaignFragmentState): CampaignV2
     encounters: Object.fromEntries(payloads(state.fragments, "encounter", "").map((entry) => [String(entry.id), entry])),
     gm: {
       googleDocsUrl: String(settings.googleDocsUrl ?? ""),
+      miniatureAssociations: settings.miniatureAssociations ?? {},
       noteGroups: payloads(state.fragments, "gm-note-group", ""),
       randomTables: payloads(state.fragments, "gm-random-table", ""),
     },

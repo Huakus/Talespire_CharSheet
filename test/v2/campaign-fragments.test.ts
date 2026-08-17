@@ -32,6 +32,15 @@ describe("granular campaign fragments", () => {
     });
     campaign.gm = {
       googleDocsUrl: "https://docs.google.com/document/d/example/edit",
+      miniatureAssociations: {
+        "creature-goblin": {
+          displayName: "Goblin",
+          boardAssetId: "asset-goblin",
+          monster: { definitionId: "goblin", name: "Goblin", armorClass: 15, hitPoints: 7 },
+          characterId: null,
+          updatedAt: "2026-07-25T12:00:00.000Z",
+        },
+      },
       noteGroups: [
         { id: "gmg_22222222222222222222222222222222", title: "Segundo", notes: [] },
         { id: "gmg_11111111111111111111111111111111", title: "Primero", notes: [] },

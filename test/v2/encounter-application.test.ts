@@ -76,7 +76,8 @@ describe("EncounterApplication", () => {
       expectedCampaignChecksum: created.checksum,
       updatedAt: time,
       combatant: {
-        kind: "custom",
+        kind: "monster",
+        monsterDefinitionId: "goblin",
         name: "Goblin",
         initiative: 14,
         armorClass: 15,
@@ -86,10 +87,19 @@ describe("EncounterApplication", () => {
       },
     });
     const current = withGoblin.campaign.encounters[encounter.id]!;
-    await application.synchronizeTaleSpireInitiative({
+    const linked = await application.associateMiniature({
       encounterId: encounter.id,
+      combatantId: current.combatants[0]!.id,
+      miniature: { creatureId: "creature-goblin", displayName: "Goblin mini", boardAssetId: "asset-goblin" },
       expectedEncounterRevision: current.revision,
       expectedCampaignChecksum: withGoblin.checksum,
+      updatedAt: time,
+    });
+    const linkedEncounter = linked.campaign.encounters[encounter.id]!;
+    await application.synchronizeTaleSpireInitiative({
+      encounterId: encounter.id,
+      expectedEncounterRevision: linkedEncounter.revision,
+      expectedCampaignChecksum: linked.checksum,
       updatedAt: time,
       queue: {
         items: [{ id: "creature-goblin", name: "Goblin", kind: "creature" }],
@@ -104,6 +114,64 @@ describe("EncounterApplication", () => {
       taleSpireCreatureId: "creature-goblin",
       initiative: 14,
       hitPoints: { current: 7, maximum: 7, temporary: 0 },
+    });
+    expect((await repository.load())!.campaign.gm.miniatureAssociations["creature-goblin"]).toMatchObject({
+      displayName: "Goblin mini",
+      monster: { definitionId: "goblin" },
+    });
+    const beforeEdit = (await repository.load())!;
+    const refreshed = await application.refreshMonsterDefinition("goblin", {
+      definitionId: "goblin-editado",
+      name: "Goblin editado",
+      armorClass: 17,
+      hitPoints: 9,
+    }, beforeEdit.checksum, time);
+    expect(refreshed.campaign.encounters[encounter.id]?.combatants[0]).toMatchObject({
+      name: "Goblin editado",
+      monsterDefinitionId: "goblin-editado",
+      armorClass: 17,
+      hitPoints: { current: 9, maximum: 9 },
+    });
+    expect(refreshed.campaign.gm.miniatureAssociations["creature-goblin"]?.monster?.definitionId).toBe("goblin-editado");
+  });
+
+  it("refreshes linked character hit points, armor class and conditions from the sheet", async () => {
+    const repository = new InMemoryCampaignRepository();
+    const campaigns = new CampaignApplication(repository);
+    const application = new EncounterApplication(repository);
+    const empty = await campaigns.createCampaign(time);
+    const withCharacter = await campaigns.createCharacter({ name: "Heroína", expectedCampaignChecksum: empty.checksum, createdAt: time });
+    const character = Object.values(withCharacter.campaign.characters)[0]!;
+    const withEncounter = await application.createEncounter("Personajes", withCharacter.checksum, time);
+    const encounter = Object.values(withEncounter.campaign.encounters)[0]!;
+    const withCombatant = await application.addCombatant({
+      encounterId: encounter.id,
+      expectedEncounterRevision: encounter.revision,
+      expectedCampaignChecksum: withEncounter.checksum,
+      updatedAt: time,
+      combatant: {
+        kind: "player",
+        characterId: character.id,
+        taleSpireClientId: null,
+        name: character.name,
+        initiative: null,
+        armorClass: character.combat.armorClass,
+        hitPoints: character.combat.hitPoints,
+        conditions: [],
+        visibleToPlayers: true,
+      },
+    });
+    const edited = await campaigns.editCharacter({
+      characterId: character.id,
+      expectedCharacterRevision: character.revision,
+      expectedCampaignChecksum: withCombatant.checksum,
+      patch: { combat: { armorClass: 18, hitPoints: { current: 4, maximum: 12, temporary: 2 } } },
+      updatedAt: time,
+    });
+    const synchronized = await application.synchronizeCharacters(edited.checksum, time);
+    expect(synchronized.campaign.encounters[encounter.id]?.combatants[0]).toMatchObject({
+      armorClass: 18,
+      hitPoints: { current: 4, maximum: 12, temporary: 2 },
     });
   });
 

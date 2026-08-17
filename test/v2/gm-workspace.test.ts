@@ -4,7 +4,7 @@ import { GmWorkspaceApplication } from "../../src/application/gm/gm-workspace-ap
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import { GmToolsPanel, matchesGroupedFilters } from "../../src/ui/gm-tools-panel";
 import { removeGmNoteGroup } from "../../src/domain/gm/gm-workspace";
-import { calculateFloatingPanelPosition, calculateTaleSpireRoundDelta, findPlayerInitiativeCombatant, GmApp } from "../../src/ui/gm-app";
+import { calculateFloatingPanelPosition, calculateTaleSpireRoundDelta, encounterSynchronizationWarnings, findPlayerInitiativeCombatant, GmApp, hasInitiativeOrderMismatch, validEncounterSelection } from "../../src/ui/gm-app";
 import { createCharacter } from "../../src/domain/character/create-character";
 import { renderCheckboxGroup } from "../../src/ui/checkbox-group";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
@@ -14,6 +14,13 @@ import { normalizeSpellDefinition } from "../../src/domain/spells/spell-catalog"
 import { migrateLegacyCharacterSpellClasses } from "../../src/infrastructure/persistence/legacy-spell-class-migration";
 
 describe("GM workspace", () => {
+  it("starts without selecting an existing encounter implicitly", () => {
+    const encounters = { first: {}, second: {} };
+    expect(validEncounterSelection(encounters, null)).toBeNull();
+    expect(validEncounterSelection(encounters, "first")).toBe("first");
+    expect(validEncounterSelection(encounters, "deleted")).toBeNull();
+  });
+
   it("combines values inside a filter group with OR and different groups with AND", () => {
     const filters = new Set(["resistance\u0000Fuego", "resistance\u0000Frío", "type\u0000Dragón"]);
     expect(matchesGroupedFilters(filters, { resistance: ["Frío"], type: ["Dragón"] })).toBe(true);
@@ -62,6 +69,55 @@ describe("GM workspace", () => {
     expect(calculateTaleSpireRoundDelta({ items, activeItemIndex: 2 }, { items: items.slice(0, 2), activeItemIndex: 0 })).toBe(0);
   });
 
+  it("detects when rolled initiatives disagree with TaleSpire turn order", () => {
+    const combatants = [
+      { id: "cmb_11111111111111111111111111111111", taleSpireCreatureId: "a", order: 0, initiative: 10 },
+      { id: "cmb_22222222222222222222222222222222", taleSpireCreatureId: "b", order: 1, initiative: 18 },
+    ];
+    expect(hasInitiativeOrderMismatch({ combatants } as Parameters<typeof hasInitiativeOrderMismatch>[0])).toBe(true);
+    combatants[0]!.initiative = 20;
+    expect(hasInitiativeOrderMismatch({ combatants } as Parameters<typeof hasInitiativeOrderMismatch>[0])).toBe(false);
+  });
+
+  it("reports every encounter and TaleSpire association inconsistency", () => {
+    const encounter = { combatants: [
+      { id: "temporary", kind: "custom", name: "Miniatura temporal", taleSpireCreatureId: "creature-a", taleSpireDisplayName: "Orco de lobby", order: 0, initiative: 8 },
+      { id: "monster", kind: "monster", name: "Goblin", taleSpireCreatureId: null, order: 1, initiative: 16 },
+      { id: "linked", kind: "monster", name: "Dragón", taleSpireCreatureId: "creature-b", order: 2, initiative: 20 },
+    ] } as unknown as Parameters<typeof encounterSynchronizationWarnings>[0];
+    const warnings = encounterSynchronizationWarnings(encounter, true);
+    expect(warnings.map((warning) => warning.code)).toEqual([
+      "initiative-order",
+      "miniature-without-identity",
+      "monster-without-miniature",
+    ]);
+    expect(warnings[1]?.text).toContain("Orco de lobby");
+    expect(warnings[2]?.text).toContain("Goblin");
+  });
+
+  it("applies a resolved TaleSpire initiative roll to the card that requested it", async () => {
+    let applied: unknown = null;
+    const combatantId = "cmb_11111111111111111111111111111111";
+    const view = Object.create(GmApp.prototype) as unknown as {
+      pendingInitiativeRolls: Map<string, string[]>;
+      selectedEncounterId: string;
+      snapshot: { campaign: { encounters: Record<string, { combatants: { id: string }[] }> } };
+      appendActionLog: () => void;
+      apply: (action: unknown) => Promise<void>;
+      render: () => void;
+      handleResolvedDiceResult: (result: { name: string; total: number }) => Promise<void>;
+    };
+    view.pendingInitiativeRolls = new Map([["Iniciativa: Goblin", [combatantId]]]);
+    view.selectedEncounterId = "encounter";
+    view.snapshot = { campaign: { encounters: { encounter: { combatants: [{ id: combatantId }] } } } };
+    view.appendActionLog = () => undefined;
+    view.apply = async (action) => { applied = action; };
+    view.render = () => undefined;
+    await view.handleResolvedDiceResult({ name: "Iniciativa: Goblin", total: 17 });
+    expect(applied).toEqual({ kind: "set-initiative", combatantId, initiative: 17 });
+    expect(view.pendingInitiativeRolls.size).toBe(0);
+  });
+
   it("matches a rolled initiative to a character even before a client link was persisted", () => {
     const characterCombatant = {
       id: "cmb_11111111111111111111111111111111",
@@ -84,7 +140,7 @@ describe("GM workspace", () => {
       googleDocsUrl: "https://docs.google.com/document/d/example/edit",
     };
     const saved = await application.save(workspace, snapshot.checksum, "2026-08-02T12:01:00.000Z");
-    expect(saved.campaign.gm).toEqual(workspace);
+    expect(saved.campaign.gm).toEqual({ ...workspace, miniatureAssociations: {} });
     expect(saved.campaign.revision).toBe(1);
     await expect(application.save(workspace, snapshot.checksum)).rejects.toThrow();
   });

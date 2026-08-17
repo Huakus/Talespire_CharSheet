@@ -158,6 +158,63 @@ export function calculateTaleSpireRoundDelta(
   return 0;
 }
 
+export function hasInitiativeOrderMismatch(encounter: Pick<Encounter, "combatants">): boolean {
+  const linked = encounter.combatants
+    .filter((combatant) => combatant.taleSpireCreatureId !== null)
+    .sort((left, right) => left.order - right.order);
+  if (linked.length < 2 || linked.every((combatant) => combatant.initiative === null)) return false;
+  const byInitiative = [...linked].sort((left, right) => {
+    if (left.initiative === null && right.initiative !== null) return 1;
+    if (left.initiative !== null && right.initiative === null) return -1;
+    return (right.initiative ?? 0) - (left.initiative ?? 0) || left.order - right.order;
+  });
+  return linked.some((combatant, index) => combatant.id !== byInitiative[index]?.id);
+}
+
+export function validEncounterSelection(
+  encounters: Readonly<Record<string, unknown>>,
+  selectedEncounterId: string | null,
+): string | null {
+  return selectedEncounterId && encounters[selectedEncounterId] ? selectedEncounterId : null;
+}
+
+export interface EncounterSynchronizationWarning {
+  code: "initiative-order" | "miniature-without-identity" | "monster-without-miniature";
+  text: string;
+}
+
+export function encounterSynchronizationWarnings(
+  encounter: Pick<Encounter, "combatants">,
+  taleSpireConnected: boolean,
+): EncounterSynchronizationWarning[] {
+  const warnings: EncounterSynchronizationWarning[] = [];
+  if (taleSpireConnected && hasInitiativeOrderMismatch(encounter)) {
+    warnings.push({
+      code: "initiative-order",
+      text: "El orden por iniciativa no coincide con TaleSpire. Cambiá el orden de las miniaturas desde TaleSpire.",
+    });
+  }
+  const miniaturesWithoutIdentity = encounter.combatants.filter((combatant) =>
+    combatant.taleSpireCreatureId !== null && combatant.kind === "custom"
+  );
+  if (miniaturesWithoutIdentity.length) {
+    warnings.push({
+      code: "miniature-without-identity",
+      text: `${miniaturesWithoutIdentity.length === 1 ? "La miniatura" : "Las miniaturas"} ${miniaturesWithoutIdentity.map((combatant) => `“${combatant.taleSpireDisplayName ?? combatant.name}”`).join(", ")} ${miniaturesWithoutIdentity.length === 1 ? "no tiene" : "no tienen"} un monstruo o personaje asociado.`,
+    });
+  }
+  const monstersWithoutMiniature = encounter.combatants.filter((combatant) =>
+    combatant.kind === "monster" && combatant.taleSpireCreatureId === null
+  );
+  if (monstersWithoutMiniature.length) {
+    warnings.push({
+      code: "monster-without-miniature",
+      text: `${monstersWithoutMiniature.length === 1 ? "El monstruo" : "Los monstruos"} ${monstersWithoutMiniature.map((combatant) => `“${combatant.name}”`).join(", ")} ${monstersWithoutMiniature.length === 1 ? "no tiene" : "no tienen"} una miniatura asociada.`,
+    });
+  }
+  return warnings;
+}
+
 export function findPlayerInitiativeCombatant(
   encounter: Pick<Encounter, "combatants">,
   clientId: string,
@@ -237,6 +294,7 @@ export class GmApp {
   private taleSpireLinkedEncounterId: string | null = null;
   private previousTaleSpireInitiativeQueue: TaleSpireNativeInitiativeQueue | null = null;
   private taleSpireInitiativeSync: Promise<void> = Promise.resolve();
+  private pendingInitiativeRolls = new Map<string, string[]>();
   private readonly toolsPanel: GmToolsPanel;
   private readonly loreBrowser: CampaignLoreBrowser | null;
 
@@ -261,10 +319,7 @@ export class GmApp {
     this.root.innerHTML = renderUiEmptyState({ title: "Cargando control GM…", text: "Recuperando campaña y catálogo compartido.", className: "sheet-empty gm-startup-status" });
     subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
     this.runtime.subscribeCampaignChanges?.(() => { void this.handleExternalChange(); });
-    this.runtime.subscribeDiceResults?.((result) => {
-      this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
-      this.render();
-    });
+    this.runtime.subscribeDiceResults?.((result) => { void this.handleResolvedDiceResult(result); });
     this.runtime.subscribePlayers?.((players) => { this.players = players; this.render(); });
     this.runtime.subscribeCharacterSummaries?.((received) => {
       this.playerSummaries.set(received.clientId, received.summary);
@@ -272,7 +327,9 @@ export class GmApp {
     });
     this.runtime.subscribeInitiative?.((clientId, initiative, characterId) => { void this.applyReceivedInitiative(clientId, initiative, characterId); });
     this.runtime.subscribeNativeInitiative?.((queue) => {
-      if (this.selectedEncounterId === this.taleSpireLinkedEncounterId) void this.enqueueTaleSpireInitiativeSync(queue);
+      if (!this.selectedEncounterId) return;
+      this.taleSpireLinkedEncounterId = this.selectedEncounterId;
+      void this.enqueueTaleSpireInitiativeSync(queue);
     });
     this.runtime.subscribeTransferStatus?.((status) => {
       this.transferStatuses.set(status.clientId, status);
@@ -295,16 +352,24 @@ export class GmApp {
     }
     this.snapshot = await this.application.loadCampaign();
     this.selectAvailableEncounter();
+    if (this.snapshot && this.selectedEncounterId) {
+      this.snapshot = await this.application.synchronizeCharacters(
+        this.snapshot.checksum,
+        new Date().toISOString(),
+        this.selectedEncounterId,
+      );
+    }
     const selected = this.selectedEncounterId ? this.snapshot?.campaign.encounters[this.selectedEncounterId] : null;
     if (selected?.combatants.some((combatant) => typeof combatant.taleSpireCreatureId === "string") && this.runtime.getNativeInitiative) {
       this.taleSpireLinkedEncounterId = selected.id;
     }
     this.render();
     void this.loreBrowser?.load();
-    if (selected && this.taleSpireLinkedEncounterId === selected.id && this.runtime.getNativeInitiative) {
+    if (selected && this.runtime.getNativeInitiative) {
       try {
         const queue = await this.runtime.getNativeInitiative();
-        if (queue) {
+        if (queue?.items.length) {
+          this.taleSpireLinkedEncounterId = selected.id;
           await this.enqueueTaleSpireInitiativeSync(queue);
           return;
         }
@@ -322,6 +387,14 @@ export class GmApp {
     this.appendActionLog("Historial reversible reiniciado por una actualización remota.", "system");
     try {
       this.snapshot = await this.application.loadCampaign();
+      this.selectAvailableEncounter();
+      if (this.snapshot && this.selectedEncounterId) {
+        this.snapshot = await this.application.synchronizeCharacters(
+          this.snapshot.checksum,
+          new Date().toISOString(),
+          this.selectedEncounterId,
+        );
+      }
       this.message = { kind: "success", text: "Se refrescaron los datos compartidos de la campaña." };
     } catch (error) {
       this.message = { kind: "error", text: this.formatError(error) };
@@ -331,8 +404,10 @@ export class GmApp {
   }
 
   private selectAvailableEncounter(): void {
-    if (this.selectedEncounterId && this.snapshot?.campaign.encounters[this.selectedEncounterId]) return;
-    this.selectedEncounterId = this.snapshot ? Object.values(this.snapshot.campaign.encounters)[0]?.id ?? null : null;
+    this.selectedEncounterId = validEncounterSelection(
+      this.snapshot?.campaign.encounters ?? {},
+      this.selectedEncounterId,
+    );
   }
 
   private render(): void {
@@ -350,7 +425,8 @@ export class GmApp {
         <nav class="sheet-tabs gm-section-nav" style="--gm-section-count:${sections.length}">${sections.map((section) => `<button type="button" data-gm-section="${section}" class="sheet-tab-button ${this.activeSection === section ? "active" : ""}">${section === "encounter" ? "Encuentro" : section === "content" ? "Contenido" : section === "lore" ? "Campaña" : section === "notes" ? "Notas" : "Herramientas"}</button>`).join("")}</nav>
         ${this.activeSection === "encounter" ? `<div class="gm-encounter-management">
           <select data-action="select-encounter" aria-label="Encuentro activo" ${encounters.length ? "" : "disabled"}>
-            ${encounters.length ? encounters.map((encounter) => `<option value="${encounter.id}" ${encounter.id === selected?.id ? "selected" : ""}>${escapeHtml(encounter.name)}</option>`).join("") : '<option>Sin encuentros</option>'}
+            <option value="" ${selected ? "" : "selected"}>${encounters.length ? "Seleccionar encuentro…" : "Sin encuentros disponibles"}</option>
+            ${encounters.map((encounter) => `<option value="${encounter.id}" ${encounter.id === selected?.id ? "selected" : ""}>${escapeHtml(encounter.name)}</option>`).join("")}
           </select>
           <details class="gm-popover gm-new-encounter"><summary>+ Encuentro</summary><div><form data-action="create-encounter" class="gm-compact-popup-form"><input name="name" required placeholder="Nombre del encuentro" aria-label="Nombre del encuentro"><button type="submit">Crear</button></form></div></details>
           <button type="button" data-action="delete-encounter" class="${selected && this.pendingDeleteEncounterId === selected.id ? "danger-confirm" : ""}" ${selected ? "" : "disabled"}>${selected && this.pendingDeleteEncounterId === selected.id ? "Confirmar eliminación" : "Eliminar"}</button>
@@ -363,7 +439,13 @@ export class GmApp {
           return status ? `<span class="${status.status}">${escapeHtml(player.label)}: ${status.status === "confirmed" ? "sincronizado" : status.status === "sending" ? "enviando" : status.status === "retrying" ? `reintentando (${status.attempt})` : "falló"}</span>` : "";
         }).join("")}</div>` : ""}
         ${this.snapshot ? `
-          ${selected ? this.renderEncounter(selected) : renderUiEmptyState({ title: "No hay encuentros", text: "Creá uno para comenzar.", className: "sheet-empty" })}
+          ${selected ? this.renderEncounter(selected) : renderUiEmptyState({
+            title: encounters.length ? "Ningún encuentro seleccionado" : "No hay encuentros",
+            text: encounters.length
+              ? "Seleccioná un encuentro existente o creá uno nuevo para comenzar."
+              : "Creá un encuentro nuevo para comenzar.",
+            className: "sheet-empty",
+          })}
         ` : renderUiEmptyState({ title: "No hay una campaña v2 cargada", text: "Importá o creá la campaña desde la hoja de personaje antes de abrir el control GM.", className: "sheet-empty" })}` : ""}
         ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span></div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
         ${this.activeSection === "lore" ? this.loreBrowser?.render() ?? "" : ""}
@@ -409,17 +491,23 @@ export class GmApp {
 
   private renderEncounter(encounter: Encounter): string {
     const combatants = orderedCombatants(encounter);
-    const candidates = [
-      ...Object.values(this.snapshot?.campaign.characters ?? {}).map((character) => ({ kind: "player", key: `character:${character.id}`, name: character.name, detail: "Personaje de campaña" })),
-      ...this.monsterCatalog().map((monster) => ({ kind: "monster", key: `monster:${monster.id}`, name: monster.name, detail: `${monster.type || "Monstruo"} · VD ${monster.challenge || "—"}` })),
-    ];
+    const candidates = this.monsterCatalog().map((monster) => ({
+      kind: "monster",
+      key: `monster:${monster.id}`,
+      name: monster.name,
+      detail: `${monster.type || "Monstruo"} · VD ${monster.challenge || "—"}`,
+    }));
+    const synchronizationWarnings = encounterSynchronizationWarnings(
+      encounter,
+      this.taleSpireLinkedEncounterId === encounter.id,
+    );
     return `
       <section class="gm-encounter-board">
       <div class="gm-turn-bar">
         <strong>Ronda ${encounter.round}</strong>
-        <details class="gm-popover gm-add-combatant-popover"><summary>+ Combatiente</summary><div>
+        <details class="gm-popover gm-add-combatant-popover"><summary>+ Monstruo</summary><div>
           <form data-action="add-combatant" class="gm-add-combatant">
-            <input data-gm-combatant-search type="search" placeholder="Buscar monstruo, personaje o jugador…" autocomplete="off">
+            <input data-gm-combatant-search type="search" placeholder="Buscar monstruo…" autocomplete="off">
             <input name="kind" type="hidden"><input name="name" type="hidden">
             <input name="sourceKey" type="hidden">
             <div class="gm-combatant-search-results">${candidates.map((candidate) => `<button type="button" data-gm-combatant-candidate data-kind="${candidate.kind}" data-key="${escapeHtml(candidate.key)}" data-name="${escapeHtml(candidate.name)}" data-search="${escapeHtml(normalizedSearch(`${candidate.name} ${candidate.detail}`))}"><strong>${escapeHtml(candidate.name)}</strong><small>${escapeHtml(candidate.detail)}</small></button>`).join("")}</div>
@@ -430,8 +518,9 @@ export class GmApp {
         </div></details>
         <button type="button" data-action="connect-talespire-initiative" class="gm-talespire-link ${this.taleSpireLinkedEncounterId === encounter.id ? "connected" : ""}" title="Vincular este encuentro con la cola de iniciativa nativa de TaleSpire" ${this.runtime.getNativeInitiative ? "" : "disabled"}>${this.taleSpireLinkedEncounterId === encounter.id ? "TS conectado" : "Vincular TS"}</button>
       </div>
+      ${synchronizationWarnings.length ? `<div class="gm-initiative-order-warning" role="alert"><strong>Revisá la sincronización del encuentro</strong><ul>${synchronizationWarnings.map((warning) => `<li data-warning="${warning.code}">${escapeHtml(warning.text)}</li>`).join("")}</ul></div>` : ""}
       <div class="gm-combatants">
-        ${combatants.length ? combatants.map((combatant) => this.renderCombatant(encounter, combatant)).join("") : '<div class="sheet-empty"><strong>Iniciativa vacía</strong><p>Agregá jugadores, monstruos o combatientes personalizados.</p></div>'}
+        ${combatants.length ? combatants.map((combatant) => this.renderCombatant(encounter, combatant)).join("") : '<div class="sheet-empty"><strong>Encuentro vacío</strong><p>Agregá un monstruo o vinculá el modo por turnos de TaleSpire.</p></div>'}
       </div></section>`;
   }
 
@@ -459,21 +548,30 @@ export class GmApp {
       combatant.taleSpireCreatureId ? "Miniatura TS vinculada" : "Sin miniatura TS",
     ].filter(Boolean);
     const expanded = this.expandedCombatantId === combatant.id;
-    return `<details class="gm-combatant ${active ? "active" : ""} ${character ? "linked-character" : ""}" data-combatant-id="${combatant.id}" ${expanded ? "open" : ""}>
+    const missingMonster = combatant.kind === "custom" && combatant.taleSpireCreatureId !== null;
+    const monsterChoices = this.monsterCatalog();
+    const savedAssociation = combatant.taleSpireCreatureId
+      ? this.snapshot?.campaign.gm.miniatureAssociations?.[combatant.taleSpireCreatureId]
+      : null;
+    return `<details class="gm-combatant ${active ? "active" : ""} ${character ? "linked-character" : ""} ${missingMonster ? "missing-monster" : ""}" data-combatant-id="${combatant.id}" ${expanded ? "open" : ""}>
       <summary class="gm-combatant-summary">
         <span class="gm-combatant-identity"><strong>${escapeHtml(combatant.name)}</strong><small>${escapeHtml(identityDetail)}</small></span>
         <span><small>INI</small><strong>${combatant.initiative ?? "—"}</strong></span>
         <span><small>CA</small><strong>${combatant.armorClass ?? "—"}</strong></span>
         <div class="hp-readout gm-combatant-hp-readout" style="--hp-level:${Math.round(currentPercent)}%;--hp-temp-level:${Math.round(temporaryPercent)}%;--hp-temp-bottom:${Math.round(temporaryBottom)}%;--hp-tone:hsl(${hitPointHue} 38% 43%)" role="meter" aria-label="Puntos de golpe" aria-valuemin="0" aria-valuemax="${combatant.hitPoints.maximum}" aria-valuenow="${combatant.hitPoints.current}"><span>PG</span><strong>${combatant.hitPoints.current}${combatant.hitPoints.temporary ? `<b> + ${combatant.hitPoints.temporary}</b>` : ""}<small> / ${combatant.hitPoints.maximum}</small></strong><em>${combatant.hitPoints.temporary ? "Temp. en azul" : "Actuales"}</em></div>
-        <span class="gm-summary-meta">${active ? '<i class="active">Turno activo</i>' : ""}${tacticalFacts.map((fact) => `<i>${escapeHtml(fact)}</i>`).join("")}<b aria-hidden="true">${expanded ? "▴" : "▾"}</b></span>
+        <span class="gm-summary-meta">${active ? '<i class="active">Turno activo</i>' : ""}${missingMonster ? '<i class="warning">Falta asociar un monstruo</i>' : ""}${tacticalFacts.map((fact) => `<i>${escapeHtml(fact)}</i>`).join("")}<b aria-hidden="true">${expanded ? "▴" : "▾"}</b></span>
         <span class="gm-summary-conditions">${conditions.map((condition) => escapeHtml(condition.label)).join(" · ")}${bloodied ? `${conditions.length ? " · " : ""}Herido` : ""}${!conditions.length && !bloodied ? "Sin condiciones" : ""}</span>
       </summary>
       <div class="gm-combatant-popover">
-        <div class="gm-talespire-association"><span>${combatant.taleSpireCreatureId ? "Miniatura de TaleSpire vinculada" : "Sin miniatura asociada"}</span><button type="button" data-action="link-selected-miniature" ${this.runtime.selectMiniature ? "" : "disabled"}>${combatant.taleSpireCreatureId ? "Cambiar por seleccionada" : "Vincular seleccionada"}</button>${combatant.taleSpireCreatureId ? '<button type="button" data-action="unlink-miniature">Desvincular</button>' : ""}</div>
-        ${character ? `<p class="gm-linked-character-notice">Estado sincronizado desde la hoja. El GM sólo puede asignar su iniciativa.</p><div class="gm-combatant-control-row gm-character-initiative-control"><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}" placeholder="—"></label><button type="button" data-action="save-initiative">Guardar INI</button></div>` : `<div class="gm-combatant-control-row"><button type="button" data-action="activate-combatant">Hacer activo</button><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}"></label><button type="button" data-action="save-initiative">Guardar INI</button><button type="button" data-action="roll-initiative">Tirar INI</button></div><div class="gm-card-actions"><input data-action="hp-amount" type="number" min="1" step="1" value="1" aria-label="Cantidad de puntos de golpe"><button type="button" data-action="damage">Daño</button><button type="button" data-action="heal">Curar</button><button type="button" data-action="temporary-hit-points">PG temp.</button></div><div class="gm-condition-pills">${conditions.map((condition) => `<button type="button" data-action="remove-condition" data-condition-id="${condition.id}" title="Quitar condición">${escapeHtml(condition.label)} ×</button>`).join("")}${bloodied ? '<span class="bloodied">Herido</span>' : ""}</div><div class="gm-condition-control"><select data-action="condition-select" aria-label="Condición">${GM_CONDITIONS.filter(([key]) => !conditions.some((condition) => condition.key === key)).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select><button type="button" data-action="add-condition" ${GM_CONDITIONS.every(([key]) => conditions.some((condition) => condition.key === key)) ? "disabled" : ""}>Agregar</button></div><div class="gm-card-actions gm-card-danger"><button type="button" data-action="toggle-visibility" class="${combatant.visibleToPlayers ? "visible" : "hidden"}">${combatant.visibleToPlayers ? "Visible" : "Oculto"}</button><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>`}
+        <div class="gm-card-associations">
+          <section class="gm-association-panel ${combatant.taleSpireCreatureId ? "linked" : "missing"}"><small>Miniatura${savedAssociation ? " · asociación guardada" : ""}</small><strong>${escapeHtml(combatant.taleSpireDisplayName ?? (combatant.taleSpireCreatureId ? "Miniatura de TaleSpire" : "Sin miniatura asociada"))}</strong><div><button type="button" data-action="link-selected-miniature" ${this.runtime.selectMiniature ? "" : "disabled"}>${combatant.taleSpireCreatureId ? "Cambiar miniatura" : "Seleccionar miniatura"}</button>${combatant.taleSpireCreatureId ? '<button type="button" data-action="unlink-miniature">Desvincular</button>' : ""}${savedAssociation ? '<button type="button" data-action="forget-miniature-association">Olvidar asociación</button>' : ""}</div></section>
+          <section class="gm-association-panel ${monster || character ? "linked" : "missing"}"><small>${character ? "Personaje" : "Monstruo"}</small><strong>${escapeHtml(character?.name ?? monster?.name ?? "Sin monstruo asociado")}</strong><details class="gm-monster-association-picker"><summary>${character ? "Reemplazar por un monstruo" : monster ? "Cambiar monstruo" : "Seleccionar monstruo"}</summary><div><input type="search" data-card-monster-search placeholder="Buscar monstruo…"><div class="gm-card-monster-results">${monsterChoices.map((choice) => `<button type="button" data-action="associate-monster" data-monster-id="${escapeHtml(choice.id)}" data-search="${escapeHtml(normalizedSearch(`${choice.name} ${choice.type} ${choice.challenge}`))}"><strong>${escapeHtml(choice.name)}</strong><small>${escapeHtml(choice.type || "Monstruo")} · VD ${escapeHtml(choice.challenge || "—")}</small></button>`).join("")}</div></div></details>${monster ? '<button type="button" data-action="edit-encounter-monster">Editar monstruo</button>' : ""}</section>
+        </div>
+        ${missingMonster ? '<p class="gm-association-warning" role="alert">Esta miniatura participa del modo por turnos, pero todavía no tiene un monstruo asociado.</p>' : ""}
+        ${character ? `<p class="gm-linked-character-notice">Estado sincronizado desde la hoja. El GM sólo puede asignar su iniciativa.</p><div class="gm-combatant-control-row gm-character-initiative-control"><label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}" placeholder="—"></label><button type="button" data-action="save-initiative">Guardar INI</button></div>` : `<div class="gm-combatant-control-row">${this.taleSpireLinkedEncounterId === encounter.id ? '<span class="gm-ts-turn-notice">El turno activo se cambia desde TaleSpire.</span>' : '<button type="button" data-action="activate-combatant">Hacer activo</button>'}<label>INI<input data-action="initiative" type="number" step="1" value="${combatant.initiative ?? ""}"></label><button type="button" data-action="save-initiative">Guardar INI</button><button type="button" data-action="roll-initiative">Tirar INI</button></div><div class="gm-card-actions"><input data-action="hp-amount" type="number" min="1" step="1" value="1" aria-label="Cantidad de puntos de golpe"><button type="button" data-action="damage">Daño</button><button type="button" data-action="heal">Curar</button><button type="button" data-action="temporary-hit-points">PG temp.</button></div><div class="gm-condition-pills">${conditions.map((condition) => `<button type="button" data-action="remove-condition" data-condition-id="${condition.id}" title="Quitar condición">${escapeHtml(condition.label)} ×</button>`).join("")}${bloodied ? '<span class="bloodied">Herido</span>' : ""}</div><div class="gm-condition-control"><select data-action="condition-select" aria-label="Condición">${GM_CONDITIONS.filter(([key]) => !conditions.some((condition) => condition.key === key)).map(([key, label]) => `<option value="${key}">${label}</option>`).join("")}</select><button type="button" data-action="add-condition" ${GM_CONDITIONS.every(([key]) => conditions.some((condition) => condition.key === key)) ? "disabled" : ""}>Agregar</button></div><div class="gm-card-actions gm-card-danger"><button type="button" data-action="toggle-visibility" class="${combatant.visibleToPlayers ? "visible" : "hidden"}">${combatant.visibleToPlayers ? "Visible" : "Oculto"}</button>${combatant.taleSpireCreatureId ? "" : '<button type="button" data-action="remove-combatant">Quitar del encuentro</button>'}</div>`}
         ${monster ? this.renderMonsterDetails(monster) : ""}
         ${character ? this.renderCharacterDetails(character) : ""}
-        ${character ? '<div class="gm-card-actions gm-card-danger"><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>' : ""}
+        ${combatant.taleSpireCreatureId ? '<p class="gm-linked-remove-notice">Para eliminar esta tarjeta, primero quitá la miniatura del modo por turnos o desvinculala.</p>' : character ? '<div class="gm-card-actions gm-card-danger"><button type="button" data-action="remove-combatant">Quitar del encuentro</button></div>' : ""}
       </div>
     </details>`;
   }
@@ -709,18 +807,22 @@ export class GmApp {
       event.preventDefault();
       const name = String(new FormData(event.currentTarget as HTMLFormElement).get("name") ?? "").trim();
       if (name) void this.execute(async () => {
+        const previousIds = new Set(Object.keys(this.requireSnapshot().campaign.encounters));
         const snapshot = await this.application.createEncounter(name, this.requireSnapshot().checksum);
-        this.selectedEncounterId = Object.values(snapshot.campaign.encounters).find((encounter) => encounter.name === name)?.id ?? null;
+        this.selectedEncounterId = Object.values(snapshot.campaign.encounters).find((encounter) => !previousIds.has(encounter.id))?.id ?? null;
         return snapshot;
       }, "Encuentro creado.");
     });
     this.root.querySelector<HTMLSelectElement>('[data-action="select-encounter"]')?.addEventListener("change", (event) => {
-      this.selectedEncounterId = (event.currentTarget as HTMLSelectElement).value;
+      const value = (event.currentTarget as HTMLSelectElement).value;
+      this.selectedEncounterId = value || null;
+      this.taleSpireLinkedEncounterId = null;
+      this.previousTaleSpireInitiativeQueue = null;
       this.pendingDeleteEncounterId = null;
       this.expandedCombatantId = null;
       this.render();
-      const selected = this.requireEncounter();
-      void this.runtime.publishEncounter?.(selected);
+      const selected = this.selectedEncounterId ? this.requireSnapshot().campaign.encounters[this.selectedEncounterId] : null;
+      if (selected) void this.refreshSelectedEncounterCharacters(selected.id);
     });
     this.root.querySelector('[data-action="refresh-players"]')?.addEventListener("click", () => void this.runtime.refreshPlayers?.());
     this.root.querySelector('[data-action="request-summaries"]')?.addEventListener("click", () => void this.runtime.requestCharacterSummaries?.().catch((error) => {
@@ -832,7 +934,29 @@ export class GmApp {
         this.render();
       });
       card.querySelector('[data-action="link-selected-miniature"]')?.addEventListener("click", () => { void this.linkSelectedMiniature(combatantId); });
-      card.querySelector('[data-action="unlink-miniature"]')?.addEventListener("click", () => { void this.apply({ kind: "set-talespire-creature", combatantId, creatureId: null }); });
+      card.querySelector('[data-action="unlink-miniature"]')?.addEventListener("click", () => { void this.unlinkMiniature(combatantId); });
+      card.querySelector('[data-action="forget-miniature-association"]')?.addEventListener("click", () => {
+        const creatureId = this.requireEncounter().combatants.find((entry) => entry.id === combatantId)?.taleSpireCreatureId;
+        if (creatureId) void this.execute(
+          () => this.application.forgetMiniatureAssociation(creatureId, this.requireSnapshot().checksum),
+          "Asociación persistente eliminada.",
+        );
+      });
+      card.querySelector<HTMLInputElement>("[data-card-monster-search]")?.addEventListener("input", (event) => {
+        const query = normalizedSearch((event.currentTarget as HTMLInputElement).value);
+        card.querySelectorAll<HTMLButtonElement>('[data-action="associate-monster"]').forEach((button) => {
+          button.hidden = Boolean(query) && !(button.dataset.search ?? "").includes(query);
+        });
+      });
+      card.querySelectorAll<HTMLButtonElement>('[data-action="associate-monster"]').forEach((button) => button.addEventListener("click", () => {
+        const monster = this.findMonster(button.dataset.monsterId ?? "");
+        if (monster) void this.associateMonster(combatantId, monster);
+      }));
+      card.querySelector('[data-action="edit-encounter-monster"]')?.addEventListener("click", () => {
+        const combatant = this.requireEncounter().combatants.find((entry) => entry.id === combatantId);
+        const monster = combatant?.kind === "monster" ? this.findMonster(combatant.monsterDefinitionId) : null;
+        if (monster) this.openMonsterEditor(monster);
+      });
       card.querySelector('[data-action="activate-combatant"]')?.addEventListener("click", () => void this.apply({ kind: "set-active-combatant", combatantId }));
       card.querySelector('[data-action="save-initiative"]')?.addEventListener("click", () => {
         const input = card.querySelector<HTMLInputElement>('[data-action="initiative"]');
@@ -893,13 +1017,63 @@ export class GmApp {
     if (!this.runtime.selectMiniature) return;
     try {
       const miniature = await this.runtime.selectMiniature();
-      await this.apply({ kind: "set-talespire-creature", combatantId, creatureId: miniature.creatureId });
+      const encounter = this.requireEncounter();
+      await this.execute(() => this.application.associateMiniature({
+        encounterId: encounter.id,
+        combatantId,
+        miniature,
+        expectedEncounterRevision: encounter.revision,
+        expectedCampaignChecksum: this.requireSnapshot().checksum,
+      }), "Miniatura asociada.");
       this.message = { kind: "success", text: `Miniatura “${miniature.displayName}” vinculada al combatiente.` };
       this.render();
     } catch (error) {
       this.message = { kind: "error", text: this.formatError(error) };
       this.render();
     }
+  }
+
+  private async unlinkMiniature(combatantId: string): Promise<void> {
+    const encounter = this.requireEncounter();
+    await this.execute(() => this.application.associateMiniature({
+      encounterId: encounter.id,
+      combatantId,
+      miniature: null,
+      expectedEncounterRevision: encounter.revision,
+      expectedCampaignChecksum: this.requireSnapshot().checksum,
+    }), "Miniatura desvinculada.");
+  }
+
+  private async associateMonster(combatantId: string, monster: MonsterDefinition): Promise<void> {
+    const encounter = this.requireEncounter();
+    await this.execute(() => this.application.associateMonster({
+      encounterId: encounter.id,
+      combatantId,
+      monster: {
+        definitionId: monster.id,
+        name: monster.name,
+        armorClass: monster.armorClass,
+        hitPoints: monster.hitPoints,
+      },
+      expectedEncounterRevision: encounter.revision,
+      expectedCampaignChecksum: this.requireSnapshot().checksum,
+    }), `Monstruo ${monster.name} asociado.`);
+  }
+
+  private openMonsterEditor(monster: MonsterDefinition): void {
+    this.activeSection = "content";
+    this.activeContentKind = "monster";
+    const custom = this.customMonsters.find((candidate) => candidate.id === monster.id || candidate.name === monster.name);
+    if (custom) {
+      this.selectedCustomMonsterKey = custom.name;
+      this.editingCustomMonsterKey = custom.name;
+      this.monsterTemplate = null;
+    } else {
+      this.selectedCustomMonsterKey = null;
+      this.editingCustomMonsterKey = "__new__";
+      this.monsterTemplate = structuredClone(monster);
+    }
+    this.render();
   }
 
   private apply(action: Parameters<EncounterApplication["apply"]>[0]["action"]): Promise<void> {
@@ -1048,6 +1222,7 @@ export class GmApp {
       "set-initiative": "Actualizar iniciativa", "remove-combatant": "Quitar combatiente", damage: "Aplicar daño", heal: "Curar combatiente",
       "grant-temporary-hit-points": "Agregar PG temporales", "set-visibility": "Cambiar visibilidad", "add-condition": "Agregar condición", "remove-condition": "Quitar condición",
       "set-talespire-creature": "Cambiar miniatura de TaleSpire",
+      "set-monster-association": "Cambiar monstruo asociado",
       "add-combatant": "Agregar combatiente", "update-combatant-stats": "Actualizar estadísticas", "synchronize-talespire-initiative": "Sincronizar iniciativa de TaleSpire",
     };
     return labels[action.kind] ?? "Actualizar encuentro";
@@ -1078,6 +1253,7 @@ export class GmApp {
     const list = (key: string): string[] => data.getAll(key).flatMap((value) => String(value).split(/[,\r\n]+/)).map((entry) => entry.trim()).filter(Boolean);
     const previousKey = this.editingCustomMonsterKey === "__new__" ? null : this.editingCustomMonsterKey ?? this.selectedCustomMonsterKey ?? duplicate?.name ?? null;
     const existing = previousKey ? this.customMonsters.find((monster) => monster.name === previousKey) ?? null : null;
+    const sourceDefinitionId = existing?.id ?? this.monsterTemplate?.id ?? null;
     const definition = normalizeMonsterDefinition({
       Id: name,
       Name: name,
@@ -1106,6 +1282,14 @@ export class GmApp {
       if (draftKey) this.formDrafts.clear(draftKey);
       this.customMonsters = [...this.customMonsters.filter((monster) =>
         monster.name !== previousKey && monster.name.toLocaleLowerCase() !== definition.name.toLocaleLowerCase()), definition];
+      if (this.snapshot && sourceDefinitionId) {
+        this.snapshot = await this.application.refreshMonsterDefinition(sourceDefinitionId, {
+          definitionId: definition.id,
+          name: definition.name,
+          armorClass: definition.armorClass,
+          hitPoints: definition.hitPoints,
+        }, this.snapshot.checksum);
+      }
       this.toolsPanel.syncMonsterInventory(definition);
       this.selectedCustomMonsterKey = definition.name;
       this.editingCustomMonsterKey = null;
@@ -1175,11 +1359,44 @@ export class GmApp {
     }), `Estadísticas de ${received.summary.name} actualizadas.`);
   }
 
+  private async refreshSelectedEncounterCharacters(encounterId: string): Promise<void> {
+    try {
+      const snapshot = await this.application.synchronizeCharacters(
+        this.requireSnapshot().checksum,
+        new Date().toISOString(),
+        encounterId,
+      );
+      if (this.selectedEncounterId !== encounterId) return;
+      this.snapshot = snapshot;
+      this.render();
+      const encounter = snapshot.campaign.encounters[encounterId];
+      if (encounter) await this.runtime.publishEncounter?.(encounter);
+    } catch (error) {
+      this.message = { kind: "error", text: this.formatError(error) };
+      this.snapshot = await this.application.loadCampaign();
+      this.selectAvailableEncounter();
+      this.render();
+    }
+  }
+
   private async applyReceivedInitiative(clientId: string, initiative: number, characterId: string | null): Promise<void> {
     const encounter = this.selectedEncounterId ? this.snapshot?.campaign.encounters[this.selectedEncounterId] : null;
     const summaryCharacterId = this.playerSummaries.get(clientId)?.characterId ?? null;
     const combatant = encounter ? findPlayerInitiativeCombatant(encounter, clientId, characterId, summaryCharacterId) : null;
     if (encounter && combatant) await this.apply({ kind: "set-initiative", combatantId: combatant.id, initiative });
+  }
+
+  private async handleResolvedDiceResult(result: { name: string; total: number }): Promise<void> {
+    this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
+    const pending = this.pendingInitiativeRolls.get(result.name);
+    const combatantId = pending?.shift();
+    if (pending && pending.length === 0) this.pendingInitiativeRolls.delete(result.name);
+    const encounter = this.selectedEncounterId ? this.snapshot?.campaign.encounters[this.selectedEncounterId] : null;
+    if (combatantId && encounter?.combatants.some((combatant) => combatant.id === combatantId)) {
+      await this.apply({ kind: "set-initiative", combatantId, initiative: result.total });
+      return;
+    }
+    this.render();
   }
 
   private async rollCombatantInitiative(combatantId: string): Promise<void> {
@@ -1192,14 +1409,23 @@ export class GmApp {
       : null;
     const modifier = monster?.initiativeModifier ?? (character ? projectCharacterStatistics(character).initiativeModifier : 0);
     try {
+      const rollName = `Iniciativa: ${combatant.name}`;
       const result = await this.runtime.diceRoller.roll({
-        name: `Iniciativa: ${combatant.name}`,
+        name: rollName,
         expressions: [`1d20${modifier >= 0 ? "+" : ""}${modifier}`],
         mode: monster?.initiativeAdvantage ? "advantage" : "normal",
       });
-      const initiative = result.totals[0];
       this.appendActionLog(`Iniciativa de ${combatant.name}: ${result.summary}`, "roll");
-      if (initiative !== undefined) await this.apply({ kind: "set-initiative", combatantId, initiative });
+      const initiative = result.totals[0];
+      if (initiative !== undefined) {
+        await this.apply({ kind: "set-initiative", combatantId, initiative });
+      } else if (result.kind === "submitted") {
+        const pending = this.pendingInitiativeRolls.get(rollName) ?? [];
+        pending.push(combatantId);
+        this.pendingInitiativeRolls.set(rollName, pending);
+        this.message = { kind: "success", text: "Tirada enviada a TaleSpire; la iniciativa se guardará al resolverse." };
+        this.render();
+      }
     } catch (error) {
       this.message = { kind: "error", text: this.formatError(error) };
       this.render();

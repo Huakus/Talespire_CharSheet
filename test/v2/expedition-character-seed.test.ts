@@ -81,7 +81,7 @@ describe("expedition character seed", () => {
       revision: 0,
       characters: Object.fromEntries(characters.map((character) => [character.id, character])),
       encounters: {},
-      gm: { noteGroups: [], randomTables: [], googleDocsUrl: "" },
+      gm: { noteGroups: [], randomTables: [], googleDocsUrl: "", miniatureAssociations: {} },
       metadata: { createdAt, updatedAt: createdAt },
     };
     const fragments = fragmentCampaign(campaign).map((fragment) => ({ ...fragment, revision: 0 }));

@@ -1810,6 +1810,29 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .gm-combatant-search-results button { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; width: 100%; text-align: left; }
 .gm-combatant-search-results button small { color: var(--ui-text-muted); }
 .gm-combatant-search-results button.selected { border-color: var(--gm-color, #c5ad6a); }
+.gm-combatant-search-results button[hidden], .gm-card-monster-results button[hidden] { display: none !important; }
+.gm-initiative-order-warning { display: grid; gap: 2px; padding: 8px 10px; color: var(--ui-warning-text, #f3d58a); background: color-mix(in srgb, #d49a35 14%, var(--ui-bg-surface)); border: 1px solid color-mix(in srgb, #d49a35 58%, var(--ui-border)); border-radius: 5px; }
+.gm-initiative-order-warning strong { font-size: .72rem; }
+.gm-initiative-order-warning ul { display: grid; gap: 3px; margin: 2px 0 0; padding-left: 18px; }
+.gm-initiative-order-warning li { color: var(--ui-text-muted); font-size: .64rem; }
+.gm-combatant.missing-monster { border-left-color: #d49a35; }
+.gm-summary-meta i.warning { color: #f3d58a; border-color: #a56d24; }
+.gm-card-associations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.gm-association-panel { display: grid; align-content: start; gap: 5px; min-width: 0; padding: 7px; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-radius: 5px; }
+.gm-association-panel.linked { border-color: color-mix(in srgb, var(--ui-success) 48%, var(--ui-border-subtle)); }
+.gm-association-panel.missing { border-color: color-mix(in srgb, #d49a35 58%, var(--ui-border-subtle)); }
+.gm-association-panel > small { color: var(--ui-text-faint); font-size: .58rem; text-transform: uppercase; }
+.gm-association-panel > strong { overflow: hidden; color: var(--ui-text); font-size: .7rem; text-overflow: ellipsis; white-space: nowrap; }
+.gm-association-panel > div { display: flex; flex-wrap: wrap; gap: 4px; }
+.gm-monster-association-picker > summary { color: var(--character-color); cursor: pointer; font-size: .62rem; font-weight: 800; }
+.gm-monster-association-picker > div { display: grid; gap: 4px; margin-top: 5px; }
+.gm-monster-association-picker input { width: 100%; }
+.gm-card-monster-results { display: grid; gap: 3px; max-height: 190px; overflow-y: auto; }
+.gm-card-monster-results button { display: flex; justify-content: space-between; gap: 7px; text-align: left; }
+.gm-card-monster-results button small { color: var(--ui-text-muted); }
+.gm-association-warning, .gm-linked-remove-notice { margin: 0; padding: 5px 7px; color: #f3d58a; background: color-mix(in srgb, #d49a35 10%, transparent); border-radius: 4px; font-size: .62rem; }
+.gm-linked-remove-notice { color: var(--ui-text-muted); background: var(--ui-bg-sunken); }
+.gm-ts-turn-notice { margin-right: auto; color: var(--ui-text-muted); font-size: .62rem; }
 .gm-participant-sheet, .gm-monster-details { margin-top: 7px; border: 1px solid var(--ui-border-subtle); border-radius: 5px; padding: 7px; }
 .gm-participant-sheet > summary, .gm-monster-details > summary { cursor: pointer; font-weight: 700; }
 .gm-participant-sheet .gm-abilities { display: grid; grid-template-columns: repeat(6, minmax(70px, 1fr)); gap: 4px; margin: 7px 0; }
@@ -1876,4 +1899,5 @@ dialog { color: var(--ui-text); }
   .gm-encounter-board .gm-combatant-hp-readout { grid-column: 1 / -1; width: 100%; }
   .gm-character-state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gm-character-ability-strip { grid-template-columns: repeat(3, minmax(54px, 1fr)) !important; }
+  .gm-card-associations { grid-template-columns: 1fr; }
 }
