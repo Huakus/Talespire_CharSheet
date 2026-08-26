@@ -17,7 +17,7 @@ describe("character colors and activatable effects", () => {
         unitWeight: 0, cost: { quantity: 0, unit: "" }, category: "wondrous-item",
         description: "", properties: [], equipped: false, attuned: false,
         requiresAttunement: false, usable: false, consumable: false, charges: null,
-        armor: null, weapon: null, bonuses: [], effect: { description: "", active: false }, catalog: null,
+        armor: null, weapon: null, bonuses: [], features: [], effect: { description: "", active: false }, catalog: null,
       }];
       character.traits = [{
         id: "trait-group-features", order: 0, title: "Features", collapsed: false,

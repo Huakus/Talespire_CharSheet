@@ -18,7 +18,7 @@ function characterFixture() {
         weapon: { category: "Simple", range: "Melee", normalRange: 5, longRange: null,
           damageExpression: "1d4", versatileDamageExpression: "", damageType: "Piercing",
           attackBonus: 0, damageBonus: 0 },
-        bonuses: [], effect: { description: "", active: false }, catalog: null,
+        bonuses: [], features: [], effect: { description: "", active: false }, catalog: null,
       },
       {
         id: "item-ring", order: 1, group: "equipment", name: "Ring", quantity: 1,
@@ -26,7 +26,7 @@ function characterFixture() {
         description: "", properties: ["attunement"], equipped: true, attuned: true,
         requiresAttunement: true, usable: true, consumable: false,
         charges: { current: 2, maximum: 3, reset: "long-rest" }, armor: null, weapon: null,
-        bonuses: [], effect: { description: "", active: false }, catalog: null,
+        bonuses: [], features: [], effect: { description: "", active: false }, catalog: null,
       },
     ];
   } });
@@ -156,5 +156,66 @@ describe("inventory", () => {
       expectedCampaignChecksum: unequipped.checksum,
       updatedAt: "2026-07-25T18:05:00.000Z",
     })).rejects.toThrow("debe estar equipado");
+  });
+
+  it("uses structured item capabilities with charges, own uses and conditional bonuses", async () => {
+    const repository = new InMemoryCampaignRepository();
+    const application = new CampaignApplication(repository);
+    const character = characterFixture();
+    const ring = character.inventory.find((item) => item.name === "Ring")!;
+    ring.features = [{
+      id: "feature-shadow-step",
+      order: 0,
+      kind: "bonus-action",
+      name: "Paso entre sombras",
+      description: "Teletransportación breve.",
+      active: false,
+      toggleable: true,
+      showInActions: true,
+      chargeCost: 1,
+      uses: { current: 2, maximum: 2, reset: "long-rest" },
+      rolls: [{ label: "Daño", expression: "1d6", mode: "normal" }],
+      bonuses: [{ category: "combatStats", key: "AC", value: 2, valueSource: null, advantage: false, disadvantage: false }],
+    }];
+    const initial = await repository.save(createTestCampaign({ id: "inventory-features", character }), { kind: "empty" });
+
+    expect(projectInventory(character).calculatedArmorClass).toBe(13);
+    const used = await application.useInventoryFeature({
+      characterId: character.id,
+      itemId: ring.id,
+      featureId: "feature-shadow-step",
+      expectedCharacterRevision: character.revision,
+      expectedCampaignChecksum: initial.checksum,
+      updatedAt: "2026-08-25T21:00:00.000Z",
+    });
+    const afterUse = used.campaign.characters[character.id]!;
+    expect(afterUse.inventory[1]).toMatchObject({
+      charges: { current: 1 },
+      features: [{ active: true, uses: { current: 1, maximum: 2 } }],
+    });
+    expect(projectInventory(afterUse).calculatedArmorClass).toBe(15);
+
+    const deactivated = await application.setInventoryFeatureActive({
+      characterId: character.id,
+      itemId: ring.id,
+      featureId: "feature-shadow-step",
+      value: false,
+      expectedCharacterRevision: afterUse.revision,
+      expectedCampaignChecksum: used.checksum,
+      updatedAt: "2026-08-25T21:01:00.000Z",
+    });
+    expect(projectInventory(deactivated.campaign.characters[character.id]!).calculatedArmorClass).toBe(13);
+
+    const reset = await application.resetInventoryCharges({
+      characterId: character.id,
+      reset: "long-rest",
+      expectedCharacterRevision: deactivated.campaign.characters[character.id]!.revision,
+      expectedCampaignChecksum: deactivated.checksum,
+      updatedAt: "2026-08-25T21:02:00.000Z",
+    });
+    expect(reset.campaign.characters[character.id]!.inventory[1]).toMatchObject({
+      charges: { current: 3 },
+      features: [{ uses: { current: 2, maximum: 2 } }],
+    });
   });
 });

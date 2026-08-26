@@ -7,6 +7,7 @@ import {
 import type { CharacterActionV2 } from "./character-action-model";
 import type { CharacterSpellV2, SpellcastingAbility } from "./character-spell-model";
 import type { RollMode } from "./character-checks";
+import type { InventoryBonus } from "./character-inventory-model";
 
 export type AbilityKey = keyof CharacterV2["abilities"];
 
@@ -22,10 +23,21 @@ function normalizedKey(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function activeInventoryBonuses(character: CharacterV2) {
+function inventoryBonusAmount(character: CharacterV2, bonus: InventoryBonus): number {
+  return bonus.valueSource === null
+    ? bonus.value
+    : abilityModifier(character.abilities[bonus.valueSource]);
+}
+
+function activeInventoryBonuses(character: CharacterV2): InventoryBonus[] {
   return character.inventory
     .filter((item) => item.equipped && (!item.requiresAttunement || item.attuned))
-    .flatMap((item) => item.bonuses);
+    .flatMap((item) => [
+      ...item.bonuses,
+      ...item.features
+        .filter((feature) => feature.kind === "passive" || feature.active)
+        .flatMap((feature) => feature.bonuses),
+    ]);
 }
 
 function inventoryBonus(character: CharacterV2, category: string, keys: readonly string[]): number {
@@ -33,7 +45,7 @@ function inventoryBonus(character: CharacterV2, category: string, keys: readonly
   const normalizedKeys = new Set(["all", ...keys.map(normalizedKey)]);
   return activeInventoryBonuses(character)
     .filter((bonus) => normalizedKey(bonus.category) === normalizedCategory && normalizedKeys.has(normalizedKey(bonus.key)))
-    .reduce((total, bonus) => total + bonus.value, 0);
+    .reduce((total, bonus) => total + inventoryBonusAmount(character, bonus), 0);
 }
 
 function traitBonus(character: CharacterV2, category: string, keys: readonly string[]): number {
@@ -223,11 +235,9 @@ export function projectInventory(character: CharacterV2): InventoryProjection {
   const shieldBonus = character.inventory
     .filter((item) => item.equipped && item.category === "shield")
     .reduce((total, item) => total + (item.armor?.base ?? 2), 0);
-  const carryWeightBonus = character.inventory
-    .filter((item) => item.equipped && (!item.requiresAttunement || item.attuned))
-    .flatMap((item) => item.bonuses)
+  const carryWeightBonus = activeInventoryBonuses(character)
     .filter((bonus) => bonus.category === "combatStats" && bonus.key === "CarryWeightBonus")
-    .reduce((total, bonus) => total + bonus.value, 0);
+    .reduce((total, bonus) => total + inventoryBonusAmount(character, bonus), 0);
   const totalWeight = character.inventory.reduce(
     (total, item) => total + item.unitWeight * item.quantity,
     0,
@@ -267,19 +277,17 @@ function normalizedSpellcastingAbility(value: string | null): SpellcastingAbilit
 export function projectSpellcasting(character: CharacterV2): SpellcastingProjection {
   const ability = normalizedSpellcastingAbility(character.spellcasting.ability);
   const modifier = ability === null ? 0 : projectedAbilityModifier(character, ability);
-  const activeBonuses = character.inventory
-    .filter((item) => item.equipped && (!item.requiresAttunement || item.attuned))
-    .flatMap((item) => item.bonuses)
+  const activeBonuses = activeInventoryBonuses(character)
     .filter((bonus) => bonus.category === "combatStats");
   const sharedBonus = activeBonuses
     .filter((bonus) => bonus.key === "SpellAttackandSave")
-    .reduce((total, bonus) => total + bonus.value, 0);
+    .reduce((total, bonus) => total + inventoryBonusAmount(character, bonus), 0);
   const attackBonus = activeBonuses
     .filter((bonus) => bonus.key === "SpellAttack" || bonus.key === "SpellAttackModifier")
-    .reduce((total, bonus) => total + bonus.value, 0);
+    .reduce((total, bonus) => total + inventoryBonusAmount(character, bonus), 0);
   const saveBonus = activeBonuses
     .filter((bonus) => bonus.key === "SpellSaveDC")
-    .reduce((total, bonus) => total + bonus.value, 0);
+    .reduce((total, bonus) => total + inventoryBonusAmount(character, bonus), 0);
   const proficiency = proficiencyBonus(character.identity.level);
   return {
     ability,

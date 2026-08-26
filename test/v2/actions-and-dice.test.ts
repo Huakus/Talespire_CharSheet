@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CampaignApplication } from "../../src/application/campaign/campaign-application";
 import {
   normalizeDiceExpression,
+  normalizeRollShortcut,
   parseDiceExpression,
 } from "../../src/domain/dice/dice-expression";
 import { projectActionAttackModifier } from "../../src/domain/character/character-projection";
@@ -76,6 +77,8 @@ describe("dice", () => {
       { sign: -1, count: 3, sides: null },
     ]);
     expect(normalizeDiceExpression("d20 + 4")).toBe("1d20+4");
+    expect(normalizeRollShortcut("+7")).toBe("1d20+7");
+    expect(normalizeRollShortcut("-2")).toBe("1d20-2");
     expect(() => parseDiceExpression("2d6++4")).toThrow();
   });
 

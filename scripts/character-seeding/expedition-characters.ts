@@ -144,9 +144,9 @@ async function buildInventory(characterId: string, blueprint: Blueprint): Promis
             ? { category: "Marcial", range: "Cuerpo a cuerpo", normalRange: null, longRange: null, damageExpression: "1d8", versatileDamageExpression: "", damageType: "Perforante", attackBonus: 1, damageBonus: 1 }
             : null;
     const bonuses = isEdrickArmor || isMaelionArmor
-      ? [{ category: "combatStats", key: "AC", value: 1, advantage: false, disadvantage: false }]
+      ? [{ category: "combatStats", key: "AC", value: 1, valueSource: null, advantage: false, disadvantage: false }]
       : isShield
-        ? [{ category: "combatStats", key: "AC", value: 1, advantage: false, disadvantage: false }]
+        ? [{ category: "combatStats", key: "AC", value: 1, valueSource: null, advantage: false, disadvantage: false }]
         : [];
     const charges = isDossLute || isPearl ? { current: 1, maximum: 1, reset: "dawn" } : null;
     const description = source.note ?? (
@@ -183,6 +183,7 @@ async function buildInventory(characterId: string, blueprint: Blueprint): Promis
       armor,
       weapon,
       bonuses,
+      features: [],
       effect: { ...emptyEffect },
       catalog: catalogMetadata(source.catalogKey),
     });

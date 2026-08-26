@@ -78,6 +78,23 @@ function number(value: JsonValue | undefined): number {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
 }
 
+function signedInteger(value: JsonValue | undefined): number {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.trunc(parsed) : 0;
+}
+
+function bonusAbility(value: JsonValue | undefined): "strength" | "dexterity" | "constitution" | "intelligence" | "wisdom" | "charisma" | null {
+  const abilities = {
+    str: "strength", strength: "strength", fue: "strength",
+    dex: "dexterity", dexterity: "dexterity", des: "dexterity",
+    con: "constitution", constitution: "constitution",
+    int: "intelligence", intelligence: "intelligence",
+    wis: "wisdom", wisdom: "wisdom", sab: "wisdom",
+    cha: "charisma", charisma: "charisma", car: "charisma",
+  } as const;
+  return abilities[String(value ?? "").trim().toLocaleLowerCase() as keyof typeof abilities] ?? null;
+}
+
 function boolean(value: JsonValue | undefined): boolean {
   return value === true || value === 1 || ["true", "yes", "sí", "si"].includes(String(value ?? "").trim().toLocaleLowerCase());
 }
@@ -133,16 +150,36 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
   const properties = Array.isArray(data.properties)
     ? data.properties.map((entry) => text(object(entry).name || object(entry).index)).filter(Boolean)
     : [];
-  const bonuses = (Array.isArray(data.bonus) ? data.bonus : Array.isArray(data.bonuses) ? data.bonuses : [])
-    .map((entry) => object(entry))
+  const rawBonuses = (Array.isArray(data.bonus) ? data.bonus : Array.isArray(data.bonuses) ? data.bonuses : [])
+    .map((entry) => object(entry));
+  const bonuses = rawBonuses
     .map((entry) => ({
       category: text(entry.category),
       key: text(entry.key),
-      value: Number(entry.value) || 0,
+      value: bonusAbility(entry.value) === null ? signedInteger(entry.value) : 0,
+      valueSource: bonusAbility(entry.value),
       advantage: Boolean(entry.advantage),
       disadvantage: Boolean(entry.disadvantage),
     }))
     .filter((entry) => entry.category.length > 0 && entry.key.length > 0);
+  const features = rawBonuses.flatMap((entry, index) => {
+    const detail = text(entry.description).trim();
+    if (!detail) return [];
+    return [{
+      id: `legacy-bonus-${index}`,
+      order: index,
+      kind: "passive" as const,
+      name: text(entry.key).trim() || `Bono ${index + 1}`,
+      description: detail,
+      active: false,
+      toggleable: false,
+      showInActions: false,
+      chargeCost: 0,
+      uses: null,
+      rolls: [],
+      bonuses: [],
+    }];
+  });
   const categoryKey = text(category.index || data.category).toLowerCase();
   const isWeapon = categoryKey.includes("weapon") || damage.damage_dice !== undefined;
   const isArmor = categoryKey.includes("armor") || armorClass.base !== undefined;
@@ -183,10 +220,11 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
       damageExpression: text(damage.damage_dice),
       versatileDamageExpression: text(object(data.two_handed_damage).damage_dice),
       damageType: text(damageType.name || damageType.index),
-      attackBonus: 0,
-      damageBonus: 0,
+      attackBonus: signedInteger(data.toHitBonus ?? data.attackBonus),
+      damageBonus: signedInteger(data.damageBonus),
     } : null,
     bonuses,
+    features,
     effect: { description: "", active: false },
     catalog: null,
   };

@@ -40,3 +40,11 @@ export function normalizeDiceExpression(expression: string): string {
     return `${sign}${term.sides === null ? term.count : `${term.count}d${term.sides}`}`;
   }).join("");
 }
+
+export function normalizeRollShortcut(expression: string): string {
+  const trimmed = expression.trim();
+  if (/^[+-]\s*\d+$/.test(trimmed)) {
+    return normalizeDiceExpression(`1d20${trimmed.replaceAll(" ", "")}`);
+  }
+  return normalizeDiceExpression(trimmed);
+}

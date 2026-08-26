@@ -27,9 +27,11 @@ import {
   inventoryItemsCanStack,
   removeInventoryItem,
   resetInventoryCharges,
+  setInventoryFeatureActive,
   setInventoryItemAttuned,
   setInventoryItemEquipped,
   upsertInventoryItem,
+  useInventoryFeature,
   useInventoryItem,
   type CharacterInventoryItemDraft,
   type CharacterInventoryItemV2,
@@ -185,6 +187,14 @@ export interface InventoryItemCommand {
   expectedCharacterRevision: number;
   expectedCampaignChecksum: string;
   updatedAt?: string;
+}
+
+export interface InventoryFeatureCommand extends InventoryItemCommand {
+  featureId: string;
+}
+
+export interface SetInventoryFeatureStateCommand extends InventoryFeatureCommand {
+  value: boolean;
 }
 
 export interface SetInventoryItemStateCommand extends InventoryItemCommand {
@@ -585,11 +595,27 @@ export class CampaignApplication {
     const character = current.campaign.characters[command.characterId]!;
     const updatedAt = command.updatedAt ?? new Date().toISOString();
     const draft = CharacterInventoryItemDraftSchema.parse(command.item);
-    const inventoryCharacter = upsertInventoryItem(
+    let inventoryCharacter = upsertInventoryItem(
       character,
       { ...draft, id: command.itemId ?? await createRandomId("inv") },
       { expectedRevision: command.expectedCharacterRevision, updatedAt },
     );
+    const savedItem = inventoryCharacter.inventory.find((item) => item.id === command.itemId);
+    const linkedAction = command.itemId
+      ? inventoryCharacter.actions.find((action) => action.inventoryItemId === command.itemId)
+      : undefined;
+    if (savedItem && linkedAction) {
+      inventoryCharacter = CharacterV2Schema.parse({
+        ...inventoryCharacter,
+        actions: savedItem.weapon === null
+          ? inventoryCharacter.actions.filter((action) => action.inventoryItemId !== savedItem.id)
+          : inventoryCharacter.actions.map((action) => action.id !== linkedAction.id ? action : {
+              ...this.actionFromInventoryItem(inventoryCharacter, savedItem, linkedAction.id),
+              order: linkedAction.order,
+              rollMode: linkedAction.rollMode,
+            }),
+      });
+    }
     const updatedCharacter = this.itemAffectsArmorClass(draft)
       ? this.withProjectedArmorClass(inventoryCharacter)
       : inventoryCharacter;
@@ -692,6 +718,35 @@ export class CampaignApplication {
         updatedAt,
       }),
     );
+  }
+
+  async useInventoryFeature(
+    command: InventoryFeatureCommand,
+  ): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => {
+      const item = character.inventory.find((entry) => entry.id === command.itemId);
+      const updated = useInventoryFeature(character, command.itemId, command.featureId, {
+        expectedRevision: command.expectedCharacterRevision,
+        updatedAt,
+      });
+      return item && this.itemAffectsArmorClass(item) ? this.withProjectedArmorClass(updated) : updated;
+    });
+  }
+
+  async setInventoryFeatureActive(
+    command: SetInventoryFeatureStateCommand,
+  ): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => {
+      const item = character.inventory.find((entry) => entry.id === command.itemId);
+      const updated = setInventoryFeatureActive(
+        character,
+        command.itemId,
+        command.featureId,
+        command.value,
+        { expectedRevision: command.expectedCharacterRevision, updatedAt },
+      );
+      return item && this.itemAffectsArmorClass(item) ? this.withProjectedArmorClass(updated) : updated;
+    });
   }
 
   async adjustInventoryItemQuantity(
@@ -1168,7 +1223,9 @@ export class CampaignApplication {
 
   private itemAffectsArmorClass(item: CharacterInventoryItemDraft): boolean {
     return item.armor !== null || item.category === "armor" || item.category === "shield" ||
-      item.bonuses.some((bonus) => bonus.category === "combatStats" && bonus.key === "AC");
+      item.bonuses.some((bonus) => bonus.category === "combatStats" && bonus.key === "AC") ||
+      item.features.some((feature) => feature.bonuses.some((bonus) =>
+        bonus.category === "combatStats" && bonus.key === "AC"));
   }
 
   private async persistUpdatedCharacter(

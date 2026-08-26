@@ -40,6 +40,13 @@ export class InventoryEquipmentError extends Error {
   }
 }
 
+export class InventoryFeatureUseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "InventoryFeatureUseError";
+  }
+}
+
 interface InventoryMutationOptions {
   expectedRevision: number;
   updatedAt: string;
@@ -201,6 +208,9 @@ export function setInventoryItemEquipped(
         quantity: equipped ? 1 : item.quantity,
         equipped,
         attuned: equipped ? item.attuned : false,
+        features: equipped
+          ? item.features
+          : item.features.map((feature) => ({ ...feature, active: false })),
       };
       return equipped && item.quantity > 1
         ? [equippedItem, {
@@ -214,7 +224,12 @@ export function setInventoryItemEquipped(
         : [equippedItem];
     }
     if (equipped && targetSlot !== null && inventoryEquipmentSlot(item) === targetSlot) {
-      return [{ ...item, equipped: false, attuned: false }];
+      return [{
+        ...item,
+        equipped: false,
+        attuned: false,
+        features: item.features.map((feature) => ({ ...feature, active: false })),
+      }];
     }
     return [item];
   });
@@ -243,7 +258,13 @@ export function setInventoryItemAttuned(
   return finish(
     character,
     character.inventory.map((item) =>
-      item.id === itemId ? { ...item, attuned } : item,
+      item.id === itemId ? {
+        ...item,
+        attuned,
+        features: attuned
+          ? item.features
+          : item.features.map((feature) => ({ ...feature, active: false })),
+      } : item,
     ),
     updatedAt,
   );
@@ -292,6 +313,97 @@ export function useInventoryItem(
   );
 }
 
+export function setInventoryFeatureActive(
+  input: CharacterV2,
+  itemIdInput: string,
+  featureId: string,
+  active: boolean,
+  options: InventoryMutationOptions,
+): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options);
+  const itemId = StableIdSchema.parse(itemIdInput);
+  const item = character.inventory.find((entry) => entry.id === itemId);
+  if (!item) throw new InventoryItemNotFoundError(itemId);
+  const feature = item.features.find((entry) => entry.id === featureId);
+  if (!feature) throw new InventoryFeatureUseError("La capacidad ya no existe en el objeto");
+  if (!feature.toggleable && active) {
+    throw new InventoryFeatureUseError("La capacidad no mantiene un estado activo");
+  }
+  if (active && (!item.equipped || (item.requiresAttunement && !item.attuned))) {
+    throw new InventoryFeatureUseError("El objeto debe estar equipado y, cuando corresponda, sintonizado");
+  }
+  return finish(character, character.inventory.map((entry) => entry.id !== itemId ? entry : {
+    ...entry,
+    features: entry.features.map((candidate) => candidate.id === featureId
+      ? { ...candidate, active }
+      : candidate),
+  }), updatedAt);
+}
+
+export function useInventoryFeature(
+  input: CharacterV2,
+  itemIdInput: string,
+  featureId: string,
+  options: InventoryMutationOptions,
+): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options);
+  const itemId = StableIdSchema.parse(itemIdInput);
+  const item = character.inventory.find((entry) => entry.id === itemId);
+  if (!item) throw new InventoryItemNotFoundError(itemId);
+  const feature = item.features.find((entry) => entry.id === featureId);
+  if (!feature) throw new InventoryFeatureUseError("La capacidad ya no existe en el objeto");
+  if (!item.equipped && !item.consumable) {
+    throw new InventoryFeatureUseError("El objeto debe estar equipado para usar esta capacidad");
+  }
+  if (item.requiresAttunement && !item.attuned) {
+    throw new InventoryFeatureUseError("El objeto debe estar sintonizado para usar esta capacidad");
+  }
+  if (feature.toggleable && feature.active) {
+    throw new InventoryFeatureUseError("La capacidad ya está activa");
+  }
+  if (feature.chargeCost > 0 && (item.charges === null || item.charges.current < feature.chargeCost)) {
+    throw new InventoryFeatureUseError(`Se necesitan ${feature.chargeCost} carga(s) para usar ${feature.name}`);
+  }
+  if (feature.uses !== null && feature.uses.current < 1) {
+    throw new InventoryFeatureUseError(`${feature.name} no tiene usos disponibles`);
+  }
+
+  return finish(character, character.inventory.map((entry) => {
+    if (entry.id !== itemId) return entry;
+    return {
+      ...entry,
+      charges: entry.charges === null || feature.chargeCost === 0
+        ? entry.charges
+        : { ...entry.charges, current: entry.charges.current - feature.chargeCost },
+      features: entry.features.map((candidate) => candidate.id !== featureId ? candidate : {
+        ...candidate,
+        active: candidate.toggleable ? true : candidate.active,
+        uses: candidate.uses === null
+          ? null
+          : { ...candidate.uses, current: candidate.uses.current - 1 },
+      }),
+    };
+  }), updatedAt);
+}
+
+export function resetInventoryItemResources(
+  item: CharacterInventoryItemV2,
+  reset: string,
+): CharacterInventoryItemV2 {
+  return CharacterInventoryItemV2Schema.parse({
+    ...item,
+    charges: item.charges !== null && item.charges.reset === reset
+      ? { ...item.charges, current: item.charges.maximum }
+      : item.charges,
+    features: item.features.map((feature) => ({
+      ...feature,
+      uses: feature.uses !== null && feature.uses.reset === reset
+        ? { ...feature.uses, current: feature.uses.maximum }
+        : feature.uses,
+    })),
+  });
+}
+
 export function resetInventoryCharges(
   input: CharacterV2,
   reset: string,
@@ -300,11 +412,7 @@ export function resetInventoryCharges(
   const { character, updatedAt } = prepare(input, options);
   return finish(
     character,
-    character.inventory.map((item) =>
-      item.charges !== null && item.charges.reset === reset
-        ? { ...item, charges: { ...item.charges, current: item.charges.maximum } }
-        : item,
-    ),
+    character.inventory.map((item) => resetInventoryItemResources(item, reset)),
     updatedAt,
   );
 }

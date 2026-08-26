@@ -34,6 +34,7 @@ export function inventoryViewIsVisible(
   const haystack = inventoryViewNormalized([
     item.name, item.category, rarity, item.description,
     item.weapon?.category ?? "", item.weapon?.damageType ?? "", item.armor?.armorCategory ?? "",
+    ...item.features.flatMap((feature) => [feature.name, feature.description, ...feature.rolls.map((roll) => `${roll.label} ${roll.expression}`)]),
     ...item.properties, ...tags,
   ].join(" "));
   const query = inventoryViewNormalized(state.search);

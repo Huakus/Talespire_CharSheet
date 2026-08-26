@@ -58,10 +58,38 @@ describe("equipment catalog and bonuses", () => {
         order: 0,
         group: "equipment",
         equipped: true,
-        bonuses: [{ category: "skills", key: "Perception", value: 0, advantage: true, disadvantage: false }],
+        bonuses: [{ category: "skills", key: "Perception", value: 0, valueSource: null, advantage: true, disadvantage: false }],
       }],
     };
     expect(projectAdjustedRollMode(character, "skills", ["Perception"], "normal")).toBe("advantage");
+  });
+
+  it("preserves legacy magic bonuses, stat sources and weapon modifiers", () => {
+    const definition = normalizeEquipmentDefinition({
+      name: "Daga de fase",
+      equipment_category: { index: "weapon" },
+      damage: { damage_dice: "1d6", damage_type: { index: "force" } },
+      toHitBonus: "+2",
+      damageBonus: "-1",
+      bonuses: [{
+        category: "skills",
+        key: "Stealth",
+        value: "DEX",
+        description: "Ventaja al ocultarse entre sombras.",
+      }],
+    });
+
+    expect(definition.weapon).toMatchObject({ attackBonus: 2, damageBonus: -1 });
+    expect(definition.bonuses).toEqual([expect.objectContaining({
+      category: "skills",
+      key: "Stealth",
+      value: 0,
+      valueSource: "dexterity",
+    })]);
+    expect(definition.features).toEqual([expect.objectContaining({
+      kind: "passive",
+      description: "Ventaja al ocultarse entre sombras.",
+    })]);
   });
 
   it("applies condition roll modes and cancels opposing advantage", () => {

@@ -17,6 +17,13 @@ import { renderCheckboxGroup } from "./checkbox-group";
 import { inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
 import { renderUiEmptyState } from "./design-system/primitives";
 import { FormDraftStore } from "./form-draft-store";
+import {
+  bindInventoryStructuredEditors,
+  readInventoryFeatures,
+  readTopLevelInventoryBonuses,
+  renderInventoryBonusEditor,
+  renderInventoryFeatureEditor,
+} from "./inventory-capability-editor";
 
 export type GmSection = "encounter" | "content" | "lore" | "notes" | "tools";
 export type GmContentSection = "spell" | "equipment" | "shop";
@@ -283,7 +290,7 @@ export class GmToolsPanel {
   private renderEquipmentCard(item: EquipmentCatalogDraft): string {
     const meta = catalogMetadata(item);
     const tags = visibleCatalogTags(meta.tags);
-    const search = [item.name, item.category, item.rarity, item.description, ...item.properties, meta.origin, ...tags].join(" ").toLocaleLowerCase();
+    const search = [item.name, item.category, item.rarity, item.description, ...item.features.flatMap((feature) => [feature.name, feature.description]), ...item.properties, meta.origin, ...tags].join(" ").toLocaleLowerCase();
     return `<article class="inventory-row gm-catalog-card ${isCatalogFavorite(item) ? "favorite" : ""}" data-gm-content-card data-search="${escapeHtml(search)}"><header class="inventory-row-header"><div class="inventory-row-main"><div><strong>${escapeHtml(item.name)}</strong>${this.renderFavoriteButton("equipment", item.name, isCatalogFavorite(item))}</div><span class="inventory-category">${escapeHtml(item.category)}</span><span class="rarity-badge" data-rarity="${escapeHtml(normalizeEquipmentRarity(item.rarity))}">${escapeHtml(equipmentRarityLabel(item.rarity))}</span><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span></div>${this.renderCatalogCardActions("equipment", item.name)}</header><div class="inventory-row-stats"><span><small>Peso</small>${item.unitWeight} lb</span><span><small>Costo</small>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span>${item.weapon ? `<span><small>Daño</small>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.consumable ? "<span>Consumible</span>" : ""}</div>${tags.length ? `<div class="catalog-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(item.description || "Sin descripción.")}</p>` : ""}</article>`;
   }
 
@@ -304,7 +311,8 @@ export class GmToolsPanel {
   }
 
   private renderEquipmentView(item: EquipmentCatalogDraft): string {
-    return `<article class="gm-content-view"><div class="gm-content-facts"><span>${escapeHtml(item.category)}</span><span>Rareza <strong>${escapeHtml(equipmentRarityLabel(item.rarity))}</strong></span><span>Peso <strong>${item.unitWeight}</strong></span><span>Costo <strong>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</strong></span>${item.consumable ? "<span>Consumible</span>" : ""}${item.requiresAttunement ? "<span>Sintonización</span>" : ""}</div>${item.weapon ? `<p><b>Daño:</b> ${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</p>` : ""}${item.properties.length ? `<p><b>Propiedades:</b> ${escapeHtml(item.properties.join(", "))}</p>` : ""}<p>${escapeHtml(item.description || "Sin descripción.")}</p></article>`;
+    const features = item.features.length ? `<div class="gm-equipment-features">${[...item.features].sort((left, right) => left.order - right.order).map((feature) => `<section><header><strong>${escapeHtml(feature.name)}</strong><span>${escapeHtml(feature.kind)}</span></header>${feature.description.split(/\r?\n\s*\r?\n/).filter(Boolean).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}${feature.rolls.length ? `<div class="catalog-tags">${feature.rolls.map((roll) => `<span>${escapeHtml(roll.label)}: ${escapeHtml(roll.expression)}</span>`).join("")}</div>` : ""}</section>`).join("")}</div>` : "";
+    return `<article class="gm-content-view"><div class="gm-content-facts"><span>${escapeHtml(item.category)}</span><span>Rareza <strong>${escapeHtml(equipmentRarityLabel(item.rarity))}</strong></span><span>Peso <strong>${item.unitWeight}</strong></span><span>Costo <strong>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</strong></span>${item.consumable ? "<span>Consumible</span>" : ""}${item.requiresAttunement ? "<span>Sintonización</span>" : ""}</div>${item.weapon ? `<p><b>Daño:</b> ${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</p>` : ""}${item.properties.length ? `<p><b>Propiedades:</b> ${escapeHtml(item.properties.join(", "))}</p>` : ""}<p>${escapeHtml(item.description || "Sin descripción.")}</p>${features}</article>`;
   }
 
   private shopInventoryDefinition(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): EquipmentCatalogDraft | null {
@@ -384,7 +392,6 @@ export class GmToolsPanel {
 
   private renderEquipmentForm(item: EquipmentCatalogDraft | null): string {
     const kind = item?.weapon ? "weapon" : item?.armor ? "armor" : "gear";
-    const bonusText = item?.bonuses.map((bonus) => `${bonus.category} | ${bonus.key} | ${bonus.value} | ${bonus.advantage ? "ventaja" : ""} | ${bonus.disadvantage ? "desventaja" : ""}`).join("\n") ?? "";
     const meta = catalogMetadata(item);
     return `<form data-gm-form="equipment" class="gm-editor-form"><input type="hidden" name="previousKey" value="${escapeHtml(item?.name ?? "")}">
       <div class="catalog-editor-meta"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span><label>Etiquetas de campaña<input name="catalogTags" value="${escapeHtml(visibleCatalogTags(meta.tags).join(", "))}" placeholder="oficial, tesoro, mágico"></label></div>
@@ -392,7 +399,9 @@ export class GmToolsPanel {
       <fieldset><legend>Arma</legend><div class="gm-form-grid"><label>Categoría de arma<input name="weaponCategory" value="${escapeHtml(item?.weapon?.category ?? "")}"></label><label>Alcance/tipo<input name="weaponRange" value="${escapeHtml(item?.weapon?.range ?? "")}"></label><label>Alcance normal<input name="normalRange" type="number" min="0" value="${item?.weapon?.normalRange ?? ""}"></label><label>Alcance largo<input name="longRange" type="number" min="0" value="${item?.weapon?.longRange ?? ""}"></label><label>Daño<input name="damageExpression" value="${escapeHtml(item?.weapon?.damageExpression ?? "")}"></label><label>Daño versátil<input name="versatileDamageExpression" value="${escapeHtml(item?.weapon?.versatileDamageExpression ?? "")}"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, item?.weapon?.damageType ?? "", "Sin daño")}</select></label><label>Bono ataque<input name="attackBonus" type="number" step="1" value="${item?.weapon?.attackBonus ?? 0}"></label><label>Bono daño<input name="damageBonus" type="number" step="1" value="${item?.weapon?.damageBonus ?? 0}"></label></div></fieldset>
       <fieldset><legend>Armadura</legend><div class="gm-form-grid"><label>CA base<input name="armorBase" type="number" step="1" value="${item?.armor?.base ?? 10}"></label><label>Categoría<select name="armorCategory">${selectOptions(["light", "medium", "heavy", "shield"], item?.armor?.armorCategory ?? "", "Sin categoría")}</select></label><label>Máx. DES<input name="maximumDexterityBonus" type="number" min="0" value="${item?.armor?.maximumDexterityBonus ?? ""}"></label></div><div class="gm-check-row"><label><input name="dexterityBonus" type="checkbox" ${item?.armor?.dexterityBonus ? "checked" : ""}> Suma DES</label><label><input name="stealthDisadvantage" type="checkbox" ${item?.armor?.stealthDisadvantage ? "checked" : ""}> Desventaja en sigilo</label></div></fieldset>
       <fieldset><legend>Uso y cargas</legend><div class="gm-check-row"><label><input name="usable" type="checkbox" ${item?.usable ? "checked" : ""}> Usable</label><label><input name="consumable" type="checkbox" ${item?.consumable ? "checked" : ""}> Consumible</label><label><input name="requiresAttunement" type="checkbox" ${item?.requiresAttunement ? "checked" : ""}> Requiere sintonización</label><label><input name="hasCharges" type="checkbox" ${item?.charges ? "checked" : ""}> Usa cargas</label></div><div class="gm-form-grid"><label>Cargas actuales<input name="chargesCurrent" type="number" min="0" value="${item?.charges?.current ?? 0}"></label><label>Cargas máximas<input name="chargesMaximum" type="number" min="0" value="${item?.charges?.maximum ?? 0}"></label><label>Recuperación<select name="chargesReset">${selectOptions(["none", "short-rest", "long-rest", "dawn", "daily", "never"], item?.charges?.reset ?? "none")}</select></label></div></fieldset>
-      <label>Bonificadores <small>categoría | clave | valor | ventaja | desventaja</small><textarea name="bonuses">${escapeHtml(bonusText)}</textarea></label><label>Efecto activable<input name="effectDescription" value="${escapeHtml(item?.effect.description ?? "")}"></label><label class="checkbox"><input name="effectActive" type="checkbox" ${item?.effect.active ? "checked" : ""}> Efecto activo por defecto</label>
+      <fieldset class="structured-bonus-fieldset"><legend>Bonificaciones permanentes</legend><p class="field-help">Se aplican al equipar y sintonizar el objeto.</p><div data-inventory-top-bonuses-container>${renderInventoryBonusEditor(item?.bonuses ?? [], true)}</div></fieldset>
+      <fieldset class="structured-feature-fieldset"><legend>Capacidades y efectos</legend><p class="field-help">Separá efectos pasivos, capacidades activables y otras reglas. Cada capacidad puede tener tiradas, bonos y recursos propios.</p><div data-inventory-features-container>${renderInventoryFeatureEditor(item?.features ?? [])}</div></fieldset>
+      <label>Efecto activable heredado<input name="effectDescription" value="${escapeHtml(item?.effect.description ?? "")}"></label><label class="checkbox"><input name="effectActive" type="checkbox" ${item?.effect.active ? "checked" : ""}> Efecto heredado activo por defecto</label>
       <label>Descripción<textarea name="description">${escapeHtml(item?.description ?? "")}</textarea></label><button type="submit">Guardar objeto</button>
     </form>`;
   }
@@ -554,9 +563,10 @@ export class GmToolsPanel {
       void this.toggleFavorite(button.dataset.gmToggleFavorite as GmContentSection, button.dataset.gmContentKey ?? "");
     }));
     this.root.querySelector<HTMLFormElement>('[data-gm-form="spell"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveSpell(new FormData(event.currentTarget as HTMLFormElement)); });
-    this.root.querySelector<HTMLFormElement>('[data-gm-form="equipment"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveEquipment(new FormData(event.currentTarget as HTMLFormElement)); });
+    this.root.querySelector<HTMLFormElement>('[data-gm-form="equipment"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveEquipment(event.currentTarget as HTMLFormElement); });
     this.root.querySelector<HTMLFormElement>('[data-gm-form="shop"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveShop(new FormData(event.currentTarget as HTMLFormElement)); });
     const draftKey = this.contentDraftKey();
+    bindInventoryStructuredEditors(this.root);
     if (draftKey) this.formDrafts.bind(
       this.root.querySelector<HTMLFormElement>("[data-gm-form]"),
       draftKey,
@@ -679,17 +689,17 @@ export class GmToolsPanel {
     try { await this.runtime.saveCustomSpell(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
-  private async saveEquipment(data: FormData): Promise<void> {
+  private async saveEquipment(form: HTMLFormElement): Promise<void> {
     if (!this.runtime.saveCustomEquipment) return;
+    const data = new FormData(form);
     const previous = String(data.get("previousKey") ?? "") || null;
     const existing = previous ? this.content.equipment.find((entry) => entry.name === previous) ?? null : null;
     const base = normalizeEquipmentDefinition({ name: String(data.get("name") ?? "").trim(), rarity: String(data.get("rarity") ?? "none"), weight: number(data.get("weight")), cost: { quantity: number(data.get("costQuantity")), unit: String(data.get("costUnit") ?? "gp") }, equipment_category: { index: String(data.get("category") ?? "adventuring-gear") }, description: String(data.get("description") ?? "") });
     const kind = String(data.get("itemKind") ?? "gear");
     const nullableInteger = (key: string): number | null => String(data.get(key) ?? "").trim() === "" ? null : Math.max(0, Math.trunc(number(data.get(key))));
-    const bonuses = String(data.get("bonuses") ?? "").split(/\r?\n/).flatMap((line) => {
-      const [category = "", key = "", value = "0", advantage = "", disadvantage = ""] = line.split("|").map((entry) => entry.trim());
-      return category && key ? [{ category, key, value: Number(value) || 0, advantage: advantage.toLocaleLowerCase().startsWith("vent"), disadvantage: disadvantage.toLocaleLowerCase().startsWith("desvent") }] : [];
-    });
+    const bonuses = readTopLevelInventoryBonuses(form);
+    let features: EquipmentCatalogDraft["features"];
+    try { features = await readInventoryFeatures(form); } catch (error) { this.failure(error); return; }
     const maximumCharges = Math.max(0, Math.trunc(number(data.get("chargesMaximum"))));
     const definition: EquipmentCatalogDraft = {
       ...base,
@@ -698,7 +708,7 @@ export class GmToolsPanel {
       charges: data.get("hasCharges") === "on" ? { current: Math.min(maximumCharges, Math.max(0, Math.trunc(number(data.get("chargesCurrent"))))), maximum: maximumCharges, reset: String(data.get("chargesReset") ?? "none") } : null,
       weapon: kind === "weapon" ? { category: String(data.get("weaponCategory") ?? ""), range: String(data.get("weaponRange") ?? ""), normalRange: nullableInteger("normalRange"), longRange: nullableInteger("longRange"), damageExpression: String(data.get("damageExpression") ?? ""), versatileDamageExpression: String(data.get("versatileDamageExpression") ?? ""), damageType: String(data.get("damageType") ?? ""), attackBonus: Math.trunc(number(data.get("attackBonus"))), damageBonus: Math.trunc(number(data.get("damageBonus"))) } : null,
       armor: kind === "armor" ? { base: Math.trunc(number(data.get("armorBase"), 10)), dexterityBonus: data.get("dexterityBonus") === "on", maximumDexterityBonus: nullableInteger("maximumDexterityBonus"), armorCategory: String(data.get("armorCategory") ?? ""), stealthDisadvantage: data.get("stealthDisadvantage") === "on" } : null,
-      bonuses, effect: { description: String(data.get("effectDescription") ?? ""), active: data.get("effectActive") === "on" },
+      bonuses, features, effect: { description: String(data.get("effectDescription") ?? ""), active: data.get("effectActive") === "on" },
       catalog: catalogFormMetadata(existing, data),
     };
     try { await this.runtime.saveCustomEquipment(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.equipment = [...this.content.equipment.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedEquipment = definition.name; this.contentSearch.equipment = definition.name; this.contentShowAll.equipment = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar objeto: ${definition.name}`); this.success("Objeto guardado."); } catch (error) { this.failure(error); }

@@ -40,6 +40,7 @@ import type {
 import type {
   CharacterInventoryItemDraft,
   CharacterInventoryItemV2,
+  InventoryFeature,
 } from "../domain/character/character-inventory-model";
 import { inventoryItemsCanStack } from "../domain/character/character-inventory";
 import type {
@@ -107,6 +108,16 @@ import { CampaignLoreBrowser } from "./campaign-lore-browser";
 import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
 import { normalizeUiQuantity, renderUiEmptyState } from "./design-system/primitives";
 import { browserSymbiotePreferences } from "./symbiote-preferences";
+import {
+  bindInventoryStructuredEditors,
+  inventoryFeatureKindLabel,
+  readInventoryFeatures,
+  readTopLevelInventoryBonuses,
+  renderInventoryBonusEditor,
+  renderInventoryFeatureEditor,
+  replaceInventoryStructuredEditors,
+} from "./inventory-capability-editor";
+import { normalizeRollShortcut } from "../domain/dice/dice-expression";
 
 export interface BrowserAppRuntime {
   storageLabel: string;
@@ -1398,6 +1409,7 @@ export class BrowserApp {
     const activeEffects = [
       ...character.spellcasting.spells.filter((spell) => spell.effect.active && spell.effect.description.trim()).map((spell) => ({ source: spell.name, description: spell.effect.description, kind: "Conjuro" })),
       ...character.inventory.filter((item) => item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
+      ...character.inventory.flatMap((item) => item.equipped ? item.features.filter((feature) => feature.active && feature.description.trim()).map((feature) => ({ source: `${item.name} · ${feature.name}`, description: feature.description, kind: inventoryFeatureKindLabel(feature.kind) })) : []),
       ...character.traits.flatMap((group) => group.traits).filter((trait) => trait.effect.active && trait.effect.description.trim()).map((trait) => ({ source: trait.name, description: trait.effect.description, kind: "Rasgo" })),
     ];
     return `<div class="play-dashboard">
@@ -1438,8 +1450,12 @@ export class BrowserApp {
 
   private renderActionFilterBar(character: CharacterV2): string {
     const filters: readonly [string, string][] = [["all", "Todas"], ["attack", "Ataques"], ["action", "Acciones"], ["bonus-action", "Adicionales"], ["reaction", "Reacciones"], ["other", "Otras"]];
+    const featureKinds = character.inventory.flatMap((item) => item.equipped ? item.features.filter((feature) => feature.showInActions || ["action", "bonus-action", "reaction"].includes(feature.kind)) : []);
     return `<nav class="filter-bar" aria-label="Filtrar acciones">${filters.map(([value, label]) => {
-      const count = value === "all" ? character.actions.length : character.actions.filter((action) => action.categories.includes(value as CharacterActionV2["categories"][number])).length;
+      const featureCount = value === "all"
+        ? featureKinds.length
+        : featureKinds.filter((feature) => value === "other" ? !["action", "bonus-action", "reaction"].includes(feature.kind) : feature.kind === value).length;
+      const count = (value === "all" ? character.actions.length : character.actions.filter((action) => action.categories.includes(value as CharacterActionV2["categories"][number])).length) + featureCount;
       return `<button type="button" data-action-filter="${value}" class="${this.actionFilter === value ? "active" : ""}"><span>${label}</span><strong>${count}</strong></button>`;
     }).join("")}</nav>`;
   }
@@ -1648,16 +1664,68 @@ export class BrowserApp {
 
   private renderCollapsibleInventoryDescription(description: string, key: string): string {
     const expanded = this.expandedInventoryDescriptions.has(key);
-    return `<div class="spell-description inventory-description ${expanded ? "expanded" : ""}" data-inventory-description="${escapeHtml(key)}"><p class="card-description">${escapeHtml(description)}</p><button type="button" class="spell-description-more" data-toggle-inventory-description aria-expanded="${expanded}">${expanded ? "Leer menos" : "Leer más"}</button></div>`;
+    return `<div class="spell-description inventory-description ${expanded ? "expanded" : ""}" data-inventory-description="${escapeHtml(key)}"><div class="card-description rich-inventory-text">${this.renderInventoryRichText(description, "Tirada")}</div><button type="button" class="spell-description-more" data-toggle-inventory-description aria-expanded="${expanded}">${expanded ? "Leer menos" : "Leer más"}</button></div>`;
+  }
+
+  private renderInventoryRichText(description: string, rollName: string): string {
+    const dice = /\b(?:\d+)?d\d+(?:\s*[+-]\s*(?:(?:\d+)?d\d+|\d+))*/gi;
+    return description.split(/\r?\n\s*\r?\n/).filter((paragraph) => paragraph.trim()).map((paragraph) => {
+      let cursor = 0;
+      let html = "";
+      for (const match of paragraph.matchAll(dice)) {
+        const index = match.index ?? 0;
+        html += escapeHtml(paragraph.slice(cursor, index)).replace(/\r?\n/g, "<br>");
+        try {
+          const expression = normalizeRollShortcut(match[0]);
+          html += `<button type="button" class="roll-button inline-dice-roll" data-roll-name="${escapeHtml(rollName)}" data-roll-expression="${escapeHtml(expression)}" data-roll-mode="normal">${escapeHtml(expression)}</button>`;
+        } catch {
+          html += escapeHtml(match[0]);
+        }
+        cursor = index + match[0].length;
+      }
+      html += escapeHtml(paragraph.slice(cursor)).replace(/\r?\n/g, "<br>");
+      return `<p>${html}</p>`;
+    }).join("");
+  }
+
+  private inventoryFeatureCanBeUsed(item: CharacterInventoryItemV2, feature: InventoryFeature): boolean {
+    return item.quantity > 0 && (item.equipped || item.consumable) &&
+      (!item.requiresAttunement || item.attuned) &&
+      (feature.chargeCost === 0 || (item.charges !== null && item.charges.current >= feature.chargeCost)) &&
+      (feature.uses === null || feature.uses.current > 0);
+  }
+
+  private renderInventoryFeatureCapability(item: CharacterInventoryItemV2, feature: InventoryFeature, actionCard = false): string {
+    const canUse = this.inventoryFeatureCanBeUsed(item, feature);
+    const shouldOfferUse = feature.kind !== "passive" || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null;
+    const resourceLabels = [
+      feature.uses ? `${feature.uses.current}/${feature.uses.maximum} usos` : "",
+      feature.chargeCost > 0 ? `${feature.chargeCost} ${feature.chargeCost === 1 ? "carga" : "cargas"}` : "",
+      feature.active ? "Activo" : "",
+    ].filter(Boolean);
+    const controls = `${feature.rolls.map((roll) => `<button type="button" class="roll-button" data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}${shouldOfferUse ? feature.toggleable && feature.active
+      ? `<button type="button" class="secondary-button" data-inventory-feature-action="deactivate" data-feature-id="${escapeHtml(feature.id)}">Desactivar</button>`
+      : `<button type="button" data-inventory-feature-action="use" data-feature-id="${escapeHtml(feature.id)}" ${canUse ? "" : "disabled"}>${feature.toggleable ? "Activar" : "Usar"}</button>` : ""}`;
+    return `<article class="inventory-feature-capability ${feature.active ? "active" : ""} ${actionCard ? "play-card action-play-card inventory-feature-action-card" : ""}" data-inventory-card data-inventory-id="${escapeHtml(item.id)}">
+      <header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h${actionCard ? "3" : "4"}>${escapeHtml(feature.name)}</h${actionCard ? "3" : "4"}></div>${resourceLabels.length ? `<span class="card-badge">${escapeHtml(resourceLabels.join(" · "))}</span>` : ""}</header>
+      ${feature.description ? `<div class="rich-inventory-text">${this.renderInventoryRichText(feature.description, `${item.name}: ${feature.name}`)}</div>` : ""}
+      ${controls ? `<div class="inventory-feature-controls">${controls}</div>` : ""}
+    </article>`;
   }
 
   private renderActionsPlay(character: CharacterV2, embedded = false): string {
     const filtered = this.actionFilter === "all"
       ? character.actions
       : character.actions.filter((action) => action.categories.includes(this.actionFilter as CharacterActionV2["categories"][number]));
+    const inventoryFeatures = character.inventory.flatMap((item) => item.equipped
+      ? item.features
+        .filter((feature) => feature.showInActions || ["action", "bonus-action", "reaction"].includes(feature.kind))
+        .filter((feature) => this.actionFilter === "all" || feature.kind === this.actionFilter || (this.actionFilter === "other" && !["action", "bonus-action", "reaction"].includes(feature.kind)))
+        .map((feature) => ({ item, feature }))
+      : []);
     return `${embedded ? '<div class="actions-spells-group action-group">' : '<section class="play-section collection-play">'}
       ${this.renderActionFilterBar(character)}
-      ${filtered.length ? `<div class="play-card-grid">${filtered.map((action) => {
+      ${filtered.length || inventoryFeatures.length ? `<div class="play-card-grid">${filtered.map((action) => {
         const attack = projectActionAttackModifier(character, action);
         const damageBonus = projectActionDamageBonus(character, action);
         const signedAttack = attack >= 0 ? `+${attack}` : String(attack);
@@ -1670,7 +1738,7 @@ export class BrowserApp {
           ${action.description && this.showSpellDescriptions ? this.renderCollapsibleSpellDescription(action.description, `action:${action.id}`) : ""}
           <div class="action-readouts"><span>Ataque <strong>${signedAttack}</strong></span>${damage ? `<span>Daño <strong>${escapeHtml(damage)}</strong>${action.damageType ? ` <em class="damage-badge" data-damage-tone="${spellDamageTone(action.damageType)}">${escapeHtml(action.damageType)}</em>` : ""}</span>` : ""}</div>
         </article>`;
-      }).join("")}</div>` : embedded ? '<p class="combined-empty">Sin acciones configuradas.</p>' : this.renderEmptyPanel("Agregá acciones y ataques desde el modo Edición.")}
+      }).join("")}${inventoryFeatures.map(({ item, feature }) => this.renderInventoryFeatureCapability(item, feature, true)).join("")}</div>` : embedded ? '<p class="combined-empty">Sin acciones configuradas.</p>' : this.renderEmptyPanel("Agregá acciones y ataques desde el modo Edición.")}
     ${embedded ? "</div>" : "</section>"}`;
   }
 
@@ -1797,6 +1865,17 @@ export class BrowserApp {
     const quantity = ownedItem?.quantity ?? 0;
     const tags = this.inventoryTags(item);
     const rarity = this.inventoryRarity(item);
+    const linkedAction = ownedItem ? character.actions.find((action) => action.inventoryItemId === ownedItem.id) : undefined;
+    const damageBase = linkedAction?.damageExpression || item.weapon?.damageExpression || "";
+    const damageBonus = linkedAction ? projectActionDamageBonus(character, linkedAction) : item.weapon?.damageBonus ?? 0;
+    const damageExpression = damageBase ? `${damageBase}${damageBonus > 0 ? `+${damageBonus}` : damageBonus < 0 ? damageBonus : ""}` : "";
+    const interactiveFeaturesHtml = !commerce && ownedItem?.features.length ? `<div class="inventory-capability-groups">${[
+      { label: "Efectos pasivos", features: ownedItem.features.filter((feature) => feature.kind === "passive") },
+      { label: "Capacidades activables", features: ownedItem.features.filter((feature) => !["passive", "other"].includes(feature.kind)) },
+      { label: "Otros efectos", features: ownedItem.features.filter((feature) => feature.kind === "other") },
+    ].filter((group) => group.features.length).map((group) => `<section><h4>${group.label}</h4>${group.features.sort((left, right) => left.order - right.order).map((feature) => this.renderInventoryFeatureCapability(ownedItem, feature)).join("")}</section>`).join("")}</div>` : "";
+    const previewFeaturesHtml = !interactiveFeaturesHtml && item.features.length ? `<div class="inventory-capability-groups inventory-capability-preview"><section><h4>Capacidades</h4>${[...item.features].sort((left, right) => left.order - right.order).map((feature) => `<article class="inventory-feature-capability"><header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h4>${escapeHtml(feature.name)}</h4></div></header>${feature.description ? `<div class="rich-inventory-text">${commerce ? feature.description.split(/\r?\n\s*\r?\n/).filter(Boolean).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("") : this.renderInventoryRichText(feature.description, `${item.name}: ${feature.name}`)}</div>` : ""}${feature.rolls.length ? `<div class="inventory-feature-controls">${feature.rolls.map((roll) => commerce ? `<span class="card-badge">${escapeHtml(roll.label)}: ${escapeHtml(roll.expression)}</span>` : `<button type="button" class="roll-button" data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}</div>` : ""}</article>`).join("")}</section></div>` : "";
+    const featuresHtml = interactiveFeaturesHtml || previewFeaturesHtml;
     const commerceControl = commerce && ownedItem ? `<div class="inventory-card-controls merchant-item-controls"><div class="merchant-quantity-control ${commerce.disabled ? "disabled" : ""}" aria-label="Cantidad de ${escapeHtml(ownedItem.name)}"><div><button type="button" data-merchant-quantity-step="-1" aria-label="Quitar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity <= 0 ? "disabled" : ""}>−</button><button type="button" data-merchant-quantity-step="1" aria-label="Agregar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity >= quantity ? "disabled" : ""}>+</button></div><input type="number" inputmode="numeric" data-merchant-select-quantity min="0" max="${quantity}" step="1" value="${commerce.selectedQuantity}" aria-label="Cantidad a intercambiar de ${escapeHtml(ownedItem.name)}" ${commerce.disabled ? "disabled" : ""}><small>de ${quantity}</small></div>${commerce.itemChallenge ? `<button type="button" class="secondary-button merchant-item-challenge-button" data-merchant-action="${commerce.itemChallenge.action}" data-merchant-item-id="${escapeHtml(ownedItem.id)}" data-base-item-dc="${commerce.itemChallenge.dc}" ${commerce.selectedQuantity > 0 ? "" : "disabled"}><span>${escapeHtml(commerce.itemChallenge.label)}</span><strong>CD ${commerce.itemChallenge.dc}</strong></button>` : ""}</div>` : "";
     const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect"><span>${escapeHtml(ownedItem.effect.description)}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto"><option value="off" ${ownedItem.effect.active ? "" : "selected"}>Inactivo</option><option value="on" ${ownedItem.effect.active ? "selected" : ""}>Activo</option></select></div>` : "";
     const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`) : "";
@@ -1808,8 +1887,8 @@ export class BrowserApp {
       catalog, commerce: !!commerce, ...(commerce ? { disabled: commerce.disabled } : {}),
       articleAttributes: ownedItem ? (commerce ? `data-merchant-commerce-item="${escapeHtml(ownedItem.id)}"` : "data-inventory-card") : "",
       headerControlHtml: commerceControl || inventoryHeaderControl,
-      statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${item.weapon?.damageExpression ? `<span>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} cargas</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
-      descriptionHtml: effectHtml + descriptionHtml, tags, actionsHtml,
+      statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${damageExpression ? `<button type="button" class="roll-button inventory-damage-roll" data-roll-name="Daño: ${escapeHtml(item.name)}" data-roll-expression="${escapeHtml(damageExpression)}" data-roll-mode="normal">${escapeHtml(damageExpression)} ${escapeHtml(item.weapon?.damageType ?? "")}</button>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} cargas</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
+      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml,
     });
   }
 
@@ -2248,7 +2327,8 @@ export class BrowserApp {
         </div>
         <label>Descripción<textarea data-inventory-field="description">${escapeHtml(item?.description ?? "")}</textarea></label>
         <div class="effect-editor"><label>Efecto breve<input data-inventory-field="effectDescription" value="${escapeHtml(item?.effect.description ?? "")}" placeholder="Se mostrará en el resumen cuando esté activo"></label><label>Estado<select data-inventory-field="effectActive"><option value="off" ${item?.effect.active ? "" : "selected"}>Inactivo</option><option value="on" ${item?.effect.active ? "selected" : ""}>Activo</option></select></label></div>
-        <label>Bonificaciones JSON<textarea data-inventory-field="bonuses" placeholder='[{"category":"skill","key":"perception","value":1,"advantage":false,"disadvantage":false}]'>${escapeHtml(JSON.stringify(item?.bonuses ?? [], null, 2))}</textarea></label>
+        <fieldset class="structured-bonus-fieldset"><legend>Bonificaciones permanentes del objeto</legend><p class="field-help">Se aplican mientras el objeto esté equipado y, si corresponde, sintonizado.</p><div data-inventory-top-bonuses-container>${renderInventoryBonusEditor(item?.bonuses ?? [], true)}</div></fieldset>
+        <fieldset class="structured-feature-fieldset"><legend>Capacidades y efectos</legend><p class="field-help">Organizá cada regla por separado, agregá tiradas directas y definí sus cargas o usos.</p><div data-inventory-features-container>${renderInventoryFeatureEditor(item?.features ?? [])}</div></fieldset>
         <details class="item-details" ${weapon || armor || charges ? "open" : ""}>
           <summary>Arma, armadura y cargas</summary>
           <div class="field-grid item-detail-grid">
@@ -2457,6 +2537,7 @@ export class BrowserApp {
   }
 
   private bindEvents(): void {
+    bindInventoryStructuredEditors(this.root);
     this.loreBrowser?.bind(this.root);
     bindViewportConstrainedDetails(this.root, ".level-progress-card", ":scope > form");
     bindViewportConstrainedDetails(this.root, ".player-filter-group", ":scope > div");
@@ -2668,6 +2749,9 @@ export class BrowserApp {
     });
     this.root.querySelectorAll<HTMLButtonElement>("[data-inventory-action]").forEach((button) => {
       button.addEventListener("click", () => void this.handleInventoryAction(button));
+    });
+    this.root.querySelectorAll<HTMLButtonElement>("[data-inventory-feature-action]").forEach((button) => {
+      button.addEventListener("click", () => void this.handleInventoryFeatureAction(button));
     });
     this.root.querySelectorAll<HTMLButtonElement>("[data-reset-inventory-charges]").forEach((button) => {
       button.addEventListener("click", () => void this.resetInventoryCharges(button));
@@ -4849,7 +4933,7 @@ export class BrowserApp {
       value("costUnit", definition.cost.unit);
       value("properties", definition.properties.join(", "));
       value("description", definition.description);
-      value("bonuses", JSON.stringify(definition.bonuses, null, 2));
+      replaceInventoryStructuredEditors(card, definition.bonuses, definition.features);
       checked("requiresAttunement", definition.requiresAttunement);
       checked("usable", definition.usable);
       checked("consumable", definition.consumable);
@@ -4940,7 +5024,8 @@ export class BrowserApp {
           attackBonus: integer("weaponAttackBonus"),
           damageBonus: integer("weaponDamageBonus"),
         } : null,
-        bonuses: JSON.parse(this.inventoryCardField<HTMLTextAreaElement>(card, "bonuses").value || "[]") as CharacterInventoryItemDraft["bonuses"],
+        bonuses: readTopLevelInventoryBonuses(card),
+        features: await readInventoryFeatures(card),
         effect: {
           description: this.inventoryCardField<HTMLInputElement>(card, "effectDescription").value,
           active: this.inventoryCardField<HTMLSelectElement>(card, "effectActive").value === "on",
@@ -5181,6 +5266,35 @@ export class BrowserApp {
       }
       await this.refreshStorageUsage();
       this.message = { kind: "success", text: "Inventario actualizado." };
+      this.render();
+    } catch (error) {
+      this.message = { kind: "error", text: formatError(error) };
+      this.render();
+    }
+  }
+
+  private async handleInventoryFeatureAction(button: HTMLButtonElement): Promise<void> {
+    if (!this.snapshot || !this.selectedCharacterId) return;
+    const card = button.closest<HTMLElement>("[data-inventory-card]");
+    const character = this.snapshot.campaign.characters[this.selectedCharacterId];
+    const item = character?.inventory.find((entry) => entry.id === card?.dataset.inventoryId);
+    const feature = item?.features.find((entry) => entry.id === button.dataset.featureId);
+    const action = button.dataset.inventoryFeatureAction;
+    if (!character || !item || !feature || !action) return;
+    const command = {
+      characterId: character.id,
+      itemId: item.id,
+      featureId: feature.id,
+      expectedCharacterRevision: character.revision,
+      expectedCampaignChecksum: this.snapshot.checksum,
+    };
+    try {
+      const snapshot = action === "deactivate"
+        ? await this.application.setInventoryFeatureActive({ ...command, value: false })
+        : await this.application.useInventoryFeature(command);
+      this.acceptCharacterSnapshot(snapshot, `${action === "deactivate" ? "Desactivar" : "Usar"} ${item.name}: ${feature.name}`);
+      await this.refreshStorageUsage();
+      this.message = { kind: "success", text: action === "deactivate" ? "Capacidad desactivada." : "Capacidad usada." };
       this.render();
     } catch (error) {
       this.message = { kind: "error", text: formatError(error) };

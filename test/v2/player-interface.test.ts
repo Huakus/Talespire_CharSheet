@@ -596,6 +596,73 @@ describe("player interface shell", () => {
     expect(excludedByAnd).toContain("No hay objetos con las características seleccionadas");
   });
 
+  it("renders structured item capabilities, inline dice and direct action rolls", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_16161616161616161616161616161616",
+      "Shadow Hero",
+      "2026-08-25T21:00:00.000Z",
+    );
+    const { rarity: _rarity, ...definition } = normalizeEquipmentDefinition({
+      name: "Daga del Umbral",
+      equipment_category: { index: "weapon" },
+      damage: { damage_dice: "1d6", damage_type: { index: "force" } },
+    });
+    definition.features = [{
+      id: "feature-shadow-passive",
+      order: 0,
+      kind: "passive",
+      name: "Hoja fásica",
+      description: "La daga cuenta como mágica.",
+      active: false,
+      toggleable: false,
+      showInActions: false,
+      chargeCost: 0,
+      uses: null,
+      rolls: [],
+      bonuses: [],
+    }, {
+      id: "feature-shadow",
+      order: 1,
+      kind: "bonus-action",
+      name: "Paso entre sombras",
+      description: "Inflige 1d6 de daño adicional.\n\nSe teletransporta 15 pies.",
+      active: false,
+      toggleable: true,
+      showInActions: true,
+      chargeCost: 1,
+      uses: null,
+      rolls: [{ label: "Daño adicional", expression: "1d6", mode: "normal" }],
+      bonuses: [],
+    }];
+    character.inventory = [{
+      ...definition,
+      id: "inv_16161616161616161616161616161616",
+      order: 0,
+      group: "equipment",
+      equipped: true,
+      attuned: false,
+      charges: { current: 2, maximum: 2, reset: "long-rest" },
+    }];
+    view.activeSheetTab = "inventory";
+    view.showInventoryDescriptions = true;
+
+    const inventory = view.renderCharacterForm(character);
+    expect(inventory).toContain("Efectos pasivos");
+    expect(inventory).toContain("Capacidades activables");
+    expect(inventory).toContain("Paso entre sombras");
+    expect(inventory).toContain('class="roll-button inline-dice-roll"');
+    expect(inventory).toContain('data-roll-expression="1d6"');
+    expect(inventory).toContain('data-inventory-feature-action="use"');
+    expect(inventory).toContain('class="roll-button inventory-damage-roll"');
+
+    view.activeSheetTab = "actions";
+    const actions = view.renderCharacterForm(character);
+    expect(actions).toContain("inventory-feature-action-card");
+    expect(actions).toContain("Paso entre sombras");
+    expect(actions).toContain("Daño adicional");
+  });
+
   it("keeps action and spell resolution rolls disabled until launch", () => {
     const view = harness();
     const character = createCharacter(

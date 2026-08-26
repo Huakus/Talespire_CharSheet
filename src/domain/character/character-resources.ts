@@ -5,6 +5,7 @@ import {
   StableIdSchema,
   type CharacterV2,
 } from "./character-v2";
+import { resetInventoryItemResources } from "./character-inventory";
 import { CharacterRevisionConflictError } from "./edit-character";
 import { resetTraitsByRest } from "./character-content";
 import {
@@ -192,11 +193,7 @@ export function applyCharacterResourceCommand(
       effects.hitPointsChangedBy = combat.hitPoints.current - previousHp;
       effects.temporaryHitPointsChangedBy = -previousTemporary;
       effects.hitDiceRecovered = combat.hitDice.remaining - previousDice;
-      inventory = character.inventory.map((item) =>
-        item.charges !== null && item.charges.reset === "long-rest"
-          ? { ...item, charges: { ...item.charges, current: item.charges.maximum } }
-          : item,
-      );
+      inventory = character.inventory.map((item) => resetInventoryItemResources(item, "long-rest"));
       spellcasting = {
         ...character.spellcasting,
         slots: Object.fromEntries(
@@ -211,11 +208,7 @@ export function applyCharacterResourceCommand(
       break;
     }
     case "short-rest": {
-      inventory = character.inventory.map((item) =>
-        item.charges !== null && item.charges.reset === "short-rest"
-          ? { ...item, charges: { ...item.charges, current: item.charges.maximum } }
-          : item,
-      );
+      inventory = character.inventory.map((item) => resetInventoryItemResources(item, "short-rest"));
       traits = resetTraitsByRest(character, "short-rest");
       break;
     }

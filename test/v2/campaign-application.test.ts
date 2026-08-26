@@ -21,7 +21,7 @@ async function applicationFixture(): Promise<{
       unitWeight: 1, cost: { quantity: 2, unit: "gp" }, category: "weapon",
       description: "", properties: [], equipped: false, attuned: false,
       requiresAttunement: false, usable: false, consumable: false, charges: null,
-      armor: null, weapon: null, bonuses: [], effect: { description: "", active: false },
+      armor: null, weapon: null, bonuses: [], features: [], effect: { description: "", active: false },
       catalog: null,
     }];
   } });

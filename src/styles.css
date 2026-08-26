@@ -1882,6 +1882,54 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .catalog-editor-meta label { min-width: 0; }
 .catalog-editor-meta input { width: 100%; }
 
+/* Capacidades estructuradas de objetos mágicos */
+.field-help { margin: 0 0 6px; color: var(--ui-text-muted); font-size: .64rem; }
+.structured-bonus-fieldset, .structured-feature-fieldset { min-width: 0; padding: 8px; border: 1px solid var(--ui-border-subtle); border-radius: 6px; }
+.inventory-bonus-editor, .inventory-feature-editor { display: grid; gap: 7px; min-width: 0; }
+.inventory-bonus-row { display: grid; grid-template-columns: minmax(105px, 1fr) minmax(125px, 1.3fr) minmax(90px, .8fr) 62px auto auto auto; align-items: center; gap: 5px; padding: 5px; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-radius: 5px; }
+.inventory-bonus-row :is(input, select) { width: 100%; min-width: 0; }
+.compact-check { display: inline-flex !important; width: auto !important; align-items: center; gap: 3px !important; margin: 0; white-space: nowrap; }
+.compact-check input { width: auto !important; }
+.secondary-button { color: var(--ui-accent); background: var(--ui-accent-surface); border: 1px solid var(--ui-accent-border); border-radius: 5px; }
+.inventory-feature-editor-group { display: grid; gap: 6px; padding: 7px; border: 1px solid var(--ui-border-subtle); border-radius: 6px; background: color-mix(in srgb, var(--ui-bg-sunken) 70%, transparent); }
+.inventory-feature-editor-group > header, .inventory-feature-editor-row > header { display: flex; align-items: center; justify-content: space-between; gap: 7px; }
+.inventory-feature-editor-group h4, .inventory-feature-editor-row header strong { margin: 0; color: var(--ui-text-secondary); font-size: .72rem; }
+.inventory-feature-editor-row { display: grid; gap: 7px; min-width: 0; padding: 8px; background: var(--ui-bg-surface); border-left: 3px solid var(--ui-accent-border); border-radius: 5px; }
+.inventory-feature-editor-row > header > div, .inventory-feature-flags { display: flex; flex-wrap: wrap; gap: 4px; }
+.inventory-feature-main-fields { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(125px, .55fr); gap: 6px; }
+.inventory-feature-resource-fields { display: grid; grid-template-columns: repeat(5, minmax(90px, 1fr)); align-items: end; gap: 5px; }
+.inventory-feature-roll-row { display: grid; grid-template-columns: minmax(120px, .8fr) minmax(100px, 1fr) minmax(85px, .5fr) auto; gap: 5px; margin-bottom: 5px; }
+.inventory-feature-editor-row fieldset { min-width: 0; padding: 6px; border: 1px solid var(--ui-border-subtle); border-radius: 5px; }
+.inventory-feature-editor-row fieldset legend { padding: 0 4px; color: var(--ui-text-muted); font-size: .62rem; }
+.rich-inventory-text { display: grid; gap: 6px; white-space: normal; }
+.rich-inventory-text p { margin: 0; line-height: 1.45; }
+.inline-dice-roll, .inventory-damage-roll { min-height: 0; padding: 1px 6px; color: var(--ui-accent-hover); background: var(--ui-accent-surface); border: 1px solid var(--ui-accent-border); border-radius: 4px; font: inherit; font-weight: 850; }
+.inventory-capability-groups { display: grid; grid-column: 1 / -1; gap: 7px; }
+.inventory-capability-groups > section { display: grid; gap: 4px; }
+.inventory-capability-groups > section > h4 { margin: 0; color: var(--ui-text-muted); font-size: .58rem; letter-spacing: .07em; text-transform: uppercase; }
+.inventory-feature-capability { display: grid; gap: 5px; padding: 7px; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-left: 3px solid var(--ui-border); border-radius: 5px; }
+.inventory-feature-capability.active { border-left-color: var(--ui-success); background: color-mix(in srgb, var(--ui-success) 7%, var(--ui-bg-sunken)); }
+.inventory-feature-capability > header { display: flex; align-items: start; justify-content: space-between; gap: 8px; }
+.inventory-feature-capability h3, .inventory-feature-capability h4 { margin: 1px 0 0; font-size: .74rem; }
+.inventory-feature-capability .rich-inventory-text { color: var(--ui-text-secondary); font-size: .66rem; }
+.inventory-feature-controls { display: flex; flex-wrap: wrap; gap: 4px; }
+.inventory-feature-controls button { padding: 4px 7px; font-size: .63rem; }
+.inventory-feature-action-card { padding: 11px; }
+.inventory-feature-action-card h3 { font-size: .95rem; }
+.gm-equipment-features { display: grid; gap: 6px; margin-top: 8px; }
+.gm-equipment-features section { padding: 7px; background: var(--ui-bg-sunken); border-left: 3px solid var(--ui-accent-border); border-radius: 4px; }
+.gm-equipment-features header { display: flex; justify-content: space-between; gap: 8px; }
+.gm-equipment-features header span { color: var(--ui-text-muted); font-size: .62rem; text-transform: uppercase; }
+
+@media (max-width: 900px) {
+  .inventory-bonus-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .inventory-feature-resource-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .inventory-feature-main-fields, .inventory-feature-roll-row { grid-template-columns: 1fr; }
+  .inventory-bonus-row { grid-template-columns: 1fr; }
+}
+
 /* Compatibility contract for screens still migrating their renderer markup. */
 :is(button, input, select, textarea):disabled {
   cursor: not-allowed;
