@@ -23,6 +23,11 @@ import {
   registerPersistencePanelOpener,
   setAppConnectionStatus,
 } from "./app-chrome";
+import {
+  createCampaignMemberTemporaryPassword,
+  updateSignedInPassword,
+} from "./campaign-member-password";
+import { updateRecoveredPassword, verifyPasswordRecovery } from "./password-recovery";
 import { browserSymbiotePreferences } from "./symbiote-preferences";
 
 const bindingKeyPrefix = "talespire-charsheet:remote-campaign:";
@@ -73,20 +78,52 @@ async function requestAuthentication(
         </div>
         <small>Supabase mantiene la sesión iniciada. Sólo se guarda el email si elegís recordarlo; nunca la contraseña.</small>
         <p class="remote-feedback" role="status" aria-live="polite"></p>
+      </form>
+      <form class="remote-recovery-form" hidden>
+        <p class="eyebrow">Recuperar acceso</p>
+        <h2>Crear una contraseña nueva</h2>
+        <p class="remote-recovery-instructions">En el email nuevo, copiá el enlace de recuperación sin abrirlo y pegalo abajo. Si el mensaje muestra un código de 6 dígitos, también podés usarlo.</p>
+        <label>Email<input name="recoveryEmail" type="email" autocomplete="email" readonly required></label>
+        <label>Enlace o código<textarea name="recoveryCredential" rows="3" autocomplete="one-time-code" spellcheck="false" required></textarea></label>
+        <label>Contraseña nueva<input name="newPassword" type="password" autocomplete="new-password" minlength="6" required></label>
+        <label>Repetir contraseña<input name="confirmPassword" type="password" autocomplete="new-password" minlength="6" required></label>
+        <div class="remote-actions">
+          <button type="submit">Cambiar contraseña y entrar</button>
+          <button type="button" class="secondary-button" data-auth-action="cancel-reset">Volver</button>
+          <button type="button" class="secondary-button" data-auth-action="resend-reset">Enviar correo nuevo</button>
+        </div>
+        <small>Los enlaces son de un solo uso. Si ya abriste el anterior y viste “Invalid host”, enviá uno nuevo y esta vez copialo sin abrirlo.</small>
+        <p class="remote-feedback" role="status" aria-live="polite"></p>
       </form>`;
-    const form = panel.querySelector<HTMLFormElement>("form");
-    const feedback = panel.querySelector<HTMLElement>(".remote-feedback");
-    if (!form || !feedback) throw new Error("REMOTE_AUTH_FORM_NOT_FOUND");
+    const form = panel.querySelector<HTMLFormElement>(".remote-auth-form");
+    const feedback = form?.querySelector<HTMLElement>(".remote-feedback");
+    const recoveryForm = panel.querySelector<HTMLFormElement>(".remote-recovery-form");
+    const recoveryFeedback = recoveryForm?.querySelector<HTMLElement>(".remote-feedback");
+    if (!form || !feedback || !recoveryForm || !recoveryFeedback) {
+      throw new Error("REMOTE_AUTH_FORM_NOT_FOUND");
+    }
 
     const emailInput = form.elements.namedItem("email") as HTMLInputElement;
     const passwordInput = form.elements.namedItem("password") as HTMLInputElement;
     const rememberInput = form.elements.namedItem("rememberEmail") as HTMLInputElement;
-    const actionButtons = [...form.querySelectorAll<HTMLButtonElement>("button")];
+    const recoveryEmailInput = recoveryForm.elements.namedItem("recoveryEmail") as HTMLInputElement;
+    const recoveryCredentialInput = recoveryForm.elements.namedItem("recoveryCredential") as HTMLTextAreaElement;
+    const newPasswordInput = recoveryForm.elements.namedItem("newPassword") as HTMLInputElement;
+    const confirmPasswordInput = recoveryForm.elements.namedItem("confirmPassword") as HTMLInputElement;
+    const cancelResetButton = recoveryForm.querySelector<HTMLButtonElement>('[data-auth-action="cancel-reset"]');
+    const resendResetButton = recoveryForm.querySelector<HTMLButtonElement>('[data-auth-action="resend-reset"]');
+    const actionButtons = [...panel.querySelectorAll<HTMLButtonElement>("button")];
     const email = (): string => emailInput.value.trim().toLocaleLowerCase();
     const rememberEmail = (): void => preferences.rememberAuthEmail(rememberInput.checked ? email() : null);
-    const setBusy = (busy: boolean): void => actionButtons.forEach((button) => {
-      if (button.dataset.authAction !== "local") button.disabled = busy;
-    });
+    const setBusy = (busy: boolean): void => actionButtons.forEach((button) => { button.disabled = busy; });
+    let recoveryVerified = false;
+
+    const showRecovery = (): void => {
+      recoveryEmailInput.value = email();
+      form.hidden = true;
+      recoveryForm.hidden = false;
+      recoveryCredentialInput.focus();
+    };
 
     const authenticate = async (kind: "signin" | "signup"): Promise<void> => {
       if (!form.reportValidity()) return;
@@ -114,23 +151,39 @@ async function requestAuthentication(
       }
     };
 
-    const sendEmailAction = async (action: "reset" | "magic" | "resend"): Promise<void> => {
+    const sendResetEmail = async (): Promise<void> => {
       if (!emailInput.reportValidity()) return;
       setBusy(true);
       feedback.textContent = "Enviando email…";
       try {
-        const result = action === "reset"
-          ? await supabase.auth.resetPasswordForEmail(email())
-          : action === "magic"
-            ? await supabase.auth.signInWithOtp({ email: email(), options: { shouldCreateUser: false } })
-            : await supabase.auth.resend({ type: "signup", email: email() });
+        const result = await supabase.auth.resetPasswordForEmail(email());
+        if (result.error) {
+          feedback.textContent = result.error.message;
+          return;
+        }
+        rememberEmail();
+        showRecovery();
+        recoveryFeedback.textContent = "Correo enviado. Copiá el enlace de recuperación sin abrirlo y pegalo arriba.";
+      } catch (error) {
+        feedback.textContent = errorMessage(error);
+      } finally {
+        setBusy(false);
+      }
+    };
+
+    const sendEmailAction = async (action: "magic" | "resend"): Promise<void> => {
+      if (!emailInput.reportValidity()) return;
+      setBusy(true);
+      feedback.textContent = "Enviando email…";
+      try {
+        const result = action === "magic"
+          ? await supabase.auth.signInWithOtp({ email: email(), options: { shouldCreateUser: false } })
+          : await supabase.auth.resend({ type: "signup", email: email() });
         feedback.textContent = result.error
           ? result.error.message
-          : action === "reset"
-            ? "Si la cuenta existe, vas a recibir instrucciones para cambiar la contraseña."
-            : action === "magic"
-              ? "Enlace de acceso enviado. Revisá tu email."
-              : "Email de confirmación reenviado.";
+          : action === "magic"
+            ? "Enlace de acceso enviado. Revisá tu email."
+            : "Email de confirmación reenviado.";
         if (!result.error) rememberEmail();
       } catch (error) {
         feedback.textContent = errorMessage(error);
@@ -154,9 +207,57 @@ async function requestAuthentication(
       button.setAttribute("aria-pressed", String(!visible));
       passwordInput.focus();
     });
-    panel.querySelector('[data-auth-action="reset-password"]')?.addEventListener("click", () => void sendEmailAction("reset"));
+    panel.querySelector('[data-auth-action="reset-password"]')?.addEventListener("click", () => void sendResetEmail());
     panel.querySelector('[data-auth-action="magic-link"]')?.addEventListener("click", () => void sendEmailAction("magic"));
     panel.querySelector('[data-auth-action="resend-confirmation"]')?.addEventListener("click", () => void sendEmailAction("resend"));
+    recoveryForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      confirmPasswordInput.setCustomValidity(
+        newPasswordInput.value === confirmPasswordInput.value ? "" : "Las contraseñas no coinciden.",
+      );
+      if (!recoveryForm.reportValidity()) return;
+
+      void (async () => {
+        setBusy(true);
+        try {
+          if (!recoveryVerified) {
+            recoveryFeedback.textContent = "Verificando el enlace de recuperación…";
+            await verifyPasswordRecovery(
+              supabase.auth,
+              recoveryEmailInput.value.trim().toLocaleLowerCase(),
+              recoveryCredentialInput.value,
+            );
+            recoveryVerified = true;
+            recoveryEmailInput.disabled = true;
+            recoveryCredentialInput.disabled = true;
+            if (cancelResetButton) cancelResetButton.hidden = true;
+            if (resendResetButton) resendResetButton.hidden = true;
+          }
+
+          recoveryFeedback.textContent = "Guardando la contraseña nueva…";
+          const user = await updateRecoveredPassword(supabase.auth, newPasswordInput.value);
+          rememberEmail();
+          recoveryFeedback.textContent = "Contraseña actualizada. Entrando…";
+          resolve(user);
+        } catch (error) {
+          recoveryFeedback.textContent = recoveryVerified
+            ? `El enlace fue verificado, pero no se pudo guardar la contraseña: ${errorMessage(error)}`
+            : `No se pudo verificar el enlace o código. Pedí un correo nuevo si ya lo habías abierto: ${errorMessage(error)}`;
+        } finally {
+          setBusy(false);
+        }
+      })();
+    });
+    cancelResetButton?.addEventListener("click", () => {
+      if (recoveryVerified) return;
+      recoveryForm.reset();
+      recoveryFeedback.textContent = "";
+      recoveryForm.hidden = true;
+      form.hidden = false;
+      feedback.textContent = "";
+      emailInput.focus();
+    });
+    resendResetButton?.addEventListener("click", () => void sendResetEmail());
     rememberInput.addEventListener("change", () => {
       if (!rememberInput.checked) preferences.rememberAuthEmail(null);
     });
@@ -267,6 +368,7 @@ function mountRemoteControls(
   appRoot: HTMLElement,
   user: User,
   campaign: RemoteCampaignSummary,
+  supabase: ReturnType<typeof createRemoteSupabaseClient>,
   client: SupabaseCampaignDocumentClient,
   bindingKey: string,
   signOut: () => Promise<void>,
@@ -282,24 +384,65 @@ function mountRemoteControls(
         <select name="role"><option value="player">Jugador</option><option value="gm">GM</option></select>
         <button type="submit">Invitar</button>
       </form>
+      <form class="remote-member-password-form" hidden>
+        <strong>Recuperar acceso de un integrante</strong>
+        <div>
+          <input name="memberEmail" type="email" autocomplete="email" placeholder="Email del integrante" required>
+          <button type="submit">Generar clave provisoria</button>
+        </div>
+        <small>Sólo el dueño puede hacerlo. La cuenta y sus datos no se eliminan.</small>
+        <p class="remote-member-password-feedback remote-feedback" role="status" aria-live="polite"></p>
+      </form>
+      <section class="remote-temporary-password" hidden>
+        <strong>Clave provisoria</strong>
+        <div>
+          <input type="text" readonly autocomplete="off" aria-label="Clave provisoria generada">
+          <button type="button" class="secondary-button" data-remote-action="copy-temporary-password">Copiar</button>
+        </div>
+        <small>Copiala ahora y compartila por privado. Supabase no permite volver a consultar esta clave.</small>
+      </section>
+      <details class="remote-change-password">
+        <summary>Cambiar mi contraseña</summary>
+        <form>
+          <label>Nueva contraseña<input name="newPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+          <label>Repetir contraseña<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+          <button type="submit">Guardar mi contraseña</button>
+          <small>Usá esto después de entrar con una clave provisoria.</small>
+          <p class="remote-own-password-feedback remote-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </details>
       <div class="remote-panel-actions">
         <button type="button" class="secondary-button" data-remote-action="change">Cambiar campaña</button>
         <button type="button" class="secondary-button" data-remote-action="signout">Cerrar sesión</button>
       </div>
-      <small class="remote-feedback" role="status"></small>
+      <small class="remote-panel-feedback remote-feedback" role="status"></small>
     </section>`;
   appRoot.insertAdjacentElement("beforebegin", controls);
   const campaignName = controls.querySelector<HTMLElement>(".remote-campaign-name");
   const userLabel = controls.querySelector<HTMLElement>(".remote-user");
   const invite = controls.querySelector<HTMLFormElement>(".remote-invite-form");
-  const feedback = controls.querySelector<HTMLElement>(".remote-feedback");
-  if (!campaignName || !userLabel || !invite || !feedback) {
+  const memberPasswordForm = controls.querySelector<HTMLFormElement>(".remote-member-password-form");
+  const memberPasswordFeedback = controls.querySelector<HTMLElement>(".remote-member-password-feedback");
+  const temporaryPasswordPanel = controls.querySelector<HTMLElement>(".remote-temporary-password");
+  const temporaryPasswordInput = temporaryPasswordPanel?.querySelector<HTMLInputElement>("input");
+  const ownPasswordForm = controls.querySelector<HTMLFormElement>(".remote-change-password form");
+  const ownPasswordFeedback = controls.querySelector<HTMLElement>(".remote-own-password-feedback");
+  const feedback = controls.querySelector<HTMLElement>(".remote-panel-feedback");
+  if (
+    !campaignName || !userLabel || !invite || !memberPasswordForm || !memberPasswordFeedback
+    || !temporaryPasswordPanel || !temporaryPasswordInput || !ownPasswordForm || !ownPasswordFeedback || !feedback
+  ) {
     throw new Error("REMOTE_CONTROLS_NOT_FOUND");
   }
   campaignName.textContent = campaign.name;
   userLabel.textContent = user.email ?? user.id;
   invite.hidden = campaign.ownerUserId !== user.id;
+  memberPasswordForm.hidden = campaign.ownerUserId !== user.id;
   const setPanelOpen = (open: boolean): void => {
+    if (!open) {
+      temporaryPasswordInput.value = "";
+      temporaryPasswordPanel.hidden = true;
+    }
     controls.hidden = !open;
     controls.classList.toggle("panel-open", open);
   };
@@ -319,6 +462,64 @@ function mountRemoteControls(
       invite.reset();
     }).catch((error: unknown) => {
       feedback.textContent = errorMessage(error);
+    });
+  });
+  memberPasswordForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!memberPasswordForm.reportValidity()) return;
+    const emailInput = memberPasswordForm.elements.namedItem("memberEmail") as HTMLInputElement;
+    const submitButton = memberPasswordForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (!submitButton) return;
+    submitButton.disabled = true;
+    temporaryPasswordPanel.hidden = true;
+    temporaryPasswordInput.value = "";
+    memberPasswordFeedback.textContent = "Generando una clave segura…";
+    void createCampaignMemberTemporaryPassword(supabase, campaign.id, emailInput.value.trim().toLocaleLowerCase())
+      .then((password) => {
+        temporaryPasswordInput.value = password;
+        temporaryPasswordPanel.hidden = false;
+        temporaryPasswordInput.focus();
+        temporaryPasswordInput.select();
+        memberPasswordFeedback.textContent = "Clave provisoria generada. Copiala antes de cerrar este panel.";
+      })
+      .catch((error: unknown) => {
+        memberPasswordFeedback.textContent = errorMessage(error);
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+      });
+  });
+  controls.querySelector('[data-remote-action="copy-temporary-password"]')?.addEventListener("click", () => {
+    void (async () => {
+      try {
+        await navigator.clipboard.writeText(temporaryPasswordInput.value);
+        memberPasswordFeedback.textContent = "Clave copiada. Compartila por un canal privado.";
+      } catch {
+        temporaryPasswordInput.focus();
+        temporaryPasswordInput.select();
+        memberPasswordFeedback.textContent = "La clave quedó seleccionada. Copiala con Ctrl+C.";
+      }
+    })();
+  });
+  ownPasswordForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const newPasswordInput = ownPasswordForm.elements.namedItem("newPassword") as HTMLInputElement;
+    const confirmPasswordInput = ownPasswordForm.elements.namedItem("confirmPassword") as HTMLInputElement;
+    confirmPasswordInput.setCustomValidity(
+      newPasswordInput.value === confirmPasswordInput.value ? "" : "Las contraseñas no coinciden.",
+    );
+    if (!ownPasswordForm.reportValidity()) return;
+    const submitButton = ownPasswordForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (!submitButton) return;
+    submitButton.disabled = true;
+    ownPasswordFeedback.textContent = "Guardando la contraseña…";
+    void updateSignedInPassword(supabase, newPasswordInput.value).then(() => {
+      ownPasswordForm.reset();
+      ownPasswordFeedback.textContent = "Contraseña actualizada.";
+    }).catch((error: unknown) => {
+      ownPasswordFeedback.textContent = errorMessage(error);
+    }).finally(() => {
+      submitButton.disabled = false;
     });
   });
   controls.querySelector('[data-remote-action="change"]')?.addEventListener("click", () => {
@@ -411,7 +612,7 @@ export async function configureRemotePersistence(
       },
     });
     panel.remove();
-    const onStatus = mountRemoteControls(appRoot, user, campaign, client, bindingKey, signOut);
+    const onStatus = mountRemoteControls(appRoot, user, campaign, supabase, client, bindingKey, signOut);
     if (persistenceMode === "remote") {
       const reportRemoteRevision = (revision: number): void => {
         onStatus({
