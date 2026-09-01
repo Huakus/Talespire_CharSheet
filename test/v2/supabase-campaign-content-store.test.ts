@@ -27,6 +27,7 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
   let loads = 0;
   const saves: Array<Record<string, unknown>> = [];
   const deletes: Array<Record<string, unknown>> = [];
+  const trades: Array<Record<string, unknown>> = [];
   const client = {
     listCampaignContent: async () => { loads += 1; return structuredClone(entries); },
     saveCampaignContentEntry: async (input: Record<string, unknown>) => {
@@ -48,8 +49,23 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
       deletes.push({ kind, contentKey, expectedRevision });
       entries = entries.filter((item) => !(item.kind === kind && item.contentKey === contentKey));
     },
+    executeCampaignMerchantTrade: async (input: Record<string, unknown>) => {
+      trades.push(structuredClone(input));
+      return {
+        campaignRevision: 5,
+        characterRevision: 3,
+        shopRevision: 8,
+        monsterRevision: 10,
+        buySubtotalCopper: 200,
+        sellSubtotalCopper: 25,
+        commissionCopper: 35,
+        characterCurrencyDeltaCopper: -210,
+        merchantCurrencyDeltaCopper: 210,
+        updatedAt: "2026-08-30T00:00:00.000Z",
+      };
+    },
   } as unknown as SupabaseCampaignDocumentClient;
-  return { client, saves, deletes, current: () => entries, loads: () => loads };
+  return { client, saves, deletes, trades, current: () => entries, loads: () => loads };
 }
 
 describe("Supabase campaign content store", () => {
@@ -136,6 +152,83 @@ describe("Supabase campaign content store", () => {
     expect(loaded[0]?.origin).toBe("imported");
   });
 
+  it("calls the atomic merchant trade RPC with the current content revisions", async () => {
+    const rpcCalls: Array<{ name: string; args: Record<string, unknown> }> = [];
+    const client = new SupabaseCampaignDocumentClient({
+      rpc: async (name: string, args: Record<string, unknown>) => {
+        rpcCalls.push({ name, args });
+        return { data: {
+          campaignRevision: 5,
+          characterRevision: 3,
+          shopRevision: 8,
+          monsterRevision: 10,
+          buySubtotalCopper: 200,
+          sellSubtotalCopper: 25,
+          commissionCopper: 35,
+          characterCurrencyDeltaCopper: -210,
+          merchantCurrencyDeltaCopper: 210,
+          updatedAt: "2026-08-30T00:00:00.000Z",
+        }, error: null };
+      },
+    } as never);
+
+    const result = await client.executeCampaignMerchantTrade({
+      campaignId,
+      characterId: "char_player",
+      shopContentKey: "gm:shop:mirna",
+      monsterContentKey: "gm:monster:mirna",
+      expectedCampaignRevision: 4,
+      expectedCharacterRevision: 2,
+      expectedShopRevision: 7,
+      expectedMonsterRevision: 9,
+      buys: [{ itemId: "merchant_item", quantity: 2 }],
+      sells: [{ itemId: "character_item", quantity: 1 }],
+    });
+
+    expect(rpcCalls).toEqual([{ name: "execute_campaign_merchant_trade", args: {
+      p_campaign_id: campaignId,
+      p_character_id: "char_player",
+      p_shop_content_key: "gm:shop:mirna",
+      p_monster_content_key: "gm:monster:mirna",
+      p_expected_campaign_revision: 4,
+      p_expected_character_revision: 2,
+      p_expected_shop_revision: 7,
+      p_expected_monster_revision: 9,
+      p_buys: [{ itemId: "merchant_item", quantity: 2 }],
+      p_sells: [{ itemId: "character_item", quantity: 1 }],
+    } }]);
+    expect(result).toMatchObject({ campaignRevision: 5, characterCurrencyDeltaCopper: -210 });
+  });
+
+  it("resolves shop and NPC metadata before executing a player trade", async () => {
+    const remote = fakeClient([
+      entry({ kind: "shop", contentKey: "gm:shop:mirna", name: "Curiosidades de Mirna", origin: "gm", revision: 7, payload: { name: "Curiosidades de Mirna", npcId: "npc_mirna" } }),
+      entry({ kind: "monster", contentKey: "gm:monster:mirna", name: "Mirna", origin: "gm", revision: 9, payload: { id: "npc_mirna", name: "Mirna" } }),
+    ]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    await store.load();
+
+    await store.executeMerchantTrade({
+      expectedCampaignRevision: 4,
+      characterId: "char_player",
+      expectedCharacterRevision: 2,
+      shopName: "Curiosidades de Mirna",
+      merchantNpcId: "npc_mirna",
+      buys: [{ itemId: "merchant_item", quantity: 2 }],
+      sells: [{ itemId: "character_item", quantity: 1 }],
+    });
+
+    expect(remote.trades).toEqual([expect.objectContaining({
+      campaignId,
+      shopContentKey: "gm:shop:mirna",
+      monsterContentKey: "gm:monster:mirna",
+      expectedShopRevision: 7,
+      expectedMonsterRevision: 9,
+    })]);
+    await store.load();
+    expect(remote.loads()).toBe(2);
+  });
+
   it("projects official rows and preserves their provenance while the GM edits tags", async () => {
     const remote = fakeClient([entry({
       kind: "spell",
@@ -186,6 +279,22 @@ describe("Supabase campaign content store", () => {
     await store.saveShop({ name: "La Posta", categories: {} });
 
     expect(remote.saves[0]).toMatchObject({ origin: "gm", tags: ["gm", "es"] });
+  });
+
+  it("renames equipment and shops without creating duplicate content entries", async () => {
+    const remote = fakeClient([
+      entry({ kind: "equipment", contentKey: "gm:equipment:rope", name: "Cuerda", origin: "gm", tags: ["gm", "es"], revision: 3, payload: { name: "Cuerda" } }),
+      entry({ kind: "shop", contentKey: "gm:shop:market", name: "Mercado", origin: "gm", tags: ["gm", "es"], revision: 5, payload: { name: "Mercado", categories: {} } }),
+    ]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+
+    await store.saveEquipment(normalizeEquipmentDefinition({ name: "Cuerda de seda" }), "Cuerda");
+    await store.saveShop({ name: "Mercado de la plaza", categories: {} }, "Mercado");
+
+    expect(remote.saves[0]).toMatchObject({ contentKey: "gm:equipment:rope", name: "Cuerda de seda", expectedRevision: 3 });
+    expect(remote.saves[1]).toMatchObject({ contentKey: "gm:shop:market", name: "Mercado de la plaza", expectedRevision: 5 });
+    expect(remote.current().filter((item) => item.kind === "equipment")).toHaveLength(1);
+    expect(remote.current().filter((item) => item.kind === "shop")).toHaveLength(1);
   });
 
   it("writes a versioned canonical spell payload without legacy duplicates", async () => {

@@ -111,9 +111,11 @@ describe("dice", () => {
   });
 
   it("resolves TaleSpire callbacks and keeps the best advantage result", async () => {
+    const sent: { groups: unknown[]; rollId: string }[] = [];
     const roller = new TaleSpireDiceRoller({
       putDiceInTray: async () => "roll-1",
       evaluateDiceResultsGroup: async (group) => Number((group as { total: number }).total),
+      sendDiceResult: async (groups, rollId) => { sent.push({ groups, rollId }); },
     });
     const resolved: number[] = [];
     roller.subscribe((result) => resolved.push(result.total));
@@ -123,5 +125,21 @@ describe("dice", () => {
       payload: { rollId: "roll-1", resultsGroups: [{ total: 9 }, { total: 17 }] },
     });
     expect(resolved).toEqual([17]);
+    expect(sent).toEqual([{ groups: [{ total: 17 }], rollId: "roll-1" }]);
+  });
+
+  it("shows only the lowest TaleSpire group for disadvantage", async () => {
+    const sent: unknown[][] = [];
+    const roller = new TaleSpireDiceRoller({
+      putDiceInTray: async () => "roll-2",
+      evaluateDiceResultsGroup: async (group) => Number((group as { total: number }).total),
+      sendDiceResult: async (groups) => { sent.push(groups); },
+    });
+    await roller.roll({ name: "Sigilo", expressions: ["1d20+4"], mode: "disadvantage" });
+    await roller.handleRollEvent({
+      kind: "rollResults",
+      payload: { rollId: "roll-2", resultsGroups: [{ total: 18 }, { total: 7 }] },
+    });
+    expect(sent).toEqual([[{ total: 7 }]]);
   });
 });

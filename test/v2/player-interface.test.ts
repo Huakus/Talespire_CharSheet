@@ -6,7 +6,7 @@ import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipme
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import type { CampaignSnapshot } from "../../src/application/ports/campaign-repository";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
-import { BrowserApp, clampMerchantQuantity, describeCharacterChanges, experienceProgress, formatCurrencyInLargestDenominations, inspiredRollMode, isValidHitPointAmount, merchantBalancePreview, strengthBasedIntimidationModifier, type BrowserAppRuntime } from "../../src/ui/browser-app";
+import { BrowserApp, clampMerchantQuantity, combineRollModes, consumeManualRollMode, describeCharacterChanges, experienceProgress, formatCurrencyInLargestDenominations, inspiredRollMode, isValidHitPointAmount, merchantBalancePreview, strengthBasedIntimidationModifier, toggleManualRollMode, toggleManualRollModeLock, type BrowserAppRuntime, type ManualRollModeState } from "../../src/ui/browser-app";
 import type { TaleSpireTransportDiagnostics } from "../../src/infrastructure/talespire/talespire-player-collaboration";
 import type { GmShop } from "../../src/domain/gm/gm-global-content";
 import type { MerchantDifficultyBreakdown } from "../../src/domain/commerce/merchant-interaction";
@@ -37,6 +37,7 @@ interface BrowserAppViewHarness {
   includeUnownedInventory: boolean;
   showInventoryDescriptions: boolean;
   armedInspirationCharacterIds: Set<string>;
+  manualRollModes: Map<string, ManualRollModeState>;
   combatExecutions: Map<string, Set<"attack" | "damage">>;
   combatExecutionDamage: Map<string, string>;
   snapshot: CampaignSnapshot | null;
@@ -281,6 +282,13 @@ describe("player interface shell", () => {
     expect(inactive).toContain("<span>INIC</span>");
     expect(inactive).toContain('class="hero-currency-indicator"');
     expect(inactive).toContain('class="hero-vitals sheet-hero-secondary"');
+    expect(inactive).toContain('aria-label="Ventaja o desventaja manual para tiradas d20"');
+    expect(inactive).not.toContain('data-manual-roll-mode="normal"');
+    expect(inactive).toContain('data-manual-roll-mode="advantage" class="hero-roll-mode-toggle " aria-pressed="false"');
+    expect(inactive).toContain('data-manual-roll-mode="disadvantage" class="hero-roll-mode-toggle " aria-pressed="false"');
+    expect(inactive).toContain('data-manual-roll-lock="advantage" class="hero-roll-mode-lock " aria-pressed="false"');
+    expect(inactive.indexOf('class="header-stat-button hero-initiative')).toBeLessThan(inactive.indexOf('class="hero-roll-modes"'));
+    expect(inactive.indexOf('class="hero-roll-modes"')).toBeLessThan(inactive.indexOf('class="inspiration-button hero-inspiration'));
     expect(inactive).toContain('title="1 PPL, 1 PO, 1 PE, 4 PP, 9 PC"');
     expect(inactive).not.toContain("1199 PC");
     for (const coin of ["platinum", "gold", "electrum", "silver", "copper"]) {
@@ -375,6 +383,20 @@ describe("player interface shell", () => {
     expect(inspiredRollMode("normal")).toBe("advantage");
     expect(inspiredRollMode("advantage")).toBe("advantage");
     expect(inspiredRollMode("disadvantage")).toBe("normal");
+    expect(combineRollModes("normal", "advantage")).toBe("advantage");
+    expect(combineRollModes("advantage", "disadvantage")).toBe("normal");
+    view.manualRollModes.set(character.id, { mode: "disadvantage", locked: true });
+    const manualDisadvantage = view.renderCharacterForm(character);
+    expect(manualDisadvantage).toContain('data-manual-roll-mode="disadvantage" class="hero-roll-mode-toggle active" aria-pressed="true"');
+    expect(manualDisadvantage).toContain('data-manual-roll-lock="disadvantage" class="hero-roll-mode-lock active" aria-pressed="true"');
+    const advantage = toggleManualRollMode(null, "advantage");
+    expect(advantage).toEqual({ mode: "advantage", locked: false });
+    expect(consumeManualRollMode(advantage)).toBeNull();
+    const lockedAdvantage = toggleManualRollModeLock(advantage, "advantage");
+    expect(lockedAdvantage).toEqual({ mode: "advantage", locked: true });
+    expect(consumeManualRollMode(lockedAdvantage)).toEqual(lockedAdvantage);
+    expect(toggleManualRollMode(lockedAdvantage, "disadvantage")).toEqual({ mode: "disadvantage", locked: false });
+    expect(toggleManualRollMode(lockedAdvantage, "advantage")).toBeNull();
     expect(strengthBasedIntimidationModifier({
       abilityModifiers: { strength: 4, charisma: 1 },
       skills: { intimidation: 5 },
@@ -594,6 +616,38 @@ describe("player interface shell", () => {
     const excludedByAnd = view.renderCharacterForm(character);
     expect(excludedByAnd).not.toContain('data-add-catalog-inventory="Elixir de prueba"');
     expect(excludedByAnd).toContain("No hay objetos con las características seleccionadas");
+  });
+
+  it("only presents item effects while their equipment requirements are active", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_15151515151515151515151515151515",
+      "Delerion",
+      "2026-08-31T00:00:00.000Z",
+    );
+    const { rarity: _rarity, ...definition } = normalizeEquipmentDefinition({ name: "Daga del Umbral" });
+    character.inventory = [{
+      ...definition,
+      id: "inv_15151515151515151515151515151515",
+      order: 0,
+      group: "equipment",
+      equipped: false,
+      attuned: false,
+      requiresAttunement: true,
+      effect: { description: "Efecto que no debe quedar activo", active: true },
+    }];
+
+    const unequipped = view.renderCharacterForm(character);
+    expect(unequipped).not.toContain("Efecto que no debe quedar activo");
+
+    character.inventory[0]!.equipped = true;
+    const unattuned = view.renderCharacterForm(character);
+    expect(unattuned).not.toContain("Efecto que no debe quedar activo");
+
+    character.inventory[0]!.attuned = true;
+    const active = view.renderCharacterForm(character);
+    expect(active).toContain("Efecto que no debe quedar activo");
+    expect(active).toContain("Daga del Umbral");
   });
 
   it("renders structured item capabilities, inline dice and direct action rolls", () => {

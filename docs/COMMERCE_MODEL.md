@@ -16,6 +16,18 @@ La interfaz y el código usan estos conceptos canónicos:
 
 Todos los importes de las operaciones se calculan y persisten en monedas de cobre (PC).
 
+## Persistencia compartida
+
+En campañas conectadas a Supabase, comprar y vender usa la función transaccional
+`execute_campaign_merchant_trade`. Un jugador autenticado puede ejecutarla si es miembro de
+la campaña; no necesita permisos de GM. La base vuelve a calcular precios y comisión con el
+estado vigente, verifica las revisiones de campaña, personaje, tienda y NPC, y actualiza
+inventarios y fondos en una sola transacción. Si cambió cualquier dato, la operación completa
+se cancela y la interfaz pide revisar el carrito.
+
+La edición general de tiendas y NPC sigue reservada a owner/GM. El permiso de comercio no
+permite que un jugador reemplace el contenido arbitrario de un comerciante.
+
 ## Cálculo de dificultad
 
 Antes de tirar, la confirmación muestra cada componente, su signo y la CD final. Las acciones de negociación y Asaltar usan:

@@ -5,6 +5,7 @@ import { normalizeMonsterDefinition, type MonsterDefinition } from "../../domain
 import { normalizeSpellDefinition } from "../../domain/spells/spell-catalog";
 import type { CampaignContent } from "../../domain/content/campaign-content";
 import type { CatalogMetadata } from "../../domain/content/catalog-metadata";
+import type { CampaignMerchantTradeCommand } from "../../domain/commerce/merchant-trade";
 import {
   serializeChecklistContentPayload,
   serializeEquipmentContentPayload,
@@ -119,6 +120,30 @@ export class SupabaseCampaignContentStore {
     await this.savePlain("checklist", item.text, serializeChecklistContentPayload(item), item.id, `gm:checklist:${item.id}`);
   }
   deleteChecklistItem(key: string): Promise<void> { return this.deleteByKeyOrName("checklist", `gm:checklist:${key}`, key); }
+
+  async executeMerchantTrade(command: CampaignMerchantTradeCommand): Promise<void> {
+    const entries = (await this.currentEntries()).filter(isSpanishCampaignContent);
+    const shopEntry = entries.find((entry) =>
+      entry.kind === "shop" && normalizedName(entry.name) === normalizedName(command.shopName));
+    const monsterEntry = entries.find((entry) =>
+      entry.kind === "monster" && String(object(entry.payload).id ?? "") === command.merchantNpcId);
+    if (!shopEntry || !monsterEntry) {
+      throw new Error("El comerciante cambió o ya no está disponible. Actualizá la tienda e intentá nuevamente.");
+    }
+    await this.client.executeCampaignMerchantTrade({
+      campaignId: this.campaignId,
+      characterId: command.characterId,
+      shopContentKey: shopEntry.contentKey,
+      monsterContentKey: monsterEntry.contentKey,
+      expectedCampaignRevision: command.expectedCampaignRevision,
+      expectedCharacterRevision: command.expectedCharacterRevision,
+      expectedShopRevision: shopEntry.revision,
+      expectedMonsterRevision: monsterEntry.revision,
+      buys: command.buys,
+      sells: command.sells,
+    });
+    this.entries = null;
+  }
 
   private project(entries: RemoteCampaignContentEntry[]): CampaignContent {
     const spanishEntries = entries.filter(isSpanishCampaignContent);

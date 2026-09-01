@@ -171,9 +171,15 @@ export class GmToolsPanel {
 
   private renderContent(section: GmContentSection): string {
     const template = this.contentTemplate?.section === section ? this.contentTemplate.value : null;
-    const spell = (section === "spell" && template ? template as SpellDefinition : this.content.spells.find((entry) => entry.name === this.selectedSpell)) ?? null;
-    const equipment = (section === "equipment" && template ? template as EquipmentCatalogDraft : this.content.equipment.find((entry) => entry.name === this.selectedEquipment)) ?? null;
-    const shop = (section === "shop" && template ? template as GmShop : this.content.shops.find((entry) => entry.name === this.selectedShop)) ?? null;
+    const spell = section === "spell"
+      ? (template ? template as SpellDefinition : this.content.spells.find((entry) => entry.name === this.selectedSpell)) ?? null
+      : null;
+    const equipment = section === "equipment"
+      ? (template ? template as EquipmentCatalogDraft : this.content.equipment.find((entry) => entry.name === this.selectedEquipment)) ?? null
+      : null;
+    const shop = section === "shop"
+      ? (template ? template as GmShop : this.content.shops.find((entry) => entry.name === this.selectedShop)) ?? null
+      : null;
     const editing = this.editingContent === section;
     if (editing) {
       const form = section === "spell" ? this.renderSpellForm(spell) : section === "equipment" ? this.renderEquipmentForm(equipment) : this.renderShopForm(shop);

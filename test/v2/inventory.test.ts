@@ -137,6 +137,7 @@ describe("inventory", () => {
     const repository = new InMemoryCampaignRepository();
     const application = new CampaignApplication(repository);
     const character = characterFixture();
+    character.inventory.find((item) => item.name === "Ring")!.effect = { description: "Luz activa", active: true };
     const initial = await repository.save(createTestCampaign({ id: "inventory-use", character }), { kind: "empty" });
     const ring = character.inventory.find((item) => item.name === "Ring")!;
     const unequipped = await application.setInventoryItemEquipped({
@@ -148,6 +149,7 @@ describe("inventory", () => {
       updatedAt: "2026-07-25T18:04:00.000Z",
     });
     const current = unequipped.campaign.characters[character.id]!;
+    expect(current.inventory.find((item) => item.id === ring.id)?.effect.active).toBe(false);
 
     await expect(application.useInventoryItem({
       characterId: character.id,

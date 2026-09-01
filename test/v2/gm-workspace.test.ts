@@ -49,6 +49,41 @@ describe("GM workspace", () => {
     expect(filtered).not.toContain(`<h3>${wizard.name}</h3>`);
   });
 
+  it("keeps each content editor title and rename field scoped to the selected entry", async () => {
+    const spell = normalizeSpellDefinition({ name: "Abrasador de Aganazzar", level: 2, classes: ["wizard"] });
+    const openSpell = normalizeSpellDefinition({ name: "Abrir", level: 2, classes: ["wizard"] });
+    const equipment = normalizeEquipmentDefinition({ name: "Cuerda de seda" });
+    const merchant = normalizeMonsterDefinition({ Id: "npc_mercado", Name: "Mercader" });
+    const shop: GmShop = { name: "Mercado de la plaza", npcId: merchant.id, categories: {} };
+    const panel = new GmToolsPanel({} as HTMLElement, {
+      loadGmContent: async () => ({ spells: [spell, openSpell], equipment: [equipment], monsters: [merchant], shops: [shop], checklist: [] }),
+    }, () => undefined, () => undefined, () => undefined);
+    await panel.load();
+    const workspace = { noteGroups: [], randomTables: [], googleDocsUrl: "" };
+    const editable = panel as unknown as {
+      editingContent: "equipment" | "shop";
+      selectedSpell: string;
+      selectedEquipment: string;
+      selectedShop: string;
+    };
+
+    editable.selectedSpell = spell.name;
+    editable.selectedEquipment = equipment.name;
+    editable.editingContent = "equipment";
+    const equipmentEditor = panel.render("content", workspace, "equipment");
+    expect(equipmentEditor).toContain(`<strong>${equipment.name}</strong>`);
+    expect(equipmentEditor).toContain(`<label>Nombre<input name="name" required value="${equipment.name}">`);
+    expect(equipmentEditor).not.toContain(`<strong>${spell.name}</strong>`);
+
+    editable.selectedSpell = openSpell.name;
+    editable.selectedShop = shop.name;
+    editable.editingContent = "shop";
+    const shopEditor = panel.render("content", workspace, "shop");
+    expect(shopEditor).toContain(`<strong>${shop.name}</strong>`);
+    expect(shopEditor).toContain(`<label>Nombre del comerciante<input name="name" required value="${shop.name}">`);
+    expect(shopEditor).not.toContain(`<strong>${openSpell.name}</strong>`);
+  });
+
   it("confines existing character spell class conversion to the persistence boundary", () => {
     const migrated = migrateLegacyCharacterSpellClasses({
       id: "spl_11111111111111111111111111111111",

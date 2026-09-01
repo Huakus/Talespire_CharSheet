@@ -70,16 +70,41 @@ export class TaleSpireDiceRoller implements DiceRoller {
     if (!request) return;
     this.pending.delete(rollId);
     const totals = await Promise.all(groups.map((group) => this.evaluateGroup(group)));
-    const total = request.mode === "advantage"
-      ? Math.max(...totals)
-      : request.mode === "disadvantage"
-        ? Math.min(...totals)
-        : totals[0];
+    const resolvedGroups = this.resolveGroups(request, groups, totals);
+    const total = resolvedGroups.totals[0];
     if (total !== undefined && Number.isFinite(total)) {
       const resolved = { name: request.name, total };
       this.listeners.forEach((listener) => listener(resolved));
     }
-    await this.api.sendDiceResult?.(groups, rollId);
+    await this.api.sendDiceResult?.(resolvedGroups.groups, rollId);
+  }
+
+  private resolveGroups(
+    request: DiceRollRequest,
+    groups: unknown[],
+    totals: number[],
+  ): { groups: unknown[]; totals: number[] } {
+    if (request.mode === "normal") return { groups, totals };
+    const resolvedGroups: unknown[] = [];
+    const resolvedTotals: number[] = [];
+    let cursor = 0;
+    for (const expression of request.expressions) {
+      const candidateCount = expression.toLowerCase().includes("d20") ? 2 : 1;
+      const candidateGroups = groups.slice(cursor, cursor + candidateCount);
+      const candidateTotals = totals.slice(cursor, cursor + candidateCount);
+      cursor += candidateCount;
+      if (!candidateGroups.length) continue;
+      const selectedIndex = candidateTotals.reduce((selected, total, index) => {
+        const selectedTotal = candidateTotals[selected];
+        if (selectedTotal === undefined) return index;
+        return request.mode === "advantage"
+          ? total > selectedTotal ? index : selected
+          : total < selectedTotal ? index : selected;
+      }, 0);
+      resolvedGroups.push(candidateGroups[selectedIndex]);
+      resolvedTotals.push(candidateTotals[selectedIndex] ?? 0);
+    }
+    return { groups: resolvedGroups, totals: resolvedTotals };
   }
 
   private async evaluateGroup(group: unknown): Promise<number> {

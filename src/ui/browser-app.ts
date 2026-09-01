@@ -23,6 +23,7 @@ import {
   SAVE_DEFINITIONS,
   SKILL_DEFINITIONS,
   type CharacterChecks,
+  type RollMode,
   type SaveKey,
   type SkillKey,
 } from "../domain/character/character-checks";
@@ -76,6 +77,7 @@ import {
   type MerchantChallenge,
   type MerchantDifficultyBreakdown,
 } from "../domain/commerce/merchant-interaction";
+import type { CampaignMerchantTradeCommand } from "../domain/commerce/merchant-trade";
 import type { GmShop } from "../domain/gm/gm-global-content";
 import type { MonsterDefinition } from "../domain/monsters/monster-catalog";
 import {
@@ -147,6 +149,7 @@ export interface BrowserAppRuntime {
   saveCustomEquipment?: (definition: EquipmentCatalogDraft) => Promise<void>;
   saveShop?: (shop: GmShop, previousKey?: string | null) => Promise<void>;
   saveMonster?: (monster: MonsterDefinition, previousKey?: string | null) => Promise<void>;
+  executeMerchantTrade?: (command: CampaignMerchantTradeCommand) => Promise<void>;
   loreReader?: CampaignLoreReader;
 }
 
@@ -391,6 +394,32 @@ export function inspiredRollMode(mode: "normal" | "advantage" | "disadvantage"):
   return mode === "disadvantage" ? "normal" : "advantage";
 }
 
+export function combineRollModes(...modes: RollMode[]): RollMode {
+  const advantage = modes.includes("advantage");
+  const disadvantage = modes.includes("disadvantage");
+  if (advantage === disadvantage) return "normal";
+  return advantage ? "advantage" : "disadvantage";
+}
+
+type ManualRollMode = Exclude<RollMode, "normal">;
+
+export interface ManualRollModeState {
+  mode: ManualRollMode;
+  locked: boolean;
+}
+
+export function toggleManualRollMode(current: ManualRollModeState | null, mode: ManualRollMode): ManualRollModeState | null {
+  return current?.mode === mode ? null : { mode, locked: false };
+}
+
+export function toggleManualRollModeLock(current: ManualRollModeState | null, mode: ManualRollMode): ManualRollModeState | null {
+  return current?.mode === mode ? { ...current, locked: !current.locked } : current;
+}
+
+export function consumeManualRollMode(current: ManualRollModeState | null): ManualRollModeState | null {
+  return current?.locked ? current : null;
+}
+
 export function formatCurrencyInLargestDenominations(value: number): string {
   const currency = currencyFromCopper(Math.max(0, Math.trunc(value)));
   const parts = CURRENCY_DENOMINATIONS
@@ -604,6 +633,7 @@ export class BrowserApp {
   private showSpellDescriptions = preference("spell-descriptions", "shown") !== "hidden";
   private expandedSpellDescriptions = new Set<string>();
   private armedInspirationCharacterIds = new Set<string>();
+  private manualRollModes = new Map<string, ManualRollModeState>();
   private combatExecutions = new Map<string, Set<CombatResolutionKind>>();
   private combatExecutionDamage = new Map<string, string>();
   private undoStacks = new Map<string, ReversibleAction[]>();
@@ -956,6 +986,7 @@ export class BrowserApp {
             <div class="hero-hit-points" title="${character.combat.hitPoints.current} PG + ${character.combat.hitPoints.temporary} temporales"><span>PG total</span><strong>${character.combat.hitPoints.current + character.combat.hitPoints.temporary}<small> / ${character.combat.hitPoints.maximum}</small></strong></div>
             <div><span>CA</span><strong>${character.combat.armorClass}</strong></div>
             <button type="button" class="header-stat-button hero-initiative roll-button" data-roll-name="Iniciativa: ${escapeHtml(character.name)}" data-roll-expression="1d20${signed(projection.initiativeModifier)}" data-roll-mode="${initiativeMode}"><span>INIC</span><strong>${signed(projection.initiativeModifier)}</strong></button>
+            ${this.renderManualRollModeControl(character)}
             ${this.renderInspirationButton(character)}
             ${this.renderCurrencyIndicator(character)}
             <div class="hero-rest-buttons"><button type="button" class="header-stat-button hero-rest-button" data-resource-action="short-rest" title="Descanso corto"><span>Descanso</span><strong>corto</strong></button><button type="button" class="header-stat-button hero-rest-button" data-resource-action="long-rest" title="Descanso largo"><span>Descanso</span><strong>largo</strong></button></div>
@@ -991,6 +1022,21 @@ export class BrowserApp {
     const inspirationState = !character.combat.inspiration ? "inactive" : inspirationArmed ? "armed" : "available";
     const inspirationAction = !character.combat.inspiration ? "Activar" : inspirationArmed ? "Desactivar" : "Usar";
     return `<button type="button" class="inspiration-button hero-inspiration ${inspirationState}" data-resource-action="inspiration" aria-pressed="${inspirationArmed}" title="${inspirationArmed ? "La próxima tirada d20 compatible se hará con inspiración" : `${inspirationAction} inspiración`}"><span>Inspiración</span><strong>${inspirationAction}</strong>${inspirationArmed ? "<small>Próxima tirada</small>" : ""}</button>`;
+  }
+
+  private renderManualRollModeControl(character: CharacterV2): string {
+    const current = this.manualRollModes.get(character.id) ?? null;
+    const options: readonly [ManualRollMode, string][] = [
+      ["advantage", "Ventaja"],
+      ["disadvantage", "Desventaja"],
+    ];
+    return `<div class="hero-roll-modes" role="group" aria-label="Ventaja o desventaja manual para tiradas d20">
+      ${options.map(([mode, label]) => {
+        const active = current?.mode === mode;
+        const locked = active && current.locked;
+        return `<div class="hero-roll-mode-row ${mode}"><button type="button" data-manual-roll-mode="${mode}" class="hero-roll-mode-toggle ${active ? "active" : ""}" aria-pressed="${active}" title="${active ? `Desactivar ${label.toLowerCase()}` : `Activar ${label.toLowerCase()} para la próxima tirada d20`}">${label}</button><button type="button" data-manual-roll-lock="${mode}" class="hero-roll-mode-lock ${locked ? "active" : ""}" aria-pressed="${locked}" aria-label="${locked ? `Desbloquear ${label.toLowerCase()}` : `Conservar ${label.toLowerCase()} después de tirar`}" title="${locked ? "Bloqueado: no se desactiva después de tirar" : "Bloquear para conservar después de tirar"}" ${active ? "" : "disabled"}>${locked ? "🔒" : "🔓"}</button></div>`;
+      }).join("")}
+    </div>`;
   }
 
   private renderCurrencyIndicator(character: CharacterV2): string {
@@ -1408,8 +1454,8 @@ export class BrowserApp {
     const proficiencyCount = proficiencyGroups.reduce((total, group) => total + group.values.length, 0);
     const activeEffects = [
       ...character.spellcasting.spells.filter((spell) => spell.effect.active && spell.effect.description.trim()).map((spell) => ({ source: spell.name, description: spell.effect.description, kind: "Conjuro" })),
-      ...character.inventory.filter((item) => item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
-      ...character.inventory.flatMap((item) => item.equipped ? item.features.filter((feature) => feature.active && feature.description.trim()).map((feature) => ({ source: `${item.name} · ${feature.name}`, description: feature.description, kind: inventoryFeatureKindLabel(feature.kind) })) : []),
+      ...character.inventory.filter((item) => item.equipped && (!item.requiresAttunement || item.attuned) && item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
+      ...character.inventory.flatMap((item) => item.equipped && (!item.requiresAttunement || item.attuned) ? item.features.filter((feature) => feature.active && feature.description.trim()).map((feature) => ({ source: `${item.name} · ${feature.name}`, description: feature.description, kind: inventoryFeatureKindLabel(feature.kind) })) : []),
       ...character.traits.flatMap((group) => group.traits).filter((trait) => trait.effect.active && trait.effect.description.trim()).map((trait) => ({ source: trait.name, description: trait.effect.description, kind: "Rasgo" })),
     ];
     return `<div class="play-dashboard">
@@ -1877,7 +1923,9 @@ export class BrowserApp {
     const previewFeaturesHtml = !interactiveFeaturesHtml && item.features.length ? `<div class="inventory-capability-groups inventory-capability-preview"><section><h4>Capacidades</h4>${[...item.features].sort((left, right) => left.order - right.order).map((feature) => `<article class="inventory-feature-capability"><header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h4>${escapeHtml(feature.name)}</h4></div></header>${feature.description ? `<div class="rich-inventory-text">${commerce ? feature.description.split(/\r?\n\s*\r?\n/).filter(Boolean).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("") : this.renderInventoryRichText(feature.description, `${item.name}: ${feature.name}`)}</div>` : ""}${feature.rolls.length ? `<div class="inventory-feature-controls">${feature.rolls.map((roll) => commerce ? `<span class="card-badge">${escapeHtml(roll.label)}: ${escapeHtml(roll.expression)}</span>` : `<button type="button" class="roll-button" data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}</div>` : ""}</article>`).join("")}</section></div>` : "";
     const featuresHtml = interactiveFeaturesHtml || previewFeaturesHtml;
     const commerceControl = commerce && ownedItem ? `<div class="inventory-card-controls merchant-item-controls"><div class="merchant-quantity-control ${commerce.disabled ? "disabled" : ""}" aria-label="Cantidad de ${escapeHtml(ownedItem.name)}"><div><button type="button" data-merchant-quantity-step="-1" aria-label="Quitar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity <= 0 ? "disabled" : ""}>−</button><button type="button" data-merchant-quantity-step="1" aria-label="Agregar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity >= quantity ? "disabled" : ""}>+</button></div><input type="number" inputmode="numeric" data-merchant-select-quantity min="0" max="${quantity}" step="1" value="${commerce.selectedQuantity}" aria-label="Cantidad a intercambiar de ${escapeHtml(ownedItem.name)}" ${commerce.disabled ? "disabled" : ""}><small>de ${quantity}</small></div>${commerce.itemChallenge ? `<button type="button" class="secondary-button merchant-item-challenge-button" data-merchant-action="${commerce.itemChallenge.action}" data-merchant-item-id="${escapeHtml(ownedItem.id)}" data-base-item-dc="${commerce.itemChallenge.dc}" ${commerce.selectedQuantity > 0 ? "" : "disabled"}><span>${escapeHtml(commerce.itemChallenge.label)}</span><strong>CD ${commerce.itemChallenge.dc}</strong></button>` : ""}</div>` : "";
-    const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect"><span>${escapeHtml(ownedItem.effect.description)}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto"><option value="off" ${ownedItem.effect.active ? "" : "selected"}>Inactivo</option><option value="on" ${ownedItem.effect.active ? "selected" : ""}>Activo</option></select></div>` : "";
+    const effectAvailable = Boolean(ownedItem?.equipped && (!ownedItem.requiresAttunement || ownedItem.attuned));
+    const effectActive = Boolean(effectAvailable && ownedItem?.effect.active);
+    const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect ${effectAvailable ? "" : "unavailable"}"><span>${escapeHtml(ownedItem.effect.description)}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto" title="${effectAvailable ? "Estado del efecto" : "El objeto debe estar equipado y, cuando corresponda, sintonizado"}" ${effectAvailable ? "" : "disabled"}><option value="off" ${effectActive ? "" : "selected"}>Inactivo</option><option value="on" ${effectActive ? "selected" : ""}>Activo</option></select></div>` : "";
     const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`) : "";
     const transferControl = ownedItem ? `<details class="inventory-item-transfer"><summary>Transferir</summary><div><select data-item-transfer-target aria-label="Personaje destinatario"><option value="">Destinatario…</option>${targets}</select><div><input data-item-transfer-quantity type="number" min="1" max="${quantity}" step="1" value="1" aria-label="Cantidad a transferir"><button type="button" data-transfer-inventory-item disabled>Confirmar</button></div></div></details>` : "";
     const inventoryHeaderControl = ownedItem ? `<div class="inventory-card-controls"><div class="inventory-card-primary"><label class="inventory-card-quantity"><span>Cant.</span><input data-inventory-quantity-input type="number" min="1" step="1" value="${quantity}" aria-label="Cantidad de ${escapeHtml(item.name)}"></label><button type="button" class="inventory-state-toggle ${ownedItem.equipped ? "active" : ""}" data-inventory-action="equip" aria-pressed="${ownedItem.equipped}" aria-label="${ownedItem.equipped ? "Quitar" : "Equipar"} ${escapeHtml(item.name)}" title="${ownedItem.equipped ? "Quitar" : "Equipar"}">${ownedItem.equipped ? "✓" : "✕"}</button></div>${transferControl}</div>` : '<span class="inventory-catalog-state">No adquirido</span>';
@@ -2571,6 +2619,29 @@ export class BrowserApp {
         this.message = null;
         this.renderAfterSavingSummaryEditor();
         if (tab === "lore") void this.loreBrowser?.load();
+      });
+    });
+    this.root.querySelectorAll<HTMLButtonElement>("[data-manual-roll-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!this.selectedCharacterId) return;
+        const mode = button.dataset.manualRollMode;
+        if (mode !== "advantage" && mode !== "disadvantage") return;
+        const next = toggleManualRollMode(this.manualRollModes.get(this.selectedCharacterId) ?? null, mode);
+        if (next) this.manualRollModes.set(this.selectedCharacterId, next);
+        else this.manualRollModes.delete(this.selectedCharacterId);
+        this.message = null;
+        this.render();
+      });
+    });
+    this.root.querySelectorAll<HTMLButtonElement>("[data-manual-roll-lock]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!this.selectedCharacterId) return;
+        const mode = button.dataset.manualRollLock;
+        if (mode !== "advantage" && mode !== "disadvantage") return;
+        const next = toggleManualRollModeLock(this.manualRollModes.get(this.selectedCharacterId) ?? null, mode);
+        if (next) this.manualRollModes.set(this.selectedCharacterId, next);
+        this.message = null;
+        this.render();
       });
     });
     this.root.querySelectorAll<HTMLSelectElement>("#theme").forEach((select) => {
@@ -3314,60 +3385,84 @@ export class BrowserApp {
     if (projectedPlayerFunds < 0) throw new Error("No tenés fondos suficientes para completar el intercambio.");
     if (projectedMerchantFunds < 0) throw new Error("El comerciante no tiene fondos suficientes para completar el intercambio.");
 
-    const originalMerchantInventory = this.merchantInventory(currentShop).map((item) => structuredClone(item));
-    const afterBuys = this.adjustMerchantInventory(currentShop, cart.buy, "remove");
     const originalNpc = this.linkedMerchantNpc(currentShop);
     if (!originalNpc) throw new Error("El comerciante no tiene un NPC asociado válido.");
-    const merchantInventoryAfterCart = (() => {
-      const inventory = afterBuys.map((item) => structuredClone(item));
-      for (const selection of cart.sell) {
-        const transferable = { ...selection.item, equipped: false, attuned: false };
-        const stack = inventory.find((entry) => inventoryItemsCanStack({ ...transferable, group: entry.group }, entry));
-        if (stack) stack.quantity += selection.quantity;
-        else inventory.push({ ...structuredClone(transferable), id: `inv_${crypto.randomUUID().replaceAll("-", "")}`, order: inventory.length, quantity: selection.quantity });
-      }
-      return inventory.map((item, order) => ({ ...item, order }));
-    })();
-    const projectedCharacter = this.projectedMerchantCartCharacter(character, cart);
-    const finalizedCharacter: CharacterV2 = {
-      ...projectedCharacter,
-      currency: currencyFromCopper(projectedPlayerFunds),
-      inventory: projectedCharacter.inventory.map((item, order) => ({
-        ...item,
-        id: item.id.startsWith("cart:") ? `inv_${crypto.randomUUID().replaceAll("-", "")}` : item.id,
-        order,
-      })),
-    };
 
-    let characterUpdated = false;
-    await this.persistMerchantInventory(currentShop, merchantInventoryAfterCart);
-    try {
-      this.acceptCharacterSnapshot(await this.application.restoreCharacterState({
-        characterId: character.id,
-        expectedCharacterRevision: character.revision,
-        expectedCampaignChecksum: this.snapshot.checksum,
-        character: finalizedCharacter,
-      }), `Intercambio con ${currentShop.name}`);
-      characterUpdated = true;
-      await this.persistMerchantShop({
-        ...currentShop,
-        interactions: { ...interaction, fundsCopper: projectedMerchantFunds },
-      });
-    } catch (error) {
-      this.customMonsters = this.customMonsters.map((entry) => entry.name === originalNpc.name ? originalNpc : entry);
-      await this.persistMerchantInventory(currentShop, originalMerchantInventory).catch(() => undefined);
-      if (characterUpdated && this.snapshot) {
-        const changedCharacter = this.snapshot.campaign.characters[character.id];
-        if (changedCharacter) {
-          await this.application.restoreCharacterState({
-            characterId: changedCharacter.id,
-            expectedCharacterRevision: changedCharacter.revision,
-            expectedCampaignChecksum: this.snapshot.checksum,
-            character,
-          }).then((snapshot) => { this.snapshot = snapshot; }).catch(() => undefined);
-        }
+    if (this.runtime.executeMerchantTrade) {
+      try {
+        await this.runtime.executeMerchantTrade({
+          expectedCampaignRevision: this.snapshot.campaign.revision,
+          characterId: character.id,
+          expectedCharacterRevision: character.revision,
+          shopName: currentShop.name,
+          merchantNpcId: originalNpc.id,
+          buys: cart.buy.map((entry) => ({ itemId: entry.item.id, quantity: entry.quantity })),
+          sells: cart.sell.map((entry) => ({ itemId: entry.item.id, quantity: entry.quantity })),
+        });
+        const [snapshot] = await Promise.all([
+          this.application.loadCampaign(),
+          this.refreshCustomContent(false),
+        ]);
+        if (!snapshot) throw new Error("La campaña ya no está disponible.");
+        this.acceptCharacterSnapshot(snapshot, `Intercambio con ${currentShop.name}`);
+      } catch (error) {
+        this.merchantCartReviewShopName = currentShop.name;
+        throw error;
       }
-      throw error;
+    } else {
+      const originalMerchantInventory = this.merchantInventory(currentShop).map((item) => structuredClone(item));
+      const afterBuys = this.adjustMerchantInventory(currentShop, cart.buy, "remove");
+      const merchantInventoryAfterCart = (() => {
+        const inventory = afterBuys.map((item) => structuredClone(item));
+        for (const selection of cart.sell) {
+          const transferable = { ...selection.item, equipped: false, attuned: false };
+          const stack = inventory.find((entry) => inventoryItemsCanStack({ ...transferable, group: entry.group }, entry));
+          if (stack) stack.quantity += selection.quantity;
+          else inventory.push({ ...structuredClone(transferable), id: `inv_${crypto.randomUUID().replaceAll("-", "")}`, order: inventory.length, quantity: selection.quantity });
+        }
+        return inventory.map((item, order) => ({ ...item, order }));
+      })();
+      const projectedCharacter = this.projectedMerchantCartCharacter(character, cart);
+      const finalizedCharacter: CharacterV2 = {
+        ...projectedCharacter,
+        currency: currencyFromCopper(projectedPlayerFunds),
+        inventory: projectedCharacter.inventory.map((item, order) => ({
+          ...item,
+          id: item.id.startsWith("cart:") ? `inv_${crypto.randomUUID().replaceAll("-", "")}` : item.id,
+          order,
+        })),
+      };
+
+      let characterUpdated = false;
+      await this.persistMerchantInventory(currentShop, merchantInventoryAfterCart);
+      try {
+        this.acceptCharacterSnapshot(await this.application.restoreCharacterState({
+          characterId: character.id,
+          expectedCharacterRevision: character.revision,
+          expectedCampaignChecksum: this.snapshot.checksum,
+          character: finalizedCharacter,
+        }), `Intercambio con ${currentShop.name}`);
+        characterUpdated = true;
+        await this.persistMerchantShop({
+          ...currentShop,
+          interactions: { ...interaction, fundsCopper: projectedMerchantFunds },
+        });
+      } catch (error) {
+        this.customMonsters = this.customMonsters.map((entry) => entry.name === originalNpc.name ? originalNpc : entry);
+        await this.persistMerchantInventory(currentShop, originalMerchantInventory).catch(() => undefined);
+        if (characterUpdated && this.snapshot) {
+          const changedCharacter = this.snapshot.campaign.characters[character.id];
+          if (changedCharacter) {
+            await this.application.restoreCharacterState({
+              characterId: changedCharacter.id,
+              expectedCharacterRevision: changedCharacter.revision,
+              expectedCampaignChecksum: this.snapshot.checksum,
+              character,
+            }).then((snapshot) => { this.snapshot = snapshot; }).catch(() => undefined);
+          }
+        }
+        throw error;
+      }
     }
     const units = [...cart.buy, ...cart.sell].reduce((sum, entry) => sum + entry.quantity, 0);
     this.clearMerchantCart(currentShop, character);
@@ -3494,10 +3589,15 @@ export class BrowserApp {
     const rollName = `${label}: ${character.name} vs ${shop.name} · ${this.nextHistoryId++}`;
     const baseMode = projectAdjustedRollMode(character, "skills", [skill, SKILL_DEFINITIONS[skill].label], character.checks.skills[skill].rollMode);
     const useInspiration = character.combat.inspiration && this.armedInspirationCharacterIds.has(character.id);
-    const mode = useInspiration ? inspiredRollMode(baseMode) : baseMode;
+    const manualState = this.manualRollModes.get(character.id) ?? null;
+    const manualMode = manualState?.mode ?? "normal";
+    const mode = combineRollModes(baseMode, manualMode, useInspiration ? "advantage" : "normal");
     this.pendingMerchantChallenges.set(rollName, { dc, label, ...(onSuccess ? { onSuccess } : {}), ...(onResolved ? { onResolved } : {}) });
     try {
       const result = await this.runtime.diceRoller.roll({ name: rollName, expressions: [preview.rollExpression], mode });
+      const nextManualState = consumeManualRollMode(manualState);
+      if (nextManualState) this.manualRollModes.set(character.id, nextManualState);
+      else this.manualRollModes.delete(character.id);
       if (useInspiration) await this.consumeInspiration(character.id);
       const total = result.totals[0];
       if (total !== undefined) await this.resolveMerchantChallenge(rollName, total);
@@ -4029,12 +4129,20 @@ export class BrowserApp {
         character.combat.inspiration &&
         this.armedInspirationCharacterIds.has(character.id) &&
         expressions.some((expression) => expression.toLowerCase().includes("d20"));
-      const mode = useInspiration ? inspiredRollMode(baseMode) : baseMode;
+      const usesD20 = expressions.some((expression) => expression.toLowerCase().includes("d20"));
+      const manualState = character && usesD20 ? this.manualRollModes.get(character.id) ?? null : null;
+      const manualMode = manualState?.mode ?? "normal";
+      const mode = combineRollModes(baseMode, manualMode, useInspiration ? "advantage" : "normal");
       const result = await this.runtime.diceRoller.roll({
         name: button.dataset.rollName ?? "Tirada",
         expressions,
         mode,
       });
+      if (manualState && character) {
+        const nextManualState = consumeManualRollMode(manualState);
+        if (nextManualState) this.manualRollModes.set(character.id, nextManualState);
+        else this.manualRollModes.delete(character.id);
+      }
       if (useInspiration && character) await this.consumeInspiration(character.id);
       this.consumeCombatResolution(button);
       this.appendActionLog(`${button.dataset.rollName ?? "Tirada"}: ${result.summary}`, "roll");
@@ -4133,11 +4241,16 @@ export class BrowserApp {
       const modifier = projectCharacterStatistics(character).initiativeModifier;
       const baseMode = projectAdjustedRollMode(character, "skills", ["Initiative"], character.checks.initiative.rollMode);
       const useInspiration = character.combat.inspiration && this.armedInspirationCharacterIds.has(character.id);
+      const manualState = this.manualRollModes.get(character.id) ?? null;
+      const manualMode = manualState?.mode ?? "normal";
       const result = await this.runtime.diceRoller.roll({
         name: `Iniciativa: ${character.name}`,
         expressions: [`1d20${modifier >= 0 ? "+" : ""}${modifier}`],
-        mode: useInspiration ? inspiredRollMode(baseMode) : baseMode,
+        mode: combineRollModes(baseMode, manualMode, useInspiration ? "advantage" : "normal"),
       });
+      const nextManualState = consumeManualRollMode(manualState);
+      if (nextManualState) this.manualRollModes.set(character.id, nextManualState);
+      else this.manualRollModes.delete(character.id);
       if (useInspiration) await this.consumeInspiration(character.id);
       this.appendActionLog(`Iniciativa: ${character.name}: ${result.summary}`, "roll");
       const total = result.totals[0];
@@ -4619,6 +4732,9 @@ export class BrowserApp {
         const card = select.closest<HTMLElement>("[data-inventory-card]");
         const item = character.inventory.find((entry) => entry.id === card?.dataset.inventoryId);
         if (!item) return;
+        if (active && (!item.equipped || (item.requiresAttunement && !item.attuned))) {
+          throw new Error("El objeto debe estar equipado y, cuando corresponda, sintonizado para activar su efecto.");
+        }
         this.finishContent(await this.application.upsertInventoryItem({
           ...this.contentCommand(character), itemId: item.id,
           item: { ...item, effect: { ...item.effect, active } },

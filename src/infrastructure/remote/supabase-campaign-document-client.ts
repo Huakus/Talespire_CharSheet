@@ -30,6 +30,19 @@ const CampaignContentRowSchema = z.object({
   deleted_at: z.string().nullable(),
 });
 
+const CampaignMerchantTradeResultSchema = z.object({
+  campaignRevision: z.coerce.number().int().nonnegative(),
+  characterRevision: z.coerce.number().int().nonnegative(),
+  shopRevision: z.coerce.number().int().nonnegative(),
+  monsterRevision: z.coerce.number().int().nonnegative(),
+  buySubtotalCopper: z.coerce.number().int().nonnegative(),
+  sellSubtotalCopper: z.coerce.number().int().nonnegative(),
+  commissionCopper: z.coerce.number().int().nonnegative(),
+  characterCurrencyDeltaCopper: z.coerce.number().int(),
+  merchantCurrencyDeltaCopper: z.coerce.number().int(),
+  updatedAt: z.string().min(1),
+});
+
 export interface RemoteCampaignDocument {
   campaignId: string;
   revision: number;
@@ -60,6 +73,21 @@ export interface RemoteCampaignContentEntry {
   revision: number;
   updatedAt: string;
 }
+
+export interface RemoteCampaignMerchantTradeInput {
+  campaignId: string;
+  characterId: string;
+  shopContentKey: string;
+  monsterContentKey: string;
+  expectedCampaignRevision: number;
+  expectedCharacterRevision: number;
+  expectedShopRevision: number;
+  expectedMonsterRevision: number;
+  buys: Array<{ itemId: string; quantity: number }>;
+  sells: Array<{ itemId: string; quantity: number }>;
+}
+
+export type RemoteCampaignMerchantTradeResult = z.infer<typeof CampaignMerchantTradeResultSchema>;
 
 export interface RemoteCampaignSubscription {
   ready: Promise<void>;
@@ -99,6 +127,19 @@ function throwRpcError(error: RpcError, expectedRevision?: number): never {
     throw new RemoteCampaignRevisionConflictError(expectedRevision, error.details, error.code);
   }
   throw new RemoteCampaignError(error.message, error.code, error.details);
+}
+
+function throwMerchantTradeRpcError(error: RpcError): never {
+  const friendlyMessages: ReadonlyArray<readonly [string, string]> = [
+    ["MERCHANT_TRADE_CONFLICT", "El inventario, los precios o los fondos cambiaron. Revisá el carrito nuevamente."],
+    ["MERCHANT_STOCK_CHANGED", "El stock del comerciante cambió. Revisá el carrito nuevamente."],
+    ["CHARACTER_INVENTORY_CHANGED", "Tu inventario cambió. Revisá el carrito nuevamente."],
+    ["INSUFFICIENT_CHARACTER_FUNDS", "No tenés fondos suficientes para completar el intercambio."],
+    ["INSUFFICIENT_MERCHANT_FUNDS", "El comerciante no tiene fondos suficientes para completar el intercambio."],
+    ["MERCHANT_NOT_AVAILABLE", "El comerciante no está disponible para comerciar."],
+  ];
+  const friendlyMessage = friendlyMessages.find(([code]) => error.message.includes(code))?.[1];
+  throw new RemoteCampaignError(friendlyMessage ?? error.message, error.code, error.details);
 }
 
 function parseDocument(data: unknown): RemoteCampaignDocument {
@@ -292,6 +333,23 @@ export class SupabaseCampaignDocumentClient {
     });
     if (result.error) throwRpcError(result.error, input.expectedRevision ?? undefined);
     return parseContentEntry(result.data);
+  }
+
+  async executeCampaignMerchantTrade(input: RemoteCampaignMerchantTradeInput): Promise<RemoteCampaignMerchantTradeResult> {
+    const result = await this.client.rpc("execute_campaign_merchant_trade", {
+      p_campaign_id: input.campaignId,
+      p_character_id: input.characterId,
+      p_shop_content_key: input.shopContentKey,
+      p_monster_content_key: input.monsterContentKey,
+      p_expected_campaign_revision: input.expectedCampaignRevision,
+      p_expected_character_revision: input.expectedCharacterRevision,
+      p_expected_shop_revision: input.expectedShopRevision,
+      p_expected_monster_revision: input.expectedMonsterRevision,
+      p_buys: input.buys,
+      p_sells: input.sells,
+    });
+    if (result.error) throwMerchantTradeRpcError(result.error);
+    return CampaignMerchantTradeResultSchema.parse(result.data);
   }
 
   async deleteCampaignContentEntry(campaignId: string, kind: CampaignContentKind, contentKey: string, expectedRevision: number): Promise<void> {

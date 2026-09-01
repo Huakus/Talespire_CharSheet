@@ -81,7 +81,7 @@ async function startBrowserDevelopment(): Promise<void> {
     diceRoller: new BrowserDiceRoller(),
     ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges } : {}),
     ...(services ? { loreReader: services.lore } : {}),
-    ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), refreshCustomContent: () => campaignContent.reload(), subscribeCustomContentChanges: (listener: () => void) => services!.subscribeContentChanges(listener), saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null) } : {}),
+    ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), refreshCustomContent: () => campaignContent.reload(), subscribeCustomContentChanges: (listener: () => void) => services!.subscribeContentChanges(listener), saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null), saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null), executeMerchantTrade: (command: Parameters<typeof campaignContent.executeMerchantTrade>[0]) => campaignContent.executeMerchantTrade(command) } : {}),
   }).start().catch(reportStartupFailure);
 }
 
@@ -191,6 +191,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
           saveCustomEquipment: (definition: Parameters<typeof campaignContent.saveEquipment>[0]) => campaignContent.saveEquipment(definition),
           saveShop: (shop: Parameters<typeof campaignContent.saveShop>[0], previousKey?: string | null) => campaignContent.saveShop(shop, previousKey ?? null),
           saveMonster: (monster: Parameters<typeof campaignContent.saveMonster>[0], previousKey?: string | null) => campaignContent.saveMonster(monster, previousKey ?? null),
+          executeMerchantTrade: (command: Parameters<typeof campaignContent.executeMerchantTrade>[0]) => campaignContent.executeMerchantTrade(command),
         }
       : {}),
     ...(api.creatures

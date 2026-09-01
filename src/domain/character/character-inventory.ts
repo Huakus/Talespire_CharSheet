@@ -208,6 +208,7 @@ export function setInventoryItemEquipped(
         quantity: equipped ? 1 : item.quantity,
         equipped,
         attuned: equipped ? item.attuned : false,
+        effect: equipped ? item.effect : { ...item.effect, active: false },
         features: equipped
           ? item.features
           : item.features.map((feature) => ({ ...feature, active: false })),
@@ -220,6 +221,8 @@ export function setInventoryItemEquipped(
             quantity: item.quantity - 1,
             equipped: false,
             attuned: false,
+            effect: { ...item.effect, active: false },
+            features: item.features.map((feature) => ({ ...feature, active: false })),
           }]
         : [equippedItem];
     }
@@ -228,6 +231,7 @@ export function setInventoryItemEquipped(
         ...item,
         equipped: false,
         attuned: false,
+        effect: { ...item.effect, active: false },
         features: item.features.map((feature) => ({ ...feature, active: false })),
       }];
     }
@@ -261,6 +265,7 @@ export function setInventoryItemAttuned(
       item.id === itemId ? {
         ...item,
         attuned,
+        effect: attuned || !item.requiresAttunement ? item.effect : { ...item.effect, active: false },
         features: attuned
           ? item.features
           : item.features.map((feature) => ({ ...feature, active: false })),
