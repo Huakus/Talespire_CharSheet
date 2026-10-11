@@ -578,10 +578,9 @@ export class GmApp {
 
   private renderCharacterDetails(character: CharacterV2): string {
     const statistics = projectCharacterStatistics(character);
-    const modifier = (score: number): number => Math.floor((score - 10) / 2);
     const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
     const abilityLabels: Record<string, string> = { strength: "FUE", dexterity: "DES", constitution: "CON", intelligence: "INT", wisdom: "SAB", charisma: "CAR" };
-    const abilities = Object.entries(character.abilities).map(([key, score]) => `<span><small>${abilityLabels[key] ?? key.slice(0, 3).toUpperCase()}</small><strong>${score}</strong><em>${signed(modifier(score))}</em><i>Salv. ${signed(statistics.savingThrows[key as keyof typeof statistics.savingThrows])}</i></span>`).join("");
+    const abilities = Object.entries(statistics.abilityScores).map(([key, score]) => `<span><small>${abilityLabels[key] ?? key.slice(0, 3).toUpperCase()}</small><strong>${score}</strong><em>${signed(statistics.abilityModifiers[key as keyof typeof statistics.abilityModifiers])}</em><i>Salv. ${signed(statistics.savingThrows[key as keyof typeof statistics.savingThrows])}</i></span>`).join("");
     const conditions = character.combat.conditions.map((condition) => `<span>${escapeHtml(condition.label)}${condition.level ? ` ${condition.level}` : ""}</span>`).join("") || '<span class="muted">Sin condiciones</span>';
     const hitDice = `${character.combat.hitDice.remaining}/${character.combat.hitDice.maximum} d${character.combat.hitDice.dieSize}`;
     return `<section class="gm-participant-sheet gm-character-overview" style="${uiAccentStyle(character.color, currentUiThemeMode())}">

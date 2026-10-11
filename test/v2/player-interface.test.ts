@@ -105,6 +105,24 @@ function harness(runtime: Partial<BrowserAppRuntime> = {}): BrowserAppViewHarnes
 }
 
 describe("player interface shell", () => {
+  it("shows effective ability scores in play while keeping editable base scores", () => {
+    const view = harness();
+    const character = createCharacter(
+      "chr_11111111111111111111111111111111", "Hero", "2026-07-26T00:00:00.000Z",
+    );
+    character.inventory = [{
+      ...normalizeEquipmentDefinition({ name: "Ring", bonuses: [
+        { category: "attributes", key: "strength", value: 2 },
+      ] }),
+      id: "inv_22222222222222222222222222222222", order: 0, group: "equipment", equipped: true,
+    }];
+    const html = view.renderCharacterForm(character);
+    expect(html).toContain('<strong>+1</strong><small title="Base: 10">12</small>');
+    view.sheetMode = "edit";
+    expect(view.renderCharacterForm(character)).toMatch(/name="strength"[^>]*value="10"/);
+    expect(character.abilities.strength).toBe(10);
+  });
+
   it("starts as a compact play sheet with stable section navigation", () => {
     const view = harness();
     const character = createCharacter(

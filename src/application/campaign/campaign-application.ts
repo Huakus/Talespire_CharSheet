@@ -616,9 +616,7 @@ export class CampaignApplication {
             }),
       });
     }
-    const updatedCharacter = this.itemAffectsArmorClass(draft)
-      ? this.withProjectedArmorClass(inventoryCharacter)
-      : inventoryCharacter;
+    const updatedCharacter = inventoryCharacter;
     return this.persistUpdatedCharacter(
       current,
       updatedCharacter,
@@ -635,15 +633,12 @@ export class CampaignApplication {
       command.expectedCampaignChecksum,
     );
     const character = current.campaign.characters[command.characterId]!;
-    const removedItem = character.inventory.find((item) => item.id === command.itemId);
     const updatedAt = command.updatedAt ?? new Date().toISOString();
     const inventoryCharacter = removeInventoryItem(character, command.itemId, {
       expectedRevision: command.expectedCharacterRevision,
       updatedAt,
     });
-    const updatedCharacter = removedItem && this.itemAffectsArmorClass(removedItem)
-      ? this.withProjectedArmorClass(inventoryCharacter)
-      : inventoryCharacter;
+    const updatedCharacter = inventoryCharacter;
     return this.persistUpdatedCharacter(
       current,
       updatedCharacter,
@@ -700,12 +695,11 @@ export class CampaignApplication {
     command: SetInventoryItemStateCommand,
   ): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command, (character, updatedAt) => {
-      const item = character.inventory.find((entry) => entry.id === command.itemId);
       const updated = setInventoryItemAttuned(character, command.itemId, command.value, {
         expectedRevision: command.expectedCharacterRevision,
         updatedAt,
       });
-      return item && this.itemAffectsArmorClass(item) ? this.withProjectedArmorClass(updated) : updated;
+      return updated;
     });
   }
 
@@ -724,12 +718,11 @@ export class CampaignApplication {
     command: InventoryFeatureCommand,
   ): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command, (character, updatedAt) => {
-      const item = character.inventory.find((entry) => entry.id === command.itemId);
       const updated = useInventoryFeature(character, command.itemId, command.featureId, {
         expectedRevision: command.expectedCharacterRevision,
         updatedAt,
       });
-      return item && this.itemAffectsArmorClass(item) ? this.withProjectedArmorClass(updated) : updated;
+      return updated;
     });
   }
 
@@ -737,7 +730,6 @@ export class CampaignApplication {
     command: SetInventoryFeatureStateCommand,
   ): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command, (character, updatedAt) => {
-      const item = character.inventory.find((entry) => entry.id === command.itemId);
       const updated = setInventoryFeatureActive(
         character,
         command.itemId,
@@ -745,7 +737,7 @@ export class CampaignApplication {
         command.value,
         { expectedRevision: command.expectedCharacterRevision, updatedAt },
       );
-      return item && this.itemAffectsArmorClass(item) ? this.withProjectedArmorClass(updated) : updated;
+      return updated;
     });
   }
 
@@ -881,9 +873,7 @@ export class CampaignApplication {
           expectedRevision: source.revision,
           updatedAt,
         });
-    const sourceUpdated = command.quantity === item.quantity && this.itemAffectsArmorClass(item)
-      ? this.withProjectedArmorClass(sourceInventory)
-      : sourceInventory;
+    const sourceUpdated = sourceInventory;
     const transferredItem: CharacterInventoryItemV2 = {
       ...cloneJson(item),
       id: item.id,
@@ -1221,13 +1211,6 @@ export class CampaignApplication {
     });
   }
 
-  private itemAffectsArmorClass(item: CharacterInventoryItemDraft): boolean {
-    return item.armor !== null || item.category === "armor" || item.category === "shield" ||
-      item.bonuses.some((bonus) => bonus.category === "combatStats" && bonus.key === "AC") ||
-      item.features.some((feature) => feature.bonuses.some((bonus) =>
-        bonus.category === "combatStats" && bonus.key === "AC"));
-  }
-
   private async persistUpdatedCharacter(
     current: CampaignSnapshot,
     character: CampaignV2["characters"][string],
@@ -1249,7 +1232,15 @@ export class CampaignApplication {
     updatedAt: string,
   ): Promise<CampaignSnapshot> {
     const characters = { ...current.campaign.characters };
-    for (const character of charactersToUpdate) characters[character.id] = character;
+    for (const character of charactersToUpdate) {
+      const previous = current.campaign.characters[character.id];
+      // Compare results instead of guessing which item fields affect AC. This covers
+      // Dexterity, removed bonuses, and consumed or transferred items as well.
+      characters[character.id] = previous &&
+        projectInventory(previous).calculatedArmorClass !== projectInventory(character).calculatedArmorClass
+        ? this.withProjectedArmorClass(character)
+        : character;
+    }
     const campaign = CampaignV2Schema.parse({
       ...current.campaign,
       revision: current.campaign.revision + 1,

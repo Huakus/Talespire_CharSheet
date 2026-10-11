@@ -105,18 +105,21 @@ export function projectAdjustedRollMode(
   return advantage ? "advantage" : "disadvantage";
 }
 
-function projectedAbilityModifier(character: CharacterV2, ability: AbilityKey): number {
+export function projectAbilityScore(character: CharacterV2, ability: AbilityKey): number {
   const short: Record<AbilityKey, string> = {
     strength: "STR", dexterity: "DEX", constitution: "CON",
     intelligence: "INT", wisdom: "WIS", charisma: "CHA",
   };
-  return abilityModifier(
-    character.abilities[ability] + traitBonus(character, "attributes", [ability, short[ability]]) +
-      inventoryBonus(character, "attributes", [ability, short[ability]]),
-  );
+  return character.abilities[ability] + traitBonus(character, "attributes", [ability, short[ability]]) +
+    inventoryBonus(character, "attributes", [ability, short[ability]]);
+}
+
+function projectedAbilityModifier(character: CharacterV2, ability: AbilityKey): number {
+  return abilityModifier(projectAbilityScore(character, ability));
 }
 
 export interface CharacterStatisticsProjection {
+  abilityScores: Record<AbilityKey, number>;
   abilityModifiers: Record<AbilityKey, number>;
   proficiencyBonus: number;
   initiativeModifier: number;
@@ -132,10 +135,15 @@ export interface CharacterStatisticsProjection {
 export function projectCharacterStatistics(
   character: CharacterV2,
 ): CharacterStatisticsProjection {
+  const abilityScores = Object.fromEntries(
+    Object.keys(character.abilities).map((ability) => [
+      ability, projectAbilityScore(character, ability as AbilityKey),
+    ]),
+  ) as Record<AbilityKey, number>;
   const abilityModifiers = Object.fromEntries(
-    Object.entries(character.abilities).map(([ability]) => [
+    Object.entries(abilityScores).map(([ability, score]) => [
       ability,
-      projectedAbilityModifier(character, ability as AbilityKey),
+      abilityModifier(score),
     ]),
   ) as Record<AbilityKey, number>;
   const proficiency = proficiencyBonus(character.identity.level);
@@ -164,6 +172,7 @@ export function projectCharacterStatistics(
   ) as Record<SaveKey, number>;
 
   return {
+    abilityScores,
     abilityModifiers,
     proficiencyBonus: proficiency,
     initiativeModifier:
@@ -203,7 +212,13 @@ export function projectActionAttackModifier(
 
 export function projectActionDamageBonus(character: CharacterV2, action: CharacterActionV2): number {
   const ranged = normalizedKey(action.reach).includes("ranged") || normalizedKey(action.weaponType).includes("ranged");
-  return action.damageBonus + inventoryBonus(character, "combatStats", [
+  const weapon = character.inventory.find((item) => item.id === action.inventoryItemId)?.weapon;
+  // Linked weapon actions already include the base ability modifier in damageBonus.
+  // Apply only the derived adjustment, preserving authored damage and weapon bonuses.
+  const abilityAdjustment = weapon && action.ability !== null
+    ? projectedAbilityModifier(character, action.ability) - abilityModifier(character.abilities[action.ability])
+    : 0;
+  return action.damageBonus + abilityAdjustment + inventoryBonus(character, "combatStats", [
     "damageBonus", "AttackandDamage", ranged ? "RangedDamageRolls" : "MeleeDamageRolls",
   ]);
 }
@@ -242,7 +257,7 @@ export function projectInventory(character: CharacterV2): InventoryProjection {
     (total, item) => total + item.unitWeight * item.quantity,
     0,
   );
-  const adjustedStrength = character.abilities.strength + traitBonus(character, "attributes", ["strength", "STR"]);
+  const adjustedStrength = projectAbilityScore(character, "strength");
   const carryingCapacity = adjustedStrength * 15 + carryWeightBonus + traitBonus(character, "combatStats", ["CarryWeightBonus"]);
   return {
     totalWeight,
