@@ -16,7 +16,9 @@ import { SupabaseGranularCampaignRepository } from "../../src/infrastructure/rem
 import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 const backendConfig = resolveRemoteBackendConfig(import.meta.env);
-const integrationPassword = "Integration-Only-123!";
+const actorKinds = ["OWNER", "MEMBER", "OUTSIDER"] as const;
+const hasInvitedActors = actorKinds.every((kind) =>
+  process.env[`SUPABASE_TEST_${kind}_EMAIL`] && process.env[`SUPABASE_TEST_${kind}_PASSWORD`]);
 
 interface TestActor {
   email: string;
@@ -41,17 +43,20 @@ async function within<T>(label: string, operation: Promise<T>, timeoutMs = 5_000
 async function createActor(label: string): Promise<TestActor> {
   if (backendConfig === null) throw new Error("Integration backend is not configured");
   const supabase = createRemoteSupabaseClient(backendConfig);
-  const uniqueEmail = `${label}-${crypto.randomUUID()}@example.com`;
-  const result = await within(`sign up ${label}`, supabase.auth.signUp({
-    email: uniqueEmail,
-    password: integrationPassword,
+  const kind = label.includes("owner") ? "OWNER" : label.includes("member") ? "MEMBER" : "OUTSIDER";
+  const email = process.env[`SUPABASE_TEST_${kind}_EMAIL`];
+  const password = process.env[`SUPABASE_TEST_${kind}_PASSWORD`];
+  if (!email || !password) throw new Error("Provision dedicated invited integration actors before running campaign access tests");
+  const result = await within(`sign in ${label}`, supabase.auth.signInWithPassword({
+    email,
+    password,
   }));
   if (result.error) throw result.error;
   if (!result.data.user || !result.data.session) {
-    throw new Error("Local Supabase must allow signups without email confirmation");
+    throw new Error("The invited integration actor could not sign in");
   }
   return {
-    email: uniqueEmail,
+    email,
     user: result.data.user,
     supabase,
     campaigns: new SupabaseCampaignDocumentClient(supabase),
@@ -59,7 +64,7 @@ async function createActor(label: string): Promise<TestActor> {
   };
 }
 
-describe.skipIf(backendConfig === null)("Supabase campaign access", () => {
+describe.skipIf(backendConfig === null || !hasInvitedActors)("Supabase campaign access", () => {
   it("enforces membership and rejects a stale concurrent write", async () => {
     const owner = await createActor("owner");
     const member = await createActor("member");

@@ -69,6 +69,21 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
 }
 
 describe("Supabase campaign content store", () => {
+  it("captures the catalog the client loaded without refreshing or replacing it after cache invalidation", async () => {
+    const savedEntry = entry({ kind: 'spell', contentKey: 'spell:test', name: 'Test', payload: { name: 'Test', level: 0 } });
+    const fake = fakeClient([savedEntry]);
+    const store = new SupabaseCampaignContentStore(fake.client, campaignId);
+    expect(store.captureLoadedEntries()).toBeNull();
+    await store.load();
+    const captured = store.captureLoadedEntries()!;
+    captured[0]!.name = 'changed diagnostic copy';
+    expect(store.captureLoadedEntries()![0]!.name).toBe('Test');
+    await store.deleteSpell('Test');
+    expect(store.captureLoadedEntries()![0]!.name).toBe('Test');
+    expect(fake.loads()).toBe(1);
+    await store.reload();
+    expect(store.captureLoadedEntries()).toEqual([]);
+  });
   it("subscribes to inserts and updates for this campaign and to unfiltered deletes", async () => {
     const registrations: Array<Record<string, unknown>> = [];
     let removed = false;

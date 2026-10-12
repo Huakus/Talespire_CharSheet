@@ -29,6 +29,8 @@ import {
 } from "./campaign-member-password";
 import { updateRecoveredPassword, verifyPasswordRecovery } from "./password-recovery";
 import { browserSymbiotePreferences } from "./symbiote-preferences";
+import { mountAppInvitationAcceptance, mountAppInvitationSender } from "./app-user-invitations";
+import { SupabaseCampaignIssueClient } from "../infrastructure/remote/supabase-campaign-issue-client";
 
 const bindingKeyPrefix = "talespire-charsheet:remote-campaign:";
 
@@ -61,20 +63,19 @@ async function requestAuthentication(
     panel.innerHTML = `
       <p class="eyebrow">Persistencia compartida</p>
       <h1>Conectar con Supabase</h1>
-      <p>Iniciá sesión o creá una cuenta para acceder a las campañas compartidas.</p>
+      <p>El acceso a las campañas compartidas es por invitación. Iniciá sesión o aceptá el correo que recibiste.</p>
       <form class="remote-auth-form">
         <label>Email<input name="email" type="email" autocomplete="email" value="${escapeHtml(rememberedEmail)}" required></label>
         <label>Contraseña<span class="remote-password-control"><input name="password" type="password" autocomplete="current-password" minlength="6" required><button type="button" class="secondary-button" data-auth-action="toggle-password" aria-pressed="false">Mostrar</button></span></label>
         <label class="remote-remember-user"><input name="rememberEmail" type="checkbox" ${rememberedEmail ? "checked" : ""}> Recordar email en este dispositivo</label>
         <div class="remote-actions">
           <button type="submit" data-auth-action="signin">Iniciar sesión</button>
-          <button type="button" data-auth-action="signup">Crear cuenta</button>
+          <button type="button" data-auth-action="accept-invitation">Aceptar invitación</button>
           <button type="button" class="secondary-button" data-auth-action="local">Continuar solo local</button>
         </div>
         <div class="remote-auth-help">
           <button type="button" class="secondary-button" data-auth-action="reset-password">Recuperar contraseña</button>
           <button type="button" class="secondary-button" data-auth-action="magic-link">Enviar enlace de acceso</button>
-          <button type="button" class="secondary-button" data-auth-action="resend-confirmation">Reenviar confirmación</button>
         </div>
         <small>Supabase mantiene la sesión iniciada. Sólo se guarda el email si elegís recordarlo; nunca la contraseña.</small>
         <p class="remote-feedback" role="status" aria-live="polite"></p>
@@ -124,15 +125,22 @@ async function requestAuthentication(
       recoveryForm.hidden = false;
       recoveryCredentialInput.focus();
     };
+    const showInvitation = mountAppInvitationAcceptance(panel, supabase.auth, (user) => {
+      preferences.rememberAuthEmail(rememberInput.checked ? user.email ?? null : null);
+      resolve(user);
+    }, () => { form.hidden = false; emailInput.focus(); });
+    panel.querySelector('[data-auth-action="accept-invitation"]')?.addEventListener("click", () => {
+      form.hidden = true;
+      recoveryForm.hidden = true;
+      showInvitation(email());
+    });
 
-    const authenticate = async (kind: "signin" | "signup"): Promise<void> => {
+    const authenticate = async (): Promise<void> => {
       if (!form.reportValidity()) return;
       setBusy(true);
-      feedback.textContent = kind === "signin" ? "Iniciando sesión…" : "Creando cuenta…";
+      feedback.textContent = "Iniciando sesión…";
       try {
-        const result = kind === "signin"
-          ? await supabase.auth.signInWithPassword({ email: email(), password: passwordInput.value })
-          : await supabase.auth.signUp({ email: email(), password: passwordInput.value });
+        const result = await supabase.auth.signInWithPassword({ email: email(), password: passwordInput.value });
         if (result.error) {
           feedback.textContent = result.error.message;
           return;
@@ -171,19 +179,15 @@ async function requestAuthentication(
       }
     };
 
-    const sendEmailAction = async (action: "magic" | "resend"): Promise<void> => {
+    const sendEmailAction = async (): Promise<void> => {
       if (!emailInput.reportValidity()) return;
       setBusy(true);
       feedback.textContent = "Enviando email…";
       try {
-        const result = action === "magic"
-          ? await supabase.auth.signInWithOtp({ email: email(), options: { shouldCreateUser: false } })
-          : await supabase.auth.resend({ type: "signup", email: email() });
+        const result = await supabase.auth.signInWithOtp({ email: email(), options: { shouldCreateUser: false } });
         feedback.textContent = result.error
           ? result.error.message
-          : action === "magic"
-            ? "Enlace de acceso enviado. Revisá tu email."
-            : "Email de confirmación reenviado.";
+          : "Enlace de acceso enviado. Revisá tu email.";
         if (!result.error) rememberEmail();
       } catch (error) {
         feedback.textContent = errorMessage(error);
@@ -194,10 +198,7 @@ async function requestAuthentication(
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
-      void authenticate("signin");
-    });
-    panel.querySelector('[data-auth-action="signup"]')?.addEventListener("click", () => {
-      void authenticate("signup");
+      void authenticate();
     });
     panel.querySelector('[data-auth-action="toggle-password"]')?.addEventListener("click", (event) => {
       const button = event.currentTarget as HTMLButtonElement;
@@ -208,8 +209,7 @@ async function requestAuthentication(
       passwordInput.focus();
     });
     panel.querySelector('[data-auth-action="reset-password"]')?.addEventListener("click", () => void sendResetEmail());
-    panel.querySelector('[data-auth-action="magic-link"]')?.addEventListener("click", () => void sendEmailAction("magic"));
-    panel.querySelector('[data-auth-action="resend-confirmation"]')?.addEventListener("click", () => void sendEmailAction("resend"));
+    panel.querySelector('[data-auth-action="magic-link"]')?.addEventListener("click", () => void sendEmailAction());
     recoveryForm.addEventListener("submit", (event) => {
       event.preventDefault();
       confirmPasswordInput.setCustomValidity(
@@ -274,6 +274,7 @@ async function requestCampaign(
   bindingKey: string,
   signOut: () => Promise<void>,
   allowLocalFallback: boolean,
+  supabase: ReturnType<typeof createRemoteSupabaseClient>,
 ): Promise<RemoteCampaignSummary | null> {
   const campaigns = await client.listCampaigns();
   const boundId = window.localStorage.getItem(bindingKey);
@@ -286,6 +287,7 @@ async function requestCampaign(
       <h1>Elegir campaña remota</h1>
       <p class="remote-account"></p>
       <div class="remote-campaign-list"></div>
+      <section class="remote-app-invitation-slot"></section>
       <form class="remote-create-form">
         <label>Nombre de la campaña<input name="name" maxlength="120" required></label>
         <button type="submit">Crear campaña</button>
@@ -299,6 +301,8 @@ async function requestCampaign(
     const list = panel.querySelector<HTMLElement>(".remote-campaign-list");
     const form = panel.querySelector<HTMLFormElement>(".remote-create-form");
     const feedback = panel.querySelector<HTMLElement>(".remote-feedback");
+    const appInvitationSlot = panel.querySelector<HTMLElement>(".remote-app-invitation-slot");
+    if (appInvitationSlot) mountAppInvitationSender(appInvitationSlot, supabase);
     if (!account || !list || !form || !feedback) {
       throw new Error("REMOTE_CAMPAIGN_FORM_NOT_FOUND");
     }
@@ -379,10 +383,11 @@ function mountRemoteControls(
   controls.innerHTML = `
     <section id="remote-persistence-panel" class="remote-persistence-panel" role="dialog" aria-modal="true" aria-label="Persistencia compartida">
       <header><div><strong class="remote-campaign-name"></strong><span class="remote-user"></span></div><button type="button" class="secondary-button" data-remote-action="close-panel">Cerrar</button></header>
+      <section class="remote-app-invitation-slot"></section>
       <form class="remote-invite-form">
         <input name="email" type="email" placeholder="Email del integrante" required>
         <select name="role"><option value="player">Jugador</option><option value="gm">GM</option></select>
-        <button type="submit">Invitar</button>
+        <button type="submit">Agregar a la campaña</button>
       </form>
       <form class="remote-member-password-form" hidden>
         <strong>Recuperar acceso de un integrante</strong>
@@ -418,6 +423,8 @@ function mountRemoteControls(
       <small class="remote-panel-feedback remote-feedback" role="status"></small>
     </section>`;
   appRoot.insertAdjacentElement("beforebegin", controls);
+  const appInvitationSlot = controls.querySelector<HTMLElement>(".remote-app-invitation-slot");
+  if (appInvitationSlot) mountAppInvitationSender(appInvitationSlot, supabase);
   const campaignName = controls.querySelector<HTMLElement>(".remote-campaign-name");
   const userLabel = controls.querySelector<HTMLElement>(".remote-user");
   const invite = controls.querySelector<HTMLFormElement>(".remote-invite-form");
@@ -542,6 +549,7 @@ function mountRemoteControls(
 export interface RemoteCampaignServices {
   content: SupabaseCampaignContentStore;
   lore: SupabaseCampaignLoreClient;
+  issueReporter: SupabaseCampaignIssueClient;
   subscribeCampaignChanges(listener: (snapshot: CampaignSnapshot) => void): () => void;
   subscribeContentChanges(listener: () => void): () => void;
 }
@@ -588,6 +596,7 @@ export async function configureRemotePersistence(
       bindingKey,
       signOut,
       allowLocalFallback,
+      supabase,
     );
     if (campaign === null) {
       panel.remove();
@@ -600,6 +609,7 @@ export async function configureRemotePersistence(
     const content = new SupabaseCampaignContentStore(client, campaign.id);
     onServices?.({
       content,
+      issueReporter: new SupabaseCampaignIssueClient(supabase, campaign.id, campaign.name, () => content.captureLoadedEntries()),
       lore: new SupabaseCampaignLoreClient(supabase, campaign.id),
       subscribeCampaignChanges: (listener) => {
         campaignChangeListeners.add(listener);

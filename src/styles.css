@@ -157,6 +157,13 @@ button { cursor: pointer; }
 .remote-setup h1 { font-size: 2rem; }
 .remote-auth-form, .remote-recovery-form, .remote-create-form { display: grid; gap: 12px; }
 .remote-auth-form[hidden], .remote-recovery-form[hidden] { display: none; }
+.remote-invitation-acceptance-form, .remote-app-invitation-form { display: grid; gap: 10px; }
+.remote-invitation-acceptance-form[hidden], .remote-app-invitation-form[hidden] { display: none; }
+.remote-invitation-acceptance-form > label, .remote-app-invitation-form > label { display: grid; gap: 4px; }
+.remote-invitation-acceptance-form textarea { min-height: 72px; resize: vertical; }
+.remote-invitation-acceptance-form h2 { margin: 0; color: var(--ui-accent); font-family: Georgia, serif; }
+.remote-app-invitation-form { padding: 10px 0; border-bottom: 1px solid var(--ui-border-subtle); }
+.remote-app-invitation-form small { color: var(--ui-text-muted); font-size: .68rem; line-height: 1.4; }
 .remote-auth-form > label, .remote-recovery-form > label { display: grid; gap: 4px; }
 .remote-password-control { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px; }
 .remote-password-control input { width: 100%; min-width: 0; }
@@ -1398,6 +1405,21 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .connection-indicator[data-state="disabled"] .connection-state-dot { background: #6f786c; }
 
 .notification-center { position: relative; flex: 0 0 auto; }
+.issue-report-button { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 27px; height: 27px; padding: 0; border: 1px solid var(--ui-border); border-radius: 5px; background: var(--ui-bg-sunken); color: var(--ui-text-secondary); }
+.issue-report-button svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.issue-report-button:hover:not(:disabled) { color: var(--ui-accent); border-color: var(--ui-accent); }
+.issue-report-button:disabled { opacity: .4; cursor: default; }
+.issue-report-dialog { box-sizing: border-box; width: min(520px, calc(100vw - 24px)); max-height: calc(100vh - 24px); margin: auto; padding: 18px; overflow: auto; color: var(--ui-text); background: var(--ui-bg-raised); border: 1px solid var(--ui-border-strong); border-radius: 8px; box-shadow: 0 18px 60px #0009; }
+.issue-report-dialog::backdrop { background: #0009; }
+.issue-report-dialog form { display: grid; gap: 14px; }
+.issue-report-dialog header, .issue-report-dialog footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.issue-report-dialog header h2 { margin: 0; font-size: 1rem; }
+.issue-report-dialog label { display: grid; gap: 6px; font-size: .85rem; }
+.issue-report-dialog textarea { box-sizing: border-box; width: 100%; min-height: 140px; resize: vertical; }
+.issue-report-dialog .issue-context-status { color: var(--ui-text-muted); font-size: .75rem; line-height: 1.5; }
+.issue-report-dialog .issue-report-feedback { margin: 0; font-size: .8rem; overflow-wrap: anywhere; }
+.issue-report-dialog footer { justify-content: flex-end; }
+.issue-report-dialog [hidden] { display: none; }
 .notification-center > summary {
   position: relative;
   display: grid;
@@ -1452,7 +1474,7 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .notification-center li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px; padding: 5px; color: var(--ui-text-secondary); background: var(--ui-bg-sunken); border-left: 2px solid var(--ui-border-strong); border-radius: 3px; font-size: .66rem; }
 .notification-center li.error { color: var(--ui-danger); border-left-color: var(--ui-danger); }
 .notification-center time { color: var(--ui-text-faint); font-variant-numeric: tabular-nums; }
-.standalone-notifications { display: flex; justify-content: flex-end; min-height: 27px; }
+.standalone-notifications { display: flex; justify-content: flex-end; gap: 4px; min-height: 27px; }
 
 .sheet-view-settings { display: grid; gap: 6px; }
 .sheet-view-settings > strong { color: var(--ui-text-muted); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
@@ -1705,6 +1727,7 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .has-tooltip::before { position: absolute; top: calc(100% + 7px); right: 0; z-index: 60; width: max-content; max-width: min(330px, calc(100vw - 18px)); padding: 6px 8px; visibility: hidden; color: var(--ui-text); background: #0d110d; border: 1px solid #4a5647; border-radius: 5px; box-shadow: 0 7px 20px #000a; content: attr(data-tooltip); font-size: .64rem; font-weight: 650; line-height: 1.35; opacity: 0; pointer-events: none; text-align: left; white-space: normal; transition: opacity .12s ease; }
 .has-tooltip:hover::before, .has-tooltip:focus-visible::before { visibility: visible; opacity: 1; }
 .notification-center > summary { color: var(--ui-text-secondary); }
+.gm-shell button.issue-report-button { padding: 0 !important; color: var(--ui-text-secondary) !important; background: var(--ui-bg-sunken) !important; border: 1px solid var(--ui-border) !important; }
 .notification-center.has-unread > summary { color: #e2c65f; border-color: #9b8438; }
 
 :root[data-v2-theme="light"] .has-tooltip::before { color: #f4f7f2; background: var(--ui-text); }

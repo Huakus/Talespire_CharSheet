@@ -28,6 +28,10 @@ export function subscribeAppConnectionStatus(listener: () => void): () => void {
   return () => listeners.delete(listener);
 }
 
+export function getAppConnectionStatuses(): typeof statuses {
+  return structuredClone(statuses);
+}
+
 export function renderAppConnectionIndicators(): string {
   const icons: Record<ConnectionKind, string> = {
     backend: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="1.5"></rect><rect x="4" y="14" width="16" height="6" rx="1.5"></rect><path d="M8 7h.01M8 17h.01M12 7h5M12 17h5"></path></svg>',

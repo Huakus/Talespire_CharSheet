@@ -7,7 +7,7 @@ const TemporaryPasswordResponseSchema = z.object({
 
 type PasswordAdministrationClient = Pick<SupabaseClient, "auth" | "functions">;
 
-async function functionErrorMessage(error: unknown): Promise<string> {
+export async function functionErrorMessage(error: unknown): Promise<string> {
   if (typeof error === "object" && error !== null && "context" in error) {
     const context = (error as { context?: unknown }).context;
     if (context instanceof Response) {

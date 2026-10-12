@@ -17,7 +17,10 @@ import {
   openPersistencePanel,
   renderAppConnectionIndicators,
   subscribeAppConnectionStatus,
+  getAppConnectionStatuses,
 } from "./app-chrome";
+import { captureIssueFormState, openIssueReportDialog, renderIssueReportButton } from "./issue-report-dialog";
+import type { CampaignIssueReporter, IssueUiContext } from "../infrastructure/remote/supabase-campaign-issue-client";
 import { bindViewportConstrainedDetails } from "./floating-panel";
 import { renderCheckboxGroup } from "./checkbox-group";
 import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
@@ -31,6 +34,7 @@ export { calculateFloatingPanelPosition } from "./floating-panel";
 type GmContentKind = "monster" | GmContentSection;
 
 export interface GmAppRuntime extends GmToolsRuntime {
+  issueReporter?: CampaignIssueReporter;
   diceRoller: DiceRoller;
   subscribeCampaignChanges?: (listener: () => void) => () => void;
   subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
@@ -476,7 +480,24 @@ export class GmApp {
   private renderNotificationCenter(): string {
     const notifications = (this.notifications ?? []).slice().reverse();
     const unread = this.unreadImportantNotifications ?? 0;
-    return `<details class="notification-center ${unread ? "has-unread" : ""}"><summary title="Mensajes" aria-label="Mensajes${unread ? `: ${unread} importantes sin leer` : ""}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg>${unread ? `<strong class="notification-badge">${unread}</strong>` : ""}</summary><div><header><strong>Mensajes</strong><small>${notifications.length} en esta sesión</small></header>${notifications.length ? `<ol>${notifications.map((entry) => `<li class="${entry.kind}"><time>${entry.occurredAt.slice(11, 19)}</time><span>${escapeHtml(entry.text)}</span></li>`).join("")}</ol>` : "<p>Sin mensajes en esta sesión.</p>"}</div></details>`;
+    return `${renderIssueReportButton(Boolean(this.runtime.issueReporter))}<details class="notification-center ${unread ? "has-unread" : ""}"><summary title="Mensajes" aria-label="Mensajes${unread ? `: ${unread} importantes sin leer` : ""}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg>${unread ? `<strong class="notification-badge">${unread}</strong>` : ""}</summary><div><header><strong>Mensajes</strong><small>${notifications.length} en esta sesión</small></header>${notifications.length ? `<ol>${notifications.map((entry) => `<li class="${entry.kind}"><time>${entry.occurredAt.slice(11, 19)}</time><span>${escapeHtml(entry.text)}</span></li>`).join("")}</ol>` : "<p>Sin mensajes en esta sesión.</p>"}</div></details>`;
+  }
+
+  private issueUiContext(): IssueUiContext {
+    return {
+      view: { mode: 'gm', theme: currentUiThemeMode(), interfaceColor: this.gmColor, screen: this.activeSection, contentKind: this.activeContentKind,
+        selectedEncounterId: this.selectedEncounterId, expandedCombatantId: this.expandedCombatantId,
+        selectedMonsterKey: this.selectedCustomMonsterKey, editingMonsterKey: this.editingCustomMonsterKey,
+        monsterSearch: this.monsterSearch, monsterFilters: [...this.monsterFilters], monsterFavoritesOnly: this.monsterFavoritesOnly,
+        players: this.players, initiative: this.previousTaleSpireInitiativeQueue },
+      selectedCharacterId: null, character: null,
+      campaignChecksum: this.snapshot?.checksum ?? null,
+      campaignRevision: this.snapshot?.campaign.revision ?? null,
+      loadedCampaign: this.snapshot?.campaign ?? null,
+      pendingForms: captureIssueFormState(this.root),
+      notifications: this.notifications.slice(-40), actions: this.actionLog.slice(-40),
+      connection: getAppConnectionStatuses(),
+    };
   }
 
   private renderContentNavigation(): string {
@@ -717,6 +738,9 @@ export class GmApp {
   }
 
   private bindEvents(): void {
+    this.root.querySelector<HTMLButtonElement>('[data-report-issue]')?.addEventListener('click', () => {
+      if (this.runtime.issueReporter) openIssueReportDialog(this.runtime.issueReporter, this.issueUiContext());
+    });
     this.loreBrowser?.bind(this.root);
     bindViewportConstrainedDetails(this.root, ".gm-popover", ":scope > div");
     bindViewportConstrainedDetails(this.root, ".gm-filter-group", ":scope > div");

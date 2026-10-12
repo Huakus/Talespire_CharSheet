@@ -48,28 +48,34 @@ function nestedUrlCandidates(value: string): string[] {
   return [...candidates];
 }
 
-function credentialFromUrl(value: string): PasswordRecoveryCredential | null {
+function credentialFromUrl(value: string, expectedType: "recovery" | "invite"): PasswordRecoveryCredential | null {
   try {
     const url = new URL(value);
     const type = url.searchParams.get("type");
     const tokenHash = url.searchParams.get("token_hash") ?? url.searchParams.get("token");
-    if (type !== "recovery" || !tokenHash) return null;
+    if (type !== expectedType || !tokenHash) return null;
     return { kind: "token-hash", tokenHash };
   } catch {
     return null;
   }
 }
 
-export function parsePasswordRecoveryCredential(value: string): PasswordRecoveryCredential {
+export function parseEmailAuthCredential(value: string, type: "recovery" | "invite"): PasswordRecoveryCredential {
   const normalized = value.trim();
   if (/^\d{6}$/.test(normalized)) return { kind: "otp", token: normalized };
 
   for (const candidate of nestedUrlCandidates(normalized)) {
-    const credential = credentialFromUrl(candidate);
+    const credential = credentialFromUrl(candidate, type);
     if (credential) return credential;
   }
 
-  throw new Error("Pegá el enlace completo de recuperación o el código de 6 dígitos del email.");
+  throw new Error(type === "invite"
+    ? "Pegá el enlace completo de invitación o el código de 6 dígitos del email."
+    : "Pegá el enlace completo de recuperación o el código de 6 dígitos del email.");
+}
+
+export function parsePasswordRecoveryCredential(value: string): PasswordRecoveryCredential {
+  return parseEmailAuthCredential(value, "recovery");
 }
 
 export async function verifyPasswordRecovery(

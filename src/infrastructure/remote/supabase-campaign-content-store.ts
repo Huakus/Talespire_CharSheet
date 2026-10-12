@@ -70,10 +70,16 @@ function spanishTags(tags: readonly string[]): string[] {
 
 export class SupabaseCampaignContentStore {
   private entries: RemoteCampaignContentEntry[] | null = null;
+  private lastLoadedEntries: RemoteCampaignContentEntry[] | null = null;
   private loadingEntries: Promise<RemoteCampaignContentEntry[]> | null = null;
   private reloadingContent: Promise<CampaignContent> | null = null;
 
   constructor(private readonly client: SupabaseCampaignDocumentClient, private readonly campaignId: string) {}
+
+  captureLoadedEntries(): RemoteCampaignContentEntry[] | null {
+    // Do not refresh here: diagnostics must preserve what this client actually loaded.
+    return this.lastLoadedEntries === null ? null : structuredClone(this.lastLoadedEntries);
+  }
 
   async load(): Promise<CampaignContent> {
     if (this.entries === null) {
@@ -81,7 +87,9 @@ export class SupabaseCampaignContentStore {
       try { this.entries = await this.loadingEntries; }
       finally { this.loadingEntries = null; }
     }
-    return this.project(this.entries);
+    const projected = this.project(this.entries);
+    this.lastLoadedEntries = structuredClone(this.entries);
+    return projected;
   }
 
   async reload(): Promise<CampaignContent> {

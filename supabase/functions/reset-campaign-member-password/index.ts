@@ -149,6 +149,11 @@ Deno.serve(async (request: Request) => {
     }
 
     const password = temporaryPassword();
+    const protectedAccount = await admin.rpc("is_protected_app_inviter", { p_user_id: target.id });
+    if (protectedAccount.error) throw protectedAccount.error;
+    if (protectedAccount.data === true) {
+      return json(403, { error: "Esta cuenta tiene permisos globales. Su titular debe recuperar la contraseña desde su propio email." });
+    }
     const update = await admin.auth.admin.updateUserById(target.id, { password });
     if (update.error) throw update.error;
     return json(200, { temporaryPassword: password });

@@ -146,6 +146,7 @@ describe("player interface shell", () => {
     expect(html).toContain('class="connection-indicators"');
     expect(html).toContain('data-tooltip="Comprobando servidor externo…"');
     expect(html).toContain('<svg viewBox="0 0 24 24"');
+    expect(html.indexOf('data-report-issue')).toBeLessThan(html.indexOf('<details class="notification-center'));
     expect(html).toContain("data-open-persistence");
     expect(html).toContain('class="notification-center ');
     expect(html).not.toContain('id="miniature-thumbnail"');

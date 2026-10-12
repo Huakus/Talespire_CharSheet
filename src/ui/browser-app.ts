@@ -104,7 +104,10 @@ import {
   openPersistencePanel,
   renderAppConnectionIndicators,
   subscribeAppConnectionStatus,
+  getAppConnectionStatuses,
 } from "./app-chrome";
+import { captureIssueFormState, openIssueReportDialog, renderIssueReportButton } from "./issue-report-dialog";
+import type { CampaignIssueReporter, IssueUiContext } from "../infrastructure/remote/supabase-campaign-issue-client";
 import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
 import { normalizeUiHexColor, UI_ACCENT_PRESETS, uiAccentStyle } from "./design-system/theme";
@@ -122,6 +125,7 @@ import {
 import { normalizeRollShortcut } from "../domain/dice/dice-expression";
 
 export interface BrowserAppRuntime {
+  issueReporter?: CampaignIssueReporter;
   storageLabel: string;
   storageEventKey?: string;
   subscribeCampaignChanges?: (listener: (snapshot: CampaignSnapshot) => void) => () => void;
@@ -1077,7 +1081,30 @@ export class BrowserApp {
   private renderNotificationCenter(): string {
     const notifications = (this.notifications ?? []).slice().reverse();
     const unread = this.unreadImportantNotifications ?? 0;
-    return `<details class="notification-center ${unread ? "has-unread" : ""}"><summary title="Mensajes" aria-label="Mensajes${unread ? `: ${unread} importantes sin leer` : ""}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg>${unread ? `<strong class="notification-badge">${unread}</strong>` : ""}</summary><div><header><strong>Mensajes</strong><small>${notifications.length} en esta sesión</small></header>${notifications.length ? `<ol>${notifications.map((entry) => `<li class="${entry.kind}"><time>${entry.occurredAt.slice(11, 19)}</time><span>${escapeHtml(entry.text)}</span></li>`).join("")}</ol>` : "<p>Sin mensajes en esta sesión.</p>"}</div></details>`;
+    return `${renderIssueReportButton(Boolean(this.runtime.issueReporter))}<details class="notification-center ${unread ? "has-unread" : ""}"><summary title="Mensajes" aria-label="Mensajes${unread ? `: ${unread} importantes sin leer` : ""}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg>${unread ? `<strong class="notification-badge">${unread}</strong>` : ""}</summary><div><header><strong>Mensajes</strong><small>${notifications.length} en esta sesión</small></header>${notifications.length ? `<ol>${notifications.map((entry) => `<li class="${entry.kind}"><time>${entry.occurredAt.slice(11, 19)}</time><span>${escapeHtml(entry.text)}</span></li>`).join("")}</ol>` : "<p>Sin mensajes en esta sesión.</p>"}</div></details>`;
+  }
+
+  private issueUiContext(): IssueUiContext {
+    return {
+      view: { mode: 'player', theme: this.theme, sheetMode: this.sheetMode, screen: this.activeSheetTab, characterFormDirty: this.characterFormDirty,
+        spellSearch: this.spellSearch, inventorySearch: this.inventorySearch, activeMerchantName: this.activeMerchantName,
+        filters: { actions: this.actionFilter, spells: this.spellFilter, spellProperties: [...this.spellPropertyFilters],
+          spellTags: [...this.spellTagFilters], spellClasses: [...this.spellClassFilters], includeUnknownSpells: this.includeUnknownSpells,
+          inventory: [...this.inventoryFilters], inventoryTags: [...this.inventoryTagFilters], inventoryRarities: [...this.inventoryRarityFilters],
+          includeUnownedInventory: this.includeUnownedInventory },
+        manualRollMode: this.selectedCharacterId ? this.manualRollModes.get(this.selectedCharacterId) ?? null : null,
+        merchantMode: this.merchantMode, merchantCart: [...this.merchantCartQuantities.entries()],
+        initiative: this.initiativeState, encounter: this.encounterSyncState, transport: this.transportDiagnostics },
+      selectedCharacterId: this.selectedCharacterId,
+      character: this.selectedCharacterId ? this.snapshot?.campaign.characters[this.selectedCharacterId] ?? null : null,
+      campaignChecksum: this.snapshot?.checksum ?? null,
+      campaignRevision: this.snapshot?.campaign.revision ?? null,
+      loadedCampaign: this.snapshot?.campaign ?? null,
+      pendingForms: captureIssueFormState(this.root),
+      notifications: this.notifications.slice(-40),
+      actions: (this.selectedCharacterId ? this.actionLogs.get(this.selectedCharacterId) ?? [] : []).slice(-40),
+      connection: getAppConnectionStatuses(),
+    };
   }
 
   private renderTransportDiagnostics(): string {
@@ -2585,6 +2612,9 @@ export class BrowserApp {
   }
 
   private bindEvents(): void {
+    this.root.querySelector<HTMLButtonElement>('[data-report-issue]')?.addEventListener('click', () => {
+      if (this.runtime.issueReporter) openIssueReportDialog(this.runtime.issueReporter, this.issueUiContext());
+    });
     bindInventoryStructuredEditors(this.root);
     this.loreBrowser?.bind(this.root);
     bindViewportConstrainedDetails(this.root, ".level-progress-card", ":scope > form");
