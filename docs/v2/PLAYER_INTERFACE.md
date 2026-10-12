@@ -41,6 +41,10 @@ The sheet is split into these stable tabs:
 7. Extras
 8. Initiative
 
+Hovering or keyboard-focusing the level ring shows an application-rendered
+tooltip with current XP and XP remaining until the next level (or maximum
+level). Opening the XP form hides the tooltip so it does not cover the controls.
+
 Summary/Play includes HP and rest controls, conditions, abilities, skills,
 saves, passive scores and proficiencies. The six abilities use one horizontal
 row above the skill grid; saving throws occupy its adjacent column without

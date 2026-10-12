@@ -1785,6 +1785,8 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .level-progress-card { position: relative; display: grid; place-items: center; min-width: 0; padding: 0; background: transparent; border: 0; border-radius: 0; }
 .level-progress-card > .level-progress-ring { position: relative; display: grid; place-items: center; width: 54px; height: 54px; padding: 0; background: conic-gradient(var(--character-color) var(--level-progress), #30382e 0); border: 0; border-radius: 50%; cursor: pointer; list-style: none; }
 .level-progress-card > .level-progress-ring::-webkit-details-marker { display: none; }
+.level-progress-card > .level-progress-ring.has-tooltip::before { right: auto; left: 0; }
+.level-progress-card[open] > .level-progress-ring.has-tooltip::before { display: none; }
 .level-progress-card > .level-progress-ring::after { inset: 7px; }
 .level-progress-card[open] > .level-progress-ring { filter: brightness(1.12); }
 .level-progress-card > form { position: fixed; top: 0; left: 0; z-index: 22; display: grid; grid-template-columns: minmax(110px, 1fr) auto; gap: 5px; width: min(210px, calc(100vw - 12px)); max-height: calc(100vh - 12px); padding: 7px; overflow-y: auto; background: var(--ui-bg-surface); border: 1px solid var(--ui-border); border-radius: 6px; box-shadow: 0 9px 24px #000b; }

@@ -2521,7 +2521,7 @@ export class BrowserApp {
     const target = remaining === null ? "nivel máximo" : `faltan ${remaining.toLocaleString("es-AR")} PX para el nivel ${progress.level + 1}`;
     const tooltip = `${current} PX actuales · ${target}`;
     return `<details class="level-progress-card">
-      <summary class="level-progress-ring" title="${tooltip}" aria-label="Nivel ${progress.level}. ${tooltip}" style="--level-progress:${progress.percent * 3.6}deg"><div><small>Nivel</small><strong>${progress.level}</strong></div></summary>
+      <summary class="level-progress-ring has-tooltip" data-tooltip="${tooltip}" aria-label="Nivel ${progress.level}. ${tooltip}" style="--level-progress:${progress.percent * 3.6}deg"><div><small>Nivel</small><strong>${progress.level}</strong></div></summary>
       <form data-gain-experience><label>Experiencia ganada<input name="amount" type="number" min="1" step="1" value="100" required></label><button type="submit">Agregar</button></form>
     </details>`;
   }
