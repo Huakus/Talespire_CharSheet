@@ -61,6 +61,7 @@ function spell(id: string, name: string, prepared: boolean, definition: SpellDef
     level,
     prepared,
     definition,
+    casting: null,
     effect: { description: "", active: false },
   };
 }

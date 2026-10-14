@@ -142,6 +142,14 @@ export function editCharacterCore(
     ...character.identity,
     ...patch.identity,
   });
+  if (character.builder) {
+    const managedIdentity = ["className", "subclass", "species", "subrace", "background", "level"] as const;
+    if (managedIdentity.some((key) => identity[key] !== character.identity[key]) ||
+      Object.entries(patch.abilities ?? {}).some(([key, value]) => value !== character.abilities[key as keyof CharacterV2["abilities"]]) ||
+      (patch.combat?.hitDice?.dieSize !== undefined && patch.combat.hitDice.dieSize !== (character.builder.classKey === "barbarian" ? 12 : character.builder.classKey === "wizard" ? 6 : ["warlock","cleric","rogue","bard","druid"].includes(character.builder.classKey) ? 8 : 10))) {
+      throw new Error("La clase, origen, atributos y dados de golpe de esta ficha se gestionan con el tutorial. Usá la subida guiada para conservar su historial.");
+    }
+  }
   const patchedHitDice = {
     ...character.combat.hitDice,
     ...patch.combat?.hitDice,

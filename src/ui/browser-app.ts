@@ -1,3 +1,15 @@
+import { CharacterProgressionPanel } from "./character-progression-panel";
+import { renderRangerPanel,bindRangerPanel } from "./ranger-play-panel";
+import { renderDruidPanel,bindDruidPanel,druidCastingOptions } from "./druid-play-panel";
+import { renderBardPanel,bindBardPanel } from "./bard-play-panel";
+import { renderBarbarianPanel,bindBarbarianPanel } from "./barbarian-play-panel";
+import { barbarianRaging } from "../domain/character/barbarian-rules";
+import { projectActionRollMode } from "../domain/character/character-projection";
+import { renderRoguePanel,bindRoguePanel } from "./rogue-play-panel";
+import { rogueSkillMinimum } from "../domain/character/rogue-play";
+import { renderClericPanel,bindClericPanel } from "./cleric-play-panel";
+import { localizedCharacter,localizedManagedSpell,localizedSpellDefinition } from "./localized-spells";
+import { PHB_SPELLS } from "../domain/character/phb-spells";
 import {
   CampaignApplication,
   type CharacterResourceAction,
@@ -7,6 +19,10 @@ import {
   type CampaignSnapshot,
 } from "../application/ports/campaign-repository";
 import type { CharacterV2 } from "../domain/character/character-v2";
+import { renderWarlockPanel,bindWarlockPanel,warlockCastingOptions,warlockSpellExtras } from "./warlock-play-panel";
+import { renderWizardPanel, bindWizardPanel, spellReady, spellRitualAvailable, wizardFreeModes, wizardFreeOptions, wizardSpellExtras } from "./wizard-play-panel";
+import type { WizardCastOptions } from "../domain/character/wizard-play";
+import { createRandomId } from "../shared/id";
 import { CharacterRevisionConflictError, editCharacterCore } from "../domain/character/edit-character";
 import { canonicalJsonStringify, type JsonValue } from "../shared/json";
 import {
@@ -17,6 +33,7 @@ import {
   projectSpellcasting,
   projectSpellDamageExpression,
   projectAdjustedRollMode,
+  projectAbilityCheckModifier,
 } from "../domain/character/character-projection";
 import type { CharacterStatisticsProjection, InventoryProjection } from "../domain/character/character-projection";
 import {
@@ -107,6 +124,7 @@ import {
   getAppConnectionStatuses,
 } from "./app-chrome";
 import { captureIssueFormState, openIssueReportDialog, renderIssueReportButton } from "./issue-report-dialog";
+import { openCharacterBuilder } from "./character-builder";
 import type { CampaignIssueReporter, IssueUiContext } from "../infrastructure/remote/supabase-campaign-issue-client";
 import type { CampaignLoreReader } from "../application/ports/campaign-lore-reader";
 import { CampaignLoreBrowser } from "./campaign-lore-browser";
@@ -288,6 +306,7 @@ type CharacterSheetTab =
   | "inventory"
   | "interactions"
   | "traits"
+  | "progression"
   | "notes"
   | "extras"
   | "lore"
@@ -300,6 +319,7 @@ const characterSheetTabs: readonly { id: CharacterSheetTab; label: string; short
   { id: "inventory", label: "Inventario", shortLabel: "Equipo" },
   { id: "interactions", label: "Comerciantes", shortLabel: "Comercio" },
   { id: "traits", label: "Rasgos", shortLabel: "Rasgos" },
+  { id: "progression", label: "Progresión", shortLabel: "Niveles" },
   { id: "notes", label: "Notas", shortLabel: "Notas" },
   { id: "extras", label: "Extras", shortLabel: "Extras" },
   { id: "lore", label: "Campaña", shortLabel: "Lore" },
@@ -670,6 +690,7 @@ export class BrowserApp {
   private theme: "dark" | "light" = preference("theme", "dark") as "dark" | "light";
   private sheetMode: CharacterSheetMode = sheetModePreference();
   private activeSheetTab: CharacterSheetTab = sheetTabPreference();
+  private readonly progressionPanel = new CharacterProgressionPanel(() => { if (this.activeSheetTab === "progression") this.render(); });
   private notifications: SessionNotification[] = [];
   private unreadImportantNotifications = 0;
   private nextNotificationId = 1;
@@ -838,7 +859,7 @@ export class BrowserApp {
       : null;
 
     this.root.innerHTML = snapshot
-      ? this.renderWorkspace(snapshot, selected)
+      ? this.renderWorkspace(snapshot, selected ? localizedCharacter(selected) : null)
       : `<div class="standalone-notifications">${this.renderNotificationCenter()}</div>${this.renderWelcome()}`;
     this.bindEvents();
     if (selected) void this.refreshMiniatureThumbnail(selected);
@@ -846,7 +867,8 @@ export class BrowserApp {
 
   private spellCatalog(): readonly SpellDefinition[] {
     const unique = new Map<string, SpellDefinition>();
-    for (const spell of this.customSpells) {
+    for (const original of [...this.customSpells.filter((spell) => spell.catalog?.origin === "gm"),...Object.values(PHB_SPELLS),...this.customSpells.filter((spell) => spell.catalog?.origin !== "gm")]) {
+      const spell = localizedSpellDefinition(original);
       if ((spell.year || "2014") !== "2014") continue;
       const key = normalizedSearchText(spell.name);
       if (!unique.has(key)) unique.set(key, spell);
@@ -856,11 +878,12 @@ export class BrowserApp {
 
   private findSpell(name: string): SpellDefinition | null {
     const normalized = name.trim().toLocaleLowerCase();
-    return this.customSpells.find((spell) => spell.name.toLocaleLowerCase() === normalized) ?? null;
+    return this.spellCatalog().find((spell) => spell.name.toLocaleLowerCase() === normalized) ?? null;
   }
 
   private spellWithCatalogDefinition(spell: CharacterSpellV2): CharacterSpellV2 {
-    const definition = this.findSpell(spell.name);
+    spell = localizedManagedSpell(spell);
+    const definition = spell.casting?.source.startsWith("builder:") ? spell.definition : this.findSpell(spell.name);
     return definition ? { ...spell, level: definition.level, definition } : spell;
   }
 
@@ -940,6 +963,47 @@ export class BrowserApp {
     }
   }
 
+  private async openGuidedBuilder(advance: boolean): Promise<void> {
+    if (!this.snapshot) return;
+    const form = this.root.querySelector<HTMLFormElement>("#character-form");
+    if (form && this.characterFormDirty && !await this.persistCharacterForm(form, false)) return;
+    const base = this.snapshot;
+    const character = advance && this.selectedCharacterId ? base.campaign.characters[this.selectedCharacterId] : undefined;
+    if (advance && !character) return;
+    const requireCampaign = () => { if (this.snapshot?.campaign.id !== base.campaign.id) throw new Error("La campaña cambió. Cerrá el asistente y abrilo en la campaña correcta."); };
+    try {
+      await openCharacterBuilder({
+        campaignId: base.campaign.id,
+        name: this.root.querySelector<HTMLInputElement>("#new-character-name")?.value ?? "",
+        ...(character ? { character } : {}),
+        diceRoller: this.runtime.diceRoller,
+        onCreate: async (operationId, creation, initialLevels) => {
+          requireCampaign();
+          const snapshot = await this.application.createGuidedCharacter({ operationId, creation, initialLevels, expectedCampaignChecksum: base.checksum });
+          this.snapshot = snapshot;
+          this.selectedCharacterId = Object.values(snapshot.campaign.characters).find((entry) => entry.builder?.creationOperationId === operationId)?.id ?? this.selectedCharacterId;
+          this.rememberSelectedCharacter();
+          this.sheetMode = "play";
+          this.activeSheetTab = "summary";
+          this.message = { kind: "success", text: "Personaje creado con el tutorial de 2014." };
+          await this.refreshStorageUsage();
+          this.render();
+        },
+        onAdvance: async (choice) => {
+          requireCampaign();
+          if (!character) throw new Error("No hay personaje para subir de nivel.");
+          const snapshot = await this.application.advanceGuidedCharacter({ characterId: character.id, choice, expectedCharacterRevision: character.revision, expectedCampaignChecksum: base.checksum });
+          this.selectedCharacterId = character.id;
+          this.acceptCharacterSnapshot(snapshot, `Subir a Guerrero ${choice.level}`);
+          this.rememberSelectedCharacter();
+          this.message = { kind: "success", text: `Nivel ${choice.level} confirmado. Se conservaron los recursos de partida.` };
+          await this.refreshStorageUsage();
+          this.render();
+        },
+      });
+    } catch (error) { this.message = { kind: "error", text: formatError(error) }; this.render(); }
+  }
+
   private async deleteCharacter(): Promise<void> {
     if (!this.snapshot || !this.selectedCharacterId) return;
     const character = this.snapshot.campaign.characters[this.selectedCharacterId];
@@ -971,6 +1035,7 @@ export class BrowserApp {
     return `<div class="character-management">
       <label>Nuevo personaje<input id="new-character-name" placeholder="Nombre"></label>
       <button type="button" class="secondary-button" id="create-character">Crear</button>
+      <button type="button" id="create-guided-character">Crear con tutorial</button>
     </div>`;
   }
 
@@ -1007,6 +1072,7 @@ export class BrowserApp {
               <label>Tema<select id="theme"><option value="dark" ${this.theme === "dark" ? "selected" : ""}>Oscuro</option><option value="light" ${this.theme === "light" ? "selected" : ""}>Claro</option></select></label>
               ${this.runtime.selectMiniature ? '<button type="button" class="secondary-button" id="link-miniature">Vincular mini</button>' : ""}
               <button type="button" class="secondary-button danger" id="delete-character">Eliminar personaje</button>
+              <button type="button" id="guided-level-up" ${character.builder && character.identity.level < 20 ? "" : "disabled"} title="${character.builder ? "Continuar el tutorial de tu clase" : "Disponible para personajes creados con el tutorial"}">Subir de nivel con tutorial</button>
               <details class="menu-section"><summary>Administrar personajes</summary>${this.renderCharacterManagement()}</details>
               ${this.renderTransportDiagnostics()}
             </div></details>
@@ -1166,6 +1232,7 @@ export class BrowserApp {
     for (const condition of character.combat.conditions) {
       if (!available.has(condition.key)) available.set(condition.key, condition.label);
     }
+    if (character.builder?.classKey === "barbarian") available.delete("raging");
     const conditions = [...available].map(([key, label]) => ({ key, label, active: activeByKey.get(key) ?? null }))
       .sort((left, right) => Number(!left.active) - Number(!right.active) || left.label.localeCompare(right.label, "es", { sensitivity: "base" }));
     return `<div class="condition-toggle-panel" aria-label="Condiciones"><small>Condiciones</small><div class="condition-toggle-list">${conditions.map(({ key, label, active }) => `<button type="button" class="condition-toggle ${active ? "active" : ""}" data-toggle-condition="${escapeHtml(key)}" data-condition-label="${escapeHtml(label)}" ${active ? `data-condition-id="${active.id}"` : ""} aria-pressed="${!!active}" title="${active ? "Desactivar" : "Activar"} ${escapeHtml(label)}">${escapeHtml(label)}</button>`).join("")}</div></div>`;
@@ -1193,6 +1260,7 @@ export class BrowserApp {
     if (this.activeSheetTab === "inventory") return this.sheetMode === "edit" ? this.renderInventory(character) : this.renderInventoryPlay(character);
     if (this.activeSheetTab === "interactions") return this.renderMerchantInteractions(character, projection);
     if (this.activeSheetTab === "traits") return this.sheetMode === "edit" ? this.renderTraits(character) : this.renderTraitsPlay(character);
+    if (this.activeSheetTab === "progression") return this.progressionPanel.render(character);
     if (this.activeSheetTab === "notes") return this.sheetMode === "edit" ? this.renderNotes(character) : this.renderNotesPlay(character);
     if (this.activeSheetTab === "extras") return this.sheetMode === "edit" ? this.renderExtras(character) : this.renderExtrasPlay(character);
     if (this.activeSheetTab === "lore") return this.loreBrowser?.render() ?? this.renderEmptyPanel("La biblioteca de campaña requiere una conexión con Supabase.");
@@ -1487,18 +1555,19 @@ export class BrowserApp {
     ];
     return `<div class="play-dashboard">
       ${this.renderResourcePanel(character)}
+      ${renderRoguePanel(character)}${renderBarbarianPanel(character)}${renderBardPanel(character)}${renderDruidPanel(character)}${renderRangerPanel(character)}
       ${activeEffects.length ? `<section class="active-effects" aria-label="Efectos activos"><div class="section-heading"><h2>Efectos activos</h2><span>${activeEffects.length}</span></div><div>${activeEffects.map((effect) => `<article><span>${effect.kind}</span><strong>${escapeHtml(effect.source)}</strong><p>${escapeHtml(effect.description)}</p></article>`).join("")}</div></section>` : ""}
       <section class="play-section checks-play-section" aria-label="Características, habilidades y salvaciones">
         <div class="ability-cards">${(Object.keys(abilityLabels) as (keyof CharacterV2["abilities"])[]).map((key) => {
           const mode = projectAdjustedRollMode(character, "skills", [key, abilityLabels[key]], "normal");
-          return `<button type="button" class="ability-card roll-button" data-roll-name="Prueba de ${abilityLabels[key]}" data-roll-expression="1d20${signed(projection.abilityModifiers[key])}" data-roll-mode="${mode}"><span>${abilityLabels[key]}</span><strong>${signed(projection.abilityModifiers[key])}</strong><small title="Base: ${character.abilities[key]}">${projection.abilityScores[key]}</small></button>`;
+          return `<button type="button" class="ability-card roll-button" data-roll-name="Prueba de ${abilityLabels[key]}" data-roll-expression="1d20${signed(projectAbilityCheckModifier(character, key))}" data-roll-mode="${mode}"><span>${abilityLabels[key]}</span><strong>${signed(projection.abilityModifiers[key])}</strong><small title="Base: ${character.abilities[key]}">${projection.abilityScores[key]}</small></button>`;
         }).join("")}</div>
         <div class="passive-score-strip" title="Puntuaciones pasivas" aria-label="Puntuaciones pasivas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg><div><span>Percepción</span><strong>${projection.passives.perception}</strong></div><div><span>Investigación</span><strong>${projection.passives.investigation}</strong></div><div><span>Perspicacia</span><strong>${projection.passives.insight}</strong></div></div>
         <div class="checks-roll-layout"><div class="quick-roll-list skills">${(Object.keys(SKILL_DEFINITIONS) as SkillKey[]).map((key) => {
           const definition = SKILL_DEFINITIONS[key];
           const state = character.checks.skills[key];
           const mode = projectAdjustedRollMode(character, "skills", [key, definition.label], state.rollMode);
-          return `<button type="button" class="quick-roll roll-button" data-roll-name="${escapeHtml(definition.label)}" data-roll-expression="1d20${signed(projection.skills[key])}" data-roll-mode="${mode}"><span>${state.proficiency === 2 ? "◆" : state.proficiency === 1 ? "●" : state.proficiency === 0.5 ? "◐" : "○"} ${escapeHtml(definition.label)}</span><strong>${signed(projection.skills[key])}</strong></button>`;
+          return `<button type="button" class="quick-roll roll-button" title="${rogueSkillMinimum(character,key) > 1 ? "Talento Seguro: aplic\u00e1 m\u00ednimo 10 al d20 desde Talentos de P\u00edcaro" : ""}" data-roll-name="${escapeHtml(definition.label)}" data-roll-expression="1d20${signed(projection.skills[key])}" data-roll-mode="${mode}"><span>${state.proficiency === 2 ? "◆" : state.proficiency === 1 ? "●" : state.proficiency === 0.5 ? "◐" : "○"} ${escapeHtml(definition.label)}</span><strong>${signed(projection.skills[key])}</strong></button>`;
         }).join("")}</div><div class="quick-roll-list saves">${(Object.keys(SAVE_DEFINITIONS) as SaveKey[]).map((key) => {
           const definition = SAVE_DEFINITIONS[key];
           const state = character.checks.savingThrows[key];
@@ -1592,6 +1661,7 @@ export class BrowserApp {
           name: definition.name,
           level: definition.level,
           prepared: false,
+          casting: null,
           definition,
           effect: { description: "", active: false },
         }));
@@ -1803,7 +1873,7 @@ export class BrowserApp {
         const damageBonus = projectActionDamageBonus(character, action);
         const signedAttack = attack >= 0 ? `+${attack}` : String(attack);
         const damage = `${action.damageExpression}${damageBonus > 0 ? `+${damageBonus}` : damageBonus < 0 ? damageBonus : ""}`;
-        const mode = projectAdjustedRollMode(character, "combatStats", [action.weaponType.toLowerCase().includes("ranged") ? "RangedAttackRolls" : "MeleeAttackRolls"], action.rollMode);
+        const mode = projectActionRollMode(character,action);
         const executionKey = `action:${character.id}:${action.id}`;
         const armed = this.combatExecutions.get(executionKey);
         return `<article class="play-card spell-play-card action-play-card" data-combat-execution-key="${executionKey}" data-combat-name="${escapeHtml(action.name)}">
@@ -1815,44 +1885,56 @@ export class BrowserApp {
     ${embedded ? "</div>" : "</section>"}`;
   }
 
+  private innateSpellAvailable(character: CharacterV2, spell: CharacterSpellV2): boolean {
+    if (spell.level === 0) return true;
+    const trait = character.traits.flatMap((group) => group.traits).find((t) => t.id === spell.casting?.traitId);
+    return !!trait && trait.uses.used < trait.uses.maximum;
+  }
+
   private renderSpellsPlay(character: CharacterV2, embedded = false, includeSearchRow = true): string {
     const projection = projectSpellcasting(character);
     const entries = this.visibleSpellEntries(character);
     const attackMode = projectAdjustedRollMode(character, "combatStats", ["SpellAttackModifier", "SpellAttackandSave"], "normal");
     return `${embedded ? '<div class="actions-spells-group spell-group">' : '<section class="play-section collection-play">'}
+      ${renderWizardPanel(character)}${renderWarlockPanel(character)}${renderClericPanel(character)}${renderRoguePanel(character)}${renderBarbarianPanel(character)}${renderBardPanel(character)}${renderDruidPanel(character)}${renderRangerPanel(character)}
       ${includeSearchRow ? this.renderSpellDiscoveryTools(character) : `<div class="spell-discovery spell-property-tools">${this.renderSpellPropertyFilters(character)}</div>`}${this.renderSpellFilterBar(character)}
       ${entries.length ? `<div class="play-card-grid spell-play-grid">${entries.map(({ spell, known, favorite }) => {
         const definition = spell.definition;
+        const projection = projectSpellcasting(character, spell);
         const tags = this.spellTags(definition);
         const damage = projectSpellDamageExpression(character, spell);
         const minimumLevel = Math.max(1, spell.level);
-        const ritualAvailable = definition?.ritual ?? false;
-        const availableSlotLevel = spell.level === 0 ? 0 : Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).find((level) => {
+        const ritualAvailable = !!spell && spellRitualAvailable(character,spell);
+    const freeModes = spell ? wizardFreeModes(character,spell) : [];
+        const availableSlotLevel = spell.level === 0 ? 0 : spell.casting?.kind === "at-will" ? spell.level : spell.casting?.kind === "innate" ? this.innateSpellAvailable(character, spell) ? spell.casting.level : undefined : spell.casting?.kind === "ritual" ? undefined : Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).find((level) => {
           const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
           return slot.used < slot.maximum;
         });
-        const spellAvailable = known && (spell.level === 0 || spell.prepared || ritualAvailable);
-        const canLaunch = known && (spell.level === 0 || (spell.prepared && availableSlotLevel !== undefined) || ritualAvailable);
-        const initialCastLevel = spell.level === 0
+        const spellAvailable = known && (spellReady(spell,character) || ritualAvailable || freeModes.some((m) => m.available));
+        const canLaunch = known && ((spellReady(spell,character) && (spell.level === 0 || availableSlotLevel !== undefined)) || ritualAvailable || freeModes.some((m) => m.available));
+        let initialCastLevel: string | number = spell.level === 0
           ? 0
-          : spell.prepared && availableSlotLevel !== undefined
+          : spellReady(spell,character) && availableSlotLevel !== undefined
             ? availableSlotLevel
             : ritualAvailable
               ? "ritual"
               : minimumLevel;
+        const preferredFree = freeModes.find((m) => m.available && m.value !== "shapechanger") ?? (spellReady(spell,character) && availableSlotLevel !== undefined ? undefined : freeModes.find((m) => m.available));
+        if (preferredFree) initialCastLevel = preferredFree.value;
         const initialDamage = typeof initialCastLevel === "number"
           ? projectSpellDamageExpression(character, spell, initialCastLevel)
           : damage;
-        const levelOptions = spell.level === 0
+        const levelOptions = druidCastingOptions(character,spell) ?? warlockCastingOptions(character,spell) ?? (spell.casting?.kind === "innate" && spell.level > 0 ? `<option value="${spell.casting.level}" data-spell-damage="${escapeHtml(projectSpellDamageExpression(character, spell, spell.casting.level))}" data-cast-available="${availableSlotLevel !== undefined}">Innato · nivel ${spell.casting.level} · ${availableSlotLevel !== undefined ? "disponible" : "sin usos"}</option>` : spell.casting?.kind === "ritual" ? "" : spell.level === 0
           ? `<option value="0" data-spell-damage="${escapeHtml(damage)}" data-cast-available="true">Truco</option>`
           : Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).map((level) => {
               const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
               const projectedDamage = projectSpellDamageExpression(character, spell, level);
-              const disabled = !spell.prepared || slot.used >= slot.maximum;
+              const disabled = !spellReady(spell,character) || slot.used >= slot.maximum;
               return `<option value="${level}" data-spell-damage="${escapeHtml(projectedDamage)}" data-cast-available="${!disabled}" ${initialCastLevel === level ? "selected" : ""} ${disabled ? "disabled" : ""}>Nivel ${level} · ${Math.max(0, slot.maximum - slot.used)} disp.</option>`;
-            }).join("");
+            }).join(""));
         const ritualOption = ritualAvailable ? `<option value="ritual" data-spell-damage="${escapeHtml(damage)}" data-cast-available="true" ${initialCastLevel === "ritual" ? "selected" : ""}>Ritual · sin espacio</option>` : "";
-        const preparation = known
+        const castingLabel = spell.casting ? `${spell.casting.source === "builder:barbarian" ? "Conjuro de senda" : spell.casting.source === "builder:race" ? "Magia racial" : spell.casting.kind === "wizard" ? `Libro de mago · ${spell.prepared ? "preparado" : "no preparado"}` : spell.casting.source.startsWith("builder:warlock:") ? spell.casting.kind === "at-will" ? "Invocación a voluntad" : spell.casting.kind === "pact-invocation" ? "Invocación con espacio" : spell.casting.source.endsWith(":arcanum") ? "Arcano místico" : "Magia de pacto" : spell.casting.kind === "druid" ? `Druida · ${spell.prepared ? "preparado" : "no preparado"}` : spell.casting.kind === "cleric" ? `Clérigo · ${spell.prepared ? "preparado" : "no preparado"}` : spell.casting.kind === "slots" ? "Conocido" : spell.casting.kind === "ritual" ? "Libro ritual" : "Dote"} · ${SAVE_DEFINITIONS[spell.casting.ability].label}` : "";
+        const preparation = castingLabel ? `<span class="cantrip-label">${escapeHtml(castingLabel)}</span>` : known
           ? spell.level > 0
             ? `<button type="button" class="preparation-toggle ${spell.prepared ? "active" : ""}" data-spell-action="prepare" title="${spell.prepared ? "Despreparar" : "Preparar"} conjuro">${spell.prepared ? "Preparado" : "No preparado"}</button>`
             : '<span class="cantrip-label">Siempre disponible</span>'
@@ -1861,10 +1943,10 @@ export class BrowserApp {
         const armed = this.combatExecutions.get(executionKey);
         const resolutionDamage = armed?.has("damage") ? this.combatExecutionDamage.get(executionKey) ?? initialDamage : initialDamage;
         const controls = known
-          ? `<label class="cast-as"><span>Lanzar como</span><select data-cast-slot-level size="1">${levelOptions}${ritualOption}</select></label><button type="button" data-spell-cast-control data-spell-action="cast" ${canLaunch ? "" : "disabled"}>Lanzar</button>${definition?.attackType === "attack" ? `<button type="button" class="roll-button" data-combat-roll="attack" data-roll-name="Ataque de conjuro: ${escapeHtml(spell.name)}" data-roll-expression="1d20${projection.attackModifier >= 0 ? "+" : ""}${projection.attackModifier}" data-roll-mode="${attackMode}" ${armed?.has("attack") ? "" : "disabled"}>Ataque</button>` : ""}${damage ? `<button type="button" class="roll-button" data-combat-roll="damage" data-spell-damage-button data-roll-name="Daño de ${escapeHtml(spell.name)}" data-roll-expression="${escapeHtml(resolutionDamage)}" data-roll-mode="normal" ${armed?.has("damage") ? "" : "disabled"}>Daño</button>` : ""}`
+          ? `<label class="cast-as"><span>Lanzar como</span><select data-cast-slot-level size="1">${levelOptions}${ritualOption}${wizardFreeOptions(character,spell,initialCastLevel)}</select></label><button type="button" data-spell-cast-control data-spell-action="cast" ${canLaunch ? "" : "disabled"}>Lanzar</button>${definition?.attackType === "attack" ? `<button type="button" class="roll-button" data-combat-roll="attack" data-roll-name="Ataque de conjuro: ${escapeHtml(spell.name)}" data-roll-expression="1d20${projection.attackModifier >= 0 ? "+" : ""}${projection.attackModifier}" data-roll-mode="${attackMode}" ${armed?.has("attack") ? "" : "disabled"}>Ataque</button>` : ""}${damage ? `<button type="button" class="roll-button" data-combat-roll="damage" data-spell-damage-button data-roll-name="Daño de ${escapeHtml(spell.name)}" data-roll-expression="${escapeHtml(resolutionDamage)}" data-roll-mode="normal" ${armed?.has("damage") ? "" : "disabled"}>Daño</button>` : ""}`
           : "";
         return `<article class="play-card spell-play-card ${known ? "known-spell" : "catalog-spell"} ${spell.prepared || spell.level === 0 ? "prepared" : ""} ${spellAvailable && canLaunch ? "" : "spell-disabled"}" data-spell-card ${known ? `data-spell-id="${spell.id}"` : ""} data-spell-name="${escapeHtml(spell.name)}" data-combat-execution-key="${executionKey}" data-combat-name="${escapeHtml(spell.name)}" data-spell-search-value="${escapeHtml(this.spellSearchValue(spell))}">
-          <header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="card-kicker">${spell.level === 0 ? "Truco" : `Nivel ${spell.level}`}</span>${definition?.school ? `<span class="school-badge" data-school-tone="${spellSchoolTone(definition.school)}">${escapeHtml(definition.school)}</span>` : ""}${preparation}<button type="button" class="favorite-toggle ${favorite ? "active" : ""}" data-spell-action="favorite" aria-pressed="${favorite}" title="${favorite ? "Quitar de favoritos" : "Agregar a favoritos"}">${favorite ? "★" : "☆"}</button></div><div class="spell-name-line"><h3>${escapeHtml(spell.name)}</h3>${definition ? `<span class="spell-inline-facts">${escapeHtml(compactCastingTime(definition.castingTime || "—"))} · ${escapeHtml(definition.range || "—")} · ${escapeHtml(definition.duration || "—")}</span>` : ""}</div></div><div class="spell-card-controls">${controls}</div></header>
+          <header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="card-kicker">${spell.level === 0 ? "Truco" : `Nivel ${spell.level}`}</span>${definition?.school ? `<span class="school-badge" data-school-tone="${spellSchoolTone(definition.school)}">${escapeHtml(definition.school)}</span>` : ""}${preparation}<button type="button" class="favorite-toggle ${favorite ? "active" : ""}" data-spell-action="favorite" aria-pressed="${favorite}" title="${favorite ? "Quitar de favoritos" : "Agregar a favoritos"}">${favorite ? "★" : "☆"}</button></div><div class="spell-name-line"><h3>${escapeHtml(spell.name)}</h3>${definition ? `<span class="spell-inline-facts">${escapeHtml(compactCastingTime(definition.castingTime || "—"))} · ${escapeHtml(definition.range || "—")} · ${escapeHtml(definition.duration || "—")}</span>` : ""}</div></div><div class="spell-card-controls">${controls}</div></header>${wizardSpellExtras(character,spell)}${warlockSpellExtras(character,spell)}
           ${tags.length ? `<div class="catalog-tags player-catalog-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
           ${definition ? definition.description && this.showSpellDescriptions ? this.renderCollapsibleSpellDescription(definition.description, known ? spell.id : `catalog:${normalizedSearchText(spell.name)}`) : "" : '<p class="muted">Sin definición de catálogo.</p>'}
           <div class="action-readouts">${definition?.attackType === "attack" ? `<span>Ataque <strong>${projection.attackModifier >= 0 ? "+" : ""}${projection.attackModifier}</strong></span>` : definition?.attackType === "save" ? `<span>Salvación <strong>${escapeHtml(definition.saveAbility.toUpperCase())} CD ${projection.saveDc}</strong></span>` : ""}${damage ? `<span>Daño <strong data-spell-damage-readout>${escapeHtml(resolutionDamage)}</strong>${definition?.damageType ? ` <em class="damage-badge" data-damage-tone="${spellDamageTone(definition.damageType)}">${escapeHtml(definition.damageType)}</em>` : ""}</span>` : ""}</div>
@@ -2030,12 +2112,7 @@ export class BrowserApp {
     const attack = action ? projectActionAttackModifier(character, action) : 0;
     const damageBonus = action ? projectActionDamageBonus(character, action) : 0;
     const effectiveMode = action
-      ? projectAdjustedRollMode(
-          character,
-          "combatStats",
-          [action.weaponType.toLowerCase().includes("ranged") ? "RangedAttackRolls" : "MeleeAttackRolls"],
-          action.rollMode,
-        )
+      ? projectActionRollMode(character,action)
       : "normal";
     const signed = attack >= 0 ? `+${attack}` : String(attack);
     return `
@@ -2105,6 +2182,7 @@ export class BrowserApp {
     const labels = ["Trucos", "Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5", "Nivel 6", "Nivel 7", "Nivel 8", "Nivel 9"];
     return `
       <fieldset aria-label="Conjuros">
+        ${renderWizardPanel(character)}${renderWarlockPanel(character)}${renderClericPanel(character)}${renderRoguePanel(character)}${renderBarbarianPanel(character)}${renderBardPanel(character)}${renderDruidPanel(character)}${renderRangerPanel(character)}
         <details class="compact-config"><summary>Configuración y espacios de conjuro</summary><div class="field-grid spell-settings">
           <label>Característica<select id="spellcasting-ability">${Object.entries({ strength: "FUE", dexterity: "DES", constitution: "CON", intelligence: "INT", wisdom: "SAB", charisma: "CAR" }).map(([value, label]) => `<option value="${value}" ${value === selectedAbility ? "selected" : ""}>${label}</option>`).join("")}</select></label>
           <label>Nivel visible<select id="spell-visible-level"><option value="">Todos</option>${Array.from({ length: 10 }, (_, level) => `<option value="${level}" ${character.spellcasting.selectedLevel === String(level) ? "selected" : ""}>${labels[level]}</option>`).join("")}</select></label>
@@ -2160,7 +2238,7 @@ export class BrowserApp {
 
   private renderSpellCard(character: CharacterV2, spell: CharacterSpellV2 | null): string {
     const definition = spell?.definition;
-    const projection = projectSpellcasting(character);
+    const projection = projectSpellcasting(character, spell);
     const attackRollMode = projectAdjustedRollMode(
       character,
       "combatStats",
@@ -2169,7 +2247,7 @@ export class BrowserApp {
     );
     const damage = spell ? projectSpellDamageExpression(character, spell) : "";
     const field = (name: string, value: string | number, attributes = "") =>
-      `<input data-spell-field="${name}" value="${escapeHtml(String(value))}" ${attributes}>`;
+      `<input data-spell-field="${name}" value="${escapeHtml(String(value))}" ${(["wizard","cleric","druid"].includes(spell?.casting?.kind ?? "") || spell?.casting?.source.startsWith("builder:warlock:") || spell?.casting?.source.startsWith("builder:rogue") || spell?.casting?.source.startsWith("builder:ranger") || spell?.casting?.source.startsWith("builder:druid") || spell?.casting?.source === "builder:bard" || spell?.casting?.source === "builder:barbarian") && ["name","level"].includes(name) ? "readonly" : ""} ${attributes}>`;
     const selectedClasses = definition?.classes ?? [];
     const knownClassKeys = new Set(SPELL_CLASS_OPTIONS.map((option) => option.value));
     const classOptions = [
@@ -2177,41 +2255,45 @@ export class BrowserApp {
       ...selectedClasses.filter((value) => !knownClassKeys.has(value as typeof SPELL_CLASS_OPTIONS[number]["value"])).map((value) => ({ value, label: spellClassLabel(value) })),
     ].map((option) => `<option value="${escapeHtml(option.value)}" ${selectedClasses.includes(option.value) ? "selected" : ""}>${escapeHtml(option.label)}</option>`).join("");
     const minimumLevel = Math.max(1, spell?.level ?? 1);
-    const availableSlotLevel = spell?.level === 0 ? 0 : spell
+    const availableSlotLevel = spell?.level === 0 ? 0 : spell?.casting?.kind === "at-will" ? spell.level : spell?.casting?.kind === "innate" ? this.innateSpellAvailable(character, spell) ? spell.casting.level : undefined : spell?.casting?.kind === "ritual" ? undefined : spell
       ? Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).find((level) => {
           const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
           return slot.used < slot.maximum;
         })
       : undefined;
-    const ritualAvailable = definition?.ritual ?? false;
-    const canLaunch = !!spell && (spell.level === 0 || (spell.prepared && availableSlotLevel !== undefined) || ritualAvailable);
-    const initialCastLevel = spell?.level === 0
+    const ritualAvailable = !!spell && spellRitualAvailable(character,spell);
+    const freeModes = spell ? wizardFreeModes(character,spell) : [];
+    const canLaunch = !!spell && ((spellReady(spell,character) && (spell.level === 0 || availableSlotLevel !== undefined)) || ritualAvailable || freeModes.some((m) => m.available));
+    let initialCastLevel: string | number = spell?.level === 0
       ? 0
-      : spell?.prepared && availableSlotLevel !== undefined
+      : (!!spell && spellReady(spell,character)) && availableSlotLevel !== undefined
         ? availableSlotLevel
         : ritualAvailable
           ? "ritual"
           : minimumLevel;
-    const slotOptions = spell
+    const preferredFree = freeModes.find((m) => m.available && m.value !== "shapechanger") ?? (spell && spellReady(spell,character) && availableSlotLevel !== undefined ? undefined : freeModes.find((m) => m.available));
+    if (preferredFree) initialCastLevel = preferredFree.value;
+    const castingLabel = spell?.casting ? `${spell.casting.source === "builder:barbarian" ? "Conjuro de senda" : spell.casting.source === "builder:race" ? "Magia racial" : spell.casting.kind === "wizard" ? `Libro de mago · ${spell.prepared ? "preparado" : "no preparado"}` : spell.casting.source.startsWith("builder:warlock:") ? spell.casting.kind === "at-will" ? "Invocación a voluntad" : spell.casting.kind === "pact-invocation" ? "Invocación con espacio" : spell.casting.source.endsWith(":arcanum") ? "Arcano místico" : "Magia de pacto" : spell.casting.kind === "druid" ? `Druida · ${spell.prepared ? "preparado" : "no preparado"}` : spell.casting.kind === "cleric" ? `Clérigo · ${spell.prepared ? "preparado" : "no preparado"}` : spell.casting.kind === "slots" ? "Conocido" : spell.casting.kind === "ritual" ? "Libro ritual" : "Dote"} · ${SAVE_DEFINITIONS[spell.casting.ability].label}` : spell?.prepared ? "Preparado" : "No preparado";
+    const slotOptions = (spell ? druidCastingOptions(character,spell) ?? warlockCastingOptions(character,spell) : null) ?? (spell?.casting?.kind === "innate" && spell.level > 0 ? `<option value="${spell.casting.level}" data-cast-available="${availableSlotLevel !== undefined}">Innato · nivel ${spell.casting.level} · ${availableSlotLevel !== undefined ? "disponible" : "sin usos"}</option>` : spell?.casting?.kind === "ritual" ? `<option value="ritual" data-cast-available="true">Ritual · sin espacio</option>` : spell
       ? spell.level === 0
         ? '<option value="0" data-cast-available="true">Truco</option>'
         : `${Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).map((level) => {
             const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
-            const disabled = !spell.prepared || slot.used >= slot.maximum;
+            const disabled = !spellReady(spell,character) || slot.used >= slot.maximum;
             return `<option value="${level}" data-cast-available="${!disabled}" ${initialCastLevel === level ? "selected" : ""} ${disabled ? "disabled" : ""}>Nivel ${level} · ${Math.max(0, slot.maximum - slot.used)} disp.</option>`;
           }).join("")}${ritualAvailable ? `<option value="ritual" data-cast-available="true" ${initialCastLevel === "ritual" ? "selected" : ""}>Ritual · sin espacio</option>` : ""}`
-      : "";
+      : "");
     return `
       <details class="spell-card collapsible-editor" data-spell-card data-spell-id="${spell?.id ?? ""}" data-spell-search-value="${spell ? escapeHtml(this.spellSearchValue(spell)) : ""}" ${spell ? "" : "open"}>
-        <summary class="editor-card-summary"><strong>${escapeHtml(spell?.name ?? "Agregar conjuro")}</strong><span>${spell ? `${spell.level === 0 ? "Truco" : `Nivel ${spell.level}`} · ${spell.prepared ? "preparado" : "no preparado"}` : "Nuevo"}${definition?.school ? ` <em class="school-badge" data-school-tone="${spellSchoolTone(definition.school)}">${escapeHtml(definition.school)}</em>` : ""}</span></summary>
+        <summary class="editor-card-summary"><strong>${escapeHtml(spell?.name ?? "Agregar conjuro")}</strong><span>${spell ? `${spell.level === 0 ? "Truco" : `Nivel ${spell.level}`} · ${escapeHtml(castingLabel)}` : "Nuevo"}${definition?.school ? ` <em class="school-badge" data-school-tone="${spellSchoolTone(definition.school)}">${escapeHtml(definition.school)}</em>` : ""}</span></summary>
         <div class="editor-card-body">
         <div class="spell-card-heading">
           <label>Nombre${field("name", spell?.name ?? "", 'list="spell-catalog-names" placeholder="Nuevo conjuro"')}</label>
-          ${spell ? `<span>Nivel ${spell.level} · ${spell.prepared ? "Preparado" : "No preparado"}</span>` : ""}
+          ${spell ? `<span>Nivel ${spell.level} · ${escapeHtml(castingLabel)}</span>` : ""}
         </div>
         <div class="field-grid">
           <label>Nivel${field("level", spell?.level ?? 0, 'type="number" min="0" max="9" step="1"')}</label>
-          <label class="checkbox"><input data-spell-field="prepared" type="checkbox" ${spell?.prepared ? "checked" : ""}> Preparado</label>
+          <label class="checkbox"><input data-spell-field="prepared" type="checkbox" ${(["wizard","cleric","druid"].includes(spell?.casting?.kind ?? "") || spell?.casting?.source.startsWith("builder:warlock:") || spell?.casting?.source.startsWith("builder:rogue") || spell?.casting?.source.startsWith("builder:ranger") || spell?.casting?.source.startsWith("builder:druid") || spell?.casting?.source === "builder:bard" || spell?.casting?.source === "builder:barbarian") ? 'disabled title="Gestionado por el tutorial y los recursos de clase"' : ""} ${spell?.prepared ? "checked" : ""}> Preparado</label>
           <label>Tiempo${field("castingTime", definition?.castingTime ?? "")}</label>
           <label>Alcance${field("range", definition?.range ?? "")}</label>
           <label>Duración${field("duration", definition?.duration ?? "")}</label>
@@ -2236,7 +2318,7 @@ export class BrowserApp {
         <div class="card-buttons">
           ${spell && definition?.attackType === "attack" ? `<button type="button" class="roll-button" data-roll-name="Ataque de conjuro: ${escapeHtml(spell.name)}" data-roll-expression="1d20${projection.attackModifier >= 0 ? "+" : ""}${projection.attackModifier}" data-roll-mode="${attackRollMode}">Tirar ataque</button>` : ""}
           ${spell && damage ? `<button type="button" class="roll-button" data-roll-name="Daño de ${escapeHtml(spell.name)}" data-roll-expression="${escapeHtml(damage)}" data-roll-mode="normal">Tirar daño</button>` : ""}
-          ${spell ? `<label>Nivel de lanzamiento<select data-cast-slot-level size="1">${slotOptions}</select></label><button type="button" data-spell-cast-control data-spell-action="cast" ${canLaunch ? "" : "disabled"}>Lanzar/gastar espacio</button><button type="button" data-spell-action="prepare">${spell.prepared ? "Despreparar" : "Preparar"}</button>` : ""}
+          ${spell ? `<label>Nivel de lanzamiento<select data-cast-slot-level size="1">${slotOptions}${wizardFreeOptions(character,spell,initialCastLevel)}</select></label><button type="button" data-spell-cast-control data-spell-action="cast" ${canLaunch ? "" : "disabled"}>Lanzar</button>${wizardSpellExtras(character,spell)}${warlockSpellExtras(character,spell)}${spell.casting ? "" : `<button type="button" data-spell-action="prepare">${spell.prepared ? "Despreparar" : "Preparar"}</button>`}` : ""}
           <button type="button" data-load-spell-catalog>Cargar datos del catálogo</button>
           <button type="button" data-save-spell>${spell ? "Guardar conjuro" : "Agregar conjuro"}</button>
           ${spell ? '<button type="button" class="danger" data-spell-action="delete">Eliminar</button>' : ""}
@@ -2422,6 +2504,7 @@ export class BrowserApp {
             <label>Clase de armadura${field("armorCategory", armor?.armorCategory ?? "")}</label>
             <label class="checkbox"><input data-inventory-field="armorDexterityBonus" type="checkbox" ${armor?.dexterityBonus ? "checked" : ""}> Suma DES</label>
             <label>Tope de DES${field("maximumDexterityBonus", armor?.maximumDexterityBonus ?? "", 'type="number" min="0" step="1"')}</label>
+            <label>Fuerza mínima${field("strengthRequirement", armor?.strengthRequirement ?? "", 'type="number" min="0" step="1"')}</label>
             <label class="checkbox"><input data-inventory-field="stealthDisadvantage" type="checkbox" ${armor?.stealthDisadvantage ? "checked" : ""}> Desventaja en sigilo</label>
             <label class="checkbox"><input data-inventory-field="hasCharges" type="checkbox" ${charges ? "checked" : ""}> Tiene cargas</label>
             <label>Cargas actuales${field("currentCharges", charges?.current ?? 0, 'type="number" min="0" step="1"')}</label>
@@ -2751,6 +2834,13 @@ export class BrowserApp {
     this.root.querySelector<HTMLButtonElement>("#create-empty-campaign")
       ?.addEventListener("click", () => void this.createEmptyCampaign());
     const characterForm = this.root.querySelector<HTMLFormElement>("#character-form");
+    if (characterForm && this.selectedCharacterId && this.snapshot?.campaign.characters[this.selectedCharacterId]?.builder) {
+      for (const name of ["className", "subclass", "species", "subrace", "background", "level", "strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"]) {
+        const control = characterForm.querySelector<HTMLInputElement>(`[name="${name}"]`);
+        if (control) { control.readOnly = true; control.title = "Gestionado por el tutorial de creación y subida de nivel"; }
+      }
+      characterForm.querySelectorAll<HTMLOptionElement>('[name="hitDieSize"] option').forEach((option) => { option.disabled = option.value !== String(this.snapshot!.campaign.characters[this.selectedCharacterId!]!.builder!.classKey === "barbarian" ? 12 : this.snapshot!.campaign.characters[this.selectedCharacterId!]!.builder!.classKey === "wizard" ? 6 : ["warlock","cleric","rogue","bard","druid"].includes(this.snapshot!.campaign.characters[this.selectedCharacterId!]!.builder!.classKey) ? 8 : 10); });
+    }
     this.characterFormDirty = false;
     characterForm?.addEventListener("submit", (event) => void this.saveCharacter(event));
     characterForm?.addEventListener("input", (event) => {
@@ -2781,6 +2871,10 @@ export class BrowserApp {
       ?.addEventListener("click", () => void this.linkSelectedMiniature());
     this.root.querySelector<HTMLButtonElement>("#create-character")
       ?.addEventListener("click", () => void this.createCharacter());
+    this.root.querySelector<HTMLButtonElement>("#create-guided-character")
+      ?.addEventListener("click", () => void this.openGuidedBuilder(false));
+    this.root.querySelector<HTMLButtonElement>("#guided-level-up")
+      ?.addEventListener("click", () => void this.openGuidedBuilder(true));
     this.root.querySelector<HTMLButtonElement>("#delete-character")
       ?.addEventListener("click", () => void this.deleteCharacter());
     this.root.querySelector<HTMLButtonElement>("#request-initiative-list")
@@ -3103,7 +3197,43 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-spell-action]").forEach((button) => {
       button.addEventListener("click", () => void this.handleSpellAction(button));
     });
+    const wizardCharacter = this.selectedCharacterId ? this.snapshot?.campaign.characters[this.selectedCharacterId] : null;
+    if (wizardCharacter) bindWizardPanel(this.root,wizardCharacter,{ diceRoller: this.runtime.diceRoller, error: (message) => this.contentFailure(new Error(message)), dispatch: async (action,label) => {
+      const operationId = await createRandomId("wizard");
+      const snapshot = await this.application.wizardAction({ ...this.contentCommand(wizardCharacter),operationId,action });
+      this.finishContent(snapshot,label);
+    } });
+    if (wizardCharacter) bindBarbarianPanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("barbarian");
+      this.finishContent(await this.application.barbarianAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
+    if (wizardCharacter) bindBardPanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("bard");
+      this.finishContent(await this.application.bardAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
+    if (wizardCharacter) bindRangerPanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("ranger");
+      this.finishContent(await this.application.rangerAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
+    if (wizardCharacter) bindDruidPanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("druid");
+      this.finishContent(await this.application.druidAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
+    if (wizardCharacter) bindRoguePanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("rogue");
+      this.finishContent(await this.application.rogueAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
+    if (wizardCharacter) bindClericPanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("build");
+      this.finishContent(await this.application.clericAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
+    if (wizardCharacter) bindWarlockPanel(this.root,wizardCharacter,{ error: (message) => this.contentFailure(new Error(message)),dispatch: async (action,label) => {
+      const operationId = await createRandomId("warlock");
+      this.finishContent(await this.application.warlockAction({ ...this.contentCommand(wizardCharacter),operationId,action }),label);
+    } });
     this.root.querySelectorAll<HTMLSelectElement>("[data-cast-slot-level]").forEach((select) => {
+      const selected = select.querySelector<HTMLOptionElement>("option[selected]");
+      if (selected) select.value = selected.value;
       select.addEventListener("change", () => this.updateSpellCastPreview(select));
     });
     this.root.querySelectorAll<HTMLButtonElement>("[data-load-spell-catalog]").forEach((button) => {
@@ -3139,6 +3269,7 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-roll-expression]").forEach((button) => {
       button.addEventListener("click", () => void this.rollDice(button));
     });
+    this.progressionPanel.bind(this.root);
   }
 
   private merchantFromElement(element: HTMLElement): GmShop | null {
@@ -4135,7 +4266,7 @@ export class BrowserApp {
     try {
       const rawExpression = button.dataset.rollExpression;
       if (!rawExpression) throw new Error("La tirada no tiene una expresión de dados.");
-      const character = this.snapshot && this.selectedCharacterId
+      const character = button.dataset.rollOwner !== "companion" && this.snapshot && this.selectedCharacterId
         ? this.snapshot.campaign.characters[this.selectedCharacterId]
         : undefined;
       const conditionKeys = new Set(
@@ -4439,6 +4570,7 @@ export class BrowserApp {
       name,
       level: definition.level,
       prepared: checkbox("prepared"),
+      casting: existing?.casting ?? null,
       definition,
       effect: {
         description: this.spellCardField<HTMLInputElement>(card, "effectDescription").value,
@@ -4562,6 +4694,7 @@ export class BrowserApp {
             name: definition.name,
             level: definition.level,
             prepared: false,
+            casting: null,
             definition,
             effect: { description: "", active: false },
           },
@@ -4594,9 +4727,10 @@ export class BrowserApp {
         });
         this.acceptCharacterSnapshot(snapshot, `${spell.prepared ? "Despreparar" : "Preparar"} conjuro: ${spell.name}`);
       } else if (action === "cast") {
+        if (barbarianRaging(character)) throw new Error("No pod\u00e9s lanzar conjuros durante la furia.");
         const slot = card?.querySelector<HTMLSelectElement>("[data-cast-slot-level]");
-        if (slot?.value === "ritual") {
-          if (!this.spellWithCatalogDefinition(spell).definition?.ritual) throw new Error("Este conjuro no se puede lanzar como ritual.");
+        if (slot?.value === "ritual" && !["wizard","warlock","cleric","barbarian","bard","druid"].includes(character.builder?.classKey ?? "")) {
+          if (!spellRitualAvailable(character,spell)) throw new Error("Este conjuro no se puede lanzar como ritual.");
           const executionKey = card.dataset.combatExecutionKey;
           const before = executionKey ? [...(this.combatExecutions.get(executionKey) ?? [])] : [];
           const beforeDamage = executionKey ? this.combatExecutionDamage.get(executionKey) ?? null : null;
@@ -4606,10 +4740,18 @@ export class BrowserApp {
           this.render();
           return;
         }
-        if (spell.level > 0 && !spell.prepared) throw new Error("Prepará el conjuro antes de lanzarlo.");
+        const freeMode = wizardFreeModes(character,spell).find((m) => m.value === slot?.value && m.available);
+        if (!spellReady(spell,character) && !(slot?.value === "ritual" && spellRitualAvailable(character,spell)) && !freeMode) throw new Error("Prepará el conjuro antes de lanzarlo.");
+        const mode: WizardCastOptions["mode"] = freeMode ? freeMode.value as WizardCastOptions["mode"] : slot?.value === "ritual" && (!spell.casting || ["wizard","cleric","druid"].includes(spell.casting.kind) || ["warlock","barbarian","bard","druid"].includes(character.builder?.classKey ?? "")) ? "ritual" : "slot";
+        const castLevel = mode !== "slot" || slot?.value === "ritual" ? spell.level : Number(slot?.value);
+        const overchannel = card.querySelector<HTMLInputElement>("[data-wizard-overchannel]")?.checked ?? false;
+        if (overchannel && slot?.selectedOptions[0]) slot.selectedOptions[0].dataset.spellDamage = (slot.selectedOptions[0].dataset.spellDamage ?? projectSpellDamageExpression(character,spell,castLevel)).replace(/(\d*)d(\d+)/gi,(_whole,count,sides) => String(Number(count || 1)*Number(sides)));
         const snapshot = await this.application.castCharacterSpell({
           ...command,
-          slotLevel: Number(slot?.value),
+          slotLevel: castLevel, mode,
+          recoverSlotLevel: Number(card.querySelector<HTMLSelectElement>("[data-wizard-recover-slot]")?.value ?? 0),
+          createWard: card.querySelector<HTMLInputElement>("[data-wizard-create-ward]")?.checked ?? true,
+          overchannel,
         });
         this.acceptCharacterSnapshot(snapshot, `Lanzar conjuro: ${spell.name}`);
         this.armCombatExecutionCard(card);
@@ -4617,7 +4759,7 @@ export class BrowserApp {
         throw new Error(`Acción de conjuro desconocida: ${action}`);
       }
       await this.refreshStorageUsage();
-      this.message = { kind: "success", text: action === "cast" ? "Conjuro lanzado y espacio registrado." : "Conjuro actualizado." };
+      this.message = { kind: "success", text: action === "cast" ? spell.casting?.kind === "innate" ? "Lanzamiento innato registrado." : "Lanzamiento registrado." : "Conjuro actualizado." };
       this.render();
     } catch (error) {
       this.message = { kind: "error", text: formatError(error) };
@@ -5092,6 +5234,7 @@ export class BrowserApp {
       value("armorCategory", definition.armor?.armorCategory ?? "");
       checked("armorDexterityBonus", definition.armor?.dexterityBonus ?? false);
       value("maximumDexterityBonus", definition.armor?.maximumDexterityBonus ?? null);
+      value("strengthRequirement", definition.armor?.strengthRequirement ?? null);
       checked("stealthDisadvantage", definition.armor?.stealthDisadvantage ?? false);
       checked("hasWeapon", definition.weapon !== null);
       value("weaponCategory", definition.weapon?.category ?? "");
@@ -5158,6 +5301,7 @@ export class BrowserApp {
           maximumDexterityBonus: this.inventoryOptionalInteger(card, "maximumDexterityBonus"),
           armorCategory: this.inventoryCardField<HTMLInputElement>(card, "armorCategory").value,
           stealthDisadvantage: checkbox("stealthDisadvantage"),
+          strengthRequirement: this.inventoryOptionalInteger(card, "strengthRequirement"),
         } : null,
         weapon: hasWeapon ? {
           category: this.inventoryCardField<HTMLInputElement>(card, "weaponCategory").value,

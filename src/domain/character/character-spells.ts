@@ -1,3 +1,10 @@
+import { prepareRangerCast } from "./ranger-play";
+import { prepareDruidCast } from "./druid-play";
+import { prepareBardCast } from "./bard-play";
+import { prepareBarbarianCast } from "./barbarian-play";
+import { prepareRogueCast } from "./rogue-play";
+import { PHB_SPELLS } from "./phb-spells";
+import { prepareClericCast } from "./cleric-play";
 import {
   CharacterV2Schema,
   IsoTimestampSchema,
@@ -11,6 +18,8 @@ import {
   SpellSlotStateSchema,
   type CharacterSpellV2,
 } from "./character-spell-model";
+import { prepareWizardCast, type WizardCastOptions } from "./wizard-play";
+import { prepareWarlockCast } from "./warlock-play";
 
 export * from "./character-spell-model";
 
@@ -67,6 +76,16 @@ export function upsertCharacterSpell(
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const spell = CharacterSpellV2Schema.parse(spellInput);
+  const existing = character.spellcasting.spells.find((entry) => entry.id === spell.id);
+  if ((spell.casting?.source.startsWith("builder:rogue") || existing?.casting?.source.startsWith("builder:rogue")) && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || spell.name !== existing.name || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conocidos de Brib\u00f3n Arcano se gestionan desde el tutorial y Ladr\u00f3n de Conjuros.");
+  if ((spell.casting?.source === "builder:bard" || existing?.casting?.source === "builder:bard") && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || spell.name !== existing.name || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conocidos de Bardo se gestionan desde el tutorial.");
+  if ((spell.casting?.source === "builder:barbarian" || existing?.casting?.source === "builder:barbarian") && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || spell.name !== existing.name || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conjuros de la senda se gestionan desde el tutorial de B\u00e1rbaro.");
+  if ((spell.casting?.source.startsWith("builder:ranger") || existing?.casting?.source.startsWith("builder:ranger")) && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || (spell.name !== existing.name && spell.name !== PHB_SPELLS[existing.casting?.key ?? ""]?.name) || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conjuros conocidos de Explorador se gestionan desde el tutorial de subida de nivel.");
+  if ((spell.casting?.source.startsWith("builder:druid") || existing?.casting?.source.startsWith("builder:druid")) && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || (spell.name !== existing.name && spell.name !== PHB_SPELLS[existing.casting?.key ?? ""]?.name) || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conjuros de Druida se gestionan desde el tutorial y su preparación diaria.");
+  if ((spell.casting?.kind === "cleric" || existing?.casting?.kind === "cleric") && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || (spell.name !== existing.name && spell.name !== PHB_SPELLS[existing.casting?.key ?? ""]?.name) || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conjuros de Clérigo se gestionan desde el tutorial y su preparación diaria.");
+  if ((spell.casting?.source.startsWith("builder:warlock:") || existing?.casting?.source.startsWith("builder:warlock:")) && (!existing || JSON.stringify(spell.casting) !== JSON.stringify(existing.casting) || (spell.name !== existing.name && spell.name !== PHB_SPELLS[existing.casting?.key ?? ""]?.name) || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("Los conjuros de Brujo se gestionan desde el tutorial y sus recursos.");
+  if (spell.casting?.kind === "wizard" && !existing) throw new Error("Aprendé conjuros de mago al subir de nivel o copiándolos al libro.");
+  if (existing?.casting?.kind === "wizard" && (spell.casting?.kind !== "wizard" || spell.casting.key !== existing.casting.key || (spell.name !== existing.name && spell.name !== PHB_SPELLS[existing.casting?.key ?? ""]?.name) || spell.level !== existing.level || spell.prepared !== existing.prepared)) throw new Error("El conjuro del libro y su preparación se gestionan con los controles de Mago.");
   const spells = [
     ...character.spellcasting.spells.filter((entry) => entry.id !== spell.id),
     spell,
@@ -81,6 +100,14 @@ export function removeCharacterSpell(
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const spellId = StableIdSchema.parse(spellIdInput);
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source === "builder:bard") throw new Error("Sustituí los conocidos de Bardo desde el tutorial de subida de nivel.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source === "builder:barbarian") throw new Error("Los conjuros de senda forman parte del historial de B\u00e1rbaro.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source.startsWith("builder:rogue")) throw new Error("Sustitu\u00ed conocidos al subir de nivel; los robados vencen tras ocho horas.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source.startsWith("builder:ranger")) throw new Error("Usá el tutorial de subida de nivel para sustituir conocidos de Explorador.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source.startsWith("builder:druid")) throw new Error("Usá la preparación diaria de Druida para administrar su lista.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.kind === "cleric") throw new Error("Usá la preparación diaria de Clérigo para administrar su lista.");
+  if (character.spellcasting.spells.find((spell) => spell.id === spellId)?.casting?.source.startsWith("builder:warlock:")) throw new Error("Sustituí conocidos e invocaciones con el tutorial de Brujo al subir de nivel.");
+  if (character.spellcasting.spells.find((spell) => spell.id === spellId)?.casting?.kind === "wizard") throw new Error("Los conjuros aprendidos forman parte del historial. Usá los controles de acceso al libro si se perdió.");
   if (!character.spellcasting.spells.some((spell) => spell.id === spellId)) {
     throw new CharacterSpellNotFoundError(spellId);
   }
@@ -97,7 +124,15 @@ export function setCharacterSpellPrepared(
   options: SpellMutationOptions,
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
+  if (character.spellcasting.spells.find((s) => s.id === spellIdInput)?.casting?.source === "builder:bard") throw new Error("Bardo conoce sus conjuros sin preparación diaria.");
+  if (character.spellcasting.spells.find((s) => s.id === spellIdInput)?.casting?.source === "builder:barbarian") throw new Error("Los conjuros de senda no requieren preparaci\u00f3n diaria.");
+  if (character.spellcasting.spells.find((s) => s.id === spellIdInput)?.casting?.source.startsWith("builder:rogue")) throw new Error("Brib\u00f3n Arcano conoce sus conjuros sin preparaci\u00f3n diaria.");
+  if (character.spellcasting.spells.find((spell) => spell.id === spellIdInput)?.casting?.source.startsWith("builder:warlock:")) throw new Error("Brujo conoce sus conjuros y no requiere preparación diaria.");
   const spellId = StableIdSchema.parse(spellIdInput);
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source.startsWith("builder:ranger")) throw new Error("Explorador conoce sus conjuros sin preparación diaria.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.source.startsWith("builder:druid")) throw new Error("Usá la preparación diaria de Druida para administrar su lista.");
+  if (character.spellcasting.spells.find((s) => s.id === spellId)?.casting?.kind === "cleric") throw new Error("Usá la preparación diaria de Clérigo para administrar su lista.");
+  if (character.spellcasting.spells.find((spell) => spell.id === spellId)?.casting?.kind === "wizard") throw new Error("Prepará la lista de mago de forma conjunta desde el libro, tras descanso largo.");
   if (!character.spellcasting.spells.some((spell) => spell.id === spellId)) {
     throw new CharacterSpellNotFoundError(spellId);
   }
@@ -147,18 +182,28 @@ export function castCharacterSpell(
   input: CharacterV2,
   spellIdInput: string,
   slotLevelInput: number,
-  options: SpellMutationOptions & { concentrationCondition?: CharacterV2["combat"]["conditions"][number] },
+  options: SpellMutationOptions & WizardCastOptions & { concentrationCondition?: CharacterV2["combat"]["conditions"][number] },
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const spellId = StableIdSchema.parse(spellIdInput);
   const spell = character.spellcasting.spells.find((entry) => entry.id === spellId);
   if (!spell) throw new CharacterSpellNotFoundError(spellId);
   const slotLevel = SpellLevelSchema.parse(slotLevelInput);
+  if (spell.level === 0 && slotLevel !== 0) throw new Error("Un truco se lanza como truco, sin elevarlo con espacios.");
+  if (spell.casting?.kind === "at-will" && slotLevel !== spell.level) throw new Error("El lanzamiento a voluntad usa el nivel base, sin espacio.");
+  if (spell.casting?.kind === "ritual" && slotLevel !== spell.level) throw new Error("Los conjuros de Lanzador ritual se lanzan como ritual a su nivel base.");
   if (slotLevel < spell.level) {
     throw new SpellSlotUnavailableError(slotLevel);
   }
+  const freeWizardCast = (character.builder?.classKey === "ranger" ? prepareRangerCast(character,spell,slotLevel,options) : character.builder?.classKey === "druid" ? prepareDruidCast(character,spell,slotLevel,options) : character.builder?.classKey === "bard" ? prepareBardCast(character,spell,slotLevel,options) : character.builder?.classKey === "barbarian" ? prepareBarbarianCast(character,spell,slotLevel,options) : character.builder?.classKey === "rogue" ? prepareRogueCast(character,spell,slotLevel,options) : character.builder?.classKey === "cleric" ? prepareClericCast(character,spell,slotLevel,options) : character.builder?.classKey === "warlock" ? prepareWarlockCast(character,spell,slotLevel,options) : prepareWizardCast(character,spell,slotLevel,options)) || spell.casting?.kind === "at-will";
   let slots = character.spellcasting.slots;
-  if (spell.level > 0) {
+  let traits = character.traits;
+  if (spell.casting?.kind === "innate" && spell.level > 0) {
+    if (slotLevel !== spell.casting.level || !spell.casting.traitId) throw new SpellSlotUnavailableError(slotLevel);
+    const trait = character.traits.flatMap((group) => group.traits).find((entry) => entry.id === spell.casting!.traitId);
+    if (!trait || trait.uses.used >= trait.uses.maximum) throw new Error("No quedan usos de este lanzamiento innato o de dote.");
+    traits = character.traits.map((group) => ({ ...group, traits: group.traits.map((entry) => entry.id === trait.id ? { ...entry, uses: { ...entry.uses, used: entry.uses.used + 1 } } : entry) }));
+  } else if (spell.level > 0 && spell.casting?.kind !== "ritual" && !freeWizardCast) {
     const state = slots[String(slotLevel)] ?? { maximum: 0, used: 0 };
     if (state.used >= state.maximum) throw new SpellSlotUnavailableError(slotLevel);
     slots = { ...slots, [String(slotLevel)]: { ...state, used: state.used + 1 } };
@@ -172,7 +217,7 @@ export function castCharacterSpell(
         ],
       }
     : character.combat;
-  return finish(character, { ...character.spellcasting, slots }, updatedAt, combat);
+  return finish({ ...character, traits }, { ...character.spellcasting, slots }, updatedAt, combat);
 }
 
 export function resetAllSpellSlots(

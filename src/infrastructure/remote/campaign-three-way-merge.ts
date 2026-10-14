@@ -123,6 +123,92 @@ export function mergeCampaignChanges(
   local: CampaignV2,
   remote: CampaignV2,
 ): CampaignMergeResult {
+  // Advancement is a semantic operation: two independently acquired levels
+  // must never be combined by the generic collection merge.
+  for (const [id, previous] of Object.entries(base.characters)) {
+    if (previous.builder?.classKey === "wizard" || previous.builder?.classKey === "cleric") {
+      const preparation = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.spells.filter((spell) => spell.casting?.kind === previous.builder!.classKey && spell.level > 0 && spell.prepared).map((spell) => spell.casting!.key).sort() ?? []);
+      const initial = preparation(previous), left = preparation(local.characters[id]), right = preparation(remote.characters[id]);
+      if (left !== initial && right !== initial && left !== right) return { campaign: null, conflictPaths: [`characters.${id}.spellcasting.${previous.builder.classKey}.preparation`] };
+    }
+    const left = local.characters[id]?.builder;
+    const right = remote.characters[id]?.builder;
+    const original = previous.builder;
+    const serialized = (value: typeof original | undefined) => canonicalJsonStringify((value ?? null) as unknown as JsonValue);
+    if (previous.builder?.classKey === "cleric") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.cleric?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.cleric.actions`] };
+    }
+    if (previous.builder?.classKey === "rogue") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.rogue?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.rogue.actions`] };
+    }
+    if (previous.builder?.classKey === "barbarian") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.barbarian?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.barbarian.actions`] };
+      // A rage action cannot be detached from simultaneous damage, rest or advancement.
+      // In particular, merging a newly started rage with a remote reduction to zero HP
+      // would bypass both its prerequisites and Relentless Rage's resolution.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,barbarian: c.spellcasting.barbarian,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        armor: c.inventory.filter((i) => i.equipped && i.category === "armor").map((i) => ({ id: i.id,armor: i.armor })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.barbarian.actions`] };
+    }
+    if (previous.builder?.classKey === "bard") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.bard?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.bard.actions`] };
+      // Inspiration spending and recovery must stay atomic with rests and advancement.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,bard: c.spellcasting.bard,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        armor: c.inventory.filter((i) => i.equipped && i.category === "armor").map((i) => ({ id: i.id,armor: i.armor })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.bard.actions`] };
+    }
+    if (previous.builder?.classKey === "ranger") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.ranger?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.ranger.actions`] };
+      // Companion and resource changes and recovery must stay atomic with rests and advancement.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,ranger: c.spellcasting.ranger,slots: c.spellcasting.slots,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        armor: c.inventory.filter((i) => i.equipped && i.category === "armor").map((i) => ({ id: i.id,armor: i.armor })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.ranger.actions`] };
+    }
+    if (previous.builder?.classKey === "druid") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.druid?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.druid.actions`] };
+      // Wild shape and resource changes and recovery must stay atomic with rests and advancement.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,druid: c.spellcasting.druid,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        armor: c.inventory.filter((i) => i.equipped && i.category === "armor").map((i) => ({ id: i.id,armor: i.armor })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.druid.actions`] };
+    }
+
+
+    if (serialized(left) !== serialized(original) && serialized(right) !== serialized(original) && serialized(left) !== serialized(right)) {
+      return { campaign: null, conflictPaths: [`characters.${id}.builder`] };
+    }
+  }
   const conflicts: string[] = [];
   const merged = mergeValue(
     base as unknown as JsonValue,

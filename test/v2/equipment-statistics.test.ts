@@ -105,7 +105,7 @@ describe("equipment-derived statistics", () => {
     s.accept(await s.app.upsertInventoryItem({ ...s.command(), item: {
       ...s.current().inventory[0]!, category: "armor", bonuses: [bonus("dexterity", 8)],
       armor: { base: 14, dexterityBonus: true, maximumDexterityBonus: 2,
-        armorCategory: "medium", stealthDisadvantage: false },
+        armorCategory: "medium", stealthDisadvantage: false, strengthRequirement: null },
     } }));
     s.accept(await s.app.setInventoryItemAttuned({ ...s.command(), value: true }));
     expect(s.current().combat.armorClass).toBe(16);

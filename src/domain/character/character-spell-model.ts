@@ -45,6 +45,13 @@ export const CharacterSpellV2Schema = z.object({
   level: SpellLevelSchema,
   prepared: z.boolean(),
   definition: SpellDefinitionSchema.nullable(),
+  casting: z.object({
+    source: z.string(), ability: SpellcastingAbilitySchema,
+    kind: z.enum(["slots", "innate", "ritual", "wizard", "cleric", "druid", "pact", "pact-invocation", "at-will"]),
+    key: z.string().default(""),
+    level: SpellLevelSchema,
+    traitId: z.string().regex(STABLE_ID_PATTERN).nullable(),
+  }).nullable().default(null),
   effect: ActivatableEffectSchema,
 });
 

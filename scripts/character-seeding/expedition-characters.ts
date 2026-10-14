@@ -180,7 +180,7 @@ async function buildInventory(characterId: string, blueprint: Blueprint): Promis
       usable: isConsumable || isDossLute || isPearl,
       consumable: isConsumable,
       charges,
-      armor,
+      armor: armor ? { ...armor, strengthRequirement: null } : null,
       weapon,
       bonuses,
       features: [],

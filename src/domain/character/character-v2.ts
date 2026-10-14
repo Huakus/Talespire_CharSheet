@@ -1,3 +1,9 @@
+import { RangerRuntimeSchema } from "./ranger-model";
+import { DruidRuntimeSchema } from "./druid-model";
+import { BardRuntimeSchema } from "./bard-model";
+import { BarbarianRuntimeSchema } from "./barbarian-model";
+import { RogueRuntimeSchema } from "./rogue-model";
+import { ClericRuntimeSchema } from "./cleric-model";
 import { z } from "zod";
 import { STABLE_ID_PATTERN } from "../../shared/id";
 import { JsonValueSchema } from "../../shared/json";
@@ -18,6 +24,9 @@ import {
 } from "./character-content-model";
 import { EncounterSchema } from "../encounter/encounter-model";
 import { GmWorkspaceSchema } from "../gm/gm-workspace";
+import { CharacterBuilderStateSchema } from "./character-builder-model";
+import { WarlockRuntimeSchema } from "./warlock-model";
+import { WizardRuntimeSchema } from "./wizard-model";
 
 export const StableIdSchema = z.string().regex(STABLE_ID_PATTERN);
 export const IsoTimestampSchema = z.string().datetime({ offset: true });
@@ -36,6 +45,7 @@ export const CharacterV2Schema = z.object({
   revision: z.number().int().nonnegative(),
   name: z.string().min(1),
   color: z.string().regex(/^#[0-9a-f]{6}$/i).default("#d9bd73"),
+  builder: CharacterBuilderStateSchema.nullable().default(null),
   identity: z.object({
     className: z.string(),
     subclass: z.string().default(""),
@@ -114,6 +124,14 @@ export const CharacterV2Schema = z.object({
     platinum: z.number().int(),
   }),
   spellcasting: z.object({
+    wizard: WizardRuntimeSchema.nullable().default(null),
+    ranger: RangerRuntimeSchema.nullable().default(null),
+    druid: DruidRuntimeSchema.nullable().default(null),
+    bard: BardRuntimeSchema.nullable().default(null),
+    barbarian: BarbarianRuntimeSchema.nullable().default(null),
+    rogue: RogueRuntimeSchema.nullable().default(null),
+    cleric: ClericRuntimeSchema.nullable().default(null),
+    warlock: WarlockRuntimeSchema.nullable().default(null),
     ability: z.string().nullable(),
     selectedLevel: z.string().nullable(),
     levels: z.record(z.string(), JsonValueSchema),

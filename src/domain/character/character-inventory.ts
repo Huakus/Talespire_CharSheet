@@ -397,12 +397,12 @@ export function resetInventoryItemResources(
 ): CharacterInventoryItemV2 {
   return CharacterInventoryItemV2Schema.parse({
     ...item,
-    charges: item.charges !== null && item.charges.reset === reset
+    charges: item.charges !== null && (item.charges.reset === reset || (reset === "long-rest" && item.charges.reset === "short-rest"))
       ? { ...item.charges, current: item.charges.maximum }
       : item.charges,
     features: item.features.map((feature) => ({
       ...feature,
-      uses: feature.uses !== null && feature.uses.reset === reset
+      uses: feature.uses !== null && (feature.uses.reset === reset || (reset === "long-rest" && feature.uses.reset === "short-rest"))
         ? { ...feature.uses, current: feature.uses.maximum }
         : feature.uses,
     })),

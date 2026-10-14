@@ -95,7 +95,7 @@ describe("LocalStorageCampaignRepository", () => {
       name: "Prueba",
       level: 1,
       prepared: false,
-      definition: null,
+      definition: null, casting: null,
       effect: { description: "", active: false },
     }];
     const saved = await repository.save(campaign, { kind: "empty" });

@@ -211,6 +211,7 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
       maximumDexterityBonus: armorClass.max_bonus === undefined ? null : Math.trunc(number(armorClass.max_bonus)),
       armorCategory: text(data.armor_category),
       stealthDisadvantage: Boolean(data.stealth_disadvantage),
+      strengthRequirement: data.str_minimum !== undefined ? Math.trunc(number(data.str_minimum)) : null,
     } : null,
     weapon: isWeapon ? {
       category: text(data.weapon_category ?? data.category_range),

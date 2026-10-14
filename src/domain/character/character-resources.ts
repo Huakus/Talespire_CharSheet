@@ -1,3 +1,9 @@
+import { resetRangerAfterRest } from "./ranger-play";
+import { endBarbarianRage,barbarianMindlessRage } from "./barbarian-rules";
+import { druidShapeActive,druidFormDamage,elapseDruidHours } from "./druid-rules";
+import { druidCircle } from "./druid-catalog";
+import { applyBarbarianResourceEffects } from "./barbarian-play";
+import { elapseRogueHours } from "./rogue-play";
 import { z } from "zod";
 import {
   CharacterV2Schema,
@@ -8,6 +14,9 @@ import {
 import { resetInventoryItemResources } from "./character-inventory";
 import { CharacterRevisionConflictError } from "./edit-character";
 import { resetTraitsByRest } from "./character-content";
+import { resetWizardAfterRest } from "./wizard-play";
+import { pactSlots } from "./warlock-catalog";
+import { abilityModifier,projectAbilityScore } from "./character-projection";
 import {
   adjustCurrency,
   CurrencyDenominationSchema,
@@ -102,6 +111,11 @@ export function applyCharacterResourceCommand(
     );
   }
 
+  if (["short-rest","long-rest"].includes(command.kind)) endBarbarianRage(character);
+  if (druidShapeActive(character) && command.kind === "spend-hit-dice") throw new Error("En Forma Salvaje usás los Dados de Golpe de la criatura. Registrá su curación con Curar y sus dados en el bloque de la forma, o revertí para gastar los de la ficha base.");
+  if (command.kind === "add-condition" && command.key === "poisoned" && character.builder?.classKey === "druid" && druidCircle(character.builder) === "land" && character.identity.level >= 10) throw new Error("Protección de la Naturaleza te hace inmune al veneno.");
+  if (command.kind === "add-condition" && character.builder?.classKey === "barbarian" && command.key === "raging") throw new Error("Inici\u00e1 Furia desde el panel de B\u00e1rbaro para gestionar sus usos.");
+  if (command.kind === "add-condition" && barbarianMindlessRage(character) && ["frightened","charmed"].includes(command.key)) throw new Error("Furia Inconsciente te hace inmune a ese estado durante la furia.");
   const combat = structuredClone(character.combat);
   let inventory = character.inventory;
   let spellcasting = character.spellcasting;
@@ -118,18 +132,23 @@ export function applyCharacterResourceCommand(
   switch (command.kind) {
     case "damage": {
       const absorbed = Math.min(combat.hitPoints.temporary, command.amount);
-      const remainingDamage = command.amount - absorbed;
+      const remainingDamage = druidFormDamage(character,command.amount - absorbed);
       const previousHp = combat.hitPoints.current;
       combat.hitPoints.temporary -= absorbed;
       combat.hitPoints.current = Math.max(0, previousHp - remainingDamage);
       effects.temporaryHitPointsChangedBy = -absorbed;
       effects.hitPointsChangedBy = combat.hitPoints.current - previousHp;
-      if (combat.conditions.some((condition) => condition.key === "concentration")) {
-        effects.concentrationCheckDc = Math.max(10, Math.ceil(command.amount / 2));
+      const focusedConjuration = character.builder?.classKey === "wizard" && character.identity.level >= 10 && character.builder.levels.find((step) => step.level === 2)?.subclass === "conjuration" && character.spellcasting.wizard?.concentrationSchool === "Conjuración";
+      if (combat.hitPoints.current === 0) combat.conditions = combat.conditions.filter((condition) => condition.key !== "concentration");
+      else if (!focusedConjuration && combat.conditions.some((condition) => condition.key === "concentration")) {
+        effects.concentrationCheckDc = Math.max(10, Math.floor(command.amount / 2));
       }
       break;
     }
     case "heal": {
+      if (character.spellcasting.druid?.form) {
+        const form = character.spellcasting.druid.form;form.currentHp = Math.min(form.maximumHp,form.currentHp+command.amount);break;
+      }
       const previousHp = combat.hitPoints.current;
       combat.hitPoints.current = Math.min(
         combat.hitPoints.maximum,
@@ -177,11 +196,14 @@ export function applyCharacterResourceCommand(
       break;
     }
     case "long-rest": {
+      elapseDruidHours(character,8);
       const previousHp = combat.hitPoints.current;
       const previousTemporary = combat.hitPoints.temporary;
       const previousDice = combat.hitDice.remaining;
-      const recoveredDice = Math.max(Math.floor(combat.hitDice.maximum / 2), 1);
-      combat.hitPoints.current = combat.hitPoints.maximum;
+      const restingForm = character.spellcasting.druid?.form;
+      const recoveredDice = restingForm ? 0 : Math.max(Math.floor(combat.hitDice.maximum / 2), 1);
+      if (restingForm) restingForm.currentHp = restingForm.maximumHp;
+      else combat.hitPoints.current = combat.hitPoints.maximum;
       combat.hitPoints.temporary = 0;
       combat.deathSaves = { successes: 0, failures: 0 };
       combat.exhaustion = Math.max(0, combat.exhaustion - 1);
@@ -204,12 +226,18 @@ export function applyCharacterResourceCommand(
         ),
       };
       traits = resetTraitsByRest(character, "long-rest");
+      elapseRogueHours(character,8); spellcasting.spells = character.spellcasting.spells;
+      resetWizardAfterRest(character,"long-rest");
       effects.deferredResets = [];
       break;
     }
     case "short-rest": {
+      elapseDruidHours(character,1);
+      if (character.builder?.classKey === "warlock") spellcasting = { ...character.spellcasting,slots: Object.fromEntries(Object.entries(character.spellcasting.slots).map(([level,state]) => [level,{ ...state,used: Number(level) === pactSlots(character.identity.level).level ? 0 : state.used }])) };
       inventory = character.inventory.map((item) => resetInventoryItemResources(item, "short-rest"));
       traits = resetTraitsByRest(character, "short-rest");
+      elapseRogueHours(character,1); spellcasting.spells = character.spellcasting.spells;
+      resetWizardAfterRest(character,"short-rest");
       break;
     }
     case "adjust-currency":
@@ -234,8 +262,18 @@ export function applyCharacterResourceCommand(
       break;
   }
 
+  if (["short-rest","long-rest"].includes(command.kind) && character.builder?.classKey === "warlock" && character.builder.creation.warlock.patron === "celestial" && character.identity.level >= 10) {
+    const before = combat.hitPoints.temporary;
+    combat.hitPoints.temporary = Math.max(before,character.identity.level+abilityModifier(projectAbilityScore(character,"charisma")));
+    effects.temporaryHitPointsChangedBy += combat.hitPoints.temporary-before;
+  }
+  if (command.kind === "short-rest" || command.kind === "long-rest") resetRangerAfterRest(character,command.kind);
+  if (character.spellcasting.wizard && combat.conditions.some((condition) => ["incapacitated", "unconscious", "stunned", "paralyzed", "petrified"].includes(condition.key))) character.spellcasting.wizard.thirdEye = null;
+  if (character.spellcasting.wizard && !combat.conditions.some((condition) => condition.key === "concentration")) character.spellcasting.wizard.concentrationSchool = null;
+  if (character.spellcasting.druid && combat.conditions.some((p) => ["unconscious","dead"].includes(p.key))) character.spellcasting.druid.form = null;
+
   return {
-    character: CharacterV2Schema.parse({
+    character: applyBarbarianResourceEffects(CharacterV2Schema.parse({
       ...character,
       combat,
       inventory,
@@ -244,7 +282,7 @@ export function applyCharacterResourceCommand(
       currency,
       revision: character.revision + 1,
       metadata: { ...character.metadata, updatedAt },
-    }),
+    }),command,character),
     effects,
   };
 }

@@ -1,6 +1,19 @@
+import { performRangerAction } from "../../domain/character/ranger-play";
+import type { RangerAction } from "../../domain/character/ranger-model";
+import { performDruidAction } from "../../domain/character/druid-play";
+import type { DruidAction } from "../../domain/character/druid-model";
+import { performBardAction } from "../../domain/character/bard-play";
+import type { BardAction } from "../../domain/character/bard-model";
+import { performBarbarianAction } from "../../domain/character/barbarian-play";
+import type { BarbarianAction } from "../../domain/character/barbarian-model";
+import { performRogueAction } from "../../domain/character/rogue-play";
+import type { RogueAction } from "../../domain/character/rogue-model";
+import { performClericAction } from "../../domain/character/cleric-play";
+import type { ClericAction } from "../../domain/character/cleric-model";
 import {
   CampaignV2Schema,
   CharacterV2Schema,
+  StableIdSchema,
   type CampaignV2,
   type CharacterV2,
 } from "../../domain/character/character-v2";
@@ -16,6 +29,13 @@ import {
   type ResourceCommandEffects,
 } from "../../domain/character/character-resources";
 import { createRandomId } from "../../shared/id";
+import { createDeterministicId } from "../../shared/id";
+import { buildGuidedCharacter, advanceGuidedCharacter, validateGuidedCreation } from "../../domain/character/guided-character-builder";
+import { applyWizardAction, type WizardCastOptions } from "../../domain/character/wizard-play";
+import { applyWarlockAction } from "../../domain/character/warlock-play";
+import type { WarlockAction } from "../../domain/character/warlock-model";
+import type { WizardAction } from "../../domain/character/wizard-model";
+import { FighterLevelChoiceSchema, type FighterCreationInput, type FighterLevelChoiceInput } from "../../domain/character/character-builder-model";
 import {
   CharacterActionDraftSchema,
   removeCharacterAction,
@@ -36,13 +56,13 @@ import {
   type CharacterInventoryItemDraft,
   type CharacterInventoryItemV2,
 } from "../../domain/character/character-inventory";
-import { abilityModifier, projectInventory } from "../../domain/character/character-projection";
+import { abilityModifier, projectInventory, preferredWeaponAbility, projectUpdatedBuilderSpeed } from "../../domain/character/character-projection";
 import {
   adjustCurrency,
   type CurrencyDenomination,
 } from "../../domain/character/character-currency";
 import { createCharacter } from "../../domain/character/create-character";
-import { cloneJson } from "../../shared/json";
+import { cloneJson, canonicalJsonStringify, type JsonValue } from "../../shared/json";
 import {
   CharacterSpellDraftSchema,
   castCharacterSpell,
@@ -275,7 +295,7 @@ export interface SetSpellSlotsCommand {
   updatedAt?: string;
 }
 
-export interface CastCharacterSpellCommand extends CharacterSpellCommand {
+export interface CastCharacterSpellCommand extends CharacterSpellCommand, WizardCastOptions {
   slotLevel: number;
 }
 
@@ -354,6 +374,41 @@ export class CampaignApplication {
     const createdAt = command.createdAt ?? new Date().toISOString();
     const character = createCharacter(await createRandomId("chr"), command.name, createdAt);
     return this.persistUpdatedCharacter(current, character, command.expectedCampaignChecksum, createdAt);
+  }
+
+  async createGuidedCharacter(command: { operationId: string; creation: FighterCreationInput; initialLevels?: FighterLevelChoiceInput[]; expectedCampaignChecksum: string; createdAt?: string }): Promise<CampaignSnapshot> {
+    const operationId = StableIdSchema.parse(command.operationId);
+    const creation = validateGuidedCreation(command.creation);
+    const initialLevels = (command.initialLevels ?? []).map((step) => FighterLevelChoiceSchema.parse(step));
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const id = await createDeterministicId("chr", current.campaign.id, operationId);
+    const previous = current.campaign.characters[id];
+    if (previous) {
+      if (!previous.builder || canonicalJsonStringify(previous.builder.creation as unknown as JsonValue) !== canonicalJsonStringify(creation as unknown as JsonValue)) throw new Error("Esta operación ya creó un personaje con otras elecciones.");
+      if (canonicalJsonStringify(previous.builder.levels.slice(0, creation.startingLevel - 1) as unknown as JsonValue) !== canonicalJsonStringify(initialLevels as unknown as JsonValue)) throw new Error("La operación ya se confirmó con otras elecciones de niveles iniciales.");
+      return current;
+    }
+    this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
+    const timestamp = command.createdAt ?? new Date().toISOString();
+    const character = await buildGuidedCharacter(id, operationId, creation, timestamp, initialLevels);
+    return this.persistUpdatedCharacter(current, character, current.checksum, timestamp);
+  }
+
+  async advanceGuidedCharacter(command: { characterId: string; choice: FighterLevelChoiceInput; expectedCharacterRevision: number; expectedCampaignChecksum: string; updatedAt?: string }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    if (character.builder?.levels.some((step) => step.operationId === command.choice.operationId)) {
+      await advanceGuidedCharacter(character, command.choice, command.updatedAt ?? character.metadata.updatedAt);
+      return current;
+    }
+    this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
+    if (character.revision !== command.expectedCharacterRevision) throw new CharacterRevisionConflictError(command.expectedCharacterRevision, character.revision);
+    const timestamp = command.updatedAt ?? new Date().toISOString();
+    const updated = await advanceGuidedCharacter(character, command.choice, timestamp);
+    return this.persistUpdatedCharacter(current, updated, current.checksum, timestamp);
   }
 
   async deleteCharacter(command: DeleteCharacterCommand): Promise<CampaignSnapshot> {
@@ -970,6 +1025,7 @@ export class CampaignApplication {
     const concentrationConditionId = await createRandomId("cnd");
     return this.applyCharacterMutation(command, (character, updatedAt) =>
       castCharacterSpell(character, command.spellId, command.slotLevel, {
+        mode: command.mode, recoverSlotLevel: command.recoverSlotLevel, createWard: command.createWard, overchannel: command.overchannel,
         expectedRevision: command.expectedCharacterRevision,
         updatedAt,
         concentrationCondition: {
@@ -981,6 +1037,100 @@ export class CampaignApplication {
         },
       }),
     );
+  }
+
+  async wizardAction(command: CharacterContentCommandBase & { operationId: string; action: WizardAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.wizard?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await applyWizardAction(character,command.action,{ operationId: command.operationId, expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+
+  async warlockAction(command: CharacterContentCommandBase & { operationId: string; action: WarlockAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.warlock?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await applyWarlockAction(character,command.action,{ operationId: command.operationId, expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+
+  async clericAction(command: CharacterContentCommandBase & { operationId: string; action: ClericAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.cleric?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performClericAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+  async rogueAction(command: CharacterContentCommandBase & { operationId: string; action: RogueAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.rogue?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performRogueAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+  async barbarianAction(command: CharacterContentCommandBase & { operationId: string; action: BarbarianAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.barbarian?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performBarbarianAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+
+  async bardAction(command: CharacterContentCommandBase & { operationId: string; action: BardAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.bard?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performBardAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+
+  async rangerAction(command: CharacterContentCommandBase & { operationId: string; action: RangerAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.ranger?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performRangerAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+
+  async druidAction(command: CharacterContentCommandBase & { operationId: string; action: DruidAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.druid?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performDruidAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
   }
 
   async setSpellcastingSettings(
@@ -1155,20 +1305,17 @@ export class CampaignApplication {
     actionId: string,
   ): CampaignV2["characters"][string]["actions"][number] {
     const weapon = item.weapon!;
-    const finesse = item.properties.includes("finesse");
-    const ranged = weapon.range.toLowerCase().includes("ranged");
-    const ability = ranged
-      ? "dexterity"
-      : finesse && character.abilities.dexterity > character.abilities.strength
-        ? "dexterity"
-        : "strength";
+    const ability = preferredWeaponAbility(character.abilities, item);
     const proficiencyText = character.proficiencies.weapons.join(" ").toLowerCase();
     const proficient = [weapon.category, item.name]
       .filter(Boolean)
-      .some((value) => proficiencyText.includes(value.toLowerCase()));
-    const reach = weapon.longRange === null
+      .some((value) => proficiencyText.includes(value.toLowerCase())) ||
+      (weapon.category.startsWith("simple") && proficiencyText.includes("armas sencillas")) ||
+      (weapon.category.startsWith("martial") && proficiencyText.includes("armas marciales"));
+    const reach = weapon.range.toLowerCase().includes("ranged") ? weapon.longRange === null
       ? weapon.normalRange === null ? weapon.range : `${weapon.normalRange} ft`
-      : `${weapon.normalRange ?? 0}/${weapon.longRange} ft`;
+      : `${weapon.normalRange ?? 0}/${weapon.longRange} ft`
+      : item.properties.includes("reach") ? "10 ft" : "5 ft";
     return {
       id: actionId,
       order: character.actions.length,
@@ -1180,7 +1327,7 @@ export class CampaignApplication {
       proficient,
       attackBonus: weapon.attackBonus,
       damageExpression: weapon.damageExpression,
-      damageBonus: abilityModifier(character.abilities[ability]) + weapon.damageBonus,
+      damageBonus: (weapon.damageExpression ? abilityModifier(character.abilities[ability]) : 0) + weapon.damageBonus,
       damageType: weapon.damageType,
       weaponType: weapon.category,
       properties: item.properties.join(", "),
@@ -1240,6 +1387,11 @@ export class CampaignApplication {
         projectInventory(previous).calculatedArmorClass !== projectInventory(character).calculatedArmorClass
         ? this.withProjectedArmorClass(character)
         : character;
+      if (previous && previous.combat.speed === character.combat.speed) {
+        characters[character.id] = CharacterV2Schema.parse({ ...characters[character.id], combat: {
+          ...characters[character.id]!.combat, speed: projectUpdatedBuilderSpeed(previous, character),
+        } });
+      }
     }
     const campaign = CampaignV2Schema.parse({
       ...current.campaign,

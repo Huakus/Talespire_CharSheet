@@ -10,7 +10,7 @@ describe("character colors and activatable effects", () => {
     const original = createTestCharacter({ configure(character) {
       character.spellcasting.spells = [{
         id: "spell-absorb-elements", order: 0, name: "Absorb Elements", level: 1,
-        prepared: true, definition: null, effect: { description: "", active: false },
+        prepared: true, definition: null, casting: null, effect: { description: "", active: false },
       }];
       character.inventory = [{
         id: "item-ring", order: 0, group: "equipment", name: "Ring", quantity: 1,

@@ -113,7 +113,7 @@ export function setTraitUsed(input: CharacterV2, groupIdInput: string, traitIdIn
 export function resetTraitsByRest(character: CharacterV2, reset: "short-rest" | "long-rest"): CharacterV2["traits"] {
   return character.traits.map((group) => ({
     ...group,
-    traits: group.traits.map((trait) => trait.uses.reset === reset
+    traits: group.traits.map((trait) => (trait.uses.reset === reset || (reset === "long-rest" && trait.uses.reset === "short-rest"))
       ? { ...trait, uses: { ...trait.uses, used: 0 } }
       : trait),
   }));

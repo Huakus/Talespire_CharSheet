@@ -1,0 +1,21 @@
+This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+Los archivos phb-srd-spells.json y phb-srd-equipment.json adaptan datos de las listas 2014 de 5e-bits/5e-database:
+https://github.com/5e-bits/5e-database/tree/main/src/2014/en
+
+Cambios: selección de conjuros de niveles 0–9, metadatos de tirada, normalización de equipo y presentación en español a partir de los PDF aportados. Los rasgos y dotes adicionales usan resúmenes propios. Los textos no SRD de los libros tienen su propia procedencia y no se identifican como contenido MIT o CC BY. No se distribuyen los PDF ni sus ilustraciones.
+
+Reglas de referencia: Manual del Jugador 2014 y Guía de Xanathar para Todo, con sus erratas; sin reglas revisadas de 2024. El PDF de Xanathar acredita una traducción de Alvaro1555 y no se presenta como traducción editorial oficial.
+https://media.wizards.com/2020/dnd/downloads/XGtE-Errata.pdf
+https://media.wizards.com/2021/dnd/downloads/PH-Errata.pdf
+
+Proyecto independiente, sin patrocinio ni aprobación de Wizards of the Coast.
+
+5e-bits/5e-database — MIT License
+Copyright (c) [2018-2020] [Adrian Padua, Christopher Ward]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

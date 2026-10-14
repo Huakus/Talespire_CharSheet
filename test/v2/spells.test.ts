@@ -19,6 +19,7 @@ function spell(id: string, name: string, level: number, prepared: boolean, damag
       damageExpression, upcastDamageExpression: level === 0 ? "1d6" : "", addAbilityModifier: false,
       damageType: "acid", year: "", catalog: null,
     },
+    casting: null,
     effect: { description: "", active: false },
   };
 }

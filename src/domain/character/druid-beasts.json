@@ -1,0 +1,476 @@
+[
+  {
+    "name": "Babuino",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Buitre",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Búho",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Cabra",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Cangrejo",
+    "challenge": 0.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Chacal",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Ciervo",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Cuervo",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Escarabajo de fuego gigante",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Escorpión",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Gato",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Hiena",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Mordedor",
+    "challenge": 0.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Rata",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Tejón",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Águila",
+    "challenge": 0.0,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Camello",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Cangrejo gigante",
+    "challenge": 0.125,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Comadreja gigante",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Estirge",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Halcón sangriento",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Mastín",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Mula",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Rata gigante",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Serpiente venenosa",
+    "challenge": 0.125,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Serpiente voladora",
+    "challenge": 0.125,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Alce",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Búho gigante",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Caballo de monta",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Ciempiés gigante",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Jabalí",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Lagarto gigante",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Lobo",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Murciélago gigante",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Pantera",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Pantera (leopardo)",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Pantera (puma)",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Pico de hacha",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Pteranodon",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Rana gigante",
+    "challenge": 0.25,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Serpiente constrictora",
+    "challenge": 0.25,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Serpiente venenosa gigante",
+    "challenge": 0.25,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Tarántula gigante",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Tejón gigante",
+    "challenge": 0.25,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Avispa gigante",
+    "challenge": 0.5,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Caballito de mar gigante",
+    "challenge": 0.5,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Cabra gigante",
+    "challenge": 0.5,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Cocodrilo",
+    "challenge": 0.5,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Oso negro",
+    "challenge": 0.5,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Simio",
+    "challenge": 0.5,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Tiburón de arrecife",
+    "challenge": 0.5,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Araña gigante",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Buitre gigante",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Hiena gigante",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "León",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Lobo terrible",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Oso pardo",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Pulpo gigante",
+    "challenge": 1.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Sapo gigante",
+    "challenge": 1.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Tigre",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Águila gigante",
+    "challenge": 1.0,
+    "swim": false,
+    "fly": true
+  },
+  {
+    "name": "Alce gigante",
+    "challenge": 2.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Alosaurio",
+    "challenge": 2.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Jabalí gigante",
+    "challenge": 2.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Oso polar",
+    "challenge": 2.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Oso polar (oso de cueva)",
+    "challenge": 2.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Plesiosaurio",
+    "challenge": 2.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Rinoceronte",
+    "challenge": 2.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Serpiente constrictora gigante",
+    "challenge": 2.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Tiburón cazador",
+    "challenge": 2.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Tigre dientes de sable",
+    "challenge": 2.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Anquilosaurio",
+    "challenge": 3.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Escorpión gigante",
+    "challenge": 3.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Orca",
+    "challenge": 3.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Elefante",
+    "challenge": 4.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Cocodrilo gigante",
+    "challenge": 5.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Tiburón gigante",
+    "challenge": 5.0,
+    "swim": true,
+    "fly": false
+  },
+  {
+    "name": "Tricerátops",
+    "challenge": 5.0,
+    "swim": false,
+    "fly": false
+  },
+  {
+    "name": "Mamut",
+    "challenge": 6.0,
+    "swim": false,
+    "fly": false
+  }
+]

@@ -24,6 +24,7 @@ export const InventoryArmorSchema = z.object({
   maximumDexterityBonus: z.number().int().nonnegative().nullable(),
   armorCategory: z.string(),
   stealthDisadvantage: z.boolean(),
+  strengthRequirement: z.number().int().nonnegative().nullable().default(null),
 });
 
 export const InventoryWeaponSchema = z.object({
