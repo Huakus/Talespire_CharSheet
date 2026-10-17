@@ -187,7 +187,8 @@ export class SupabaseGranularCampaignRepository implements CampaignRepository {
     try {
       campaign = assembleCampaign(state);
     } catch (error) {
-      throw new CampaignRepositoryCorruptionError("The granular campaign state is invalid", { cause: error });
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new CampaignRepositoryCorruptionError(`No se pudo reconstruir la campaña remota: ${detail}`, { cause: error });
     }
     const stored = { snapshot: await createCampaignSnapshot(campaign), state: copyState(state) };
     this.remember(stored);

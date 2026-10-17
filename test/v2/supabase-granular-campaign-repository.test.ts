@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { CampaignRepositoryCorruptionError } from "../../src/application/ports/campaign-repository";
 import { createCampaignSnapshot } from "../../src/infrastructure/persistence/campaign-snapshot";
 import {
   fragmentCampaign,
@@ -28,6 +29,34 @@ function stateFixture(): RemoteCampaignFragmentState {
 }
 
 describe("SupabaseGranularCampaignRepository", () => {
+  it("reports the failing character and field without saving or accepting invalid state", async () => {
+    const state = stateFixture();
+    const runtime = state.fragments.find((fragment) => fragment.kind === "character-runtime")!;
+    (runtime.payload.combat as { hitPoints: { current: unknown } }).hitPoints.current = "invalid";
+    const saveCampaign = vi.fn();
+    const repository = new SupabaseGranularCampaignRepository({
+      readCampaign: async () => state,
+      saveCampaign,
+    } as unknown as SupabaseCampaignFragmentClient, "campaign");
+
+    const error = await repository.load().catch((error: unknown) => error);
+    expect(error).toBeInstanceOf(CampaignRepositoryCorruptionError);
+    expect((error as Error).message).toContain("Hero");
+    expect((error as Error).message).toContain("combat.hitPoints.current");
+    expect((error as Error).cause).toBeInstanceOf(Error);
+    expect(repository.remoteRevision).toBe(-1);
+    expect(saveCampaign).not.toHaveBeenCalled();
+  });
+
+  it("preserves the missing-fragment cause", async () => {
+    const state = stateFixture();
+    state.fragments = state.fragments.filter((fragment) => fragment.kind !== "character-runtime");
+    const repository = new SupabaseGranularCampaignRepository({
+      readCampaign: async () => state,
+    } as unknown as SupabaseCampaignFragmentClient, "campaign");
+    await expect(repository.load()).rejects.toThrow("missing a required fragment");
+  });
+
   it("saves a hit point change as one small fragment transaction", async () => {
     const state = stateFixture();
     const saves: { changes: CampaignFragmentChange[]; characters: CharacterVersionChange[] }[] = [];

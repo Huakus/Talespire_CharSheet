@@ -191,7 +191,7 @@ export function assembleCampaign(state: RemoteCampaignFragmentState): CampaignV2
     );
     if (!core || !runtime) throw new Error(`Character ${version.characterId} is missing a required fragment`);
     const runtimeSpellcasting = object(runtime.payload.spellcasting, "character spellcasting runtime");
-    const character = CharacterV2Schema.parse({
+    const parsed = CharacterV2Schema.safeParse({
       ...core.payload,
       revision: version.revision,
       combat: runtime.payload.combat,
@@ -208,6 +208,14 @@ export function assembleCampaign(state: RemoteCampaignFragmentState): CampaignV2
       extras: payloads(state.fragments, "character-extra", version.characterId),
       metadata: { createdAt: version.createdAt, updatedAt: version.updatedAt },
     });
+    if (!parsed.success) {
+      const details = parsed.error.issues.slice(0, 5)
+        .map((issue) => `${issue.path.join(".")}: ${issue.message}`).join("; ");
+      throw new Error(`Personaje ${String(core.payload.name ?? version.characterId)} (${version.characterId}): ${details}`, {
+        cause: parsed.error,
+      });
+    }
+    const character = parsed.data;
     return [character.id, character];
   }));
 

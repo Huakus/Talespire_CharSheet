@@ -31,6 +31,7 @@ import { updateRecoveredPassword, verifyPasswordRecovery } from "./password-reco
 import { browserSymbiotePreferences } from "./symbiote-preferences";
 import { mountAppInvitationAcceptance, mountAppInvitationSender } from "./app-user-invitations";
 import { SupabaseCampaignIssueClient } from "../infrastructure/remote/supabase-campaign-issue-client";
+import { mountRemoteStartupFailure } from "./remote-startup-failure";
 
 const bindingKeyPrefix = "talespire-charsheet:remote-campaign:";
 
@@ -560,6 +561,12 @@ export async function configureRemotePersistence(
   onServices?: (services: RemoteCampaignServices) => void,
 ): Promise<CampaignRepository> {
   const persistenceMode = loadPersistenceMode();
+  let recovery: {
+    bindingKey: string;
+    account: string;
+    campaign?: string;
+    signOut: () => Promise<void>;
+  } | undefined;
   try {
     if (persistenceMode === "local") {
       setAppConnectionStatus("persistence", { state: "disabled", label: "Persistencia remota desactivada · modo local" });
@@ -587,8 +594,10 @@ export async function configureRemotePersistence(
     const fragmentClient = new SupabaseCampaignFragmentClient(supabase);
     const bindingKey = `${bindingKeyPrefix}${config.url}`;
     const signOut = async (): Promise<void> => {
-      await supabase.auth.signOut();
+      const result = await supabase.auth.signOut({ scope: "local" });
+      if (result.error) throw result.error;
     };
+    recovery = { bindingKey, account: user.email ?? user.id, signOut };
     const campaign = await requestCampaign(
       panel,
       user,
@@ -603,6 +612,7 @@ export async function configureRemotePersistence(
       setAppConnectionStatus("persistence", { state: "disabled", label: "Persistencia remota omitida · modo local" });
       return primary;
     }
+    recovery.campaign = campaign.name;
 
     window.localStorage.setItem(bindingKey, campaign.id);
     const campaignChangeListeners = new Set<(snapshot: CampaignSnapshot) => void>();
@@ -682,14 +692,32 @@ export async function configureRemotePersistence(
   } catch (error) {
     setAppConnectionStatus("persistence", { state: "error", label: `Supabase no disponible · ${errorMessage(error)}` });
     appRoot.replaceChildren();
+    if (persistenceMode === "remote") {
+      const context = recovery;
+      mountRemoteStartupFailure(appRoot, {
+        message: errorMessage(error),
+        retry: () => window.location.reload(),
+        ...(context ? {
+          account: context.account,
+          ...(context.campaign ? { campaign: context.campaign } : {}),
+          changeCampaign: () => {
+            window.localStorage.removeItem(context.bindingKey);
+            window.location.reload();
+          },
+          signOut: async () => {
+            await context.signOut();
+            window.localStorage.removeItem(context.bindingKey);
+            window.location.reload();
+          },
+        } : {}),
+      });
+      throw error;
+    }
     const warning = document.createElement("aside");
     warning.className = "remote-controls";
     warning.dataset.state = "unavailable";
-    warning.textContent = persistenceMode === "remote"
-      ? `Supabase no disponible · edición bloqueada para proteger la campaña: ${errorMessage(error)}`
-      : `Modo local activo · no se pudo preparar Supabase: ${errorMessage(error)}`;
+    warning.textContent = `Modo local activo · no se pudo preparar Supabase: ${errorMessage(error)}`;
     appRoot.insertAdjacentElement("beforebegin", warning);
-    if (persistenceMode === "remote") throw error;
     return primary;
   }
 }
