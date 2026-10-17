@@ -1,3 +1,4 @@
+import { oathSpells } from "./martial-catalog";
 import { CharacterV2Schema,type CharacterV2 } from "./character-v2";
 import { CharacterBuilderStateSchema,BUILDER_ABILITIES,type FighterLevelChoice } from "./character-builder-model";
 import { buildGuidedCharacter,advanceGuidedCharacter } from "./guided-character-builder";
@@ -6,6 +7,7 @@ import { SAVE_DEFINITIONS,SKILL_DEFINITIONS,type SkillKey } from "./character-ch
 import { projectCharacterStatistics } from "./character-projection";
 import { rangerCompanionMaximum } from "./ranger-builder";
 import { applyWizardBenefits } from "./wizard-builder";
+import { wizardCopyDescription, wizardBookDefinition } from "./wizard-catalog";
 import { clericDomain,clericDomainSpells } from "./cleric-catalog";
 import { druidCircleSpells } from "./druid-catalog";
 
@@ -42,8 +44,9 @@ function levelEntry(c: CharacterV2,old: CharacterV2|null,step: FighterLevelChoic
   const granted = currentTraits.filter((t) => { const p = previousTraits.get(t.id);return !p || p.name !== t.name || p.description !== t.description || p.uses.maximum !== t.uses.maximum || p.uses.reset !== t.uses.reset; }).map((t) => traitEntry(t,previousTraits.get(t.id)));
   const removed = traits(old).filter((t) => !currentIds.has(t.id)).map((t) => traitEntry(t));
   const previousSpells = new Set(old?.spellcasting.spells.map((s) => s.id) ?? []),replacementNames = new Set(choices.replacements.filter((r) => r.label === "Conjuro").map((r) => r.after));
-  const domain = clericDomain(state),alwaysPrepared = domain ? clericDomainSpells(domain,c.identity.level) : druidCircleSpells(state);
-  const spells: ProgressionSpell[] = c.spellcasting.spells.filter((s) => !previousSpells.has(s.id) && !replacementNames.has(progressionSpellName(s.casting?.key ?? ""))).map((s) => ({ name: s.name,level: s.level,kind: s.level === 0 ? "Truco" : alwaysPrepared.includes(s.casting?.key ?? "") && ["cleric","druid"].includes(s.casting?.kind ?? "") ? "Siempre preparado" : s.casting?.kind === "cleric" || s.casting?.kind === "druid" ? "Disponible para preparar" : s.casting?.kind === "wizard" ? "Libro" : s.casting?.kind === "ritual" ? "Ritual" : s.casting?.kind === "innate" || s.casting?.kind === "at-will" ? "Innato" : "Conocido" }));
+  const domain = clericDomain(state),alwaysPrepared = state.classKey === "paladin" ? oathSpells(state) : domain ? clericDomainSpells(domain,c.identity.level) : druidCircleSpells(state);
+  const previousOathSpells = old?.builder?.classKey === "paladin" ? oathSpells(old.builder) : [];
+  const spells: ProgressionSpell[] = c.spellcasting.spells.filter((s) => (!previousSpells.has(s.id) || state.classKey === "paladin" && alwaysPrepared.includes(s.casting?.key ?? "") && !previousOathSpells.includes(s.casting?.key ?? "")) && !replacementNames.has(progressionSpellName(s.casting?.key ?? ""))).map((s) => ({ name: s.name,level: s.level,kind: s.level === 0 ? "Truco" : alwaysPrepared.includes(s.casting?.key ?? "") && ["cleric","druid"].includes(s.casting?.kind ?? "") ? "Siempre preparado" : s.casting?.kind === "cleric" || s.casting?.kind === "druid" ? "Disponible para preparar" : s.casting?.kind === "wizard" ? "Libro" : s.casting?.kind === "ritual" ? "Ritual" : s.casting?.kind === "innate" || s.casting?.kind === "at-will" ? "Innato" : "Conocido" }));
   return { level: c.identity.level,className: c.identity.className,subclass: c.identity.subclass,...choices,benefits,traits: granted,retiredTraits: removed,spells,studies: [],hpMaximum: c.combat.hitPoints.maximum,hpIncrease: c.combat.hitPoints.maximum-(old?.combat.hitPoints.maximum ?? 0),proficiency: after.proficiencyBonus };
 }
 
@@ -58,7 +61,7 @@ export async function projectCharacterProgression(input: CharacterV2): Promise<C
   const introduceCopies = async () => {
     if (!current.spellcasting.wizard) return;
     const copies = (source.spellcasting.wizard?.copied ?? []).filter((s) => s.level === current.identity.level);if (!copies.length) return;
-    levels.at(-1)!.studies = copies.map((s) => ({ label: "Copia al libro",value: progressionSpellName(s.key),description: `${s.gold} po · ${s.hours} horas. Registrada durante este nivel, fuera de las incorporaciones gratuitas del tutorial.` }));
+    levels.at(-1)!.studies = copies.map((s) => ({ label: "Copia al libro",value: wizardBookDefinition(s.key,copies)?.name ?? progressionSpellName(s.key),description: `${wizardCopyDescription(s)}. Registrada durante este nivel, fuera de las incorporaciones gratuitas del tutorial.` }));
     current.spellcasting.wizard.copied.push(...structuredClone(copies));current.spellcasting.wizard.book = [...new Set([...current.spellcasting.wizard.book,...copies.map((s) => s.key)])];current = await applyWizardBenefits(current,current);
   };
   await introduceCopies();

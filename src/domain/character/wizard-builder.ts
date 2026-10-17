@@ -3,7 +3,7 @@ import { CharacterBuilderStateSchema, FighterCreationSchema, FighterLevelChoiceS
 import { validateBuilderOrigin, fighterBuilderScores, fighterBuilderMaximumHp, createBuilderCharacter, finishBuilderCreation } from "./fighter-builder";
 import { validateFeat, distinct, builderFeats } from "./fighter-build-rules";
 import { applyAdditionalFighterBenefits } from "./fighter-builder-grants";
-import { WIZARD_SCHOOLS, WIZARD_SLOTS, WIZARD_ASI_LEVELS, WIZARD_SCHOOL_FEATURES, wizardCantripCount, wizardSchool,wizardTraditionName } from "./wizard-catalog";
+import { WIZARD_SCHOOLS, WIZARD_SLOTS, WIZARD_ASI_LEVELS, WIZARD_SCHOOL_FEATURES, wizardCantripCount, wizardSchool,wizardTraditionName, wizardBookDefinition, wizardCopyAccess } from "./wizard-catalog";
 import { PHB_SPELLS } from "./phb-spells";
 import { WizardRuntimeSchema, type WizardRuntime } from "./wizard-model";
 import { CharacterSpellV2Schema } from "./character-spell-model";
@@ -43,10 +43,10 @@ export function replayWizardChoices(state: CharacterBuilderState, copied: Wizard
     if (school === "necromancy" && step.level === 6 && !book.includes("animate-dead")) book.push("animate-dead");
     if (school === "transmutation" && step.level === 10 && !book.includes("polymorph")) book.push("polymorph");
     if (step.level === 18) {
-      if (step.wizard.mastery.length !== 2 || step.wizard.mastery.some((key,i) => !book.includes(key) || PHB_SPELLS[key]?.level !== i+1)) throw new Error("Maestría requiere un conjuro de nivel 1 y otro de nivel 2 de tu libro, en ese orden.");
+      if (step.wizard.mastery.length !== 2 || step.wizard.mastery.some((key,i) => !book.includes(key) || wizardBookDefinition(key,copied)?.level !== i+1)) throw new Error("Maestría requiere un conjuro de nivel 1 y otro de nivel 2 de tu libro, en ese orden.");
     } else if (step.wizard.mastery.length) throw new Error("Maestría de conjuros se elige en Mago 18.");
     if (step.level === 20) {
-      if (step.wizard.signature.length !== 2 || !distinct(step.wizard.signature) || step.wizard.signature.some((key) => !book.includes(key) || PHB_SPELLS[key]?.level !== 3)) throw new Error("Conjuros característicos requiere dos conjuros distintos de nivel 3 de tu libro.");
+      if (step.wizard.signature.length !== 2 || !distinct(step.wizard.signature) || step.wizard.signature.some((key) => !book.includes(key) || wizardBookDefinition(key,copied)?.level !== 3)) throw new Error("Conjuros característicos requiere dos conjuros distintos de nivel 3 de tu libro.");
     } else if (step.wizard.signature.length) throw new Error("Los conjuros característicos se eligen en Mago 20.");
     validatePrepared(step.wizard.prepared,book,fighterBuilderScores({ ...state, levels: state.levels.filter((s) => s.level <= step.level) }),step.level,step.wizard.signature);
   }
@@ -65,7 +65,7 @@ export function validateWizardBuild(input: CharacterBuilderState, copied: Wizard
   const state = CharacterBuilderStateSchema.parse(input);
   if (state.classKey !== "wizard") throw new Error("El historial no corresponde a Mago.");
   validateWizardCreation(state.creation);
-  if (!distinct(copied.map((entry) => entry.operationId)) || copied.some((entry) => entry.level > state.levels.length+1 || !PHB_SPELLS[entry.key]?.classes.includes("wizard") || PHB_SPELLS[entry.key]!.level < 1 || PHB_SPELLS[entry.key]!.level > WIZARD_SLOTS[entry.level]!.length)) throw new Error("El historial de copia contiene conjuros o niveles que no corresponden a este mago.");
+  if (!distinct(copied.map((entry) => entry.operationId)) || copied.some((entry) => entry.level > state.levels.length+1 || !wizardCopyAccess(entry) || wizardBookDefinition(entry.key,copied)!.level < 1 || wizardBookDefinition(entry.key,copied)!.level > WIZARD_SLOTS[entry.level]!.length)) throw new Error("El historial de copia contiene conjuros o niveles que no corresponden a este mago.");
   for (const [i,step] of state.levels.entries()) {
     if (step.hpBase > 6 || step.hpMethod === "fixed" && step.hpBase !== 4) throw new Error("Mago usa 4 PG fijos o un resultado de d6, antes de Constitución.");
     if ((step.level === 2) !== (step.subclass !== null) || step.subclass && !WizardSchoolSchema.safeParse(step.subclass).success) throw new Error("Elegí una tradición arcana del Manual 2014 o Xanathar al adquirir Mago 2.");
@@ -111,7 +111,7 @@ export async function applyWizardBenefits(input: CharacterV2, previous: Characte
     definitions.push(...WIZARD_SCHOOL_FEATURES[school].filter((f) => f.level <= level));
   }
   if (level >= 18) definitions.push({ key: "spell-mastery", name: "Maestría de conjuros", description: "Un conjuro de nivel 1 y otro de nivel 2 del libro: si están preparados, podés lanzarlos a su nivel base sin espacio. Para elevarlos, gastás espacio normal. Ocho horas de estudio permiten intercambiar una o ambas elecciones por otras de los mismos niveles." });
-  for (const key of wizardSignature(state)) definitions.push({ key: `signature-${key}`, name: `Conjuro característico: ${PHB_SPELLS[key]!.name}`, description: "Siempre preparado, sin ocupar cupo; un lanzamiento a nivel 3 sin espacio por descanso corto/largo. También podés gastar espacios normales, incluidos superiores.", maximum: 1, reset: "short-rest" });
+  for (const key of wizardSignature(state)) definitions.push({ key: `signature-${key}`, name: `Conjuro característico: ${wizardBookDefinition(key,runtime.copied)!.name}`, description: "Siempre preparado, sin ocupar cupo; un lanzamiento a nivel 3 sin espacio por descanso corto/largo. También podés gastar espacios normales, incluidos superiores.", maximum: 1, reset: "short-rest" });
   const group = await traitGroup(character,"wizard",`Mago · ${school ? WIZARD_SCHOOLS[school] : "PHB 2014"}`,definitions);
   definitions.forEach((definition,i) => { runtime.resourceIds[definition.key] = group.traits[i]!.id; runtime.resourceIds[definition.name] = group.traits[i]!.id; });
   character.traits = [...character.traits.filter((g) => g.id !== group.id),group];
@@ -125,8 +125,8 @@ export async function applyWizardBenefits(input: CharacterV2, previous: Characte
   const decisions = level === 1 ? state.creation.wizard.prepared : state.levels.at(-1)!.wizard.prepared;
   const prepared = decisions ?? (previous ? character.spellcasting.spells.filter((s) => s.casting?.source === "builder:wizard" && s.level > 0 && s.prepared).map((s) => s.casting!.key!) : replay.book.slice(0,wizardPreparationLimit(character)));
   const generated = await Promise.all([...replay.cantrips,...replay.book].map(async (key) => {
-    const id = await createDeterministicId("spl",character.id,"builder-spell","wizard",key), old = character.spellcasting.spells.find((s) => s.id === id), definition = PHB_SPELLS[key]!;
-    return CharacterSpellV2Schema.parse({ id, name: definition.name, level: definition.level, order: old?.order ?? character.spellcasting.spells.length + [...replay.cantrips,...replay.book].indexOf(key), prepared: definition.level === 0 || prepared.includes(key) || wizardSignature(state).includes(key), definition: old?.definition ?? definition, casting: { source: "builder:wizard", key, ability: "intelligence", kind: "wizard", level: definition.level, traitId: null }, effect: old?.effect ?? { description: "", active: false } });
+    const id = await createDeterministicId("spl",character.id,"builder-spell","wizard",key), old = character.spellcasting.spells.find((s) => s.id === id) ?? character.spellcasting.spells.find((s) => s.casting?.kind === "wizard" && s.casting.key === key), definition = wizardBookDefinition(key,runtime.copied)!;
+    return CharacterSpellV2Schema.parse({ id: old?.id ?? id, name: definition.name, level: definition.level, order: old?.order ?? character.spellcasting.spells.length + [...replay.cantrips,...replay.book].indexOf(key), prepared: definition.level === 0 || prepared.includes(key) || wizardSignature(state).includes(key), definition: old?.definition ?? definition, casting: { source: "builder:wizard", key, ability: "intelligence", kind: "wizard", level: definition.level, traitId: null }, effect: old?.effect ?? { description: "", active: false } });
   }));
   character.spellcasting.spells = [...character.spellcasting.spells.filter((s) => s.casting?.source !== "builder:wizard"),...generated];
   character.spellcasting.wizard = runtime;

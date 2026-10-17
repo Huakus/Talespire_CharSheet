@@ -3,6 +3,7 @@ import { normalizeEquipmentDefinition, type EquipmentCatalogDraft } from "../../
 import { normalizeChecklistItem, normalizeShop, type GmChecklistItem, type GmShop } from "../../domain/gm/gm-global-content";
 import { normalizeMonsterDefinition, type MonsterDefinition } from "../../domain/monsters/monster-catalog";
 import { normalizeSpellDefinition } from "../../domain/spells/spell-catalog";
+import { spellSourceTag } from "../../domain/spells/spell-source";
 import type { CampaignContent } from "../../domain/content/campaign-content";
 import type { CatalogMetadata } from "../../domain/content/catalog-metadata";
 import type { CampaignMerchantTradeCommand } from "../../domain/commerce/merchant-trade";
@@ -56,6 +57,8 @@ export function isSpanishCampaignContent(entry: RemoteCampaignContentEntry): boo
     [...expected].some((language) => marker === language || marker.startsWith(`${language}-`)));
   const isSpanish = hasMarker(SPANISH_LANGUAGE_MARKERS);
   const isEnglish = hasMarker(ENGLISH_LANGUAGE_MARKERS);
+  // An old snapshot is deliberately retained verbatim, even if it was English/2024.
+  if (entry.kind === "spell" && entry.tags.includes("old")) return true;
   if (isEnglish) return false;
   return isSpanish || entry.origin === "gm";
 }
@@ -66,6 +69,14 @@ function spanishTags(tags: readonly string[]): string[] {
     return !SPANISH_LANGUAGE_MARKERS.has(marker) && !ENGLISH_LANGUAGE_MARKERS.has(marker);
   });
   return [...new Set([...retained, "es"])];
+}
+
+function spellTags(value: SpellDefinition, existing: RemoteCampaignContentEntry | undefined): string[] {
+  const source = spellSourceTag(value);
+  if (source) return [source,...(value.catalog?.tags.includes("favorite") ? ["favorite"] : [])];
+  // Other campaigns still use their original catalog; leave that vocabulary intact.
+  if (existing) return spanishTags(value.catalog?.tags ?? existing.tags);
+  return ["custom"];
 }
 
 export class SupabaseCampaignContentStore {
@@ -202,7 +213,7 @@ export class SupabaseCampaignContentStore {
           : serializeMonsterContentPayload(value as MonsterDefinition),
       ...(existing ? { existing } : {}),
       origin: existing?.origin ?? "gm",
-      tags: spanishTags(embedded?.tags ?? existing?.tags ?? ["gm"]),
+      tags: kind === "spell" ? spellTags(value as SpellDefinition,existing) : spanishTags(embedded?.tags ?? existing?.tags ?? ["gm"]),
     });
   }
 
@@ -230,7 +241,7 @@ export class SupabaseCampaignContentStore {
   private async deleteByName(kind: CampaignContentKind, name: string): Promise<void> { return this.deleteByKeyOrName(kind, "", name); }
   private async deleteByKeyOrName(kind: CampaignContentKind, contentKey: string, name: string): Promise<void> {
     const entries = await this.currentEntries();
-    const existing = entries.find((entry) => isSpanishCampaignContent(entry) && entry.kind === kind && (entry.contentKey === contentKey || normalizedName(entry.name) === normalizedName(name)));
+    const existing = entries.find((entry) => isSpanishCampaignContent(entry) && entry.kind === kind && !(kind === "spell" && entry.tags.includes("old") && entry.contentKey !== contentKey) && (entry.contentKey === contentKey || normalizedName(entry.name) === normalizedName(name)));
     if (!existing) return;
     await this.client.deleteCampaignContentEntry(this.campaignId, kind, existing.contentKey, existing.revision);
     this.entries = entries.filter((entry) => !(entry.kind === kind && entry.contentKey === existing.contentKey));

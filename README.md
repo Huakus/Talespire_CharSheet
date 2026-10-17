@@ -20,12 +20,13 @@ The application entry point is `v2.html`; production assets are generated in
 `dist-v2/` and loaded by `manifest.json`.
 
 The guided builder supports single-class 2014 Fighters, Wizards, Warlocks,
-Clerics, Rogues, Barbarians, Bards, Druids and Rangers from level 1 to 20, with PHB and Xanathar options: six Fighter
+Clerics, Rogues, Barbarians, Bards, Druids, Rangers, Sorcerers, Monks and Paladins from level 1 to 20, with PHB and Xanathar options: six Fighter
 archetypes, nine Wizard traditions, five Warlock patrons, nine Cleric domains,
 seven Rogue archetypes, five Barbarian paths, five Bard colleges and four Druid circles
-(with all eight Land terrains), plus five Ranger archetypes. Shared
+(with all eight Land terrains), five Ranger archetypes, five Sorcerer origins, six Monk traditions and five Paladin oaths. Shared
 choices include 15 PHB racial profiles, 18 customizable backgrounds, 57 feats,
 equipment packages or gold purchases, and 456 spells with Spanish display text.
+Monks include ki and elemental disciplines; Paladins include daily preparation, oath spells, Lay on Hands, Divine Smite and shared Channel Divinity. See [Monk and Paladin implementation](docs/v2/MONK_PALADIN_IMPLEMENTATION.md).
 Unavailable choices are explained and disabled; duplicate spell learning is
 filtered across selectors. Clerics include daily preparation, domain spells,
 shared Channel Divinity, rituals and Divine Intervention. See
@@ -46,6 +47,9 @@ resources and the manual use of creature stat blocks are documented in
 Ranger favored enemies, terrains, spells, all five archetypes and separate beast
 companion resources are documented in
 [`RANGER_BUILDER_IMPLEMENTATION.md`](docs/v2/RANGER_BUILDER_IMPLEMENTATION.md).
+Sorcerer origins, all eight Metamagic options, flexible casting and temporary
+slots, wild surges and class resources are documented in
+[`SORCERER_BUILDER_IMPLEMENTATION.md`](docs/v2/SORCERER_BUILDER_IMPLEMENTATION.md).
 Open **Crear con tutorial** under character management, choose the class and initial level,
 then use **Subir de nivel con tutorial** on that sheet.
 The **Progresión** tab shows every recorded level with decisions, replaced

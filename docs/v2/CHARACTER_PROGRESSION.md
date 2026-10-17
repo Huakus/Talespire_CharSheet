@@ -1,6 +1,6 @@
 # Progresión del personaje
 
-La pestaña **Progresión**, junto a **Rasgos**, permite consultar el recorrido de las nueve clases del tutorial 2014, en modo Juego y Edición. También abre personajes existentes y creados inicialmente a nivel alto. No agrega ni modifica datos de campaña.
+La pestaña **Progresión**, junto a **Rasgos**, permite consultar el recorrido de las doce clases del tutorial 2014, en modo Juego y Edición. También abre personajes existentes y creados inicialmente a nivel alto. No agrega ni modifica datos de campaña. Monje incorpora tradición, armas kensei y disciplinas/sustituciones; Paladín incorpora estilo, juramento y sus conjuros siempre preparados. Hechicero incorpora origen, ancestro/afinidad, metamagia y sus conjuros elegidos.
 
 Cada nivel es desplegable. El último está abierto inicialmente. Se puede buscar por texto sin distinguir mayúsculas/tildes, abrir/cerrar todos los resultados e ir directamente a un nivel.
 

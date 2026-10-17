@@ -2,6 +2,7 @@ import type { CampaignSnapshot } from "../application/ports/campaign-repository"
 import type { CharacterInventoryItemV2 } from "../domain/character/character-inventory-model";
 import { inventoryItemsCanStack } from "../domain/character/character-inventory";
 import type { SpellDefinition } from "../domain/character/character-spell-model";
+import { isOldSpell, spellSourceTag, spellSourceLabel } from "../domain/spells/spell-source";
 import { inventoryCostInCopper, merchantChallengeTarget, merchantNpcStatistics, normalizeMerchantInteraction } from "../domain/commerce/merchant-interaction";
 import {
   DAMAGE_TYPES, EQUIPMENT_CATEGORIES, EQUIPMENT_PROPERTIES, EQUIPMENT_RARITIES,
@@ -147,7 +148,7 @@ export class GmToolsPanel {
   async load(): Promise<void> {
     if (!this.runtime.loadGmContent) return;
     this.content = await this.runtime.loadGmContent();
-    this.selectedSpell = this.content.spells[0]?.name ?? "";
+    this.selectedSpell = this.content.spells.find((entry) => !isOldSpell(entry))?.name ?? "";
     this.selectedEquipment = this.content.equipment[0]?.name ?? "";
     this.selectedShop = this.content.shops[0]?.name ?? "";
   }
@@ -172,7 +173,7 @@ export class GmToolsPanel {
   private renderContent(section: GmContentSection): string {
     const template = this.contentTemplate?.section === section ? this.contentTemplate.value : null;
     const spell = section === "spell"
-      ? (template ? template as SpellDefinition : this.content.spells.find((entry) => entry.name === this.selectedSpell)) ?? null
+      ? (template ? template as SpellDefinition : this.content.spells.find((entry) => !isOldSpell(entry) && entry.name === this.selectedSpell)) ?? null
       : null;
     const equipment = section === "equipment"
       ? (template ? template as EquipmentCatalogDraft : this.content.equipment.find((entry) => entry.name === this.selectedEquipment)) ?? null
@@ -235,8 +236,8 @@ export class GmToolsPanel {
       { key: "component", label: "Componente", values: uniqueValues(this.content.spells.flatMap((spell) => spell.components.split(/[,;\s]+/).filter(Boolean))) },
       { key: "damage", label: "Tipo de daño", values: uniqueValues(this.content.spells.map((spell) => spell.damageType)) },
       { key: "resolution", label: "Resolución", values: uniqueValues(this.content.spells.map((spell) => spell.attackType === "attack" ? "Ataque" : spell.attackType === "save" ? "Salvación" : "")) },
-      { key: "edition", label: "Edición", values: uniqueValues(this.content.spells.map((spell) => spell.year)) },
-      { key: "tag", label: "Etiquetas", values: uniqueValues(this.content.spells.flatMap((spell) => visibleCatalogTags(catalogMetadata(spell).tags))) },
+      ...(this.content.spells.every((spell) => spellSourceTag(spell)) ? [] : [{ key: "edition", label: "Edición", values: uniqueValues(this.content.spells.map((spell) => spell.year)) }]),
+      { key: "tag", label: "Origen", values: uniqueValues(this.content.spells.flatMap((spell) => visibleCatalogTags(catalogMetadata(spell).tags))) },
     ].filter((group) => group.values.length);
     if (section === "equipment") return [
       { key: "category", label: "Categoría", values: uniqueValues(this.content.equipment.map((item) => item.category)) },
@@ -290,7 +291,7 @@ export class GmToolsPanel {
     const tags = visibleCatalogTags(meta.tags);
     const classLabels = spellClassLabels(spell.classes);
     const search = [spell.name, spell.school, spell.description, spell.damageType, ...spell.classes, ...classLabels, meta.origin, ...tags].join(" ").toLocaleLowerCase();
-    return `<article class="play-card spell-play-card gm-catalog-card ${isCatalogFavorite(spell) ? "favorite" : ""}" data-gm-content-card data-search="${escapeHtml(search)}"><header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span><span class="school-badge">${escapeHtml(spell.school || "Sin escuela")}</span><span class="action-kind-label">Nivel ${spell.level}</span></div><div class="spell-name-line"><h3>${escapeHtml(spell.name)}</h3>${this.renderFavoriteButton("spell", spell.name, isCatalogFavorite(spell))}</div></div>${this.renderCatalogCardActions("spell", spell.name)}</header><div class="gm-card-facts"><span><small>Tiempo</small>${escapeHtml(spell.castingTime || "—")}</span><span><small>Alcance</small>${escapeHtml(spell.range || "—")}</span><span><small>Duración</small>${escapeHtml(spell.duration || "—")}</span><span><small>Clases</small>${escapeHtml(classLabels.join(", ") || "—")}</span>${spell.ritual ? "<span>Ritual</span>" : ""}${spell.concentration ? "<span>Concentración</span>" : ""}</div>${tags.length ? `<div class="catalog-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(spell.description || "Sin descripción.")}</p>` : ""}</article>`;
+    return `<article class="play-card spell-play-card gm-catalog-card ${isCatalogFavorite(spell) ? "favorite" : ""}" data-gm-content-card data-search="${escapeHtml(search)}"><header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(spellSourceLabel(spellSourceTag(spell) ?? meta.origin))}</span><span class="school-badge">${escapeHtml(spell.school || "Sin escuela")}</span><span class="action-kind-label">Nivel ${spell.level}</span></div><div class="spell-name-line"><h3>${escapeHtml(spell.name)}</h3>${isOldSpell(spell) ? "" : this.renderFavoriteButton("spell", spell.name, isCatalogFavorite(spell))}</div></div>${isOldSpell(spell) ? "<p>old · Versión conservada por una ficha. Pendiente de reemplazo.</p>" : this.renderCatalogCardActions("spell", spell.name)}</header><div class="gm-card-facts"><span><small>Tiempo</small>${escapeHtml(spell.castingTime || "—")}</span><span><small>Alcance</small>${escapeHtml(spell.range || "—")}</span><span><small>Duración</small>${escapeHtml(spell.duration || "—")}</span><span><small>Clases</small>${escapeHtml(classLabels.join(", ") || "—")}</span>${spell.ritual ? "<span>Ritual</span>" : ""}${spell.concentration ? "<span>Concentración</span>" : ""}</div>${tags.length && !spellSourceTag(spell) ? `<div class="catalog-tags">${tags.map((tag) => `<span>${escapeHtml(spellSourceLabel(tag))}</span>`).join("")}</div>` : ""}${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(spell.description || "Sin descripción.")}</p>` : ""}</article>`;
   }
 
   private renderEquipmentCard(item: EquipmentCatalogDraft): string {
@@ -389,8 +390,8 @@ export class GmToolsPanel {
     const meta = catalogMetadata(spell);
     return `<form data-gm-form="spell" class="gm-editor-form">
       <input type="hidden" name="previousKey" value="${escapeHtml(spell?.name ?? "")}">
-      <div class="catalog-editor-meta"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span><label>Etiquetas de campaña<input name="catalogTags" value="${escapeHtml(visibleCatalogTags(meta.tags).join(", "))}" placeholder="oficial, reglas, fuego"></label></div>
-      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(spell?.name ?? "")}"></label><label>Nivel<select name="level">${Array.from({ length: 10 }, (_, level) => `<option value="${level}" ${spell?.level === level ? "selected" : ""}>${level === 0 ? "Truco" : `Nivel ${level}`}</option>`).join("")}</select></label><label>Escuela<select name="school">${selectOptions(SPELL_SCHOOLS, spell?.school ?? "", "Sin escuela")}</select></label><label>Tiempo<input name="castingTime" value="${escapeHtml(spell?.castingTime ?? "1 acción")}"></label><label>Alcance<input name="range" value="${escapeHtml(spell?.range ?? "")}"></label><label>Duración<input name="duration" value="${escapeHtml(spell?.duration ?? "")}"></label>${renderCheckboxGroup("Componentes", "components", SPELL_COMPONENTS, components)}${renderCheckboxGroup("Clases", "classes", SPELL_CLASS_OPTIONS, classes)}<label>Daño<input name="damageExpression" value="${escapeHtml(spell?.damageExpression ?? "")}" placeholder="2d6"></label><label>Daño al escalar<input name="upcastDamageExpression" value="${escapeHtml(spell?.upcastDamageExpression ?? "")}" placeholder="1d6"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, spell?.damageType ?? "", "Sin daño")}</select></label><label>Resolución<select name="attackType"><option value="none">Ninguna</option><option value="attack" ${spell?.attackType === "attack" ? "selected" : ""}>Ataque</option><option value="save" ${spell?.attackType === "save" ? "selected" : ""}>Salvación</option></select></label><label>Salvación<select name="saveAbility">${selectOptions(SPELL_SAVE_ABILITIES, spell?.saveAbility ?? "", "No aplica")}</select></label><label>Edición<select name="year">${selectOptions(["2014", "2024"], spell?.year ?? "2014")}</select></label></div>
+      <div class="catalog-editor-meta"><span>Origen: ${escapeHtml(spellSourceLabel(spellSourceTag(spell) ?? "custom"))}</span></div>
+      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(spell?.name ?? "")}"></label><label>Nivel<select name="level">${Array.from({ length: 10 }, (_, level) => `<option value="${level}" ${spell?.level === level ? "selected" : ""}>${level === 0 ? "Truco" : `Nivel ${level}`}</option>`).join("")}</select></label><label>Escuela<select name="school">${selectOptions(SPELL_SCHOOLS, spell?.school ?? "", "Sin escuela")}</select></label><label>Tiempo<input name="castingTime" value="${escapeHtml(spell?.castingTime ?? "1 acción")}"></label><label>Alcance<input name="range" value="${escapeHtml(spell?.range ?? "")}"></label><label>Duración<input name="duration" value="${escapeHtml(spell?.duration ?? "")}"></label>${renderCheckboxGroup("Componentes", "components", SPELL_COMPONENTS, components)}${renderCheckboxGroup("Clases", "classes", SPELL_CLASS_OPTIONS, classes)}<label>Daño<input name="damageExpression" value="${escapeHtml(spell?.damageExpression ?? "")}" placeholder="2d6"></label><label>Daño al escalar<input name="upcastDamageExpression" value="${escapeHtml(spell?.upcastDamageExpression ?? "")}" placeholder="1d6"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, spell?.damageType ?? "", "Sin daño")}</select></label><label>Resolución<select name="attackType"><option value="none">Ninguna</option><option value="attack" ${spell?.attackType === "attack" ? "selected" : ""}>Ataque</option><option value="save" ${spell?.attackType === "save" ? "selected" : ""}>Salvación</option></select></label><label>Salvación<select name="saveAbility">${selectOptions(SPELL_SAVE_ABILITIES, spell?.saveAbility ?? "", "No aplica")}</select></label><input type="hidden" name="year" value="${escapeHtml(spell?.year ?? "2014")}"></div>
       <div class="gm-check-row"><label><input name="ritual" type="checkbox" ${spell?.ritual ? "checked" : ""}> Ritual</label><label><input name="concentration" type="checkbox" ${spell?.concentration ? "checked" : ""}> Concentración</label><label><input name="addAbilityModifier" type="checkbox" ${spell?.addAbilityModifier ? "checked" : ""}> Sumar característica al daño</label></div>
       <label>Material<input name="material" value="${escapeHtml(spell?.material ?? "")}"></label><label>Descripción<textarea name="description">${escapeHtml(spell?.description ?? "")}</textarea></label><label>A niveles superiores<textarea name="higherLevels">${escapeHtml(spell?.higherLevels ?? "")}</textarea></label><button type="submit">Guardar conjuro</button>
     </form>`;
@@ -517,7 +518,7 @@ export class GmToolsPanel {
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-template]").forEach((button) => button.addEventListener("click", () => {
       const section = button.dataset.gmTemplate as GmContentSection;
       const key = button.dataset.gmContentKey ?? "";
-      const source = section === "spell" ? this.content.spells.find((entry) => entry.name === key)
+      const source = section === "spell" ? this.content.spells.find((entry) => !isOldSpell(entry) && entry.name === key)
         : section === "equipment" ? this.content.equipment.find((entry) => entry.name === key)
           : this.content.shops.find((entry) => entry.name === key);
       if (!source) return;
@@ -638,10 +639,10 @@ export class GmToolsPanel {
   private async toggleFavorite(section: GmContentSection, key: string): Promise<void> {
     try {
       if (section === "spell" && this.runtime.saveCustomSpell) {
-        const current = this.content.spells.find((entry) => entry.name === key); if (!current) return;
+        const current = this.content.spells.find((entry) => !isOldSpell(entry) && entry.name === key); if (!current) return;
         const updated = withFavoriteTag(current, !isCatalogFavorite(current));
         await this.runtime.saveCustomSpell(updated, key);
-        this.content.spells = this.content.spells.map((entry) => entry.name === key ? updated : entry);
+        this.content.spells = this.content.spells.map((entry) => !isOldSpell(entry) && entry.name === key ? updated : entry);
       } else if (section === "equipment" && this.runtime.saveCustomEquipment) {
         const current = this.content.equipment.find((entry) => entry.name === key); if (!current) return;
         const updated = withFavoriteTag(current, !isCatalogFavorite(current));
@@ -690,9 +691,9 @@ export class GmToolsPanel {
   private async saveSpell(data: FormData): Promise<void> {
     if (!this.runtime.saveCustomSpell) return;
     const previous = String(data.get("previousKey") ?? "") || null;
-    const existing = previous ? this.content.spells.find((entry) => entry.name === previous) ?? null : null;
-    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), catalog: catalogFormMetadata(existing, data) };
-    try { await this.runtime.saveCustomSpell(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.spells = [...this.content.spells.filter((entry) => entry.name !== previous && entry.name !== definition.name), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
+    const existing = previous ? this.content.spells.find((entry) => !isOldSpell(entry) && entry.name === previous) ?? null : null;
+    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), catalog: { ...catalogMetadata(existing), tags: [spellSourceTag(existing) ?? "custom",...(existing && isCatalogFavorite(existing) ? [FAVORITE_TAG] : [])] } };
+    try { await this.runtime.saveCustomSpell(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.spells = [...this.content.spells.filter((entry) => isOldSpell(entry) || (entry.name !== previous && entry.name !== definition.name)), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
   private async saveEquipment(form: HTMLFormElement): Promise<void> {
@@ -767,7 +768,7 @@ export class GmToolsPanel {
 
   private async deleteContent(kind: string): Promise<void> {
     try {
-      if (kind === "spell" && this.selectedSpell && this.runtime.deleteCustomSpell) { await this.runtime.deleteCustomSpell(this.selectedSpell); this.content.spells = this.content.spells.filter((entry) => entry.name !== this.selectedSpell); this.selectedSpell = this.content.spells[0]?.name ?? ""; }
+      if (kind === "spell" && this.selectedSpell && this.runtime.deleteCustomSpell) { await this.runtime.deleteCustomSpell(this.selectedSpell); this.content.spells = this.content.spells.filter((entry) => isOldSpell(entry) || entry.name !== this.selectedSpell); this.selectedSpell = this.content.spells.find((entry) => !isOldSpell(entry))?.name ?? ""; }
       if (kind === "equipment" && this.selectedEquipment && this.runtime.deleteCustomEquipment) { await this.runtime.deleteCustomEquipment(this.selectedEquipment); this.content.equipment = this.content.equipment.filter((entry) => entry.name !== this.selectedEquipment); this.selectedEquipment = this.content.equipment[0]?.name ?? ""; }
       if (kind === "shop" && this.selectedShop && this.runtime.deleteShop) { await this.runtime.deleteShop(this.selectedShop); this.content.shops = this.content.shops.filter((entry) => entry.name !== this.selectedShop); this.selectedShop = this.content.shops[0]?.name ?? ""; }
       this.recordAction(`Eliminar contenido: ${kind}`);

@@ -1,0 +1,36 @@
+{
+  "rows": 1635,
+  "current_unique_tags": [
+    "2024",
+    "eng",
+    "es",
+    "gm",
+    "imported",
+    "legacy",
+    "official",
+    "xge"
+  ],
+  "current_tags": {
+    "imported": 6,
+    "gm": 6,
+    "legacy": 199,
+    "eng": 817,
+    "es": 818,
+    "official": 1629,
+    "xge": 193,
+    "2024": 704
+  },
+  "proposed_content_types": {
+    "homebrew": 4,
+    "official": 1629,
+    "third-party": 2
+  },
+  "proposed_rules": {
+    "2014": 929,
+    "2024": 706
+  },
+  "missing_book": 704,
+  "generator_rows": 456,
+  "generator_catalog_null": 456,
+  "source_unverified_rows": 14
+}

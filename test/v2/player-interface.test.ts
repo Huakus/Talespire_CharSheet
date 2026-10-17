@@ -863,7 +863,8 @@ describe("player interface shell", () => {
     expect(alphaIndex).toBeLessThan(ritualIndex);
     expect(html).toContain('id="spell-search"');
     expect(html).toContain('data-spell-property-filter="ritual"');
-    expect(html).toContain('data-spell-property-filter="prepared" class="" aria-pressed="false"><span>Preparados</span><strong>2</strong>');
+    expect(html).toContain('data-spell-personal-filter="availability" data-spell-facet-value="ready"');
+    expect(html).toContain('<span>Listos para usar</span><strong>4</strong>');
     expect(html).toContain('data-spell-property-filter="ritual" class="" aria-pressed="false"><span>Ritual</span><strong>1</strong>');
     expect(html).toContain('data-spell-property-filter="save" class="" aria-pressed="false"><span>Salvación</span><strong>0</strong>');
     expect(html).toContain('<span>Catálogo</span>');

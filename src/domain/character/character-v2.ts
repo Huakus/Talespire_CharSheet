@@ -1,3 +1,5 @@
+import { MartialRuntimeSchema } from "./martial-model";
+import { SorcererRuntimeSchema } from "./sorcerer-model";
 import { RangerRuntimeSchema } from "./ranger-model";
 import { DruidRuntimeSchema } from "./druid-model";
 import { BardRuntimeSchema } from "./bard-model";
@@ -126,6 +128,9 @@ export const CharacterV2Schema = z.object({
   spellcasting: z.object({
     wizard: WizardRuntimeSchema.nullable().default(null),
     ranger: RangerRuntimeSchema.nullable().default(null),
+    sorcerer: SorcererRuntimeSchema.nullable().default(null),
+    monk: MartialRuntimeSchema.nullable().default(null),
+    paladin: MartialRuntimeSchema.nullable().default(null),
     druid: DruidRuntimeSchema.nullable().default(null),
     bard: BardRuntimeSchema.nullable().default(null),
     barbarian: BarbarianRuntimeSchema.nullable().default(null),

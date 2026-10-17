@@ -3,6 +3,10 @@ import type { SpellDefinition } from "./character-spell-model";
 // Terminology follows the supplied PDFs. Mechanical corrections follow SRD 5.1
 // and the 2014 PHB / Xanathar errata linked in the implementation audit.
 export function correct2014SpellText(spells: Record<string,SpellDefinition>) {
+  spells.longstrider!.duration = "1 hora";
+  spells.longstrider!.concentration = false;
+  spells.shillelagh!.duration = "1 minuto";
+  spells["circle-of-power"]!.concentration = true;
   spells["arcane-eye"]!.classes = ["wizard"];
   spells.divination!.classes = ["cleric"];
   spells["faerie-fire"]!.classes = ["bard","druid"];

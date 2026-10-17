@@ -1,3 +1,6 @@
+import { MONK_SKILLS,PALADIN_SKILLS } from "./martial-catalog";
+import { builderGoldMultiplier } from "./fighter-builder-catalog";
+import { SORCERER_SKILLS,sorcererOrigin } from "./sorcerer-catalog";
 import { RANGER_SKILLS } from "./ranger-catalog";
 import { DRUID_SKILLS,DRUID_WEAPONS,HERBALISM } from "./druid-catalog";
 import { BARD_SKILLS,bardCollege } from "./bard-catalog";
@@ -37,7 +40,7 @@ export function validateBuilderOrigin(creation: FighterCreation): FighterCreatio
   validateFighterAbilities(creation);
   validateFighterOrigin(creation);
   const racialSkills = racialSkillGrants(creation);
-  const classSkills: readonly string[] = creation.classKey === "ranger" ? RANGER_SKILLS : creation.classKey === "druid" ? DRUID_SKILLS : creation.classKey === "bard" ? BARD_SKILLS : creation.classKey === "barbarian" ? BARBARIAN_SKILLS : creation.classKey === "rogue" ? ROGUE_SKILLS : creation.classKey === "wizard" ? ["arcana", "history", "insight", "investigation", "medicine", "religion"] : creation.classKey === "cleric" ? CLERIC_SKILLS : creation.classKey === "warlock" ? WARLOCK_SKILLS : FIGHTER_SKILLS;
+  const classSkills: readonly string[] = creation.classKey === "monk" ? MONK_SKILLS : creation.classKey === "paladin" ? PALADIN_SKILLS : creation.classKey === "sorcerer" ? SORCERER_SKILLS : creation.classKey === "ranger" ? RANGER_SKILLS : creation.classKey === "druid" ? DRUID_SKILLS : creation.classKey === "bard" ? BARD_SKILLS : creation.classKey === "barbarian" ? BARBARIAN_SKILLS : creation.classKey === "rogue" ? ROGUE_SKILLS : creation.classKey === "wizard" ? ["arcana", "history", "insight", "investigation", "medicine", "religion"] : creation.classKey === "cleric" ? CLERIC_SKILLS : creation.classKey === "warlock" ? WARLOCK_SKILLS : FIGHTER_SKILLS;
   if (creation.skills.length !== (creation.classKey === "rogue" ? 4 : ["bard","ranger"].includes(creation.classKey) ? 3 : 2) || creation.skills.some((key) => !classSkills.includes(key)) || !unique(creation.skills)) throw new Error(`Elegí ${creation.classKey === "rogue" ? "cuatro" : ["bard","ranger"].includes(creation.classKey) ? "tres" : "dos"} habilidades distintas de la lista de tu clase.`);
   if (!unique([...creation.skills, ...creation.background.skills, ...racialSkills])) throw new Error("Hay competencias repetidas. Personalizá las habilidades del trasfondo o elegí otras habilidades de clase.");
   if (creation.background.tools.length + creation.background.languages.length !== 2) throw new Error("El trasfondo requiere dos herramientas/idiomas en total.");
@@ -113,8 +116,8 @@ export function fighterBuilderMaximumHp(state: CharacterBuilderState): number {
   // minimum one HP acquired at each later level without applying a bonus twice.
   let scores = fighterBuilderScores({ ...state, levels: [] });
   let constitution = abilityModifier(scores.constitution);
-  const racial = state.creation.race === "hill-dwarf" ? 1 : 0;
-  let hp = (state.classKey === "barbarian" ? 12 : state.classKey === "wizard" ? 6 : ["warlock","cleric","rogue","bard","druid"].includes(state.classKey) ? 8 : 10) + constitution + racial;
+  const racial = (state.creation.race === "hill-dwarf" ? 1 : 0) + (sorcererOrigin(state) === "draconic" ? 1 : 0);
+  let hp = (state.classKey === "barbarian" ? 12 : ["wizard","sorcerer"].includes(state.classKey) ? 6 : ["warlock","cleric","rogue","bard","druid","monk"].includes(state.classKey) ? 8 : 10) + constitution + racial;
   for (const step of state.levels) {
     scores = fighterBuilderScores({ ...state, levels: state.levels.filter((entry) => entry.level <= step.level) });
     const nextConstitution = abilityModifier(scores.constitution);
@@ -126,6 +129,7 @@ export function fighterBuilderMaximumHp(state: CharacterBuilderState): number {
 }
 
 export function builderStyles(character: CharacterV2): string[] {
+  if (character.builder?.classKey === "paladin") return character.builder.levels.flatMap((s) => s.paladin.style ? [s.paladin.style] : []);
   if (character.builder?.classKey === "ranger") return character.builder.levels.flatMap((s) => s.ranger.style ? [s.ranger.style] : []);
   if (character.builder?.classKey === "bard") return character.builder.levels.flatMap((s) => s.bard.style ? [s.bard.style] : []);
   return character.builder?.classKey === "fighter" ? [character.builder.creation.style, ...character.builder.levels.flatMap((step) => step.additionalStyle ? [step.additionalStyle] : [])] : [];
@@ -171,19 +175,21 @@ export function finishBuilderCreation(character: CharacterV2): CharacterV2 {
 }
 
 export async function createBuilderCharacter(id: string, state: CharacterBuilderState, createdAt: string): Promise<CharacterV2> {
-  const creation = state.creation, ranger = state.classKey === "ranger", druid = state.classKey === "druid", bard = state.classKey === "bard", wizard = state.classKey === "wizard", warlock = state.classKey === "warlock", cleric = state.classKey === "cleric", rogue = state.classKey === "rogue", barbarian = state.classKey === "barbarian";
+  const creation = state.creation, monk = state.classKey === "monk", paladin = state.classKey === "paladin", sorcerer = state.classKey === "sorcerer", ranger = state.classKey === "ranger", druid = state.classKey === "druid", bard = state.classKey === "bard", wizard = state.classKey === "wizard", warlock = state.classKey === "warlock", cleric = state.classKey === "cleric", rogue = state.classKey === "rogue", barbarian = state.classKey === "barbarian";
   let character = createCharacter(id, creation.name, createdAt);
   const race = BUILDER_RACES[creation.race];
   const abilities = fighterBuilderScores(state);
   const hp = fighterBuilderMaximumHp(state);
   character = CharacterV2Schema.parse({ ...character, builder: state, abilities, identity: { ...character.identity, playerName: creation.playerName, species: race.species, subrace: race.subrace, background: creation.background.name, alignment: creation.alignment }, combat: { ...character.combat, speed: `${race.speed} ft`, initiative: String(abilityModifier(abilities.dexterity)), hitPoints: { current: hp, maximum: hp, temporary: 0 }, hitDice: { current: "1", formula: "1d10", remaining: 1, maximum: 1, dieSize: 10 } }, proficiencies: { armor: ["Todas las armaduras", "Escudos"], weapons: ["Armas sencillas", "Armas marciales"], tools: [...creation.background.tools, ...(creation.dwarfTool ? [DWARF_TOOLS[creation.dwarfTool]] : []), ...(creation.race === "rock-gnome" ? ["Herramientas de hojalatero"] : [])], languages: [...race.languages, ...creation.languages, ...creation.background.languages] } });
+  if (monk) { character.identity.className = "Monje";character.proficiencies.armor = creation.race === "mountain-dwarf" ? ["Armaduras ligeras","Armaduras medias"] : [];character.proficiencies.weapons = ["Armas sencillas","Espada corta"];character.proficiencies.tools.push(creation.monk.tool);character.combat.hitDice = { current:"1",formula:"1d8",remaining:1,maximum:1,dieSize:8 }; }
+  if (paladin) character.identity.className = "Paladín";
   if (ranger) { character.identity.className = "Explorador";character.proficiencies.armor = ["Armaduras ligeras","Armaduras medias","Escudos"]; }
   if (barbarian) {
     character.identity.className = "Bárbaro"; character.combat.hitDice = { current: "1",formula: "1d12",remaining: 1,maximum: 1,dieSize: 12 };
     character.proficiencies.armor = ["Armaduras ligeras","Armaduras medias","Escudos"];
   }
-  if (wizard) {
-    character.identity.className = "Mago";
+  if (wizard || sorcerer) {
+    character.identity.className = sorcerer ? "Hechicero" : "Mago";
     character.combat.hitDice = { current: "1", formula: "1d6", remaining: 1, maximum: 1, dieSize: 6 };
     character.proficiencies.armor = creation.race === "mountain-dwarf" ? ["Armaduras ligeras", "Armaduras medias"] : [];
     character.proficiencies.weapons = ["Daga", "Dardo", "Honda", "Bastón", "Ballesta ligera", ...(creation.race.includes("dwarf") ? ["Hacha de batalla", "Hacha de mano", "Martillo ligero", "Martillo de guerra"] : ["high-elf", "wood-elf"].includes(creation.race) ? ["Espada larga", "Espada corta", "Arco largo", "Arco corto"] : creation.race === "drow" ? ["Estoque", "Espada corta", "Ballesta de mano"] : [])];
@@ -203,18 +209,24 @@ export async function createBuilderCharacter(id: string, state: CharacterBuilder
   if (rogue) { character.proficiencies.weapons = [...new Set(character.proficiencies.weapons)]; character.proficiencies.tools = [...new Set([...character.proficiencies.tools,THIEVES_TOOLS])]; character.proficiencies.languages.push("Jerga de Ladrones"); }
   if (bard) character.proficiencies.tools = [...new Set([...character.proficiencies.tools,...creation.bard.instruments])];
   for (const skill of [...creation.skills, ...creation.background.skills, ...racialSkillGrants(creation)]) character.checks.skills[skill].proficiency = 1;
-  character.checks.savingThrows[rogue || bard ? "dexterity" : wizard || druid ? "intelligence" : warlock || cleric ? "charisma" : "strength"].proficiency = 1;
-  character.checks.savingThrows[ranger ? "dexterity" : bard ? "charisma" : rogue ? "intelligence" : wizard || druid || warlock || cleric ? "wisdom" : "constitution"].proficiency = 1;
+  character.checks.savingThrows[paladin ? "wisdom" : sorcerer ? "constitution" : rogue || bard ? "dexterity" : wizard || druid ? "intelligence" : warlock || cleric ? "charisma" : "strength"].proficiency = 1;
+  character.checks.savingThrows[monk ? "dexterity" : paladin ? "charisma" : ranger ? "dexterity" : bard || sorcerer ? "charisma" : rogue ? "intelligence" : wizard || druid || warlock || cleric ? "wisdom" : "constitution"].proficiency = 1;
   const quantities = new Map<string, { quantity: number; equipped: boolean }>();
   const add = (key: string, quantity = 1, equipped = false) => { const old = quantities.get(key); quantities.set(key, { quantity: (old?.quantity ?? 0) + quantity, equipped: equipped || (old?.equipped ?? false) }); };
   if (creation.equipment.method === "gold") {
     for (const purchase of creation.equipment.purchases) add(purchase.key, purchase.quantity, purchase.equipped);
     const spent = creation.equipment.purchases.reduce((sum, p) => sum + equipmentGoldCost(p.key) * p.quantity, 0);
-    const copper = Math.round((creation.equipment.goldRoll.reduce((a,b) => a+b, 0) * 10 - spent) * 100);
+    const copper = Math.round((creation.equipment.goldRoll.reduce((a,b) => a+b, 0) * builderGoldMultiplier(creation.classKey) - spent) * 100);
     character.currency.gold = Math.floor(copper / 100);
     character.currency.silver = Math.floor(copper % 100 / 10); character.currency.copper = copper % 10;
   } else {
-    if (wizard) {
+    if (monk) {
+      add(creation.monkWeapon,1,true);add(creation.monkPack);add("dart",10);
+    } else if (paladin) {
+      add("chain-mail",1,true);add(creation.equipment.primary,1,true);if (creation.equipment.shield) add("shield",1,!BUILDER_WEAPONS[creation.equipment.primary]!.properties.includes("two-handed"));else add(creation.equipment.secondary!);if (creation.paladinSecondary === "javelins") add("javelin",5);else add(creation.paladinSecondary);add(creation.paladinPack === "priest" ? "priests-pack" : "explorer");add(creation.paladinSymbol);
+    } else if (sorcerer) {
+      add(creation.sorcererWeapon,1,true);if (creation.sorcererWeapon === "light-crossbow") add("bolts",20);add("dagger",2);add(creation.wizardFocus);add(creation.sorcererPack);
+    } else if (wizard) {
       add(creation.wizardWeapon, 1, true); add(creation.wizardFocus); add(creation.wizardPack === "scholar" ? "scholars-pack" : "explorer"); add("spellbook");
     } else if (ranger) {
       add(creation.rangerArmor,1,true);creation.rangerWeapons.forEach((key,i) => add(key,1,i === 0));add(creation.rangerPack);add("longbow");add("quiver");add("arrows",20);
@@ -259,7 +271,7 @@ export async function createBuilderCharacter(id: string, state: CharacterBuilder
   for (const item of character.inventory.filter((entry) => entry.weapon)) {
     const ranged = item.weapon!.range === "ranged";
     const ability = preferredWeaponAbility(abilities, item);
-    character.actions.push({ id: await createDeterministicId("act", id, "builder-weapon", item.id), order: character.actions.length, name: item.name, categories: ["attack", "action"], activation: "Acción", reach: ranged ? `${item.weapon!.normalRange}/${item.weapon!.longRange} ft` : item.properties.includes("reach") ? "10 ft" : "5 ft", ability, proficient: ranger || barbarian || state.classKey === "fighter" || character.proficiencies.weapons.includes(item.name) || (warlock || cleric || rogue || bard) && item.weapon!.category.startsWith("simple") || cleric && clericMartialWeapons(creation.cleric.domain) || warlock && creation.warlock.patron === "hexblade", attackBonus: 0, damageExpression: item.weapon!.damageExpression, damageBonus: item.weapon!.damageExpression ? abilityModifier(abilities[ability]) : 0, damageType: item.weapon!.damageType, weaponType: item.weapon!.category, properties: item.properties.join(", "), description: item.description, inventoryItemId: item.id, rollMode: "normal" });
+    character.actions.push({ id: await createDeterministicId("act", id, "builder-weapon", item.id), order: character.actions.length, name: item.name, categories: ["attack", "action"], activation: "Acción", reach: ranged ? `${item.weapon!.normalRange}/${item.weapon!.longRange} ft` : item.properties.includes("reach") ? "10 ft" : "5 ft", ability, proficient: paladin || ranger || barbarian || state.classKey === "fighter" || character.proficiencies.weapons.includes(item.name) || (monk || warlock || cleric || rogue || bard) && item.weapon!.category.startsWith("simple") || cleric && clericMartialWeapons(creation.cleric.domain) || warlock && creation.warlock.patron === "hexblade", attackBonus: 0, damageExpression: item.weapon!.damageExpression, damageBonus: item.weapon!.damageExpression ? abilityModifier(abilities[ability]) : 0, damageType: item.weapon!.damageType, weaponType: item.weapon!.category, properties: item.properties.join(", "), description: item.description, inventoryItemId: item.id, rollMode: "normal" });
   }
   character.traits.push(await traitGroup(character, "background", creation.background.name, [{ key: "feature", name: creation.background.featureName, description: creation.background.featureDescription }]));
   const personality = [creation.personality, creation.appearance && `Descripción: ${creation.appearance}`, ...creation.personalTraits.map((t, i) => `Rasgo ${i+1}: ${t}`), creation.ideal && `Ideal: ${creation.ideal}`, creation.bond && `Vínculo: ${creation.bond}`, creation.flaw && `Defecto: ${creation.flaw}`].filter(Boolean).join("\n\n");

@@ -1,6 +1,8 @@
+import { MONK_TRADITIONS,PALADIN_OATHS,ELEMENTAL_DISCIPLINES } from "./martial-catalog";
+import { SORCERER_ORIGINS,SORCERER_AFFINITIES,METAMAGIC } from "./sorcerer-catalog";
 import type { CharacterBuilderState,FighterLevelChoice,FeatChoice } from "./character-builder-model";
 import { BUILDER_ABILITIES } from "./character-builder-model";
-import { BUILDER_RACES,DWARF_TOOLS,FIGHTING_STYLES,PHB_EQUIPMENT } from "./fighter-builder-catalog";
+import { BUILDER_RACES,BUILDER_WEAPONS,DWARF_TOOLS,FIGHTING_STYLES,PHB_EQUIPMENT } from "./fighter-builder-catalog";
 import { SAVE_DEFINITIONS,SKILL_DEFINITIONS,type SkillKey } from "./character-checks";
 import { SUBCLASSES,DRAGON_ANCESTRIES } from "./phb-character-options";
 import { FEATS,MANEUVERS } from "./phb-fighter-choices";
@@ -58,6 +60,22 @@ export function progressionChoices(state: CharacterBuilderState,step: FighterLev
   if (state.classKey === "barbarian") { const p = pick.barbarian;if (p.path) add("Senda",BARBARIAN_PATHS[p.path]);if (p.totem) add(`Tótem de nivel ${level}`,TOTEM_ANIMALS[p.totem]);if (p.divineDamage) add("Daño de Furia Divina",damage[p.divineDamage]);if (p.storm) { const previous = [...state.levels].reverse().find((s) => s.level < level && s.barbarian.storm)?.barbarian.storm;if (previous && previous !== p.storm) replacements.push({ label: "Entorno de tormenta",before: STORM_ENVIRONMENTS[previous],after: STORM_ENVIRONMENTS[p.storm] });else add("Entorno de tormenta",STORM_ENVIRONMENTS[p.storm]); } }
   if (state.classKey === "bard") { const p = pick.bard;if (p.college) add("Colegio",BARD_COLLEGES[p.college]);many("Instrumentos elegidos",p.instruments);many("Habilidades elegidas",p.skills,skill);many("Pericias elegidas",p.expertise,skill);if (p.style) add("Estilo de combate",FIGHTING_STYLES[p.style].name);spells("Trucos aprendidos",p.cantrips);spells("Conjuros aprendidos",p.learn);spells("Secretos Mágicos",p.secrets);replace("Conjuro",p.replaceSpell); }
   if (state.classKey === "druid") { const p = pick.druid;if (p.circle) add("Círculo",DRUID_CIRCLES[p.circle]);if (p.land) add("Terreno del Círculo de la Tierra",DRUID_LANDS[p.land]);spells("Trucos aprendidos",p.cantrips);if (p.bonusCantrip) spells("Truco adicional",[p.bonusCantrip]);if (p.prepared) spells("Preparación registrada en el tutorial",p.prepared); }
+  if (state.classKey === "monk") {
+    const p = step?.monk ?? state.creation.monk;
+    if(p.tool) add("Herramienta de monje",p.tool);
+    if(p.tradition) add("Tradición monástica",MONK_TRADITIONS[p.tradition]);
+    p.weapons.forEach((k) => add("Arma kensei",BUILDER_WEAPONS[k]?.name ?? k));
+    if(p.brush) add("Camino del Pincel",p.brush === "calligrapher" ? "Calígrafo" : "Pintor");
+    p.disciplines.forEach((k) => add("Disciplina elemental",ELEMENTAL_DISCIPLINES[k]?.name ?? k));
+    if(p.replacement) replacements.push({label:"Disciplina elemental",before:ELEMENTAL_DISCIPLINES[p.replacement.oldKey]?.name ?? p.replacement.oldKey,after:ELEMENTAL_DISCIPLINES[p.replacement.newKey]?.name ?? p.replacement.newKey});
+  }
+  if (state.classKey === "paladin") {
+    const p = step?.paladin ?? state.creation.paladin;
+    if(p.oath) add("Juramento sagrado",PALADIN_OATHS[p.oath]);
+    if(p.style) add("Estilo de combate",FIGHTING_STYLES[p.style].name);
+    if(p.prepared) add("Preparación inicial",p.prepared.map(progressionSpellName).join(" · "));
+  }
+  if (state.classKey === "sorcerer") { const p = pick.sorcerer;if (p.origin) add("Origen",SORCERER_ORIGINS[p.origin]);if (p.ancestry) add("Ancestro dragón",DRAGON_ANCESTRIES[p.ancestry].name);if (p.affinity) add("Afinidad divina",SORCERER_AFFINITIES[p.affinity]);spells("Trucos aprendidos",p.cantrips);spells("Conjuros aprendidos",p.learn);many("Metamagia elegida",p.metamagic,(m) => METAMAGIC[m as keyof typeof METAMAGIC].name);replace("Conjuro",p.replaceSpell); }
   if (state.classKey === "ranger") { const p = pick.ranger;if (p.archetype) add("Arquetipo",RANGER_ARCHETYPES[p.archetype]);if (p.style) add("Estilo de combate",FIGHTING_STYLES[p.style].name);if (p.hunter) { const h = HUNTER_OPTIONS[level]![p.hunter]!;add("Rasgo de Cazador elegido",h.name,h.description); }if (p.terrain) add("Terreno predilecto",RANGER_TERRAINS[p.terrain]);if (p.enemy) { add("Enemigo predilecto",p.enemy.type === "humanoids" ? p.enemy.humanoids.join(" y ") : RANGER_ENEMIES[p.enemy.type]);add("Idioma de enemigos",p.enemy.language || "Sin idioma nuevo"); }if (p.ironMind) add("Salvación de Mente de Hierro",SAVE_DEFINITIONS[p.ironMind].label);if (p.companion) add("Compañero inicial",`${p.companion.name} · ${p.companion.species} · VD ${p.companion.challenge}`,p.companion.notes);spells("Conjuros aprendidos",p.learn);replace("Conjuro",p.replaceSpell); }
   if (step) add("PG del nivel antes de Constitución",`${step.hpBase} · ${step.hpMethod === "rolled" ? "tirada registrada" : "valor fijo"}`);
   return { decisions,replacements };

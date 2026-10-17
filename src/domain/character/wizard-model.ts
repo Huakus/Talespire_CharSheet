@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { STABLE_ID_PATTERN } from "../../shared/id";
+import { SpellDefinitionSchema } from "./character-spell-model";
 
 export const StoneBenefitSchema = z.enum(["darkvision", "speed", "constitution", "acid", "cold", "fire", "lightning", "thunder"]);
 export const WizardRuntimeSchema = z.object({
@@ -8,7 +9,14 @@ export const WizardRuntimeSchema = z.object({
   book: z.array(z.string()).default([]),
   activeBookId: z.string().nullable().default(null),
   backups: z.array(z.object({ id: z.string().regex(STABLE_ID_PATTERN), keys: z.array(z.string()), available: z.boolean() })).default([]),
-  copied: z.array(z.object({ operationId: z.string().regex(STABLE_ID_PATTERN), key: z.string(), level: z.number().int().min(1).max(20), gold: z.number().nonnegative(), hours: z.number().nonnegative() })).default([]),
+  copied: z.array(z.object({
+    operationId: z.string().regex(STABLE_ID_PATTERN), key: z.string(), level: z.number().int().min(1).max(20),
+    gold: z.number().nonnegative(), hours: z.number().nonnegative(),
+    source: z.enum(["external", "own", "scroll"]).nullable().default(null),
+    historical: z.boolean().default(false),
+    definition: SpellDefinitionSchema.nullable().default(null),
+    wizardAccess: z.enum(["standard", "campaign"]).default("standard"),
+  })).default([]),
   mastery: z.array(z.string()).max(2).default([]),
   portent: z.array(z.object({ value: z.number().int().min(1).max(20), used: z.boolean() })).max(3).default([]),
   portentNeedsRoll: z.boolean().default(true),

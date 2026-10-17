@@ -1,3 +1,5 @@
+import { martialConditionImmune,martialResourceEffects } from "./martial-play";
+import { sorcererResourceEffects } from "./sorcerer-play";
 import { resetRangerAfterRest } from "./ranger-play";
 import { endBarbarianRage,barbarianMindlessRage } from "./barbarian-rules";
 import { druidShapeActive,druidFormDamage,elapseDruidHours } from "./druid-rules";
@@ -244,6 +246,7 @@ export function applyCharacterResourceCommand(
       currency = adjustCurrency(currency, command.denomination, command.quantity);
       break;
     case "add-condition":
+      if (martialConditionImmune(character,command.key)) throw new Error("Tu clase te hace inmune a esta condición mientras se cumplen sus requisitos.");
       combat.conditions = [
         ...combat.conditions.filter((condition) => condition.key !== command.key),
         {
@@ -273,7 +276,7 @@ export function applyCharacterResourceCommand(
   if (character.spellcasting.druid && combat.conditions.some((p) => ["unconscious","dead"].includes(p.key))) character.spellcasting.druid.form = null;
 
   return {
-    character: applyBarbarianResourceEffects(CharacterV2Schema.parse({
+    character: martialResourceEffects(sorcererResourceEffects(applyBarbarianResourceEffects(CharacterV2Schema.parse({
       ...character,
       combat,
       inventory,
@@ -282,7 +285,7 @@ export function applyCharacterResourceCommand(
       currency,
       revision: character.revision + 1,
       metadata: { ...character.metadata, updatedAt },
-    }),command,character),
+    }),command,character),command.kind),command.kind),
     effects,
   };
 }

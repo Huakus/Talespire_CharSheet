@@ -1,8 +1,9 @@
+import { monkCanCast } from "./martial-catalog";
 import { rangerLanguages } from "./ranger-catalog";
 import { HERBALISM } from "./druid-catalog";
 import { bardCollege,bardClassSkills,bardClassTools,bardClassExpertise } from "./bard-catalog";
 import { barbarianPath } from "./barbarian-catalog";
-import { builderGoldDice } from "./fighter-builder-catalog";
+import { builderGoldDice,builderGoldMultiplier } from "./fighter-builder-catalog";
 import { rogueArchetype,rogueClassSkills,rogueClassTools } from "./rogue-catalog";
 import { isXanatharFeat,validateXanatharFeat } from "./xanathar-feats";
 import { clericHeavyArmor } from "./cleric-catalog";
@@ -22,7 +23,7 @@ export function builderFeats(state: CharacterBuilderState): Array<{ feat: FeatCh
   return [...(state.creation.initialFeat ? [{ feat: state.creation.initialFeat, level: 1 }] : []), ...state.levels.flatMap((step) => step.feat ? [{ feat: step.feat, level: step.level }] : [])];
 }
 export function canCastSpells(state: CharacterBuilderState): boolean {
-  return state.classKey === "ranger" && state.levels.length+1 >= 2 || barbarianPath(state) === "totem-warrior" || barbarianPath(state) === "ancestral-guardian" && state.levels.length+1 >= 10 || rogueArchetype(state) === "arcane-trickster" || state.classKey === "druid" || state.classKey === "bard" || state.classKey === "wizard" || state.classKey === "warlock" || state.classKey === "cleric" || ["high-elf", "drow", "forest-gnome", "tiefling"].includes(state.creation.race) || fighterSubclass(state) === "eldritch-knight" || builderFeats(state).some(({ feat }) => ["magic-initiate", "ritual-caster", "spell-sniper"].includes(feat.key));
+  return state.classKey === "paladin" && state.levels.length+1 >= 2 || monkCanCast(state) || state.classKey === "sorcerer" || state.classKey === "ranger" && state.levels.length+1 >= 2 || barbarianPath(state) === "totem-warrior" || barbarianPath(state) === "ancestral-guardian" && state.levels.length+1 >= 10 || rogueArchetype(state) === "arcane-trickster" || state.classKey === "druid" || state.classKey === "bard" || state.classKey === "wizard" || state.classKey === "warlock" || state.classKey === "cleric" || ["high-elf", "drow", "forest-gnome", "tiefling"].includes(state.creation.race) || fighterSubclass(state) === "eldritch-knight" || builderFeats(state).some(({ feat }) => ["magic-initiate", "ritual-caster", "spell-sniper"].includes(feat.key));
 }
 export function validateFighterOrigin(creation: FighterCreation): void {
   const variable = ["human-variant", "half-elf"].includes(creation.race);
@@ -46,11 +47,11 @@ export function validateFighterOrigin(creation: FighterCreation): void {
     if (selected && !choice.keys.includes(selected)) throw new Error("El equipo elegido no pertenece a esta alternativa del trasfondo.");
   });
   if (creation.equipment.method === "gold") {
-    if (creation.equipment.goldRoll.length !== builderGoldDice(creation.classKey)) throw new Error(`El oro inicial de tu clase requiere ${builderGoldDice(creation.classKey)}d4 × 10 po.`);
+    if (creation.equipment.goldRoll.length !== builderGoldDice(creation.classKey)) throw new Error(`El oro inicial de tu clase requiere ${builderGoldDice(creation.classKey)}d4${creation.classKey === "monk" ? "" : " × 10"} po.`);
     if (!distinct(creation.equipment.purchases.map((p) => p.key))) throw new Error("Agrupá las compras repetidas en una sola cantidad.");
     if (creation.equipment.purchases.some((p) => !PHB_PURCHASABLE_EQUIPMENT[p.key])) throw new Error("Elegí equipo con precio de compra en el catálogo PHB 2014; los regalos y objetos narrativos pertenecen al paquete de trasfondo.");
     const cost = creation.equipment.purchases.reduce((sum, p) => sum + equipmentGoldCost(p.key) * p.quantity, 0);
-    if (cost > creation.equipment.goldRoll.reduce((a,b) => a+b, 0) * 10 + .000001) throw new Error(`Las compras superan las po iniciales: ${builderGoldDice(creation.classKey)}d4 × 10. Esta alternativa reemplaza equipo y oro de clase y trasfondo.`);
+    if (cost > creation.equipment.goldRoll.reduce((a,b) => a+b, 0) * builderGoldMultiplier(creation.classKey) + .000001) throw new Error(`Las compras superan las po iniciales: ${builderGoldDice(creation.classKey)}d4${creation.classKey === "monk" ? "" : " × 10"}. Esta alternativa reemplaza equipo y oro de clase y trasfondo.`);
     const equipped = creation.equipment.purchases.filter((p) => p.equipped).map((p) => PHB_EQUIPMENT[p.key]!);
     const hands = equipped.reduce((sum, item) => sum + (item.category === "shield" ? 1 : item.weapon ? item.properties.includes("two-handed") ? 2 : 1 : 0), 0);
     if (hands > 2 || equipped.filter((item) => item.category === "armor").length > 1 || equipped.filter((item) => item.category === "shield").length > 1) throw new Error("El equipo inicial necesita manos libres y una sola armadura/escudo equipados.");
@@ -62,8 +63,8 @@ export function validateFeat(feat: FeatChoice, scores: FighterCreation["baseAbil
   const definition = FEATS[feat.key];
   if (feat.expertise && feat.key !== "prodigy") throw new Error("Solo Prodigio elige pericia con estas dotes.");
   const armorFeats = builderFeats(previous).map(({ feat }) => feat.key);
-  const medium = previous.classKey === "ranger" || previous.classKey === "druid" || previous.classKey === "bard" && ["valor","swords"].includes(bardCollege(previous) ?? "") || previous.classKey === "barbarian" || previous.classKey === "warlock" && previous.creation.warlock.patron === "hexblade" || previous.classKey === "cleric" || previous.classKey === "fighter" || previous.creation.race === "mountain-dwarf" || armorFeats.includes("moderately-armored") || armorFeats.includes("heavily-armored");
-  const light = previous.classKey === "bard" || previous.classKey === "rogue" || previous.classKey === "warlock" || medium || armorFeats.includes("lightly-armored"), heavy = previous.classKey === "cleric" && clericHeavyArmor(previous.creation.cleric.domain) || previous.classKey === "fighter" || armorFeats.includes("heavily-armored");
+  const medium = previous.classKey === "paladin" || previous.classKey === "ranger" || previous.classKey === "druid" || previous.classKey === "bard" && ["valor","swords"].includes(bardCollege(previous) ?? "") || previous.classKey === "barbarian" || previous.classKey === "warlock" && previous.creation.warlock.patron === "hexblade" || previous.classKey === "cleric" || previous.classKey === "fighter" || previous.creation.race === "mountain-dwarf" || armorFeats.includes("moderately-armored") || armorFeats.includes("heavily-armored");
+  const light = previous.classKey === "bard" || previous.classKey === "rogue" || previous.classKey === "warlock" || medium || armorFeats.includes("lightly-armored"), heavy = previous.classKey === "paladin" || previous.classKey === "cleric" && clericHeavyArmor(previous.creation.cleric.domain) || previous.classKey === "fighter" || armorFeats.includes("heavily-armored");
   if ((["heavily-armored", "medium-armor-master"].includes(feat.key) && !medium) || (feat.key === "moderately-armored" && !light) || (feat.key === "heavy-armor-master" && !heavy)) throw new Error(`No cumplís el requisito de competencia con armaduras de ${definition.name}.`);
   if (definition.abilities.length ? !feat.ability || !definition.abilities.includes(feat.ability) : feat.ability !== null) throw new Error("Elegí el atributo de la dote; su aumento se limita a 20.");
   const prerequisite = definition.prerequisite;
@@ -74,15 +75,15 @@ export function validateFeat(feat: FeatChoice, scores: FighterCreation["baseAbil
     if (feat.key === "wood-elf-magic" && (feat.spells.some((key) => PHB_SPELLS[key]?.level !== 0 || !PHB_SPELLS[key]?.classes.includes("druid")))) throw new Error("Elegí un truco de druida.");
     if (feat.key === "prodigy") {
       const knownLanguages = [...rangerLanguages(previous),...previous.levels.flatMap((s) => s.rogue.languages),...BUILDER_RACES[previous.creation.race].languages,...previous.creation.languages,...previous.creation.background.languages,...previous.creation.cleric.languages,...builderFeats(previous).flatMap(({ feat }) => feat.languages)];
-      const knownTools = [...(previous.classKey === "druid" ? [HERBALISM] : []),...bardClassTools(previous),...rogueClassTools(previous),...previous.creation.background.tools,...(previous.creation.dwarfTool ? [DWARF_TOOLS[previous.creation.dwarfTool]] : []),...builderFeats(previous).flatMap(({ feat }) => feat.tools)];
+      const knownTools = [...(previous.classKey === "monk" ? [previous.creation.monk.tool,...(previous.levels.some((s) => s.monk.tradition === "drunken-master") ? ["Suministros de cervecero"] : []),...previous.levels.flatMap((s) => s.monk.brush ? [s.monk.brush === "painter" ? "Suministros de pintor" : "Suministros de calígrafo"] : [])] : []),...(previous.classKey === "druid" ? [HERBALISM] : []),...bardClassTools(previous),...rogueClassTools(previous),...previous.creation.background.tools,...(previous.creation.dwarfTool ? [DWARF_TOOLS[previous.creation.dwarfTool]] : []),...builderFeats(previous).flatMap(({ feat }) => feat.tools)];
       if (!TOOLS.includes(feat.tools[0]!) || knownTools.includes(feat.tools[0]!) || !LANGUAGES.includes(feat.languages[0]!) || !distinct([...knownLanguages,...feat.languages])) throw new Error("Prodigio requiere herramienta e idioma nuevos del catálogo.");
     }
     return;
   }
   if (feat.key === "skilled") {
     if (feat.skills.length + feat.tools.length !== 3 || !distinct(feat.skills) || !distinct(feat.tools) || !feat.tools.every((tool) => TOOLS.includes(tool))) throw new Error("Hábil requiere tres competencias distintas en habilidades o herramientas.");
-    const skills = [...bardClassSkills(previous),...rogueClassSkills(previous),...previous.creation.cleric.skills,...previous.levels.map((s) => s.xanathar.skill).filter(Boolean),...previous.creation.skills, ...previous.creation.background.skills, ...racialSkillGrants(previous.creation), ...builderFeats(previous).flatMap(({ feat: old }) => old.skills)];
-    const tools = [...(previous.classKey === "druid" ? [HERBALISM] : []),...bardClassTools(previous),...rogueClassTools(previous),...(previous.classKey === "cleric" && previous.creation.cleric.domain === "forge" ? ["Herramientas de herrero"] : []),...previous.creation.background.tools, ...(previous.creation.dwarfTool ? [DWARF_TOOLS[previous.creation.dwarfTool]] : []), ...(previous.creation.race === "rock-gnome" ? ["Herramientas de hojalatero"] : []), ...builderFeats(previous).flatMap(({ feat: old }) => old.tools), ...previous.levels.filter((s) => s.artisanTool).map((s) => s.artisanTool)];
+    const skills = [...(previous.classKey === "monk" && previous.levels.some((s) => s.monk.tradition === "drunken-master") ? ["performance"] : []),...bardClassSkills(previous),...rogueClassSkills(previous),...previous.creation.cleric.skills,...previous.levels.map((s) => s.xanathar.skill).filter(Boolean),...previous.creation.skills, ...previous.creation.background.skills, ...racialSkillGrants(previous.creation), ...builderFeats(previous).flatMap(({ feat: old }) => old.skills)];
+    const tools = [...(previous.classKey === "monk" ? [previous.creation.monk.tool,...(previous.levels.some((s) => s.monk.tradition === "drunken-master") ? ["Suministros de cervecero"] : []),...previous.levels.flatMap((s) => s.monk.brush ? [s.monk.brush === "painter" ? "Suministros de pintor" : "Suministros de calígrafo"] : [])] : []),...(previous.classKey === "druid" ? [HERBALISM] : []),...bardClassTools(previous),...rogueClassTools(previous),...(previous.classKey === "cleric" && previous.creation.cleric.domain === "forge" ? ["Herramientas de herrero"] : []),...previous.creation.background.tools, ...(previous.creation.dwarfTool ? [DWARF_TOOLS[previous.creation.dwarfTool]] : []), ...(previous.creation.race === "rock-gnome" ? ["Herramientas de hojalatero"] : []), ...builderFeats(previous).flatMap(({ feat: old }) => old.tools), ...previous.levels.filter((s) => s.artisanTool).map((s) => s.artisanTool)];
     if (feat.skills.some((skill) => skills.includes(skill)) || feat.tools.some((tool) => tools.includes(tool))) throw new Error("Ya conocés una de las competencias elegidas para Hábil.");
   } else if (feat.skills.length || feat.tools.length) throw new Error("Esta dote no concede elecciones de habilidades o herramientas.");
   if (feat.key === "linguist") {

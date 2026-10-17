@@ -1,3 +1,5 @@
+import { MonkChoicesSchema,PaladinChoicesSchema } from "./martial-model";
+import { SorcererChoicesSchema } from "./sorcerer-model";
 import { RangerChoicesSchema } from "./ranger-model";
 import { DruidChoicesSchema } from "./druid-model";
 import { BardChoicesSchema } from "./bard-model";
@@ -52,7 +54,7 @@ export const FighterMagicChoiceSchema = z.object({
 }).prefault({});
 
 export const FighterCreationSchema = z.object({
-  classKey: z.enum(["fighter", "wizard", "warlock", "cleric", "rogue", "barbarian", "bard", "druid", "ranger"]).default("fighter"),
+  classKey: z.enum(["fighter", "wizard", "warlock", "cleric", "rogue", "barbarian", "bard", "druid", "ranger", "sorcerer", "monk", "paladin"]).default("fighter"),
   name: z.string().trim().min(1).max(100),
   playerName: z.string().trim().max(100).default(""),
   race: RaceKeySchema,
@@ -106,6 +108,16 @@ export const FighterCreationSchema = z.object({
   bard: BardChoicesSchema,
   druid: DruidChoicesSchema,
   ranger: RangerChoicesSchema,
+  sorcerer: SorcererChoicesSchema,
+  monk: MonkChoicesSchema,
+  paladin: PaladinChoicesSchema,
+  monkWeapon: z.string().default("shortsword"),
+  monkPack: z.enum(["dungeoneer","explorer"]).default("explorer"),
+  paladinSecondary: z.string().default("javelins"),
+  paladinPack: z.enum(["priest","explorer"]).default("priest"),
+  paladinSymbol: z.enum(["amulet","emblem","reliquary"]).default("amulet"),
+  sorcererWeapon: z.string().default("light-crossbow"),
+  sorcererPack: z.enum(["dungeoneer","explorer"]).default("dungeoneer"),
   rangerArmor: z.enum(["scale-mail","leather"]).default("scale-mail"),
   rangerWeapons: z.array(z.string()).length(2).default(["shortsword","shortsword"]),
   rangerPack: z.enum(["dungeoneer","explorer"]).default("explorer"),
@@ -152,6 +164,9 @@ export const FighterLevelChoiceSchema = z.object({
   bard: BardChoicesSchema,
   druid: DruidChoicesSchema,
   ranger: RangerChoicesSchema,
+  sorcerer: SorcererChoicesSchema,
+  monk: MonkChoicesSchema,
+  paladin: PaladinChoicesSchema,
   xanathar: z.object({ skill: z.string().default(""),language: z.string().default(""),cantrip: z.string().default(""),shots: z.array(z.string()).max(2).default([]),bonusSave: z.enum(["intelligence","charisma"]).nullable().default(null) }).prefault({}),
 });
 
@@ -159,7 +174,7 @@ export const CharacterBuilderStateSchema = z.object({
   schemaVersion: z.literal(1),
   ruleset: z.literal("dnd5e-2014"),
   packageVersion: z.literal(1),
-  classKey: z.enum(["fighter", "wizard", "warlock", "cleric", "rogue", "barbarian", "bard", "druid", "ranger"]),
+  classKey: z.enum(["fighter", "wizard", "warlock", "cleric", "rogue", "barbarian", "bard", "druid", "ranger", "sorcerer", "monk", "paladin"]),
   creationOperationId: StableId,
   creation: FighterCreationSchema,
   levels: z.array(FighterLevelChoiceSchema).max(19),
@@ -168,11 +183,11 @@ export const CharacterBuilderStateSchema = z.object({
   if (state.creation.classKey !== state.classKey) context.addIssue({ code: "custom", message: "La clase del origen no coincide con el historial.", path: ["creation", "classKey"] });
   const operations = new Set([state.creationOperationId]);
   const hasChoices = (value: Record<string,unknown>) => Object.values(value).some((entry) => Array.isArray(entry) ? entry.length > 0 : entry !== null && entry !== "" && entry !== false);
-  for (const key of ["wizard","warlock","cleric","rogue","barbarian","bard","druid","ranger"] as const) if (key !== state.classKey && hasChoices(state.creation[key])) context.addIssue({ code: "custom",message: "Hay elecciones de otra clase en la creación.",path: ["creation",key] });
+  for (const key of ["wizard","warlock","cleric","rogue","barbarian","bard","druid","ranger","sorcerer","monk","paladin"] as const) if (key !== state.classKey && hasChoices(state.creation[key])) context.addIssue({ code: "custom",message: "Hay elecciones de otra clase en la creación.",path: ["creation",key] });
   state.levels.forEach((step, index) => {
     if (step.level !== index + 2 || operations.has(step.operationId)) context.addIssue({ code: "custom", message: "Historial de niveles inválido o duplicado.", path: ["levels", index] });
     operations.add(step.operationId);
-    for (const key of ["wizard","warlock","cleric","rogue","barbarian","bard","druid","ranger"] as const) if (key !== state.classKey && hasChoices(step[key])) context.addIssue({ code: "custom",message: "Este nivel contiene elecciones de otra clase.",path: ["levels",index,key] });
+    for (const key of ["wizard","warlock","cleric","rogue","barbarian","bard","druid","ranger","sorcerer","monk","paladin"] as const) if (key !== state.classKey && hasChoices(step[key])) context.addIssue({ code: "custom",message: "Este nivel contiene elecciones de otra clase.",path: ["levels",index,key] });
     if (state.classKey !== "fighter" && hasChoices(step.xanathar)) context.addIssue({ code: "custom",message: "Las elecciones de arquetipo marcial requieren Guerrero.",path: ["levels",index,"xanathar"] });
   });
 });

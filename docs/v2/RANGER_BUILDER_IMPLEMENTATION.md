@@ -39,7 +39,7 @@ La iniciativa del Acechador suma SAB. El panel contextual duplica la competencia
 
 Los rasgos completos quedan en la ficha. Los paneles ofrecen tiradas de daño condicional y consumo de recursos; objetivos, alcance, acción/reacción, límites por turno, ataques adicionales, resistencia, oscuridad, camuflaje y efectos sobre terceros se resuelven en mesa. El compañero no crea una ficha de criatura ni turnos automáticos en TaleSpire. Sus demás atributos, sentidos, movimiento, ataques alternativos y rasgos se consultan en el bloque y pueden anotarse en su perfil. Compartir Conjuros no aplica efectos automáticamente a otra ficha.
 
-No incluye multiclase, adopción de fichas manuales, Tasha, SCAG, Explorador revisado de Unearthed Arcana ni reglas 2024. Restan Hechicero, Monje y Paladín.
+No incluye multiclase, adopción de fichas manuales, Tasha, SCAG, Explorador revisado de Unearthed Arcana ni reglas 2024. [Hechicero](SORCERER_BUILDER_IMPLEMENTATION.md) se incorporó como décima clase. Restan Monje y Paladín.
 
 ## Fuentes y validación
 

@@ -3,6 +3,23 @@ import type { TraitDefinition } from "./builder-traits";
 import { defaultFighterCreation } from "./fighter-builder-catalog";
 import type { CharacterV2 } from "./character-v2";
 import type { CharacterSpellV2 } from "./character-spell-model";
+import type { WizardRuntime } from "./wizard-model";
+import { PHB_SPELLS } from "./phb-spells";
+
+/** Per-character access does not change the shared PHB spell lists. */
+export function wizardBookDefinition(key: string, copied: WizardRuntime["copied"] = []) {
+  return copied.find((copy) => copy.key === key)?.definition ?? PHB_SPELLS[key];
+}
+export function wizardCopyAccess(copy: WizardRuntime["copied"][number]): boolean {
+  const definition = copy.definition ?? PHB_SPELLS[copy.key];
+  return !!definition && (copy.wizardAccess === "campaign" ? !!copy.definition : definition.classes.includes("wizard"));
+}
+
+export function wizardCopyDescription(copy: WizardRuntime["copied"][number]): string {
+  const origin = copy.source === "external" ? "Libro ajeno" : copy.source === "own" ? "Libro propio" : copy.source === "scroll" ? "Pergamino" : "Copia al libro";
+  const access = copy.wizardAccess === "campaign" ? " · contenido de campaña" : "";
+  return `${origin}${access} · ${copy.historical ? "registro histórico; coste y tiempo anteriores no registrados" : `${copy.gold} po · ${copy.hours} horas`}`;
+}
 
 export const WIZARD_SCHOOLS: Record<WizardSchool, string> = { abjuration: "Abjuración", conjuration: "Conjuración", divination: "Adivinación", enchantment: "Encantamiento", evocation: "Evocación", illusion: "Ilusión", necromancy: "Nigromancia", transmutation: "Transmutación", "war-magic": "Magia de Guerra (Xanathar)" };
 export function wizardTraditionName(school: WizardSchool | null) { return school ? school === "war-magic" ? WIZARD_SCHOOLS[school] : `Escuela de ${WIZARD_SCHOOLS[school]}` : ""; }

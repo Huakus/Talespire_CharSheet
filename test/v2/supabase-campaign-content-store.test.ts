@@ -69,6 +69,25 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
 }
 
 describe("Supabase campaign content store", () => {
+  it("keeps one source tag when saving a curated spell without reintroducing language tags",async()=>{
+    const remote=fakeClient([]),store=new SupabaseCampaignContentStore(remote.client,campaignId);
+    await store.saveSpell({ ...normalizeSpellDefinition({ name: "Conjuro de prueba",level: 1 }),catalog: { contentKey: "official:spell:es:2014:test",origin: "official",tags: ["manual_jugador"],revision: 0 } });
+    expect(remote.saves[0]?.tags).toEqual(["manual_jugador"]);
+    expect(remote.saves[0]?.payload).toMatchObject({ language: "es",year: "2014" });
+  });
+  it("loads old snapshots verbatim even when their legacy key and text are English",async()=>{
+    const remote=fakeClient([entry({ kind: "spell",contentKey: "old:spell:eng:historical",name: "Phantasmal Force",origin: "imported",tags: ["old"],payload: { name: "Phantasmal Force",level: 2,year: "2024",desc: "Original",language: "en" } })]);
+    expect((await new SupabaseCampaignContentStore(remote.client,campaignId).load()).spells[0]).toMatchObject({ name: "Phantasmal Force",year: "2024",description: "Original",catalog: { tags: ["old"] } });
+  });
+  it("does not delete a retained version when the active definition has the same name",async()=>{
+    const remote=fakeClient([
+      entry({ kind: "spell",contentKey: "old:spell:first",name: "Luz",origin: "imported",tags: ["old"],payload: { name: "Luz",level: 0 } }),
+      entry({ kind: "spell",contentKey: "official:spell:es:2014:light",name: "Luz",tags: ["manual_jugador"],payload: { name: "Luz",level: 0,language: "es" } }),
+    ]);
+    await new SupabaseCampaignContentStore(remote.client,campaignId).deleteSpell("Luz");
+    expect(remote.deletes[0]?.contentKey).toBe("official:spell:es:2014:light");
+    expect(remote.current().some((r)=>r.tags.includes("old"))).toBe(true);
+  });
   it("captures the catalog the client loaded without refreshing or replacing it after cache invalidation", async () => {
     const savedEntry = entry({ kind: 'spell', contentKey: 'spell:test', name: 'Test', payload: { name: 'Test', level: 0 } });
     const fake = fakeClient([savedEntry]);

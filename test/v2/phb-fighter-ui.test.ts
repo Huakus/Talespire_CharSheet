@@ -130,7 +130,8 @@ describe("PHB fighter tutorial", () => {
     const racial = character.spellcasting.spells.find((spell) => spell.name === "Reprensión infernal")!;
     const arcane = character.spellcasting.spells.find((spell) => spell.casting?.source === "builder:eldritch-knight" && spell.level === 1 && spell.definition?.ritual)!;
     const card = (spellId: string) => root.querySelector<HTMLElement>(`[data-spell-id="${spellId}"]`)!;
-    expect(card(racial.id).textContent).toContain("Magia racial · Carisma");
+    expect(card(racial.id).querySelector('[data-spell-casting="source"]')!.textContent).toBe("Magia racial");
+    expect(card(racial.id).querySelector('[data-spell-casting="ability"]')!.textContent).toBe("CAR");
     expect(card(racial.id).querySelector('[data-spell-action="prepare"]')).toBeNull();
     expect(card(arcane.id).querySelector('option[value="ritual"]')).toBeNull();
     expect(card(arcane.id).querySelector<HTMLButtonElement>('[data-spell-action="cast"]')!.disabled).toBe(false);

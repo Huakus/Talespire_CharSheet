@@ -1,6 +1,7 @@
+import type { SorcererCastOptions } from "./sorcerer-model";
 import { CharacterV2Schema, IsoTimestampSchema, StableIdSchema, type CharacterV2 } from "./character-v2";
 import { WizardActionSchema, type WizardAction } from "./wizard-model";
-import { wizardSchool, WIZARD_SCHOOLS, WIZARD_SLOTS, wizardSpellSource } from "./wizard-catalog";
+import { wizardSchool, WIZARD_SCHOOLS, WIZARD_SLOTS, wizardSpellSource, wizardBookDefinition, wizardCopyAccess } from "./wizard-catalog";
 import { PHB_SPELLS } from "./phb-spells";
 import { applyWizardBenefits, wizardPreparationLimit, wizardSignature } from "./wizard-builder";
 import { abilityModifier, projectAbilityScore, projectUpdatedBuilderSpeed } from "./character-projection";
@@ -28,14 +29,15 @@ function pay(character: CharacterV2, gold: number) {
   character.currency = { copper: remaining%10, silver: Math.floor(remaining%100/10), electrum: 0, gold: Math.floor(remaining/100), platinum: 0 };
 }
 export function wizardCopyCost(character: CharacterV2, key: string, source: "external" | "own" | "scroll") {
-  const spell = PHB_SPELLS[key], school = wizardSchool(character.builder!);
-  if (!spell || spell.level < 1 || !spell.classes.includes("wizard") || spell.level > WIZARD_SLOTS[character.identity.level]!.length) throw new Error("Solo podés copiar conjuros de mago de un nivel que puedas preparar.");
+  const spell = wizardBookDefinition(key,character.spellcasting.wizard?.copied), school = wizardSchool(character.builder!);
+  const priorCopy = character.spellcasting.wizard?.copied.find((copy) => copy.key === key);
+  if (!spell || spell.level < 1 || !(priorCopy ? wizardCopyAccess(priorCopy) : spell.classes.includes("wizard")) || spell.level > WIZARD_SLOTS[character.identity.level]!.length) throw new Error("Solo podés copiar conjuros de mago de un nivel que puedas preparar.");
   const half = school && spell.school === WIZARD_SCHOOLS[school] ? .5 : 1;
   return { gold: spell.level * (source === "own" ? 10 : 50) * half, hours: spell.level * (source === "own" ? 1 : 2) * half };
 }
 function validateMastery(character: CharacterV2, keys: string[]) {
   const r = character.spellcasting.wizard!;
-  if (character.identity.level < 18 || !r.bookAvailable || keys.length !== 2 || keys.some((key,i) => !r.book.includes(key) || PHB_SPELLS[key]?.level !== i+1)) throw new Error("Elegí Maestría de niveles 1 y 2 entre los conjuros del libro disponible; requiere Mago 18.");
+  if (character.identity.level < 18 || !r.bookAvailable || keys.length !== 2 || keys.some((key,i) => !r.book.includes(key) || wizardBookDefinition(key,r.copied)?.level !== i+1)) throw new Error("Elegí Maestría de niveles 1 y 2 entre los conjuros del libro disponible; requiere Mago 18.");
 }
 export async function applyWizardAction(input: CharacterV2, actionInput: WizardAction, options: { operationId: string; expectedRevision: number; updatedAt: string }): Promise<CharacterV2> {
   let character = CharacterV2Schema.parse(input);
@@ -69,7 +71,8 @@ export async function applyWizardAction(input: CharacterV2, actionInput: WizardA
       if (action.source === "own" && !runtime.book.includes(action.key) && !existing?.prepared && !ownText) throw new Error("La notación propia requiere una copia propia disponible, o reconstruir un conjuro preparado de memoria.");
       const cost = wizardCopyCost(character,action.key,action.source);
       pay(character,cost.gold);
-      runtime.copied.push({ operationId,key: action.key,level,gold: cost.gold,hours: cost.hours }); runtime.book.push(action.key);
+      const previousCopy = runtime.copied.find((copy) => copy.key === action.key);
+      runtime.copied.push({ operationId,key: action.key,level,gold: cost.gold,hours: cost.hours,source: action.source,historical: false,definition: previousCopy?.definition ?? null,wizardAccess: previousCopy?.wizardAccess ?? "standard" }); runtime.book.push(action.key);
       const previouslyPrepared = new Set(character.spellcasting.spells.filter((s) => s.prepared).map((s) => s.id));
       character = await applyWizardBenefits(character,character);
       character.spellcasting.spells.forEach((spell) => { if (spell.casting?.kind === "wizard") spell.prepared = spell.level === 0 || previouslyPrepared.has(spell.id) || wizardSignature(character.builder!).includes(spell.casting.key); });
@@ -145,7 +148,7 @@ export async function applyWizardAction(input: CharacterV2, actionInput: WizardA
   return CharacterV2Schema.parse(character);
 }
 
-export interface WizardCastOptions { mode?: "slot" | "ritual" | "mastery" | "signature" | "shapechanger" | undefined; recoverSlotLevel?: number | undefined; createWard?: boolean | undefined; overchannel?: boolean | undefined }
+export interface WizardCastOptions extends SorcererCastOptions { mode?: "slot" | "ritual" | "mastery" | "signature" | "shapechanger" | "shadow-darkness" | `ki-${number}` | undefined; recoverSlotLevel?: number | undefined; createWard?: boolean | undefined; overchannel?: boolean | undefined }
 export function canCastWithEquippedArmor(character: CharacterV2) {
   const known = character.proficiencies.armor.map((s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase());
   return character.inventory.filter((i) => i.equipped && i.armor).every((item) => {
@@ -158,7 +161,7 @@ export function prepareWizardCast(character: CharacterV2, spell: CharacterSpellV
   if (character.builder?.classKey !== "wizard") { if (options.mode && options.mode !== "slot") throw new Error("Este modo de lanzamiento requiere Mago."); return false; }
   if (!canCastWithEquippedArmor(character)) throw new Error("No podés lanzar con armadura o escudo sin competencia.");
   const mode = options.mode ?? "slot", runtime = character.spellcasting.wizard!, school = wizardSchool(character.builder), isWizardSpell = spell.casting?.kind === "wizard", key = spell.casting?.key ?? "";
-  const definition = wizardSpellSource(character,spell) ? PHB_SPELLS[key] : spell.definition;
+  const definition = wizardSpellSource(character,spell) ? wizardBookDefinition(key,runtime.copied) : spell.definition;
   if (!definition) throw new Error("El conjuro no tiene definición válida.");
   if (definition.concentration) runtime.concentrationSchool = definition.school;
   let free = spell.casting?.kind === "ritual" || spell.casting?.kind === "innate";
@@ -172,7 +175,7 @@ export function prepareWizardCast(character: CharacterV2, spell: CharacterSpellV
     free = true;
   } else if (mode === "signature") {
     if (!wizardSignature(character.builder).includes(key) || slot !== 3) throw new Error("Elegí uno de tus conjuros característicos a nivel 3.");
-    useFeature(character,`Conjuro característico: ${PHB_SPELLS[key]!.name}`); free = true;
+    useFeature(character,`Conjuro característico: ${wizardBookDefinition(key,runtime.copied)!.name}`); free = true;
   } else if (mode === "shapechanger") {
     schoolRequired(character,"transmutation",10);
     if (key !== "polymorph" || slot !== 4 || !spell.prepared) throw new Error("Cambiaformas requiere Polimorfar preparado y solo te transforma a vos en bestia de VD 1 o menor.");

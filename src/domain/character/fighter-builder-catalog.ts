@@ -155,4 +155,5 @@ export function defaultFighterCreation(name = ""): FighterCreation {
   return { ...creation, name };
 }
 
-export function builderGoldDice(classKey: FighterCreation["classKey"]) { return ["barbarian","druid"].includes(classKey) ? 2 : ["fighter","cleric","bard","ranger"].includes(classKey) ? 5 : 4; }
+export const builderGoldMultiplier = (key: string) => key === "monk" ? 1 : 10;
+export function builderGoldDice(classKey: FighterCreation["classKey"]) { return classKey === "sorcerer" ? 3 : ["barbarian","druid"].includes(classKey) ? 2 : ["fighter","cleric","bard","ranger","monk","paladin"].includes(classKey) ? 5 : 4; }

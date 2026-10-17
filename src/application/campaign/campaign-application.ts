@@ -1,3 +1,8 @@
+import { syncMonkActions } from "../../domain/character/martial-builder";
+import { performMartialAction,martialRuntime,syncMartialEffects } from "../../domain/character/martial-play";
+import type { MartialAction } from "../../domain/character/martial-model";
+import { performSorcererAction } from "../../domain/character/sorcerer-play";
+import type { SorcererAction } from "../../domain/character/sorcerer-model";
 import { performRangerAction } from "../../domain/character/ranger-play";
 import type { RangerAction } from "../../domain/character/ranger-model";
 import { performDruidAction } from "../../domain/character/druid-play";
@@ -1025,6 +1030,7 @@ export class CampaignApplication {
     const concentrationConditionId = await createRandomId("cnd");
     return this.applyCharacterMutation(command, (character, updatedAt) =>
       castCharacterSpell(character, command.spellId, command.slotLevel, {
+        metamagic: command.metamagic,metamagicConfirmed: command.metamagicConfirmed,twinnedEligible: command.twinnedEligible,elementalResistance: command.elementalResistance,shadowDarkness: command.shadowDarkness,
         mode: command.mode, recoverSlotLevel: command.recoverSlotLevel, createWard: command.createWard, overchannel: command.overchannel,
         expectedRevision: command.expectedCharacterRevision,
         updatedAt,
@@ -1106,6 +1112,29 @@ export class CampaignApplication {
     if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
     const updatedAt = command.updatedAt ?? new Date().toISOString();
     const updated = await performBardAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+
+  async martialAction(command: CharacterContentCommandBase & { operationId: string; action: MartialAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = martialRuntime(character)?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performMartialAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
+  }
+  async sorcererAction(command: CharacterContentCommandBase & { operationId: string; action: SorcererAction }): Promise<CampaignSnapshot> {
+    const current = await this.repository.load();
+    if (!current) throw new CampaignNotFoundError();
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    const retry = character.spellcasting.sorcerer?.actions.some((a) => a.operationId === command.operationId);
+    if (!retry) this.assertCurrentChecksum(current,command.expectedCampaignChecksum);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const updated = await performSorcererAction(character,command.operationId,command.action,{ expectedRevision: command.expectedCharacterRevision, updatedAt });
     return retry ? current : this.persistUpdatedCharacter(current,updated,current.checksum,updatedAt);
   }
 
@@ -1381,6 +1410,8 @@ export class CampaignApplication {
     const characters = { ...current.campaign.characters };
     for (const character of charactersToUpdate) {
       const previous = current.campaign.characters[character.id];
+      syncMartialEffects(character);
+      if (character.builder?.classKey === "monk") await syncMonkActions(character,previous ?? null);
       // Compare results instead of guessing which item fields affect AC. This covers
       // Dexterity, removed bonuses, and consumed or transferred items as well.
       characters[character.id] = previous &&

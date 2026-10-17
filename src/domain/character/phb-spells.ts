@@ -37,5 +37,9 @@ for (const [key,translation] of Object.entries(spanish)) if (PHB_SPELLS[key]) PH
 export const XANATHAR_SPELL_KEYS = new Set(xanathar.map((spell) => spell.key));
 for (const { key,...definition } of xanathar) PHB_SPELLS[key] = SpellDefinitionSchema.parse(definition);
 correct2014SpellText(PHB_SPELLS);
+for (const [key, spell] of Object.entries(PHB_SPELLS)) {
+  const source = XANATHAR_SPELL_KEYS.has(key) ? "xanathar" : "manual_jugador";
+  spell.catalog = { contentKey: `official:spell:es:2014:${key}`, origin: "official", tags: [source], revision: 0 };
+}
 export function classSpells(classKey: string, level: number, maximumLevel = level): string[] { return Object.keys(PHB_SPELLS).filter((key) => { const spell = PHB_SPELLS[key]!; return spell.classes.includes(classKey) && spell.level >= level && spell.level <= maximumLevel; }).sort((a,b) => PHB_SPELLS[a]!.name.localeCompare(PHB_SPELLS[b]!.name,"es")); }
 export function spellAbility(classKey: string): "intelligence" | "wisdom" | "charisma" { return classKey === "wizard" ? "intelligence" : ["cleric", "druid"].includes(classKey) ? "wisdom" : "charisma"; }

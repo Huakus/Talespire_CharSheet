@@ -1072,6 +1072,14 @@ button[type="submit"], .secondary-button { padding: 6px 9px; font-size: .72rem; 
 .spell-title { display: grid; justify-items: start; min-width: 0; }
 .spell-meta-line, .spell-name-line { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; min-width: 0; }
 .spell-meta-line .card-kicker { margin: 0; }
+.spell-editor-meta { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.spell-editor-meta .cantrip-label { margin-top: 0; }
+[data-spell-casting] { white-space: nowrap; }
+.spell-personal-filter > div { grid-template-columns: 1fr; }
+.spell-personal-filter > div button { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.spell-personal-filter > div button strong { font-size: .6rem; color: var(--ui-text-muted); }
+.property-filter:has(.spell-personal-filter) { grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); }
+.spell-filter-current { display: block; max-width: 120px; overflow: hidden; text-overflow: ellipsis; font-size: .58rem; font-weight: 500; }
 .school-badge, .damage-badge { padding: 0; color: var(--semantic-tone, var(--ui-item-other)); background: transparent; border: 0; border-radius: 0; font-size: .64rem; font-style: normal; font-weight: 700; line-height: 1; }
 [data-school-tone="abjuration"] { --semantic-tone: var(--ui-school-abjuration); }
 [data-school-tone="conjuration"] { --semantic-tone: var(--ui-school-conjuration); }

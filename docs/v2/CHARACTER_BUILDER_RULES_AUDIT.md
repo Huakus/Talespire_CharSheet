@@ -1,6 +1,8 @@
 # Auditoría de reglas del tutorial · Guerrero 2014
 
-> Estado actual al 14/10/2026: nueve clases con Manual 2014 y Xanathar.
+> Estado actual al 16/10/2026: doce clases con Manual 2014 y Xanathar.
+> Se completaron [Monje y Paladín](MONK_PALADIN_IMPLEMENTATION.md), con seis tradiciones y cinco juramentos.
+> Se agregó [Hechicero](SORCERER_BUILDER_IMPLEMENTATION.md), con cinco orígenes y las ocho metamagias.
 > Se agregó [Explorador](RANGER_BUILDER_IMPLEMENTATION.md), con cinco arquetipos y compañero animal.
 > Se agregó [Druida](DRUID_BUILDER_IMPLEMENTATION.md), con cuatro círculos y ocho terrenos de Tierra.
 > Se agregó [Bardo](BARD_BUILDER_IMPLEMENTATION.md), con sus cinco colegios.

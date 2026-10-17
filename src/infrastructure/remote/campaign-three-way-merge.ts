@@ -175,6 +175,48 @@ export function mergeCampaignChanges(
       const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
       if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.bard.actions`] };
     }
+    if (previous.builder?.classKey === "paladin") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.paladin?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.paladin.actions`] };
+      // Equipment, resources and recovery remain atomic with feature use and casting.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,paladin: c.spellcasting.paladin,slots: c.spellcasting.slots,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        equipment: c.inventory.filter((i) => i.equipped).map((i) => ({ id: i.id,armor: i.armor,weapon: i.weapon,properties: i.properties,bonuses: i.bonuses })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.paladin.actions`] };
+    }
+    if (previous.builder?.classKey === "monk") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.monk?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.monk.actions`] };
+      // Equipment, resources and recovery remain atomic with feature use and casting.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,monk: c.spellcasting.monk,slots: c.spellcasting.slots,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        equipment: c.inventory.filter((i) => i.equipped).map((i) => ({ id: i.id,armor: i.armor,weapon: i.weapon,properties: i.properties,bonuses: i.bonuses })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.monk.actions`] };
+    }
+    if (previous.builder?.classKey === "sorcerer") {
+      const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.sorcerer?.actions ?? []);
+      const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
+      if (a !== initial && b !== initial && a !== b) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.sorcerer.actions`] };
+      // Companion and resource changes and recovery must stay atomic with rests and advancement.
+      const relevantState = (c: typeof previous | undefined) => canonicalJsonStringify((c ? {
+        builder: c.builder,sorcerer: c.spellcasting.sorcerer,slots: c.spellcasting.slots,hp: c.combat.hitPoints,
+        conditions: c.combat.conditions,exhaustion: c.combat.exhaustion,
+        resources: c.traits.flatMap((g) => g.traits).filter((t) => t.uses.maximum > 0 || t.uses.used > 0).map((t) => ({ id: t.id,uses: t.uses })).sort((x,y) => x.id.localeCompare(y.id)),
+        armor: c.inventory.filter((i) => i.equipped && i.category === "armor").map((i) => ({ id: i.id,armor: i.armor })),
+      } : null) as unknown as JsonValue);
+      const baseState = relevantState(previous), localState = relevantState(local.characters[id]), remoteState = relevantState(remote.characters[id]);
+      if (localState !== remoteState && (a !== initial && remoteState !== baseState || b !== initial && localState !== baseState)) return { campaign: null,conflictPaths: [`characters.${id}.spellcasting.sorcerer.actions`] };
+    }
     if (previous.builder?.classKey === "ranger") {
       const actions = (character: typeof previous | undefined) => JSON.stringify(character?.spellcasting.ranger?.actions ?? []);
       const initial = actions(previous), a = actions(local.characters[id]), b = actions(remote.characters[id]);
