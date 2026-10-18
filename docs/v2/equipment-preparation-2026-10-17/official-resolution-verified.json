@@ -1,0 +1,43 @@
+{
+  "revision": 1285,
+  "retiredUnowned": 15,
+  "retiredPayloadsPreserved": true,
+  "officialUpdated": 2,
+  "concreteBelts": 6,
+  "activeNormalized": 836,
+  "remaining": [
+    {
+      "key": "official:equipment:es:e6ee8011b040eaf1b2afa84a",
+      "name": "Amuleto del Explorador"
+    },
+    {
+      "key": "official:equipment:es:093e25cc68fc731ffea7ad42",
+      "name": "Armadura Mortis"
+    },
+    {
+      "key": "imported:equipment:legacy:9e036c804481226114e6c22c",
+      "name": "Cristal Carmsí"
+    },
+    {
+      "key": "official:equipment:es:3b388b3c27ba18c34a4b26e6",
+      "name": "Daga que regresa"
+    },
+    {
+      "key": "imported:equipment:legacy:f9a55f61d3ecdfdc16848447",
+      "name": "Núcleo Luciente"
+    },
+    {
+      "key": "official:equipment:es:d691c1d7187e8dbbc9c58d0e",
+      "name": "Túnica del Paso de Invierno"
+    },
+    {
+      "key": "imported:equipment:legacy:cbefe528bbe7f909a82dcbc9",
+      "name": "Varita de molestar"
+    },
+    {
+      "key": "official:equipment:es:b3b525789bef0a0562bffe54",
+      "name": "Varita del fastidio"
+    }
+  ],
+  "publicationMatchesDatabase": true
+}

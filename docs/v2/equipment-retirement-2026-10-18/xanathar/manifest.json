@@ -1,0 +1,761 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1293,
+  "archiveSha256": "79be78871c3de99ce8d53d5fe38e0cae15308e85d6edfd6355a4393ab330132b",
+  "rows": [
+    {
+      "key": "official:equipment:eng:033fa7636c2e7b0c961d04cd",
+      "name": "Clockwork Amulet",
+      "sha256": "516471baa687283733a337040f655c375f299419625c0fdc11b685bd4b390292",
+      "targetKeys": [
+        "official:equipment:es:57eba494f4a7db5a84fb0b16"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "clockwork-amulet",
+        "page": 141,
+        "sourceLines": 9,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:05388b17c0a180c60a8a2f6d",
+      "name": "Pipe of Smoke Monsters",
+      "sha256": "7c8cabfa12a42b16fa5c4211e31135eca1eff1f035f103f9c74b327a3e1ceef7",
+      "targetKeys": [
+        "official:equipment:es:4c6e0b1e43293b4a31cd9aeb"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "pipe-of-smoke-monsters",
+        "page": 143,
+        "sourceLines": 6,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:119bcaf874950d0cf369e6c1",
+      "name": "Ersatz Eye",
+      "sha256": "840852e71d967ad98d90cf6c8a53892cad7265b74c8ee2f1c852b15607cd0a28",
+      "targetKeys": [
+        "official:equipment:es:0d2fe70e110b7c482fd62e4f"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "ersatz-eye",
+        "page": 143,
+        "sourceLines": 4,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:1460f3c3bf3c64645fdb0934",
+      "name": "Instrument of Scribing",
+      "sha256": "a4dfe35b22f912e0652c0ad04c245a3d5622e3160f75bcbea0f642f8cbff39c1",
+      "targetKeys": [
+        "official:equipment:es:9f9e914b739d906d64d2c25c"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "instrument-of-scribing",
+        "page": 142,
+        "sourceLines": 12,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:14d236144d34ca5fc5f76e9d",
+      "name": "Rope of Mending",
+      "sha256": "db354ac06cd6d49feba0b28c4602d153a670af0d03e7fbeb42e93313a2c0f8e1",
+      "targetKeys": [
+        "official:equipment:es:7510516ec155c655e2fab8df"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "rope-of-mending",
+        "page": 142,
+        "sourceLines": 7,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:15816b5e0548901c28d85e6e",
+      "name": "Hat of Vermin",
+      "sha256": "60c3e0af0715bd85114d115c798eeaa9fc88880b770f16b5ab58369def5a364d",
+      "targetKeys": [
+        "official:equipment:es:69e51880b6f94b751c871ab7"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "hat-of-vermin",
+        "page": 143,
+        "sourceLines": 12,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:1b51382ab94ca48279fea8ff",
+      "name": "Boots of False Tracks",
+      "sha256": "6f8c16c8c10555e218510f868909ad5dd41451965d202f401b014058e574a332",
+      "targetKeys": [
+        "official:equipment:es:eb3fd646d5b376512553d6e3"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "boots-of-false-tracks",
+        "page": 141,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:1ebe0f8c2dfe9ceea9645d55",
+      "name": "Enduring Spellbook",
+      "sha256": "259652b52310c7dcfb6cdb297938568d5a896690bd0a91d7cf93deeba05a73d0",
+      "targetKeys": [
+        "official:equipment:es:8da11044f966512d6addc01a"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "enduring-spellbook",
+        "page": 143,
+        "sourceLines": 4,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:366bf283e43ec2a84c18ef20",
+      "name": "Pole of Angling",
+      "sha256": "8f3c05dc05a36d059c2b5198638622982a4030313cdd6b7ecc3084f85ffa0c33",
+      "targetKeys": [
+        "official:equipment:es:b9adb0010ed28070310a84af"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "pole-of-angling",
+        "page": 144,
+        "sourceLines": 5,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:36b9d2abaeb75bfaa0dc6c64",
+      "name": "Cloak of Billowing",
+      "sha256": "da8aece5f69d8b9d7d3832b4f4831ff5cd655ed5fb37bf5d36e093f0aacd9383",
+      "targetKeys": [
+        "official:equipment:es:d018fb138ed5d52f98d1bf5c"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "cloak-of-billowing",
+        "page": 141,
+        "sourceLines": 2,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:398dea4f70793b3895b1f221",
+      "name": "Staff of Adornment",
+      "sha256": "3a13a8fb8ba4d102b922fb52717046f7df56a1437577ca232cb85c326e154322",
+      "targetKeys": [
+        "official:equipment:es:4a1fb288fa56b71185b0637c"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "staff-of-adornment",
+        "page": 141,
+        "sourceLines": 9,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:422e6b3ccccad9923d432c06",
+      "name": "Unbreakable Arrow",
+      "sha256": "3fbbe06ffd294722f4d56dc6ddebcd94b9cff678fd5b9514e5db4b9261a1a9cf",
+      "targetKeys": [
+        "official:equipment:es:8a04293239c4fc5646d79a47"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "unbreakable-arrow",
+        "page": 142,
+        "sourceLines": 2,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:44be6b32839067d552f1e62a",
+      "name": "Horn of Silent Alarm",
+      "sha256": "c77296eb873f9ad6400014ffe185fee11525ef503e1e345a278a95020e8d7204",
+      "targetKeys": [
+        "official:equipment:es:315aef2f4b81c2c96ad75ba1"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "horn-of-silent-alarm",
+        "page": 142,
+        "sourceLines": 6,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:45d88aed78da90a2e8e684f5",
+      "name": "Wand of Scowls",
+      "sha256": "b709c77250c637e6891119276ceffdf44d4f77800937f1997ca8fb0967a6dded",
+      "targetKeys": [
+        "official:equipment:es:59e2d70bb33932f24e564bcb"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "wand-of-scowls",
+        "page": 144,
+        "sourceLines": 9,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:46b93afb4134d78d55a96ba9",
+      "name": "Hat of Wizardry",
+      "sha256": "3eb2d6459916568677345186a41faf6f56b8de79ea27c9bd4d4a992b08fd0a27",
+      "targetKeys": [
+        "official:equipment:es:4e2108321d7bdfa345a3b532"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "hat-of-wizardry",
+        "page": 144,
+        "sourceLines": 13,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:47b01af66af2b83aeb0fd866",
+      "name": "Pole of Collapsing",
+      "sha256": "6abfe0a536ca3ee7d00e8536bf029fda4e0c07f39c2fd9a0bdbbbe3416b5517e",
+      "targetKeys": [
+        "official:equipment:es:676eb827a4ce1e8dd46472c9"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "pole-of-collapsing",
+        "page": 144,
+        "sourceLines": 8,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:4f4b0f7c8689a4ae7e6426af",
+      "name": "Ruby of the War Mage",
+      "sha256": "d8759fa724860b526ed45dd9726a64d3cc9b137040cd104b6f04c15d80a5f140",
+      "targetKeys": [
+        "official:equipment:es:72f41df7d2a8c10d774fdeb7"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "ruby-of-the-war-mage",
+        "page": 143,
+        "sourceLines": 10,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:5810e1b6f2ffe4a6eb3973b2",
+      "name": "Perfume of Bewitching",
+      "sha256": "cffc3542f1854d8b09acd8195610d5488b7f985cf881fbb2287151e612da4329",
+      "targetKeys": [
+        "official:equipment:es:bc773dbca706b1f84de882b4"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "perfume-of-bewitching",
+        "page": 143,
+        "sourceLines": 7,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:58657cc9c4556202df8bbb14",
+      "name": "Instrument of Illusions",
+      "sha256": "e6881e169e20f67049ee615abbd327d6886a92272613692b608348e3c76a0b9a",
+      "targetKeys": [
+        "official:equipment:es:dbae6806b8de5b9b0dfdfd25"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "instrument-of-illusions",
+        "page": 142,
+        "sourceLines": 8,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:5bf7531b3e9757fe7072e10d",
+      "name": "Dread Helm",
+      "sha256": "5fd39927850917fb704e55c2f7ea9624edcbfef1cfc61163141708674839b90f",
+      "targetKeys": [
+        "official:equipment:es:d4390867d1a2cd62b4f77e38"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "dread-helm",
+        "page": 144,
+        "sourceLines": 12,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:6180b4949775658050c25de2",
+      "name": "Charlatan's Die",
+      "sha256": "a63880a91334c445b7ebc3da4eccabda61fb88e5540345f8acf86969f2570f86",
+      "targetKeys": [
+        "official:equipment:es:d12861b48f075c06d035e577"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "charlatans-die",
+        "page": 142,
+        "sourceLines": 2,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:67457a1e0864800a736c6349",
+      "name": "Wand of Conducting",
+      "sha256": "bf75b028963cfe616584ba40c8a3e2a1b2ac738972e70ae760fdf97d38b16d55",
+      "targetKeys": [
+        "official:equipment:es:279b82b3a270fa682c9c7463"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "wand-of-conducting",
+        "page": 144,
+        "sourceLines": 8,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:68456c94750f45c06d45a023",
+      "name": "Cast-Off Armor",
+      "sha256": "66173f09d19c799f0ab5b630591d456343b5bcf0b77c46f4a4e5b059f777498e",
+      "targetKeys": [
+        "official:equipment:es:2abeb153e2c5efa431eef118"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "cast-off-armor",
+        "page": 141,
+        "sourceLines": 1,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:6b4b6b3704ba3f73ff1a37d2",
+      "name": "Staff of Flowers",
+      "sha256": "c3cf7228feabd00864e9f6b3a654ceb8b77f9150ab5c456509caca0ec3abe2bc",
+      "targetKeys": [
+        "official:equipment:es:3197a4c13048be4426d6c7a7"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "staff-of-flowers",
+        "page": 141,
+        "sourceLines": 11,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:6ed2f9eb2a61d92752788f3a",
+      "name": "Staff of Birdcalls",
+      "sha256": "d5d74c7fca7dcb0c9a03ccf3a143343d29730d7fa343e0d3e7c6754a46ed8081",
+      "targetKeys": [
+        "official:equipment:es:1f8f1eb126121522fd0418c5"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "staff-of-birdcalls",
+        "page": 141,
+        "sourceLines": 12,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:7a45d695aa8d7f419c295432",
+      "name": "Pot of Awakening",
+      "sha256": "f02f0f880648e61b73136819a9264d375114b26ad62f1b96e664aa693f3c8c52",
+      "targetKeys": [
+        "official:equipment:es:0fbd781233c374a307e6151d"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "pot-of-awakening",
+        "page": 143,
+        "sourceLines": 8,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:7ef81be6d7718779d7db9e01",
+      "name": "Heward's Handy Spice Pouch",
+      "sha256": "25ea06042fe3bd3cd6ba29512e0995ceffe6b278417b400f188583a38495569d",
+      "targetKeys": [
+        "official:equipment:es:22ead02982c6736091739550"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "hewards-handy-spice-pouch",
+        "page": 141,
+        "sourceLines": 8,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:8c5b8e34a87a0e3da2ccbc93",
+      "name": "Talking Doll",
+      "sha256": "21b22bae996b1d83a0557e0a834964b645dc0ef3dd317821cbb77ed77148f927",
+      "targetKeys": [
+        "official:equipment:es:5f2f9bceb8c4ef26e9fcf7cb"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "talking-doll",
+        "page": 143,
+        "sourceLines": 10,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:8c85937fb2dfc7049e632847",
+      "name": "Candle of the Deep",
+      "sha256": "b3742401c3db35b884f0f3f63db5fa484cbac0b482bf4b27267474e60af07e0a",
+      "targetKeys": [
+        "official:equipment:es:28fe6370af3b8127478ffa0c"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "candle-of-the-deep",
+        "page": 144,
+        "sourceLines": 2,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:8ec50cc25ce2d5f3fd6bb278",
+      "name": "Veteran's Cane",
+      "sha256": "8be89c54519ae545a6463bb1c5dcfee297249e5c9a641c9bf75dc8af2b6484fe",
+      "targetKeys": [
+        "official:equipment:es:62d361c598b85c5c557afb85"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "veterans-cane",
+        "page": 141,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:968a8a62a2c320cefa972827",
+      "name": "Tankard of Sobriety",
+      "sha256": "169d39ed2e82f0d49a54e233b4819369b053ae17a7d086014f026fa1b83384d7",
+      "targetKeys": [
+        "official:equipment:es:6c63bbeea282e0bbcade0547"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "tankard-of-sobriety",
+        "page": 143,
+        "sourceLines": 5,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:9f8612d150ab5c94f093838b",
+      "name": "Walloping Ammunition",
+      "sha256": "03bbcc1544dfcadb002b01ecd6616508d2716a05484f7419af3eb7a534454b60",
+      "targetKeys": [
+        "official:equipment:es:06b42638a9689434c22bb471"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "walloping-ammunition",
+        "page": 143,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:a3c2d18f8c1b55ab9851688e",
+      "name": "Smoldering Armor",
+      "sha256": "8a37b719e9741e29d476b93e9d06d5ac007be2162de782d099a8b468bff1876b",
+      "targetKeys": [
+        "official:equipment:es:4f71dcffbe96aafbee252bae"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "smoldering-armor",
+        "page": 141,
+        "sourceLines": 2,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:ae7419f38d66ce492f524adb",
+      "name": "Wand of Pyrotechnics",
+      "sha256": "7646b0f3de98a226c93ef0d2600fcf6c6ec722a122f07bcae59344ab5304c04a",
+      "targetKeys": [
+        "official:equipment:es:05455ce74fdcd23b34a0c3c7"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "wand-of-pyrotechnics",
+        "page": 144,
+        "sourceLines": 11,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:afb3a7d60fb20c2c81c0ed37",
+      "name": "Lock of Trickery",
+      "sha256": "52d13f526bdb0d32dafbd38a9fe711626f44793d0da48b5c081b1876e6f0544b",
+      "targetKeys": [
+        "official:equipment:es:12cc18f6cd52f43208e2766e"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "lock-of-trickery",
+        "page": 141,
+        "sourceLines": 5,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:b3099ac6a31d394eb5cb2f88",
+      "name": "Dark Shard Amulet",
+      "sha256": "3f612b1f9adb280243ebb97e1d035cc39ca2b91749f6ab445b3c3e5ca56b94ab",
+      "targetKeys": [
+        "official:equipment:es:963e6e150ffd4c0b17157fe7"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "dark-shard-amulet",
+        "page": 140,
+        "sourceLines": 14,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:b5f188822dd87babd8a83200",
+      "name": "Clothes of Mending",
+      "sha256": "43eb5e359d56ec8dfb36c4047d14977ada83c4d5ac7422b07d1a0fbd282be500",
+      "targetKeys": [
+        "official:equipment:es:3bfaabab18a9dbda489b287c"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "clothes-of-mending",
+        "page": 143,
+        "sourceLines": 4,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:c0fd162a29a95a9f561e287c",
+      "name": "Orb of Direction",
+      "sha256": "59bfef75c090772777b925d7156dbb9d4fb6a35d39fabe6e31caec660bae9818",
+      "targetKeys": [
+        "official:equipment:es:736d97860c48e80efac95ad5"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "orb-of-direction",
+        "page": 143,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:c973e8c4cc59748e9dc50833",
+      "name": "Mystery Key",
+      "sha256": "95a82622fb232357fec290624c072759b405275cba0e854c502d41f680e2a672",
+      "targetKeys": [
+        "official:equipment:es:de82f3e540891c078aa379bc"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "mystery-key",
+        "page": 143,
+        "sourceLines": 4,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:ccc37ce0cc9abc9b7f559c37",
+      "name": "Moon-Touched Sword",
+      "sha256": "ab41fc5ee4a55aaddcc1b32e510f9c9e069c484ce668c7d9554b8bbebf018ef5",
+      "targetKeys": [
+        "official:equipment:es:043f8e0591e572ca18adfcd9"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "moon-touched-sword",
+        "page": 142,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:d0cf095748c4c629a5eee124",
+      "name": "Orb of Time",
+      "sha256": "ddeb8814947b4270f76e157dd357f2ce61ff482e469c0e8929543cf5ce178785",
+      "targetKeys": [
+        "official:equipment:es:51d5bdcc15355bda895cbc86"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "orb-of-time",
+        "page": 143,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:d1bee5453054ee2983dec8cc",
+      "name": "Shield of Expression",
+      "sha256": "715e6eafb3507dfdd1dfbfa2833386ae29dc16337cbd8098ac9ad0559590037e",
+      "targetKeys": [
+        "official:equipment:es:3dd6975494637a4686fd56c6"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "shield-of-expression",
+        "page": 142,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:d3f7ff54c4c86abf31b1a4a6",
+      "name": "Ear Horn of Hearing",
+      "sha256": "61d6ea061c8c05688760cc92a5e3b5b5816e8046ffdfae507627ccea35c83101",
+      "targetKeys": [
+        "official:equipment:es:13846679c7de58e9e7e71b43"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "ear-horn-of-hearing",
+        "page": 142,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:e34bff35befa12c6819d0115",
+      "name": "Gleaming Armor",
+      "sha256": "f1f851b769961f31d102d25a4d91fc8912281801da21180c44a589fd4936a415",
+      "targetKeys": [
+        "official:equipment:es:ad0c7921601d8e090a1a7dc9"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "gleaming-armor",
+        "page": 141,
+        "sourceLines": 1,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:e3ffbcabf8e79085cb43fee0",
+      "name": "Wand of Smiles",
+      "sha256": "3cfea5b1483e0eb29903990de009caa707b9350a5013c6723b7bb7f745a945fd",
+      "targetKeys": [
+        "official:equipment:es:f5a09e6d10357773fe2ecbd8"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "wand-of-smiles",
+        "page": 144,
+        "sourceLines": 9,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:e7cbbe76775e63356b68f413",
+      "name": "Bead of Nourishment",
+      "sha256": "787299134e8599ac9fe5780d6144de551c1a7ce6d0da4440856fe6b7eca141c4",
+      "targetKeys": [
+        "official:equipment:es:ee6f64eed46d5b15567835f7"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "bead-of-nourishment",
+        "page": 141,
+        "sourceLines": 3,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    },
+    {
+      "key": "official:equipment:eng:ec2c8fb5b075775c5c3111b3",
+      "name": "Bead of Refreshment",
+      "sha256": "80703cc0d0ccc74b7f539c9a510aafae0c62a189da6db5d676f145a3c1a51719",
+      "targetKeys": [
+        "official:equipment:es:349dff67424d2297bd82ab61"
+      ],
+      "reason": "La sección del manual de Xanathar aportado está transcrita íntegramente en español, incluida su línea de requisitos, y conserva los datos económicos existentes. Se aplica la preferencia del GM por las reglas de la fuente de 2014 compatible y su autorización para traducción revisada; la acreditación editorial pendiente permanece explícita. Los efectos asistidos y automatizaciones pendientes no se ocultan por retirar el duplicado inglés.",
+      "evidence": {
+        "index": "bead-of-refreshment",
+        "page": 142,
+        "sourceLines": 4,
+        "spanishSource": "Manual de Xanathar aportado por el GM",
+        "translationAccreditation": "Transcripción revisada del documento aportado; no se afirma acreditación editorial oficial independiente."
+      }
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

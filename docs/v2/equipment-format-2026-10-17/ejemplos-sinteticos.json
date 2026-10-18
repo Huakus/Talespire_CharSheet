@@ -1,0 +1,813 @@
+[
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:simple",
+    "revision": 0,
+    "language": "es",
+    "name": "Cuerda de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "adventuring-gear",
+    "subtypes": [],
+    "magical": false,
+    "rarity": "none",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:conditional-weapon",
+    "revision": 0,
+    "language": "es",
+    "name": "Arma condicionada de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "rare",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": {
+      "category": "simple",
+      "meleeReachFeet": 5,
+      "thrown": false,
+      "rangeFeet": null,
+      "attackBonus": 1,
+      "damageBonus": 1,
+      "baseDamage": [
+        {
+          "id": "base",
+          "kind": "damage",
+          "condition": "",
+          "expression": "1d6",
+          "damageType": "piercing",
+          "timing": "base"
+        }
+      ]
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "conditional-damage",
+        "name": "Capacidad de prueba",
+        "activation": "trigger",
+        "trigger": "Al cumplirse la condición de este ejemplo.",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": ""
+        },
+        "target": "portador",
+        "range": "personal",
+        "duration": "instantánea",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "extra",
+            "kind": "damage",
+            "condition": "Solo contra el objetivo indicado.",
+            "expression": "1d4",
+            "damageType": "force",
+            "timing": "on-hit"
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Adaptador pendiente.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "text"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:armor",
+    "revision": 0,
+    "language": "es",
+    "name": "Armadura de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "armor",
+    "subtypes": [],
+    "magical": false,
+    "rarity": "none",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": null,
+    "armor": {
+      "category": "medium",
+      "baseArmorClass": 14,
+      "dexterity": "capped",
+      "dexterityCap": 2,
+      "strengthMinimum": null,
+      "stealthDisadvantage": false,
+      "armorClassBonus": 0
+    },
+    "resources": [],
+    "capabilities": [],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:finite-resource",
+    "revision": 0,
+    "language": "es",
+    "name": "Cristal de usos finitos de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "adventuring-gear",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "reserve",
+        "name": "Reserva",
+        "kind": "finite",
+        "maximum": 3,
+        "unit": "usos",
+        "recovery": {
+          "kind": "none"
+        },
+        "exhaustion": "Se agota la reserva del ejemplo."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "use",
+        "name": "Capacidad de prueba",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": ""
+        },
+        "target": "portador",
+        "range": "personal",
+        "duration": "instantánea",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "reserve",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "effect",
+            "kind": "narrative",
+            "instructions": "Resolver la interacción narrativa indicada.",
+            "condition": ""
+          }
+        ],
+        "execution": {
+          "mode": "narrative",
+          "handler": null,
+          "explanation": "Adjudicación narrativa.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "text"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:spell-item",
+    "revision": 0,
+    "language": "es",
+    "name": "Amuleto de conjuro de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "adventuring-gear",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "rare",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "charges",
+        "name": "Cargas",
+        "kind": "charges",
+        "maximum": 3,
+        "unit": "cargas",
+        "recovery": {
+          "kind": "event",
+          "event": "dawn",
+          "explanation": "Ejemplo de recuperación aleatoria.",
+          "amount": {
+            "kind": "roll",
+            "expression": "1d3"
+          }
+        },
+        "exhaustion": ""
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "cast",
+        "name": "Capacidad de prueba",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": ""
+        },
+        "target": "portador",
+        "range": "personal",
+        "duration": "instantánea",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "charges",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "cast-spell",
+            "kind": "spell",
+            "spellKey": "example:spell",
+            "level": 1,
+            "ability": "intelligence",
+            "saveDc": null,
+            "attackBonus": null,
+            "components": "waived",
+            "explanation": "Ejemplo sintético.",
+            "condition": ""
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Vínculo de ejecución pendiente.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "text"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:spell-storage",
+    "revision": 0,
+    "language": "es",
+    "name": "Almacenamiento de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "adventuring-gear",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "rare",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "capacity",
+        "name": "Capacidad",
+        "kind": "spell-storage",
+        "maximum": 5,
+        "unit": "niveles de conjuro",
+        "recovery": {
+          "kind": "none"
+        },
+        "exhaustion": ""
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "store",
+        "name": "Capacidad de prueba",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": ""
+        },
+        "target": "portador",
+        "range": "personal",
+        "duration": "instantánea",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "storage",
+            "kind": "storage",
+            "resourceId": "capacity",
+            "content": "spells",
+            "explanation": "La copia debe conservar los conjuros y los datos del lanzador original.",
+            "condition": ""
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Almacenamiento pendiente de implementación.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "text"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "example:complex-campaign-item",
+    "revision": 0,
+    "language": "es",
+    "name": "Dispositivo de campaña de prueba",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "test-source",
+        "kind": "campaign",
+        "title": "Ejemplo técnico sintético",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": null,
+        "verified": true
+      }
+    ],
+    "category": "adventuring-gear",
+    "subtypes": [],
+    "magical": false,
+    "rarity": "none",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 1,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "Sin precio definido en este ejemplo."
+    },
+    "description": [
+      {
+        "id": "text",
+        "section": "description",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "type": "paragraph",
+        "text": "  Texto conservado con espacios y saltos.\nSegundo párrafo del ejemplo.  "
+      },
+      {
+        "id": "steps",
+        "type": "list",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "ordered": true,
+        "items": [
+          "Primer paso.",
+          "Segundo paso."
+        ]
+      },
+      {
+        "id": "table",
+        "type": "table",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "test-source"
+        ],
+        "columns": [
+          "Resultado",
+          "Efecto"
+        ],
+        "rows": [
+          [
+            "1",
+            "Resultado narrativo"
+          ],
+          [
+            "2",
+            "Otro resultado"
+          ]
+        ]
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": ""
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "custom",
+        "name": "Capacidad de prueba",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": ""
+        },
+        "target": "portador",
+        "range": "personal",
+        "duration": "instantánea",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "unknown",
+            "kind": "unmodeled",
+            "explanation": "Regla singular que debe recuperarse sin inventar su mecánica.",
+            "original": {
+              "resonances": [
+                "a",
+                "b"
+              ],
+              "specialRule": {
+                "limit": null,
+                "active": false
+              }
+            },
+            "condition": ""
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Pendiente de decisión y representación.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "text"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "archive:synthetic"
+    ],
+    "review": {
+      "identity": false,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Ejemplo del formato; no es un objeto definitivo."
+      ]
+    }
+  }
+]

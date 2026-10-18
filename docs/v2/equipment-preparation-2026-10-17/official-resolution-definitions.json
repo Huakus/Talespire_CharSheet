@@ -1,0 +1,1839 @@
+[
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:8a9a75437af1c1c8f77ef3c5",
+    "revision": 1,
+    "language": "es",
+    "name": "Cinturón de fuerza de gigante de las colinas",
+    "aliases": [
+      "Belt of hill giant strength"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "original:546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 243 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "hill"
+    ],
+    "magical": true,
+    "rarity": "rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "El SRD no fija un precio de venta ni un peso. No convertir un precio heredado de cero en un precio oficial."
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto este cinturón, tu puntuación de Fuerza cambiará a un valor proporcionado por el cinturón. No tendrá ningún efecto si tu Fuerza es igual o superior a la que proporciona el cinturón."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Existen seis variedades de este cinturón, que se corresponden, incluida su rareza, con los seis tipos de gigantes verdaderos. El cinturón de fuerza de gigante de piedra y el cinturón de fuerza de gigante de escarcha poseen apariencias diferentes, pero ambos producen el mismo efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Tipo",
+          "Fuerza",
+          "Rareza"
+        ],
+        "rows": [
+          [
+            "Gigante de las colinas",
+            "21",
+            "Raro"
+          ],
+          [
+            "Gigante de piedra/escarcha",
+            "23",
+            "Muy raro"
+          ],
+          [
+            "Gigante de fuego",
+            "25",
+            "Muy raro"
+          ],
+          [
+            "Gigante de las nubes",
+            "27",
+            "Legendario"
+          ],
+          [
+            "Gigante de las tormentas",
+            "29",
+            "Legendario"
+          ]
+        ]
+      },
+      {
+        "id": "selected-giant",
+        "section": "rules",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Variante de esta ficha: gigante de las colinas. La Fuerza proporcionada es 21; no reduce una puntuación igual o superior."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "giant-strength",
+        "name": "Fuerza 21",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se lleve puesto y esté sintonizado.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "strength-minimum",
+            "condition": "No tiene efecto si la Fuerza del portador ya es igual o superior.",
+            "kind": "bonus",
+            "target": "strength",
+            "operation": "minimum",
+            "value": 21
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Aplica la Fuerza de la variante concreta, sin reducir una puntuación superior.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "selected-giant"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+      "775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+      "8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+      "546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:703f79dcdde75b6b4ba33f5d",
+    "revision": 1,
+    "language": "es",
+    "name": "Cinturón de fuerza de gigante de piedra",
+    "aliases": [
+      "Belt of stone giant strength"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "original:546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 243 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "stone"
+    ],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "El SRD no fija un precio de venta ni un peso. No convertir un precio heredado de cero en un precio oficial."
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto este cinturón, tu puntuación de Fuerza cambiará a un valor proporcionado por el cinturón. No tendrá ningún efecto si tu Fuerza es igual o superior a la que proporciona el cinturón."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Existen seis variedades de este cinturón, que se corresponden, incluida su rareza, con los seis tipos de gigantes verdaderos. El cinturón de fuerza de gigante de piedra y el cinturón de fuerza de gigante de escarcha poseen apariencias diferentes, pero ambos producen el mismo efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Tipo",
+          "Fuerza",
+          "Rareza"
+        ],
+        "rows": [
+          [
+            "Gigante de las colinas",
+            "21",
+            "Raro"
+          ],
+          [
+            "Gigante de piedra/escarcha",
+            "23",
+            "Muy raro"
+          ],
+          [
+            "Gigante de fuego",
+            "25",
+            "Muy raro"
+          ],
+          [
+            "Gigante de las nubes",
+            "27",
+            "Legendario"
+          ],
+          [
+            "Gigante de las tormentas",
+            "29",
+            "Legendario"
+          ]
+        ]
+      },
+      {
+        "id": "selected-giant",
+        "section": "rules",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Variante de esta ficha: gigante de piedra. La Fuerza proporcionada es 23; no reduce una puntuación igual o superior."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "giant-strength",
+        "name": "Fuerza 23",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se lleve puesto y esté sintonizado.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "strength-minimum",
+            "condition": "No tiene efecto si la Fuerza del portador ya es igual o superior.",
+            "kind": "bonus",
+            "target": "strength",
+            "operation": "minimum",
+            "value": 23
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Aplica la Fuerza de la variante concreta, sin reducir una puntuación superior.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "selected-giant"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+      "775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+      "8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+      "546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:22c9edf3abf6378363d33d2d",
+    "revision": 1,
+    "language": "es",
+    "name": "Cinturón de fuerza de gigante de escarcha",
+    "aliases": [
+      "Belt of frost giant strength"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "original:546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 243 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "frost"
+    ],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "El SRD no fija un precio de venta ni un peso. No convertir un precio heredado de cero en un precio oficial."
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto este cinturón, tu puntuación de Fuerza cambiará a un valor proporcionado por el cinturón. No tendrá ningún efecto si tu Fuerza es igual o superior a la que proporciona el cinturón."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Existen seis variedades de este cinturón, que se corresponden, incluida su rareza, con los seis tipos de gigantes verdaderos. El cinturón de fuerza de gigante de piedra y el cinturón de fuerza de gigante de escarcha poseen apariencias diferentes, pero ambos producen el mismo efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Tipo",
+          "Fuerza",
+          "Rareza"
+        ],
+        "rows": [
+          [
+            "Gigante de las colinas",
+            "21",
+            "Raro"
+          ],
+          [
+            "Gigante de piedra/escarcha",
+            "23",
+            "Muy raro"
+          ],
+          [
+            "Gigante de fuego",
+            "25",
+            "Muy raro"
+          ],
+          [
+            "Gigante de las nubes",
+            "27",
+            "Legendario"
+          ],
+          [
+            "Gigante de las tormentas",
+            "29",
+            "Legendario"
+          ]
+        ]
+      },
+      {
+        "id": "selected-giant",
+        "section": "rules",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Variante de esta ficha: gigante de escarcha. La Fuerza proporcionada es 23; no reduce una puntuación igual o superior."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "giant-strength",
+        "name": "Fuerza 23",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se lleve puesto y esté sintonizado.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "strength-minimum",
+            "condition": "No tiene efecto si la Fuerza del portador ya es igual o superior.",
+            "kind": "bonus",
+            "target": "strength",
+            "operation": "minimum",
+            "value": 23
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Aplica la Fuerza de la variante concreta, sin reducir una puntuación superior.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "selected-giant"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+      "775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+      "8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+      "546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:0cf8cee92980c8a5ed1a781b",
+    "revision": 1,
+    "language": "es",
+    "name": "Cinturón de fuerza de gigante de fuego",
+    "aliases": [
+      "Belt of fire giant strength"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "original:546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 243 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "fire"
+    ],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "El SRD no fija un precio de venta ni un peso. No convertir un precio heredado de cero en un precio oficial."
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto este cinturón, tu puntuación de Fuerza cambiará a un valor proporcionado por el cinturón. No tendrá ningún efecto si tu Fuerza es igual o superior a la que proporciona el cinturón."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Existen seis variedades de este cinturón, que se corresponden, incluida su rareza, con los seis tipos de gigantes verdaderos. El cinturón de fuerza de gigante de piedra y el cinturón de fuerza de gigante de escarcha poseen apariencias diferentes, pero ambos producen el mismo efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Tipo",
+          "Fuerza",
+          "Rareza"
+        ],
+        "rows": [
+          [
+            "Gigante de las colinas",
+            "21",
+            "Raro"
+          ],
+          [
+            "Gigante de piedra/escarcha",
+            "23",
+            "Muy raro"
+          ],
+          [
+            "Gigante de fuego",
+            "25",
+            "Muy raro"
+          ],
+          [
+            "Gigante de las nubes",
+            "27",
+            "Legendario"
+          ],
+          [
+            "Gigante de las tormentas",
+            "29",
+            "Legendario"
+          ]
+        ]
+      },
+      {
+        "id": "selected-giant",
+        "section": "rules",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Variante de esta ficha: gigante de fuego. La Fuerza proporcionada es 25; no reduce una puntuación igual o superior."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "giant-strength",
+        "name": "Fuerza 25",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se lleve puesto y esté sintonizado.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "strength-minimum",
+            "condition": "No tiene efecto si la Fuerza del portador ya es igual o superior.",
+            "kind": "bonus",
+            "target": "strength",
+            "operation": "minimum",
+            "value": 25
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Aplica la Fuerza de la variante concreta, sin reducir una puntuación superior.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "selected-giant"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+      "775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+      "8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+      "546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:0c93e794740cce5c109176b1",
+    "revision": 1,
+    "language": "es",
+    "name": "Cinturón de fuerza de gigante de las nubes",
+    "aliases": [
+      "Belt of cloud giant strength"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "original:546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 243 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "cloud"
+    ],
+    "magical": true,
+    "rarity": "legendary",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "El SRD no fija un precio de venta ni un peso. No convertir un precio heredado de cero en un precio oficial."
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto este cinturón, tu puntuación de Fuerza cambiará a un valor proporcionado por el cinturón. No tendrá ningún efecto si tu Fuerza es igual o superior a la que proporciona el cinturón."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Existen seis variedades de este cinturón, que se corresponden, incluida su rareza, con los seis tipos de gigantes verdaderos. El cinturón de fuerza de gigante de piedra y el cinturón de fuerza de gigante de escarcha poseen apariencias diferentes, pero ambos producen el mismo efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Tipo",
+          "Fuerza",
+          "Rareza"
+        ],
+        "rows": [
+          [
+            "Gigante de las colinas",
+            "21",
+            "Raro"
+          ],
+          [
+            "Gigante de piedra/escarcha",
+            "23",
+            "Muy raro"
+          ],
+          [
+            "Gigante de fuego",
+            "25",
+            "Muy raro"
+          ],
+          [
+            "Gigante de las nubes",
+            "27",
+            "Legendario"
+          ],
+          [
+            "Gigante de las tormentas",
+            "29",
+            "Legendario"
+          ]
+        ]
+      },
+      {
+        "id": "selected-giant",
+        "section": "rules",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Variante de esta ficha: gigante de las nubes. La Fuerza proporcionada es 27; no reduce una puntuación igual o superior."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "giant-strength",
+        "name": "Fuerza 27",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se lleve puesto y esté sintonizado.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "strength-minimum",
+            "condition": "No tiene efecto si la Fuerza del portador ya es igual o superior.",
+            "kind": "bonus",
+            "target": "strength",
+            "operation": "minimum",
+            "value": 27
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Aplica la Fuerza de la variante concreta, sin reducir una puntuación superior.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "selected-giant"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+      "775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+      "8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+      "546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:f0dafbf516ee2a10110fa094",
+    "revision": 1,
+    "language": "es",
+    "name": "Cinturón de fuerza de gigante de las tormentas",
+    "aliases": [
+      "Belt of storm giant strength"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+        "kind": "legacy",
+        "title": "Cinturón de Fuerza de Gigante",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:a4bb31770f018b43ba0417a9",
+        "verified": false
+      },
+      {
+        "id": "original:8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "original:546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9",
+        "kind": "legacy",
+        "title": "Belt of Giant Strength",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:a7590a2029da279800f06857",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 243 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "storm"
+    ],
+    "magical": true,
+    "rarity": "legendary",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "El SRD no fija un precio de venta ni un peso. No convertir un precio heredado de cero en un precio oficial."
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto este cinturón, tu puntuación de Fuerza cambiará a un valor proporcionado por el cinturón. No tendrá ningún efecto si tu Fuerza es igual o superior a la que proporciona el cinturón."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Existen seis variedades de este cinturón, que se corresponden, incluida su rareza, con los seis tipos de gigantes verdaderos. El cinturón de fuerza de gigante de piedra y el cinturón de fuerza de gigante de escarcha poseen apariencias diferentes, pero ambos producen el mismo efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Tipo",
+          "Fuerza",
+          "Rareza"
+        ],
+        "rows": [
+          [
+            "Gigante de las colinas",
+            "21",
+            "Raro"
+          ],
+          [
+            "Gigante de piedra/escarcha",
+            "23",
+            "Muy raro"
+          ],
+          [
+            "Gigante de fuego",
+            "25",
+            "Muy raro"
+          ],
+          [
+            "Gigante de las nubes",
+            "27",
+            "Legendario"
+          ],
+          [
+            "Gigante de las tormentas",
+            "29",
+            "Legendario"
+          ]
+        ]
+      },
+      {
+        "id": "selected-giant",
+        "section": "rules",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Variante de esta ficha: gigante de las tormentas. La Fuerza proporcionada es 29; no reduce una puntuación igual o superior."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "giant-strength",
+        "name": "Fuerza 29",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Llevar puesto y estar sintonizado con el cinturón."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se lleve puesto y esté sintonizado.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "strength-minimum",
+            "condition": "No tiene efecto si la Fuerza del portador ya es igual o superior.",
+            "kind": "bonus",
+            "target": "strength",
+            "operation": "minimum",
+            "value": 29
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Aplica la Fuerza de la variante concreta, sin reducir una puntuación superior.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "selected-giant"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f9d6d2e850f69700fc3d91fd1bb747a45e2a247a150a3b8cab6ae4028a8bbe88",
+      "775a9a1ef912b1571d0e2dbe8c0bd432ed1df359ffb5c13839767056e438e3c3",
+      "8ef4af9e12a9973eec86b1ea9ed3962dff93d8dc945e3fd06c1b89ab13fd28fe",
+      "546e39e9b852feb58b9a17bf18d95b3a4e452eab9e3ac2dcb814f71baf7a10d9"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:b2ccc2c141497ce32fa56712",
+    "revision": 1,
+    "language": "es",
+    "name": "Amuleto del devoto +1",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:b3b2943d11204db0ea68a9a9cd8b0c0c06dbfb083fbf60047ffdf7cb1b7258b0",
+        "kind": "legacy",
+        "title": "Amuleto del devoto, +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:b2ccc2c141497ce32fa56712",
+        "verified": false
+      },
+      {
+        "id": "original:2f714589a73163e27a571e343c4646bdc0a533198c52f001df43b689bad8ff3b",
+        "kind": "legacy",
+        "title": "Amuleto del devoto, +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:b2ccc2c141497ce32fa56712",
+        "verified": false
+      },
+      {
+        "id": "original:50d087424d5437966133aec2f7e5ea6a00bb97fa451907966b73a190cb32f897",
+        "kind": "legacy",
+        "title": "Amulet of the Devout, +1",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:6b32a4fa3d2f515d39d94072",
+        "verified": false
+      },
+      {
+        "id": "original:da66685c5511322d6876c1f301e94457ffe1ef8feabe1593bf4b6f19a8b2a128",
+        "kind": "legacy",
+        "title": "Amulet of the Devout, +1",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:6b32a4fa3d2f515d39d94072",
+        "verified": false
+      },
+      {
+        "id": "tasha-official-identification",
+        "kind": "book",
+        "title": "Tasha's Cauldron of Everything (2020) · identificación y beneficios corroborados por D&D Beyond",
+        "language": "en",
+        "rulesEdition": "2014",
+        "locator": "https://www.dndbeyond.com/posts/1243-paladin-201-the-best-magic-items-for-paladins",
+        "verified": true
+      },
+      {
+        "id": "tasha-imported-spanish",
+        "kind": "legacy",
+        "title": "Texto español previamente existente en ECE; cotejo íntegro con el libro pendiente",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "official:equipment:es:b2ccc2c141497ce32fa56712",
+        "verified": false
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "tasha-rule-0",
+        "section": "rules",
+        "provenance": "unreviewed",
+        "sourceIds": [
+          "tasha-imported-spanish",
+          "tasha-official-identification"
+        ],
+        "type": "paragraph",
+        "text": "Este amuleto lleva el símbolo de una deidad. Mientras lleves puesto el símbolo sagrado, obtienes un bonificador de +1 a las tiradas de ataque y a las CD de las tiradas de salvación de tus conjuros."
+      },
+      {
+        "id": "tasha-rule-1",
+        "section": "rules",
+        "provenance": "unreviewed",
+        "sourceIds": [
+          "tasha-imported-spanish",
+          "tasha-official-identification"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves puesto el amuleto, puedes usar Canalizar divinidad sin gastar uno de sus usos normales. Una vez usada esta propiedad, no puede volver a usarse hasta el siguiente amanecer. El amuleto no cambia el tiempo de activación del efecto de Canalizar divinidad que elijas."
+      },
+      {
+        "id": "tasha-rule-2",
+        "section": "rules",
+        "provenance": "unreviewed",
+        "sourceIds": [
+          "tasha-imported-spanish",
+          "tasha-official-identification"
+        ],
+        "type": "paragraph",
+        "text": "Requiere sintonización por un clérigo o paladín."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [
+        {
+          "kind": "class",
+          "keys": [
+            "cleric",
+            "paladin"
+          ],
+          "explanation": "Requiere sintonización por un clérigo o paladín."
+        }
+      ],
+      "presence": "worn",
+      "explanation": "Requiere sintonización por un clérigo o paladín."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "daily-property",
+        "name": "Canalizar divinidad sin gastar un uso",
+        "kind": "uses",
+        "maximum": 1,
+        "unit": "usos",
+        "recovery": {
+          "kind": "event",
+          "event": "dawn",
+          "explanation": "Recupera al amanecer; no al descansar.",
+          "amount": {
+            "kind": "full"
+          }
+        },
+        "exhaustion": "No puede volver a usarse esta propiedad antes del siguiente amanecer."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "spellcasting-bonus",
+        "name": "Bonificación de conjuros +1",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "class",
+              "keys": [
+                "cleric",
+                "paladin"
+              ],
+              "explanation": "Requiere sintonización por un clérigo o paladín."
+            }
+          ],
+          "presence": "worn",
+          "explanation": "Requiere sintonización por un clérigo o paladín."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se cumplan los requisitos del objeto.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "attack-bonus",
+            "condition": "Este amuleto lleva el símbolo de una deidad. Mientras lleves puesto el símbolo sagrado, obtienes un bonificador de +1 a las tiradas de ataque y a las CD de las tiradas de salvación de tus conjuros.",
+            "kind": "bonus",
+            "target": "spell-attack",
+            "operation": "add",
+            "value": 1
+          },
+          {
+            "id": "save-bonus",
+            "condition": "Este amuleto lleva el símbolo de una deidad. Mientras lleves puesto el símbolo sagrado, obtienes un bonificador de +1 a las tiradas de ataque y a las CD de las tiradas de salvación de tus conjuros.",
+            "kind": "bonus",
+            "target": "spell-save-dc",
+            "operation": "add",
+            "value": 1
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-spell-bonus",
+          "explanation": "Se aplica a los conjuros del portador; no a la CD de rasgos que no sean conjuros.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "tasha-rule-0"
+        ]
+      },
+      {
+        "id": "daily-property",
+        "name": "Registrar Canalizar divinidad gratuito",
+        "activation": "other",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "class",
+              "keys": [
+                "cleric",
+                "paladin"
+              ],
+              "explanation": "Requiere sintonización por un clérigo o paladín."
+            }
+          ],
+          "presence": "worn",
+          "explanation": "Requiere sintonización por un clérigo o paladín."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Según el rasgo de clase.",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "daily-property",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "class-resource",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Mientras lleves puesto el amuleto, puedes usar Canalizar divinidad sin gastar uno de sus usos normales. Una vez usada esta propiedad, no puede volver a usarse hasta el siguiente amanecer. El amuleto no cambia el tiempo de activación del efecto de Canalizar divinidad que elijas.",
+            "original": {
+              "index": "amulet-of-the-devout-1",
+              "importedDescription": [
+                "Este amuleto lleva el símbolo de una deidad incrustado con piedras o metales preciosos. Mientras lleves el símbolo sagrado, obtienes un bonificador de +1 a las tiradas de ataque de conjuros y a las CD de las tiradas de salvación de tus conjuros.",
+                "Mientras uses este amuleto, puedes usar tu habilidad Canalizar divinidad sin gastar ninguno de los usos de la habilidad. Una vez que uses esta propiedad, no podrás volver a usarla hasta el siguiente amanecer.",
+                "Requiere sintonización."
+              ]
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "El botón registra el uso diario del objeto. Resolver el rasgo de clase descrito, sin volver a gastar el recurso normal cuando el amuleto lo exime.",
+          "pendingAutomation": [
+            "Elegir y resolver un efecto de Canalizar divinidad sin descontar el uso de clase; el contador del objeto es independiente."
+          ]
+        },
+        "textBlockIds": [
+          "tasha-rule-1"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "b3b2943d11204db0ea68a9a9cd8b0c0c06dbfb083fbf60047ffdf7cb1b7258b0",
+      "2f714589a73163e27a571e343c4646bdc0a533198c52f001df43b689bad8ff3b",
+      "50d087424d5437966133aec2f7e5ea6a00bb97fa451907966b73a190cb32f897",
+      "da66685c5511322d6876c1f301e94457ffe1ef8feabe1593bf4b6f19a8b2a128"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Objeto oficial de Tasha identificado. Falta cotejar íntegramente el texto del libro y obtener o acreditar la traducción española oficial; el artículo público confirma identidad y beneficios generales.",
+        "La propiedad diaria registra el gasto del objeto; la resolución del recurso de clase sigue asistida.",
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+    "revision": 1,
+    "language": "es",
+    "name": "Tambor del creador de ritmos +1",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:666b50d323feb7997422ae35c1b4e11e03b62b3906f81905959fb46d2e08aa5e",
+        "kind": "legacy",
+        "title": "Tambor del creador de ritmos, +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+        "verified": false
+      },
+      {
+        "id": "original:b67033e3e4f5161c4983b64606d47e6075526c6a464839bff944a9506d4c7352",
+        "kind": "legacy",
+        "title": "Tambor del creador de ritmos, +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+        "verified": false
+      },
+      {
+        "id": "original:b5c382c2506450929200debe0248994184663ecb49654ec3093c40d3d3e4d392",
+        "kind": "legacy",
+        "title": "Rhythm-Maker's Drum, +1",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:db009bbc4aa972740fb12f94",
+        "verified": false
+      },
+      {
+        "id": "original:2b3f93671221f44759c90fc5e531ee44e6c176c635b804c372bc60850154f837",
+        "kind": "legacy",
+        "title": "Rhythm-Maker's Drum, +1",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:db009bbc4aa972740fb12f94",
+        "verified": false
+      },
+      {
+        "id": "tasha-official-identification",
+        "kind": "book",
+        "title": "Tasha's Cauldron of Everything (2020) · identificación y beneficios corroborados por D&D Beyond",
+        "language": "en",
+        "rulesEdition": "2014",
+        "locator": "https://www.dndbeyond.com/posts/1186-bard-201-the-best-magic-items-for-bards",
+        "verified": true
+      },
+      {
+        "id": "tasha-imported-spanish",
+        "kind": "legacy",
+        "title": "Texto español previamente existente en ECE; cotejo íntegro con el libro pendiente",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+        "verified": false
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "tasha-rule-0",
+        "section": "rules",
+        "provenance": "unreviewed",
+        "sourceIds": [
+          "tasha-imported-spanish",
+          "tasha-official-identification"
+        ],
+        "type": "paragraph",
+        "text": "Mientras sostienes este tambor, obtienes un bonificador de +1 a las tiradas de ataque y a las CD de las tiradas de salvación de tus conjuros de bardo."
+      },
+      {
+        "id": "tasha-rule-1",
+        "section": "rules",
+        "provenance": "unreviewed",
+        "sourceIds": [
+          "tasha-imported-spanish",
+          "tasha-official-identification"
+        ],
+        "type": "paragraph",
+        "text": "Como acción, puedes tocar el tambor para recuperar un uso de Inspiración bárdica. Una vez usada esta propiedad, no puede volver a usarse hasta el siguiente amanecer."
+      },
+      {
+        "id": "tasha-rule-2",
+        "section": "rules",
+        "provenance": "unreviewed",
+        "sourceIds": [
+          "tasha-imported-spanish",
+          "tasha-official-identification"
+        ],
+        "type": "paragraph",
+        "text": "Requiere sintonización por un bardo."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [
+        {
+          "kind": "class",
+          "keys": [
+            "bard"
+          ],
+          "explanation": "Requiere sintonización por un bardo."
+        }
+      ],
+      "presence": "held",
+      "explanation": "Requiere sintonización por un bardo."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "daily-property",
+        "name": "Recuperar Inspiración bárdica",
+        "kind": "uses",
+        "maximum": 1,
+        "unit": "usos",
+        "recovery": {
+          "kind": "event",
+          "event": "dawn",
+          "explanation": "Recupera al amanecer; no al descansar.",
+          "amount": {
+            "kind": "full"
+          }
+        },
+        "exhaustion": "No puede volver a usarse esta propiedad antes del siguiente amanecer."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "spellcasting-bonus",
+        "name": "Bonificación de conjuros +1",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "class",
+              "keys": [
+                "bard"
+              ],
+              "explanation": "Requiere sintonización por un bardo."
+            }
+          ],
+          "presence": "held",
+          "explanation": "Requiere sintonización por un bardo."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Mientras se cumplan los requisitos del objeto.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "attack-bonus",
+            "condition": "Mientras sostienes este tambor, obtienes un bonificador de +1 a las tiradas de ataque y a las CD de las tiradas de salvación de tus conjuros de bardo.",
+            "kind": "bonus",
+            "target": "bard-spell-attack",
+            "operation": "add",
+            "value": 1
+          },
+          {
+            "id": "save-bonus",
+            "condition": "Mientras sostienes este tambor, obtienes un bonificador de +1 a las tiradas de ataque y a las CD de las tiradas de salvación de tus conjuros de bardo.",
+            "kind": "bonus",
+            "target": "bard-spell-save-dc",
+            "operation": "add",
+            "value": 1
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-spell-bonus",
+          "explanation": "Se aplica únicamente a conjuros identificados como aprendidos de Bardo; nunca por el mero hecho de usar Carisma.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "tasha-rule-0"
+        ]
+      },
+      {
+        "id": "daily-property",
+        "name": "Recuperar Inspiración bárdica",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "class",
+              "keys": [
+                "bard"
+              ],
+              "explanation": "Requiere sintonización por un bardo."
+            }
+          ],
+          "presence": "held",
+          "explanation": "Requiere sintonización por un bardo."
+        },
+        "target": "portador",
+        "range": "",
+        "duration": "Según el rasgo de clase.",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "daily-property",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "class-resource",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Como acción, puedes tocar el tambor para recuperar un uso de Inspiración bárdica. Una vez usada esta propiedad, no puede volver a usarse hasta el siguiente amanecer.",
+            "original": {
+              "index": "rhythm-maker's-drum-1",
+              "importedDescription": [
+                "Mientras sostienes este tambor, obtienes un bonificador de +1 a las tiradas de ataque de conjuros y a las CD de las tiradas de salvación de tus conjuros de bardo.",
+                "Como acción, puedes tocar el tambor para recuperar un uso de tu atributo Inspiración bárdica. Esta propiedad del tambor no se puede volver a utilizar hasta el siguiente amanecer.",
+                "Requiere sintonización."
+              ]
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "El botón registra el uso diario del objeto. Resolver el rasgo de clase descrito, sin volver a gastar el recurso normal cuando el amuleto lo exime.",
+          "pendingAutomation": [
+            "Recuperar un uso en la reserva concreta de Inspiración bárdica; en fichas antiguas debe identificarse primero esa reserva."
+          ]
+        },
+        "textBlockIds": [
+          "tasha-rule-1"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "666b50d323feb7997422ae35c1b4e11e03b62b3906f81905959fb46d2e08aa5e",
+      "b67033e3e4f5161c4983b64606d47e6075526c6a464839bff944a9506d4c7352",
+      "b5c382c2506450929200debe0248994184663ecb49654ec3093c40d3d3e4d392",
+      "2b3f93671221f44759c90fc5e531ee44e6c176c635b804c372bc60850154f837"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": false,
+      "mechanics": false,
+      "unresolved": [
+        "Objeto oficial de Tasha identificado. Falta cotejar íntegramente el texto del libro y obtener o acreditar la traducción española oficial; el artículo público confirma identidad y beneficios generales.",
+        "La propiedad diaria registra el gasto del objeto; la resolución del recurso de clase sigue asistida.",
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "revision": 1304,
+  "sharedSpanishDefinitions": 757,
+  "sharedRowsRetired": 815,
+  "sharedEnglishRemaining": 0,
+  "allExistingCampaignDataPreserved": true,
+  "sharedNonEquipmentPreserved": true,
+  "fullResultPayloadHashesMatched": true,
+  "hashes": {
+    "shared": "3b8a021ffc9633e4ad5cbebf23529539",
+    "content": "b521c36ef024459e204dd352375793ed",
+    "revision": 1304,
+    "versions": "e18236ea3b0f3bb0bb8ac007859797d0",
+    "campaigns": "8b138737e9c6e08bc638bdb7718e3635",
+    "fragments": "36908fdeb473a34a589ce0abad14b04e",
+    "otherShared": "9c664200568e68c995719768c2bf173c"
+  },
+  "freshPostCommitPayloadHashesMatched": 757
+}

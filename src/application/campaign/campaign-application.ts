@@ -1,4 +1,7 @@
 import { syncMonkActions } from "../../domain/character/martial-builder";
+import { storeEquipmentSpell, castEquipmentStoredSpell } from "../../domain/equipment/equipment-spell-storage";
+import { syncInventorySpellGrants } from "../../domain/character/item-spells";
+import { spendInventoryItemCharges, consumeInventoryUnit, performLucentCoreAction, useInventoryHealingFeature, type LucentCoreAction } from "../../domain/character/character-inventory";
 import { performMartialAction,martialRuntime,syncMartialEffects } from "../../domain/character/martial-play";
 import type { MartialAction } from "../../domain/character/martial-model";
 import { performSorcererAction } from "../../domain/character/sorcerer-play";
@@ -57,6 +60,7 @@ import {
   setInventoryItemEquipped,
   upsertInventoryItem,
   useInventoryFeature,
+  recoverInventoryItem,
   useInventoryItem,
   type CharacterInventoryItemDraft,
   type CharacterInventoryItemV2,
@@ -217,6 +221,14 @@ export interface InventoryItemCommand {
 export interface InventoryFeatureCommand extends InventoryItemCommand {
   featureId: string;
 }
+export interface RecoverInventoryItemCommand extends InventoryItemCommand {
+  event: string;
+  rolled?: number;
+}
+
+export interface StoreEquipmentSpellCommand extends InventoryItemCommand {
+  spell: import("../../domain/equipment/equipment-spell-storage").StoreSpellInput;
+}
 
 export interface SetInventoryFeatureStateCommand extends InventoryFeatureCommand {
   value: boolean;
@@ -358,6 +370,17 @@ export class CampaignApplication {
 
   loadCampaign(): Promise<CampaignSnapshot | null> {
     return this.repository.load();
+  }
+
+  async reconcileInventorySpells(characterId: string): Promise<CampaignSnapshot | null> {
+    const current = await this.repository.load();
+    const original = current?.campaign.characters[characterId];
+    if (!current || !original) return current;
+    const character = structuredClone(original);
+    await syncInventorySpellGrants(character);
+    if (JSON.stringify(character.spellcasting.spells) === JSON.stringify(original.spellcasting.spells)) return current;
+    character.revision += 1;
+    return this.persistUpdatedCharacter(current, character, current.checksum, new Date().toISOString());
   }
 
   async createCampaign(createdAt = new Date().toISOString()): Promise<CampaignSnapshot> {
@@ -784,6 +807,35 @@ export class CampaignApplication {
       });
       return updated;
     });
+  }
+
+  async recoverInventoryItem(command: RecoverInventoryItemCommand): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => recoverInventoryItem(character, command.itemId, command.event, command.rolled, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+  }
+
+  async performLucentCoreAction(command: InventoryItemCommand & { action: LucentCoreAction }): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => performLucentCoreAction(character, command.itemId, command.action, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+  }
+
+  async useInventoryHealingFeature(command: InventoryFeatureCommand & { healing: number }): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command,(character,updatedAt)=>useInventoryHealingFeature(character,command.itemId,command.featureId,command.healing,{expectedRevision:command.expectedCharacterRevision,updatedAt}));
+  }
+
+  async spendInventoryItemCharges(command: InventoryItemCommand & { amount: number }): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => spendInventoryItemCharges(character, command.itemId, command.amount, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+  }
+
+  async consumeInventoryUnit(command: InventoryItemCommand): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => consumeInventoryUnit(character, command.itemId, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+  }
+
+  async storeEquipmentSpell(command: StoreEquipmentSpellCommand): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => storeEquipmentSpell(character, command.itemId, command.spell, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+  }
+
+  async castEquipmentStoredSpell(command: InventoryItemCommand & { storedId: string }): Promise<CampaignSnapshot> {
+    const id = await createRandomId("cnd");
+    return this.applyCharacterMutation(command, (character, updatedAt) => castEquipmentStoredSpell(character, command.itemId, command.storedId, { expectedRevision: command.expectedCharacterRevision, updatedAt, concentrationCondition: { id, key: "concentration", label: "Concentración", level: null, addedAt: updatedAt } }));
   }
 
   async setInventoryFeatureActive(
@@ -1410,6 +1462,7 @@ export class CampaignApplication {
     const characters = { ...current.campaign.characters };
     for (const character of charactersToUpdate) {
       const previous = current.campaign.characters[character.id];
+      await syncInventorySpellGrants(character);
       syncMartialEffects(character);
       if (character.builder?.classKey === "monk") await syncMonkActions(character,previous ?? null);
       // Compare results instead of guessing which item fields affect AC. This covers

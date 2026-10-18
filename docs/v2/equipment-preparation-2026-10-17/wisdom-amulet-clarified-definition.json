@@ -1,0 +1,190 @@
+{
+  "id": "recovery:official:equipment:es:9b9bc630f8db9ca7d472176a",
+  "name": "Amuleto de la sabiduría",
+  "armor": null,
+  "format": "equipment-definition-draft",
+  "origin": "campaign",
+  "rarity": "rare",
+  "review": {
+    "identity": true,
+    "editorial": true,
+    "mechanics": true,
+    "unresolved": [
+      "Cerrar la cobertura de los datos y diferencias antiguos antes de migrar o retirar versiones; las copias y precios comerciales siguen intactos."
+    ],
+    "information": false
+  },
+  "weapon": null,
+  "weight": {
+    "value": 0.1,
+    "unit": "lb"
+  },
+  "aliases": [
+    "Amulet of Wisdom"
+  ],
+  "economy": {
+    "basePrice": null,
+    "campaignPrice": {
+      "unit": "gp",
+      "quantity": 1500
+    },
+    "explanation": "Precio de campaña anterior conservado por separado; cero no se interpreta como precio oficial ni modifica el stock."
+  },
+  "magical": true,
+  "sources": [
+    {
+      "id": "original:0b1ce2caa032cfa99acdb661cb39d639b83442fa4d736fecfe2d03358c4dca18",
+      "kind": "legacy",
+      "title": "Amuleto de la sabiduría",
+      "locator": "official:equipment:es:9b9bc630f8db9ca7d472176a",
+      "language": "es",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "original:48ac83d906bbde5a7e5806957ca80e4a39c0bc7d2c55f21fca00569f6e1d8241",
+      "kind": "legacy",
+      "title": "Amuleto de la sabiduría",
+      "locator": "official:equipment:es:9b9bc630f8db9ca7d472176a",
+      "language": "es",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "original:9d0da9facad302200f3caa3316f4b4bbfed392a24cd49cab157972b6a28c1ccd",
+      "kind": "legacy",
+      "title": "Amulet of Wisdom",
+      "locator": "official:equipment:eng:357057ea2ed932c82ea0e83c",
+      "language": "en",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "original:ec5dde53b342103fc1ae1617e9f699c863292585e573d007a511658dbef56a86",
+      "kind": "legacy",
+      "title": "Amulet of Wisdom",
+      "locator": "official:equipment:eng:357057ea2ed932c82ea0e83c",
+      "language": "en",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "ece-authored-rule",
+      "kind": "campaign",
+      "title": "ECE · regla de campaña conservada",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "official:equipment:es:9b9bc630f8db9ca7d472176a",
+      "verified": true
+    },
+    {
+      "id": "ece-gm-wisdom-amulet-saves",
+      "kind": "campaign",
+      "title": "ECE · regla del Amuleto de la sabiduría confirmada por el GM",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "Indicación del GM en esta conversación, 18 de octubre de 2026: «+1 a las salvaciones de Sabiduría»",
+      "verified": true
+    }
+  ],
+  "category": "wondrous-item",
+  "language": "es",
+  "revision": 2,
+  "subtypes": [],
+  "resources": [],
+  "consumable": false,
+  "properties": [
+    "magic"
+  ],
+  "description": [
+    {
+      "id": "campaign-text-0",
+      "type": "paragraph",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "text": "Un amuleto místico que mejora la conexión del usuario con su sabiduría interior."
+    },
+    {
+      "id": "campaign-text-1",
+      "type": "paragraph",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "text": "Requiere sintonía."
+    },
+    {
+      "id": "gm-wisdom-saves-clarification",
+      "type": "paragraph",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-gm-wisdom-amulet-saves"
+      ],
+      "text": "Mientras lleves puesto este amuleto y estés sintonizado con él, obtienes un bonificador de +1 a las tiradas de salvación de Sabiduría. Este bonificador no aumenta tu puntuación de Sabiduría ni se aplica a las salvaciones de otras características."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "wisdom-saves-bonus",
+      "name": "Salvaciones de Sabiduría +1",
+      "activation": "passive",
+      "trigger": "",
+      "requirements": {
+        "attunement": true,
+        "presence": "worn",
+        "bearer": [],
+        "explanation": "Requisitos conservados de la regla de campaña; no se añade sintonización si el texto y los campos no la exigen."
+      },
+      "target": "Portador",
+      "range": "",
+      "duration": "Mientras se cumplan equipo y sintonización.",
+      "concentration": false,
+      "costs": [],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "wisdom-saving-throws-plus-one",
+          "kind": "bonus",
+          "condition": "Solo tiradas de salvación de Sabiduría; requiere llevar puesto y sintonizado el amuleto.",
+          "target": "wisdom-saves",
+          "operation": "add",
+          "value": 1
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Regla de campaña confirmada por el GM. Falta integrar y verificar su aplicación en el formato nuevo.",
+        "pendingAutomation": [
+          "Aplicar el +1 únicamente a las salvaciones de Sabiduría mientras se cumplan los requisitos de equipo y sintonización.",
+          "Retirar el bono al dejar de cumplir los requisitos y evitar duplicarlo si la copia antigua ya tiene ese efecto."
+        ]
+      },
+      "textBlockIds": [
+        "campaign-text-0",
+        "campaign-text-1",
+        "gm-wisdom-saves-clarification"
+      ]
+    }
+  ],
+  "requirements": {
+    "attunement": true,
+    "presence": "worn",
+    "bearer": [],
+    "explanation": "Requisitos conservados de la regla de campaña; no se añade sintonización si el texto y los campos no la exigen."
+  },
+  "schemaVersion": 1,
+  "baseDefinitionId": null,
+  "recoverySourceIds": [
+    "0b1ce2caa032cfa99acdb661cb39d639b83442fa4d736fecfe2d03358c4dca18",
+    "48ac83d906bbde5a7e5806957ca80e4a39c0bc7d2c55f21fca00569f6e1d8241",
+    "9d0da9facad302200f3caa3316f4b4bbfed392a24cd49cab157972b6a28c1ccd",
+    "ec5dde53b342103fc1ae1617e9f699c863292585e573d007a511658dbef56a86",
+    "7b0acf6dc9140127acb7c1cee19c40ba8312fadde5accaa8848539200b38bf94"
+  ]
+}

@@ -5,6 +5,7 @@ export interface DiceRollRequest {
   name: string;
   expressions: string[];
   mode: z.infer<typeof RollModeSchema>;
+  abilityCheck?: { modifier: number; minimum: number };
 }
 
 export interface DiceRollResult {

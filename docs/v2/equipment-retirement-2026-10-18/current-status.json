@@ -1,0 +1,91 @@
+{
+  "revision": 1304,
+  "normalized": 828,
+  "englishPending": 0,
+  "preparationsRemaining": 0,
+  "definitionsRetired": 834,
+  "preparationsRetired": 853,
+  "registry": 1687,
+  "allRetiredKeysReseedCheckPassed": true,
+  "characters": 16,
+  "characterItems": 241,
+  "merchantItems": 24,
+  "toolDefinitionsCompleted": 37,
+  "toolCharacterCopiesRefreshed": 13,
+  "toolMerchantCopiesRefreshed": 1,
+  "fullAutomationComplete": false,
+  "allLegacyRetired": true,
+  "stages": [
+    {
+      "stage": "/initial",
+      "definitions": 90,
+      "preparations": 20
+    },
+    {
+      "stage": "/bilingual",
+      "definitions": 90,
+      "preparations": 0
+    },
+    {
+      "stage": "/physical",
+      "definitions": 172,
+      "preparations": 0
+    },
+    {
+      "stage": "/authoritative",
+      "definitions": 206,
+      "preparations": 0
+    },
+    {
+      "stage": "/tools-physical",
+      "definitions": 41,
+      "preparations": 0
+    },
+    {
+      "stage": "/xanathar",
+      "definitions": 47,
+      "preparations": 0
+    },
+    {
+      "stage": "/final-source",
+      "definitions": 124,
+      "preparations": 0
+    },
+    {
+      "stage": "/usage-retirement",
+      "definitions": 13,
+      "preparations": 0
+    },
+    {
+      "stage": "/campaign-duplicates",
+      "definitions": 16,
+      "preparations": 0
+    },
+    {
+      "stage": "/final-corrections",
+      "definitions": 24,
+      "preparations": 0
+    },
+    {
+      "stage": "/spanish-duplicates",
+      "definitions": 11,
+      "preparations": 0
+    },
+    {
+      "stage": "/preparations",
+      "definitions": 0,
+      "preparations": 833
+    }
+  ],
+  "shared": {
+    "normalized": 757,
+    "englishRemaining": 0,
+    "rowsRetired": 815,
+    "allExistingCampaignDataPreserved": true
+  },
+  "mechanicsBacklog": {
+    "definitions": 475,
+    "usedByCharacters": 98,
+    "usedByMerchants": 10
+  }
+}

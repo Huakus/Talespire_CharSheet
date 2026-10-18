@@ -1,0 +1,28 @@
+{
+  "pilotRowsPersisted": 12,
+  "activeSpanishEquipment": 806,
+  "activeCatalogRows": 1609,
+  "originalPayloadsVerified": true,
+  "charactersUnchanged": true,
+  "npcStockUnchanged": true,
+  "otherCampaignsUnchanged": true,
+  "sharedCatalogUnchanged": true,
+  "definitiveObjectsCreated": 0,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "campaignRevision": 1168,
+  "pilotNames": [
+    "Daga del Umbral · variante de Stix",
+    "Collar de hablar con los muertos",
+    "Daga del Umbral",
+    "Varita de Armadura de Mago",
+    "Núcleo Luciente",
+    "Bastón del marchitamiento",
+    "Reloj de arena",
+    "Perla De Poder",
+    "Munición +1",
+    "Poción de curación",
+    "Guanteletes De Fuerza De Ogro",
+    "Anillo de Almacenamiento de Hechizos"
+  ]
+}

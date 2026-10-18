@@ -1,0 +1,331 @@
+[
+  {
+    "key": "tinkers-tools",
+    "name": "Herramientas de manitas",
+    "aliases": [
+      "tinkers-tools",
+      "Herramientas de manitas",
+      "Herramientas de Tinker",
+      "Tinker's Tools",
+      "Herramientas de artífice"
+    ]
+  },
+  {
+    "key": "cooks-utensils",
+    "name": "Útiles de cocinero",
+    "aliases": [
+      "cooks-utensils",
+      "Útiles de cocinero",
+      "Utensilios de cocinero"
+    ]
+  },
+  {
+    "key": "cobblers-tools",
+    "name": "Herramientas de zapatero",
+    "aliases": [
+      "cobblers-tools",
+      "Herramientas de zapatero"
+    ]
+  },
+  {
+    "key": "navigators-tools",
+    "name": "Herramientas de navegante",
+    "aliases": [
+      "navigators-tools",
+      "Herramientas de navegante",
+      "Herramientas del Navegador"
+    ]
+  },
+  {
+    "key": "calligraphers-supplies",
+    "name": "Suministros de calígrafo",
+    "aliases": [
+      "calligraphers-supplies",
+      "Suministros de calígrafo",
+      "Suministros para calígrafos",
+      "Materiales de caligrafía",
+      "Calligrapher's Supplies"
+    ]
+  },
+  {
+    "key": "brewers-supplies",
+    "name": "Suministros de cervecero",
+    "aliases": [
+      "brewers-supplies",
+      "Suministros de cervecero",
+      "Suministros para cerveceros",
+      "Materiales de cervecería",
+      "Brewer's Supplies"
+    ]
+  },
+  {
+    "key": "painters-supplies",
+    "name": "Suministros para pintores",
+    "aliases": [
+      "painters-supplies",
+      "Suministros para pintores",
+      "Suministros de pintor"
+    ]
+  },
+  {
+    "key": "three-dragon-ante-set",
+    "name": "Set de tres dragones",
+    "aliases": [
+      "three-dragon-ante-set",
+      "Set de tres dragones",
+      "Apuesta de tres dragones"
+    ]
+  },
+  {
+    "key": "jewelers-tools",
+    "name": "Herramientas de joyero",
+    "aliases": [
+      "jewelers-tools",
+      "Herramientas de joyero"
+    ]
+  },
+  {
+    "key": "drum",
+    "name": "Tambor",
+    "aliases": [
+      "drum",
+      "Tambor"
+    ]
+  },
+  {
+    "key": "pan-flute",
+    "name": "Flauta de pan",
+    "aliases": [
+      "pan-flute",
+      "Flauta de pan"
+    ]
+  },
+  {
+    "key": "disguise-kit",
+    "name": "Kit de disfraz",
+    "aliases": [
+      "disguise-kit",
+      "Kit de disfraz"
+    ]
+  },
+  {
+    "key": "glassblowers-tools",
+    "name": "Herramientas del soplador de vidrio",
+    "aliases": [
+      "glassblowers-tools",
+      "Herramientas del soplador de vidrio",
+      "Herramientas de soplador de vidrio"
+    ]
+  },
+  {
+    "key": "carpenters-tools",
+    "name": "Herramientas de carpintero",
+    "aliases": [
+      "carpenters-tools",
+      "Herramientas de carpintero"
+    ]
+  },
+  {
+    "key": "viol",
+    "name": "Viola",
+    "aliases": [
+      "viol",
+      "Viola"
+    ]
+  },
+  {
+    "key": "herbalism-kit",
+    "name": "Útiles de herborista",
+    "aliases": [
+      "herbalism-kit",
+      "Útiles de herborista",
+      "Kit de herbolario",
+      "Kit de herboristería",
+      "Herbalism Kit",
+      "Kit de herborista"
+    ]
+  },
+  {
+    "key": "masons-tools",
+    "name": "Herramientas de albañil",
+    "aliases": [
+      "masons-tools",
+      "Herramientas de albañil"
+    ]
+  },
+  {
+    "key": "dulcimer",
+    "name": "Dulcémele",
+    "aliases": [
+      "dulcimer",
+      "Dulcémele",
+      "Dulcimer"
+    ]
+  },
+  {
+    "key": "weavers-tools",
+    "name": "Herramientas del tejedor",
+    "aliases": [
+      "weavers-tools",
+      "Herramientas del tejedor"
+    ]
+  },
+  {
+    "key": "poisoners-kit",
+    "name": "Kit de envenenamiento",
+    "aliases": [
+      "poisoners-kit",
+      "Kit de envenenamiento",
+      "Kit de venenos"
+    ]
+  },
+  {
+    "key": "cartographers-tools",
+    "name": "Herramientas de cartógrafo",
+    "aliases": [
+      "cartographers-tools",
+      "Herramientas de cartógrafo",
+      "Herramientas del cartógrafo",
+      "Cartographer's Tools"
+    ]
+  },
+  {
+    "key": "potters-tools",
+    "name": "Herramientas de alfarero",
+    "aliases": [
+      "potters-tools",
+      "Herramientas de alfarero"
+    ]
+  },
+  {
+    "key": "alchemists-supplies",
+    "name": "Suministros de alquimista",
+    "aliases": [
+      "alchemists-supplies",
+      "Suministros de alquimista",
+      "Suministros del alquimista",
+      "Materiales alquímicos",
+      "Alchemist's Supplies"
+    ]
+  },
+  {
+    "key": "shawm",
+    "name": "Chirimía",
+    "aliases": [
+      "shawm",
+      "Chirimía",
+      "Caramillo"
+    ]
+  },
+  {
+    "key": "forgery-kit",
+    "name": "Kit de falsificación",
+    "aliases": [
+      "forgery-kit",
+      "Kit de falsificación"
+    ]
+  },
+  {
+    "key": "woodcarvers-tools",
+    "name": "Herramientas del tallador de madera",
+    "aliases": [
+      "woodcarvers-tools",
+      "Herramientas del tallador de madera",
+      "Herramientas de tallista"
+    ]
+  },
+  {
+    "key": "thieves-tools",
+    "name": "Herramientas de ladrón",
+    "aliases": [
+      "thieves-tools",
+      "Herramientas de ladrón",
+      "Herramientas de los ladrones"
+    ]
+  },
+  {
+    "key": "horn",
+    "name": "Cuerno",
+    "aliases": [
+      "horn",
+      "Cuerno"
+    ]
+  },
+  {
+    "key": "lute",
+    "name": "Laúd",
+    "aliases": [
+      "lute",
+      "Laúd"
+    ]
+  },
+  {
+    "key": "leatherworkers-tools",
+    "name": "Herramientas para trabajar el cuero",
+    "aliases": [
+      "leatherworkers-tools",
+      "Herramientas para trabajar el cuero"
+    ]
+  },
+  {
+    "key": "playing-card-set",
+    "name": "Juego de cartas para jugar",
+    "aliases": [
+      "playing-card-set",
+      "Juego de cartas para jugar"
+    ]
+  },
+  {
+    "key": "lyre",
+    "name": "Lira",
+    "aliases": [
+      "lyre",
+      "Lira"
+    ]
+  },
+  {
+    "key": "smiths-tools",
+    "name": "Herramientas de herrero",
+    "aliases": [
+      "smiths-tools",
+      "Herramientas de herrero",
+      "Herramientas de Smith",
+      "Smith's Tools"
+    ]
+  },
+  {
+    "key": "bagpipes",
+    "name": "Gaita",
+    "aliases": [
+      "bagpipes",
+      "Gaita"
+    ]
+  },
+  {
+    "key": "dragonchess-set",
+    "name": "Set de ajedrez de dragón",
+    "aliases": [
+      "dragonchess-set",
+      "Set de ajedrez de dragón",
+      "Ajedrez de dragones"
+    ]
+  },
+  {
+    "key": "flute",
+    "name": "Flauta",
+    "aliases": [
+      "flute",
+      "Flauta"
+    ]
+  },
+  {
+    "key": "dice-set",
+    "name": "Juego de dados",
+    "aliases": [
+      "dice-set",
+      "Juego de dados",
+      "Set de dados",
+      "Dice Set"
+    ]
+  }
+]

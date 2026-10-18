@@ -1,0 +1,159 @@
+{
+  "id": "recovery:imported:equipment:legacy:ad2b2b095ece73a10323c150",
+  "name": "Capa con runas",
+  "armor": null,
+  "format": "equipment-definition-draft",
+  "origin": "campaign",
+  "rarity": "uncommon",
+  "review": {
+    "identity": true,
+    "editorial": true,
+    "mechanics": true,
+    "unresolved": [
+      "Cerrar la cobertura de los datos y diferencias antiguos antes de migrar o retirar versiones; las copias y precios comerciales siguen intactos."
+    ],
+    "information": false
+  },
+  "weapon": null,
+  "weight": {
+    "value": 5,
+    "unit": "lb"
+  },
+  "aliases": [
+    "Runed Cloak"
+  ],
+  "economy": {
+    "basePrice": null,
+    "campaignPrice": null,
+    "explanation": "Precio de campaña anterior conservado por separado; cero no se interpreta como precio oficial ni modifica el stock."
+  },
+  "magical": true,
+  "sources": [
+    {
+      "id": "original:54b95bfe8584037d1ecaf6877891cc6ec09e5ca1220d64d2901d8b05ecc4e773",
+      "kind": "legacy",
+      "title": "Capa con runas",
+      "locator": "imported:equipment:legacy:ad2b2b095ece73a10323c150",
+      "language": "es",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "original:d780e03e30432cdc99c6aeafc4217623a5392706ef9e02414be8dc3a49fc82b3",
+      "kind": "legacy",
+      "title": "Runed Cloak",
+      "locator": "imported:equipment:eng:ed6851b4211c8b41e2038171",
+      "language": "en",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "ece-authored-rule",
+      "kind": "campaign",
+      "title": "ECE · regla de campaña conservada",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "imported:equipment:legacy:ad2b2b095ece73a10323c150",
+      "verified": true
+    },
+    {
+      "id": "ece-gm-runed-cloak-spell-slot",
+      "kind": "campaign",
+      "title": "ECE · aclaración del GM sobre la Capa con runas",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "Indicación del GM en esta conversación: «siempre tenes un espacio de conjuro adicional... ese espacio se usa y recupera igual que el resto...»",
+      "verified": true
+    }
+  ],
+  "category": "wondrous-item",
+  "language": "es",
+  "revision": 2,
+  "subtypes": [],
+  "resources": [],
+  "consumable": false,
+  "properties": [
+    "magic"
+  ],
+  "description": [
+    {
+      "id": "campaign-text-0",
+      "type": "paragraph",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "text": "Esta capa está tejida con hilos oscuros y resistentes, en cuyo forro interior se inscriben antiguas runas arcanas apenas visibles cuando la tela descansa. \n Al portarla, el usuario siente un leve pulso mágico, como si la prenda almacenara fragmentos de energía latente. \n Mientras se viste esta capa, el portador obtiene una ranura adicional de conjuro de nivel 1."
+    },
+    {
+      "id": "gm-slot-clarification",
+      "type": "paragraph",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-gm-runed-cloak-spell-slot"
+      ],
+      "text": "Mientras lleves puesta la capa, tienes un espacio de conjuro adicional de nivel 1. Ese espacio se gasta y recupera con las mismas reglas que los demás espacios del portador. Aumenta la capacidad de espacios; no es una carga del objeto ni tiene una recuperación independiente."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "additional-spell-slot",
+      "name": "Espacio de conjuro adicional de nivel 1",
+      "activation": "passive",
+      "trigger": "",
+      "requirements": {
+        "attunement": false,
+        "presence": "worn",
+        "bearer": [],
+        "explanation": "Requisitos conservados de la regla de campaña; no se añade sintonización si el texto y los campos no la exigen."
+      },
+      "target": "Portador",
+      "range": "",
+      "duration": "Mientras lleves puesta la capa.",
+      "concentration": false,
+      "costs": [],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "additional-level-1-slot",
+          "kind": "spell-slot-capacity",
+          "condition": "Mientras lleves puesta la Capa con runas.",
+          "level": 1,
+          "amount": 1,
+          "pool": "inherit",
+          "recovery": "inherit",
+          "explanation": "Añadir un espacio de nivel 1 a la reserva de conjuros correspondiente del portador y aplicar sus reglas de gasto y recuperación. No elevar su nivel por el nivel de los espacios de Magia del Pacto ni inventar un contador diario del objeto. Si hay varias reservas, resolver a cuál corresponde antes de aplicarlo; no sumarlo a todas automáticamente."
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Regla aclarada por el GM. Falta integrar el aumento de capacidad con el gasto y recuperación de la reserva del portador.",
+        "pendingAutomation": [
+          "Añadir la capacidad al llevar puesta la capa, sin alterar los espacios base de la clase ni duplicar el bono ya existente.",
+          "Asociar el espacio con la reserva correspondiente del portador y heredar sus reglas de gasto y recuperación.",
+          "Conservar el gasto al quitar, volver a poner o transferir la capa para que esas operaciones no funcionen como una recarga."
+        ]
+      },
+      "textBlockIds": [
+        "campaign-text-0",
+        "gm-slot-clarification"
+      ]
+    }
+  ],
+  "requirements": {
+    "attunement": false,
+    "presence": "worn",
+    "bearer": [],
+    "explanation": "Requisitos conservados de la regla de campaña; no se añade sintonización si el texto y los campos no la exigen."
+  },
+  "schemaVersion": 1,
+  "baseDefinitionId": null,
+  "recoverySourceIds": [
+    "54b95bfe8584037d1ecaf6877891cc6ec09e5ca1220d64d2901d8b05ecc4e773",
+    "d780e03e30432cdc99c6aeafc4217623a5392706ef9e02414be8dc3a49fc82b3",
+    "b876d1ba31f392273d2a6c97b1435e3332ca24904cf28c0033721ca9f4429fb8"
+  ]
+}

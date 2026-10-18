@@ -1,0 +1,764 @@
+[
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:imported:equipment:legacy:9e036c804481226114e6c22c",
+    "revision": 2,
+    "language": "es",
+    "name": "Cristal Carmesí",
+    "aliases": [
+      "Cristal Carmsí",
+      "Crimson Crystal"
+    ],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "original:66a7b232ef9a9bcdd5800ac62114d4f169eff0f3c5211f5f0dd833ec76de80d8",
+        "kind": "legacy",
+        "title": "Cristal Carmsí",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "imported:equipment:legacy:9e036c804481226114e6c22c",
+        "verified": false
+      },
+      {
+        "id": "original:fa38866f055760047f8a1e93ec5f65d8d62cfac5cd77cf6a9bdddc9873053662",
+        "kind": "legacy",
+        "title": "Crimson Crystal",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "imported:equipment:eng:c1e46081d1229dffc469b797",
+        "verified": false
+      },
+      {
+        "id": "ece-gm-campaign-resolution",
+        "kind": "campaign",
+        "title": "ECE · identificación y consolidación autorizadas por el GM",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "Conversación del 18 de octubre de 2026: Cristal Carmesí y Núcleo Luciente son de campaña; unificar las varitas si corresponden y definir sus mecánicas; retirar los otros cuatro objetos.",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "campaign-text-0",
+        "section": "flavor",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Este cristal de color carmesí profundo parece absorber la luz en lugar de reflejarla. Su superficie late lentamente, como si contuviera algo vivo en su interior, y al sostenerlo se percibe un calor inquietante acompañado de una presión sutil en la mente."
+      },
+      {
+        "id": "campaign-text-1",
+        "section": "flavor",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Los Cristales Carmesí no formaban parte del diseño original del Corazón: son el resultado de experimentos prohibidos que canalizaban energía vital, dolor y memoria hacia una forma sólida. Su sola presencia altera el entorno arcano, y los estudiosos coinciden en que no se trata solo de un acumulador de poder, sino de un ancla para fuerzas que no deberían ser fijadas."
+      },
+      {
+        "id": "campaign-text-2",
+        "section": "flavor",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Quienes los manipulan durante demasiado tiempo suelen describir sueños repetitivos, ecos de pensamientos ajenos y una sensación persistente de urgencia o hambre mágica. Incluso inactivos, estos cristales son considerados reliquias extremadamente peligrosas."
+      },
+      {
+        "id": "narrative-interpretation",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Su descripción establece una reliquia narrativa de campaña. No define bonos, daño, cargas, consumo, salvaciones ni una condición mecánica; los sueños, sensaciones y alteraciones del entorno se resuelven por el GM."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "possessed",
+      "explanation": "El texto no define sintonización ni una activación mecánica."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "campaign-relic",
+        "name": "Reliquia del Corazón",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "possessed",
+          "explanation": "El texto no define sintonización ni una activación mecánica."
+        },
+        "target": "Según la descripción.",
+        "range": "",
+        "duration": "",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "narrative-relic",
+            "condition": "",
+            "kind": "narrative",
+            "instructions": "Conservar el trasfondo de la reliquia sin inventar penalizaciones, poderes ni consumo."
+          }
+        ],
+        "execution": {
+          "mode": "narrative",
+          "handler": null,
+          "explanation": "Resolver el contenido narrativo en la mesa.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "narrative-interpretation"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "66a7b232ef9a9bcdd5800ac62114d4f169eff0f3c5211f5f0dd833ec76de80d8",
+      "fa38866f055760047f8a1e93ec5f65d8d62cfac5cd77cf6a9bdddc9873053662"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:imported:equipment:legacy:f9a55f61d3ecdfdc16848447",
+    "revision": 2,
+    "language": "es",
+    "name": "Núcleo Luciente Adaptado",
+    "aliases": [
+      "Núcleo Luciente",
+      "Lucent Core"
+    ],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "original:d8f4e8192d13a41a995ea44a828cedac2d397b6f63cdd0c3171701fa93ae47e4",
+        "kind": "legacy",
+        "title": "Núcleo Luciente",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "imported:equipment:legacy:f9a55f61d3ecdfdc16848447",
+        "verified": false
+      },
+      {
+        "id": "original:2f6e91df5300c1bb5faefc3197e6b93924314669d29f106746ae2d1d1a6e899b",
+        "kind": "legacy",
+        "title": "Lucent Core",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "imported:equipment:eng:984f4d5a3c67343c068c738f",
+        "verified": false
+      },
+      {
+        "id": "ece-gm-campaign-resolution",
+        "kind": "campaign",
+        "title": "ECE · identificación y consolidación autorizadas por el GM",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "Conversación del 18 de octubre de 2026: Cristal Carmesí y Núcleo Luciente son de campaña; unificar las varitas si corresponden y definir sus mecánicas; retirar los otros cuatro objetos.",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [
+      "ece-lucent-core-adapted"
+    ],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 3,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "campaign-text-0",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Una esfera de tecnología aeloriana modificada por Draven a partir de un núcleo recuperado en un antiguo campamento de investigación. Un cristal luciente central permanece suspendido entre varios anillos metálicos móviles cubiertos de grabados resonantes."
+      },
+      {
+        "id": "campaign-text-1",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Vinculación: Requiere vinculación por una criatura competente con Herramientas de Artífice o Herramientas de Tinkerer."
+      },
+      {
+        "id": "campaign-text-2",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Cargas: El núcleo posee 3 cargas máximas. Recupera todas sus cargas durante un descanso largo si se inserta un fragmento de Cristal Luciente en su receptáculo interno. Sin cristal no recupera cargas."
+      },
+      {
+        "id": "campaign-text-3",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Resonancia del Recuerdo (Verde): Consume 1 carga. Durante 10 minutos el usuario obtiene ventaja en pruebas de Investigación relacionadas con tecnología aeloriana y para localizar inscripciones, mecanismos o rastros mágicos ocultos."
+      },
+      {
+        "id": "campaign-text-4",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Resonancia del Umbral (Azul): Consume 1 carga. Durante 1 minuto el usuario obtiene resistencia al daño por frío y ventaja en tiradas realizadas para resistir condiciones climáticas extremas."
+      },
+      {
+        "id": "campaign-text-5",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Resonancia de la Revelación (Violeta): Consume 1 carga. Durante 1 minuto el núcleo puede interactuar con mecanismos aelorianos, activar dispositivos resonantes y abrir cerraduras diseñadas para responder a frecuencias lucientes."
+      },
+      {
+        "id": "campaign-text-6",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Reconfiguración: Como acción, una criatura vinculada puede cambiar la resonancia activa realizando una prueba de Inteligencia utilizando Herramientas de Artífice CD 12. Si falla, la acción se pierde y la resonancia no cambia."
+      },
+      {
+        "id": "campaign-text-7",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Desgaste: Cada vez que las 3 cargas sean consumidas antes de completar un descanso largo, tira 1d20. Con un resultado de 1, el núcleo se vuelve inestable. Mientras permanezca inestable, no puede utilizar la Resonancia de la Revelación. Puede repararse durante un descanso largo utilizando materiales metálicos valorados en 25 po y un fragmento de Cristal Luciente."
+      },
+      {
+        "id": "campaign-text-8",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Estado actual: Se trata de un dispositivo experimental cuya verdadera capacidad aún no ha sido descubierta. Las ruinas aelorianas podrían revelar nuevas resonancias y mejoras permanentes."
+      },
+      {
+        "id": "source-resolution",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Esta ficha aplica la versión Adaptada que describe el objeto modificado por Draven: peso 3 lb y rareza poco común. El descanso largo con Cristal Luciente está confirmado en ambos idiomas; se corrige el campo antiguo de descanso corto. La vinculación usa la sintonización ya indicada en la ficha y exige competencia con herramientas de hojalatero (tinker-tools); «herramientas de artífice» es el alias empleado en la descripción de campaña."
+      },
+      {
+        "id": "operational-clarification",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Las resonancias se activan con una acción y una carga; solo se mantiene un efecto de resonancia del núcleo a la vez. Reconfigurar sigue siendo una acción con prueba de Inteligencia y herramientas CD 12, sin coste de carga. No se descuenta automáticamente un cristal insertado para recargar: el texto exige insertarlo, pero no declara que se consuma. El GM confirma los materiales utilizados en una reparación."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [
+        {
+          "kind": "proficiency",
+          "keys": [
+            "tinker-tools"
+          ],
+          "explanation": "Requiere competencia con herramientas de hojalatero/manitas (herramientas de artífice de esta campaña)."
+        }
+      ],
+      "presence": "held",
+      "explanation": "Sintonización y competencia con las herramientas indicadas por el objeto."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "core-charges",
+        "name": "Cargas del núcleo",
+        "kind": "charges",
+        "maximum": 3,
+        "unit": "cargas",
+        "recovery": {
+          "kind": "event",
+          "event": "other",
+          "explanation": "Completar un descanso largo con un fragmento de Cristal Luciente insertado. Sin cristal no recupera cargas. Usar el control específico de recarga condicionada.",
+          "amount": {
+            "kind": "full"
+          }
+        },
+        "exhaustion": "Al gastar tres cargas antes de un descanso largo, resolver un d20. Con 1, queda inestable y no puede utilizar Revelación hasta repararse."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "resonance-green",
+        "name": "Resonancia del Recuerdo (verde)",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "proficiency",
+              "keys": [
+                "tinker-tools"
+              ],
+              "explanation": "Requiere competencia con herramientas de hojalatero/manitas (herramientas de artífice de esta campaña)."
+            }
+          ],
+          "presence": "held",
+          "explanation": "Sintonización y competencia con las herramientas indicadas por el objeto."
+        },
+        "target": "Según la descripción.",
+        "range": "",
+        "duration": "10 minutos",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "core-charges",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "aelorian-investigation",
+            "condition": "Investigación de tecnología aeloriana o búsqueda de inscripciones, mecanismos o rastros mágicos ocultos.",
+            "kind": "defense",
+            "defense": "advantage",
+            "target": "aelorian-investigation"
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-lucent-core",
+          "explanation": "Configura la resonancia mediante prueba CD 12; registra gasto, duración, desgaste, inestabilidad y recarga condicionada por copia. La duración avanza con los controles de tiempo de juego. La resistencia al frío se aplica cuando se registra daño tipificado, no a un daño ya calculado.",
+          "pendingAutomation": [
+            "El usuario identifica cuándo la Investigación corresponde al ámbito de la resonancia; la tirada con ventaja está disponible en el control del núcleo."
+          ]
+        },
+        "textBlockIds": [
+          "campaign-text-3"
+        ]
+      },
+      {
+        "id": "resonance-blue",
+        "name": "Resonancia del Umbral (azul)",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "proficiency",
+              "keys": [
+                "tinker-tools"
+              ],
+              "explanation": "Requiere competencia con herramientas de hojalatero/manitas (herramientas de artífice de esta campaña)."
+            }
+          ],
+          "presence": "held",
+          "explanation": "Sintonización y competencia con las herramientas indicadas por el objeto."
+        },
+        "target": "Según la descripción.",
+        "range": "",
+        "duration": "1 minuto",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "core-charges",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "cold-resistance",
+            "condition": "Mientras dure la resonancia activa.",
+            "kind": "defense",
+            "defense": "resistance",
+            "target": "cold"
+          },
+          {
+            "id": "extreme-weather",
+            "condition": "Solo tiradas para resistir condiciones climáticas extremas durante la resonancia.",
+            "kind": "defense",
+            "defense": "advantage",
+            "target": "extreme-weather"
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-lucent-core",
+          "explanation": "Configura la resonancia mediante prueba CD 12; registra gasto, duración, desgaste, inestabilidad y recarga condicionada por copia. La duración avanza con los controles de tiempo de juego. La resistencia al frío se aplica cuando se registra daño tipificado, no a un daño ya calculado.",
+          "pendingAutomation": [
+            "Identificar las tiradas que corresponden a clima extremo y aplicarles ventaja; no aplicar ventaja a todas las salvaciones de Constitución."
+          ]
+        },
+        "textBlockIds": [
+          "campaign-text-4"
+        ]
+      },
+      {
+        "id": "resonance-violet",
+        "name": "Resonancia de la Revelación (violeta)",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "proficiency",
+              "keys": [
+                "tinker-tools"
+              ],
+              "explanation": "Requiere competencia con herramientas de hojalatero/manitas (herramientas de artífice de esta campaña)."
+            }
+          ],
+          "presence": "held",
+          "explanation": "Sintonización y competencia con las herramientas indicadas por el objeto."
+        },
+        "target": "Según la descripción.",
+        "range": "",
+        "duration": "1 minuto",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "core-charges",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "aelorian-mechanisms",
+            "condition": "No puede utilizarse mientras el núcleo esté inestable.",
+            "kind": "narrative",
+            "instructions": "Interactuar con mecanismos aelorianos, activar dispositivos resonantes y abrir cerraduras que respondan a frecuencias lucientes."
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-lucent-core",
+          "explanation": "Configura la resonancia mediante prueba CD 12; registra gasto, duración, desgaste, inestabilidad y recarga condicionada por copia. La duración avanza con los controles de tiempo de juego. La resistencia al frío se aplica cuando se registra daño tipificado, no a un daño ya calculado.",
+          "pendingAutomation": [
+            "El GM resuelve qué mecanismos responden al dispositivo y sus resultados en el tablero."
+          ]
+        },
+        "textBlockIds": [
+          "campaign-text-5"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "d8f4e8192d13a41a995ea44a828cedac2d397b6f63cdd0c3171701fa93ae47e4",
+      "2f6e91df5300c1bb5faefc3197e6b93924314669d29f106746ae2d1d1a6e899b"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:imported:equipment:legacy:cbefe528bbe7f909a82dcbc9",
+    "revision": 2,
+    "language": "es",
+    "name": "Varita del fastidio",
+    "aliases": [
+      "Varita de molestar",
+      "Wand of Annoyance"
+    ],
+    "baseDefinitionId": null,
+    "origin": "campaign",
+    "sources": [
+      {
+        "id": "original:4a0d135889080bb02eef58888e77405ab29901e715a31fd8e2d434050a9250e0",
+        "kind": "legacy",
+        "title": "Varita de molestar",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "imported:equipment:legacy:cbefe528bbe7f909a82dcbc9",
+        "verified": false
+      },
+      {
+        "id": "original:6f31a8d09a4ba95ac32e61f437e47ee25a0a7716b746d12e3c37bf7c72cebad4",
+        "kind": "legacy",
+        "title": "Wand of Annoyance",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "imported:equipment:eng:46e3aeede45125b23450615a",
+        "verified": false
+      },
+      {
+        "id": "original:17701c9da0f2679d6010feaab19da39f24a202ff8b65a13fba55821d510119e9",
+        "kind": "legacy",
+        "title": "Wand of Annoyance",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:bc47945a149c5827db617627",
+        "verified": false
+      },
+      {
+        "id": "original:75d2ac56cf6d3a3dd9ded3a8076dba34245af1ee0d48d5d2fb2b7df5d51f01bf",
+        "kind": "legacy",
+        "title": "Wand of Annoyance",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:bc47945a149c5827db617627",
+        "verified": false
+      },
+      {
+        "id": "ece-gm-campaign-resolution",
+        "kind": "campaign",
+        "title": "ECE · identificación y consolidación autorizadas por el GM",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "Conversación del 18 de octubre de 2026: Cristal Carmesí y Núcleo Luciente son de campaña; unificar las varitas si corresponden y definir sus mecánicas; retirar los otros cuatro objetos.",
+        "verified": true
+      }
+    ],
+    "category": "wand",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": {
+      "value": 0.2,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "wand-flavor",
+        "section": "flavor",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Esta varita corta y ligeramente torcida tiene símbolos irregulares que parecen moverse cuando no se los observa. Al sostenerla emite un zumbido tenue, como un insecto atrapado en una linterna."
+      },
+      {
+        "id": "wand-rule",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Como acción, gasta 1 carga y elige una criatura que puedas ver a 30 pies o menos. Debe superar una salvación de Sabiduría CD 14. Si falla, queda fastidiada hasta el comienzo de tu siguiente turno y tiene desventaja en la primera salvación de Constitución que realice para mantener la concentración durante ese intervalo. Después de esa salvación termina la desventaja. Si no realiza ninguna, el efecto expira al comienzo de tu siguiente turno. Una salvación exitosa evita el efecto."
+      },
+      {
+        "id": "wand-limits",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "La varita no inflige daño ni rompe automáticamente la concentración, no impide acciones ni reacciones y no penaliza otras salvaciones, pruebas o ataques. El fastidio se manifiesta como suspiros, quejas o irritación; no es un estado oficial de 5e."
+      },
+      {
+        "id": "wand-charges",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Tiene 3 cargas y recupera todas las cargas gastadas al amanecer. No recupera cargas por un descanso. No puede activarse sin cargas."
+      },
+      {
+        "id": "wand-durability",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "No puede destruirse por medios ordinarios. Su destrucción mediante magia o acontecimientos especiales se resuelve por el GM."
+      },
+      {
+        "id": "wand-consolidation",
+        "section": "rules",
+        "provenance": "campaign",
+        "sourceIds": [
+          "ece-gm-campaign-resolution"
+        ],
+        "type": "paragraph",
+        "text": "Regla custom consolidada por autorización del GM. Las versiones antiguas discrepaban en CD, cargas, sintonización y rareza. Se mantienen acción, alcance y salvación de Sabiduría de la descripción detallada, y CD 14 y tres cargas al amanecer de la versión de campaña. La penalización concreta de concentración, rareza poco común y duración hasta el siguiente turno del usuario se definen en esta consolidación; no se atribuyen a un manual oficial."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "Empuñarla y estar sintonizado con ella. El sentido del humor es ambientación, no un requisito de personaje."
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "annoyance-charges",
+        "name": "Cargas",
+        "kind": "charges",
+        "maximum": 3,
+        "unit": "cargas",
+        "recovery": {
+          "kind": "event",
+          "event": "dawn",
+          "explanation": "Recupera las tres cargas al amanecer.",
+          "amount": {
+            "kind": "full"
+          }
+        },
+        "exhaustion": "No puede activarse sin una carga disponible."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "annoyance",
+        "name": "Provocar fastidio",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "Empuñarla y estar sintonizado con ella. El sentido del humor es ambientación, no un requisito de personaje."
+        },
+        "target": "Según la descripción.",
+        "range": "30 pies; criatura visible",
+        "duration": "Hasta el comienzo de tu siguiente turno; la desventaja termina al aplicarse una vez.",
+        "concentration": false,
+        "costs": [
+          {
+            "resourceId": "annoyance-charges",
+            "amount": 1
+          }
+        ],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "concentration-disadvantage",
+            "condition": "Solo si falla Sabiduría CD 14; una salvación de Constitución para mantener concentración, antes del siguiente turno del usuario.",
+            "kind": "defense",
+            "defense": "disadvantage",
+            "target": "next-concentration-save"
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "El botón gasta una carga. El objetivo realiza su salvación y aplica, si corresponde, la desventaja al único chequeo de concentración indicado.",
+          "pendingAutomation": [
+            "Seleccionar el objetivo, resolver su salvación de Sabiduría y registrar o retirar en su ficha la desventaja a una sola salvación de concentración."
+          ]
+        },
+        "textBlockIds": [
+          "wand-rule",
+          "wand-limits",
+          "wand-charges"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "4a0d135889080bb02eef58888e77405ab29901e715a31fd8e2d434050a9250e0",
+      "6f31a8d09a4ba95ac32e61f437e47ee25a0a7716b746d12e3c37bf7c72cebad4",
+      "17701c9da0f2679d6010feaab19da39f24a202ff8b65a13fba55821d510119e9",
+      "75d2ac56cf6d3a3dd9ded3a8076dba34245af1ee0d48d5d2fb2b7df5d51f01bf"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su cobertura antes de eliminar versiones."
+      ]
+    }
+  }
+]

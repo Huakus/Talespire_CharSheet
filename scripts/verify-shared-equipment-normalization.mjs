@@ -1,0 +1,4 @@
+import{readFileSync,writeFileSync}from'node:fs';import assert from'node:assert/strict';
+const read=p=>JSON.parse(readFileSync(p,'utf8')),plan=read('tmp/equipment-definitions/shared-equipment-plan.json'),after=read('tmp/equipment-definitions/shared-equipment-after-metadata.json'),expected=plan.rows.filter(r=>r.action==='normalize');assert.equal(after.length,757);
+for(const p of expected){const r=after.find(r=>r.metadata.content_key===p.before.content_key);assert.ok(r);assert.equal(r.payload_md5,p.nextPayloadMd5);assert.deepEqual(r.metadata.tags,['es','reglas_2014']);assert.ok(!r.metadata.content_key.includes(':eng:'));}
+const path='docs/v2/equipment-retirement-2026-10-18/shared/verified.json',verified=read(path);verified.freshPostCommitPayloadHashesMatched=757;writeFileSync(path,JSON.stringify(verified,null,2));console.log(JSON.stringify({verifiedSpanishDefinitions:after.length,allFreshPayloadHashesMatch:true}));

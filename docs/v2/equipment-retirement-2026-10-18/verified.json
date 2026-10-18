@@ -1,0 +1,20 @@
+{
+  "revision": 1288,
+  "english": 733,
+  "registry": 110,
+  "normalized": 839,
+  "preparations": 833,
+  "retiredStillPresent": 0,
+  "protectedHashesEqual": true,
+  "hashes": {
+    "shared": "f047b7188bfbcef360e67d11b8df18ed",
+    "content": "f404b95e177df16024ed8d5898edbb5f",
+    "revision": 1288,
+    "versions": "474f5f1691b015d2e8e38ec6cc24bc0d",
+    "fragments": "729708253da3bc8ef0b996807ab2336f",
+    "otherCampaigns": "8fc4ee65322cb858c7b22f284a8eef86"
+  },
+  "deletedDefinitions": 90,
+  "deletedPreparations": 20,
+  "untouchedCharacterAndMerchantCopies": 265
+}

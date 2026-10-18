@@ -1,0 +1,261 @@
+[
+  {
+    "baseIndex": "club",
+    "name": "Club",
+    "text": "A club is a simple melee weapon, typically a short, sturdy piece of wood used for bludgeoning.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "dagger",
+    "name": "Dagger",
+    "text": "A dagger is a small, versatile melee weapon with a pointed blade, ideal for stabbing or throwing.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "greatclub",
+    "name": "Greatclub",
+    "text": "A massive, two-handed wooden club, simple yet powerful, capable of delivering heavy blows.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "handaxe",
+    "name": "Handaxe",
+    "text": "A versatile, one-handed axe designed for close combat and throwing, often favored for its balance and utility.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "javelin",
+    "name": "Javelin",
+    "text": "A lightweight throwing spear, designed for ranged attacks, with a simple design for easy handling and effective piercing strikes.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "light-hammer",
+    "name": "Light hammer",
+    "text": "A small, one-handed weapon, often used for quick, precise strikes. It can be thrown or used in close combat.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "mace",
+    "name": "Mace",
+    "text": "A blunt, one-handed weapon with a heavy head, designed for crushing blows. It’s effective against armored opponents.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "quarterstaff",
+    "name": "Quarterstaff",
+    "text": "A long, wooden staff often used as a versatile melee weapon. It can be wielded with one or two hands for either striking or blocking.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "sickle",
+    "name": "Sickle",
+    "text": "A curved, bladed tool primarily used for harvesting, but in combat, it serves as a short, slashing weapon effective in close quarters.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "spear",
+    "name": "Spear",
+    "text": "A long pole weapon with a pointed tip, designed for thrusting or throwing, making it versatile in both melee and ranged combat.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "crossbow-light",
+    "name": "Crossbow, light",
+    "text": "A small, one-handed ranged weapon that fires bolts with high accuracy, often favored for its ease of use and portability.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "dart",
+    "name": "Dart",
+    "text": "A small, thrown projectile that is lightweight and quick, typically used for ranged attacks in close quarters. It is often favored for its speed and ease of concealment.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "shortbow",
+    "name": "Shortbow",
+    "text": "A compact and lightweight ranged weapon, ideal for quick shots at medium distances. It is favored for its ease of use and portability, often carried by hunters or scouts.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "sling",
+    "name": "Sling",
+    "text": "A simple ranged weapon that uses a small pouch to hurl stones or other projectiles. It is lightweight, easy to use, and effective at medium range, making it popular for hunting or as a low-tech weapon in combat.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "battleaxe",
+    "name": "Battleaxe",
+    "text": "A versatile melee weapon with a broad, heavy blade designed for powerful strikes. It can be used for slashing or cleaving, making it a popular choice for warriors seeking a balance of damage and practicality.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "flail",
+    "name": "Flail",
+    "text": "A melee weapon consisting of a spiked ball attached to a handle by a chain or hinge. It is designed for delivering powerful, crushing blows, often bypassing shields or armor due to its unpredictable swinging motion.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "glaive",
+    "name": "Glaive",
+    "text": "A polearm with a long shaft and a single-edged blade at the end, often resembling a large spear with a sword-like blade. It is used for sweeping, slashing attacks, making it effective at both close and medium range.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "greataxe",
+    "name": "Greataxe",
+    "text": "A large, two-handed weapon with a heavy, broad blade, designed for powerful, cleaving strikes.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "greatsword",
+    "name": "Greatsword",
+    "text": "A large, two-handed sword known for its broad blade and high damage output, ideal for sweeping attacks.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "halberd",
+    "name": "Halberd",
+    "text": "A polearm with an axe blade, spear tip, and hook, used for both slashing and thrusting in combat.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "lance",
+    "name": "Lance",
+    "text": "A long polearm designed for mounted combat, featuring a pointed tip for thrusting.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "longsword",
+    "name": "Longsword",
+    "text": "A versatile one-handed or two-handed weapon with a straight, double-edged blade, ideal for slashing and thrusting.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "maul",
+    "name": "Maul",
+    "text": "A heavy two-handed weapon with a large, blunt head designed for smashing, often used to deliver powerful, crushing blows.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "morningstar",
+    "name": "Morningstar",
+    "text": "A spiked club with a metal head, often mounted on a shaft, designed for striking with both impact and piercing damage.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "pike",
+    "name": "Pike",
+    "text": "A long, spear-like polearm designed for thrusting, with a sharp point ideal for keeping enemies at a distance.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "rapier",
+    "name": "Rapier",
+    "text": "A slender, sharply pointed sword designed for thrusting, often used in quick, precise attacks.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "scimitar",
+    "name": "Scimitar",
+    "text": "A curved, single-edged sword known for its slashing ability, often used in close combat.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "shortsword",
+    "name": "Shortsword",
+    "text": "A small, versatile blade ideal for quick, close combat, often used for thrusting and slashing.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "trident",
+    "name": "Trident",
+    "text": "A three-pronged spear, often used for thrusting, and is favored for its reach and versatility in both combat and hunting.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "war-pick",
+    "name": "War pick",
+    "text": "A weapon with a sharp, pointed head, designed for piercing armor, commonly used in close combat to penetrate tough defenses.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "warhammer",
+    "name": "Warhammer",
+    "text": "A heavy, blunt weapon with a thick, hammer-like head, used for smashing through armor and dealing powerful blows.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "whip",
+    "name": "Whip",
+    "text": "A flexible, lash-like weapon used for striking from a distance, often causing pain or entangling foes.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "blowgun",
+    "name": "Blowgun",
+    "text": "A ranged weapon that uses a long tube to propel darts or needles through air by blowing with force, often used for stealth or hunting.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "crossbow-hand",
+    "name": "Crossbow, hand",
+    "text": "A small, one-handed ranged weapon that fires bolts with great precision, ideal for close-quarters combat or stealth attacks.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "crossbow-heavy",
+    "name": "Crossbow, heavy",
+    "text": "A powerful, two-handed ranged weapon that delivers strong bolts at long distances, often requiring more strength to wield effectively.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "longbow",
+    "name": "Longbow",
+    "text": "A large, two-handed ranged weapon known for its long range and high damage.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  },
+  {
+    "baseIndex": "net",
+    "name": "Net",
+    "text": "A thrown weapon used to entangle and restrain targets, reducing their movement and ability to act.",
+    "decision": "Sustituir la introducción importada por las estadísticas y propiedades oficiales de 2014. No conceder efectos por alusiones descriptivas a armaduras, rapidez, barridos o bloqueos.",
+    "source": "SRD 5.1 (2014), tabla de armas y reglas de propiedades."
+  }
+]

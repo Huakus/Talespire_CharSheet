@@ -1,0 +1,96 @@
+{
+  "mode": "Análisis: no se modificaron catálogos, inventarios, reglas ni código de aplicación.",
+  "freshness": {
+    "catalogHashMatchesLastVerification": true,
+    "sharedHashMatchesLastVerification": true,
+    "inventoryReadFresh": true
+  },
+  "spanishEntries": 806,
+  "inventoryCount": 241,
+  "characterCores": 16,
+  "warningGroupsOverlap": true,
+  "data": {
+    "total": 110,
+    "categories": {
+      "mounts-and-vehicles": 40,
+      "tools": 33,
+      "equipment": 6
+    },
+    "mixedDamage": 17,
+    "missingRecharge": 14
+  },
+  "descriptions": {
+    "empty": 102,
+    "emptyCategories": {
+      "adventuring-gear": 52,
+      "mounts-and-vehicles": 24,
+      "armor": 12,
+      "weapon": 7,
+      "potion": 4,
+      "equipment": 2,
+      "shield": 1
+    },
+    "flagged": 80,
+    "embeddedJson": [
+      "Núcleo Luciente"
+    ],
+    "emptyBonusedNames": [
+      "Gran hacha +1",
+      "Espada larga +1",
+      "Espada grande +2",
+      "Mayal +2",
+      "Guja +3",
+      "Hacha de batalla +1",
+      "Alabarda +3"
+    ],
+    "emptyPotions": [
+      "Poción de mayor curación",
+      "Poción de curación",
+      "Poción de curación superior",
+      "Poción de sanación suprema"
+    ]
+  },
+  "sources": {
+    "pending": 753,
+    "pendingWithLocalSrdIndexCandidate": 238,
+    "indexMatchIsNotIdentityCertification": true,
+    "spanishImports": [
+      "Cristal Luciente",
+      "Pergamino de Erudito",
+      "Sombra del Segador",
+      "Capa de Carisma +1",
+      "Varita de Armadura de Mago",
+      "Cristal Carmsí",
+      "Capa con runas",
+      "Cristal de Reserva",
+      "Varita de molestar",
+      "Túnica de Agati",
+      "Joyas",
+      "Núcleo Luciente",
+      "Amuleto de mago",
+      "Bastón de Acelerar"
+    ]
+  },
+  "repeatedNames": 11,
+  "rowsWithRepeatedNames": 22,
+  "inventoryLinks": {
+    "nombre único candidato": 107,
+    "sin coincidencia automática": 84,
+    "referencia explícita": 48,
+    "nombre ambiguo": 2
+  },
+  "inventoryWithZeroMaximum": [
+    {
+      "owner": "Delerion",
+      "name": "Perla De Poder"
+    },
+    {
+      "owner": "Delerion",
+      "name": "Varita de Armadura de Mago"
+    },
+    {
+      "owner": "Delerion",
+      "name": "Bastón del marchitamiento"
+    }
+  ]
+}

@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { createClient } from "@supabase/supabase-js";
 import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 import { merchantAfterPersuasion, normalizeMerchantInteraction } from "../../src/domain/commerce/merchant-interaction";
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import { normalizeSpellDefinition } from "../../src/domain/spells/spell-catalog";
+import { equipmentDraftExample } from "../fixtures/equipment-definition-drafts";
+import { EquipmentPreparationPayloadSchema, isEquipmentPreparationPayload } from "../../src/domain/equipment/equipment-preparation";
+import { captureEquipmentSource } from "../../src/domain/equipment/equipment-recovery";
 import { SupabaseCampaignContentStore } from "../../src/infrastructure/remote/supabase-campaign-content-store";
 import {
   RemoteCampaignContentEntry,
@@ -29,7 +33,7 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
   const deletes: Array<Record<string, unknown>> = [];
   const trades: Array<Record<string, unknown>> = [];
   const client = {
-    listCampaignContent: async () => { loads += 1; return structuredClone(entries); },
+    listCampaignContent: async (_campaignId: string, scope = "all") => { loads += 1; return structuredClone(entries.filter((entry) => scope === "all" || (scope === "preparation" ? isEquipmentPreparationPayload(entry.payload) : !isEquipmentPreparationPayload(entry.payload)))); },
     saveCampaignContentEntry: async (input: Record<string, unknown>) => {
       saves.push(structuredClone(input));
       const previous = entries.find((item) => item.kind === input.kind && item.contentKey === input.contentKey);
@@ -69,6 +73,96 @@ function fakeClient(initial: RemoteCampaignContentEntry[]) {
 }
 
 describe("Supabase campaign content store", () => {
+  it("loads recovery originals separately and never requests them when loading the active catalog", async () => {
+    const definition = equipmentDraftExample();
+    const draft = entry({ kind: "equipment", contentKey: "prep:one", name: definition.name, payload: EquipmentPreparationPayloadSchema.parse({ schemaVersion: 2, kind: "equipment", language: "es", format: "equipment-preparation", definition, originals: [], decisions: [] }) });
+    const calls: string[] = [];
+    const client = { listCampaignContent: async (_id: string, scope: string) => { calls.push(scope); return [draft]; } } as unknown as SupabaseCampaignDocumentClient;
+    const store = new SupabaseCampaignContentStore(client, campaignId);
+    expect((await store.load()).equipmentPreparations).toBeUndefined();
+    expect(store.captureLoadedEntries()).toEqual([]);
+    expect(calls).toEqual(["active"]);
+    expect((await store.loadEquipmentPreparations()).equipmentPreparations).toHaveLength(1);
+    await store.loadEquipmentPreparations();
+    expect(calls).toEqual(["active", "preparation"]);
+    await store.loadEquipmentPreparations(true);
+    expect(calls).toEqual(["active", "preparation", "preparation"]);
+  });
+
+  it("sends separate null-safe active and preparation filters through the installed Supabase SDK", async () => {
+    const urls: URL[] = [];
+    const sdk = createClient("https://example.supabase.co", "test-publishable-key", {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      global: { fetch: async (input) => { urls.push(new URL(String(input))); return new Response("[]", { headers: { "Content-Type": "application/json" } }); } },
+    });
+    const client = new SupabaseCampaignDocumentClient(sdk);
+    await client.listCampaignContent(campaignId, "active");
+    await client.listCampaignContent(campaignId, "preparation");
+    expect(urls[0]!.searchParams.get("or")).toBe("(payload->>format.is.null,payload->>format.neq.equipment-preparation)");
+    expect(urls[1]!.searchParams.get("payload->>format")).toBe("eq.equipment-preparation");
+    expect(urls[1]!.searchParams.get("kind")).toBe("eq.equipment");
+    for (const url of urls) { expect(url.searchParams.get("campaign_id")).toBe(`eq.${campaignId}`); expect(url.searchParams.get("deleted_at")).toBe("is.null"); }
+  });
+
+  it("round-trips preparation separately from an active item with the same name", async () => {
+    const definition = equipmentDraftExample();
+    const active = entry({ kind: "equipment", contentKey: "active:one", name: definition.name, payload: { name: definition.name, description: "Original activo" } });
+    const remote = fakeClient([active]), store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    const original = await captureEquipmentSource("ECE", active.contentKey, "2026-10-17T00:00:00.000Z", { ...active, payload: { ...active.payload, unknownUsefulField: { english: "Keep all information", limit: 0 } } });
+    const payload = EquipmentPreparationPayloadSchema.parse({ schemaVersion: 2, kind: "equipment", language: "es", format: "equipment-preparation", definition, originals: [original], decisions: [] });
+    await store.saveEquipmentPreparation({ payload, catalog: null });
+    const loaded = await store.load();
+    expect(loaded.equipment).toHaveLength(1);
+    expect(loaded.equipmentPreparations).toBeUndefined();
+    const preparationContent = await store.loadEquipmentPreparations();
+    expect(preparationContent.equipmentPreparations).toHaveLength(1);
+    expect(preparationContent.equipmentPreparations?.[0]?.payload).toEqual(payload);
+    expect(remote.current().find((row) => row.contentKey === "active:one")).toEqual(active);
+    expect(remote.saves[0]?.tags).not.toContain("definitiva");
+    expect(remote.deletes).toHaveLength(0);
+    await store.saveEquipment({ ...normalizeEquipmentDefinition({ name: definition.name }), catalog: loaded.equipment[0]!.catalog }, definition.name);
+    expect(remote.saves.at(-1)?.contentKey).toBe("active:one");
+    await store.deleteEquipment(definition.name);
+    expect((await store.loadEquipmentPreparations()).equipmentPreparations).toHaveLength(1);
+  });
+
+  it("prepares the exact original without changing the active entry or inventing reviewed rules", async () => {
+    const original = entry({ kind: "equipment", contentKey: "active:recover", name: "Objeto a recuperar", payload: { name: "Objeto a recuperar", desc: [" Texto original. ", "Second English line"], source: "Legacy book", page: 10, special: { extra: [false, null, 0] } } });
+    const remote = fakeClient([original]), store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    const preparation = await store.prepareExistingEquipment(original.contentKey);
+    expect(preparation.payload.originals[0]?.raw).toEqual(original);
+    expect(preparation.payload.definition.description[0]).toMatchObject({ text: " Texto original. ", provenance: "unreviewed" });
+    expect(preparation.payload.definition.requirements.attunement).toBeNull();
+    expect(remote.saves).toHaveLength(0);
+    await store.saveEquipmentPreparation(preparation);
+    const existing = await store.prepareExistingEquipment(original.contentKey);
+    expect(existing.catalog?.revision).toBe(0);
+    expect(existing.payload).toEqual(preparation.payload);
+    expect(remote.current().find((row) => row.contentKey === original.contentKey)).toEqual(original);
+  });
+
+  it("detects stale preparation revisions and damaged archives before saving", async () => {
+    const remote = fakeClient([entry({ kind: "equipment", contentKey: "active:source", name: "Objeto", payload: { name: "Objeto" } })]);
+    const store = new SupabaseCampaignContentStore(remote.client, campaignId);
+    const initial = await store.prepareExistingEquipment("active:source");
+    await store.saveEquipmentPreparation(initial);
+    const loaded = (await store.loadEquipmentPreparations()).equipmentPreparations![0]!;
+    await store.saveEquipmentPreparation(loaded);
+    await expect(store.saveEquipmentPreparation(loaded)).rejects.toThrow("cambió");
+    const damaged = structuredClone((await store.loadEquipmentPreparations()).equipmentPreparations![0]!);
+    damaged.payload.originals[0]!.raw.description = "Cambio no verificado";
+    await expect(store.saveEquipmentPreparation(damaged)).rejects.toThrow("original");
+    const activeTarget = structuredClone(initial); activeTarget.catalog = { contentKey: "active:source", origin: "official", tags: ["es"], revision: 0 };
+    await expect(store.saveEquipmentPreparation(activeTarget)).rejects.toThrow("catálogo activo");
+    expect(remote.saves).toHaveLength(2);
+  });
+
+  it("reports invalid preparation payloads without exposing them as usable items", async () => {
+    const remote = fakeClient([entry({ kind: "equipment", contentKey: "broken:preparation", name: "Borrador incompleto", payload: { format: "equipment-preparation", schemaVersion: 9, definition: { name: "Borrador incompleto" } } })]);
+    const loaded = await new SupabaseCampaignContentStore(remote.client, campaignId).loadEquipmentPreparations();
+    expect(loaded.equipmentPreparationIssues?.[0]?.contentKey).toBe("broken:preparation");
+    expect(remote.current()[0]?.payload.schemaVersion).toBe(9);
+  });
   it("keeps one source tag when saving a curated spell without reintroducing language tags",async()=>{
     const remote=fakeClient([]),store=new SupabaseCampaignContentStore(remote.client,campaignId);
     await store.saveSpell({ ...normalizeSpellDefinition({ name: "Conjuro de prueba",level: 1 }),catalog: { contentKey: "official:spell:es:2014:test",origin: "official",tags: ["manual_jugador"],revision: 0 } });
@@ -389,7 +483,7 @@ describe("Supabase campaign content store", () => {
 
   it("keeps merchant stock solely in the linked NPC inventory", async () => {
     const monster = normalizeMonsterDefinition({ Id: "npc_mirna", Name: "Mirna", Type: "Humanoide", Inventory: ["Vieja moneda"] });
-    const dagger = normalizeEquipmentDefinition({ name: "Daga", cost: { quantity: 2, unit: "gp" }, equipment_category: { index: "weapon" } });
+    const dagger = { ...normalizeEquipmentDefinition({ name: "Daga", cost: { quantity: 2, unit: "gp" }, equipment_category: { index: "weapon" } }), catalog: { contentKey: "gm:equipment:dagger", origin: "gm" as const, tags: ["es", "custom"], revision: 4 } };
     const remote = fakeClient([
       entry({ kind: "monster", contentKey: "gm:monster:mirna", name: monster.name, origin: "gm", tags: ["gm"], payload: monster as unknown as Record<string, unknown> }),
       entry({ kind: "equipment", contentKey: "gm:equipment:dagger", name: dagger.name, origin: "gm", tags: ["gm"], payload: dagger as unknown as Record<string, unknown> }),
@@ -411,7 +505,7 @@ describe("Supabase campaign content store", () => {
 
     const savedMonster = remote.saves.find((save) => save.kind === "monster");
     expect(savedMonster?.payload).toMatchObject({ inventory: [
-      expect.objectContaining({ name: "Daga", quantity: 1 }),
+      expect.objectContaining({ name: "Daga", quantity: 1, catalog: dagger.catalog }),
       expect.objectContaining({ name: "Cuerda", quantity: 2 }),
     ] });
     const savedShop = remote.saves.find((save) => save.kind === "shop");
@@ -419,7 +513,7 @@ describe("Supabase campaign content store", () => {
     expect(savedShop?.payload).not.toHaveProperty("inventory");
     const loaded = await store.load();
     expect(loaded.monsters.find((value) => value.id === "npc_mirna")?.inventory).toEqual(expect.arrayContaining([
-      expect.objectContaining({ id: expect.stringMatching(/^inv_[a-f0-9]{32}$/), name: "Daga", quantity: 1, cost: { quantity: 2, unit: "gp" } }),
+      expect.objectContaining({ id: expect.stringMatching(/^inv_[a-f0-9]{32}$/), name: "Daga", quantity: 1, cost: { quantity: 2, unit: "gp" }, catalog: dagger.catalog }),
       expect.objectContaining({ name: "Cuerda", quantity: 2 }),
     ]));
     expect(loaded.shops[0]?.inventory).toBeUndefined();

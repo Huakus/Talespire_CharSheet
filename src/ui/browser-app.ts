@@ -121,7 +121,17 @@ import type {
 } from "../infrastructure/talespire/talespire-player-collaboration";
 import type { PlayerCustomContent } from "../infrastructure/talespire/custom-content-transfer";
 import { bindViewportConstrainedDetails } from "./floating-panel";
-import { renderSharedInventoryCard } from "./inventory-view";
+import { inventoryCatalogDefinition, renderSharedInventoryCard } from "./inventory-view";
+import { inventoryDescriptionBlocks, inventoryDescriptionText, inventoryPlayerText, inventorySupplementalText } from "./inventory-description";
+import { bindEquipmentToolChecks, renderEquipmentToolCheck } from "./equipment-tool-checks";
+import { inventoryEquipmentDefinition, equipmentBearerIssue, equipmentPlainDescription } from "../domain/equipment/equipment-live";
+import { equipmentClassResourceIssue } from "../domain/equipment/equipment-class-resources";
+import { CORE_RESONANCES, coreFeatureIssue, isLucentCore, lucentCoreState, type CoreResonance } from "../domain/equipment/equipment-lucent-core";
+import type { LucentCoreAction } from "../domain/character/character-inventory";
+import { DAMAGE_TYPES } from "../domain/equipment/equipment-constants";
+import { inventoryHealingExpression } from "../domain/equipment/equipment-healing";
+import { projectEquipmentSpellSlots } from "../domain/equipment/equipment-spell-slots";
+import { equipmentTagLabel, visibleEquipmentTags } from "../domain/equipment/equipment-tags";
 import {
   canOpenPersistencePanel,
   openPersistencePanel,
@@ -913,7 +923,7 @@ export class BrowserApp {
   }
 
   private equipmentCatalog(): readonly EquipmentCatalogDraft[] {
-    return this.customEquipment;
+    return this.customEquipment.filter((item) => !item.catalog?.tags.includes("revision_pendiente"));
   }
 
   private findEquipment(name: string): EquipmentCatalogDraft | null {
@@ -1634,7 +1644,7 @@ export class BrowserApp {
     return `<nav class="filter-bar spell-filter-bar" aria-label="Filtrar conjuros">${filters.map((value) => {
       const spells = value === "all" ? sourceSpells : sourceSpells.filter((spell) => spell.level === Number(value));
       const prepared = spells.filter((spell) => spell.prepared).length;
-      const slot = value !== "all" && Number(value) > 0 ? character.spellcasting.slots[value] : undefined;
+      const slot = value !== "all" && Number(value) > 0 ? projectEquipmentSpellSlots(character, Number(value)) : undefined;
       const label = value === "all" ? "Todos" : labels[Number(value)]!;
       const slotText = slot && slot.maximum > 0 ? ` · ${Math.max(0, slot.maximum - slot.used)} disp./${slot.used} usados` : "";
       const marks = slot && slot.maximum > 0
@@ -1813,16 +1823,16 @@ export class BrowserApp {
       item.weapon?.damageType ?? "",
       item.armor?.armorCategory ?? "",
       ...item.properties,
-      ...this.inventoryTags(item),
+      ...this.inventoryTags(item), ...this.inventoryTags(item).map(equipmentTagLabel),
     ].join(" "));
   }
 
   private inventoryDefinition(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): EquipmentCatalogDraft | null {
-    return "rarity" in item ? item : this.findEquipment(item.name);
+    return inventoryCatalogDefinition(item, this.customEquipment);
   }
 
   private inventoryTags(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string[] {
-    return catalogTags(this.inventoryDefinition(item) ?? item);
+    return visibleEquipmentTags(catalogTags(this.inventoryDefinition(item) ?? item));
   }
 
   private inventoryRarity(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string {
@@ -1857,7 +1867,7 @@ export class BrowserApp {
     const tags = uniqueLabels(source.flatMap((item) => this.inventoryTags(item)));
     const rarities = uniqueLabels(source.map((item) => this.inventoryRarity(item)));
     const noFilters = this.inventoryFilters.size === 0 && this.inventoryTagFilters.size === 0 && this.inventoryRarityFilters.size === 0;
-    const tagMenu = tags.length ? `<details class="gm-filter-group player-filter-group ${this.inventoryTagFilters.size ? "active" : ""}"><summary>Etiquetas${this.inventoryTagFilters.size ? `<strong>${this.inventoryTagFilters.size}</strong>` : ""}</summary><div>${tags.map((tag) => `<button type="button" data-inventory-tag-filter="${escapeHtml(tag)}" class="${this.inventoryTagFilters.has(tag) ? "active" : ""}" aria-pressed="${this.inventoryTagFilters.has(tag)}">${escapeHtml(tag)}</button>`).join("")}</div></details>` : "";
+    const tagMenu = tags.length ? `<details class="gm-filter-group player-filter-group ${this.inventoryTagFilters.size ? "active" : ""}"><summary>Etiquetas${this.inventoryTagFilters.size ? `<strong>${this.inventoryTagFilters.size}</strong>` : ""}</summary><div>${tags.map((tag) => `<button type="button" data-inventory-tag-filter="${escapeHtml(tag)}" class="${this.inventoryTagFilters.has(tag) ? "active" : ""}" aria-pressed="${this.inventoryTagFilters.has(tag)}">${escapeHtml(equipmentTagLabel(tag))}</button>`).join("")}</div></details>` : "";
     const rarityMenu = rarities.length ? `<details class="gm-filter-group player-filter-group ${this.inventoryRarityFilters.size ? "active" : ""}"><summary>Rareza${this.inventoryRarityFilters.size ? `<strong>${this.inventoryRarityFilters.size}</strong>` : ""}</summary><div>${rarities.map((rarity) => `<button type="button" data-inventory-rarity-filter="${escapeHtml(rarity)}" class="${this.inventoryRarityFilters.has(rarity) ? "active" : ""}" aria-pressed="${this.inventoryRarityFilters.has(rarity)}">${escapeHtml(equipmentRarityLabel(rarity))}</button>`).join("")}</div></details>` : "";
     return `<nav class="filter-bar property-filter inventory-filter-bar" aria-label="Filtros del inventario"><button type="button" data-clear-inventory-filters class="${noFilters && !this.inventorySearch && !this.includeUnownedInventory ? "active" : ""}" aria-pressed="${noFilters && !this.inventorySearch && !this.includeUnownedInventory}">Limpiar</button>${filters.map(([value, label]) => `<button type="button" data-inventory-filter="${value}" class="${this.inventoryFilters.has(value) ? "active" : ""}" aria-pressed="${this.inventoryFilters.has(value)}"><span>${label}</span><strong>${sourceItems.filter((item) => this.inventoryMatchesFilter(item, value)).length}</strong></button>`).join("")}${tagMenu}${rarityMenu}${allowCatalog ? `<button type="button" class="catalog-toggle ${this.includeUnownedInventory ? "active" : ""}" data-include-unowned-inventory aria-pressed="${this.includeUnownedInventory}">${this.includeUnownedInventory ? "Ocultar catálogo" : "Mostrar catálogo"}</button>` : ""}</nav>`;
   }
@@ -1873,9 +1883,11 @@ export class BrowserApp {
     </div>`;
   }
 
-  private renderCollapsibleInventoryDescription(description: string, key: string): string {
+  private renderCollapsibleInventoryDescription(description: string, key: string, definition: ReturnType<typeof inventoryEquipmentDefinition> = null): string {
     const expanded = this.expandedInventoryDescriptions.has(key);
-    return `<div class="spell-description inventory-description ${expanded ? "expanded" : ""}" data-inventory-description="${escapeHtml(key)}"><div class="card-description rich-inventory-text">${this.renderInventoryRichText(description, "Tirada")}</div><button type="button" class="spell-description-more" data-toggle-inventory-description aria-expanded="${expanded}">${expanded ? "Leer menos" : "Leer más"}</button></div>`;
+    const structured = definition && description === equipmentPlainDescription(definition);
+    const html = structured ? inventoryDescriptionBlocks(definition).map((block) => block.type === "paragraph" ? this.renderInventoryRichText(block.text, "Tirada") : block.type === "list" ? `<${block.ordered ? "ol" : "ul"}>${block.items.map((text) => `<li>${this.renderInventoryRichText(text, "Tirada")}</li>`).join("")}</${block.ordered ? "ol" : "ul"}>` : `<div class="inventory-rule-table"><table><thead><tr>${block.columns.map((text) => `<th>${escapeHtml(text)}</th>`).join("")}</tr></thead><tbody>${block.rows.map((row) => `<tr>${row.map((text) => `<td>${this.renderInventoryRichText(text, "Tirada")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`).join("") : this.renderInventoryRichText(inventoryDescriptionText(description, definition), "Tirada");
+    return `<div class="spell-description inventory-description ${expanded ? "expanded" : ""}" data-inventory-description="${escapeHtml(key)}"><div class="card-description rich-inventory-text">${html}</div><button type="button" class="spell-description-more" data-toggle-inventory-description aria-expanded="${expanded}">${expanded ? "Leer menos" : "Leer más"}</button></div>`;
   }
 
   private renderInventoryRichText(description: string, rollName: string): string {
@@ -1900,27 +1912,36 @@ export class BrowserApp {
   }
 
   private inventoryFeatureCanBeUsed(item: CharacterInventoryItemV2, feature: InventoryFeature): boolean {
-    return item.quantity > 0 && (item.equipped || item.consumable) &&
+    const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
+    return (!character || !equipmentBearerIssue(character, item, feature.id) && !equipmentClassResourceIssue(character, item, feature.id)) && !coreFeatureIssue(item, feature.id) && item.quantity > 0 && (item.equipped || item.consumable) &&
       (!item.requiresAttunement || item.attuned) &&
       (feature.chargeCost === 0 || (item.charges !== null && item.charges.current >= feature.chargeCost)) &&
       (feature.uses === null || feature.uses.current > 0);
   }
 
-  private renderInventoryFeatureCapability(item: CharacterInventoryItemV2, feature: InventoryFeature, actionCard = false): string {
+  private renderInventoryFeatureCapability(item: CharacterInventoryItemV2, feature: InventoryFeature, actionCard = false, description = inventoryPlayerText(inventorySupplementalText(feature.description))): string {
     const canUse = this.inventoryFeatureCanBeUsed(item, feature);
-    const shouldOfferUse = feature.kind !== "passive" || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null;
+    const healingExpression = inventoryHealingExpression(item,feature.id);
+    const actor = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
+    const resourceIssue = actor ? equipmentClassResourceIssue(actor, item, feature.id) : "";
+    const owned = actor?.inventory.some((entry)=>entry.id===item.id) === true;
+    const canDrink = canUse && !!actor && actor.combat.hitPoints.current > 0 && !actor.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key));
+    const canRoll = !item.rules || item.quantity > 0 && (item.equipped || item.consumable) && (!item.requiresAttunement || item.attuned) && (!actor || !equipmentBearerIssue(actor,item,feature.id));
+    const spellGrant = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""]?.spellcasting.spells.some((s) => s.casting?.kind === "item" && s.casting.source === `inventory:${item.id}:${feature.id}`);
+    const shouldOfferUse = !["passive", "other"].includes(feature.kind) || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null;
     const resourceLabels = [
       feature.uses ? `${feature.uses.current}/${feature.uses.maximum} usos` : "",
       feature.chargeCost > 0 ? `${feature.chargeCost} ${feature.chargeCost === 1 ? "carga" : "cargas"}` : "",
       feature.active ? "Activo" : "",
     ].filter(Boolean);
-    const controls = `${feature.rolls.map((roll) => `<button type="button" class="roll-button" data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}${shouldOfferUse ? feature.toggleable && feature.active
+    const controls = `${feature.rolls.map((roll) => `<button type="button" class="roll-button" ${!canRoll ? 'disabled title="Equipá y, si corresponde, sintonizá el objeto."' : 'title="La tirada no gasta recursos; Usar registra el coste de la capacidad."'} data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}${shouldOfferUse ? feature.toggleable && feature.active
       ? `<button type="button" class="secondary-button" data-inventory-feature-action="deactivate" data-feature-id="${escapeHtml(feature.id)}">Desactivar</button>`
-      : `<button type="button" data-inventory-feature-action="use" data-feature-id="${escapeHtml(feature.id)}" ${canUse ? "" : "disabled"}>${feature.toggleable ? "Activar" : "Usar"}</button>` : ""}`;
+      : `<button type="button" data-inventory-feature-action="use" data-feature-id="${escapeHtml(feature.id)}" ${resourceIssue ? `title="${escapeHtml(resourceIssue)}"` : ""} ${canUse ? "" : "disabled"}>${spellGrant ? "Lanzar" : feature.toggleable ? "Activar" : "Usar"}</button>` : ""}`;
     return `<article class="inventory-feature-capability ${feature.active ? "active" : ""} ${actionCard ? "play-card action-play-card inventory-feature-action-card" : ""}" data-inventory-card data-inventory-id="${escapeHtml(item.id)}">
       <header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h${actionCard ? "3" : "4"}>${escapeHtml(feature.name)}</h${actionCard ? "3" : "4"}></div>${resourceLabels.length ? `<span class="card-badge">${escapeHtml(resourceLabels.join(" · "))}</span>` : ""}</header>
-      ${feature.description ? `<div class="rich-inventory-text">${this.renderInventoryRichText(feature.description, `${item.name}: ${feature.name}`)}</div>` : ""}
+      ${description ? `<div class="rich-inventory-text">${this.renderInventoryRichText(description, `${item.name}: ${feature.name}`)}</div>` : ""}
       ${controls ? `<div class="inventory-feature-controls">${controls}</div>` : ""}
+      ${healingExpression && owned ? `<div class="inventory-feature-controls"><label>Curación (${escapeHtml(healingExpression)})<input type="number" data-equipment-healing-result min="1" placeholder="Vacío para tirar"></label><button type="button" data-equipment-self-healing="${escapeHtml(feature.id)}" ${canDrink ? "" : "disabled"}>Beber y curarme</button><small>Consume la poción y aplica el resultado a tus PG. Para administrarla a otro, Usar registra únicamente el consumo.</small></div>` : ""}
     </article>`;
   }
 
@@ -1968,7 +1989,7 @@ export class BrowserApp {
       : spell.casting?.kind === "innate" ? this.innateSpellAvailable(character, spell) ? spell.casting.level : undefined
       : spell.casting?.kind === "ritual" ? undefined
       : Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).find((level) => {
-        const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
+        const slot = projectEquipmentSpellSlots(character, level);
         return slot.used < slot.maximum;
       });
     const canLaunch = known && ((spellReady(spell, character) && (spell.level === 0 || availableSlotLevel !== undefined)) || ritualAvailable || freeModes.some((mode) => mode.available));
@@ -2004,7 +2025,7 @@ export class BrowserApp {
         const levelOptions = spell.casting?.source === "builder:monk" ? "" : itemSpellOptions(character,spell) ?? druidCastingOptions(character,spell) ?? warlockCastingOptions(character,spell) ?? (spell.casting?.kind === "innate" && spell.level > 0 ? `<option value="${spell.casting.level}" data-spell-damage="${escapeHtml(projectSpellDamageExpression(character, spell, spell.casting.level))}" data-cast-available="${availableSlotLevel !== undefined}">Innato · nivel ${spell.casting.level} · ${availableSlotLevel !== undefined ? "disponible" : "sin usos"}</option>` : spell.casting?.kind === "ritual" ? "" : spell.level === 0
           ? `<option value="0" data-spell-damage="${escapeHtml(damage)}" data-cast-available="true">Truco</option>`
           : Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).map((level) => {
-              const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
+              const slot = projectEquipmentSpellSlots(character, level);
               const projectedDamage = projectSpellDamageExpression(character, spell, level);
               const disabled = !spellReady(spell,character) || slot.used >= slot.maximum;
               return `<option value="${level}" data-spell-damage="${escapeHtml(projectedDamage)}" data-cast-available="${!disabled}" ${initialCastLevel === level ? "selected" : ""} ${disabled ? "disabled" : ""}>Nivel ${level} · ${Math.max(0, slot.maximum - slot.used)} disp.</option>`;
@@ -2101,18 +2122,29 @@ export class BrowserApp {
     const damageBase = linkedAction?.damageExpression || item.weapon?.damageExpression || "";
     const damageBonus = linkedAction ? projectActionDamageBonus(character, linkedAction) : item.weapon?.damageBonus ?? 0;
     const damageExpression = damageBase ? `${damageBase}${damageBonus > 0 ? `+${damageBonus}` : damageBonus < 0 ? damageBonus : ""}` : "";
+    const definition = inventoryEquipmentDefinition(item);
+    const displayedText = [description, ...(definition && description === equipmentPlainDescription(definition) ? inventoryDescriptionBlocks(definition).map(block => block.type === "paragraph" ? block.text : block.type === "list" ? block.items.join("\n") : block.rows.map(row => row.join(" · ")).join("\n")) : [])];
+    const featureDescriptions = new Map([...item.features].sort((a, b) => a.order - b.order).map(feature => {
+      const extra = inventoryPlayerText(inventorySupplementalText(feature.description, displayedText));
+      displayedText.push(extra);
+      return [feature.id, this.showInventoryDescriptions ? extra : ""];
+    }));
     const interactiveFeaturesHtml = !commerce && ownedItem?.features.length ? `<div class="inventory-capability-groups">${[
       { label: "Efectos pasivos", features: ownedItem.features.filter((feature) => feature.kind === "passive") },
       { label: "Capacidades activables", features: ownedItem.features.filter((feature) => !["passive", "other"].includes(feature.kind)) },
       { label: "Otros efectos", features: ownedItem.features.filter((feature) => feature.kind === "other") },
-    ].filter((group) => group.features.length).map((group) => `<section><h4>${group.label}</h4>${group.features.sort((left, right) => left.order - right.order).map((feature) => this.renderInventoryFeatureCapability(ownedItem, feature)).join("")}</section>`).join("")}</div>` : "";
-    const previewFeaturesHtml = !interactiveFeaturesHtml && item.features.length ? `<div class="inventory-capability-groups inventory-capability-preview"><section><h4>Capacidades</h4>${[...item.features].sort((left, right) => left.order - right.order).map((feature) => `<article class="inventory-feature-capability"><header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h4>${escapeHtml(feature.name)}</h4></div></header>${feature.description ? `<div class="rich-inventory-text">${commerce ? feature.description.split(/\r?\n\s*\r?\n/).filter(Boolean).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("") : this.renderInventoryRichText(feature.description, `${item.name}: ${feature.name}`)}</div>` : ""}${feature.rolls.length ? `<div class="inventory-feature-controls">${feature.rolls.map((roll) => commerce ? `<span class="card-badge">${escapeHtml(roll.label)}: ${escapeHtml(roll.expression)}</span>` : `<button type="button" class="roll-button" data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}</div>` : ""}</article>`).join("")}</section></div>` : "";
+    ].filter((group) => group.features.length).map((group) => `<section><h4>${group.label}</h4>${group.features.sort((left, right) => left.order - right.order).map((feature) => this.renderInventoryFeatureCapability(ownedItem, feature, false, featureDescriptions.get(feature.id) ?? "")).join("")}</section>`).join("")}</div>` : "";
+    const previewFeaturesHtml = !interactiveFeaturesHtml && item.features.length ? `<div class="inventory-capability-groups inventory-capability-preview"><section><h4>Capacidades</h4>${[...item.features].sort((left, right) => left.order - right.order).map((feature) => {
+      const extra = featureDescriptions.get(feature.id) ?? "";
+      return `<article class="inventory-feature-capability"><header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h4>${escapeHtml(feature.name)}</h4></div></header>${extra ? `<div class="rich-inventory-text">${commerce ? extra.split(/\r?\n\s*\r?\n/).filter(Boolean).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("") : this.renderInventoryRichText(extra, `${item.name}: ${feature.name}`)}</div>` : ""}${feature.rolls.length ? `<div class="inventory-feature-controls">${feature.rolls.map((roll) => commerce ? `<span class="card-badge">${escapeHtml(roll.label)}: ${escapeHtml(roll.expression)}</span>` : `<button type="button" class="roll-button" data-roll-name="${escapeHtml(`${item.name}: ${roll.label}`)}" data-roll-expression="${escapeHtml(roll.expression)}" data-roll-mode="${roll.mode}">${escapeHtml(roll.label)}</button>`).join("")}</div>` : ""}</article>`;
+    }).join("")}</section></div>` : "";
     const featuresHtml = interactiveFeaturesHtml || previewFeaturesHtml;
     const commerceControl = commerce && ownedItem ? `<div class="inventory-card-controls merchant-item-controls"><div class="merchant-quantity-control ${commerce.disabled ? "disabled" : ""}" aria-label="Cantidad de ${escapeHtml(ownedItem.name)}"><div><button type="button" data-merchant-quantity-step="-1" aria-label="Quitar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity <= 0 ? "disabled" : ""}>−</button><button type="button" data-merchant-quantity-step="1" aria-label="Agregar una unidad de ${escapeHtml(ownedItem.name)}" ${commerce.disabled || commerce.selectedQuantity >= quantity ? "disabled" : ""}>+</button></div><input type="number" inputmode="numeric" data-merchant-select-quantity min="0" max="${quantity}" step="1" value="${commerce.selectedQuantity}" aria-label="Cantidad a intercambiar de ${escapeHtml(ownedItem.name)}" ${commerce.disabled ? "disabled" : ""}><small>de ${quantity}</small></div>${commerce.itemChallenge ? `<button type="button" class="secondary-button merchant-item-challenge-button" data-merchant-action="${commerce.itemChallenge.action}" data-merchant-item-id="${escapeHtml(ownedItem.id)}" data-base-item-dc="${commerce.itemChallenge.dc}" ${commerce.selectedQuantity > 0 ? "" : "disabled"}><span>${escapeHtml(commerce.itemChallenge.label)}</span><strong>CD ${commerce.itemChallenge.dc}</strong></button>` : ""}</div>` : "";
     const effectAvailable = Boolean(ownedItem?.equipped && (!ownedItem.requiresAttunement || ownedItem.attuned));
     const effectActive = Boolean(effectAvailable && ownedItem?.effect.active);
-    const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect ${effectAvailable ? "" : "unavailable"}"><span>${escapeHtml(ownedItem.effect.description)}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto" title="${effectAvailable ? "Estado del efecto" : "El objeto debe estar equipado y, cuando corresponda, sintonizado"}" ${effectAvailable ? "" : "disabled"}><option value="off" ${effectActive ? "" : "selected"}>Inactivo</option><option value="on" ${effectActive ? "selected" : ""}>Activo</option></select></div>` : "";
-    const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`) : "";
+    const effectText = ownedItem ? inventorySupplementalText(ownedItem.effect.description, displayedText) : "";
+    const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect ${effectAvailable ? "" : "unavailable"}"><span>${escapeHtml(effectText || "Efecto del objeto")}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto" title="${effectAvailable ? "Estado del efecto" : "El objeto debe estar equipado y, cuando corresponda, sintonizado"}" ${effectAvailable ? "" : "disabled"}><option value="off" ${effectActive ? "" : "selected"}>Inactivo</option><option value="on" ${effectActive ? "selected" : ""}>Activo</option></select></div>` : "";
+    const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`, inventoryEquipmentDefinition(item)) : "";
     const transferControl = ownedItem ? `<details class="inventory-item-transfer"><summary>Transferir</summary><div><select data-item-transfer-target aria-label="Personaje destinatario"><option value="">Destinatario…</option>${targets}</select><div><input data-item-transfer-quantity type="number" min="1" max="${quantity}" step="1" value="1" aria-label="Cantidad a transferir"><button type="button" data-transfer-inventory-item disabled>Confirmar</button></div></div></details>` : "";
     const inventoryHeaderControl = ownedItem ? `<div class="inventory-card-controls"><div class="inventory-card-primary"><label class="inventory-card-quantity"><span>Cant.</span><input data-inventory-quantity-input type="number" min="1" step="1" value="${quantity}" aria-label="Cantidad de ${escapeHtml(item.name)}"></label><button type="button" class="inventory-state-toggle ${ownedItem.equipped ? "active" : ""}" data-inventory-action="equip" aria-pressed="${ownedItem.equipped}" aria-label="${ownedItem.equipped ? "Quitar" : "Equipar"} ${escapeHtml(item.name)}" title="${ownedItem.equipped ? "Quitar" : "Equipar"}">${ownedItem.equipped ? "✓" : "✕"}</button></div>${transferControl}</div>` : '<span class="inventory-catalog-state">No adquirido</span>';
     const actionsHtml = commerce ? "" : `<div class="inventory-row-actions">${catalog ? `<button type="button" data-add-catalog-inventory="${escapeHtml(item.name)}">Agregar</button>` : `${ownedItem?.usable ? `<button type="button" data-inventory-action="use" ${useDisabled ? "disabled" : ""} title="${useDisabled && !ownedItem.consumable && !ownedItem.equipped ? "Debe estar equipado" : "Usar objeto"}">Usar</button>` : ""}${ownedItem?.requiresAttunement && ownedItem.equipped ? `<button type="button" class="secondary-button" data-inventory-action="attune">${ownedItem.attuned ? "Desintonizar" : "Sintonizar"}</button>` : ""}`}</div>`;
@@ -2122,8 +2154,54 @@ export class BrowserApp {
       articleAttributes: ownedItem ? (commerce ? `data-merchant-commerce-item="${escapeHtml(ownedItem.id)}"` : "data-inventory-card") : "",
       headerControlHtml: commerceControl || inventoryHeaderControl,
       statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${damageExpression ? `<button type="button" class="roll-button inventory-damage-roll" data-roll-name="Daño: ${escapeHtml(item.name)}" data-roll-expression="${escapeHtml(damageExpression)}" data-roll-mode="normal">${escapeHtml(damageExpression)} ${escapeHtml(item.weapon?.damageType ?? "")}</button>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} cargas</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
-      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml,
+      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml: actionsHtml + (!commerce && ownedItem ? renderEquipmentToolCheck(ownedItem) + this.renderEquipmentRecovery(ownedItem) + this.renderEquipmentSpellStorage(ownedItem) + this.renderLucentCore(character, ownedItem) + this.renderAssistedEquipmentCosts(character, ownedItem) : ""),
     });
+  }
+
+  private renderEquipmentRecovery(item: CharacterInventoryItemV2): string {
+    if (isLucentCore(item)) return "";
+    const resources = inventoryEquipmentDefinition(item)?.resources.filter((r) => r.kind !== "spell-storage");
+    if (resources?.length !== 1 || !item.charges) return "";
+    const resource = resources[0]!, recovery = resource.recovery;
+    if (recovery.kind !== "event") return "";
+    const event = ({ dawn: "al amanecer", dusk: "al anochecer", "short-rest": "tras descanso corto", "long-rest": "tras descanso largo", other: "al cumplir la condición" })[recovery.event];
+    return `<details class="inventory-recovery"><summary>Recuperación ${event}</summary><p>${escapeHtml(recovery.explanation)}</p>${recovery.amount.kind === "roll" ? `<label>Resultado de ${escapeHtml(recovery.amount.expression)}<input type="number" data-equipment-recovery-roll inputmode="numeric" placeholder="Vacío para tirar"></label>` : ""}<button type="button" class="secondary-button" data-recover-equipment="${escapeHtml(recovery.event)}" ${item.charges.current >= item.charges.maximum ? "disabled" : ""}>Confirmar evento y recuperar${recovery.amount.kind === "roll" ? ` ${escapeHtml(recovery.amount.expression)}` : ""}</button><small>Usar cuando se cumpla el evento indicado. Conserva lo gastado y respeta el máximo.</small></details>`;
+  }
+
+  private renderLucentCore(character: CharacterV2, item: CharacterInventoryItemV2): string {
+    if (!isLucentCore(item)) return "";
+    const state = lucentCoreState(item), ready = item.equipped && item.attuned && !equipmentBearerIssue(character,item);
+    const active = ready && state.active && state.remainingRounds > 0;
+    const investigation = projectCharacterStatistics(character).skills.investigation;
+    return `<details class="inventory-lucent-core"><summary>Núcleo Luciente · ${state.unstable ? "inestable" : "estable"}</summary>
+      <p>Configuración: ${state.resonance ? CORE_RESONANCES[state.resonance] : "sin configurar"}.${state.lastCheckTotal === null ? "" : ` Última prueba: ${state.lastCheckTotal} contra CD 12.`}</p>
+      <label>Resonancia<select data-core-resonance>${Object.entries(CORE_RESONANCES).map(([key,label]) => `<option value="${key}" ${key === state.resonance ? "selected disabled" : ""}>${label}${key === state.resonance ? " · ya configurada" : ""}</option>`).join("")}</select></label>
+      <label>Resultado del d20<input data-core-d20 type="number" min="1" max="20" placeholder="Vacío para tirar"></label><button type="button" data-lucent-core-action="configure" ${ready ? "" : "disabled"}>Reconfigurar · acción · INT + herramientas CD 12</button>
+      ${state.wearCheckPending ? `<p>Desgaste pendiente: al gastar tres cargas antes de un descanso largo debe resolverse un d20. Con 1, Revelación queda bloqueada hasta reparar.</p><button type="button" data-lucent-core-action="wear" ${ready ? "" : "disabled"}>Resolver desgaste · d20</button>` : ""}
+      ${state.active ? `<p>${active ? "Efecto activo" : "Efecto suspendido mientras no se cumplan los requisitos"}: ${CORE_RESONANCES[state.active]} · ${state.remainingRounds} rondas restantes. ${state.active === "blue" ? "Resistencia al frío y ventaja frente al clima extremo." : state.active === "green" ? "Ventaja en Investigación aeloriana y búsquedas descritas." : "Interacción con mecanismos aelorianos."}</p><button type="button" data-lucent-core-action="round">Avanzar una ronda</button><button type="button" data-lucent-core-action="minute">Avanzar un minuto</button><button type="button" data-lucent-core-action="end">Terminar efecto</button>${active && state.active === "green" ? `<button type="button" class="roll-button" data-roll-name="Núcleo: Investigación aeloriana" data-roll-expression="1d20${investigation >= 0 ? "+" : ""}${investigation}" data-roll-mode="advantage">Investigación aeloriana · ventaja</button>` : ""}` : ""}
+      <fieldset><legend>Recarga y reparación</legend><label><input type="checkbox" data-core-rest>Se completó un descanso largo</label><label><input type="checkbox" data-core-crystal>Hay un fragmento de Cristal Luciente insertado o disponible para la reparación</label><button type="button" data-lucent-core-action="recover" ${ready && !state.wearCheckPending ? "" : "disabled"}>Confirmar recarga a 3</button>${state.unstable ? `<label><input type="checkbox" data-core-materials>Se utilizaron materiales metálicos por valor de 25 po</label><button type="button" data-lucent-core-action="repair" ${ready ? "" : "disabled"}>Confirmar reparación</button>` : ""}<p>Descansar solo no recarga el núcleo. Estos controles confirman las condiciones; no retiran automáticamente materiales de otro inventario. El paso del tiempo se registra en rondas, sin usar tiempo real.</p></fieldset></details>`;
+  }
+
+  private renderEquipmentSpellStorage(item: CharacterInventoryItemV2): string {
+    const storage = item.rules?.storage;
+    const capacity = inventoryEquipmentDefinition(item)?.resources.find((r) => r.kind === "spell-storage")?.maximum;
+    if (!storage || !capacity) return "";
+    if (!storage.known) return '<p>Contenido antiguo sin identificar. No se deduce a partir de las cargas anteriores.</p>';
+    const used = storage.spells.reduce((n, s) => n + s.slotLevel, 0);
+    const ready = item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned);
+    const spells = this.spellCatalog().filter((s) => s.level > 0 && s.level <= capacity - used).sort((a,b) => a.name.localeCompare(b.name, "es"));
+    return `<details class="inventory-spell-storage"><summary>Conjuros almacenados · ${used}/${capacity} niveles</summary>${storage.spells.length ? storage.spells.map((s) => `<p><strong>${escapeHtml(String(s.definition.name))}</strong> · nivel ${s.slotLevel} · CD ${s.saveDc ?? "—"} · ataque ${s.attackBonus ?? "—"} <button type="button" data-cast-stored-spell="${escapeHtml(s.id)}" ${ready ? "" : 'disabled title="Equipá y sintonizá el objeto"'}>Lanzar y liberar espacio</button></p>`).join("") : "<p>Vacío.</p>"}${spells.length ? `<fieldset><legend>Registrar un conjuro lanzado al objeto</legend><label>Conjuro<select data-storage-spell>${spells.map((s) => `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)} (nivel ${s.level})</option>`).join("")}</select></label><label>Nivel del espacio usado<input data-storage-level type="number" min="1" max="${capacity - used}" value="1"></label><label>Característica del lanzador<select data-storage-ability><option value="intelligence">INT</option><option value="wisdom">SAB</option><option value="charisma">CAR</option></select></label><label>Modificador original<input data-storage-modifier type="number" placeholder="Modificador de la característica"></label><label>CD original<input data-storage-dc type="number" min="0" placeholder="CD del lanzador"></label><label>Ataque original<input data-storage-attack type="number" placeholder="Bono del lanzador"></label><label><input data-storage-confirm type="checkbox">El lanzador gastó y registró su espacio de conjuro.</label><button type="button" data-store-equipment-spell>Guardar conjuro</button><p>Se conservan el nivel, la CD y el ataque originales. Al lanzarlo, el portador mantiene la concentración si corresponde. La carga registra un lanzamiento ya realizado; no gasta otro espacio.</p></fieldset>` : "<p>Sin capacidad libre.</p>"}</details>`;
+  }
+
+  private renderAssistedEquipmentCosts(character: CharacterV2, item: CharacterInventoryItemV2): string {
+    const definition = inventoryEquipmentDefinition(item);
+    if (!definition) return "";
+    const resource = definition.resources.find((r) => r.kind !== "spell-storage");
+    const manualCharges = item.charges && resource && item.features.every((f) => f.chargeCost === 0);
+    const wholeUnit = item.consumable && !definition.capabilities.some((cap) => cap.consumeQuantity > 0);
+    if (!manualCharges && !wholeUnit) return "";
+    const ready = item.quantity > 0 && (item.equipped || item.consumable) && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character, item);
+    return `<details class="inventory-assisted-cost"><summary>Registrar costes del uso</summary><p>Aplicá la regla de la descripción y registrá su coste. Los efectos que siguen siendo asistidos se detallan en el objeto.</p>${manualCharges ? `<label>${escapeHtml(resource!.name)} gastadas<input data-equipment-spend-amount type="number" min="1" max="${item.charges!.current}" value="1"></label><button type="button" data-equipment-assisted-cost="charges" ${ready && item.charges!.current > 0 ? "" : "disabled"}>Registrar gasto</button><p>${escapeHtml(resource!.exhaustion)}</p>` : ""}${wholeUnit ? '<button type="button" data-equipment-assisted-cost="unit">Registrar consumo de una unidad completa</button>' : ""}</details>`;
   }
 
   private renderTraitsPlay(character: CharacterV2): string {
@@ -2347,7 +2425,7 @@ export class BrowserApp {
       ? spell.level === 0
         ? '<option value="0" data-cast-available="true">Truco</option>'
         : `${Array.from({ length: 10 - minimumLevel }, (_, index) => minimumLevel + index).map((level) => {
-            const slot = character.spellcasting.slots[String(level)] ?? { maximum: 0, used: 0 };
+            const slot = projectEquipmentSpellSlots(character, level);
             const disabled = !spellReady(spell,character) || slot.used >= slot.maximum;
             return `<option value="${level}" data-cast-available="${!disabled}" ${initialCastLevel === level ? "selected" : ""} ${disabled ? "disabled" : ""}>Nivel ${level} · ${Math.max(0, slot.maximum - slot.used)} disp.</option>`;
           }).join("")}${ritualAvailable ? `<option value="ritual" data-cast-available="true" ${initialCastLevel === "ritual" ? "selected" : ""}>Ritual · sin espacio</option>` : ""}`
@@ -2724,6 +2802,7 @@ export class BrowserApp {
           </div>
           ${this.renderCharacterFacts(character)}
         </div>
+        <details class="equipment-damage-options"><summary>Aplicar defensas de objetos al daño</summary><label>Tipo de daño<select data-incoming-damage-type aria-label="Tipo de daño para aplicar defensas de objetos"><option value="">Daño ya calculado</option>${DAMAGE_TYPES.map((type)=>`<option value="${type}">${({acid:"Ácido",bludgeoning:"Contundente",cold:"Frío",fire:"Fuego",force:"Fuerza",lightning:"Relámpago",necrotic:"Necrótico",piercing:"Perforante",poison:"Veneno",psychic:"Psíquico",radiant:"Radiante",slashing:"Cortante",thunder:"Trueno"})[type]}</option>`).join("")}</select></label><label><input type="checkbox" data-incoming-magical>Daño mágico</label><small>Elegí el tipo para aplicar las defensas de objetos implementadas al pulsar Daño. Si ya ajustaste resistencias o vulnerabilidades, dejá «Daño ya calculado».</small></details>
       </section>`;
   }
 
@@ -3019,6 +3098,11 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-inventory-feature-action]").forEach((button) => {
       button.addEventListener("click", () => void this.handleInventoryFeatureAction(button));
     });
+    this.root.querySelectorAll<HTMLButtonElement>("[data-recover-equipment]").forEach((button) => button.addEventListener("click", () => void this.recoverEquipment(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-lucent-core-action]").forEach((button) => button.addEventListener("click", () => void this.handleLucentCore(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-self-healing]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentHealing(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-store-equipment-spell], [data-cast-stored-spell]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentSpellStorage(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-assisted-cost]").forEach((button) => button.addEventListener("click", () => void this.handleAssistedEquipmentCost(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-reset-inventory-charges]").forEach((button) => {
       button.addEventListener("click", () => void this.resetInventoryCharges(button));
     });
@@ -3360,6 +3444,7 @@ export class BrowserApp {
         if (button.dataset.historyAction === "redo") void this.redoLastAction();
       });
     });
+    bindEquipmentToolChecks(this.root, () => this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""]);
     this.root.querySelectorAll<HTMLButtonElement>("[data-roll-expression]").forEach((button) => {
       button.addEventListener("click", () => void this.rollDice(button));
     });
@@ -3655,7 +3740,7 @@ export class BrowserApp {
           sells: cart.sell.map((entry) => ({ itemId: entry.item.id, quantity: entry.quantity })),
         });
         const [snapshot] = await Promise.all([
-          this.application.loadCampaign(),
+          this.application.reconcileInventorySpells(character.id),
           this.refreshCustomContent(false),
         ]);
         if (!snapshot) throw new Error("La campaña ya no está disponible.");
@@ -4357,6 +4442,7 @@ export class BrowserApp {
   }
 
   private async rollDice(button: HTMLButtonElement): Promise<void> {
+    if (button.disabled) return;
     try {
       const rawExpression = button.dataset.rollExpression;
       if (!rawExpression) throw new Error("La tirada no tiene una expresión de dados.");
@@ -4366,7 +4452,8 @@ export class BrowserApp {
       const conditionKeys = new Set(
         character?.combat.conditions.map((condition) => condition.key) ?? [],
       );
-      const expressions = rawExpression.split("/").map((expression) => {
+      const abilityCheck = button.dataset.rollCheckModifier === undefined ? undefined : { modifier: Number(button.dataset.rollCheckModifier), minimum: Number(button.dataset.rollCheckMinimum) };
+      const expressions = abilityCheck ? ["1d20", ...(conditionKeys.has("guidance") ? ["1d4"] : [])] : rawExpression.split("/").map((expression) => {
         if (!expression.toLowerCase().includes("d20")) return expression;
         let adjusted = expression;
         if (conditionKeys.has("bless") || conditionKeys.has("guidance")) {
@@ -4392,6 +4479,7 @@ export class BrowserApp {
         name: button.dataset.rollName ?? "Tirada",
         expressions,
         mode,
+        ...(abilityCheck ? { abilityCheck } : {}),
       });
       if (manualState && character) {
         const nextManualState = consumeManualRollMode(manualState);
@@ -5673,9 +5761,13 @@ export class BrowserApp {
       expectedCampaignChecksum: this.snapshot.checksum,
     };
     try {
+      const spells = character.spellcasting.spells.filter((s) => s.casting?.kind === "item" && s.casting.source === `inventory:${item.id}:${feature.id}`);
+      if (action !== "deactivate" && spells.length > 1) throw new Error("Elegí el conjuro que quieras lanzar desde la pestaña Conjuros.");
       const snapshot = action === "deactivate"
         ? await this.application.setInventoryFeatureActive({ ...command, value: false })
-        : await this.application.useInventoryFeature(command);
+        : spells.length === 1
+          ? await this.application.castCharacterSpell({ ...command, spellId: spells[0]!.id, slotLevel: spells[0]!.casting!.level })
+          : await this.application.useInventoryFeature(command);
       this.acceptCharacterSnapshot(snapshot, `${action === "deactivate" ? "Desactivar" : "Usar"} ${item.name}: ${feature.name}`);
       await this.refreshStorageUsage();
       this.message = { kind: "success", text: action === "deactivate" ? "Capacidad desactivada." : "Capacidad usada." };
@@ -5707,6 +5799,120 @@ export class BrowserApp {
     }
   }
 
+  private async recoverEquipment(button: HTMLButtonElement): Promise<void> {
+    const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
+    const card = button.closest<HTMLElement>("[data-inventory-id]");
+    const item = character?.inventory.find((entry) => entry.id === card?.dataset.inventoryId);
+    if (!character || !item || !this.snapshot) return;
+    const resource = inventoryEquipmentDefinition(item)?.resources.find((r) => r.kind !== "spell-storage");
+    if (!resource || resource.recovery.kind !== "event") return;
+    const recovery = resource.recovery, input = card?.querySelector<HTMLInputElement>("[data-equipment-recovery-roll]");
+    button.disabled = true;
+    try {
+      let rolled: number | undefined;
+      if (recovery.amount.kind === "roll") {
+        if (input?.value.trim()) rolled = Number(input.value);
+        else {
+          const result = await this.runtime.diceRoller.roll({ name: `Recuperar ${item.name}`, expressions: [recovery.amount.expression], mode: "normal" });
+          rolled = result.totals[0];
+          if (rolled === undefined) { this.message = { kind: "success", text: "Tirada enviada. Ingresá el resultado para confirmar la recuperación; todavía no se cambiaron los usos." }; this.render(); return; }
+        }
+      }
+      this.acceptCharacterSnapshot(await this.application.recoverInventoryItem({ characterId: character.id, itemId: item.id, event: recovery.event, ...(rolled === undefined ? {} : { rolled }), expectedCharacterRevision: character.revision, expectedCampaignChecksum: this.snapshot.checksum }), `Recuperar usos: ${item.name}`);
+      this.message = { kind: "success", text: "Recuperación aplicada según la regla del objeto." }; this.render();
+    } catch (error) { this.message = { kind: "error", text: formatError(error) }; this.render(); }
+    finally { button.disabled = false; }
+  }
+
+  private async handleLucentCore(button: HTMLButtonElement): Promise<void> {
+    const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""], card = button.closest<HTMLElement>("[data-inventory-id]");
+    const item = character?.inventory.find((entry) => entry.id === card?.dataset.inventoryId);
+    if (!character || !item || !card || !this.snapshot) return;
+    button.disabled = true;
+    try {
+      const kind = button.dataset.lucentCoreAction;
+      let action: LucentCoreAction;
+      if (kind === "configure" || kind === "wear") {
+        const input = card.querySelector<HTMLInputElement>("[data-core-d20]");
+        let d20 = Number(input?.value);
+        if (!input?.value.trim()) {
+          const roll = await this.runtime.diceRoller.roll({ name: `${item.name}: ${kind === "wear" ? "desgaste" : "reconfiguración"}`, expressions: ["1d20"], mode: "normal" });
+          if (roll.totals[0] === undefined) { this.message = { kind: "success", text: "Tirada enviada. Ingresá el d20 para confirmar; todavía no se cambió el núcleo." }; this.render(); return; }
+          d20 = roll.totals[0];
+        }
+        action = kind === "wear" ? { kind, d20 } : { kind, d20, resonance: card.querySelector<HTMLSelectElement>("[data-core-resonance]")!.value as CoreResonance };
+      } else if (kind === "recover") action = { kind, longRestCompleted: card.querySelector<HTMLInputElement>("[data-core-rest]")!.checked, crystalInserted: card.querySelector<HTMLInputElement>("[data-core-crystal]")!.checked };
+      else if (kind === "repair") action = { kind, longRestCompleted: card.querySelector<HTMLInputElement>("[data-core-rest]")!.checked, crystalConfirmed: card.querySelector<HTMLInputElement>("[data-core-crystal]")!.checked, materialsConfirmed: card.querySelector<HTMLInputElement>("[data-core-materials]")!.checked };
+      else if (kind === "round" || kind === "minute") action = { kind: "elapsed", rounds: kind === "round" ? 1 : 10 };
+      else if (kind === "end") action = { kind };
+      else return;
+      this.acceptCharacterSnapshot(await this.application.performLucentCoreAction({ characterId: character.id, itemId: item.id, action, expectedCharacterRevision: character.revision, expectedCampaignChecksum: this.snapshot.checksum }), `Núcleo: ${kind}`);
+      this.message = { kind: "success", text: "Estado del núcleo registrado." }; this.render();
+    } catch (error) { this.message = { kind: "error", text: formatError(error) }; this.render(); }
+    finally { button.disabled = false; }
+  }
+
+  private async handleEquipmentHealing(button: HTMLButtonElement): Promise<void> {
+    const character=this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""], card=button.closest<HTMLElement>("[data-inventory-id]");
+    const item=character?.inventory.find((entry)=>entry.id===card?.dataset.inventoryId), featureId=button.dataset.equipmentSelfHealing;
+    if (!character || !item || !card || !featureId || !this.snapshot) return;
+    const expression=inventoryHealingExpression(item,featureId);if (!expression) return;
+    button.disabled=true;
+    try {
+      const input=button.closest<HTMLElement>(".inventory-feature-capability")?.querySelector<HTMLInputElement>("[data-equipment-healing-result]");
+      let healing=Number(input?.value);
+      if (!input?.value.trim()) {
+        const roll=await this.runtime.diceRoller.roll({name:`Beber ${item.name}`,expressions:[expression],mode:"normal"});
+        if (roll.totals[0] === undefined) { this.message={kind:"success",text:"Tirada enviada. Ingresá el resultado para consumir y aplicar la curación; todavía no se gastó la poción."};this.render();return; }
+        healing=roll.totals[0];
+      }
+      this.acceptCharacterSnapshot(await this.application.useInventoryHealingFeature({characterId:character.id,itemId:item.id,featureId,healing,expectedCharacterRevision:character.revision,expectedCampaignChecksum:this.snapshot.checksum}),`Beber ${item.name}`);
+      this.message={kind:"success",text:"Poción consumida y curación aplicada."};this.render();
+    } catch(error) { this.message={kind:"error",text:formatError(error)};this.render(); }
+    finally { button.disabled=false; }
+  }
+
+  private async handleEquipmentSpellStorage(button: HTMLButtonElement): Promise<void> {
+    const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
+    const card = button.closest<HTMLElement>("[data-inventory-id]");
+    const item = character?.inventory.find((i) => i.id === card?.dataset.inventoryId);
+    if (!character || !item || !card || !this.snapshot) return;
+    button.disabled = true;
+    try {
+      const base = { characterId: character.id, itemId: item.id, expectedCharacterRevision: character.revision, expectedCampaignChecksum: this.snapshot.checksum };
+      if (button.dataset.castStoredSpell) {
+        this.acceptCharacterSnapshot(await this.application.castEquipmentStoredSpell({ ...base, storedId: button.dataset.castStoredSpell }), `Lanzar desde ${item.name}`);
+      } else {
+        const value = (key: string) => card.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-storage-${key}]`)?.value ?? "";
+        const definition = this.findSpell(value("spell"));
+        if (!definition) throw new Error("Seleccioná el conjuro cargado.");
+        if (!value("dc").trim() || !value("attack").trim() || !value("modifier").trim()) throw new Error("Completá la CD, el ataque y el modificador originales del lanzador.");
+        const ability = value("ability");
+        if (ability !== "intelligence" && ability !== "wisdom" && ability !== "charisma") throw new Error("Característica inválida.");
+        this.acceptCharacterSnapshot(await this.application.storeEquipmentSpell({ ...base, spell: { id: await createRandomId("spl"), definition, slotLevel: Number(value("level")), ability, saveDc: Number(value("dc")), attackBonus: Number(value("attack")), abilityModifier: Number(value("modifier")), expenditureConfirmed: !!card.querySelector<HTMLInputElement>("[data-storage-confirm]")?.checked } }), `Cargar ${item.name}`);
+      }
+      this.message = { kind: "success", text: "Contenido del objeto actualizado." }; this.render();
+    } catch (error) { this.message = { kind: "error", text: formatError(error) }; this.render(); }
+    finally { button.disabled = false; }
+  }
+
+  private async handleAssistedEquipmentCost(button: HTMLButtonElement): Promise<void> {
+    const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
+    const card = button.closest<HTMLElement>("[data-inventory-id]");
+    const item = character?.inventory.find((i) => i.id === card?.dataset.inventoryId);
+    if (!character || !item || !card || !this.snapshot) return;
+    button.disabled = true;
+    try {
+      const command = { characterId: character.id, itemId: item.id, expectedCharacterRevision: character.revision, expectedCampaignChecksum: this.snapshot.checksum };
+      const snapshot = button.dataset.equipmentAssistedCost === "unit"
+        ? await this.application.consumeInventoryUnit(command)
+        : await this.application.spendInventoryItemCharges({ ...command, amount: Number(card.querySelector<HTMLInputElement>("[data-equipment-spend-amount]")?.value) });
+      this.acceptCharacterSnapshot(snapshot, `Registrar coste: ${item.name}`);
+      this.message = { kind: "success", text: "Coste registrado. Resolvé los efectos y consecuencias según la descripción del objeto." }; this.render();
+    } catch (error) { this.message = { kind: "error", text: formatError(error) }; this.render(); }
+    finally { button.disabled = false; }
+  }
+
   private resourceInteger(id: string): number {
     const input = this.root.querySelector<HTMLInputElement>(`#${id}`);
     const value = Number(input?.value);
@@ -5726,7 +5932,8 @@ export class BrowserApp {
           resourceAction = { kind: "heal", amount: this.resourceInteger("resource-amount") };
           break;
         case "damage":
-          resourceAction = { kind: "damage", amount: this.resourceInteger("resource-amount") };
+          { const damageType=this.root.querySelector<HTMLSelectElement>("[data-incoming-damage-type]")?.value;
+            resourceAction = { kind: "damage", amount: this.resourceInteger("resource-amount"), ...(DAMAGE_TYPES.includes(damageType as typeof DAMAGE_TYPES[number]) ? { damageType: damageType as typeof DAMAGE_TYPES[number], magical: this.root.querySelector<HTMLInputElement>("[data-incoming-magical]")?.checked ?? false } : {}) }; }
           break;
         case "temporary":
           resourceAction = { kind: "grant-temporary-hit-points", amount: this.resourceInteger("resource-amount") };

@@ -4,6 +4,7 @@ import type {
   DiceRoller,
 } from "../../application/ports/dice-roller";
 import { normalizeDiceExpression } from "../../domain/dice/dice-expression";
+import { resolveAbilityCheckRoll, validateAbilityCheckRoll } from "../../domain/dice/ability-check-roll";
 
 export interface TaleSpireDiceApi {
   putDiceInTray(
@@ -31,6 +32,7 @@ export class TaleSpireDiceRoller implements DiceRoller {
   }
 
   async roll(request: DiceRollRequest): Promise<DiceRollResult> {
+    validateAbilityCheckRoll(request);
     const suffix = request.mode === "advantage"
       ? " (Ventaja)"
       : request.mode === "disadvantage"
@@ -71,7 +73,7 @@ export class TaleSpireDiceRoller implements DiceRoller {
     this.pending.delete(rollId);
     const totals = await Promise.all(groups.map((group) => this.evaluateGroup(group)));
     const resolvedGroups = this.resolveGroups(request, groups, totals);
-    const total = resolvedGroups.totals[0];
+    const total = resolveAbilityCheckRoll(request, resolvedGroups.totals)[0];
     if (total !== undefined && Number.isFinite(total)) {
       const resolved = { name: request.name, total };
       this.listeners.forEach((listener) => listener(resolved));

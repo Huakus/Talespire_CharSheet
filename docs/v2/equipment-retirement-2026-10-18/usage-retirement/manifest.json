@@ -1,0 +1,281 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1296,
+  "archiveSha256": "17a92184a88129e36ed321ac6f7cba1e7b23b47a23002f70d8f1db7f69c66db0",
+  "rows": [
+    {
+      "key": "official:equipment:eng:1aeb4e1cd7307b4ee06847d4",
+      "name": "Wand",
+      "sha256": "78e6e6ac81f625b2ff08e13147a431fcf8807ea8605a6e29f2ae78842b852a9b",
+      "targetKeys": [
+        "official:equipment:es:7fe5b1f1a76b6720b8dec06f"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador arcano"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:27e2a54a853b1557bdc71ce2",
+      "name": "Sprig of mistletoe",
+      "sha256": "a1bdcf90287d1213251d6ffef2240829b59424a9145d5e789c8c225f3c2172a4",
+      "targetKeys": [
+        "official:equipment:es:708fc72185654ae03cadaf43"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador druídico"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:28f9950ceb9ad206c5b021b9",
+      "name": "Emblem",
+      "sha256": "b043bc4801fa6cbe32994b58a9d3b7cb769c8f3eeecebda36ed6588a2adbe79d",
+      "targetKeys": [
+        "official:equipment:es:96eecf010fe0c04f3024f662"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 70 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Símbolo sagrado"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:2e716d306486a3d6ab971a06",
+      "name": "Staff",
+      "sha256": "889856d1f79a46b694a22f0997fe6f622dc9b8329718b78a011a28c9ca994628",
+      "targetKeys": [
+        "official:equipment:es:fc99115af245a6af70c01f2d"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador arcano"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:374a6561c121738ad437cd93",
+      "name": "Scale, merchant's",
+      "sha256": "0618c545f0eb9d7202ec08e1d6b92e8a8314167906bfefa06e54542d4ad4de99",
+      "targetKeys": [
+        "official:equipment:es:286c19d8391b36b2d8bd9295"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 68 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Balanza de mercader"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7a106d19279a82f2c4985d64",
+      "name": "Wooden staff",
+      "sha256": "40f451b9bcbe707af2b99b050f2a4fc678b671ee06efbe500eed4923c65778b2",
+      "targetKeys": [
+        "official:equipment:es:0ad295d1ff31df0157a0e340"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador druídico"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:89f3f11d933b7fce99642b9d",
+      "name": "Rod",
+      "sha256": "c58838bc6d6feb6192d0a231e1ddb19cc14d3035420c8de666938823779d67d5",
+      "targetKeys": [
+        "official:equipment:es:6337e9894a2fe3787473d5a6"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador arcano"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:abc1529aa4f4310716ae2754",
+      "name": "Saddle, Military",
+      "sha256": "caf6276f23049c6509cff4e804f18e94431f8b0bf4e932c6e4579cefdde6a25f",
+      "targetKeys": [
+        "official:equipment:es:2a314816a4d97bac5926841a"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 72 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 73 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Sillas"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:adbd4ef415c0a4112fd0125d",
+      "name": "Yew wand",
+      "sha256": "3e864638c0dbdbae64b5d2b965244264cde4f500fe0de1a1f03b560b83a35d30",
+      "targetKeys": [
+        "official:equipment:es:8105376de27fa47cc79976b0"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador druídico"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b113c7c9c1cc38de9e0e2b63",
+      "name": "Crystal",
+      "sha256": "f828e794db67c802e11f7ae67d9a23914790066d116fead163f2ac09591c8cf8",
+      "targetKeys": [
+        "official:equipment:es:b68a1e1784bfc6847014f566"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador arcano"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b641892d46be07b9bfe5f781",
+      "name": "Pouch",
+      "sha256": "ef279d1d34b73322a8d6b2e2a4ce449b578512d3bf0990ad66aec2aae5e9e9be",
+      "targetKeys": [
+        "official:equipment:es:7863f03eb5565607a7c86b7d"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 68 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Bolsa"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e0de403f9dca99bfd3d97670",
+      "name": "Totem",
+      "sha256": "badeb04117dcee5825ae10d2495c4a7d4bc2546b8763b95fb884e8aaaaff598d",
+      "targetKeys": [
+        "official:equipment:es:cbdba9aab3fca9a45891cc6b"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 69 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Canalizador druídico"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:ee89569bfff00d8ba9bf6c99",
+      "name": "Reliquary",
+      "sha256": "83ebfce62cf4d5f3d6aaa41829fb241b0900c397407395dbdc7e505ffbe8239b",
+      "targetKeys": [
+        "official:equipment:es:8e43d0d29557eb5e83692b05"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 70 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Símbolo sagrado"
+          ]
+        }
+      ]
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

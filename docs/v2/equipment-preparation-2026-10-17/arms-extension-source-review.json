@@ -1,0 +1,88 @@
+{
+  "baselineRevision": 1209,
+  "sourceChecks": [
+    {
+      "id": "recovery:official:equipment:es:19907a1ffffb2a058fd67fc1",
+      "name": "Hacha a dos manos +1",
+      "index": "greataxe",
+      "baseIndex": "greataxe",
+      "enhancement": 1,
+      "repairedIndex": true,
+      "page": 66,
+      "officialRow": [
+        "Greataxe",
+        "30 gp",
+        "1d12 slashing",
+        "7 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ac0f80fd1c0f1c938d30b0a8",
+      "name": "Red +3",
+      "index": "net-3",
+      "baseIndex": "net",
+      "enhancement": 3,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Net",
+        "1 gp",
+        "—",
+        "3 lb.",
+        "Special, thrown (range 5/15)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bd6b6d0bae53fcbd755d2486",
+      "name": "Red +1",
+      "index": "net-1",
+      "baseIndex": "net",
+      "enhancement": 1,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Net",
+        "1 gp",
+        "—",
+        "3 lb.",
+        "Special, thrown (range 5/15)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c452c8155853d2ae14b93ee8",
+      "name": "Red",
+      "index": "net",
+      "baseIndex": "net",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Net",
+        "1 gp",
+        "—",
+        "3 lb.",
+        "Special, thrown (range 5/15)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:fedd698066b62346698b608a",
+      "name": "Red +2",
+      "index": "net-2",
+      "baseIndex": "net",
+      "enhancement": 2,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Net",
+        "1 gp",
+        "—",
+        "3 lb.",
+        "Special, thrown (range 5/15)"
+      ]
+    }
+  ],
+  "skipped": [],
+  "activeCopiesChanged": 0,
+  "deletedVersions": 0
+}

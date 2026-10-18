@@ -3,6 +3,9 @@ import { STABLE_ID_PATTERN } from "../../shared/id";
 import { ActivatableEffectSchema } from "./character-effect-model";
 import { CatalogMetadataSchema } from "../content/catalog-metadata";
 import { RollModeSchema } from "./character-checks";
+import { EquipmentDefinitionDraftSchema } from "../equipment/equipment-definition";
+import { LosslessJsonObjectSchema } from "../../shared/lossless-json";
+import { SpellDefinitionSchema, SpellcastingAbilitySchema } from "./character-spell-model";
 
 export const InventoryCostSchema = z.object({
   quantity: z.number().finite().nonnegative(),
@@ -94,7 +97,12 @@ export const InventoryFeatureSchema = z.object({
   bonuses: z.array(InventoryBonusSchema).default([]),
 });
 
-export const CharacterInventoryItemV2Schema = z.object({
+function omitUndefinedCore<T extends { lucentCore?: unknown }>(value: T): Omit<T,"lucentCore"> & { lucentCore?: NonNullable<T["lucentCore"]> } {
+  const { lucentCore, ...rest } = value;
+  return lucentCore == null ? rest : { ...rest, lucentCore: lucentCore as NonNullable<T["lucentCore"]> };
+}
+
+export const CharacterInventoryItemFieldsSchema = z.object({
   id: z.string().regex(STABLE_ID_PATTERN),
   order: z.number().int().nonnegative(),
   group: z.string().min(1),
@@ -117,10 +125,48 @@ export const CharacterInventoryItemV2Schema = z.object({
   features: z.array(InventoryFeatureSchema).default([]),
   effect: ActivatableEffectSchema,
   catalog: CatalogMetadataSchema.nullable().default(null),
+  rules: z.object({
+    definition: LosslessJsonObjectSchema.refine((value) => EquipmentDefinitionDraftSchema.safeParse(value).success, "La definición vinculada no es válida."),
+    pending: z.array(z.string()),
+    original: LosslessJsonObjectSchema,
+    personalDescription: z.string(),
+    slotUsage: z.record(z.string(), z.number().int().nonnegative()).default({}),
+    lucentCore: z.object({
+      resonance: z.enum(["green", "blue", "violet"]).nullable(),
+      active: z.enum(["green", "blue", "violet"]).nullable(),
+      remainingRounds: z.number().int().nonnegative(),
+      spentSinceRest: z.number().int().nonnegative(),
+      unstable: z.boolean(),
+      wearCheckPending: z.boolean(),
+      lastCheckTotal: z.number().int().nullable(),
+    }).optional(),
+    storage: z.object({
+      known: z.boolean(),
+      spells: z.array(z.object({
+        id: z.string().regex(STABLE_ID_PATTERN),
+        slotLevel: z.number().int().min(1).max(9),
+        definition: LosslessJsonObjectSchema.refine((value) => SpellDefinitionSchema.safeParse(value).success, "Conjuro almacenado inválido."),
+        ability: SpellcastingAbilitySchema,
+        saveDc: z.number().int().nonnegative().nullable(),
+        attackBonus: z.number().int().nullable(),
+        abilityModifier: z.number().int().nullable().default(null),
+      })),
+    }).nullable().default(null),
+  }).transform(omitUndefinedCore).optional(),
 });
 
-export const CharacterInventoryItemDraftSchema = CharacterInventoryItemV2Schema.omit({
+type ItemFields = z.infer<typeof CharacterInventoryItemFieldsSchema>;
+type WithOptionalRules<T extends { rules?: unknown }> = Omit<T, "rules"> & { rules?: NonNullable<ItemFields["rules"]> };
+export const CharacterInventoryItemV2Schema = CharacterInventoryItemFieldsSchema.transform((value): WithOptionalRules<ItemFields> => {
+  const { rules, ...rest } = value;
+  return rules === undefined ? rest : { ...rest, rules };
+});
+const DraftFieldsSchema = CharacterInventoryItemFieldsSchema.omit({
   id: true,
+});
+export const CharacterInventoryItemDraftSchema = DraftFieldsSchema.transform((value): WithOptionalRules<z.infer<typeof DraftFieldsSchema>> => {
+  const { rules, ...rest } = value;
+  return rules === undefined ? rest : { ...rest, rules };
 });
 
 export type CharacterInventoryItemV2 = z.infer<typeof CharacterInventoryItemV2Schema>;

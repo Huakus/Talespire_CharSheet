@@ -1,0 +1,96 @@
+{
+  "item": "Sombra del Segador",
+  "savedAs": "equipment-preparation",
+  "equipmentRevision": 2,
+  "campaignRevision": 1200,
+  "preparationRows": 853,
+  "effect": {
+    "id": "intelligence-plus-one",
+    "condition": "Mientras estés sintonizado y el objeto esté en contacto con tu cuerpo, llevado o vestido.",
+    "kind": "bonus",
+    "target": "intelligence",
+    "operation": "add",
+    "value": 1
+  },
+  "resources": [
+    {
+      "id": "marca",
+      "name": "Marca de la Cercanía",
+      "kind": "uses",
+      "maximum": 1,
+      "unit": "usos",
+      "recovery": {
+        "kind": "event",
+        "event": "dawn",
+        "explanation": "Recupera el uso gastado al amanecer, según confirmó el GM.",
+        "amount": {
+          "kind": "full"
+        }
+      },
+      "exhaustion": "No puedes activar la marca sin un uso disponible."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "intelligence-bonus",
+      "name": "Inteligencia +1",
+      "activation": "passive",
+      "duration": "Mientras se cumplan equipo y sintonización.",
+      "concentration": false,
+      "costs": []
+    },
+    {
+      "id": "veil-of-penumbra",
+      "name": "Velo de Penumbra",
+      "activation": "passive",
+      "duration": "Mientras se cumplan equipo y sintonización.",
+      "concentration": false,
+      "costs": []
+    },
+    {
+      "id": "nearness-mark",
+      "name": "Marca de la Cercanía",
+      "activation": "bonus-action",
+      "duration": "Hasta 1 minuto",
+      "concentration": true,
+      "costs": [
+        {
+          "resourceId": "marca",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "lingering-presence",
+      "name": "Presencia Persistente",
+      "activation": "trigger",
+      "duration": "Beneficio hasta el final de tu siguiente turno; la contrapartida se resuelve como indica el texto.",
+      "concentration": false,
+      "costs": []
+    },
+    {
+      "id": "whisper-of-finality",
+      "name": "Susurro de Finalidad",
+      "activation": "trigger",
+      "duration": "Si fallas la salvación, hasta tu próximo descanso largo.",
+      "concentration": false,
+      "costs": []
+    }
+  ],
+  "previousOriginalsPreserved": true,
+  "gmInstructionArchivedAndVerified": true,
+  "otherContentUnchanged": true,
+  "sharedCatalogUnchanged": true,
+  "charactersUnchanged": true,
+  "merchantStockUnchanged": true,
+  "otherCampaignsUnchanged": true,
+  "activeCopiesChanged": 0,
+  "activeSlotCapacityChanged": false,
+  "executionImplemented": false,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "preparationLoadErrors": 0,
+  "targetedTestsPassed": 30,
+  "typecheckPassed": true,
+  "buildPassed": true
+}

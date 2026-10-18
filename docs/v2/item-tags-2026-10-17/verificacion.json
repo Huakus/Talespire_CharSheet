@@ -1,0 +1,40 @@
+{
+  "tagsApplied": 3180,
+  "payloadsChanged": 0,
+  "deleted": 0,
+  "scopes": {
+    "shared": {
+      "total": 1572,
+      "visibleSpanish": 789,
+      "spanishTagCounts": {
+        "conflicto_version": 14,
+        "descripcion_pendiente": 102,
+        "fuente_pendiente": 739,
+        "manual_jugador": 2,
+        "revisar_datos": 110,
+        "revisar_descripcion": 69,
+        "revisar_funciones": 164,
+        "xanathar": 48
+      }
+    },
+    "ece": {
+      "total": 1609,
+      "visibleSpanish": 806,
+      "spanishTagCounts": {
+        "conflicto_version": 18,
+        "custom": 3,
+        "descripcion_pendiente": 102,
+        "ece": 1,
+        "fuente_pendiente": 753,
+        "manual_jugador": 2,
+        "revisar_datos": 110,
+        "revisar_descripcion": 80,
+        "revisar_funciones": 171,
+        "version_local": 20,
+        "xanathar": 48
+      }
+    }
+  },
+  "protectedHashesUnchanged": true,
+  "inventoryCount": 241
+}

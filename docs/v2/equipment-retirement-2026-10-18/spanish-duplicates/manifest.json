@@ -1,0 +1,394 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1301,
+  "archiveSha256": "f6874533e60dea59fffb8007a2491f3b053f56f57845498b510424332f6e63bb",
+  "rows": [
+    {
+      "key": "official:equipment:es:0a0d7b00e6b26351a1e4890e",
+      "name": "Espadón +2",
+      "sha256": "e1e807ded210b4b116fcacb0d2d3c04509ba5b93151441d5525adb9342d1112f",
+      "targetKeys": [
+        "official:equipment:es:5fd4c566606777a3c02ae011"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:0a0d7b00e6b26351a1e4890e",
+            "official:equipment:es:5fd4c566606777a3c02ae011"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:5fd4c566606777a3c02ae011",
+              "price": {
+                "unit": "gp",
+                "quantity": 1000
+              }
+            },
+            {
+              "key": "official:equipment:es:0a0d7b00e6b26351a1e4890e",
+              "price": {
+                "unit": "gp",
+                "quantity": 50
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:ee2f824a81e843344627dbf3",
+      "name": "Anillo de salto",
+      "sha256": "fa8e428a2f0fa7cf3cc0c2e49119a259d51ead0d08fb1918c04644a64834c324",
+      "targetKeys": [
+        "official:equipment:es:12dbdfe92af7a3f1f15418a0"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:12dbdfe92af7a3f1f15418a0",
+            "official:equipment:es:ee2f824a81e843344627dbf3"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:12dbdfe92af7a3f1f15418a0",
+              "price": {
+                "unit": "gp",
+                "quantity": 2000
+              }
+            },
+            {
+              "key": "official:equipment:es:ee2f824a81e843344627dbf3",
+              "price": {
+                "unit": "gp",
+                "quantity": 2000
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:679d721371e4b0885be06590",
+      "name": "Hacha a dos manos +1",
+      "sha256": "3546769d11cf87b905485f5e06a8ca64da02ff1f07bcca4550a0c78999a05d2b",
+      "targetKeys": [
+        "official:equipment:es:19907a1ffffb2a058fd67fc1"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:19907a1ffffb2a058fd67fc1",
+            "official:equipment:es:679d721371e4b0885be06590"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:19907a1ffffb2a058fd67fc1",
+              "price": {
+                "unit": "gp",
+                "quantity": 500
+              }
+            },
+            {
+              "key": "official:equipment:es:679d721371e4b0885be06590",
+              "price": {
+                "unit": "gp",
+                "quantity": 30
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:7622f66eede71e94d406bb57",
+      "name": "Cota de malla de adamantina",
+      "sha256": "a9c2c9b94d37028ab3a88cd1e9dcc18c0ae8d1e1e6745936138347bd8e31c957",
+      "targetKeys": [
+        "official:equipment:es:38070df72830c84b3b5c4bea"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:38070df72830c84b3b5c4bea",
+            "official:equipment:es:7622f66eede71e94d406bb57"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:38070df72830c84b3b5c4bea",
+              "price": {
+                "unit": "gp",
+                "quantity": 2050
+              }
+            },
+            {
+              "key": "official:equipment:es:7622f66eede71e94d406bb57",
+              "price": {
+                "unit": "gp",
+                "quantity": 2050
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:e1a05d8b10f5b9670944a1bd",
+      "name": "Espada larga +1",
+      "sha256": "c98b4bebb520c3386ee988495dfc2cd7e1c167ff0a16a9b1870ac8010ea59f40",
+      "targetKeys": [
+        "official:equipment:es:3f6e5a23723a6523271ed210"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:3f6e5a23723a6523271ed210",
+            "official:equipment:es:e1a05d8b10f5b9670944a1bd"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:3f6e5a23723a6523271ed210",
+              "price": {
+                "unit": "gp",
+                "quantity": 1500
+              }
+            },
+            {
+              "key": "official:equipment:es:e1a05d8b10f5b9670944a1bd",
+              "price": {
+                "unit": "gp",
+                "quantity": 15
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:461254bffffc17715e5fe044",
+      "name": "Hacha de guerra +1",
+      "sha256": "470e19367aef51717eb980dc65d18f4c20128def453dc0d0a3552874ef2a41ce",
+      "targetKeys": [
+        "official:equipment:es:cbd7512b6ae6ef9f5b511d37"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:461254bffffc17715e5fe044",
+            "official:equipment:es:cbd7512b6ae6ef9f5b511d37"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:cbd7512b6ae6ef9f5b511d37",
+              "price": {
+                "unit": "gp",
+                "quantity": 500
+              }
+            },
+            {
+              "key": "official:equipment:es:461254bffffc17715e5fe044",
+              "price": {
+                "unit": "gp",
+                "quantity": 10
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:4c7b73d2c7e5619095103c94",
+      "name": "Guja +3",
+      "sha256": "f4ff11a6a9eb4792dfd836702ff2d119f87156adead1e4529139f56e0f525e3b",
+      "targetKeys": [
+        "official:equipment:es:7b531f3e18b96bfdd467ac99"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:4c7b73d2c7e5619095103c94",
+            "official:equipment:es:7b531f3e18b96bfdd467ac99"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:7b531f3e18b96bfdd467ac99",
+              "price": {
+                "unit": "gp",
+                "quantity": 1500
+              }
+            },
+            {
+              "key": "official:equipment:es:4c7b73d2c7e5619095103c94",
+              "price": {
+                "unit": "gp",
+                "quantity": 20
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:ae1c070d246a0bbbbdfd9c3a",
+      "name": "Anillo de caminar sobre las aguas",
+      "sha256": "e013b7838255c4ab9ac0e909ed022bb8762eff25108603f0c69155556e584613",
+      "targetKeys": [
+        "official:equipment:es:563d29e14ec46eb9bf800072"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:563d29e14ec46eb9bf800072",
+            "official:equipment:es:ae1c070d246a0bbbbdfd9c3a"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:563d29e14ec46eb9bf800072",
+              "price": {
+                "unit": "gp",
+                "quantity": 2000
+              }
+            },
+            {
+              "key": "official:equipment:es:ae1c070d246a0bbbbdfd9c3a",
+              "price": {
+                "unit": "gp",
+                "quantity": 2000
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:6591271dc3ec33171abe8a98",
+      "name": "Alabarda +3",
+      "sha256": "8488d1c97c57dd2bd422aa0ba14cc53472b4f6fd714a5521531765549cb19324",
+      "targetKeys": [
+        "official:equipment:es:d9dc8f660008890da65ff3bb"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:6591271dc3ec33171abe8a98",
+            "official:equipment:es:d9dc8f660008890da65ff3bb"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:d9dc8f660008890da65ff3bb",
+              "price": {
+                "unit": "gp",
+                "quantity": 1500
+              }
+            },
+            {
+              "key": "official:equipment:es:6591271dc3ec33171abe8a98",
+              "price": {
+                "unit": "gp",
+                "quantity": 20
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:ce76e80ba20ad50ec12fe5b0",
+      "name": "Mangual +2",
+      "sha256": "feb6e7237861ef7ba52c95013125f4fc1ba205bba1968601091675cb9d4edf93",
+      "targetKeys": [
+        "official:equipment:es:6e474e549c4888eda815c1ff"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:6e474e549c4888eda815c1ff",
+            "official:equipment:es:ce76e80ba20ad50ec12fe5b0"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:6e474e549c4888eda815c1ff",
+              "price": {
+                "unit": "gp",
+                "quantity": 1000
+              }
+            },
+            {
+              "key": "official:equipment:es:ce76e80ba20ad50ec12fe5b0",
+              "price": {
+                "unit": "gp",
+                "quantity": 10
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:e721509cc0c1d5f572afb81d",
+      "name": "Anillo de protección",
+      "sha256": "42a6ac28564892f1b3f5ec9f16ed8fa84b9cdf5be158f4298f8dbc3b5925a194",
+      "targetKeys": [
+        "official:equipment:es:b2a16fd04dd10bb6241cffcb"
+      ],
+      "reason": "Duplicado español con reglas y estadísticas idénticas. Reasignar las copias a la definición conservada antes de eliminar la fila redundante.",
+      "evidence": [
+        {
+          "kind": "identical-spanish-rules-and-mechanics",
+          "compared": [
+            "official:equipment:es:b2a16fd04dd10bb6241cffcb",
+            "official:equipment:es:e721509cc0c1d5f572afb81d"
+          ],
+          "prices": [
+            {
+              "key": "official:equipment:es:b2a16fd04dd10bb6241cffcb",
+              "price": {
+                "unit": "gp",
+                "quantity": 750
+              }
+            },
+            {
+              "key": "official:equipment:es:e721509cc0c1d5f572afb81d",
+              "price": {
+                "unit": "gp",
+                "quantity": 750
+              }
+            }
+          ],
+          "decision": "Misma identidad oficial, requisitos, estadísticas y texto de reglas. Se conserva el precio de catálogo de la variante mágica ya existente; los precios de las copias se preservan. Ambas filas completas quedan archivadas fuera del catálogo activo."
+        }
+      ]
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

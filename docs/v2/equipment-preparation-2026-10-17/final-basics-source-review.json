@@ -1,0 +1,77 @@
+{
+  "reviewed": 12,
+  "items": [
+    {
+      "key": "imported:equipment:legacy:69aec4cb70fbb4be170cf479",
+      "page": 111,
+      "index": "pergamino-de-erudito",
+      "name": "Pergamino de notas"
+    },
+    {
+      "key": "official:equipment:es:1690ade2e005b3d5419276d2",
+      "page": 72,
+      "index": "burglars-pack",
+      "name": "Paquete de ladrón"
+    },
+    {
+      "key": "official:equipment:es:27449e1bed6d4f91099fb4e4",
+      "page": 128,
+      "index": "three-dragon-ante-set",
+      "name": "Set de tres dragones"
+    },
+    {
+      "key": "official:equipment:es:3e000ccfb949f6041bdb6785",
+      "page": 72,
+      "index": "diplomats-pack",
+      "name": "Paquete de diplomático"
+    },
+    {
+      "key": "official:equipment:es:5dc4abd6720f5eb80dea925b",
+      "page": 72,
+      "index": "block-of-incense",
+      "name": "Bloque de incienso"
+    },
+    {
+      "key": "official:equipment:es:6e83c9fa1434c8e5af25720e",
+      "page": 72,
+      "index": "entertainers-pack",
+      "name": "Paquete de artista"
+    },
+    {
+      "key": "official:equipment:es:787b7ce6af1d2525c342d664",
+      "page": 69,
+      "index": "sling-bullet",
+      "name": "Balas de honda (bolsa de 20)"
+    },
+    {
+      "key": "official:equipment:es:7f88e7a006665acd21818ae9",
+      "page": 72,
+      "index": "dungeoneers-pack",
+      "name": "Paquete de explorador de mazmorras"
+    },
+    {
+      "key": "official:equipment:es:89025bb9c91e286ccab71344",
+      "page": 72,
+      "index": "string-10-feet",
+      "name": "Cordel (3 m / 10 pies)"
+    },
+    {
+      "key": "official:equipment:es:bd719c69d26174bd353e513d",
+      "page": 72,
+      "index": "censer",
+      "name": "Incensario"
+    },
+    {
+      "key": "official:equipment:es:cc4b1ad17ddbae45d3744f22",
+      "page": 72,
+      "index": "alms-box",
+      "name": "Caja para limosnas"
+    },
+    {
+      "key": "official:equipment:es:e14cde6c9aac3e864c054708",
+      "page": 128,
+      "index": "dragonchess-set",
+      "name": "Set de ajedrez de dragón"
+    }
+  ]
+}

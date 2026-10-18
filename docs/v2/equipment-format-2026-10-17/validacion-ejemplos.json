@@ -1,0 +1,71 @@
+[
+  {
+    "id": "example:simple",
+    "name": "Cuerda de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  },
+  {
+    "id": "example:conditional-weapon",
+    "name": "Arma condicionada de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "conditional-damage: falta soporte de ejecución.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  },
+  {
+    "id": "example:armor",
+    "name": "Armadura de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  },
+  {
+    "id": "example:finite-resource",
+    "name": "Cristal de usos finitos de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "use: el consumo de recursos necesita un adaptador automático o asistido.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  },
+  {
+    "id": "example:spell-item",
+    "name": "Amuleto de conjuro de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "cast: falta soporte de ejecución.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  },
+  {
+    "id": "example:spell-storage",
+    "name": "Almacenamiento de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "store: falta soporte de ejecución.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  },
+  {
+    "id": "example:complex-campaign-item",
+    "name": "Dispositivo de campaña de prueba",
+    "definitive": false,
+    "blockers": [
+      "El formato aún no está integrado en edición, persistencia y uso del symbiote.",
+      "custom: mecánica aún sin representar.",
+      "custom: falta soporte de ejecución.",
+      "La revisión tiene decisiones o comprobaciones pendientes."
+    ]
+  }
+]

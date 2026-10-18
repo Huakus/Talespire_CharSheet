@@ -1,0 +1,31 @@
+import{readFileSync,writeFileSync}from'node:fs';import assert from'node:assert/strict';
+import{createServer}from'vite';
+const root='tmp/equipment-definitions',read=n=>JSON.parse(readFileSync(root+'/'+n,'utf8')),s=read('spanish-duplicate-relink-before.json'),live=read('spanish-duplicates-live.json'),mapping=read('spanish-duplicates-references.json');
+assert.equal(mapping.length,1);const m=mapping[0],old=s.copy.payload,target=live.entries.find(r=>r.content_key===m.targetKeys[0]),d=target.payload.rules.definition;
+assert.equal(old.catalog.contentKey,m.key);
+for(const k of ['capabilities','resources','requirements','weapon','armor','properties','weight','magical','consumable','rarity','subtypes','category'])assert.deepEqual(old.rules.definition[k],d[k],k);
+const next=structuredClone(old);next.rules.definition=structuredClone(d);next.catalog={...next.catalog,contentKey:target.content_key,revision:target.revision,origin:target.origin,tags:target.tags};
+const server=await createServer({configFile:false,root:process.cwd(),server:{middlewareMode:true},appType:'custom'});
+try{const{CharacterInventoryItemV2Schema}=await server.ssrLoadModule('/src/domain/character/character-inventory-model.ts');CharacterInventoryItemV2Schema.parse(next);}finally{await server.close();}
+assert.deepEqual({...next,rules:old.rules,catalog:old.catalog},old);assert.deepEqual({...next.rules,definition:old.rules.definition},old.rules);
+writeFileSync(root+'/spanish-duplicate-relink-plan.json',JSON.stringify({before:s,after:next,target}));
+const q=v=>"'"+String(v).replaceAll("'","''")+"'",j=v=>'$relink_json$'+JSON.stringify(v)+'$relink_json$::jsonb',cid=s.copy.campaign_id;
+const copyWhere=`campaign_id=${q(cid)} and fragment_kind='character-inventory' and parent_id=${q(s.copy.parent_id)} and entity_id=${q(s.copy.entity_id)}`,versionWhere=`campaign_id=${q(cid)} and character_id=${q(s.version.character_id)}`;
+const hashes={content:`(select md5(string_agg(md5(to_jsonb(t)::text),'' order by campaign_id,kind,content_key)) from public.campaign_content_entries t)`,shared:`(select md5(string_agg(md5(to_jsonb(t)::text),'' order by kind,content_key)) from public.official_content_entries t)`,fragments:`(select md5(string_agg(md5(to_jsonb(t)::text),'' order by campaign_id,fragment_kind,parent_id,entity_id)) from public.campaign_state_fragments t where not(${copyWhere}))`,versions:`(select md5(string_agg(md5(to_jsonb(t)::text),'' order by campaign_id,character_id)) from public.campaign_character_versions t where not(${versionWhere}))`,campaigns:`(select md5(string_agg(md5(to_jsonb(t)::text),'' order by id)) from public.campaigns t where id<>${q(cid)})`};
+const guards=Object.entries(hashes).map(([k,v])=>q(k)+','+v).join(',');
+const sql=`begin;lock table public.campaigns,public.campaign_state_fragments,public.campaign_character_versions in share row exclusive mode;lock table public.campaign_content_entries,public.official_content_entries in share mode;
+create temporary table _relink_guard on commit drop as select jsonb_build_object(${guards}) as hashes;
+do $relink$ begin
+if(select state_revision from public.campaigns where id=${q(cid)})<>${s.revision} then raise exception 'RELINK_CAMPAIGN_CHANGED';end if;
+if not exists(select 1 from public.campaign_content_entries t where campaign_id=${q(cid)} and kind='equipment' and content_key=${q(target.content_key)} and to_jsonb(t)=${j(target)})then raise exception 'RELINK_DESTINATION_CHANGED';end if;
+if not exists(select 1 from public.campaign_state_fragments t where ${copyWhere} and to_jsonb(t)=${j(s.copy)})then raise exception 'RELINK_COPY_CHANGED';end if;
+if not exists(select 1 from public.campaign_character_versions t where ${versionWhere} and to_jsonb(t)=${j(s.version)})then raise exception 'RELINK_VERSION_CHANGED';end if;
+update public.campaign_state_fragments set payload=${j(next)},revision=revision+1,updated_at=statement_timestamp() where ${copyWhere};
+update public.campaign_character_versions set revision=revision+1,updated_at=statement_timestamp() where ${versionWhere};
+if(select hashes from _relink_guard) is distinct from jsonb_build_object(${guards})then raise exception 'RELINK_SCOPE_CHANGED';end if;
+update public.campaigns set state_revision=state_revision+1,state_updated_at=statement_timestamp(),updated_at=statement_timestamp() where id=${q(cid)};
+end $relink$;
+select jsonb_build_object('revision',(select state_revision from public.campaigns where id=${q(cid)}),'copies',1,'instanceStatePreserved',true) as result;
+commit;`;
+writeFileSync(root+'/spanish-duplicate-relink-publication.sql',sql);writeFileSync(root+'/spanish-duplicate-relink-dry-run.sql',sql.replace(/commit;$/,'rollback;'));
+console.log(JSON.stringify({copies:1,from:m.key,to:target.content_key,revision:s.revision+1}));

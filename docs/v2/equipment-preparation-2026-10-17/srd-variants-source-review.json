@@ -1,0 +1,757 @@
+{
+  "reviewed": 153,
+  "tables": [
+    {
+      "name": "Cuerno del Valhalla (Latón / oropel)",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Tipo de cuerno",
+            "Berserkers invocados",
+            "Requisito"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Poción de fuerza de gigante de hielo",
+      "tables": [
+        {
+          "columns": [
+            "Tipo de gigante",
+            "Fuerza",
+            "Rareza"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Esfera de aniquilación",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Resultado"
+          ],
+          "rows": 3
+        }
+      ]
+    },
+    {
+      "name": "Cuerno del Valhalla (Bronce)",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Tipo de cuerno",
+            "Berserkers invocados",
+            "Requisito"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Cubo de fuerza",
+      "tables": [
+        {
+          "columns": [
+            "Cara",
+            "Cargas",
+            "Efecto"
+          ],
+          "rows": 6
+        },
+        {
+          "columns": [
+            "Conjuro u objeto",
+            "Cargas perdidas"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Armadura de resistencia (Armadura de cuero)",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Anillo de resistencia",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "Gema"
+          ],
+          "rows": 10
+        }
+      ]
+    },
+    {
+      "name": "Varita de las maravillas",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Efecto"
+          ],
+          "rows": 22
+        }
+      ]
+    },
+    {
+      "name": "Poción de resistencia",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Armadura de resistencia (Armadura de cuero tachonado)",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Bastón de los magos",
+      "tables": [
+        {
+          "columns": [
+            "Distancia del origen",
+            "Daño"
+          ],
+          "rows": 6
+        }
+      ]
+    },
+    {
+      "name": "Cuerno del Valhalla (Plata)",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Tipo de cuerno",
+            "Berserkers invocados",
+            "Requisito"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Alfombra voladora",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Tamaño",
+            "Capacidad",
+            "Velocidad volando"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Bolsa de judías",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Efecto"
+          ],
+          "rows": 12
+        }
+      ]
+    },
+    {
+      "name": "Bolsa de trucos",
+      "tables": [
+        {
+          "columns": [
+            "d8",
+            "Criatura"
+          ],
+          "rows": 8
+        },
+        {
+          "columns": [
+            "d8",
+            "Criatura"
+          ],
+          "rows": 8
+        },
+        {
+          "columns": [
+            "d8",
+            "Criatura"
+          ],
+          "rows": 8
+        }
+      ]
+    },
+    {
+      "name": "Poción de fuerza del gigante de las nubes",
+      "tables": [
+        {
+          "columns": [
+            "Tipo de gigante",
+            "Fuerza",
+            "Rareza"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Poción de fuerza de gigante de las colinas",
+      "tables": [
+        {
+          "columns": [
+            "Tipo de gigante",
+            "Fuerza",
+            "Rareza"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Baraja de múltiples cosas",
+      "tables": [
+        {
+          "columns": [
+            "Naipe",
+            "Carta"
+          ],
+          "rows": 22
+        }
+      ]
+    },
+    {
+      "name": "Cuerno del Valhalla (Hierro)",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Tipo de cuerno",
+            "Berserkers invocados",
+            "Requisito"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Manual de gólems",
+      "tables": [
+        {
+          "columns": [
+            "d20",
+            "Gólem",
+            "Tiempo",
+            "Precio"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Vela de invocación",
+      "tables": [
+        {
+          "columns": [
+            "d20",
+            "Alineamiento"
+          ],
+          "rows": 9
+        }
+      ]
+    },
+    {
+      "name": "Poción de fuerza de gigante de piedra",
+      "tables": [
+        {
+          "columns": [
+            "Tipo de gigante",
+            "Fuerza",
+            "Rareza"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Armadura de resistencia (Cota de malla)",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Armadura de resistencia (Armadura acolchada)",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Ficha de pluma",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Ficha de pluma",
+            "d100",
+            "Ficha de pluma"
+          ],
+          "rows": 3
+        }
+      ]
+    },
+    {
+      "name": "Aparato del crustáceo",
+      "tables": [
+        {
+          "columns": [
+            "Palanca",
+            "Subida",
+            "Bajada"
+          ],
+          "rows": 10
+        }
+      ]
+    },
+    {
+      "name": "Poción de fuerza de gigante de tormenta",
+      "tables": [
+        {
+          "columns": [
+            "Tipo de gigante",
+            "Fuerza",
+            "Rareza"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Armadura de resistencia (Armadura de pieles)",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Anillo de estrellas fugaces",
+      "tables": [
+        {
+          "columns": [
+            "Esferas",
+            "Daño de relámpago"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Bastón de poder",
+      "tables": [
+        {
+          "columns": [
+            "Distancia del origen",
+            "Daño"
+          ],
+          "rows": 6
+        }
+      ]
+    },
+    {
+      "name": "Poción de fuerza de gigante de fuego",
+      "tables": [
+        {
+          "columns": [
+            "Tipo de gigante",
+            "Fuerza",
+            "Rareza"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Collar de plegarias",
+      "tables": [
+        {
+          "columns": [
+            "d20",
+            "Cuenta...",
+            "Conjuro"
+          ],
+          "rows": 6
+        }
+      ]
+    },
+    {
+      "name": "Frasco de hierro",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Contenido"
+          ],
+          "rows": 20
+        }
+      ]
+    },
+    {
+      "name": "Baraja de ilusiones",
+      "tables": [
+        {
+          "columns": [
+            "Naipe",
+            "Ilusión"
+          ],
+          "rows": 33
+        }
+      ]
+    },
+    {
+      "name": "Túnica de objetos útiles",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Parche"
+          ],
+          "rows": 13
+        }
+      ]
+    },
+    {
+      "name": "Armadura de resistencia (Armadura de placas)",
+      "tables": [
+        {
+          "columns": [
+            "d10",
+            "Tipo de daño",
+            "d10",
+            "Tipo de daño"
+          ],
+          "rows": 5
+        }
+      ]
+    },
+    {
+      "name": "Botella de ifrit",
+      "tables": [
+        {
+          "columns": [
+            "d100",
+            "Efecto"
+          ],
+          "rows": 3
+        }
+      ]
+    },
+    {
+      "name": "Poción de curación suprema",
+      "tables": [
+        {
+          "columns": [
+            "Poción de...",
+            "Rareza",
+            "PG recuperados"
+          ],
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "name": "Gema elemental",
+      "tables": [
+        {
+          "columns": [
+            "Gema",
+            "Elemental invocado"
+          ],
+          "rows": 4
+        }
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "name": "Pergamino de Erudito",
+      "id": "recovery:imported:equipment:legacy:69aec4cb70fbb4be170cf479",
+      "index": "pergamino-de-erudito",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Cristal Carmsí",
+      "id": "recovery:imported:equipment:legacy:9e036c804481226114e6c22c",
+      "index": "cristal-carmesi",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Varita de molestar",
+      "id": "recovery:imported:equipment:legacy:cbefe528bbe7f909a82dcbc9",
+      "index": "varita-de-molestar",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Núcleo Luciente",
+      "id": "recovery:imported:equipment:legacy:f9a55f61d3ecdfdc16848447",
+      "index": "núcleo-luciente",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Armadura Mortis",
+      "id": "recovery:official:equipment:es:093e25cc68fc731ffea7ad42",
+      "index": "mortis-armour",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Armadura de Invulnerabilidad (Cuero)",
+      "id": "recovery:official:equipment:es:11b3762d05502efd347d1799",
+      "index": "armor-of-invulnerability-leather",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Armadura de Invulnerabilidad (Acolchada)",
+      "id": "recovery:official:equipment:es:165c06eba671094a9c4bcf5b",
+      "index": "armor-of-invulnerability-padded",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Paquete de ladrón",
+      "id": "recovery:official:equipment:es:1690ade2e005b3d5419276d2",
+      "index": "burglars-pack",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Set de tres dragones",
+      "id": "recovery:official:equipment:es:27449e1bed6d4f91099fb4e4",
+      "index": "three-dragon-ante-set",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Daga que regresa",
+      "id": "recovery:official:equipment:es:3b388b3c27ba18c34a4b26e6",
+      "index": "returning-dagger",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Paquete del diplomático",
+      "id": "recovery:official:equipment:es:3e000ccfb949f6041bdb6785",
+      "index": "diplomats-pack",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Bloque de incienso",
+      "id": "recovery:official:equipment:es:5dc4abd6720f5eb80dea925b",
+      "index": "block-of-incense",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Red Viciosa",
+      "id": "recovery:official:equipment:es:5edb865fbeda1561a0ebc201",
+      "index": "vicious-net",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Paquete de Animador",
+      "id": "recovery:official:equipment:es:6e83c9fa1434c8e5af25720e",
+      "index": "entertainers-pack",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Bala de honda",
+      "id": "recovery:official:equipment:es:787b7ce6af1d2525c342d664",
+      "index": "sling-bullet",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Armadura de Invulnerabilidad (cota de malla)",
+      "id": "recovery:official:equipment:es:78ea275af54bf3abc9e5b449",
+      "index": "armor-of-invulnerability-chain-mail",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Paquete del explorador de mazmorras",
+      "id": "recovery:official:equipment:es:7f88e7a006665acd21818ae9",
+      "index": "dungeoneers-pack",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Cuerda (10 pies)",
+      "id": "recovery:official:equipment:es:89025bb9c91e286ccab71344",
+      "index": "string-10-feet",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Tambor del creador de ritmos, +1",
+      "id": "recovery:official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+      "index": "rhythm-maker's-drum-1",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Alabarda berserker",
+      "id": "recovery:official:equipment:es:96423b15cf42c0cc4d4bdb38",
+      "index": "berserker-halberd",
+      "reason": "La combinación física no coincide inequívocamente con las restricciones de la familia oficial; no convertirla en variante de campaña sin evidencia."
+    },
+    {
+      "name": "Armadura de Vulnerabilidad (Cuero Tachonado)",
+      "id": "recovery:official:equipment:es:9c0b2485bb8e9c16f412c775",
+      "index": "armor-of-vulnerability-studded-leather",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Espada Corta Vorpal",
+      "id": "recovery:official:equipment:es:a159f087514e34df02a92cc1",
+      "index": "vorpal-shortsword",
+      "reason": "La combinación física no coincide inequívocamente con las restricciones de la familia oficial; no convertirla en variante de campaña sin evidencia."
+    },
+    {
+      "name": "Armadura de Invulnerabilidad (Ocultar)",
+      "id": "recovery:official:equipment:es:a1f03e679b7b344f03909718",
+      "index": "armor-of-invulnerability-hide",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Armadura de Vulnerabilidad (Cota de Malla)",
+      "id": "recovery:official:equipment:es:a4b52e8dc344d05be4fab602",
+      "index": "armor-of-vulnerability-chain-mail",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Cinturón de Fuerza de Gigante",
+      "id": "recovery:official:equipment:es:a4bb31770f018b43ba0417a9",
+      "index": "belt-of-giant-strength",
+      "reason": "La entrada genérica necesita una variante concreta; no elegir un subtipo sin evidencia."
+    },
+    {
+      "name": "Amuleto del devoto, +1",
+      "id": "recovery:official:equipment:es:b2ccc2c141497ce32fa56712",
+      "index": "amulet-of-the-devout-1",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Varita del fastidio",
+      "id": "recovery:official:equipment:es:b3b525789bef0a0562bffe54",
+      "index": "wand-of-annoyance",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Espada Corta del Filo",
+      "id": "recovery:official:equipment:es:b7803d81192c972fce31d6c9",
+      "index": "shortsword-of-sharpness",
+      "reason": "La combinación física no coincide inequívocamente con las restricciones de la familia oficial; no convertirla en variante de campaña sin evidencia."
+    },
+    {
+      "name": "Incensario",
+      "id": "recovery:official:equipment:es:bd719c69d26174bd353e513d",
+      "index": "censer",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Armadura de Vulnerabilidad (Acolchada)",
+      "id": "recovery:official:equipment:es:bef8a190f7d416d1e0bf3007",
+      "index": "armor-of-vulnerability-padded",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Armadura de Vulnerabilidad (Ocultar)",
+      "id": "recovery:official:equipment:es:bf9d4777f6761e30002e10a6",
+      "index": "armor-of-vulnerability-hide",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Caja de limosnas",
+      "id": "recovery:official:equipment:es:cc4b1ad17ddbae45d3744f22",
+      "index": "alms-box",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Armadura de Invulnerabilidad (Cuero Tachonado)",
+      "id": "recovery:official:equipment:es:d222a78fa718fe92c426ab08",
+      "index": "armor-of-invulnerability-studded-leather",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Túnica del Paso de Invierno",
+      "id": "recovery:official:equipment:es:d691c1d7187e8dbbc9c58d0e",
+      "index": "robe-of-the-winterstep",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Armadura de Vulnerabilidad (Cuero)",
+      "id": "recovery:official:equipment:es:de73b6277de67bf8e74faf46",
+      "index": "armor-of-vulnerability-leather",
+      "reason": "La regla oficial es una armadura de placas. El subtipo distinto se conserva sin presentarlo como variante oficial válida."
+    },
+    {
+      "name": "Set de ajedrez de dragón",
+      "id": "recovery:official:equipment:es:e14cde6c9aac3e864c054708",
+      "index": "dragonchess-set",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    },
+    {
+      "name": "Amuleto del Explorador",
+      "id": "recovery:official:equipment:es:e6ee8011b040eaf1b2afa84a",
+      "index": "scouts-amulet",
+      "reason": "No se encontró una correspondencia inequívoca en el SRD; conserva su información y necesita otra fuente."
+    }
+  ]
+}

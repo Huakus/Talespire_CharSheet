@@ -1,0 +1,1703 @@
+[
+  {
+    "itemId": "recovery:gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+    "itemName": "Daga del Umbral · variante de Stix",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Hoja Fásica",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+    "itemName": "Daga del Umbral · variante de Stix",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Hoja Fásica",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+    "itemName": "Daga del Umbral · variante de Stix",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Hoja Fásica",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:gm:equipment:ece-collar-hablar-con-los-muertos",
+    "itemName": "Collar de hablar con los muertos",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Hablar con los muertos",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:gm:equipment:ece-collar-hablar-con-los-muertos",
+    "itemName": "Collar de hablar con los muertos",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Hablar con los muertos",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:gm:equipment:ece-collar-hablar-con-los-muertos",
+    "itemName": "Collar de hablar con los muertos",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Hablar con los muertos",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:7464ea9038f8df5a37722aca",
+    "itemName": "Sombra del Segador",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "INT",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:7464ea9038f8df5a37722aca",
+    "itemName": "Sombra del Segador",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "INT",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:7464ea9038f8df5a37722aca",
+    "itemName": "Sombra del Segador",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "INT",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:7600b9e4640022d731c55428",
+    "itemName": "Capa de Carisma +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "CHA",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:7600b9e4640022d731c55428",
+    "itemName": "Capa de Carisma +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "CHA",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:7600b9e4640022d731c55428",
+    "itemName": "Capa de Carisma +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "CHA",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:da5aa681decf2561baece063",
+    "itemName": "Túnica de Agati",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:da5aa681decf2561baece063",
+    "itemName": "Túnica de Agati",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:da5aa681decf2561baece063",
+    "itemName": "Túnica de Agati",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:fb36d9c23d740e8f2e5d2d26",
+    "itemName": "Amuleto de mago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Arcana",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:fb36d9c23d740e8f2e5d2d26",
+    "itemName": "Amuleto de mago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Arcana",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:imported:equipment:legacy:fb36d9c23d740e8f2e5d2d26",
+    "itemName": "Amuleto de mago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Arcana",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:0b5bdfe22131e9df8dadf58f",
+    "itemName": "Cuero tachonado +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:0b5bdfe22131e9df8dadf58f",
+    "itemName": "Cuero tachonado +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:0b5bdfe22131e9df8dadf58f",
+    "itemName": "Cuero tachonado +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:0f35540ad5761cc8b53de256",
+    "itemName": "Varita del Mago de Guerra +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:0f35540ad5761cc8b53de256",
+    "itemName": "Varita del Mago de Guerra +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:0f35540ad5761cc8b53de256",
+    "itemName": "Varita del Mago de Guerra +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:120eb2040f33ea4c66ff25c3",
+    "itemName": "Coraza +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:120eb2040f33ea4c66ff25c3",
+    "itemName": "Coraza +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:120eb2040f33ea4c66ff25c3",
+    "itemName": "Coraza +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:162777d7c51d3223ce6c645e",
+    "itemName": "Cadena Élfica",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:162777d7c51d3223ce6c645e",
+    "itemName": "Cadena Élfica",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:162777d7c51d3223ce6c645e",
+    "itemName": "Cadena Élfica",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:16a7d3c8d1281ab007b8cdec",
+    "itemName": "Armadura de cuero +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:16a7d3c8d1281ab007b8cdec",
+    "itemName": "Armadura de cuero +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:16a7d3c8d1281ab007b8cdec",
+    "itemName": "Armadura de cuero +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:181be68f4b1f5b75ca241809",
+    "itemName": "Camisote de Mallas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:181be68f4b1f5b75ca241809",
+    "itemName": "Camisote de Mallas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:181be68f4b1f5b75ca241809",
+    "itemName": "Camisote de Mallas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:182b00e731897a7e4885ffb0",
+    "itemName": "Armadura acolchada +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:182b00e731897a7e4885ffb0",
+    "itemName": "Armadura acolchada +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:182b00e731897a7e4885ffb0",
+    "itemName": "Armadura acolchada +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:27f05898e96ee8f4afc5e64f",
+    "itemName": "Armadura de Cuero +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:27f05898e96ee8f4afc5e64f",
+    "itemName": "Armadura de Cuero +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:27f05898e96ee8f4afc5e64f",
+    "itemName": "Armadura de Cuero +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2b9317ec14536ced5520b06e",
+    "itemName": "Bastón del Gran Mago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2b9317ec14536ced5520b06e",
+    "itemName": "Bastón del Gran Mago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2b9317ec14536ced5520b06e",
+    "itemName": "Bastón del Gran Mago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2beae9ae708fc324d2ff5360",
+    "itemName": "Armadura de Pieles +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2beae9ae708fc324d2ff5360",
+    "itemName": "Armadura de Pieles +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2beae9ae708fc324d2ff5360",
+    "itemName": "Armadura de Pieles +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2d19032cbd0001d46f6922c2",
+    "itemName": "Armadura de Bandas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2d19032cbd0001d46f6922c2",
+    "itemName": "Armadura de Bandas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:2d19032cbd0001d46f6922c2",
+    "itemName": "Armadura de Bandas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:32da119ee9cc78e069f0cc38",
+    "itemName": "Cota de Anillas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:32da119ee9cc78e069f0cc38",
+    "itemName": "Cota de Anillas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:32da119ee9cc78e069f0cc38",
+    "itemName": "Cota de Anillas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:399d2fabfaca062f022b9259",
+    "itemName": "Varita del mago de guerra +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:399d2fabfaca062f022b9259",
+    "itemName": "Varita del mago de guerra +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:399d2fabfaca062f022b9259",
+    "itemName": "Varita del mago de guerra +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:40a2f5363de51d6cb164abd8",
+    "itemName": "Brazales De Arquería",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "RangedDamageRolls",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:40a2f5363de51d6cb164abd8",
+    "itemName": "Brazales De Arquería",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "RangedDamageRolls",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:40a2f5363de51d6cb164abd8",
+    "itemName": "Brazales De Arquería",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "RangedDamageRolls",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:45c8ee7602d853f90c15821e",
+    "itemName": "Personal de los Bosques",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:45c8ee7602d853f90c15821e",
+    "itemName": "Personal de los Bosques",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:45c8ee7602d853f90c15821e",
+    "itemName": "Personal de los Bosques",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:467d1b7be14f7d6b4b56ac69",
+    "itemName": "Brazales de Defensa",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:467d1b7be14f7d6b4b56ac69",
+    "itemName": "Brazales de Defensa",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:467d1b7be14f7d6b4b56ac69",
+    "itemName": "Brazales de Defensa",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:46f6e5386a87b70724f56073",
+    "itemName": "Talismán Del Bien Puro",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:46f6e5386a87b70724f56073",
+    "itemName": "Talismán Del Bien Puro",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:46f6e5386a87b70724f56073",
+    "itemName": "Talismán Del Bien Puro",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:47ca78a92149955639cb961b",
+    "itemName": "Armadura de Cuero +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:47ca78a92149955639cb961b",
+    "itemName": "Armadura de Cuero +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:47ca78a92149955639cb961b",
+    "itemName": "Armadura de Cuero +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:4f77ea44ee87d0a74202f068",
+    "itemName": "Armadura de Placas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:4f77ea44ee87d0a74202f068",
+    "itemName": "Armadura de Placas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:4f77ea44ee87d0a74202f068",
+    "itemName": "Armadura de Placas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:5390e688d545c3237cbd0c5c",
+    "itemName": "Camisa de cadena +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:5390e688d545c3237cbd0c5c",
+    "itemName": "Camisa de cadena +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:5390e688d545c3237cbd0c5c",
+    "itemName": "Camisa de cadena +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:55c9bbc182e669a1be9867a5",
+    "itemName": "Cuero Tachonado +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:55c9bbc182e669a1be9867a5",
+    "itemName": "Cuero Tachonado +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:55c9bbc182e669a1be9867a5",
+    "itemName": "Cuero Tachonado +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:55ddce2d71e95e11f10fa0d1",
+    "itemName": "Medio plato +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:55ddce2d71e95e11f10fa0d1",
+    "itemName": "Medio plato +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:55ddce2d71e95e11f10fa0d1",
+    "itemName": "Medio plato +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:62b6151d7d1f6ff522e0fd0f",
+    "itemName": "Cota de Mallas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:62b6151d7d1f6ff522e0fd0f",
+    "itemName": "Cota de Mallas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:62b6151d7d1f6ff522e0fd0f",
+    "itemName": "Cota de Mallas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:634d54d5c1f1eb780cc8a4f1",
+    "itemName": "Armadura acolchada +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:634d54d5c1f1eb780cc8a4f1",
+    "itemName": "Armadura acolchada +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:634d54d5c1f1eb780cc8a4f1",
+    "itemName": "Armadura acolchada +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "itemName": "Piedra de la buena suerte",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "itemName": "Piedra de la buena suerte",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "itemName": "Piedra de la buena suerte",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "itemName": "Piedra de la buena suerte",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "itemName": "Piedra de la buena suerte",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "itemName": "Piedra de la buena suerte",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6bcfc9fa2fc699815dbbb59f",
+    "itemName": "Espada Corta de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6bcfc9fa2fc699815dbbb59f",
+    "itemName": "Espada Corta de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6bcfc9fa2fc699815dbbb59f",
+    "itemName": "Espada Corta de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6be205ff80da3f50db3b8036",
+    "itemName": "Espada Larga de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6be205ff80da3f50db3b8036",
+    "itemName": "Espada Larga de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6be205ff80da3f50db3b8036",
+    "itemName": "Espada Larga de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6be93bc8a7410c878291438a",
+    "itemName": "Cota de anillas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6be93bc8a7410c878291438a",
+    "itemName": "Cota de anillas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:6be93bc8a7410c878291438a",
+    "itemName": "Cota de anillas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:71168d41bf97907e2f13c3ed",
+    "itemName": "Escudo +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:71168d41bf97907e2f13c3ed",
+    "itemName": "Escudo +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:71168d41bf97907e2f13c3ed",
+    "itemName": "Escudo +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:711f85d63c831b6b0310fb58",
+    "itemName": "Espadón de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:711f85d63c831b6b0310fb58",
+    "itemName": "Espadón de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:711f85d63c831b6b0310fb58",
+    "itemName": "Espadón de la Fortuna",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7341991155e5614334eabe5b",
+    "itemName": "Armadura de Placas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7341991155e5614334eabe5b",
+    "itemName": "Armadura de Placas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7341991155e5614334eabe5b",
+    "itemName": "Armadura de Placas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:79910f93add94f0d8e5b252d",
+    "itemName": "Cota de Escamas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:79910f93add94f0d8e5b252d",
+    "itemName": "Cota de Escamas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:79910f93add94f0d8e5b252d",
+    "itemName": "Cota de Escamas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7d468487c373342123ec2cc0",
+    "itemName": "Piedra Ioun (Maestría)",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Regla recuperada 1",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7d468487c373342123ec2cc0",
+    "itemName": "Piedra Ioun (Maestría)",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Regla recuperada 1",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7d468487c373342123ec2cc0",
+    "itemName": "Piedra Ioun (Maestría)",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "Regla recuperada 1",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7ec0a3dd884b82f14e197d01",
+    "itemName": "Cota de Mallas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7ec0a3dd884b82f14e197d01",
+    "itemName": "Cota de Mallas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7ec0a3dd884b82f14e197d01",
+    "itemName": "Cota de Mallas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7fee756c80e074dd2dc47947",
+    "itemName": "Anteojos De Vista De Águila",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7fee756c80e074dd2dc47947",
+    "itemName": "Anteojos De Vista De Águila",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:7fee756c80e074dd2dc47947",
+    "itemName": "Anteojos De Vista De Águila",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+    "itemName": "Tambor del creador de ritmos, +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSaveBonus",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+    "itemName": "Tambor del creador de ritmos, +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSaveBonus",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+    "itemName": "Tambor del creador de ritmos, +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSaveBonus",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8dd6403aac77cfcf26306fda",
+    "itemName": "Placa Enana",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8dd6403aac77cfcf26306fda",
+    "itemName": "Placa Enana",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8dd6403aac77cfcf26306fda",
+    "itemName": "Placa Enana",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8e008beb14d9a1218115d432",
+    "itemName": "Armadura de Bandas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8e008beb14d9a1218115d432",
+    "itemName": "Armadura de Bandas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:8e008beb14d9a1218115d432",
+    "itemName": "Armadura de Bandas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9828fb017c40e4bf29d19851",
+    "itemName": "Armadura de Placas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9828fb017c40e4bf29d19851",
+    "itemName": "Armadura de Placas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9828fb017c40e4bf29d19851",
+    "itemName": "Armadura de Placas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-2",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-2",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "itemName": "Bastón de poder",
+    "capabilityId": "recovered-capability-2",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9ae2f695fea4ba034c965e44",
+    "itemName": "Varita del mago de guerra +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9ae2f695fea4ba034c965e44",
+    "itemName": "Varita del mago de guerra +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9ae2f695fea4ba034c965e44",
+    "itemName": "Varita del mago de guerra +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9b9bc630f8db9ca7d472176a",
+    "itemName": "Amuleto de la sabiduría",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "WIS",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9b9bc630f8db9ca7d472176a",
+    "itemName": "Amuleto de la sabiduría",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "WIS",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9b9bc630f8db9ca7d472176a",
+    "itemName": "Amuleto de la sabiduría",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "WIS",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9c392a061bebd392140a7928",
+    "itemName": "Cota de Mallas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9c392a061bebd392140a7928",
+    "itemName": "Cota de Mallas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9c392a061bebd392140a7928",
+    "itemName": "Cota de Mallas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9e13963d798973f5b3d0ce0f",
+    "itemName": "Escudo +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9e13963d798973f5b3d0ce0f",
+    "itemName": "Escudo +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9e13963d798973f5b3d0ce0f",
+    "itemName": "Escudo +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9e57f5c2c50cbb85a56cb9e4",
+    "itemName": "Túnica Del Archimago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSave",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9e57f5c2c50cbb85a56cb9e4",
+    "itemName": "Túnica Del Archimago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSave",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9e57f5c2c50cbb85a56cb9e4",
+    "itemName": "Túnica Del Archimago",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSave",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9f9639a65a7cabefc1d9049b",
+    "itemName": "Camisote de Mallas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9f9639a65a7cabefc1d9049b",
+    "itemName": "Camisote de Mallas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:9f9639a65a7cabefc1d9049b",
+    "itemName": "Camisote de Mallas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a155bf5597398f3db007faf0",
+    "itemName": "Cota de Escama +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a155bf5597398f3db007faf0",
+    "itemName": "Cota de Escama +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a155bf5597398f3db007faf0",
+    "itemName": "Cota de Escama +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a77c00829eecde4eeb0dd206",
+    "itemName": "Camisote de Mallas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a77c00829eecde4eeb0dd206",
+    "itemName": "Camisote de Mallas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a77c00829eecde4eeb0dd206",
+    "itemName": "Camisote de Mallas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+    "itemName": "Capa de protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+    "itemName": "Capa de protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+    "itemName": "Capa de protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+    "itemName": "Capa de protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+    "itemName": "Capa de protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+    "itemName": "Capa de protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a9be83570ee776a70e802364",
+    "itemName": "Escudo +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a9be83570ee776a70e802364",
+    "itemName": "Escudo +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:a9be83570ee776a70e802364",
+    "itemName": "Escudo +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:afb89853c4231e6ca2fe2552",
+    "itemName": "Piedra Ioun (Protección)",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:afb89853c4231e6ca2fe2552",
+    "itemName": "Piedra Ioun (Protección)",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:afb89853c4231e6ca2fe2552",
+    "itemName": "Piedra Ioun (Protección)",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+    "itemName": "Anillo de Protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+    "itemName": "Anillo de Protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+    "itemName": "Anillo de Protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+    "itemName": "Anillo de Protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+    "itemName": "Anillo de Protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+    "itemName": "Anillo de Protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2ccc2c141497ce32fa56712",
+    "itemName": "Amuleto del devoto, +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSave",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2ccc2c141497ce32fa56712",
+    "itemName": "Amuleto del devoto, +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSave",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b2ccc2c141497ce32fa56712",
+    "itemName": "Amuleto del devoto, +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackandSave",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b70c41be552f3dc614f1f4ad",
+    "itemName": "Cuero Tachonado Glamuroso",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b70c41be552f3dc614f1f4ad",
+    "itemName": "Cuero Tachonado Glamuroso",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b70c41be552f3dc614f1f4ad",
+    "itemName": "Cuero Tachonado Glamuroso",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b7ee9ad6f87c3d31d0885c59",
+    "itemName": "Coraza +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b7ee9ad6f87c3d31d0885c59",
+    "itemName": "Coraza +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b7ee9ad6f87c3d31d0885c59",
+    "itemName": "Coraza +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b97890f2fdedbce0fbe843c2",
+    "itemName": "Talismán Del Mal Definitivo",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b97890f2fdedbce0fbe843c2",
+    "itemName": "Talismán Del Mal Definitivo",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:b97890f2fdedbce0fbe843c2",
+    "itemName": "Talismán Del Mal Definitivo",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "SpellAttackModifier",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:bab6db982022a6143a1b1533",
+    "itemName": "Armadura de Pieles +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:bab6db982022a6143a1b1533",
+    "itemName": "Armadura de Pieles +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:bab6db982022a6143a1b1533",
+    "itemName": "Armadura de Pieles +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:c8fa48c5adb8a687456ca9ee",
+    "itemName": "Cuero tachonado +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:c8fa48c5adb8a687456ca9ee",
+    "itemName": "Cuero tachonado +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:c8fa48c5adb8a687456ca9ee",
+    "itemName": "Cuero tachonado +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d137ddfe32e465d25e312925",
+    "itemName": "Vara de Alerta",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d137ddfe32e465d25e312925",
+    "itemName": "Vara de Alerta",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d137ddfe32e465d25e312925",
+    "itemName": "Vara de Alerta",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d45091cecb894506094369a2",
+    "itemName": "Túnica De Las Estrellas",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d45091cecb894506094369a2",
+    "itemName": "Túnica De Las Estrellas",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d45091cecb894506094369a2",
+    "itemName": "Túnica De Las Estrellas",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d995aa33c84484e94ba986a9",
+    "itemName": "Semiplacas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d995aa33c84484e94ba986a9",
+    "itemName": "Semiplacas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:d995aa33c84484e94ba986a9",
+    "itemName": "Semiplacas +2",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e0cf274b1cea0fc5b14f7a34",
+    "itemName": "AArmadura de Semiplacas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e0cf274b1cea0fc5b14f7a34",
+    "itemName": "AArmadura de Semiplacas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e0cf274b1cea0fc5b14f7a34",
+    "itemName": "AArmadura de Semiplacas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e6ee8011b040eaf1b2afa84a",
+    "itemName": "Amuleto del Explorador",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e6ee8011b040eaf1b2afa84a",
+    "itemName": "Amuleto del Explorador",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e6ee8011b040eaf1b2afa84a",
+    "itemName": "Amuleto del Explorador",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "PassivePerception",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+    "itemName": "Anillo de protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+    "itemName": "Anillo de protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+    "itemName": "Anillo de protección",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "All",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+    "itemName": "Anillo de protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+    "itemName": "Anillo de protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+    "itemName": "Anillo de protección",
+    "capabilityId": "recovered-capability-1",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e906a312ff87ccc1916ac4d1",
+    "itemName": "Cota de Escamas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e906a312ff87ccc1916ac4d1",
+    "itemName": "Cota de Escamas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:e906a312ff87ccc1916ac4d1",
+    "itemName": "Cota de Escamas +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:f2405c391591b473b8b7b215",
+    "itemName": "Armadura Acolchada +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:f2405c391591b473b8b7b215",
+    "itemName": "Armadura Acolchada +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:f2405c391591b473b8b7b215",
+    "itemName": "Armadura Acolchada +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:f54d4d85e1e10d66dd2f0b71",
+    "itemName": "Cota de Anillas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:f54d4d85e1e10d66dd2f0b71",
+    "itemName": "Cota de Anillas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:f54d4d85e1e10d66dd2f0b71",
+    "itemName": "Cota de Anillas +1",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:fc78555eb05f45cfcd3d8c15",
+    "itemName": "Armadura de Pieles +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:fc78555eb05f45cfcd3d8c15",
+    "itemName": "Armadura de Pieles +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:fc78555eb05f45cfcd3d8c15",
+    "itemName": "Armadura de Pieles +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:ffd81d86c50bcb1c09a82ff8",
+    "itemName": "Armadura de Coraza +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Representar condiciones, costes y efectos de la regla recuperada."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:ffd81d86c50bcb1c09a82ff8",
+    "itemName": "Armadura de Coraza +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Integrar su ejecución y aplicación a la ficha."
+  },
+  {
+    "itemId": "recovery:official:equipment:es:ffd81d86c50bcb1c09a82ff8",
+    "itemName": "Armadura de Coraza +3",
+    "capabilityId": "recovered-capability-0",
+    "capabilityName": "AC",
+    "description": "Falta representar la mecánica conservada en el original."
+  }
+]

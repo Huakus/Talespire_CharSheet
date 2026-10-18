@@ -1,0 +1,20 @@
+{
+  "revision": 1304,
+  "definitions": 3,
+  "copiesAffected": 0,
+  "fullPostPublicationPayloadsMatch": true,
+  "items": [
+    {
+      "key": "official:equipment:es:198cf5e385f3109703e813d3",
+      "name": "Bote de remos"
+    },
+    {
+      "key": "official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+      "name": "Tambor del creador de ritmos +1"
+    },
+    {
+      "key": "official:equipment:es:ada2351ae3c3ff654d40cb56",
+      "name": "Barcaza"
+    }
+  ]
+}

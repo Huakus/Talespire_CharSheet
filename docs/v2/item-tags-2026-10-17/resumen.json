@@ -1,0 +1,67 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "summary": {
+    "shared": {
+      "total": 1572,
+      "modified": 1572,
+      "languages": {
+        "es": 789,
+        "en": 783,
+        "unknown": 0
+      },
+      "tags": {
+        "manual_jugador": 4,
+        "xanathar": 96,
+        "custom": 0,
+        "fuente_pendiente": 1472,
+        "pendiente_traduccion": 0,
+        "revisar_equivalencia": 783,
+        "descripcion_pendiente": 197,
+        "revisar_descripcion": 138,
+        "revisar_datos": 220,
+        "revisar_funciones": 300,
+        "conflicto_version": 24,
+        "version_local": 0
+      }
+    },
+    "ece": {
+      "total": 1609,
+      "modified": 1608,
+      "languages": {
+        "es": 806,
+        "en": 803,
+        "unknown": 0
+      },
+      "tags": {
+        "manual_jugador": 4,
+        "xanathar": 96,
+        "custom": 3,
+        "fuente_pendiente": 1506,
+        "pendiente_traduccion": 0,
+        "revisar_equivalencia": 803,
+        "descripcion_pendiente": 202,
+        "revisar_descripcion": 149,
+        "revisar_datos": 220,
+        "revisar_funciones": 311,
+        "conflicto_version": 40,
+        "version_local": 20
+      }
+    }
+  },
+  "labels": {
+    "manual_jugador": "Manual del Jugador",
+    "xanathar": "Xanathar",
+    "custom": "Contenido de campaña",
+    "fuente_pendiente": "Fuente pendiente",
+    "pendiente_traduccion": "Traducción pendiente",
+    "revisar_equivalencia": "Revisar equivalencia en español",
+    "descripcion_pendiente": "Sin descripción",
+    "revisar_descripcion": "Revisar descripción",
+    "revisar_datos": "Revisar datos",
+    "revisar_funciones": "Revisar funciones",
+    "conflicto_version": "Conflicto de versión",
+    "version_local": "Versión local"
+  },
+  "deleted": 0,
+  "payloadsModified": 0
+}

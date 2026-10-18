@@ -1,0 +1,3341 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1290,
+  "archiveSha256": "e618010de8ddead72e256776d8a6b3da5695b3af36bdc2ac094d5fa83bf4adae",
+  "rows": [
+    {
+      "key": "official:equipment:eng:007c191d7b22854ad9b84fe0",
+      "name": "Sun Blade",
+      "sha256": "62ba3012b4e786f68f5d574e475f936b0f1414da257166e9684db0a0196571be",
+      "targetKeys": [
+        "official:equipment:es:5c10f65193e2bb033dd88f9e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada solar",
+          "page": 248,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:052ac68da360a0f4cc69b106",
+      "name": "Greatsword of Sharpness",
+      "sha256": "6d461ae1ba9b9c6882d74993b64b01447c18e48f384c94a9545fe1448dd613a7",
+      "targetKeys": [
+        "official:equipment:es:397f56a255aa64b959bb17ad"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada de hoja afilada",
+          "page": 248,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:05fc6f96c8d0079981b73f86",
+      "name": "Armor of Resistance (Studded Leather)",
+      "sha256": "9d712b5ee8794c9dcf52f8bf774e485decb56eaca8053be6968b3547954209c8",
+      "targetKeys": [
+        "official:equipment:es:2b27121f4f6b49d06be83a0b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de resistencia",
+          "page": 229,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:07239f520294bb09dcb4bfdd",
+      "name": "Gauntlets of Ogre Power",
+      "sha256": "a2e392d9b45ebf566f5773bca3c7eded8a90ee58765a25b62c0df6a34cc639b0",
+      "targetKeys": [
+        "official:equipment:es:d12a1e5c8d86194c4729fcff"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Guanteletes de fuerza de ogro",
+          "page": 254,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:0a755ca9f93ecc763df9d1db",
+      "name": "Vicious Shortsword",
+      "sha256": "bf06ec860c3bc54cad06a5785add9f44c50a5e62f650dfa8be32e3b2072e9adb",
+      "targetKeys": [
+        "official:equipment:es:48a1fa2051aaf151a240831d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:0cf1d604f2084dcd525be3df",
+      "name": "Amulet of Proof against Detection and Location",
+      "sha256": "ccee43dfad20c73cf0a0236cc9aa50f2da789fc9084eb72e87c6b4ade4d3f883",
+      "targetKeys": [
+        "official:equipment:es:2bda57073d4de65a9fc99b84"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Amuleto a prueba de detección y localización",
+          "page": 224,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:0d25a950a86e329ddd7877d2",
+      "name": "Bracers of Archery",
+      "sha256": "7d7933f423d1573deca4f4d88951557b9f303d2d8f25568a8fb4911bf78a22dc",
+      "targetKeys": [
+        "official:equipment:es:40a2f5363de51d6cb164abd8"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Brazales de arquería",
+          "page": 240,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:0d47fda06debad7e30e80ab8",
+      "name": "Vicious Warhammer",
+      "sha256": "f544a634dcd633fd613e8599c77b517aab8930702738f781511dc0c8e57b6aa8",
+      "targetKeys": [
+        "official:equipment:es:670193d18fadb992218eedf7"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:0fba8afbdc1017ef1d70392e",
+      "name": "Vicious Longsword",
+      "sha256": "bec727c27cbba7fec07b867f68a9f415c7c88c8221b632fd8f9d499bbe6cf799",
+      "targetKeys": [
+        "official:equipment:es:9ed0f1f2ba370de4d8d74dcc"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:116d22eaf3352b431cbb456f",
+      "name": "Circlet of Blasting",
+      "sha256": "14b151d54eeecc507f0619c4de14155829c7c31d62771275e24c534372ec5f75",
+      "targetKeys": [
+        "official:equipment:es:837132a2b546795dcbf8cd3c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Diadema de estallidos",
+          "page": 246,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:1197cdfd85de300e97137782",
+      "name": "Vicious Rapier",
+      "sha256": "a9e72560af74897b22219eb86652e39e83bbe7a330fd44b58418d2b9e45ffc56",
+      "targetKeys": [
+        "official:equipment:es:3d3aec52c044be52dd2ff23f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:125222ae8245f71c5aa5f19d",
+      "name": "Horn of Valhalla (Silver)",
+      "sha256": "c71fac2a536cb64843ebe0e46fbe18d233a7c9bf5a2628a6181aa2ba1940b999",
+      "targetKeys": [
+        "official:equipment:es:2bc2a95f6395e248236a47ab"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cuerno del Valhalla",
+          "page": 245,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:143b8ecd61b00ec1bf901042",
+      "name": "Frost Brand Longsword",
+      "sha256": "58d8e3b1b676db5848b870eb8cf51eac5157fedae7060141184d6460c3652c3a",
+      "targetKeys": [
+        "official:equipment:es:204b52f3c4fd93201813054e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Hierro de escarcha",
+          "page": 255,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:167d57c9f60a9f3c604df299",
+      "name": "Ammunition +3",
+      "sha256": "b7b3b6c050b32d578f7fb7878e2a755becc21fd33637d1066ca5e2250465fc17",
+      "targetKeys": [
+        "official:equipment:es:2332f606e84baed04abe564c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Munición +1, +2 o +3",
+          "page": 258,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:1836f7ca87f6e3ee9d704e2e",
+      "name": "Trident +1",
+      "sha256": "0b1e4fbad8372f5c866d1ad0e944a032a8709911f34403010eedc9daa7ff0b9b",
+      "targetKeys": [
+        "official:equipment:es:7032cbe638abba93f8addd7a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:188a68dfbf62365ca73c3aee",
+      "name": "Chain Shirt +2",
+      "sha256": "8a54b2d3fa3b90e47b172c86fbe1d59a5b2bbf451d912c9f71830903c76c658b",
+      "targetKeys": [
+        "official:equipment:es:181be68f4b1f5b75ca241809"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:1f114d3cba7b63d7fc33f713",
+      "name": "Tome of Clear Thought",
+      "sha256": "bb13241be3831909d6749f00339bb41b4f57b4649515bb981ef965465a75c66c",
+      "targetKeys": [
+        "official:equipment:es:6f505d7deed241155c4e0b85"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Tomo de pensamiento claro",
+          "page": 264,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:20cdb52bf6560e41ee81ec02",
+      "name": "Berserker Battleaxe",
+      "sha256": "c7efe0622ed64943f6956cfcfde2ab227bd8649636682c29c12ffa5698c6f699",
+      "targetKeys": [
+        "official:equipment:es:ce1d5cf7c2597a556c05a8f1"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Hacha berserker",
+          "page": 254,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:2106226b5498ff7522d04fb6",
+      "name": "Vicious Lance",
+      "sha256": "7f864c1989027a88e520a0142e4bd10253f26b5c85ff7358cefad174449a71e7",
+      "targetKeys": [
+        "official:equipment:es:f76998ec59eb6db8507dc857"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:2498490e0e06fc711395d7f6",
+      "name": "Potion of Fire Giant Strength",
+      "sha256": "81d8083dee252ce500dc8fffa072da42d9363022c1ff6325df6ca5b2c6c5f0d7",
+      "targetKeys": [
+        "official:equipment:es:9aa7b625b0a1d2f57d2321e2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de fuerza de gigante",
+          "page": 261,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:26a6cddb8751f9c91821a9e9",
+      "name": "Potion of Resistance",
+      "sha256": "fb22e181351f0de7653854ad5990a6515027b425eb6a86aaa289ed4c0f44add0",
+      "targetKeys": [
+        "official:equipment:es:288b0e63563a7d6ecda0925b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de resistencia",
+          "page": 261,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:26b30054e4bba04550da96de",
+      "name": "Armor of Resistance (Leather)",
+      "sha256": "c6e368271d37dbcc4c2eb350ae2dd9ff2ba16506cc8e7b668242f9febb7166ec",
+      "targetKeys": [
+        "official:equipment:es:2576abf7d0b4aa35a244426d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de resistencia",
+          "page": 229,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:2bff9bb144d14fbae3628360",
+      "name": "Ring of Free Action",
+      "sha256": "caedc4325182ba1787478bb030647605d3ceae741eab60212537ed95ea6bae2c",
+      "targetKeys": [
+        "official:equipment:es:c854a59e028f50e24ed1d734"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de libertad de acción",
+          "page": 226,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:2d4c2035828867dae8b82a2d",
+      "name": "Plate Mail +3",
+      "sha256": "9b390a2d96fbd72d78ebd28dfc38d2efdbfbf2de2ae3d33cae91d33afe289a96",
+      "targetKeys": [
+        "official:equipment:es:7341991155e5614334eabe5b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:32b1ca3bde7f71cd1cc905a2",
+      "name": "Horseshoes of a Zephyr",
+      "sha256": "8f4d01e521906a2bacccf97abb9eaf1c3e30a51fc92fdf3915dbbcbf83429988",
+      "targetKeys": [
+        "official:equipment:es:d837a9dc165434a7ebb4b2bb"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Herraduras del céfiro",
+          "page": 255,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:34d16c911013de2b6364f728",
+      "name": "Vicious Blowgun",
+      "sha256": "22061e7ed73448830c37e5b2631424a5ae7835e772ecb741d821ba2af87f185a",
+      "targetKeys": [
+        "official:equipment:es:a7f27ead1cc4e65c9c4bb23e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:35827b3c4243eff8fa9fb06c",
+      "name": "Potion of Clairvoyance",
+      "sha256": "5d665ee8b3f7220afcb2535cea55908ceefc5006bbf4002080cc847c0afea179",
+      "targetKeys": [
+        "official:equipment:es:25c626a208ba4a32f000c0d0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de clarividencia",
+          "page": 260,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:360bac216c73f52c14dc38f4",
+      "name": "Defender Shortsword",
+      "sha256": "a9841a8dbaa0b4d0dd2c2a0ab61687b2ab3c6dfc3c622c33022cc1ccfb3a0a5e",
+      "targetKeys": [
+        "official:equipment:es:8ff4129cbfb5f59e99585e4e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Defensora",
+          "page": 246,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3658ccd95ba6f08c0554a02a",
+      "name": "Vicious Pike",
+      "sha256": "0f1cf532bfb84a85e431336e4e8a2c0637114f1a1cd0d1b4e6afebe2fdffda30",
+      "targetKeys": [
+        "official:equipment:es:5b1a504148920a35312b923e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:36630d18c8fa449c87e301a2",
+      "name": "Candle of Invocation",
+      "sha256": "88e37ce4ba2e9a4c51de7f3481154318da048412a3607805717b15198b5984eb",
+      "targetKeys": [
+        "official:equipment:es:6eaa83f8bf3b7833d32c8ec4"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Vela de invocación",
+          "page": 269,
+          "completeSourceBlocks": 5
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3827f7fd871c6584eb0520f2",
+      "name": "Horn of Valhalla (Brass)",
+      "sha256": "3e677dc7880952261f579985dedde1c98a1268faa072110929dc8779b8893573",
+      "targetKeys": [
+        "official:equipment:es:08aeefad60648a37018c0624"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cuerno del Valhalla",
+          "page": 245,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:38705ecfc87e423a99650892",
+      "name": "Shortsword of Life Stealing",
+      "sha256": "be13334a42b6289714eef20a757ce4cc2b80ee3314be6fc616595947f5c98d6d",
+      "targetKeys": [
+        "official:equipment:es:c7bd474b6e2f8bc12a428038"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada ladrona de vida",
+          "page": 248,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:396fcbe57d5b14ba11c0e26e",
+      "name": "Apparatus of the Crab",
+      "sha256": "010a0329e9761c7c6094f08455a73458e9188c5ec15726021a27deeaccfc5b5f",
+      "targetKeys": [
+        "official:equipment:es:88c9115b7d543622bd1c0bde"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Aparato del crustáceo",
+          "page": 228,
+          "completeSourceBlocks": 5
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:39e175b983f4ddde3a64662b",
+      "name": "Ammunition +2",
+      "sha256": "ae4d508c2afad87ec40468218a173abc3f3183cbf34ab95609c022f2fd56d11b",
+      "targetKeys": [
+        "official:equipment:es:250884d74945e41176af6df1"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Munición +1, +2 o +3",
+          "page": 258,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3ace8a4ea1a5e9b935fe1690",
+      "name": "Vicious Club",
+      "sha256": "e93ac001e9ae0471c11ec0998c40b1339be99321a7198c9a9fc1935f4bd46aa1",
+      "targetKeys": [
+        "official:equipment:es:c7cb954c8d7ea77c90cdd4cb"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3b57a6b2cd2d88fcfb7a5186",
+      "name": "Horn of Valhalla (Iron)",
+      "sha256": "c9d5132e90f49474a6c26388f169d8d360d5022f52faa65541468dd236a28cb7",
+      "targetKeys": [
+        "official:equipment:es:536aff9fe0a2d11fe8d4ee85"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cuerno del Valhalla",
+          "page": 245,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3c6df829d193e8fe44150d4a",
+      "name": "Manual of Gainful Exercise",
+      "sha256": "625a343f67e8b1b0bd803e0f1d3839ccd55ea439c2339fe9db1479f8d2f42f4d",
+      "targetKeys": [
+        "official:equipment:es:f04899b83f054b78715736ed"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Manual del ejercicio beneficioso",
+          "page": 256,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3cf7bda3190902bd2cb307cc",
+      "name": "Hat of Disguise",
+      "sha256": "f1f4db5791fc70dbba25d35be98aaa46d6ffadeb36ccd55e78b004ac07b6fc2f",
+      "targetKeys": [
+        "official:equipment:es:50efd0e45ac3503fcd5c510e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Sombrero de disfraz",
+          "page": 263,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:3d7458dc272fab0954332f0a",
+      "name": "Dwarven Thrower",
+      "sha256": "a790e8bc93c2f54277028edabceccb8bab404fc094009143dfe063d5ce7c9a03",
+      "targetKeys": [
+        "official:equipment:es:5f608ab32b300011f295ecc8"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Martillo arrojadizo enano",
+          "page": 256,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:40d7982fd93e164fc8d64624",
+      "name": "Medallion of Thoughts",
+      "sha256": "1078e697ce41c91b96d04accb01a95500fafafebbee2a862c9b9ed4fac42ba11",
+      "targetKeys": [
+        "official:equipment:es:8a04f86771d4d29eeccaedd8"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Medallón de los pensamientos",
+          "page": 257,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:432b75c77ab558fdd518f6fe",
+      "name": "Tome of Understanding",
+      "sha256": "246e14c65dd53b6f93e11cc0f6f7f43adb8ef685e33ace17dd6bc1151a45070b",
+      "targetKeys": [
+        "official:equipment:es:6f6157682bba7d1b46c44ff2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Tomo de entendimiento",
+          "page": 264,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:471825482db7cf47a43d21d2",
+      "name": "Ring of Air Elemental Command",
+      "sha256": "ffd9b023f3048bbcb94f33db030de12d2a859f382b68abe8fc8f496cb272841b",
+      "targetKeys": [
+        "official:equipment:es:8ff078f8b72ac0e9e11beaec"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de comandar elementales",
+          "page": 224,
+          "completeSourceBlocks": 11
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:481228f76145f63c15f2e0cc",
+      "name": "Vicious Battleaxe",
+      "sha256": "a8d3aacf876f03e4603b9e4845d25777c4d2012dfd9eee7adb416f536cad9b1d",
+      "targetKeys": [
+        "official:equipment:es:bc117e3bd0d7e4cdec3a735a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:4b7a2dae5ae955b689dc3664",
+      "name": "Potion of Climbing",
+      "sha256": "67f7a8073fa51a6ca68813c0a721e44005e6870d345dd3615da4f56580a28d26",
+      "targetKeys": [
+        "official:equipment:es:603a7612a52f1b0dc500319a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de trepar",
+          "page": 261,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:4bbc758176f0e61dfd8f393e",
+      "name": "Ring of Three Wishes",
+      "sha256": "39726c1cc8d0d13f99e3a6211b65fe2c55d1f4bc04190d6db7449139f0c8800b",
+      "targetKeys": [
+        "official:equipment:es:16bfcef27391210d1ed5263a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de los tres deseos",
+          "page": 226,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:4e6b8d1265ef3dabf535c8c8",
+      "name": "Vorpal Greatsword",
+      "sha256": "286f999728265679172cdd176ee4031ee800c99a062585daccdcf91bd20794d1",
+      "targetKeys": [
+        "official:equipment:es:1cc6fb29854598ed46a65f3c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada vorpal",
+          "page": 249,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:4f9e3d1f063476739f2df298",
+      "name": "Elemental Gem",
+      "sha256": "825a64c379c20d4c2da01c5c097eb3bff17a8884008bfa6c23e031371a27a49b",
+      "targetKeys": [
+        "official:equipment:es:f59d76529bbbad4366ef31ef"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Gema elemental",
+          "page": 254,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:505bb864814e5ac08cc48249",
+      "name": "Luck Blade Shortsword",
+      "sha256": "5b3cb8331f56285da5962515be0b5f2c410dc56dafa2d164e6b99c96a99580e2",
+      "targetKeys": [
+        "official:equipment:es:6bcfc9fa2fc699815dbbb59f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Filo de la fortuna",
+          "page": 251,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:51bb5952e0881643bcd7c294",
+      "name": "Flame Tongue Longsword",
+      "sha256": "a182af4b8ae123bb6ee0a85e93b270e521f43b6f71aab9b273810d589eac636f",
+      "targetKeys": [
+        "official:equipment:es:11d881cebe78bd3b6034c457"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Lengua de fuego",
+          "page": 255,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:526d4222932481afc2d41aa8",
+      "name": "Horn of Valhalla (Bronze)",
+      "sha256": "17cca5fbb2b34fdbc614fd20e178499805e9084fe38a3df406bb1264aef4a36b",
+      "targetKeys": [
+        "official:equipment:es:2332efbe842bef596b4af269"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cuerno del Valhalla",
+          "page": 245,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:533faf676b3fce1afea970a4",
+      "name": "Stone of Good Luck",
+      "sha256": "babaf1ab31c98399ad20539b209d376c71227e9b706ab6ca7af2ee7f48e70ce7",
+      "targetKeys": [
+        "official:equipment:es:6880ccd9a4ad0a0ca9f7b45b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Piedra de la buena fortuna (piedra de la suerte)",
+          "page": 259,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:537ab755ea4fa6ce621789b0",
+      "name": "Dwarven Plate",
+      "sha256": "e35f4a474ce2b8c3460e781a476e2733f20e124b1675d88adc9dffb3b00df8c9",
+      "targetKeys": [
+        "official:equipment:es:8dd6403aac77cfcf26306fda"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de placas enana",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:53ea315570edb26ecede1efb",
+      "name": "Periapt of Health",
+      "sha256": "b350c842a9127158bdb6503d8f83c9979af805ee8e1a2a42f8195ed952f2b302",
+      "targetKeys": [
+        "official:equipment:es:4a0280fe1a12b371b774bf9f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Talismán de salud",
+          "page": 263,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:57e2cd088530c216892f19a6",
+      "name": "Well of Many Worlds",
+      "sha256": "5d52b97b09a8cee2b01f79e5977cf32b854511aa86a66054c547e3df6174d5ed",
+      "targetKeys": [
+        "official:equipment:es:5b5c9f4db3a6a9bf121717fe"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Pozo de los muchos mundos",
+          "page": 263,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:58a6fcaa4a49dd040e3e3b48",
+      "name": "Plate Mail +1",
+      "sha256": "85202da702caef79242f2f3dcfb6de54cacd4df73a70040361cf03a53d1072d5",
+      "targetKeys": [
+        "official:equipment:es:4f77ea44ee87d0a74202f068"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:58b5b1013cacbe3027e41181",
+      "name": "Dragon Slayer Shortsword",
+      "sha256": "cb3916277bc12018c123480f0d389c634b94cc12cb26e85f4503243f60c667d0",
+      "targetKeys": [
+        "official:equipment:es:505f80662d56ffa3adb212b7"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Matadragones",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:59d682ced2bd798307f98af5",
+      "name": "Vicious Crossbow, light",
+      "sha256": "ab0580c7e17f4341571fe8632637e73ea5892b4afbe794bf985bb2096b1b9d35",
+      "targetKeys": [
+        "official:equipment:es:7ed1857c411cd63b4a9ae3ec"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:5dfc406b3ce747548fd6c03b",
+      "name": "Oil of Etherealness",
+      "sha256": "f6f52bca5b8eb8724e79156a24279a21b49eff238b3917f9f7c9f04865f2ad76",
+      "targetKeys": [
+        "official:equipment:es:607b667eddf76a4b1dda4c2e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Aceite de etereidad",
+          "page": 223,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:613ad339db9b243c8d5f4d84",
+      "name": "Eyes of the Eagle",
+      "sha256": "c10884a9ac47ef7ada2e063f58d5a8882fcb93cb75e414edf50567558fcefeb7",
+      "targetKeys": [
+        "official:equipment:es:7fee756c80e074dd2dc47947"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anteojos de vista de águila",
+          "page": 228,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:625790457e28b78d88b232b0",
+      "name": "Vicious Greatsword",
+      "sha256": "79ef4df2b2b31ee0d2fd49df52622a8fdac3fbdbb385b41f61bb176e429d6b6b",
+      "targetKeys": [
+        "official:equipment:es:bde6b27f011acff17c7ca62f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:62bae8e91c1d60a4df2037d4",
+      "name": "Animated Shield",
+      "sha256": "f37c759cb72eca6a836de811461588ea51ff19d7134356b3e348c294e871e4cd",
+      "targetKeys": [
+        "official:equipment:es:40b58116d37541a913e599f0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Escudo animado",
+          "page": 247,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:638d72867537f76a6c3307e4",
+      "name": "Vicious Light hammer",
+      "sha256": "36a33a99c55f022db063d119be2bdd86490db0d274502740a403d85685898b96",
+      "targetKeys": [
+        "official:equipment:es:e195a30cf2bed9617cab705d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:654780195a6a2e21e4de6bd1",
+      "name": "Vicious Dart",
+      "sha256": "ff458d5c6bd34ca04f61f274e6333557eeab2e4d0ef5f8f6cb1d51aee86cbbb1",
+      "targetKeys": [
+        "official:equipment:es:b53f1d3eda845184553e548c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6654a873b8470d7327e24e05",
+      "name": "Robe of Useful Items",
+      "sha256": "4f3fece27217d4933f6a6da840cd9c23376dbec1c7aa14f2b37c554d5f48a3bb",
+      "targetKeys": [
+        "official:equipment:es:b98496842c9011838d19a5f5"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Túnica de objetos útiles",
+          "page": 265,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6679f82326909003ea398adb",
+      "name": "Oathbow",
+      "sha256": "7dcb41dd5801fb6aa1e414edcf5287d2866546fc8310b11ea5b687a977822706",
+      "targetKeys": [
+        "official:equipment:es:43b466967fe1635949e68f69"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arco juramentado",
+          "page": 229,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6715ebfa66bf802f4fe1e7c8",
+      "name": "Longsword of Wounding",
+      "sha256": "b0f77be6e7d52f7e4c71f086ea18771351d8cec5306b2e514cc518bb12321b5d",
+      "targetKeys": [
+        "official:equipment:es:dfe4f67404619490ab853e9d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada hiriente",
+          "page": 248,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6b8d88ebe07938573c4455a6",
+      "name": "Armor of Resistance (Padded)",
+      "sha256": "cc1e99f947229edcb5899424d960385cf9d6585e2cf9a42548e46e435013a366",
+      "targetKeys": [
+        "official:equipment:es:82bec804f111fbf655ff7dcf"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de resistencia",
+          "page": 229,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6c9c54fed537d630fcd3aa7f",
+      "name": "Ring of Swimming",
+      "sha256": "368190488bece1422672cab69121ce0bd2a158e8f45e1e3cf236b14dc30387f3",
+      "targetKeys": [
+        "official:equipment:es:f49a0cb0ee5dc6d777c153e6"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de natación",
+          "page": 226,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6d51d5968354bf8bc8f43284",
+      "name": "Vicious Sickle",
+      "sha256": "0d4b0e44d6aa88904298a73dc6d3a3ba121fb02ac65e1607ec2c96386d1f1b66",
+      "targetKeys": [
+        "official:equipment:es:43ba30e7be7c03faaaaff52c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6d8201fac8749e6a353370a0",
+      "name": "Mace of Smiting",
+      "sha256": "41b64c2e61e3c1d4d0b79120d37b449a71d6bb910cccb462ddde4e4e7b90ab51",
+      "targetKeys": [
+        "official:equipment:es:b4f84e86590127efe768a95f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Maza castigadora",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6dae7df5f7bca040414dc44b",
+      "name": "Potion of Stone Giant Strength",
+      "sha256": "b6dd5a27633858e10783a1da354b6a1a23ae07876d1aab98f7e53bfc2b2e6515",
+      "targetKeys": [
+        "official:equipment:es:72d78d4649313d1a3f8b5b1e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de fuerza de gigante",
+          "page": 261,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:704b46b0bb710ef658dc6557",
+      "name": "Mace of Terror",
+      "sha256": "777ba93655af70cb450cf3e800873d39f74165c30217864a63dc93112b49aeb7",
+      "targetKeys": [
+        "official:equipment:es:f6aefab76047c5788d5cb069"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Maza del terror",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7109610cb6b9dc65f475bbba",
+      "name": "Ring of Resistance",
+      "sha256": "15e3dc96f554b8114bd5f6c5c31c07662ac5aa576f00b377c95c78b19a1bed94",
+      "targetKeys": [
+        "official:equipment:es:25d11d7b5a7b5c94a5f9c0c8"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de resistencia",
+          "page": 227,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:718e5ce3b1dbd82394bacb51",
+      "name": "Bag of Devouring",
+      "sha256": "63c7ab0c5fa4c5886759993039b89e48d5d51b8517bc0d498034ba97515cdac6",
+      "targetKeys": [
+        "official:equipment:es:3a81c2f6a557d09b39518381"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Bolsa devoradora",
+          "page": 238,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:725d6f660b7d85357f2f15ef",
+      "name": "Wand of the War Mage +2",
+      "sha256": "2d0604c6472dfeffc488cd77a13d55c62734b71880412c04c15bc28c04905d74",
+      "targetKeys": [
+        "official:equipment:es:9ae2f695fea4ba034c965e44"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Varita del mago de guerra +1, +2 o +3",
+          "page": 269,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:73ef22acc5089641ff8db380",
+      "name": "Dancing Shortsword",
+      "sha256": "7804d0c738067330dc6783b13d120ea84ea83fd640fed55c950811d6334682b0",
+      "targetKeys": [
+        "official:equipment:es:78a330dcbaa0773138491e90"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada danzarina",
+          "page": 248,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:74dea61e5e952f174d92f8be",
+      "name": "Vicious Whip",
+      "sha256": "fa7a47b1e809fd6a2ccbca35f10af620f79eb1d26d938656f02b5b6e2529d1d2",
+      "targetKeys": [
+        "official:equipment:es:412fed1c4f5ada1768df781f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:76b443e791ad074e9a0eb199",
+      "name": "Ring of Regeneration",
+      "sha256": "64c59cc984a3d51cfdfcdf11a32387448bce6a28d41719561d1e31af831fff30",
+      "targetKeys": [
+        "official:equipment:es:d81d22e38c3ddd4e620b5674"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de regeneración",
+          "page": 227,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:774705e2ab24cadccbb1a1e8",
+      "name": "Net +2",
+      "sha256": "cfc38c237ac10fc225a17722296fd5344ea1d37f3a709cb8af4c611d130308cc",
+      "targetKeys": [
+        "official:equipment:es:fedd698066b62346698b608a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:779060b146b752c18a78113b",
+      "name": "Ring of Fire Elemental Command",
+      "sha256": "e0bf28e9391f87ca1c5c410b606855bddacc7bbe0442770a0846ac427694a383",
+      "targetKeys": [
+        "official:equipment:es:f3814673135c5a3a0681325d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de comandar elementales",
+          "page": 224,
+          "completeSourceBlocks": 11
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:77a5b46f1a77d49324b7371b",
+      "name": "Vicious Greatclub",
+      "sha256": "de3e013d6d8b3c9910fae3e6b125dfb907959f39b2bc287fbc0771da393b3543",
+      "targetKeys": [
+        "official:equipment:es:dca7ce044bc3a61a7d7975a9"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:784f52beba98193f4ae0a788",
+      "name": "Manual of Quickness of Action",
+      "sha256": "c4c06ed7be5bc87d29bb174f649283750871746f3342965b7a4b4dce1219d5a7",
+      "targetKeys": [
+        "official:equipment:es:669dbf2489ed293bb38d8a17"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Manual de rapidez de acción",
+          "page": 256,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:784fc4975704e5abf3b7e17b",
+      "name": "Lance +3",
+      "sha256": "ef196061575a99704ee2508ddab35c0855595c5928ced1d9f54bb57fdb6abe9c",
+      "targetKeys": [
+        "official:equipment:es:3b8581124ebb69e0130f882e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:78bfcce52791daf159ae7902",
+      "name": "Vicious Morningstar",
+      "sha256": "91eab8e811dcdf9e8d2db72b71fe7948a6ed12e4de8f437456e026a7637ff666",
+      "targetKeys": [
+        "official:equipment:es:6deba73e296507e887a4ed1f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:78fa9819ec262bc45a43caff",
+      "name": "Wind Fan",
+      "sha256": "d6813967e27bde2afa3a70f6ec576d6db15c18517d813d1d86010536bb0e93f2",
+      "targetKeys": [
+        "official:equipment:es:cc6d904679038c3cb3a54a64"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Abanico del viento",
+          "page": 222,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7974610f2668978075fae1c4",
+      "name": "Belt of Dwarvenkind",
+      "sha256": "92fbab0f5e1106287e0b58a8e2039a26dd6bfb21e365b044e5186a0e7036bc80",
+      "targetKeys": [
+        "official:equipment:es:a7fbc04fda77cc66426fa9c3"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cinturón enano",
+          "page": 243,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7acc005bd8cf2a451a92f6d0",
+      "name": "Wand of the War Mage +3",
+      "sha256": "d31b0a5a5cdbaf5c4c95db27c7f472d2a3ab868a22f5b6bed8c4846f4e0c4e78",
+      "targetKeys": [
+        "official:equipment:es:399d2fabfaca062f022b9259"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Varita del mago de guerra +1, +2 o +3",
+          "page": 269,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7d75de39e68177c229ed6861",
+      "name": "Robe of the Archmagi",
+      "sha256": "3b4206a4897bd07a27af1149877f0aee22e1fe48148197094e4a9404bee57cab",
+      "targetKeys": [
+        "official:equipment:es:9e57f5c2c50cbb85a56cb9e4"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Túnica del archimago",
+          "page": 265,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7e0bb85794ce22bc3d37ae5a",
+      "name": "Potion of Flying",
+      "sha256": "e78273dcc2a24b55c92b7c5d828c294cd215700d2e4351eb469e2a1a0f98762c",
+      "targetKeys": [
+        "official:equipment:es:aeb6ec2ff9a2adb5c0b4c021"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de vuelo",
+          "page": 262,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7ef8c5dd0ab99f6d3fb4cf34",
+      "name": "Potion of Mind Reading",
+      "sha256": "22b9a4481c3c1d7eb333f2409a4fd8b02c4a88a6280de3ccb7f40311ecb7672a",
+      "targetKeys": [
+        "official:equipment:es:3873f56f6673d7d6a8e03ffb"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de leer mentes",
+          "page": 261,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7fab9e6fe05ace8c74c4082d",
+      "name": "Efreeti Bottle",
+      "sha256": "8b5183402c8b87862888d5d4975aaeee25c0810828efda2295aa6c565f9049ca",
+      "targetKeys": [
+        "official:equipment:es:db7d1b79dc665d3f57d5d2c2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Botella de ifrit",
+          "page": 240,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7feb8e01f4b33fb8ee4e91cc",
+      "name": "Ring of Animal Influence",
+      "sha256": "efe4ac8ee9a17d1d7efe2be7561a22ad07fb851469ab7686a0cf45e5f9fc60e9",
+      "targetKeys": [
+        "official:equipment:es:0fdb2edd8391f7440a662f31"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de influencia animal",
+          "page": 226,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:80c758790ac9fd5bbddbc2a9",
+      "name": "Manual of Golems",
+      "sha256": "b5a0ecf13b26a0ec1fe547933144730b5bff857b0ba2d450df2e6b3d3b2b6035",
+      "targetKeys": [
+        "official:equipment:es:5ff00bfd7ee36f8d690360b2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Manual de gólems",
+          "page": 256,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:819966d04090b7a699720b9e",
+      "name": "Trident of Fish Command",
+      "sha256": "2b668598aa0ec846e7e9c5b5f56a784f22ed2cffd77173db7254fb017949c7aa",
+      "targetKeys": [
+        "official:equipment:es:eb25c4df5d5bd294667b7d08"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Tridente de comandar peces",
+          "page": 264,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:81bc11113ebf7d1728269d21",
+      "name": "Necklace of Prayer Beads",
+      "sha256": "c87a9b5f6b19827fbcebfad99c3c1c6756b82c61fcdd6b51e95d28c2bb55726c",
+      "targetKeys": [
+        "official:equipment:es:a2667f9e44b993a8c4bedb72"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Collar de plegarias",
+          "page": 243,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:81e27f4341399f703cdce92f",
+      "name": "Robe of Stars",
+      "sha256": "2adcae22b440e3212fad0b3639738a19a25876c5163fdbe7744c80250b6d822e",
+      "targetKeys": [
+        "official:equipment:es:d45091cecb894506094369a2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Túnica de las estrellas",
+          "page": 264,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:83092e0c6f451df2471c4a01",
+      "name": "Longsword of Life Stealing",
+      "sha256": "f64e53caf964d9ef208190126adce59bdf04901093612795dbea9fe21729d37b",
+      "targetKeys": [
+        "official:equipment:es:8a0b52974feae87ab4720b0d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada ladrona de vida",
+          "page": 248,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:85592ca305609ec90151351d",
+      "name": "Javelin of Lightning",
+      "sha256": "82e86a469dd5d619996e4df8ec53d103779fe79f932d116237cc50b6121056cd",
+      "targetKeys": [
+        "official:equipment:es:9852ab1d5c8a0dd1a28350ee"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Jabalina del relámpago",
+          "page": 255,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:858a215e39cca47db98ff4ed",
+      "name": "Potion of Storm Giant Strength",
+      "sha256": "a907b530877f74439e8778472551d3d7a9d55188079587f0553412a0dfbd2f43",
+      "targetKeys": [
+        "official:equipment:es:9372bf03b25b9c3b9c203e43"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de fuerza de gigante",
+          "page": 261,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:85c5f1397e191787c0feeb8f",
+      "name": "Necklace of Adaptation",
+      "sha256": "3445748ebdb1399bdc3b985b818f919aaf9791f4fe6827f0abf2b9f2c6a6c1ed",
+      "targetKeys": [
+        "official:equipment:es:c28c2cb011feaf97fdd6402b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Collar de adaptación",
+          "page": 243,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:870968a95e846fd5c241734f",
+      "name": "Scale Mail +3",
+      "sha256": "8718e9218f26b678c72ed2cbaae5311f03366425543e745032b6c356cd98dc7b",
+      "targetKeys": [
+        "official:equipment:es:e906a312ff87ccc1916ac4d1"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:870f293ef76787277b96a800",
+      "name": "Potion of Growth",
+      "sha256": "d28816c9fd1738e98a94ec52372d635c5f2d95104e352bd0d870aa362dd233e0",
+      "targetKeys": [
+        "official:equipment:es:769ff7952f0ed75b062d6044"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de crecimiento",
+          "page": 260,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8ac3c12a0d727d987a537f3c",
+      "name": "Vicious Mace",
+      "sha256": "6d4b7aed67bc9ab486a14f7f7756bb34dc09445e8feec91572d2c767600a2231",
+      "targetKeys": [
+        "official:equipment:es:39e88b4040a225d6baa7b634"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8b2a329508d1b1404a51a78e",
+      "name": "Cloak of Protection",
+      "sha256": "eb28c4520c1e04c1eddab18191d633680cac29f11e38ccdc6d11e73b0fbc7b24",
+      "targetKeys": [
+        "official:equipment:es:a953a6430afcb4161c27bed0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Capa de protección",
+          "page": 241,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8b7f8f58501c060b9439140f",
+      "name": "Net +3",
+      "sha256": "48256140166863705adc3f7e1122c4040aef9c4fa4b141df464393b459e3cd37",
+      "targetKeys": [
+        "official:equipment:es:ac0f80fd1c0f1c938d30b0a8"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8b8bfdeaa7eea0fdddb3d4bf",
+      "name": "Net +1",
+      "sha256": "9d3f490988d3983da3038a4f208ef94bf865d7556832cc7d62aad4ec51a3fc4e",
+      "targetKeys": [
+        "official:equipment:es:bd6b6d0bae53fcbd755d2486"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8bb7c86be27da7e83666ff8c",
+      "name": "Boots of the Winterlands",
+      "sha256": "42fc313b58c8c9b536132ee433913638f91752c07286b5db88252b9d11b932a6",
+      "targetKeys": [
+        "official:equipment:es:79ac3b7e18f9352b31f1cde4"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Botas de las tierras invernales",
+          "page": 239,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8c68b7344670a64233f8bb6c",
+      "name": "Helm of Comprehending Languages",
+      "sha256": "5d8749141b9dcd32fd82e706eb74e61431cb55d26a5547e99492c8155399c393",
+      "targetKeys": [
+        "official:equipment:es:ee49205d290ab9eaafa1108f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Yelmo de entender idiomas",
+          "page": 270,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8cbd03cf702b026be5fd8024",
+      "name": "Ring of Djinni",
+      "sha256": "1e064195a593be5e1570b4e80706462a9b99cf61b35ff3d5a3f9f960f639d4d4",
+      "targetKeys": [
+        "official:equipment:es:5fcf7a51d08d0aecbe269fd4"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de invocar djinns",
+          "page": 226,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:931d93c578d3477bc49692ab",
+      "name": "Boots of Levitation",
+      "sha256": "0374f87cb2a31c53f8783e427671a6a9324a7ca897e3613fb8324c7b4b54f39f",
+      "targetKeys": [
+        "official:equipment:es:8e9870158921c82b6141bae1"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Botas de levitación",
+          "page": 239,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:949c02f795c7a5ddde1c0955",
+      "name": "Frost Brand Greatsword",
+      "sha256": "df74e69b96d7732b5c657d164f23cb1541338f29d4da737b3fcbaba5f82d2ff3",
+      "targetKeys": [
+        "official:equipment:es:d557752500840d78b5e905d8"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Hierro de escarcha",
+          "page": 255,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:94f501edc0823095b7d4c144",
+      "name": "Vicious Shortbow",
+      "sha256": "2c5ead9c5b748e6b60903534f44e0fcdd6af3382d8bccb6079606dd1fb472099",
+      "targetKeys": [
+        "official:equipment:es:aec2756204181dbd531cb861"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:956c9ad4cab94215a4adb086",
+      "name": "Vicious Handaxe",
+      "sha256": "68be404fe24e15ce089c70b7ca7f7a1ecc55edf3d4a0b46fdcf0b226b03b57fb",
+      "targetKeys": [
+        "official:equipment:es:52c0cef94e13699b0ea2c75d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:96acf9be3d4cce9ec5ab0b4e",
+      "name": "Luck Blade Greatsword",
+      "sha256": "26d100628d3ea61dc8a227e1ac8ca6d74923e6fdaaa7ec5c5c27e8976882ebed",
+      "targetKeys": [
+        "official:equipment:es:711f85d63c831b6b0310fb58"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Filo de la fortuna",
+          "page": 251,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:96ce13704f3b6d20707e8284",
+      "name": "Ring of Shooting Stars",
+      "sha256": "9bdacb3691928a91074f474a992e4aa6531e1e256c25cb1946aec7d8bfd4bf2f",
+      "targetKeys": [
+        "official:equipment:es:972c534ec917c0ce3dd1011d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de estrellas fugaces",
+          "page": 225,
+          "completeSourceBlocks": 8
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:97536aea68178e059f411af3",
+      "name": "Cloak of the Bat",
+      "sha256": "3b4787614720e8ba90e163eddcd55a6fb059bc704d7d1b52d7e6230b08731c1d",
+      "targetKeys": [
+        "official:equipment:es:b05f5e537ecf92db2ca2ae7e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Capa de murciélago",
+          "page": 241,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9781221c3315cd05f6887885",
+      "name": "Wand of the War Mage +1",
+      "sha256": "b27f1bb6b34d83d256de5a1f54a7c34a69da85579991f62ddf019b15f2ad159c",
+      "targetKeys": [
+        "official:equipment:es:0f35540ad5761cc8b53de256"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Varita del mago de guerra +1, +2 o +3",
+          "page": 269,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9791c31e8eed45e7bd8c0887",
+      "name": "Defender Longsword",
+      "sha256": "c99c1a49eed7d6721f857c2d27d2b5d09af666b2515355d0b10cdf71af41b84e",
+      "targetKeys": [
+        "official:equipment:es:963783ee3a520240dda29847"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Defensora",
+          "page": 246,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:97e0a45385978dcdeea7d351",
+      "name": "Bag of Devouring",
+      "sha256": "120fe3bbca7cdc51d778665ae7c58a95fbf0c2efe2b8f76be545b32e199789bd",
+      "targetKeys": [
+        "official:equipment:es:3a81c2f6a557d09b39518381"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Bolsa devoradora",
+          "page": 238,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9884f74a978da03a8a604fa5",
+      "name": "Dancing Longsword",
+      "sha256": "268186e6b4727f684ee8b45c5eb7b9ef32f588d688294b57665f352fbe46e34d",
+      "targetKeys": [
+        "official:equipment:es:79852c0176e7952ae8226dcc"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada danzarina",
+          "page": 248,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:98980a069b2876fe809eaccd",
+      "name": "Trident +3",
+      "sha256": "28f7fe6d31c11daf7fb26809d78566e2e223e0013c4fe45d5aa357183b44837f",
+      "targetKeys": [
+        "official:equipment:es:5b01996255a88f8d3879f2f0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:992e35f2e85cd00302166939",
+      "name": "Iron Flask",
+      "sha256": "9d5067263f6d564a4ffb9a89e9a88447cc5df1f677d52111fd8601eeffc8ce0b",
+      "targetKeys": [
+        "official:equipment:es:a2e56acba61a14b044864300"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Frasco de hierro",
+          "page": 253,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9996f632b2b4be690b837f81",
+      "name": "Potion of Speed",
+      "sha256": "8c70e15471306376314999f22b157ced84da08948e085dd85d2960ef1bf94ed5",
+      "targetKeys": [
+        "official:equipment:es:2ce971dab6d5fa7c121bc193"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de velocidad",
+          "page": 261,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9c4b1c2ec811499b5e3fa661",
+      "name": "Carpet of Flying",
+      "sha256": "4202f8e5493773bb899fa26b1784fe1e6755d4b73e62760a6b1fa637bac053f2",
+      "targetKeys": [
+        "official:equipment:es:2d00d208f92c4357d88f466e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Alfombra voladora",
+          "page": 223,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9cd09a0d899ac4397f3815dc",
+      "name": "Tome of Leadership and Influence",
+      "sha256": "b8e80295bd01eee0ccc11ab919c578a513ca5a8c2ec149c877144c390034c373",
+      "targetKeys": [
+        "official:equipment:es:e6fb55a58513814680574185"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Tomo de liderazgo e influencia",
+          "page": 264,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9cef51783d6adc1ad5987055",
+      "name": "Armor of Invulnerability (Plate)",
+      "sha256": "b2a67b140d7c5bf460dacd6e5e77cfe11a309ca2fd553c0469ff21bfa0ab922b",
+      "targetKeys": [
+        "official:equipment:es:5af2e272b32cb89586b0a2d9"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de invulnerabilidad",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9f343a499fafaaac4944a3d6",
+      "name": "Chain Shirt +3",
+      "sha256": "704dd0f82bdc1dd819dfe7b684176869f3721f8adb65691777f0c07f0d84647d",
+      "targetKeys": [
+        "official:equipment:es:5390e688d545c3237cbd0c5c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9fed9106e0fdb85e56b35c5f",
+      "name": "Armor of Resistance (Chain Mail)",
+      "sha256": "1c8996c79bf18f6a995c9d6e283a16a854b05fd4434afb6fb91e3db9320535e3",
+      "targetKeys": [
+        "official:equipment:es:81d0edc3f74b29c0545f788e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de resistencia",
+          "page": 229,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:a292d91181da85461583de34",
+      "name": "Armor of Resistance (Hide)",
+      "sha256": "f058bcf24d7d8e09a9b0a0f053857d4ce9f59ab5a18e5fc07745386f13359868",
+      "targetKeys": [
+        "official:equipment:es:96f92ffa499fc09fac85545f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de resistencia",
+          "page": 229,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:a4657af78d2552c5f6cd63cd",
+      "name": "Luck Blade Longsword",
+      "sha256": "4aacf6a9ee4e36ac07984ed2894d1bacc4907f0f84ec16a0e9501b38a5e4e2d7",
+      "targetKeys": [
+        "official:equipment:es:6be205ff80da3f50db3b8036"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Filo de la fortuna",
+          "page": 251,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:a6d702958569c1ed0c2e3b71",
+      "name": "Vicious War pick",
+      "sha256": "52aaa4dff9f8a210ac0a71dcf383fc54e5c714f70442cc71062dfb5c40f621c3",
+      "targetKeys": [
+        "official:equipment:es:3a1cacc0e24f2e0b2016270d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:a6e5fc16cd3882b5fc53b465",
+      "name": "Helm of Teleportation",
+      "sha256": "2f2ccfe79c24d62e92ca44b4c65f7b7465166b9a05a1352c433e24656547750b",
+      "targetKeys": [
+        "official:equipment:es:31e133f12be930aa336bc88c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Yelmo de teletransporte",
+          "page": 271,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:aa637529fe08797b5ab02339",
+      "name": "Cube of Force",
+      "sha256": "d1346f2da63d4864d54e04ea1fcb2f0a8918c0a8e3a9929354acbf76d85c233b",
+      "targetKeys": [
+        "official:equipment:es:23abf7f292bc7bc0f40d9f43"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cubo de fuerza",
+          "page": 244,
+          "completeSourceBlocks": 6
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:abf25053b4ecd6ef67e71708",
+      "name": "Flame Tongue Shortsword",
+      "sha256": "2568dafc1467c57910be3220e6d344b5a99840aef49b64079a4fe795d96eb62b",
+      "targetKeys": [
+        "official:equipment:es:957d1a1e835c57b5736aa511"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Lengua de fuego",
+          "page": 255,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b194dac543f53b3bdb01c9ad",
+      "name": "Greatsword of Wounding",
+      "sha256": "98d6efa83fc892f821a86eb4558f1c53ad7d1c8ff8dece69b06bac5759cb3ef2",
+      "targetKeys": [
+        "official:equipment:es:821a97f9c8fb63e7bd326b70"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada hiriente",
+          "page": 248,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b2763ccc30c871f2479dbaf3",
+      "name": "Vicious Crossbow, hand",
+      "sha256": "b66b7f1af5329cd0ff91c62897e7d67c59d9976c9fa854415d3a7a9f5ade3d2b",
+      "targetKeys": [
+        "official:equipment:es:0ba1a16b9c6d2e8701b1e58b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b287112a78aa9419c9c6b50d",
+      "name": "Scale Mail +2",
+      "sha256": "49075ce52d6d8a51eb1671e596cc005a2909f7d460adcba622dca45cb8d226e0",
+      "targetKeys": [
+        "official:equipment:es:79910f93add94f0d8e5b252d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b34dbff4f23d270ef5afcb5e",
+      "name": "Greatsword of Life Stealing",
+      "sha256": "f64b10f66bcb0884d152df5cdb1d2985ca11fa4b80b1306f410d8c096aaa360f",
+      "targetKeys": [
+        "official:equipment:es:4a02f0cda8f345e2b24656d0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada ladrona de vida",
+          "page": 248,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b49b75de37634de6e4807114",
+      "name": "Vicious Halberd",
+      "sha256": "7db2d214f181743cfb195e35710a1fbb71d4ba2a75c52ddf73f448e392e3a54e",
+      "targetKeys": [
+        "official:equipment:es:079105286daecce94d961d55"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b746730bb53306eed5150d45",
+      "name": "Glamoured Studded Leather",
+      "sha256": "2a69355e16f36852fe864d2fbea667577bd1bad20bec9ab98b5941a4c2421c90",
+      "targetKeys": [
+        "official:equipment:es:b70c41be552f3dc614f1f4ad"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cuero tachonado encantado",
+          "page": 245,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b8441e534536d6a29f677df0",
+      "name": "Headband of Intellect",
+      "sha256": "f3437d091e258fd1e135fcedce2012258a9d831c603e4e5fed3820eea1e61994",
+      "targetKeys": [
+        "official:equipment:es:0c9cd0117d738dbe2f69d163"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Diadema de intelecto",
+          "page": 246,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b84902d55782182338048b51",
+      "name": "Dagger of Venom",
+      "sha256": "4326e90975de8dab81bdcbd0e915d5d49cce3e6d3e719a8410e46fb59f96b1cb",
+      "targetKeys": [
+        "official:equipment:es:ae9631af3d28e537066aa759"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Daga de la ponzoña",
+          "page": 246,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:b93fa9b7a0f2044a67b8d95e",
+      "name": "Vicious Longbow",
+      "sha256": "0b3af79def8476d942dbf65c997d0765a0c546218e1b1fe8178ab9f529809edb",
+      "targetKeys": [
+        "official:equipment:es:6d448708b838897d955a51eb"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:ba5465888af88d416c2d2705",
+      "name": "Wand of Wonder",
+      "sha256": "9364704a68adb93b4e3c6288c66c356ff9851a7531c064904260f7cbe7088566",
+      "targetKeys": [
+        "official:equipment:es:283d43a7fbb28f2f5d081a4d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Varita de las maravillas",
+          "page": 267,
+          "completeSourceBlocks": 5
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bb4148042893266b2fb0b34f",
+      "name": "Defender Greatsword",
+      "sha256": "54a3fee496628c53a35c23db4c8b76247588d94f02b36e0294bea15d0ff6b048",
+      "targetKeys": [
+        "official:equipment:es:b87f89b4ff0c0569889ebd32"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Defensora",
+          "page": 246,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bb6f0505d7520e583be235d2",
+      "name": "Frost Brand Shortsword",
+      "sha256": "a2385867aee4c0fa5391677c8462be968ae90e9876e795158f07d9980121ca79",
+      "targetKeys": [
+        "official:equipment:es:e994633540f2d0f6fe235b6b"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Hierro de escarcha",
+          "page": 255,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bbb78d8fc9070b58d51edbfc",
+      "name": "Bag of Tricks",
+      "sha256": "914cfa651e02234427c493ac1d1beca4f6e2a9a18a39907463817412affdb344",
+      "targetKeys": [
+        "official:equipment:es:3ba334460d1fc2fa2a8a2a56"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Bolsa de trucos",
+          "page": 238,
+          "completeSourceBlocks": 9
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bd097f3b249a056027585d55",
+      "name": "Hammer of Thunderbolts",
+      "sha256": "bed4c39dccd9ea028358167bb768b7ece74f446c032495745ff0cbb8fc059778",
+      "targetKeys": [
+        "official:equipment:es:bbea1bc3b1ff5ee755a3fe51"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Martillo de rayos",
+          "page": 256,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:be1f7897e5b6f2236ef76e02",
+      "name": "Vicious Crossbow, heavy",
+      "sha256": "186a84e7776c027d95701123c58bc403aa117cc26502d55a748729a755434d6d",
+      "targetKeys": [
+        "official:equipment:es:43724e0ebf8db032ebc00277"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:befacee67f0ea20552d111b4",
+      "name": "Vicious Flail",
+      "sha256": "e84aeae83548f072634f78950660c8701b32630ba14f946a1396b43a44f2bdc9",
+      "targetKeys": [
+        "official:equipment:es:01c5dc1bd369314a9f51b7dc"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bf7278f41e4ee284ba07beee",
+      "name": "Vicious Trident",
+      "sha256": "12e1ada744d8d3c92c7e7c4513b0f6911a3d43063e2a029d606ea3ef620b7797",
+      "targetKeys": [
+        "official:equipment:es:4174a78b2371715a4e15dc13"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bfbecaf638fa3729c0782552",
+      "name": "Feather Token",
+      "sha256": "95062cd09c43666a52ced24d0806c4a2b1c1f06b5d8f663d0495bb7452bd1d82",
+      "targetKeys": [
+        "official:equipment:es:8442091e560c1191cf13f5d2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Ficha de pluma",
+          "page": 251,
+          "completeSourceBlocks": 9
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c036f90c6de25882ea4b47a3",
+      "name": "Berserker Greataxe",
+      "sha256": "579721ff184c66cec1f7e67f3931d92f3abe6268badada69d02c1d5cd6cb3e64",
+      "targetKeys": [
+        "official:equipment:es:cad362e9a0790605f65af7ae"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Hacha berserker",
+          "page": 254,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c3aeec8f35a4cbf166b578b9",
+      "name": "Goggles of Night",
+      "sha256": "7438d87430c0fa63a12626a521366f3219d9add57710afe3dbfeea80a95d6153",
+      "targetKeys": [
+        "official:equipment:es:4ab721eddc176d100836952d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anteojos de la noche",
+          "page": 228,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c3ba4b8caee3b6ce5f6c90a8",
+      "name": "Slippers of Spider Climbing",
+      "sha256": "cd2fbdb538c9c26d922afa2a60eda248a7fa6fa55cc1d46c0a39cdf65c03010c",
+      "targetKeys": [
+        "official:equipment:es:3534fedcf685dcdcbdddaa6c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Babuchas de trepar cual arácnido",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c6656804a43285dc131a9b02",
+      "name": "Vicious Glaive",
+      "sha256": "52b2157e83b7730c41e91efd9670f935c5e4529845600e9464618655b6573756",
+      "targetKeys": [
+        "official:equipment:es:d9b601a829486f58d1edab2a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c6baf885cad62acf2200e452",
+      "name": "Potion of Cloud Giant Strength",
+      "sha256": "1b9f91726940a9506215ebbf0d69adda3475629b076e73507e647a73c8b2dc4a",
+      "targetKeys": [
+        "official:equipment:es:4a6120b4d5686829d8c8e4e2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de fuerza de gigante",
+          "page": 261,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c7b46cfde97dfde9132b8349",
+      "name": "Vicious Spear",
+      "sha256": "ac35fd4b0be47aca6e2f31d2b818a559fd97335cfc73735e53ecd44c1b04ff80",
+      "targetKeys": [
+        "official:equipment:es:77c1a86f7bceca1fb79453c1"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c805b22c02843f4776ec214e",
+      "name": "Marvelous Pigments",
+      "sha256": "fad438a44cc2256c85fd68d6bc3fb66103dc13184d623250e43acd4aa6c7047f",
+      "targetKeys": [
+        "official:equipment:es:1e8f4862e932193dfef39183"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Pigmentos maravillosos",
+          "page": 260,
+          "completeSourceBlocks": 5
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c83b3bbd0b268a926ec051e6",
+      "name": "Shortsword of Wounding",
+      "sha256": "4c28884ab764dffc6ee8e778a93f9f258f8e86795fc924cc02544454dd208f4f",
+      "targetKeys": [
+        "official:equipment:es:58484f3b7d519324fe81e80c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada hiriente",
+          "page": 248,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:c992472ae403d31dc79bbe3e",
+      "name": "Armor of Resistance (Plate)",
+      "sha256": "e2f9f94c5f6cd6ff05ef371bc37daf7e9c390ff7c26ef7f2aa7137b8bac55f15",
+      "targetKeys": [
+        "official:equipment:es:d2a4db57f6b1c2d09cc9d4f6"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de resistencia",
+          "page": 229,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:ca2cc83c1d10bf7ffe5aca0c",
+      "name": "Adamantine Breastplate",
+      "sha256": "920db24e26b36ebec446a75c2ca24679625e8a7321ff9974f8571f25ba2d0487",
+      "targetKeys": [
+        "official:equipment:es:abd56d7599c6230266eae7ea"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura adamantina",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:ca674856a5dad01d8301483e",
+      "name": "Plate Mail +2",
+      "sha256": "90d6947219b5acc0c2e082809e184fcf367fd4f700ec14d766a3aacf933d678a",
+      "targetKeys": [
+        "official:equipment:es:9828fb017c40e4bf29d19851"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:cafb705dc8c3b4261edb9ee4",
+      "name": "Potion of Hill Giant Strength",
+      "sha256": "fd7ec8e8fbc45138758ce850297aaecd18fa8806f8eb97c169dabcb93b4a565c",
+      "targetKeys": [
+        "official:equipment:es:4c62e49d5acef27730cb5b42"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de fuerza de gigante",
+          "page": 261,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:cb38cfa821bf4b70e2262ddd",
+      "name": "Cloak of Arachnida",
+      "sha256": "26aa83bd80aab7a77a05a9cfec1159fa9c8eb9bc49885c6f94fd5abba9911f6f",
+      "targetKeys": [
+        "official:equipment:es:228455e6c8f12bf61d32bd0f"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Capa arácnida",
+          "page": 241,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:cdfea41a47cc60e16f9d2501",
+      "name": "Adamantine Splint",
+      "sha256": "2bff4652b7e319a269c90b09329bb7ad9fc288ba6d117ac78e45b2970b026cc4",
+      "targetKeys": [
+        "official:equipment:es:2d37f163346ec0dd009ba51d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura adamantina",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d0b13de91dab31fc3546a2e6",
+      "name": "Talisman of Ultimate Evil",
+      "sha256": "5d7cdb6e404e5105ca109269070c0b1fd8ef2de53657bb5ae51f22f192dc397b",
+      "targetKeys": [
+        "official:equipment:es:b97890f2fdedbce0fbe843c2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Talismán del mal definitivo",
+          "page": 263,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d1972ecaef6350977f0a6bb3",
+      "name": "Vicious Dagger",
+      "sha256": "26bf7b6c78115dca7b23c09e6b60709d7b8a40013377366440bb016fda52b9f7",
+      "targetKeys": [
+        "official:equipment:es:ea969a49b5350a175ac19b83"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d21d8ea77c8b936e249dd119",
+      "name": "Lance +2",
+      "sha256": "3cff31f437626b9459f1da97e5957beb7b72d047c1b54ffd8527b99171edd80a",
+      "targetKeys": [
+        "official:equipment:es:c6929be1c3c6f588eeadcd62"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d408b9c235837ae3cfba06a1",
+      "name": "Scale Mail +1",
+      "sha256": "1b8aa2d582e241a629d268355b85e836d45afdcc0885d55838c247d18029de0a",
+      "targetKeys": [
+        "official:equipment:es:a155bf5597398f3db007faf0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d485dd59d922a6ecfbd4a09d",
+      "name": "Lance +1",
+      "sha256": "987ccbf95391351f51fe495416b1ccb80ac2316777abb5385932a262ef76a82b",
+      "targetKeys": [
+        "official:equipment:es:da3415c797431ef012a27635"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d5b5ab43aa581031000b74a2",
+      "name": "Trident +2",
+      "sha256": "c0bbf6880ac445000578ee41e6fbb3d4ac063b55930225f5be143d0b44415aa2",
+      "targetKeys": [
+        "official:equipment:es:b7799ae500cd0551eb6c8300"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma +1, +2 o +3",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d6d02648da62c03b3cead6df",
+      "name": "Amulet of Health",
+      "sha256": "f1fe2d5aa04d7d1331b2b73fa8db21f24b026023a9f208114c7535ffce41f311",
+      "targetKeys": [
+        "official:equipment:es:81d6b272e5ddb1f0c19e89f6"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Amuleto de salud",
+          "page": 224,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d7665c8edf4028a1819d8be0",
+      "name": "Scimitar of Speed",
+      "sha256": "558f646729d259964ec28d65e1af1d5178a00d0d7f664d991e943a959a043304",
+      "targetKeys": [
+        "official:equipment:es:aee4ecc2761ede53dbfb4ef0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cimitarra de velocidad",
+          "page": 242,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d7b75e7c033e442225511a26",
+      "name": "Vorpal Longsword",
+      "sha256": "dad5df9089f8fb6f4585df7981f60da01085f5b244b778346385938be01aff29",
+      "targetKeys": [
+        "official:equipment:es:c5b127456eacb42e3226696a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada vorpal",
+          "page": 249,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:d9cf957cb6fe982d7f77bd57",
+      "name": "Boots of Speed",
+      "sha256": "dea69bc8e52eeb741bc5274a4e234396e433b448c796c11a6f38fd184ed84805",
+      "targetKeys": [
+        "official:equipment:es:4e36e183be0438f40795afb1"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Botas de velocidad",
+          "page": 239,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:dc24ba8e531557c80b1b0e46",
+      "name": "Potion of Heroism",
+      "sha256": "685f4c445e3c7d4d89c18130d62dfae1eb62caa53cf95d839cbb22f08e551b19",
+      "targetKeys": [
+        "official:equipment:es:8a8fbb6b819be5eeb799cd18"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de heroísmo",
+          "page": 261,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:dd8cec1d4c60594fde835fa5",
+      "name": "Nine Lives Stealer",
+      "sha256": "44f5bdf0aabec6ccec82307d8ed1f3ce723b781c6773725c42f665cafeaf9fd8",
+      "targetKeys": [
+        "official:equipment:es:8d85de3910c02958da0b2003"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Ladrona de nueve vidas",
+          "page": 255,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:df1c8cf729532bd685ebca46",
+      "name": "Chain Shirt +1",
+      "sha256": "2c9f445840bff1f38a3f9b9f600bb4c30f5ed11e33449daaf777a19f7dcd56d7",
+      "targetKeys": [
+        "official:equipment:es:a77c00829eecde4eeb0dd206"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura +1, +2 o +3",
+          "page": 230,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:df4ff21707607ae80cf8f972",
+      "name": "Bowl of Command Water Elementals",
+      "sha256": "3fa7c6ead81a469a294f1a20a0510379bea4cf6a3b0aa35fab8c289026d93cbe",
+      "targetKeys": [
+        "official:equipment:es:65b77c0aa953b874822fa87d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Cuenco para controlar elementales de agua",
+          "page": 244,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e02c8e1bc1f0228e7b08cebf",
+      "name": "Mace of Disruption",
+      "sha256": "e5d03d8c85f080913e42c60a9cead329f1ac4d788c4eec59790353850cc3260c",
+      "targetKeys": [
+        "official:equipment:es:3b1581c937cbc58988d337c0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Maza disruptiva",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e1f3cc64db34a2f2941cb4d8",
+      "name": "Manual of Bodily Health",
+      "sha256": "ad589d4850fed7c40bce64b13d0662812e2389924ed70fa7980147941fd3ed84",
+      "targetKeys": [
+        "official:equipment:es:69d561ca2c3a56764e71cebd"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Manual de la salud corporal",
+          "page": 256,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e27f6ae827a4299b57a8ea94",
+      "name": "Vicious Maul",
+      "sha256": "65782658946145d8dfbe16b9d48493a8559e4d2183157a23288566f6ad0d8e7b",
+      "targetKeys": [
+        "official:equipment:es:01e53a9ef6634e62cefc984e"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e2c4694a1a343dfbb8c73a83",
+      "name": "Sphere of Annihilation",
+      "sha256": "0bdbf5974a4f0e07940b78cbc45e3c153c3ecaacacfe79157d35674a836209d0",
+      "targetKeys": [
+        "official:equipment:es:1720e219787223e70061991c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Esfera de aniquilación",
+          "page": 247,
+          "completeSourceBlocks": 6
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e2db9e047690bd24634c37d0",
+      "name": "Adamantine Plate",
+      "sha256": "d8f157366edae5251f37a4c41898ab53eb3a1e3e0b32fca460168cb9cc494e78",
+      "targetKeys": [
+        "official:equipment:es:34cbbbaf34a6ecc0fd73e8ca"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura adamantina",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e3ea5006907843062880c588",
+      "name": "Ring of Evasion",
+      "sha256": "12953675c677767397a37a70af2b51e615244aaafeea2447995a99c9d6095a70",
+      "targetKeys": [
+        "official:equipment:es:d194c1925cd7eed15e88f9d2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de evasión",
+          "page": 226,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e5c28499129059b73f6a120f",
+      "name": "Dragon Slayer Greatsword",
+      "sha256": "559359af4ffdb6548a1dd95a6faf9d9379db35fe9242ed73c1a9b0555953ae25",
+      "targetKeys": [
+        "official:equipment:es:6d0fa52287609369216948bf"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Matadragones",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e6bab755bc8ab593bc2082f4",
+      "name": "Potion of Frost Giant Strength",
+      "sha256": "2f0f51e38eea485f07884c111eef8713b100152c6dad181818f662ff8fb309e0",
+      "targetKeys": [
+        "official:equipment:es:0cba9b4d9ef522fe32934799"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Poción de fuerza de gigante",
+          "page": 261,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e75d88bf31a3b703c24c977b",
+      "name": "Talisman of Pure Good",
+      "sha256": "a74fe101f50557e30dbff7684d3ad25aa40afa6d3f45d4cd8b8bdd930903dc38",
+      "targetKeys": [
+        "official:equipment:es:46f6e5386a87b70724f56073"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Talismán del bien puro",
+          "page": 263,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e7b2b83f1b8bbdb7e0e64093",
+      "name": "Ring of Water Elemental Command",
+      "sha256": "ec37b55bcaded13b45dd93804975ba0166857045a6dc405ab94d06ec4c18721f",
+      "targetKeys": [
+        "official:equipment:es:541bab9b71892325839d85c0"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de comandar elementales",
+          "page": 224,
+          "completeSourceBlocks": 11
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e9019ac91e23052e009623d6",
+      "name": "Vicious Greataxe",
+      "sha256": "5cb18e9b22ed8166c207ab1fdd54c4e4dd0d988b148e6568aaedb175d37336e3",
+      "targetKeys": [
+        "official:equipment:es:bcca7355919b0bf34749e140"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e9ff94556d34024f56d13165",
+      "name": "Vicious Sling",
+      "sha256": "fc6ce37cd7d0ef830f711b06d80acf4cc7c90a1c2b63e70e82d98e3a6d71b2a0",
+      "targetKeys": [
+        "official:equipment:es:9b4e2e201ea30fe2d31e4c16"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:eccd8da89be22a4c782d4182",
+      "name": "Ring of Earth Elemental Command",
+      "sha256": "8ecf5b826924bfa326bc6b840ea5dfc43ebff1b9947df8275be410653d96ebe1",
+      "targetKeys": [
+        "official:equipment:es:bbb14cd18a2f266a4b6f3921"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de comandar elementales",
+          "page": 224,
+          "completeSourceBlocks": 11
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:ee8f7db474ef346359c37294",
+      "name": "Vicious Quarterstaff",
+      "sha256": "d118b37895f4ca05c2d3ed3d5fb31a4495b0d0891932dde4e5d8127507ad6310",
+      "targetKeys": [
+        "official:equipment:es:bb14d0105c6f290c8ccf2eaa"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:f09fbdc41e6df6b4ab46adcf",
+      "name": "Ring of Spell Storing",
+      "sha256": "67343dc8afa99f51e1d43bb4c41e1683683188073f131d21be0aa380d9ba8741",
+      "targetKeys": [
+        "official:equipment:es:ef95f23bd99224f3cdf64a7d"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Anillo de almacenamiento de conjuros",
+          "page": 224,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:f193a6ef623a2f12b21f4c75",
+      "name": "Armor of Vulnerability (Plate)",
+      "sha256": "904e0a4d899c1f3c3b64044d0abd324e5cadc584a0c38982ec442b1599ce4ab2",
+      "targetKeys": [
+        "official:equipment:es:17a8948e3f7bd66ba362ccbf"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura de vulnerabilidad",
+          "page": 230,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:f19b03a0828319e41f031cb6",
+      "name": "Vicious Javelin",
+      "sha256": "a3f4066c007636e1e939ba73cbb5fe6b5e5132c07760b5eff9477c6b22862a0f",
+      "targetKeys": [
+        "official:equipment:es:01213a8f63ace3ea64f5e250"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:f2f8c301333bb7f2c5b1f402",
+      "name": "Longsword of Sharpness",
+      "sha256": "79a038a7bd2165aa04bf43c802e424d5989ee087b82df7dbe3f679f8fd14f392",
+      "targetKeys": [
+        "official:equipment:es:e59b07ec950530f903759662"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada de hoja afilada",
+          "page": 248,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:f4026319a95edc7e850c33a4",
+      "name": "Dancing Greatsword",
+      "sha256": "62e3ed3f359b14ab62f7623fff26d8606c60359d1b23aacd928433621965db17",
+      "targetKeys": [
+        "official:equipment:es:23f23e21a5e68c1fae048f09"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Espada danzarina",
+          "page": 248,
+          "completeSourceBlocks": 3
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:f51fc93b1787692440facdc3",
+      "name": "Dragon Slayer Longsword",
+      "sha256": "a5fa76c8f8ceab1f8a26c55d436968022b088a54321a664230fa4bf8824723c7",
+      "targetKeys": [
+        "official:equipment:es:d853aa97a9cf8e6489371efd"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Matadragones",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fbce352b484dba656a7c763d",
+      "name": "Bag of Beans",
+      "sha256": "5d5a373bae5aff70ca658001a44e2513f36c23b42879861313d93854e1e6018b",
+      "targetKeys": [
+        "official:equipment:es:35b4956012293b51dbd948f2"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Bolsa de judías",
+          "page": 237,
+          "completeSourceBlocks": 4
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fcba55fedc410cb8832c4c09",
+      "name": "Vicious Scimitar",
+      "sha256": "c2b088968c93ecefea255150db567e18b471cea9c50ea0fbd833b657bb7a7ea9",
+      "targetKeys": [
+        "official:equipment:es:6807f943647e5f66904aab8c"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Arma feroz, regla del manual de 2014",
+          "fixedDamage": 7,
+          "trigger": "natural-20",
+          "source": "dmg-2014-vicious"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fd1b90d0d6e01e757ba8adcf",
+      "name": "Bracers of Defense",
+      "sha256": "dbcac3aede67a22653540fcbdd71ba84b246612d237335a55618a2769040bcb0",
+      "targetKeys": [
+        "official:equipment:es:467d1b7be14f7d6b4b56ac69"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Brazales de defensa",
+          "page": 240,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fda6940412cda6423a7a46f0",
+      "name": "Giant Slayer Battleaxe",
+      "sha256": "38918c8b060db3a8a4849e4c5304838a5364507f4634d37e30262db92e3b4b9f",
+      "targetKeys": [
+        "official:equipment:es:79a0a5ea6cf16922cb5a78f7"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Matagigantes",
+          "page": 257,
+          "completeSourceBlocks": 2
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fe193f8e65410704ab77bdc8",
+      "name": "Ammunition +1",
+      "sha256": "4eb82adb333d6e7aaf9d67c21dd2a7f2499088f1dc8f7c55f21a71f73fbb873e",
+      "targetKeys": [
+        "official:equipment:es:a1046d202eac24eb208cce1a"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Munición +1, +2 o +3",
+          "page": 258,
+          "completeSourceBlocks": 1
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fececb8437d3d931ba4d6e1e",
+      "name": "Adamantine Half Plate",
+      "sha256": "ee303feb47e93f4f0b86902389f3c904f4646f573b6b181e5d6b4dc62e16056a",
+      "targetKeys": [
+        "official:equipment:es:6c18c45b014bd495b9788c25"
+      ],
+      "reason": "Aplicada la instrucción del GM: cuando existe versión oficial, usar las reglas originales de 2014. Se conserva íntegra la sección primaria española (o la regla de arma feroz ya cotejada con el manual de 2014); el texto y los campos normativos de la importación inglesa se sustituyen por esa fuente aunque difieran. Los precios y pesos de catálogo se conservan, sin modificar inventarios.",
+      "evidence": [
+        {
+          "spanishPrimarySection": "Armadura adamantina",
+          "page": 229,
+          "completeSourceBlocks": 1
+        }
+      ]
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

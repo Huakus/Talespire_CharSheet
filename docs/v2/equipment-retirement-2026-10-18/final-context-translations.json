@@ -1,0 +1,26 @@
+[
+  {
+    "key": "official:equipment:es:8c306d2c8891ec0be3ed4ecf",
+    "index": "rhythm-maker's-drum-1",
+    "legacyKey": "official:equipment:eng:db009bbc4aa972740fb12f94",
+    "englishSha256": "5eca4960f2e91b8bf7c5cd98ef050454b563be214a0d3a865c4d2d885c3b68fd",
+    "texts": [
+      "Mientras sostienes este tambor, obtienes un bonificador de +1 a las tiradas de ataque de conjuros y a las CD de las tiradas de salvación de tus conjuros de bardo.",
+      "Como acción, puedes tocar el tambor para recuperar un uso de tu rasgo Inspiración bárdica. Esta propiedad del tambor no puede volver a usarse hasta el siguiente amanecer.",
+      "Requiere sintonización por un bardo."
+    ],
+    "sourceLimitation": "Texto inglés existente en la base y resumen oficial público. No se atribuye la traducción a la editorial ni se afirma haber accedido al texto completo de pago."
+  },
+  {
+    "key": "official:equipment:es:b2ccc2c141497ce32fa56712",
+    "index": "amulet-of-the-devout-1",
+    "legacyKey": "official:equipment:eng:6b32a4fa3d2f515d39d94072",
+    "englishSha256": "dd224630035c6935bdffb8d4063002a617c5c0cf208b1c9d81bd3d79c2aa7a2f",
+    "texts": [
+      "Este amuleto lleva el símbolo de una deidad incrustado con piedras o metales preciosos. Mientras llevas puesto el símbolo sagrado, obtienes un bonificador de +1 a las tiradas de ataque de conjuros y a las CD de las tiradas de salvación de tus conjuros.",
+      "Mientras llevas puesto este amuleto, puedes usar tu rasgo Canalizar divinidad sin gastar uno de sus usos. Una vez usada esta propiedad, no puede volver a usarse hasta el siguiente amanecer.",
+      "Requiere sintonización por un clérigo o paladín."
+    ],
+    "sourceLimitation": "Texto inglés existente en la base y resumen oficial público. No se atribuye la traducción a la editorial ni se afirma haber accedido al texto completo de pago."
+  }
+]

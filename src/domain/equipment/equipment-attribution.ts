@@ -1,0 +1,3 @@
+/** Attribution required by the official Spanish SRD 5.1, licensed under CC BY 4.0. */
+export const SRD_51_ATTRIBUTION = "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.";
+export const SRD_51_SOURCE_URL = "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf";

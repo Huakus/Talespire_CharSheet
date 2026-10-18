@@ -1,0 +1,22 @@
+{
+  "mode": "local-preparation-only",
+  "spanishDrafts": 806,
+  "relatedEnglishRowsPreserved": 803,
+  "uniqueOriginalArchivesUsed": 3181,
+  "draftsWithRelatedSources": 805,
+  "recoveredRuleCandidates": 81,
+  "pendingAutomationEntries": 243,
+  "definitiveObjects": 0,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "policy": {
+    "existingOfficialItems": "validate-original-2014-rules",
+    "characterBuilderSources": "unchanged",
+    "missingSpanishText": "reviewed-translation-from-english",
+    "preferOfficialSpanishWhenAvailable": true,
+    "execution": "automatic-or-assisted-with-visible-backlog",
+    "umbralDagger": "phase-blade-exclusive-to-stix-variant"
+  },
+  "stixVariant": "recovery:gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+  "note": "Candidate relations preserve evidence; they do not certify identities, translations or rules. Unknown fields remain pending instead of receiving invented defaults."
+}

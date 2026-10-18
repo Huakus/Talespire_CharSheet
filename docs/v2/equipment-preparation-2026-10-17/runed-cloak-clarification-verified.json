@@ -1,0 +1,33 @@
+{
+  "item": "Capa con runas",
+  "savedAs": "equipment-preparation",
+  "equipmentRevision": 2,
+  "campaignRevision": 1198,
+  "preparationRows": 853,
+  "effect": {
+    "id": "additional-level-1-slot",
+    "condition": "Mientras lleves puesta la Capa con runas.",
+    "kind": "spell-slot-capacity",
+    "level": 1,
+    "amount": 1,
+    "pool": "inherit",
+    "recovery": "inherit",
+    "explanation": "Añadir un espacio de nivel 1 a la reserva de conjuros correspondiente del portador y aplicar sus reglas de gasto y recuperación. No elevar su nivel por el nivel de los espacios de Magia del Pacto ni inventar un contador diario del objeto. Si hay varias reservas, resolver a cuál corresponde antes de aplicarlo; no sumarlo a todas automáticamente."
+  },
+  "previousOriginalsPreserved": true,
+  "gmInstructionArchivedAndVerified": true,
+  "otherContentUnchanged": true,
+  "sharedCatalogUnchanged": true,
+  "charactersUnchanged": true,
+  "merchantStockUnchanged": true,
+  "otherCampaignsUnchanged": true,
+  "activeCopiesChanged": 0,
+  "activeSlotCapacityChanged": false,
+  "executionImplemented": false,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "preparationLoadErrors": 0,
+  "targetedTestsPassed": 37,
+  "typecheckPassed": true,
+  "buildPassed": true
+}

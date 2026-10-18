@@ -1,0 +1,1359 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1288,
+  "archiveSha256": "00eb6615818c5d13ca2eb77d022206a34ea0fadd7de449cd8d4d20d2159a8044",
+  "rows": [
+    {
+      "key": "official:equipment:eng:05fed3a351d9e4f2f5c78336",
+      "name": "Wand of Secrets",
+      "sha256": "ad7a3e91c48397ed54c97c7025b2c0b5ee80de52293e6008b26f8a1aeb582cae",
+      "targetKeys": [
+        "official:equipment:es:fa694e0f28f6a842eb8b74ef"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 269,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:075075fd8a7d667d34aa8d04",
+      "name": "Ring of Spell Turning",
+      "sha256": "e7a9f9dd51c8ed8108fd8e363fff2da61e0a9865843213c89a9dff75985e6a5f",
+      "targetKeys": [
+        "official:equipment:es:d9e9a9a6ad6074aa856fdb75"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 237,
+        "spanishPage": 227,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:0b7c4e70a6d1477906f64842",
+      "name": "Cloak of the Manta Ray",
+      "sha256": "440e63308ad6369189fcb1548c37df60a74ad75ef799753f1c9ff4be1f6513fd",
+      "targetKeys": [
+        "official:equipment:es:29b91b0b62ab8ab131ddf0b1"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 214,
+        "spanishPage": 241,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:12a26735f83dedbcf05d4374",
+      "name": "Arrow-Catching Shield",
+      "sha256": "189355b247a8b6421bd680aeb6c94d87d5e9f090a466d82c02c16dcef7e9b66d",
+      "targetKeys": [
+        "official:equipment:es:d2c9cf7c7304dbd37f8bc7e1"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 209,
+        "spanishPage": 247,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:14ee71d7b7bdaf769659371f",
+      "name": "Robe of Eyes",
+      "sha256": "0337d0b143cb930539d84b02fac95139451f4a94fdf26cfea809a9e546b336cf",
+      "targetKeys": [
+        "official:equipment:es:b4e79a3cd24aec59f54d746c"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 238,
+        "spanishPage": 264,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:195608cbf8be2131b2711774",
+      "name": "Horn of Blasting",
+      "sha256": "0fe4c8239a6fe2651961e6133f1f804bfe845184bb2b83ef7f0ffcfad554414f",
+      "targetKeys": [
+        "official:equipment:es:5e7858f630e21b5d417a1498"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 226,
+        "spanishPage": 245,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:1a9c1bc7215497e664d77d06",
+      "name": "Rope of Climbing",
+      "sha256": "d789ea2a3eb0a773daed5a832761a85936339b6b991b416389d024e6219080a4",
+      "targetKeys": [
+        "official:equipment:es:f16f5c78093a9e8470217e65"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 241,
+        "spanishPage": 244,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:1e4e1f87a597f674f6eb5aeb",
+      "name": "Mirror of Life Trapping",
+      "sha256": "82224a8322419183b8386ff6bc18b5431880b9fd7dfec8feb663e75ca8ccaa19",
+      "targetKeys": [
+        "official:equipment:es:4833ddfcc70fc5283f6e5e6a"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 230,
+        "spanishPage": 249,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 7
+      }
+    },
+    {
+      "key": "official:equipment:eng:222dff463ce96b987e4cf3ef",
+      "name": "Bead of Force",
+      "sha256": "e7df0a0d3384132676410184afaddfaae7436c02bc538050039036a515fc858f",
+      "targetKeys": [
+        "official:equipment:es:452141c2dd6546ad7efa6fbf"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 211,
+        "spanishPage": 240,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:22c12d5128a594bb77c91b9e",
+      "name": "Dimensional Shackles",
+      "sha256": "d91ba8f642ab39c86fa43303b610926aaf30331abf7ab71e2fd9ee8f4157aaa3",
+      "targetKeys": [
+        "official:equipment:es:f3000567c773f6c02cfb2957"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 219,
+        "spanishPage": 254,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:233fa52d864606241459d8b8",
+      "name": "Brooch of Shielding",
+      "sha256": "a3127deafed09ccf593f3fa86d9522ef4add21391118334feca0d32af34e3086",
+      "targetKeys": [
+        "official:equipment:es:8b457fb486eaa62761e1af40"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 212,
+        "spanishPage": 240,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:23da475d3f72e90597d16b73",
+      "name": "Eyes of Minute Seeing",
+      "sha256": "cbe4be30ca846113136f9b487c47a64c2971ec552e7915d6514a647e70601d26",
+      "targetKeys": [
+        "official:equipment:es:d613ca81a782e29c124eff8f"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 221,
+        "spanishPage": 228,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:24f9a6e0f477d588579070d5",
+      "name": "Periapt of Wound Closure",
+      "sha256": "81cd34f9b8f4a05e59ddf97e794e677d553a57ca51cec2008a50fbaadd3927b9",
+      "targetKeys": [
+        "official:equipment:es:8a613560179ce75309d54f99"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 263,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:295ccf1f2cf985e1ecb9d1da",
+      "name": "Wand of Magic Missiles",
+      "sha256": "c94604b54c4a121f491015a1e4252bdcb5d420cd728349c5cb1c133b4f244df6",
+      "targetKeys": [
+        "official:equipment:es:784bd660a08f0f45bc4bd35e"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 268,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:2c0ef1ab81d794e4638cb76e",
+      "name": "Chime of Opening",
+      "sha256": "2f80253c646cfed748e2b77b76a78ffa2832fa59b1aaf7d8c5020532041b55e7",
+      "targetKeys": [
+        "official:equipment:es:b516b1395030f3d0e44512e6"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 213,
+        "spanishPage": 241,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:2e6b0b4463e7d5cae2285aba",
+      "name": "Pipes of Haunting",
+      "sha256": "cf8078f34c8cd5fa877d8860f46e00cd35c690908716a318d0fa341ff5c6efc0",
+      "targetKeys": [
+        "official:equipment:es:cf92c104e190056bf85689b9"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 252,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:3373ec11993c9424600e9be1",
+      "name": "Cloak of Displacement",
+      "sha256": "e4b3e0c85aa2e3c6a6fddb048735748a635cc1cccca655817925ab7743ff916a",
+      "targetKeys": [
+        "official:equipment:es:5a6e10a599f12e551f1d8566"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 214,
+        "spanishPage": 241,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:34b48205a6e594c28f5855db",
+      "name": "Holy Avenger",
+      "sha256": "a3f79eb06bf6a41aea9914dcf928ccca153b551b5ae69a61adad22d97ffa7bfd",
+      "targetKeys": [
+        "official:equipment:es:551cabb8577067cfc1e49fb9"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 225,
+        "spanishPage": 270,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:34be3f4a2053bce05f163050",
+      "name": "Mantle of Spell Resistance",
+      "sha256": "95d1a94ade4264c5df205202d55a7ef2f776d1a77bc850e508cd1194372eb182",
+      "targetKeys": [
+        "official:equipment:es:e22d639500fbb1d59085b9a5"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 229,
+        "spanishPage": 256,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:3a5c6d68f75f41253c4991df",
+      "name": "Amulet of the Planes",
+      "sha256": "5876cefbc919f151fdcd3bb56a15307f6092d192bdd7b99f1635de9a473faca6",
+      "targetKeys": [
+        "official:equipment:es:7a41873e8602ad756e91bf15"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 207,
+        "spanishPage": 224,
+        "legacyTextParts": 2,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:405f580b7c49021a10e9f0bc",
+      "name": "Gloves of Missile Snaring",
+      "sha256": "40473bdde02766a0b463594d424b42575e798b36f03ef484eeeee4c9a07a2c01",
+      "targetKeys": [
+        "official:equipment:es:5af4e6bb6390ffae681ef6a5"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 224,
+        "spanishPage": 254,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:409e71a39f5cfd6de0b904bf",
+      "name": "Helm of Telepathy",
+      "sha256": "185a2875a1e215080e1dd8b7420a1c6431c64d91ebe14ec9f886285944c11f3e",
+      "targetKeys": [
+        "official:equipment:es:daca2184e53f2ea25df94b05"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 225,
+        "spanishPage": 270,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:451157e1d9823394cb21d86b",
+      "name": "Wand of Fireballs",
+      "sha256": "4c65dfb71c763eff0aa4952dcf2756a77f7a7ef530cf3d1c8ce4377e01ff31cf",
+      "targetKeys": [
+        "official:equipment:es:8ec089ba90c7b3afc8bb2f17"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 248,
+        "spanishPage": 267,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:4792e5804d2a4e3255552288",
+      "name": "Gem of Brightness",
+      "sha256": "769e516a90a2b61f28e94f4f59fb33edb493770c10a279d2de99b388cd8ab4cf",
+      "targetKeys": [
+        "official:equipment:es:f9667e4c34019878374a5f6c"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 223,
+        "spanishPage": 253,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:4a24d1b9dea190d89d1f6ad4",
+      "name": "Brazier of Commanding Fire Elementals",
+      "sha256": "be99e4bca259f0521c5856776466f6718d6d4c52743cfa50388e2baeeb95dfd3",
+      "targetKeys": [
+        "official:equipment:es:d857ec4ef6d77131aa567d47"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 212,
+        "spanishPage": 240,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:4da3de6dd906224cd5747afc",
+      "name": "Wand of Fear",
+      "sha256": "ece777eb1a46bde6efaf4ac6d21910b3032e4316ef4c007e0913dfda88993c6c",
+      "targetKeys": [
+        "official:equipment:es:8e74acfe2a0c28dcf4c90bd9"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 248,
+        "spanishPage": 269,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:4f8b3a300728023046b5c64a",
+      "name": "Oil of Sharpness",
+      "sha256": "e572777992ace2d962d91b41778da5394b1f28e756ccd005bb2bd3cfbccc368d",
+      "targetKeys": [
+        "official:equipment:es:dbdd04e383a8cd140b7f0c66"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 222,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:570b8d93e5f73770a1ad981b",
+      "name": "Boots of Elvenkind",
+      "sha256": "d07dc31b8611b05d7d83e740071ad08d5df8f4e352c89168e4549668ba852de5",
+      "targetKeys": [
+        "official:equipment:es:f7cc21b1535dd5ae98118d7b"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 212,
+        "spanishPage": 239,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:57bcec4b5eae907b84ff0c25",
+      "name": "Cape of the Mountebank",
+      "sha256": "b24f25b3d3dfda185abea4b308304cb9bf92259433cddce707f01d5d439a8cfd",
+      "targetKeys": [
+        "official:equipment:es:1841b81ee7964b8aa7381ead"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 213,
+        "spanishPage": 241,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:635adb4ce422f058d1e8dabc",
+      "name": "Boots of Striding and Springing",
+      "sha256": "e4df126e1c9c03ddbf5fa0eb308855b9885105b8e45f4c9fbec9221001306996",
+      "targetKeys": [
+        "official:equipment:es:c50d2ef062b71da3a562d1f3"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 212,
+        "spanishPage": 239,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:6792084a8d6e08a916499d4b",
+      "name": "Plate Armor of Etherealness",
+      "sha256": "9b46f12a3359215ecfe2bd92c80667c5b6a3460e69db736904cb07fed34b2ecb",
+      "targetKeys": [
+        "official:equipment:es:b00a1b20ddb86783f1a9417c"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 233,
+        "spanishPage": 229,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:717d2ccccd5d1f930441231e",
+      "name": "Dust of Sneezing and Choking",
+      "sha256": "14a6e8caa27897ad4bc5f57df9aa8a1a24b76407e91048a3d2c88abee35d991d",
+      "targetKeys": [
+        "official:equipment:es:3f024215021b8d6d2f55ce10"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 219,
+        "spanishPage": 262,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:72670eed1bb3841d78c8f471",
+      "name": "Ring of Invisibility",
+      "sha256": "cc07434d12e27699e10ce4b0c352f5cd94b0bf3206e574b66e61f7cddd6a6484",
+      "targetKeys": [
+        "official:equipment:es:a5a38836a0abdf55d85abd49"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 236,
+        "spanishPage": 226,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:7399a45c0e03dc84d8950760",
+      "name": "Staff of Frost",
+      "sha256": "6ddf57a323c99c7b02c11cbaf7a94f4c5af7e3cdd5943f414fd8c68b4bf16a64",
+      "targetKeys": [
+        "official:equipment:es:67c4d58203382e9febe67247"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 243,
+        "spanishPage": 233,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:7438c60b35487f77dc5e829f",
+      "name": "Ring of X-ray Vision",
+      "sha256": "2fcb2eda9fb9aa4c73809adfa9f19c606e3bc97cd47e8bb9f40eb8e5f70eeaa7",
+      "targetKeys": [
+        "official:equipment:es:42c6717f4067f757367c2635"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 238,
+        "spanishPage": 227,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:7500370a77b548f59c306447",
+      "name": "Philter of Love",
+      "sha256": "ce53b820eeca263e7f2b9db6ca196a3d8e1f6d0999eb9a5a780fb42223a2c2b2",
+      "targetKeys": [
+        "official:equipment:es:28901ef2614cdb26e4f09af0"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 252,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:7609e458b8295a486cb2f9a4",
+      "name": "Wings of Flying",
+      "sha256": "e5360fcb9473b1be37c78c94e2df44645699b8e9be55af70a2e6a545a9f9700c",
+      "targetKeys": [
+        "official:equipment:es:e6f279561dbf73cf66121000"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 251,
+        "spanishPage": 223,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:7af81ddad806f343b3438c7f",
+      "name": "Rod of Security",
+      "sha256": "62d5b0e1cda684d6e58c89b6313c69792f7c8de18533dcda2daa327f9dca22f1",
+      "targetKeys": [
+        "official:equipment:es:8b3fcc59e77077e00e089e90"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 241,
+        "spanishPage": 266,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:7bf54001723236ac7be89edc",
+      "name": "Instant Fortress",
+      "sha256": "423412326c05ec9713d1a991010209412cb6eca8d87d0c5e1364ec6fc9419064",
+      "targetKeys": [
+        "official:equipment:es:e3acaffca731d7c31f0bfeff"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 226,
+        "spanishPage": 252,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 4
+      }
+    },
+    {
+      "key": "official:equipment:eng:7cfabcc6cc216d59db9ac01d",
+      "name": "Potion of Gaseous Form",
+      "sha256": "28966f4978da2e1c7b56f7113c80fc2759ebf2d3cfa6b827483e58c83d95641a",
+      "targetKeys": [
+        "official:equipment:es:1292a93cfe7a65cc643acff2"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 234,
+        "spanishPage": 261,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:7fac3a016b1a153d9305759f",
+      "name": "Potion of Diminution",
+      "sha256": "b121676026c249beadb3ed2983cd45177691654cdfe5eafbb4e583033cf8b4b1",
+      "targetKeys": [
+        "official:equipment:es:b70bcbd36262a7a83ce6943f"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 233,
+        "spanishPage": 261,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:8928a8bbb9f4394f77076255",
+      "name": "Staff of Fire",
+      "sha256": "9b51e8e2fa081e7ead7fad668b70ec3635bba6faea99af722472311c153c4eb0",
+      "targetKeys": [
+        "official:equipment:es:cf69ef489f5705da5fee89ad"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 243,
+        "spanishPage": 233,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:89c6d2d7a91d25eed06f9805",
+      "name": "Universal Solvent",
+      "sha256": "38fcc829ca9b841ef909c2a29ff24e3c74f24afceab6c621dcff6ace048c7f67",
+      "targetKeys": [
+        "official:equipment:es:3d024672d426c959fbf7c9a1"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 248,
+        "spanishPage": 246,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:902c6d073beabf02d8235805",
+      "name": "Portable Hole",
+      "sha256": "8098e490db702833320956ff63422952a0d21c17026c4832ecc8646299e26492",
+      "targetKeys": [
+        "official:equipment:es:39453ee81afcebaacb6be012"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 233,
+        "spanishPage": 223,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 5
+      }
+    },
+    {
+      "key": "official:equipment:eng:9488a1152cd1f1b790e0abea",
+      "name": "Scarab of Protection",
+      "sha256": "cef9a09f91f748d6b4092834215b31b63af2123801a33aee47e4f97cd1e0265c",
+      "targetKeys": [
+        "official:equipment:es:0896a39342fdfdeba982f162"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 241,
+        "spanishPage": 246,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:959744dd9b46086e5a8f8bdf",
+      "name": "Winged Boots",
+      "sha256": "de45a7bef21a867c6d3b84ddaffc8c4d7f67f7eea2b74b205186f4403183aebb",
+      "targetKeys": [
+        "official:equipment:es:1a642ca8b6c9c5446ce9f228"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 251,
+        "spanishPage": 239,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:9858c353a61d6c8d2e379ec3",
+      "name": "Handy Haversack",
+      "sha256": "3651d1fcb9068d76236446061182d08cedbee620c256d7cf00df02fea8c11f7d",
+      "targetKeys": [
+        "official:equipment:es:f97aac9925b409067faa06fa"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 224,
+        "spanishPage": 257,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 4
+      }
+    },
+    {
+      "key": "official:equipment:eng:99a0ae72898a1d21a63e0266",
+      "name": "Horseshoes of Speed",
+      "sha256": "f9fb212df9a416448146918164cc9e17f6152e97be055226b764541ce9c35b1a",
+      "targetKeys": [
+        "official:equipment:es:9c016be8b83c12338a8dad61"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 226,
+        "spanishPage": 255,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:9aa3e1c27b7cd75d1091846e",
+      "name": "Broom of Flying",
+      "sha256": "dd58e9e7c8fac462ac164c51ffb555873abcc6d1f84fd51c1a9f7f212ae1deaf",
+      "targetKeys": [
+        "official:equipment:es:6e0e16ea21a0f01542022994"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 213,
+        "spanishPage": 247,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:9d4a881efa27b95c8e51de43",
+      "name": "Pearl of Power",
+      "sha256": "9132f858f0308421165599c25e29a4b685d67cc0b2376801662dd1f5515fdf06",
+      "targetKeys": [
+        "official:equipment:es:7315505b374dfa1d4dcb8e49"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 259,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:a2810985d035ac36c9bd630c",
+      "name": "Potion of Water Breathing",
+      "sha256": "53e3408ae3bdd5d0526643f0faed60b72a55a0a5eabe6a33d1528c8503d82664",
+      "targetKeys": [
+        "official:equipment:es:aea59c66b9746d54d96a91a0"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 235,
+        "spanishPage": 261,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:a29421a1007ea5ed31a62731",
+      "name": "Lantern of Revealing",
+      "sha256": "865ce9d84dde3169eb2b9e4fff0600a6b7037996f49e94f24870d89c2f402cdc",
+      "targetKeys": [
+        "official:equipment:es:ae8df89f9da41aae9d719be2"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 228,
+        "spanishPage": 255,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:a3f72baf5b58b6e4befd27d1",
+      "name": "Iron Bands of Binding",
+      "sha256": "e852bc8f735f4eb56e1b9a15f5505c149783132cc59d71d290240ff3e57a1f98",
+      "targetKeys": [
+        "official:equipment:es:30656091b999872276793afc"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 228,
+        "spanishPage": 230,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 4
+      }
+    },
+    {
+      "key": "official:equipment:eng:a7e851b8041bd78a9226945f",
+      "name": "Talisman of the Sphere",
+      "sha256": "9e293cfac07204cef733f907375c1fcd3856179411ea0c59ddfef5f30d9688d0",
+      "targetKeys": [
+        "official:equipment:es:1dc5037c519b0370df4df0ea"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 247,
+        "spanishPage": 263,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:aadf7505fef73e4ef2aa1c4f",
+      "name": "Cubic Gate",
+      "sha256": "998a0a80eb1484f37de5432f63af2f8b4ebfe2224a349b6e8f8b8a7d7c130371",
+      "targetKeys": [
+        "official:equipment:es:74a52ed7f52b736c3d425209"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 215,
+        "spanishPage": 262,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:ab6fc1bb30d6e6128ae25941",
+      "name": "Gloves of Swimming and Climbing",
+      "sha256": "32988a9cad2258a893dca843b4f0a447adae85998bb2abfc7bf1fa4a6b8e9ae5",
+      "targetKeys": [
+        "official:equipment:es:db68a706e3edbdffed736118"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 224,
+        "spanishPage": 254,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:af0b577784f95268169cff67",
+      "name": "Necklace of Fireballs",
+      "sha256": "bd8ea4f572f753e33e3df4697497299787be95518a6f51ca7f4d6916fc505487",
+      "targetKeys": [
+        "official:equipment:es:656acc5366e5b282988b132f"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 231,
+        "spanishPage": 243,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:b3c34d398a2a822bf89ee98f",
+      "name": "Stone of Controlling Earth Elementals",
+      "sha256": "ce2382f95a1e0023762bb25c0125045e0b9e7f1a817fa03bb5d7a4b9202e0519",
+      "targetKeys": [
+        "official:equipment:es:c6a9b98b612f27c0d1503b17"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 246,
+        "spanishPage": 259,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:b42f7d3ac1d6329d35e80400",
+      "name": "Pipes of the Sewers",
+      "sha256": "bbd779cf5cc6f30432fceeedc2502978d7402671835647fce0f35cda71dceab0",
+      "targetKeys": [
+        "official:equipment:es:cd01816f1e2741e749410128"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 252,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:b6604a8c286fa13f291b4b5f",
+      "name": "Restorative Ointment",
+      "sha256": "50b12c6a0e22fc9315d4248fa3915a86e1e0218c053ac36f9cc7a94c6a0f9b5e",
+      "targetKeys": [
+        "official:equipment:es:cb06ceb25f2b8c9a2ef8e087"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 235,
+        "spanishPage": 265,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:b8ed7693283dc3b3ce51cdef",
+      "name": "Ring of Warmth",
+      "sha256": "1138bd9bb9245240ecbdbf8d01873a98d9235344dcc17bf46628e5e57274703d",
+      "targetKeys": [
+        "official:equipment:es:998400e4c821f962aeb6cdd5"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 238,
+        "spanishPage": 224,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:b92b097dbd8de85f0ee9e640",
+      "name": "Robe of Scintillating Colors",
+      "sha256": "a25a7736ef3b781a5e948a5d179baa9d825d93d987b68c0c69b1d0dfa0715fe3",
+      "targetKeys": [
+        "official:equipment:es:40c309135dcff04c75eaedf9"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 238,
+        "spanishPage": 264,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:bf94969f1470a8d23e85a08e",
+      "name": "Decanter of Endless Water",
+      "sha256": "2f2e417f3d52d2c9222bb0299407721bedcd80440dbc17e58148100d9bd92522",
+      "targetKeys": [
+        "official:equipment:es:54bd24ef297c7d88cdcc3f10"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 216,
+        "spanishPage": 246,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:c0772377dd94933c33a62399",
+      "name": "Wand of Polymorph",
+      "sha256": "a7b7efdb2a5cd6eee931892d1ea98cb00cb695243e8ab525400e9b5998ce555b",
+      "targetKeys": [
+        "official:equipment:es:9d725e129a9bf59a7ba9ff76"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 268,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:c09a54e11f83c2d0258dd5f1",
+      "name": "Folding Boat",
+      "sha256": "0f5920d990637ea9a7a79fa55902dc65229716208fc30004c2bee75b86f263f8",
+      "targetKeys": [
+        "official:equipment:es:b51442c4161640e2e7a37f88"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 223,
+        "spanishPage": 239,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 5
+      }
+    },
+    {
+      "key": "official:equipment:eng:c504b7847f3f3dacc7a1740e",
+      "name": "Potion of Poison",
+      "sha256": "1206b2e51ebc80a37a901d7213a3268a156eaace5d3e87ee4d0c659db6551689",
+      "targetKeys": [
+        "official:equipment:es:976d98f889add0f9fff0501e"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 234,
+        "spanishPage": 262,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:c5f27b1cfc2c5a1f22ca1a52",
+      "name": "Arrow of Slaying",
+      "sha256": "e70fa1b90f648d5c88b922b45c8e5b8ee4c620b6f38f7bdf4d8f8216aad7e9c3",
+      "targetKeys": [
+        "official:equipment:es:85b343f16d824ce798cbb857"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 209,
+        "spanishPage": 252,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:c94f1c723d75b64f3e31c412",
+      "name": "Dust of Disappearance",
+      "sha256": "ee15b5b1d6b9e65d8e5a8316e61519ae8d0647c29712c04a343f8370d025126d",
+      "targetKeys": [
+        "official:equipment:es:63387bbd35bbb15be6d09c3e"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 219,
+        "spanishPage": 262,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:cc7dae226b8c991080d63d51",
+      "name": "Ring of Telekinesis",
+      "sha256": "fffa526f43d7061ee30cea90f554fc7172132c6224fd95848e3a6edf0e21046d",
+      "targetKeys": [
+        "official:equipment:es:903dd146fa94bcb540f66067"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 238,
+        "spanishPage": 227,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:d224e7354a35174bdf7f58c1",
+      "name": "Cloak of Elvenkind",
+      "sha256": "c4bcb650393724641f733f4121b1189386488dd60ce8bc5150aa676487abbf28",
+      "targetKeys": [
+        "official:equipment:es:2ff65e228901f70ca8f98828"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 214,
+        "spanishPage": 241,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:db0c2000b3062fb96f83d98d",
+      "name": "Potion of Animal Friendship",
+      "sha256": "288bbb4b2b15f1ed9272e1e04628301266f408d2993953e099546e21b1ad7266",
+      "targetKeys": [
+        "official:equipment:es:594081d8f38c71118bc60395"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 233,
+        "spanishPage": 260,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:dbebc9453b30c52879851504",
+      "name": "Oil of Slipperiness",
+      "sha256": "07bc6465edd9c311d4de0d2458ec2b9210c5d7c328326f94d6673def9cc4cd17",
+      "targetKeys": [
+        "official:equipment:es:c3bb4e8b9c95693e77d45d7a"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 223,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:dd18fb408ab8a1a8a1ab6e4b",
+      "name": "Wand of Paralysis",
+      "sha256": "1d6ba7e309d0360445e917097a9ef6840c1b978dd042917888883e5be64c7523",
+      "targetKeys": [
+        "official:equipment:es:285015c1f803ed9cd52a94c8"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 268,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:e08e5c29ea00149f622f988a",
+      "name": "Periapt of Proof against Poison",
+      "sha256": "2d97051a7e8a9e8f34cbae403e9c0c59d5549938542678cca8ef0cb1cb82ff90",
+      "targetKeys": [
+        "official:equipment:es:98f0c87fbcf5e4c229ee31c6"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 232,
+        "spanishPage": 243,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:e38456aef6b30152e3457fb9",
+      "name": "Wand of Enemy Detection",
+      "sha256": "36c8c67fea8574bc37d27692a735ac6e70935d5dbdfd4638d85281abc8cde5e6",
+      "targetKeys": [
+        "official:equipment:es:9638893b09627d66fd5f549d"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 248,
+        "spanishPage": 267,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:e59e65c2c6dab172282294d0",
+      "name": "Helm of Brilliance",
+      "sha256": "bc5bd769a505058874f1c9cfb39a88eebae526be588f6d6fe2c19928f0920cfe",
+      "targetKeys": [
+        "official:equipment:es:fdc90a46759c54f9de9bdfd3"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 225,
+        "spanishPage": 270,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:e76ad04aad26f56ecff5f620",
+      "name": "Wand of Web",
+      "sha256": "b9cec562c0a2bbb943fa8e77310e58b310eda82fd7fed7c19be98874b94af460",
+      "targetKeys": [
+        "official:equipment:es:e71f1a3639d0ca163bea1a3f"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 269,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:e87ab1aa464c72ce7ef3809c",
+      "name": "Wand of Binding",
+      "sha256": "71a5c526e371acacfee0bff85970553cc95960eb9723ed1e6e10a2369df1b8e1",
+      "targetKeys": [
+        "official:equipment:es:d8a3f2f409a708360ac1156f"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 248,
+        "spanishPage": 267,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:ece35147cb6ff27c9e676903",
+      "name": "Rope of Entanglement",
+      "sha256": "eca10fb9f1a2ba6f4ed8b5ef74a7f74a27e2312ad3a39b02a2b7a31772e96e38",
+      "targetKeys": [
+        "official:equipment:es:372fde0046c3e7c354b9b95a"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 241,
+        "spanishPage": 245,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:eda35e0e023c1a43950eb167",
+      "name": "Rod of Rulership",
+      "sha256": "097cda8882399d325d141c1258e6c19d0f769a81685696d216ce2efda064e30b",
+      "targetKeys": [
+        "official:equipment:es:05dc4be45345df58030acae8"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 240,
+        "spanishPage": 242,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:ef3ff54dc4f7fb0c1626bcb5",
+      "name": "Eyes of Charming",
+      "sha256": "498918ad8cb72eac4c5e08f1d34e69f0059a2187c10765113665fbbdb8d28e53",
+      "targetKeys": [
+        "official:equipment:es:93f1c99090f8be79a17fd06e"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 220,
+        "spanishPage": 227,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:f05f4ce3c292c0531e593dc5",
+      "name": "Dust of Dryness",
+      "sha256": "2001d931ac9a2a3465a466a2df0db59af8972010345ee207832fed5441c89aae",
+      "targetKeys": [
+        "official:equipment:es:f6f7ba7d85aced20808b7e36"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 219,
+        "spanishPage": 262,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:f10bb332707c28db72b71de3",
+      "name": "Wand of Magic Detection",
+      "sha256": "7447fb72e84e11175adeb6a01a9cc2f57a5bcb2ec8fdebd9c2c060174cd102d9",
+      "targetKeys": [
+        "official:equipment:es:456584ec47f3232d734253f5"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 267,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:f303fb597592bc55eada6a9e",
+      "name": "Wand of Lightning Bolts",
+      "sha256": "f34b5df14027441ba5d77f7ecfb45365cddd8257ed0e66caf8dd9b9d9cbde127",
+      "targetKeys": [
+        "official:equipment:es:57bf7eb989a1861f3147626f"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 249,
+        "spanishPage": 269,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:f524752d540d4bc9f1042440",
+      "name": "Ring of Feather Falling",
+      "sha256": "60645ce3ebdcfd7b642314cef73b886b105f996b637d34c2fcdfa414a5f508cb",
+      "targetKeys": [
+        "official:equipment:es:21b2968f9cb713fdc704304c"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 236,
+        "spanishPage": 224,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:f91cc2a90a3b10883dd00719",
+      "name": "Gem of Seeing",
+      "sha256": "fbc67950c5914104a6d83dd3b6e3e91ad78fd06d4b232ba7176cd575ac95f1cf",
+      "targetKeys": [
+        "official:equipment:es:fe7e7b105892cbe04c051592"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 223,
+        "spanishPage": 253,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:f9aaaba3a98ce97ca406c89e",
+      "name": "Potion of Invisibility",
+      "sha256": "4778b0348c445952eab37380b123fb206b436404242005d041bf403813696f0d",
+      "targetKeys": [
+        "official:equipment:es:b6c252fadf815e5461e8d2a1"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 234,
+        "spanishPage": 261,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:fc6109bdf51e486d80648bc5",
+      "name": "Censer of Controlling Air Elementals",
+      "sha256": "9fcf4ba03be12ba656932e152c71c9aef8d2628d45ef482f42b78466d7848bd7",
+      "targetKeys": [
+        "official:equipment:es:f6074a2c384a012868bc89f1"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 213,
+        "spanishPage": 255,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:fcc31695dd5a58ce35c95d45",
+      "name": "Eversmoking Bottle",
+      "sha256": "74217851c637d1c735e583b72f29311bc3f96e3a36a262560cfe7dcc9a195c17",
+      "targetKeys": [
+        "official:equipment:es:db828358f6811c9a673a2d57"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 220,
+        "spanishPage": 240,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:ff2c0a45ec70b262c3e4a633",
+      "name": "Sovereign Glue",
+      "sha256": "148ecd8b00938fa3648ece1b0eac6f4c1fd8621d763ad00de9b15239148f03fc",
+      "targetKeys": [
+        "official:equipment:es:7c1a658894dfd5edf11c9260"
+      ],
+      "reason": "Texto inglés íntegro contenido en la sección primaria del SRD 5.1; sección española completa cotejada; identidad, precio y peso conservados. Las estadísticas importadas se subordinan a las reglas oficiales de 2014.",
+      "evidence": {
+        "englishPage": 242,
+        "spanishPage": 258,
+        "legacyTextParts": 1,
+        "SpanishBlocks": 2
+      }
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

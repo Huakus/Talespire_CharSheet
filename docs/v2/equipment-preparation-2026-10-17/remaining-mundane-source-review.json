@@ -1,0 +1,739 @@
+{
+  "reviewed": 113,
+  "items": [
+    {
+      "key": "official:equipment:es:0aa19f2c9603e29879a2e214",
+      "page": 69,
+      "index": "lantern-bullseye",
+      "name": "Linterna de ojo de buey"
+    },
+    {
+      "key": "official:equipment:es:0ad295d1ff31df0157a0e340",
+      "page": 69,
+      "index": "wooden-staff",
+      "name": "Bastón de madera"
+    },
+    {
+      "key": "official:equipment:es:0df0fce82893a26df93b35e1",
+      "page": 70,
+      "index": "cooks-utensils",
+      "name": "Utensilios de cocina"
+    },
+    {
+      "key": "official:equipment:es:0e9469a9b602ef2d1b086290",
+      "page": 70,
+      "index": "cobblers-tools",
+      "name": "Herramientas de zapatero"
+    },
+    {
+      "key": "official:equipment:es:0f2da68fc4617fc88a6cee6a",
+      "page": 72,
+      "index": "warship",
+      "name": "Buque de guerra"
+    },
+    {
+      "key": "official:equipment:es:11428b06fe82e2010dc6af96",
+      "page": 72,
+      "index": "sailing-ship",
+      "name": "Velero"
+    },
+    {
+      "key": "official:equipment:es:11dda2f8fa756b72d355bd89",
+      "page": 70,
+      "index": "navigators-tools",
+      "name": "Herramientas de navegante"
+    },
+    {
+      "key": "official:equipment:es:122a5b42fc5eb1a251f32b5f",
+      "page": 72,
+      "index": "saddle-riding",
+      "name": "Silla de montar"
+    },
+    {
+      "key": "official:equipment:es:13678f40845e1493325cd2bd",
+      "page": 69,
+      "index": "lock",
+      "name": "Cerradura"
+    },
+    {
+      "key": "official:equipment:es:1441e31bea46dfaf31b4ac5c",
+      "page": 73,
+      "index": "barding-hide",
+      "name": "Barda: Armadura de pieles"
+    },
+    {
+      "key": "official:equipment:es:183d3ef114f14c0156ed80d1",
+      "page": 69,
+      "index": "clothes-travelers",
+      "name": "Ropa de viajero"
+    },
+    {
+      "key": "official:equipment:es:198cf5e385f3109703e813d3",
+      "page": 72,
+      "index": "rowboat",
+      "name": "Bote de remos"
+    },
+    {
+      "key": "official:equipment:es:19a7ad792dc5ecfb49acd0dd",
+      "page": 69,
+      "index": "healers-kit",
+      "name": "Útiles de sanador"
+    },
+    {
+      "key": "official:equipment:es:1bbb5a6d73812d5aebafdf52",
+      "page": 72,
+      "index": "pony",
+      "name": "Pony"
+    },
+    {
+      "key": "official:equipment:es:1e0bd1eccf146b43a2130f6e",
+      "page": 72,
+      "index": "saddle-pack",
+      "name": "Silla de Motar, Mochila"
+    },
+    {
+      "key": "official:equipment:es:1fafadc4b40af398980615c2",
+      "page": 69,
+      "index": "pole-10-foot",
+      "name": "Pértiga (10 pies)"
+    },
+    {
+      "key": "official:equipment:es:2353d4d34b4c7c673e0e39b4",
+      "page": 69,
+      "index": "candle",
+      "name": "Vela"
+    },
+    {
+      "key": "official:equipment:es:264a8de945ade4509efd9ce4",
+      "page": 70,
+      "index": "painters-supplies",
+      "name": "Suministros para pintores"
+    },
+    {
+      "key": "official:equipment:es:28f864c07b796f73e541b992",
+      "page": 72,
+      "index": "chariot",
+      "name": "Carro de guerra"
+    },
+    {
+      "key": "official:equipment:es:290cd1915f462803ca99b78e",
+      "page": 72,
+      "index": "saddle-exotic",
+      "name": "Silla de montar exótica"
+    },
+    {
+      "key": "official:equipment:es:2a314816a4d97bac5926841a",
+      "page": 72,
+      "index": "saddle-military",
+      "name": "Silla de Montar, Militar"
+    },
+    {
+      "key": "official:equipment:es:2b08ececa88951ad3a4ac769",
+      "page": 70,
+      "index": "jewelers-tools",
+      "name": "Herramientas de joyero"
+    },
+    {
+      "key": "official:equipment:es:2f7c206fec5dc60df24e2645",
+      "page": 69,
+      "index": "perfume-vial",
+      "name": "Perfume (vial)"
+    },
+    {
+      "key": "official:equipment:es:30d74265c4c216002d67c8c4",
+      "page": 69,
+      "index": "paper-one-sheet",
+      "name": "Papel (una hoja)"
+    },
+    {
+      "key": "official:equipment:es:326aeb8a8b37e2ee6e3479d7",
+      "page": 70,
+      "index": "drum",
+      "name": "Tambor"
+    },
+    {
+      "key": "official:equipment:es:348988e49bc0cfe298620489",
+      "page": 70,
+      "index": "pan-flute",
+      "name": "Flauta de pan"
+    },
+    {
+      "key": "official:equipment:es:363de1b1a70fdde0f95493dd",
+      "page": 69,
+      "index": "chest",
+      "name": "Cofre"
+    },
+    {
+      "key": "official:equipment:es:36b554eb203ac85cfe44699d",
+      "page": 71,
+      "index": "camel",
+      "name": "Camello"
+    },
+    {
+      "key": "official:equipment:es:378b3a05057eed29aa375cc9",
+      "page": 69,
+      "index": "ram-portable",
+      "name": "Ariete portátil"
+    },
+    {
+      "key": "official:equipment:es:37f3cfdbd596eae8d96687eb",
+      "page": 70,
+      "index": "disguise-kit",
+      "name": "Kit de disfraz"
+    },
+    {
+      "key": "official:equipment:es:393ca8fe9719b61f76997b82",
+      "page": 70,
+      "index": "glassblowers-tools",
+      "name": "Herramientas del soplador de vidrio"
+    },
+    {
+      "key": "official:equipment:es:3ff21cd542767fee7b128dfb",
+      "page": 73,
+      "index": "barding-plate",
+      "name": "Barda: Armadura de placas"
+    },
+    {
+      "key": "official:equipment:es:3ff4dd36b7f7add3d8539341",
+      "page": 71,
+      "index": "mule",
+      "name": "Mula"
+    },
+    {
+      "key": "official:equipment:es:439d1116c7f5e64e3a8ad11a",
+      "page": 69,
+      "index": "lantern-hooded",
+      "name": "Linterna sorda"
+    },
+    {
+      "key": "official:equipment:es:44f9f463d3d4e4e60207ced0",
+      "page": 70,
+      "index": "carpenters-tools",
+      "name": "Herramientas de carpintero"
+    },
+    {
+      "key": "official:equipment:es:4568eca51c17850a6e659f83",
+      "page": 69,
+      "index": "block-and-tackle",
+      "name": "Polipasto"
+    },
+    {
+      "key": "official:equipment:es:4641b0daf44b43be3a95eda4",
+      "page": 69,
+      "index": "hunting-trap",
+      "name": "Trampa de caza"
+    },
+    {
+      "key": "official:equipment:es:466d3e34918225cb60fa5f9a",
+      "page": 72,
+      "index": "horse-draft",
+      "name": "Caballo de tiro"
+    },
+    {
+      "key": "official:equipment:es:48a2bedcc6332898d75b780f",
+      "page": 70,
+      "index": "viol",
+      "name": "Viola"
+    },
+    {
+      "key": "official:equipment:es:494ef43f15d2dae7b953c1e1",
+      "page": 69,
+      "index": "fishing-tackle",
+      "name": "Aparejos de pesca"
+    },
+    {
+      "key": "official:equipment:es:537b7abf6ef905c67da19d09",
+      "page": 72,
+      "index": "cart",
+      "name": "Carreta"
+    },
+    {
+      "key": "official:equipment:es:5545001556a49bda7f0727f9",
+      "page": 73,
+      "index": "barding-half-plate",
+      "name": "Barda: Media armadura"
+    },
+    {
+      "key": "official:equipment:es:55c9dbeff68a625e39467fdd",
+      "page": 72,
+      "index": "mastiff",
+      "name": "Mastín"
+    },
+    {
+      "key": "official:equipment:es:587fb93a831f3718d1ebc8fc",
+      "page": 72,
+      "index": "horse-riding",
+      "name": "Caballo de monta"
+    },
+    {
+      "key": "official:equipment:es:5dfd4a037c647bbe917932a0",
+      "page": 72,
+      "index": "wagon",
+      "name": "Carro"
+    },
+    {
+      "key": "official:equipment:es:5f88a69b0ea9fbb89037ee8c",
+      "page": 70,
+      "index": "masons-tools",
+      "name": "Herramientas de albañil"
+    },
+    {
+      "key": "official:equipment:es:6337e9894a2fe3787473d5a6",
+      "page": 69,
+      "index": "rod",
+      "name": "Vara"
+    },
+    {
+      "key": "official:equipment:es:64afc941ef9c5161f4368409",
+      "page": 73,
+      "index": "barding-scale-mail",
+      "name": "Barda: Cota de escamas"
+    },
+    {
+      "key": "official:equipment:es:680455fdeb92a348fcad1dc5",
+      "page": 70,
+      "index": "dulcimer",
+      "name": "Dulcémele"
+    },
+    {
+      "key": "official:equipment:es:6aab8ce7284a16c61edd2e41",
+      "page": 69,
+      "index": "holy-water-flask",
+      "name": "Agua bendita (frasco)"
+    },
+    {
+      "key": "official:equipment:es:708fc72185654ae03cadaf43",
+      "page": 69,
+      "index": "sprig-of-mistletoe",
+      "name": "Ramita de muérdago"
+    },
+    {
+      "key": "official:equipment:es:728ff87ae9b933c7623d68ca",
+      "page": 70,
+      "index": "weavers-tools",
+      "name": "Herramientas del tejedor"
+    },
+    {
+      "key": "official:equipment:es:73d1f95b3a80f2914d62adb4",
+      "page": 70,
+      "index": "poisoners-kit",
+      "name": "Kit de envenenamiento"
+    },
+    {
+      "key": "official:equipment:es:75e60fc4a570f34cda60902b",
+      "page": 72,
+      "index": "warhorse",
+      "name": "Caballo de guerra"
+    },
+    {
+      "key": "official:equipment:es:7669f31b87e57d13af60430a",
+      "page": 71,
+      "index": "donkey",
+      "name": "Burro"
+    },
+    {
+      "key": "official:equipment:es:796d69885dabe07b8511c0fc",
+      "page": 69,
+      "index": "barrel",
+      "name": "Barril"
+    },
+    {
+      "key": "official:equipment:es:7bd754729288ef8f0a649414",
+      "page": 72,
+      "index": "bit-and-bridle",
+      "name": "Bocado y brida"
+    },
+    {
+      "key": "official:equipment:es:7fe5b1f1a76b6720b8dec06f",
+      "page": 69,
+      "index": "wand",
+      "name": "Varita mágica"
+    },
+    {
+      "key": "official:equipment:es:80e2a613125161d8ac5f1026",
+      "page": 72,
+      "index": "sled",
+      "name": "Trineo"
+    },
+    {
+      "key": "official:equipment:es:8105376de27fa47cc79976b0",
+      "page": 69,
+      "index": "yew-wand",
+      "name": "Varita de tejo"
+    },
+    {
+      "key": "official:equipment:es:8436adcd81a5ccb945920165",
+      "page": 71,
+      "index": "elephant",
+      "name": "Elefante"
+    },
+    {
+      "key": "official:equipment:es:84becffc50fa2fbb219c8931",
+      "page": 69,
+      "index": "vial",
+      "name": "Vial"
+    },
+    {
+      "key": "official:equipment:es:8885d34214b355720b48ae25",
+      "page": 69,
+      "index": "lamp",
+      "name": "Lámpara"
+    },
+    {
+      "key": "official:equipment:es:88e68c6ea3e6296d75226c8d",
+      "page": 70,
+      "index": "potters-tools",
+      "name": "Herramientas de alfarero"
+    },
+    {
+      "key": "official:equipment:es:8de8fb66d5bee75f24fb3ca2",
+      "page": 69,
+      "index": "case-crossbow-bolt",
+      "name": "Estuche, virote de ballesta"
+    },
+    {
+      "key": "official:equipment:es:8e43d0d29557eb5e83692b05",
+      "page": 69,
+      "index": "reliquary",
+      "name": "Relicario"
+    },
+    {
+      "key": "official:equipment:es:8e82386c079eaff60b255689",
+      "page": 73,
+      "index": "barding-padded",
+      "name": "Barda: Armadura acolchada"
+    },
+    {
+      "key": "official:equipment:es:9051b7284367c6f605464859",
+      "page": 72,
+      "index": "longship",
+      "name": "Barco largo"
+    },
+    {
+      "key": "official:equipment:es:91a07be41ee8d7a742570207",
+      "page": 73,
+      "index": "barding-splint",
+      "name": "Barda: Armadura de bandas"
+    },
+    {
+      "key": "official:equipment:es:94cc6be390252602527efa75",
+      "page": 73,
+      "index": "barding-leather",
+      "name": "Barda: Armadura de cuero"
+    },
+    {
+      "key": "official:equipment:es:96eecf010fe0c04f3024f662",
+      "page": 69,
+      "index": "emblem",
+      "name": "Emblema"
+    },
+    {
+      "key": "official:equipment:es:97f754e822ee88e4525d7d8f",
+      "page": 70,
+      "index": "shawm",
+      "name": "Caramillo"
+    },
+    {
+      "key": "official:equipment:es:9cb43d663815c002b6dfb91d",
+      "page": 69,
+      "index": "manacles",
+      "name": "Esposas"
+    },
+    {
+      "key": "official:equipment:es:9d1f464e5c95c694ecfc7713",
+      "page": 70,
+      "index": "forgery-kit",
+      "name": "Kit de falsificación"
+    },
+    {
+      "key": "official:equipment:es:a1f5620ef71c65be6f79a808",
+      "page": 69,
+      "index": "chalk-1-piece",
+      "name": "Tiza (1 pieza)"
+    },
+    {
+      "key": "official:equipment:es:a4909975068e6186190596aa",
+      "page": 73,
+      "index": "barding-studded-leather",
+      "name": "Barda: Armadura de cuero tachonado"
+    },
+    {
+      "key": "official:equipment:es:a6a58ebb5f291eae14e072cd",
+      "page": 69,
+      "index": "sack",
+      "name": "Saco"
+    },
+    {
+      "key": "official:equipment:es:a7ef83a006b81b56921e34cd",
+      "page": 70,
+      "index": "woodcarvers-tools",
+      "name": "Herramientas del tallador de madera"
+    },
+    {
+      "key": "official:equipment:es:ac2e2ed021ea21b29f9d85cd",
+      "page": 69,
+      "index": "poison-basic-vial",
+      "name": "Veneno, básico (vial)"
+    },
+    {
+      "key": "official:equipment:es:ada2351ae3c3ff654d40cb56",
+      "page": 72,
+      "index": "keelboat",
+      "name": "Barco de quilla"
+    },
+    {
+      "key": "official:equipment:es:ae5ae8ad7f4f0009e8143b42",
+      "page": 70,
+      "index": "thieves-tools",
+      "name": "Herramientas de ladrón"
+    },
+    {
+      "key": "official:equipment:es:b481444e07aad32c36a9d82b",
+      "page": 70,
+      "index": "horn",
+      "name": "Cuerno"
+    },
+    {
+      "key": "official:equipment:es:b681ac481c11572110f2f916",
+      "page": 69,
+      "index": "bucket",
+      "name": "Balde"
+    },
+    {
+      "key": "official:equipment:es:b68a1e1784bfc6847014f566",
+      "page": 69,
+      "index": "crystal",
+      "name": "Cristal"
+    },
+    {
+      "key": "official:equipment:es:b7d4b8adc9070875fb7690fc",
+      "page": 70,
+      "index": "lute",
+      "name": "Laúd"
+    },
+    {
+      "key": "official:equipment:es:ba07dd39b3d643f4a0b621d4",
+      "page": 69,
+      "index": "ladder-10-foot",
+      "name": "Escalera (10 pies)"
+    },
+    {
+      "key": "official:equipment:es:bd00cc0985a3ff7fd512cbed",
+      "page": 69,
+      "index": "bottle-glass",
+      "name": "Botella, vidrio"
+    },
+    {
+      "key": "official:equipment:es:c0ed13a29aca1414ae15f3b9",
+      "page": 69,
+      "index": "pot-iron",
+      "name": "Olla, hierro"
+    },
+    {
+      "key": "official:equipment:es:c3ee7379af7aad0425190cf7",
+      "page": 69,
+      "index": "ball-bearings-bag-of-1000",
+      "name": "Bolas de metal (bolsa de 1000)"
+    },
+    {
+      "key": "official:equipment:es:c6632056f27d609c9ee846f4",
+      "page": 70,
+      "index": "leatherworkers-tools",
+      "name": "Herramientas para trabajar el cuero"
+    },
+    {
+      "key": "official:equipment:es:c69a2c5afe146cf1ea5d6010",
+      "page": 73,
+      "index": "barding-breastplate",
+      "name": "Barda: Coraza"
+    },
+    {
+      "key": "official:equipment:es:c7dabdd631c10991973eec3f",
+      "page": 70,
+      "index": "playing-card-set",
+      "name": "Juego de cartas para jugar"
+    },
+    {
+      "key": "official:equipment:es:c7f3467c9866f80f6c863f9c",
+      "page": 70,
+      "index": "lyre",
+      "name": "Lira"
+    },
+    {
+      "key": "official:equipment:es:cbdba9aab3fca9a45891cc6b",
+      "page": 69,
+      "index": "totem",
+      "name": "Tótem"
+    },
+    {
+      "key": "official:equipment:es:d0ef0cbf3f2c302401e92cdf",
+      "page": 72,
+      "index": "carriage",
+      "name": "Carruaje"
+    },
+    {
+      "key": "official:equipment:es:d13c18c1982dca096ccc9cb5",
+      "page": 73,
+      "index": "barding-chain-mail",
+      "name": "Barda: Cota de malla"
+    },
+    {
+      "key": "official:equipment:es:d4a4618e5fe0191cec822e5d",
+      "page": 69,
+      "index": "basket",
+      "name": "Cesta"
+    },
+    {
+      "key": "official:equipment:es:d5dc5f1b27ae2611d038bfd6",
+      "page": 69,
+      "index": "jug-or-pitcher",
+      "name": "Jarra"
+    },
+    {
+      "key": "official:equipment:es:da1107925e69cb5321432247",
+      "page": 70,
+      "index": "bagpipes",
+      "name": "Gaita"
+    },
+    {
+      "key": "official:equipment:es:dcf9ae72ad3346f46f750894",
+      "page": 69,
+      "index": "sealing-wax",
+      "name": "Lacre"
+    },
+    {
+      "key": "official:equipment:es:ddfa56929383750182858407",
+      "page": 69,
+      "index": "signet-ring",
+      "name": "Anillo de sello"
+    },
+    {
+      "key": "official:equipment:es:dec16d62f8477362b139d098",
+      "page": 69,
+      "index": "magnifying-glass",
+      "name": "Lupa"
+    },
+    {
+      "key": "official:equipment:es:e2a48f83cd62b9c237d9db9f",
+      "page": 69,
+      "index": "chain-10-feet",
+      "name": "Cadena (10 pies)"
+    },
+    {
+      "key": "official:equipment:es:e3c10775cb7ba927427f1356",
+      "page": 69,
+      "index": "signal-whistle",
+      "name": "Silbato de señal"
+    },
+    {
+      "key": "official:equipment:es:e629d6f51a5a9f80c19a2b4e",
+      "page": 73,
+      "index": "barding-chain-shirt",
+      "name": "Barda: Camisa de malla"
+    },
+    {
+      "key": "official:equipment:es:ec94c2515d9c391b94afa713",
+      "page": 72,
+      "index": "animal-feed-1-day",
+      "name": "Alimentación animal (1 día)"
+    },
+    {
+      "key": "official:equipment:es:ef0e94b62dccd53d3466b046",
+      "page": 69,
+      "index": "component-pouch",
+      "name": "Bolsa de componentes"
+    },
+    {
+      "key": "official:equipment:es:f02c595d294730852f45ca1a",
+      "page": 69,
+      "index": "flask-or-tankard",
+      "name": "Frasco o jarra"
+    },
+    {
+      "key": "official:equipment:es:f54b722030a8cd74d16cb832",
+      "page": 73,
+      "index": "barding-ring-mail",
+      "name": "Barda: Cota guarnecida"
+    },
+    {
+      "key": "official:equipment:es:f739db0167df5f7d1eca2d70",
+      "page": 72,
+      "index": "stabling-1-day",
+      "name": "Estabulación (1 día)"
+    },
+    {
+      "key": "official:equipment:es:f8647e911c5455c047842128",
+      "page": 72,
+      "index": "galley",
+      "name": "Galera"
+    },
+    {
+      "key": "official:equipment:es:fb982a2fc9e8a56c9820d025",
+      "page": 70,
+      "index": "flute",
+      "name": "Flauta"
+    },
+    {
+      "key": "official:equipment:es:fc99115af245a6af70c01f2d",
+      "page": 69,
+      "index": "staff",
+      "name": "Bastón Magico"
+    }
+  ],
+  "skipped": [
+    {
+      "name": "Paquete de ladrón",
+      "id": "recovery:official:equipment:es:1690ade2e005b3d5419276d2",
+      "index": "burglars-pack",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Paquete del diplomático",
+      "id": "recovery:official:equipment:es:3e000ccfb949f6041bdb6785",
+      "index": "diplomats-pack",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Bloque de incienso",
+      "id": "recovery:official:equipment:es:5dc4abd6720f5eb80dea925b",
+      "index": "block-of-incense",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Paquete de Animador",
+      "id": "recovery:official:equipment:es:6e83c9fa1434c8e5af25720e",
+      "index": "entertainers-pack",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Bala de honda",
+      "id": "recovery:official:equipment:es:787b7ce6af1d2525c342d664",
+      "index": "sling-bullet",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Paquete del explorador de mazmorras",
+      "id": "recovery:official:equipment:es:7f88e7a006665acd21818ae9",
+      "index": "dungeoneers-pack",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Cuerda (10 pies)",
+      "id": "recovery:official:equipment:es:89025bb9c91e286ccab71344",
+      "index": "string-10-feet",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Incensario",
+      "id": "recovery:official:equipment:es:bd719c69d26174bd353e513d",
+      "index": "censer",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    },
+    {
+      "name": "Caja de limosnas",
+      "id": "recovery:official:equipment:es:cc4b1ad17ddbae45d3744f22",
+      "index": "alms-box",
+      "reason": "Filas inequívocas: 0; no sustituir por datos de API sin cotejo."
+    }
+  ]
+}

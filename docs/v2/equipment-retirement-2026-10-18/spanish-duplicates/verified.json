@@ -1,0 +1,18 @@
+{
+  "revision": 1302,
+  "definitionsDeleted": 11,
+  "preparationsDeleted": 0,
+  "registryCount": 854,
+  "englishRemaining": 0,
+  "normalizedRemaining": 828,
+  "preparationsRemaining": 833,
+  "protectedHashesEqual": true,
+  "hashes": {
+    "shared": "f047b7188bfbcef360e67d11b8df18ed",
+    "content": "ef8ca1dd35544278b93bf7a8a693a8ed",
+    "revision": 1302,
+    "versions": "e18236ea3b0f3bb0bb8ac007859797d0",
+    "fragments": "36908fdeb473a34a589ce0abad14b04e",
+    "otherCampaigns": "8fc4ee65322cb858c7b22f284a8eef86"
+  }
+}

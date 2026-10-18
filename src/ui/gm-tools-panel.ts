@@ -1,3 +1,6 @@
+import { equipmentTagLabel, visibleEquipmentTags } from "../domain/equipment/equipment-tags";
+import type { EquipmentPreparation } from "../domain/equipment/equipment-preparation";
+import { EquipmentPreparationPanel } from "./equipment-preparation-panel";
 import type { CampaignSnapshot } from "../application/ports/campaign-repository";
 import type { CharacterInventoryItemV2 } from "../domain/character/character-inventory-model";
 import { inventoryItemsCanStack } from "../domain/character/character-inventory";
@@ -15,7 +18,7 @@ import type { CampaignContent } from "../domain/content/campaign-content";
 import type { CatalogMetadata } from "../domain/content/catalog-metadata";
 import { createRandomId } from "../shared/id";
 import { renderCheckboxGroup } from "./checkbox-group";
-import { inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
+import { inventoryCatalogDefinition, inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
 import { renderUiEmptyState } from "./design-system/primitives";
 import { FormDraftStore } from "./form-draft-store";
 import {
@@ -35,6 +38,9 @@ export interface GmToolsRuntime {
   saveCustomSpell?: (definition: SpellDefinition, previousKey: string | null) => Promise<void>;
   deleteCustomSpell?: (key: string) => Promise<void>;
   saveCustomEquipment?: (definition: EquipmentCatalogDraft, previousKey: string | null) => Promise<void>;
+  saveEquipmentPreparation?: (value: EquipmentPreparation) => Promise<EquipmentPreparation | void>;
+  prepareExistingEquipment?: (contentKey: string) => Promise<EquipmentPreparation>;
+  loadEquipmentPreparations?: () => Promise<Pick<CampaignContent, "equipmentPreparations" | "equipmentPreparationIssues">>;
   deleteCustomEquipment?: (key: string) => Promise<void>;
   saveShop?: (shop: GmShop, previousKey: string | null) => Promise<void>;
   saveCustomMonster?: (monster: CampaignContent["monsters"][number], previousKey: string | null) => Promise<void>;
@@ -113,6 +119,7 @@ function selectOptions(values: readonly string[], selected: string, emptyLabel?:
 }
 
 export class GmToolsPanel {
+  private readonly preparation: EquipmentPreparationPanel;
   private readonly formDrafts = new FormDraftStore();
   private content: CampaignContent = { spells: [], equipment: [], monsters: [], shops: [], checklist: [] };
   private selectedSpell = "";
@@ -143,11 +150,18 @@ export class GmToolsPanel {
     private readonly setMessage: (message: Message) => void,
     private readonly rerender: () => void,
     private readonly recordAction: (label: string, kind?: "action" | "roll" | "system") => void = () => undefined,
-  ) {}
+  ) {
+    this.preparation = new EquipmentPreparationPanel({
+      ...(runtime.saveEquipmentPreparation ? { saveEquipmentPreparation: runtime.saveEquipmentPreparation } : {}),
+      ...(runtime.prepareExistingEquipment ? { prepareExistingEquipment: runtime.prepareExistingEquipment } : {}),
+      loadPreparations: async () => runtime.loadEquipmentPreparations ? runtime.loadEquipmentPreparations() : runtime.loadGmContent ? runtime.loadGmContent() : {},
+    }, rerender);
+  }
 
   async load(): Promise<void> {
     if (!this.runtime.loadGmContent) return;
     this.content = await this.runtime.loadGmContent();
+    if (!this.runtime.loadEquipmentPreparations) this.preparation.setContent(this.content.equipmentPreparations ?? [], this.content.equipmentPreparationIssues ?? []);
     this.selectedSpell = this.content.spells.find((entry) => !isOldSpell(entry))?.name ?? "";
     this.selectedEquipment = this.content.equipment[0]?.name ?? "";
     this.selectedShop = this.content.shops[0]?.name ?? "";
@@ -193,10 +207,10 @@ export class GmToolsPanel {
     const cards = section === "spell"
       ? favoriteFirst(this.content.spells.filter((entry) => { const meta = catalogMetadata(entry); return (!this.contentFavoritesOnly.spell || isCatalogFavorite(entry)) && this.matchesSpellFilters(entry) && (!query || normalizedSearch([entry.name, entry.school, entry.description, entry.damageType, ...entry.classes, ...spellClassLabels(entry.classes), meta.origin, ...visibleCatalogTags(meta.tags)].join(" ")).includes(query)); }), isCatalogFavorite, (entry) => entry.name).map((entry) => this.renderSpellCard(entry)).join("")
       : section === "equipment"
-        ? favoriteFirst(this.content.equipment.filter((entry) => { const meta = catalogMetadata(entry); return (!this.contentFavoritesOnly.equipment || isCatalogFavorite(entry)) && this.matchesEquipmentFilters(entry) && (!query || normalizedSearch([entry.name, entry.category, entry.rarity, entry.description, ...entry.properties, meta.origin, ...visibleCatalogTags(meta.tags)].join(" ")).includes(query)); }), isCatalogFavorite, (entry) => entry.name).map((entry) => this.renderEquipmentCard(entry)).join("")
+        ? favoriteFirst(this.content.equipment.filter((entry) => { const meta = catalogMetadata(entry); return (!this.contentFavoritesOnly.equipment || isCatalogFavorite(entry)) && this.matchesEquipmentFilters(entry) && (!query || normalizedSearch([entry.name, entry.category, entry.rarity, entry.description, ...entry.properties, meta.origin, ...visibleEquipmentTags(meta.tags).flatMap((tag) => [tag, equipmentTagLabel(tag)])].join(" ")).includes(query)); }), isCatalogFavorite, (entry) => entry.name).map((entry) => this.renderEquipmentCard(entry)).join("")
         : favoriteFirst(this.content.shops.filter((entry) => (!this.contentFavoritesOnly.shop || this.isShopFavorite(entry)) && this.matchesShopFilters(entry) && (!query || normalizedSearch([entry.name, ...this.shopVisibleTags(entry), ...Object.keys(entry.categories), ...Object.values(entry.categories).flat()].join(" ")).includes(query))), (entry) => this.isShopFavorite(entry), (entry) => entry.name).map((entry) => this.renderShopCard(entry)).join("");
     const label = section === "spell" ? "conjuro" : section === "equipment" ? "objeto" : "comerciante";
-    return `<section class="gm-content-catalog">${this.renderContentDiscovery(section, label)}${this.renderContentFilterBar(section)}<div class="gm-catalog-grid">${cards}</div>${renderUiEmptyState({ title: "Sin resultados", text: `No hay ${label}s que coincidan con los filtros.`, className: "sheet-empty gm-content-empty", hidden: Boolean(cards) })}</section>`;
+    return `${section === "equipment" ? this.preparation.render() : ""}<section class="gm-content-catalog">${this.renderContentDiscovery(section, label)}${this.renderContentFilterBar(section)}<div class="gm-catalog-grid">${cards}</div>${renderUiEmptyState({ title: "Sin resultados", text: `No hay ${label}s que coincidan con los filtros.`, className: "sheet-empty gm-content-empty", hidden: Boolean(cards) })}</section>`;
   }
 
   syncMonsterInventory(monster: CampaignContent["monsters"][number]): void {
@@ -225,7 +239,7 @@ export class GmToolsPanel {
     const groups = this.contentFilterGroups(section);
     const active = this.contentFilters[section];
     const showingAll = !this.contentSearch[section].trim() && active.size === 0 && !this.contentFavoritesOnly[section];
-    return `<nav class="filter-bar property-filter gm-content-filter-bar gm-grouped-filters"><button type="button" data-gm-show-all-content="${section}" class="${showingAll ? "active" : ""}" aria-pressed="${showingAll}">Todos</button><button type="button" data-gm-favorites-only="${section}" class="gm-favorites-filter ${this.contentFavoritesOnly[section] ? "active" : ""}" aria-pressed="${this.contentFavoritesOnly[section]}">★ Favoritos</button>${groups.map((group) => { const selected = selectedFilterValues(active, group.key); return `<details class="gm-filter-group ${selected.length ? "active" : ""}" ${this.openContentFilterGroup[section] === group.key ? "open" : ""}><summary>${escapeHtml(group.label)}${selected.length ? `<strong>${selected.length}</strong>` : ""}</summary><div>${group.values.map((value) => { const token = filterToken(group.key, value); const label = group.key === "rarity" ? equipmentRarityLabel(value) : group.key === "class" ? spellClassLabel(value) : value; return `<button type="button" data-gm-content-filter-value="${escapeHtml(value)}" data-gm-filter-group="${escapeHtml(group.key)}" data-gm-filter-section="${section}" class="${active.has(token) ? "active" : ""}" aria-pressed="${active.has(token)}">${escapeHtml(label)}</button>`; }).join("")}</div></details>`; }).join("")}</nav>`;
+    return `<nav class="filter-bar property-filter gm-content-filter-bar gm-grouped-filters"><button type="button" data-gm-show-all-content="${section}" class="${showingAll ? "active" : ""}" aria-pressed="${showingAll}">Todos</button><button type="button" data-gm-favorites-only="${section}" class="gm-favorites-filter ${this.contentFavoritesOnly[section] ? "active" : ""}" aria-pressed="${this.contentFavoritesOnly[section]}">★ Favoritos</button>${groups.map((group) => { const selected = selectedFilterValues(active, group.key); return `<details class="gm-filter-group ${selected.length ? "active" : ""}" ${this.openContentFilterGroup[section] === group.key ? "open" : ""}><summary>${escapeHtml(group.label)}${selected.length ? `<strong>${selected.length}</strong>` : ""}</summary><div>${group.values.map((value) => { const token = filterToken(group.key, value); const label = group.key === "rarity" ? equipmentRarityLabel(value) : group.key === "class" ? spellClassLabel(value) : section === "equipment" && group.key === "tag" ? equipmentTagLabel(value) : value; return `<button type="button" data-gm-content-filter-value="${escapeHtml(value)}" data-gm-filter-group="${escapeHtml(group.key)}" data-gm-filter-section="${section}" class="${active.has(token) ? "active" : ""}" aria-pressed="${active.has(token)}">${escapeHtml(label)}</button>`; }).join("")}</div></details>`; }).join("")}</nav>`;
   }
 
   private contentFilterGroups(section: GmContentSection): ContentFilterGroup[] {
@@ -247,7 +261,7 @@ export class GmToolsPanel {
       { key: "damage", label: "Tipo de daño", values: uniqueValues(this.content.equipment.map((item) => item.weapon?.damageType ?? "")) },
       { key: "weaponCategory", label: "Categoría de arma", values: uniqueValues(this.content.equipment.map((item) => item.weapon?.category ?? "")) },
       { key: "armorCategory", label: "Categoría de armadura", values: uniqueValues(this.content.equipment.map((item) => item.armor?.armorCategory ?? "")) },
-      { key: "tag", label: "Etiquetas", values: uniqueValues(this.content.equipment.flatMap((item) => visibleCatalogTags(catalogMetadata(item).tags))) },
+      { key: "tag", label: "Etiquetas", values: uniqueValues(this.content.equipment.flatMap((item) => visibleEquipmentTags(catalogMetadata(item).tags))) },
     ].filter((group) => group.values.length);
     return [
       { key: "category", label: "Categoría", values: uniqueValues(this.content.shops.flatMap((shop) => Object.keys(shop.categories))) },
@@ -269,7 +283,7 @@ export class GmToolsPanel {
       category: [item.category], rarity: [item.rarity], property: item.properties,
       kind: [item.weapon ? "Arma" : item.armor ? "Armadura" : "Equipo"], damage: [item.weapon?.damageType ?? ""],
       weaponCategory: [item.weapon?.category ?? ""], armorCategory: [item.armor?.armorCategory ?? ""],
-      tag: visibleCatalogTags(catalogMetadata(item).tags),
+      tag: visibleEquipmentTags(catalogMetadata(item).tags),
     });
   }
 
@@ -277,9 +291,9 @@ export class GmToolsPanel {
     return matchesGroupedFilters(this.contentFilters.shop, { category: Object.keys(shop.categories), tag: this.shopVisibleTags(shop) });
   }
 
-  private renderCatalogCardActions(section: GmContentSection, key: string): string {
+  private renderCatalogCardActions(section: GmContentSection, key: string, preparationKey?: string): string {
     const confirming = this.pendingDeleteContent?.section === section && this.pendingDeleteContent.key === key;
-    return `<div class="gm-content-card-actions"><div><button type="button" data-gm-edit="${section}" data-gm-content-key="${escapeHtml(key)}">Editar</button><button type="button" data-gm-delete="${section}" data-gm-content-key="${escapeHtml(key)}" class="${confirming ? "danger-confirm" : ""}">${confirming ? "Confirmar eliminación" : "Eliminar"}</button></div><button type="button" data-gm-template="${section}" data-gm-content-key="${escapeHtml(key)}" title="Crear una copia editable">Clonar</button></div>`;
+    return `<div class="gm-content-card-actions"><div><button type="button" data-gm-edit="${section}" data-gm-content-key="${escapeHtml(key)}">Editar</button><button type="button" data-gm-delete="${section}" data-gm-content-key="${escapeHtml(key)}" class="${confirming ? "danger-confirm" : ""}">${confirming ? "Confirmar eliminación" : "Eliminar"}</button></div><button type="button" data-gm-template="${section}" data-gm-content-key="${escapeHtml(key)}" title="Crear una copia editable">Clonar</button>${preparationKey && this.runtime.prepareExistingEquipment ? `<button type="button" data-prepare-existing-equipment="${escapeHtml(preparationKey)}" ${this.preparation.canPrepare() ? "" : 'disabled title="Guardá o cancelá el borrador actual"'}>Preparar</button>` : ""}</div>`;
   }
 
   private renderFavoriteButton(section: GmContentSection, key: string, favorite: boolean): string {
@@ -296,9 +310,9 @@ export class GmToolsPanel {
 
   private renderEquipmentCard(item: EquipmentCatalogDraft): string {
     const meta = catalogMetadata(item);
-    const tags = visibleCatalogTags(meta.tags);
+    const tags = visibleEquipmentTags(meta.tags);
     const search = [item.name, item.category, item.rarity, item.description, ...item.features.flatMap((feature) => [feature.name, feature.description]), ...item.properties, meta.origin, ...tags].join(" ").toLocaleLowerCase();
-    return `<article class="inventory-row gm-catalog-card ${isCatalogFavorite(item) ? "favorite" : ""}" data-gm-content-card data-search="${escapeHtml(search)}"><header class="inventory-row-header"><div class="inventory-row-main"><div><strong>${escapeHtml(item.name)}</strong>${this.renderFavoriteButton("equipment", item.name, isCatalogFavorite(item))}</div><span class="inventory-category">${escapeHtml(item.category)}</span><span class="rarity-badge" data-rarity="${escapeHtml(normalizeEquipmentRarity(item.rarity))}">${escapeHtml(equipmentRarityLabel(item.rarity))}</span><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span></div>${this.renderCatalogCardActions("equipment", item.name)}</header><div class="inventory-row-stats"><span><small>Peso</small>${item.unitWeight} lb</span><span><small>Costo</small>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span>${item.weapon ? `<span><small>Daño</small>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.consumable ? "<span>Consumible</span>" : ""}</div>${tags.length ? `<div class="catalog-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(item.description || "Sin descripción.")}</p>` : ""}</article>`;
+    return `<article class="inventory-row gm-catalog-card ${isCatalogFavorite(item) ? "favorite" : ""}" data-gm-content-card data-search="${escapeHtml(search)}"><header class="inventory-row-header"><div class="inventory-row-main"><div><strong>${escapeHtml(item.name)}</strong>${this.renderFavoriteButton("equipment", item.name, isCatalogFavorite(item))}</div><span class="inventory-category">${escapeHtml(item.category)}</span><span class="rarity-badge" data-rarity="${escapeHtml(normalizeEquipmentRarity(item.rarity))}">${escapeHtml(equipmentRarityLabel(item.rarity))}</span><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span></div>${this.renderCatalogCardActions("equipment", item.name, meta.contentKey)}</header><div class="inventory-row-stats"><span><small>Peso</small>${item.unitWeight} lb</span><span><small>Costo</small>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span>${item.weapon ? `<span><small>Daño</small>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.consumable ? "<span>Consumible</span>" : ""}</div>${tags.length ? `<div class="catalog-tags">${tags.map((tag) => `<span>${escapeHtml(equipmentTagLabel(tag))}</span>`).join("")}</div>` : ""}${this.showContentDescriptions ? `<p class="card-description">${escapeHtml(item.description || "Sin descripción.")}</p>` : ""}</article>`;
   }
 
   private renderShopCard(shop: GmShop): string {
@@ -323,7 +337,7 @@ export class GmToolsPanel {
   }
 
   private shopInventoryDefinition(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): EquipmentCatalogDraft | null {
-    return "rarity" in item ? item : this.content.equipment.find((entry) => normalizedSearch(entry.name) === normalizedSearch(item.name)) ?? null;
+    return inventoryCatalogDefinition(item, this.content.equipment);
   }
 
   private shopInventoryRarity(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string {
@@ -331,7 +345,7 @@ export class GmToolsPanel {
   }
 
   private shopInventoryTags(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string[] {
-    return visibleCatalogTags(catalogMetadata(this.shopInventoryDefinition(item) ?? item).tags);
+    return visibleEquipmentTags(catalogMetadata(this.shopInventoryDefinition(item) ?? item).tags);
   }
 
   private shopInventoryVisible(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): boolean {
@@ -378,7 +392,7 @@ export class GmToolsPanel {
     const tags = uniqueValues(source.flatMap((item) => this.shopInventoryTags(item)));
     const rarities = uniqueValues(source.map((item) => this.shopInventoryRarity(item)));
     const noFilters = !this.shopInventoryFilters.size && !this.shopInventoryTagFilters.size && !this.shopInventoryRarityFilters.size;
-    const tagMenu = tags.length ? `<details class="gm-filter-group player-filter-group ${this.shopInventoryTagFilters.size ? "active" : ""}"><summary>Etiquetas${this.shopInventoryTagFilters.size ? `<strong>${this.shopInventoryTagFilters.size}</strong>` : ""}</summary><div>${tags.map((tag) => `<button type="button" data-gm-shop-inventory-tag="${escapeHtml(tag)}" class="${this.shopInventoryTagFilters.has(tag) ? "active" : ""}">${escapeHtml(tag)}</button>`).join("")}</div></details>` : "";
+    const tagMenu = tags.length ? `<details class="gm-filter-group player-filter-group ${this.shopInventoryTagFilters.size ? "active" : ""}"><summary>Etiquetas${this.shopInventoryTagFilters.size ? `<strong>${this.shopInventoryTagFilters.size}</strong>` : ""}</summary><div>${tags.map((tag) => `<button type="button" data-gm-shop-inventory-tag="${escapeHtml(tag)}" class="${this.shopInventoryTagFilters.has(tag) ? "active" : ""}">${escapeHtml(equipmentTagLabel(tag))}</button>`).join("")}</div></details>` : "";
     const rarityMenu = rarities.length ? `<details class="gm-filter-group player-filter-group ${this.shopInventoryRarityFilters.size ? "active" : ""}"><summary>Rareza${this.shopInventoryRarityFilters.size ? `<strong>${this.shopInventoryRarityFilters.size}</strong>` : ""}</summary><div>${rarities.map((rarity) => `<button type="button" data-gm-shop-inventory-rarity="${escapeHtml(rarity)}" class="${this.shopInventoryRarityFilters.has(rarity) ? "active" : ""}">${escapeHtml(equipmentRarityLabel(rarity))}</button>`).join("")}</div></details>` : "";
     const cards = `${items.map((item) => this.renderShopInventoryCard(item)).join("")}${catalog.map((item) => this.renderShopInventoryCard(item, true)).join("")}`;
     return `<section class="gm-shop-inventory"><div class="section-heading"><h3>Inventario del comerciante</h3><span>${inventory.reduce((sum, item) => sum + item.quantity, 0)} objetos</span></div>${npc ? `<div class="spell-discovery inventory-discovery"><div class="spell-search-row inventory-search-row"><label class="spell-search inventory-search"><span>Buscar</span><input data-gm-shop-inventory-search type="search" value="${escapeHtml(this.shopInventorySearch)}" placeholder="Nombre, tipo, propiedad…"></label><button type="button" class="description-toggle" data-gm-shop-inventory-descriptions>${this.showContentDescriptions ? "Ocultar descripciones" : "Mostrar descripciones"}</button></div><nav class="filter-bar property-filter inventory-filter-bar"><button type="button" data-gm-shop-inventory-clear class="${noFilters ? "active" : ""}">Limpiar</button>${filters.map(([value, label]) => `<button type="button" data-gm-shop-inventory-filter="${value}" class="${this.shopInventoryFilters.has(value) ? "active" : ""}"><span>${label}</span><strong>${inventory.filter((item) => inventoryViewMatchesBasicFilter(item, value)).length}</strong></button>`).join("")}${tagMenu}${rarityMenu}<button type="button" class="catalog-toggle ${this.shopInventoryIncludeCatalog ? "active" : ""}" data-gm-shop-inventory-catalog>${this.shopInventoryIncludeCatalog ? "Ocultar catálogo" : "Mostrar catálogo"}</button></nav></div><div class="inventory-dense-list">${cards || '<div class="sheet-empty"><p>No hay objetos que coincidan con la búsqueda y los filtros.</p></div>'}</div>` : '<div class="sheet-empty"><p>Seleccioná un NPC asociado para administrar su inventario.</p></div>'}</section>`;
@@ -496,6 +510,8 @@ export class GmToolsPanel {
   }
 
   private bindContent(): void {
+    this.preparation.bind(this.root);
+    this.root.querySelectorAll<HTMLButtonElement>("[data-prepare-existing-equipment]").forEach((button) => button.addEventListener("click", () => { void this.preparation.prepare(button.dataset.prepareExistingEquipment ?? ""); }));
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-new]").forEach((button) => button.addEventListener("click", () => {
       const section = button.dataset.gmNew as GmContentSection;
       this.contentTemplate = null;

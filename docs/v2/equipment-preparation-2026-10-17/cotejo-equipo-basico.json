@@ -1,0 +1,52 @@
+{
+  "reviewedOn": "2026-10-17",
+  "status": "content-review-only",
+  "sources": [
+    {
+      "id": "basic-rules-2014-equipment",
+      "kind": "book",
+      "title": "Basic Rules (2014) · Equipment",
+      "language": "en",
+      "rulesEdition": "2014",
+      "locator": "https://www.dndbeyond.com/sources/dnd/basic-rules-2014/equipment · Other Adventuring Gear y reglas de cada objeto",
+      "verified": true
+    },
+    {
+      "id": "provided-phb-spanish-equipment",
+      "kind": "book",
+      "title": "Manual del Jugador aportado · texto español",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "D&D - Manual del Jugador 5E (1).pdf · páginas PDF/impresas 125 y 127; cotejo visual. La acreditación editorial de esta traducción sigue pendiente.",
+      "verified": true
+    }
+  ],
+  "notes": [
+    "Precios y pesos contrastados con la tabla original de 2014 y con las páginas del PDF aportado.",
+    "La verificación de una página no acredita que su traducción sea la edición española oficial. Los textos nuevos se identifican como traducción propia revisada desde la fuente inglesa.",
+    "El guion en el peso de Campanilla se conserva como peso no especificado; no se convierte en cero.",
+    "El lote no certifica la recuperación de todos los campos antiguos ni habilita la migración o el borrado."
+  ],
+  "items": [
+    { "index": "abacus", "name": "Ábaco", "category": "adventuring-gear", "price": { "quantity": 2, "unit": "gp" }, "weightLb": 2 },
+    { "index": "hammer-sledge", "name": "Almádena", "category": "adventuring-gear", "price": { "quantity": 2, "unit": "gp" }, "weightLb": 10 },
+    {
+      "index": "scale-merchants", "name": "Balanza de mercader", "category": "adventuring-gear", "price": { "quantity": 5, "unit": "gp" }, "weightLb": 3,
+      "paragraph": "Una balanza incluye una pequeña báscula, platillos y un surtido adecuado de pesas de hasta 2 libras. Permite medir el peso exacto de objetos pequeños, como metales preciosos en bruto o mercancías, para ayudar a determinar su valor."
+    },
+    { "index": "bell", "name": "Campanilla", "category": "adventuring-gear", "price": { "quantity": 1, "unit": "gp" }, "weightLb": null },
+    { "index": "mirror-steel", "name": "Espejo de acero", "category": "adventuring-gear", "price": { "quantity": 5, "unit": "gp" }, "weightLb": 0.5 },
+    { "index": "hammer", "name": "Martillo", "category": "adventuring-gear", "price": { "quantity": 1, "unit": "gp" }, "weightLb": 3 },
+    { "index": "shovel", "name": "Pala", "category": "adventuring-gear", "price": { "quantity": 2, "unit": "gp" }, "weightLb": 5 },
+    { "index": "pick-miners", "name": "Pico de minero", "category": "adventuring-gear", "price": { "quantity": 2, "unit": "gp" }, "weightLb": 10 },
+    { "index": "hourglass", "name": "Reloj de arena", "category": "adventuring-gear", "price": { "quantity": 25, "unit": "gp" }, "weightLb": 1 },
+    { "index": "whetstone", "name": "Piedra de afilar", "category": "adventuring-gear", "price": { "quantity": 1, "unit": "cp" }, "weightLb": 1 },
+    {
+      "index": "potion-of-healing", "name": "Poción de curación", "category": "potion", "price": { "quantity": 50, "unit": "gp" }, "weightLb": 0.5,
+      "magical": true, "consumable": true,
+      "paragraph": "Un personaje que bebe el líquido rojo mágico de este vial recupera 2d4 + 2 puntos de golpe. Beber o administrar una poción requiere una acción.",
+      "healing": "2d4+2",
+      "notes": ["La rareza queda pendiente de cotejar con la clasificación de objetos mágicos; no se conserva el valor antiguo «ninguna» por defecto."]
+    }
+  ]
+}

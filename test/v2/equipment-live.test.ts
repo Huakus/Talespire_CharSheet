@@ -1,0 +1,105 @@
+import { describe, expect, it } from "vitest";
+import reviewed from "../../docs/v2/equipment-preparation-2026-10-17/used-equipment-reviewed-definitions.json";
+import cloak from "../../docs/v2/equipment-preparation-2026-10-17/runed-cloak-clarified-definition.json";
+import { EquipmentDefinitionDraftSchema } from "../../src/domain/equipment/equipment-definition";
+import { bindReviewedEquipment } from "../../src/domain/equipment/equipment-live";
+import { projectEquipmentSpellSlots } from "../../src/domain/equipment/equipment-spell-slots";
+import { CharacterInventoryItemV2Schema } from "../../src/domain/character/character-inventory-model";
+import { createCharacter } from "../../src/domain/character/create-character";
+import { projectAbilityScore, projectInventory } from "../../src/domain/character/character-projection";
+import { recoverInventoryItem, resetInventoryItemResources, setInventoryItemAttuned, setInventoryItemEquipped, upsertInventoryItem, useInventoryFeature, inventoryItemsCanStack } from "../../src/domain/character/character-inventory";
+import { castCharacterSpell } from "../../src/domain/character/character-spells";
+import { PHB_SPELLS } from "../../src/domain/character/phb-spells";
+import { serializeEquipmentContentPayload, serializeMonsterContentPayload } from "../../src/domain/content/content-payload";
+import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
+import type { JsonObject } from "../../src/shared/json";
+const time = "2026-10-18T12:00:00.000Z";
+const itemId = "inv_11111111111111111111111111111111";
+const char = () => createCharacter("chr_11111111111111111111111111111111", "Prueba", time);
+const definition = (name: string) => EquipmentDefinitionDraftSchema.parse(reviewed.find((d) => d.name === name));
+const raw = (overrides: JsonObject = {}): JsonObject => ({ id: itemId, order: 0, group: "Mochila", name: "Nombre anterior", quantity: 1, unitWeight: 1, cost: { quantity: 37, unit: "gp" }, category: "adventuring-gear", description: "Historia personal", properties: [], equipped: false, attuned: false, requiresAttunement: false, usable: false, consumable: false, charges: null, weapon: null, armor: null, bonuses: [], features: [], effect: { description: "", active: false }, catalog: null, ...overrides });
+const options = (revision: number) => ({ expectedRevision: revision, updatedAt: time });
+describe("reviewed equipment in active inventory and commerce", () => {
+  it("preserves a legacy Defense style without doubling it and removes it with the armor", () => {
+    const character = char(); character.identity.className = "Guerrero";
+    const item = bindReviewedEquipment(raw({ equipped: true }), definition("Armadura de cuero tachonado +1")); character.inventory = [item];
+    character.traits = [{ id: "trg_11111111111111111111111111111111", order: 0, title: "Rasgos", collapsed: false, traits: [{ id: "trt_11111111111111111111111111111111", order: 0, name: "Estilo de lucha: Defensa", description: "Mientras llevas armadura, +1 a la CA.", collapsed: true, effect: { active: false, description: "" }, uses: { used: 0, maximum: 0, reset: "none" }, adjustment: { value: 1, ability: "NONE", category: "combatStats", subcategory: "AC", advantage: false, disadvantage: false, applyToDerived: false } }] }];
+    expect(projectInventory(character).calculatedArmorClass).toBe(14);
+    character.traits[0]!.traits[0]!.adjustment!.applyToDerived = true;
+    expect(projectInventory(character).calculatedArmorClass).toBe(14);
+    item.equipped = false; expect(projectInventory(character).calculatedArmorClass).toBe(10);
+  });
+  it("keeps identity, price, quantity and personal prose with an exact original", () => {
+    const original = raw({ quantity: 7, oldUnknownField: { clues: [false, 0, ""] } });
+    const item = bindReviewedEquipment(original, definition("Daga"));
+    expect(item).toMatchObject({ id: itemId, quantity: 7, cost: { quantity: 37, unit: "gp" }, equipped: false, attuned: false });
+    expect(item.rules!.original).toEqual(original);
+    expect(item.rules!.personalDescription).toBe("Historia personal");
+    expect(bindReviewedEquipment(JSON.parse(JSON.stringify(item)), definition("Daga"))).toEqual(item);
+  });
+  it("does not double-count a magical armor bonus and preserves a personal bonus", () => {
+    const source = definition("Armadura de cuero tachonado +1");
+    const item = bindReviewedEquipment(raw({ bonuses: [{ category: "combatStats", key: "AC", value: 1, valueSource: null, advantage: false, disadvantage: false }], equipped: true }), source);
+    const c = char(); c.abilities.dexterity = 16; c.inventory = [item];
+    expect(projectInventory(c).calculatedArmorClass).toBe(16);
+    const shield = bindReviewedEquipment(raw({ bonuses: [{ category: "combatStats", key: "AC", value: 2, valueSource: null, advantage: false, disadvantage: false }] }), definition("Escudo +1"));
+    expect(shield.bonuses).toHaveLength(1); expect(shield.bonuses[0]!.value).toBe(2);
+    expect(shield.rules!.pending.join(" ")).toContain("bono propio");
+  });
+  it("applies minimum 19 only while attuned, updates HP and never lowers a higher Constitution", () => {
+    let c = char(); c.identity.level = 6; c.abilities.constitution = 13; c.combat.hitPoints = { current: 10, maximum: 20, temporary: 0 };
+    c.inventory = [bindReviewedEquipment(raw({ equipped: true }), definition("Amuleto de salud"))];
+    expect(projectAbilityScore(c, "constitution")).toBe(13);
+    c = setInventoryItemAttuned(c, itemId, true, options(c.revision));
+    expect(projectAbilityScore(c, "constitution")).toBe(19); expect(c.combat.hitPoints).toMatchObject({ current: 28, maximum: 38 });
+    c = setInventoryItemEquipped(c, itemId, false, options(c.revision));
+    expect(projectAbilityScore(c, "constitution")).toBe(13); expect(c.combat.hitPoints).toMatchObject({ current: 10, maximum: 20 });
+    c.abilities.constitution = 22; c.inventory[0]!.equipped = true; c.inventory[0]!.attuned = true;
+    expect(projectAbilityScore(c, "constitution")).toBe(22);
+  });
+  it("spends consumables through their capability without deleting unrelated zero-quantity records", () => {
+    let c = char(); const item = bindReviewedEquipment(raw({ quantity: 2 }), definition("Poción de curación"));
+    const sentinel = CharacterInventoryItemV2Schema.parse({ ...raw(), id: "inv_22222222222222222222222222222222", quantity: 0 });
+    c.inventory = [item, sentinel];
+    c = useInventoryFeature(c, itemId, item.features[0]!.id, options(c.revision));
+    expect(c.inventory[0]!.quantity).toBe(1); expect(c.inventory).toHaveLength(2);
+    c = useInventoryFeature(c, itemId, item.features[0]!.id, options(c.revision));
+    expect(c.inventory).toEqual([sentinel]);
+  });
+  it("preserves spent charges and uses rolled dawn recovery instead of a full refill", () => {
+    const staff = bindReviewedEquipment(raw({ charges: { current: 0, maximum: 0, reset: "" } }), definition("Bastón de marchitamiento"));
+    expect(staff.charges).toMatchObject({ current: 0, maximum: 3, reset: "manual" });
+    expect(resetInventoryItemResources(staff, "dawn").charges!.current).toBe(0);
+    let c = char(); c.inventory = [staff];
+    expect(() => recoverInventoryItem(c,itemId,"dawn",4,options(c.revision))).toThrow("1d3");
+    c = recoverInventoryItem(c,itemId,"dawn",2,options(c.revision)); expect(c.inventory[0]!.charges!.current).toBe(2);
+    expect(() => recoverInventoryItem(c,itemId,"long-rest",3,options(c.revision))).toThrow("evento");
+    expect(inventoryItemsCanStack(staff, { ...staff, id: "inv_22222222222222222222222222222222" })).toBe(false);
+  });
+  it("adds the cloak slot to the real spell UI pool and preserves its spending across removal and transfer", () => {
+    let c = char(); c.spellcasting.slots["1"] = { maximum: 1, used: 1 };
+    c.inventory = [bindReviewedEquipment(raw({ equipped: true }), EquipmentDefinitionDraftSchema.parse(cloak))];
+    c.spellcasting.spells = [{ id: "spl_11111111111111111111111111111111", order: 0, name: "Proyectil mágico", level: 1, prepared: true, definition: PHB_SPELLS["magic-missile"]!, casting: null, effect: { description: "", active: false } }];
+    expect(projectEquipmentSpellSlots(c,1)).toEqual({ maximum: 2, used: 1 });
+    c = castCharacterSpell(c,c.spellcasting.spells[0]!.id,1,options(c.revision));
+    expect(projectEquipmentSpellSlots(c,1)).toEqual({ maximum: 2, used: 2 });
+    c = setInventoryItemEquipped(c,itemId,false,options(c.revision));
+    c = setInventoryItemEquipped(c,itemId,true,options(c.revision));
+    expect(projectEquipmentSpellSlots(c,1)).toEqual({ maximum: 2, used: 2 });
+    const other = char(); other.spellcasting.slots["1"] = { maximum: 0, used: 0 }; other.inventory = structuredClone(c.inventory);
+    expect(projectEquipmentSpellSlots(other,1)).toEqual({ maximum: 1, used: 1 });
+    expect(projectEquipmentSpellSlots({ ...other, inventory: [resetInventoryItemResources(other.inventory[0]!,"short-rest",other)] },1).used).toBe(1);
+    expect(projectEquipmentSpellSlots({ ...other, inventory: [resetInventoryItemResources(other.inventory[0]!,"long-rest",other)] },1).used).toBe(0);
+  });
+  it("retains complete rules through catalog and NPC save/reload, and through a legacy editor", () => {
+    const item = bindReviewedEquipment(raw(), definition("Daga"));
+    const { id: _id, order: _order, group: _group, ...draft } = item;
+    const loaded = normalizeEquipmentDefinition(serializeEquipmentContentPayload({ ...draft, rarity: "none" }));
+    expect(loaded.rules).toEqual(item.rules);
+    const monster = normalizeMonsterDefinition({ name: "Comerciante", id: "npc", inventory: [item] });
+    expect(serializeMonsterContentPayload(monster).inventory).toMatchObject([{ rules: item.rules }]);
+    const c = char(); c.inventory = [item]; const { rules: _rules, ...legacyDraft } = item;
+    expect(upsertInventoryItem(c,legacyDraft,options(c.revision)).inventory[0]!.rules).toEqual(item.rules);
+  });
+});

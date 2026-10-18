@@ -1,0 +1,947 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1287,
+  "archiveSha256": "6560c29e72cab2ad982321e2e93b41fd486b7d306b80270137f01c387d4ddc47",
+  "rows": [
+    {
+      "key": "official:equipment:es:093e25cc68fc731ffea7ad42",
+      "name": "Armadura Mortis",
+      "sha256": "e7947e5d959704b8d2c8e0ad143cf01e05759b9fb69423b0ef85490a7ced5c7a",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:11b3762d05502efd347d1799",
+      "name": "Armadura de Invulnerabilidad (Cuero)",
+      "sha256": "1f98d5ebd42b07de1b211b0b73b410d5e312d34f60604b379e878e2f4b20cba2",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:165c06eba671094a9c4bcf5b",
+      "name": "Armadura de Invulnerabilidad (Acolchada)",
+      "sha256": "a2504066a02e6582e4e97d101e61c4c911490834067c89866b38ab979c808afa",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:3b388b3c27ba18c34a4b26e6",
+      "name": "Daga que regresa",
+      "sha256": "64aafc3c5a0f5ac594e9e6fc134793e6365a0dcfa20f18cba96013cc0bbb4b7d",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:5edb865fbeda1561a0ebc201",
+      "name": "Red Viciosa",
+      "sha256": "bdacbd1a1a7e3989ea5ccdc1f4bebf16f6271de055015bd3bba5360232eddbdb",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:78ea275af54bf3abc9e5b449",
+      "name": "Armadura de Invulnerabilidad (cota de malla)",
+      "sha256": "db7afb5c9ec4b1027db839c134eacc0f9f477fe10e14c86e8e0b6bc6ae62f11f",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:96423b15cf42c0cc4d4bdb38",
+      "name": "Alabarda berserker",
+      "sha256": "add0622973f11a15f34b65cdb4fa394caac02b00039c5f132edbb25bc901e778",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:9c0b2485bb8e9c16f412c775",
+      "name": "Armadura de Vulnerabilidad (Cuero Tachonado)",
+      "sha256": "6a40eab42d61658c3a68a42d0f2f3890f93a6f91f0a35495544eae8b75ab9710",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:a159f087514e34df02a92cc1",
+      "name": "Espada Corta Vorpal",
+      "sha256": "5b13cdeea7e5c7b7ad48187a53738376d1683f323c88040cdf7c83700a5e7c28",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:a1f03e679b7b344f03909718",
+      "name": "Armadura de Invulnerabilidad (Ocultar)",
+      "sha256": "dcc34d5f70a5d8d85e6c1dce8fbc905e283c76aa74314e9daae038596c68d5d0",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:a4b52e8dc344d05be4fab602",
+      "name": "Armadura de Vulnerabilidad (Cota de Malla)",
+      "sha256": "0291e4e61850451c9f960c5e239d6347516a96bc3b0b864989deaa6ba98246f3",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:a4bb31770f018b43ba0417a9",
+      "name": "Cinturón de Fuerza de Gigante",
+      "sha256": "bc0bc0d3d57d92cbf8e46294aa58c5f30a6b6f451a19b4e9668a970dbc62de18",
+      "targetKeys": [
+        "official:equipment:es:0c93e794740cce5c109176b1",
+        "official:equipment:es:0cf8cee92980c8a5ed1a781b",
+        "official:equipment:es:22c9edf3abf6378363d33d2d",
+        "official:equipment:es:703f79dcdde75b6b4ba33f5d",
+        "official:equipment:es:8a9a75437af1c1c8f77ef3c5",
+        "official:equipment:es:f0dafbf516ee2a10110fa094"
+      ],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:b3b525789bef0a0562bffe54",
+      "name": "Varita del fastidio",
+      "sha256": "f11479eaea81eaf09546155b7ad69381ba52b61f0abe1731f457fe0397cb9057",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:b7803d81192c972fce31d6c9",
+      "name": "Espada Corta del Filo",
+      "sha256": "7608c9e296d1a0e4062e805b9d9210664cb3ebef779723294518a35eff727abe",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:bef8a190f7d416d1e0bf3007",
+      "name": "Armadura de Vulnerabilidad (Acolchada)",
+      "sha256": "9c52465ee36087a92f1c4ed81587e3c0f501a02f3828a6c2003f62bf5f77cabd",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:bf9d4777f6761e30002e10a6",
+      "name": "Armadura de Vulnerabilidad (Ocultar)",
+      "sha256": "9b5c81dd988f54ff61a3968c8a982e83223357d2faeecbea54dc7eea38b7adbc",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:d222a78fa718fe92c426ab08",
+      "name": "Armadura de Invulnerabilidad (Cuero Tachonado)",
+      "sha256": "5fde1e81701ea66845401479ed747672689dead971870ebc465fce470c5a1ce3",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:d691c1d7187e8dbbc9c58d0e",
+      "name": "Túnica del Paso de Invierno",
+      "sha256": "cfe6db9e52dab0da85a2d4059cc9cc6450d548330550263c46b156397a5180e3",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:de73b6277de67bf8e74faf46",
+      "name": "Armadura de Vulnerabilidad (Cuero)",
+      "sha256": "15af5862661a2a36b620eb4943b8500685e7e5c623a20e4f1abfa362dbfb64f9",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:es:e6ee8011b040eaf1b2afa84a",
+      "name": "Amuleto del Explorador",
+      "sha256": "1a6beef48cc003eaf72d50c214cd5b44bfaf669b148565acbaf97817af0e2741",
+      "targetKeys": [],
+      "reason": "Retirada explícita del GM o variante inválida ya resuelta; la fila estaba dada de baja.",
+      "evidence": "EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md; EQUIPMENT_CAMPAIGN_RESOLUTION_2026-10-18.md"
+    },
+    {
+      "key": "official:equipment:eng:021d56fc8193b2338c2d6970",
+      "name": "Abacus",
+      "sha256": "89c916239f5bd03cbf28cd599f9c2507e1c6f2d8fd494db576b8ba0f11f7e9b0",
+      "targetKeys": [
+        "official:equipment:es:f88e54bf8b39875147baef8e"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:f88e54bf8b39875147baef8e"
+    },
+    {
+      "key": "official:equipment:eng:055d14a34be7c1caab6708da",
+      "name": "Scale Mail",
+      "sha256": "948f10aa3c2ad6d573234faf80258d1fe79eb9f9d663cbbf5233602587f5bd4c",
+      "targetKeys": [
+        "official:equipment:es:957990f620d129d77c5255ce"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:957990f620d129d77c5255ce"
+    },
+    {
+      "key": "official:equipment:eng:0d92d7081f0a2b17d93d1b1f",
+      "name": "Returning Dagger",
+      "sha256": "9dca70b088a3769e19ecf716e8e7b0e7f9a826f0e503f0d262f7b809923eff0e",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:3b388b3c27ba18c34a4b26e6"
+    },
+    {
+      "key": "official:equipment:eng:0d9810a810dc9280aac5a77b",
+      "name": "Clothes, traveler's",
+      "sha256": "13df8e38b7c9e21fddb43804657d88ebc4c2dec5f727a9d2a058a1952ed996dc",
+      "targetKeys": [
+        "official:equipment:es:183d3ef114f14c0156ed80d1"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:183d3ef114f14c0156ed80d1"
+    },
+    {
+      "key": "official:equipment:eng:0f7ef0b58ca0bd203f43bd09",
+      "name": "Robe of the Winterstep",
+      "sha256": "7da2751dd83198e2fa8074ee5ad02d130fec63dd56dce32263303883a40acaad",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:d691c1d7187e8dbbc9c58d0e"
+    },
+    {
+      "key": "official:equipment:eng:11cf156e3451b55440b4879d",
+      "name": "Berserker Halberd",
+      "sha256": "a014cbaeb24a0fe5cbaa8bf9023f652bce1d8d680a40f684949f7ddf56581577",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:96423b15cf42c0cc4d4bdb38"
+    },
+    {
+      "key": "official:equipment:eng:151eee1e97b2963363e422ef",
+      "name": "Armor of Vulnerability (Studded Leather)",
+      "sha256": "0f166854552e3a81f3d23fe9bbe62b90327acd53485416bc1966168852291627",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:9c0b2485bb8e9c16f412c775"
+    },
+    {
+      "key": "official:equipment:eng:168406477a39433816888035",
+      "name": "Saddle, Riding",
+      "sha256": "4feea33f1fb0093e84d6926a6dd27deec3fc4667a8a11fd5174de9da30ebdb2b",
+      "targetKeys": [
+        "official:equipment:es:122a5b42fc5eb1a251f32b5f"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:122a5b42fc5eb1a251f32b5f"
+    },
+    {
+      "key": "official:equipment:eng:213d69d687005be134a35ca0",
+      "name": "Basket",
+      "sha256": "25d577d18f60e7d3ec650c359f38dae76d44a3f7a6d7fa701618a9e20459627a",
+      "targetKeys": [
+        "official:equipment:es:d4a4618e5fe0191cec822e5d"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:d4a4618e5fe0191cec822e5d"
+    },
+    {
+      "key": "official:equipment:eng:2393fd95ba71782bf68279eb",
+      "name": "Pick, miner's",
+      "sha256": "ff7f3f70ffb6f39c7be673c97707be06f499bd1732a5fa8529c0ae092bc18284",
+      "targetKeys": [
+        "official:equipment:es:c1b3267aa5aef117df0cbb5c"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:c1b3267aa5aef117df0cbb5c"
+    },
+    {
+      "key": "official:equipment:eng:2901cea887697c42ffe78e5e",
+      "name": "Half Plate Armor",
+      "sha256": "4377717a1b8562902740b8430d4d30c9a3621002468fdd6179ef725575d2b630",
+      "targetKeys": [
+        "official:equipment:es:61efb0ab40e6bac2ce56ea58"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:61efb0ab40e6bac2ce56ea58"
+    },
+    {
+      "key": "official:equipment:eng:2a92bddcb7627afcc9d641ad",
+      "name": "Robes",
+      "sha256": "fdbe3aeacc254be1e38a2ef89c2e5d13f9d509ef3d15535bf7cd98aaf7969d07",
+      "targetKeys": [
+        "official:equipment:es:afb5b580c85a20384fbf97b5"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:afb5b580c85a20384fbf97b5"
+    },
+    {
+      "key": "official:equipment:eng:2f7ce948a8308cadd516d841",
+      "name": "Bedroll",
+      "sha256": "89d64b3688e18918ce03be9571b3c4b074e11931a43ca67c831bf5866e6b3103",
+      "targetKeys": [
+        "official:equipment:es:3c51a3c091c8f10097310716"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:3c51a3c091c8f10097310716"
+    },
+    {
+      "key": "official:equipment:eng:3083f7ce383d29e3bbe528c9",
+      "name": "Hourglass",
+      "sha256": "8e502cbb33d629c73b6491b44cb40e86957037a043dd4b0aaeee4fc9fe6d1ea0",
+      "targetKeys": [
+        "official:equipment:es:6b4e8a7ee89714ac92465871"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:6b4e8a7ee89714ac92465871"
+    },
+    {
+      "key": "official:equipment:eng:375ba2811b0995b86f2c2db6",
+      "name": "Mortis Armour",
+      "sha256": "b59d2de3312bdb61afaff010faf416697d2c4c30010fabbfb6f518c02604d108",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:093e25cc68fc731ffea7ad42"
+    },
+    {
+      "key": "official:equipment:eng:3a04a6696d3e5831353eac59",
+      "name": "Shovel",
+      "sha256": "265c3b8d1b0ff464a7e63c69948e6de9b893c1964cfe7340e8c4d66e80015746",
+      "targetKeys": [
+        "official:equipment:es:0b7e57abff9195ecec3e5f13"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:0b7e57abff9195ecec3e5f13"
+    },
+    {
+      "key": "official:equipment:eng:3cefa4a257312039d1712d62",
+      "name": "Pole (10-foot)",
+      "sha256": "ef1fd18602e83161e5259a5b1e9dddfe214c393f34e38ec3e6af7956a16fef09",
+      "targetKeys": [
+        "official:equipment:es:1fafadc4b40af398980615c2"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:1fafadc4b40af398980615c2"
+    },
+    {
+      "key": "official:equipment:eng:3f56584c0b7816fefaa8bcce",
+      "name": "Blanket",
+      "sha256": "2bd5c4c1022d638f4dcdd7c180751ae0a1cb8bdc739f7e5c8f417f0efe24ba59",
+      "targetKeys": [
+        "official:equipment:es:ab11ee9a5facf012c567cb18"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:ab11ee9a5facf012c567cb18"
+    },
+    {
+      "key": "official:equipment:eng:4199218a08b56c9d05bdac2e",
+      "name": "Wagon",
+      "sha256": "c4e248540c763711b4aca19827e2354c6c00166dfc7e0b9bf79cef0c89650777",
+      "targetKeys": [
+        "official:equipment:es:5dfd4a037c647bbe917932a0"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:5dfd4a037c647bbe917932a0"
+    },
+    {
+      "key": "official:equipment:eng:450741b322287718752b8a48",
+      "name": "Clothes, common",
+      "sha256": "aa746d04cc37d013576db95c5797e0aff56f9af44c168f8236b8c07696e19ff1",
+      "targetKeys": [
+        "official:equipment:es:460da7e8ff13313e9f1f24ea"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:460da7e8ff13313e9f1f24ea"
+    },
+    {
+      "key": "official:equipment:eng:48fe60582750d9c456f98ef9",
+      "name": "Chariot",
+      "sha256": "d9386f84f9d1b6acd4e46f8db51e6d71177c811a5c0fc7455c1feaf76770fbe7",
+      "targetKeys": [
+        "official:equipment:es:28f864c07b796f73e541b992"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:28f864c07b796f73e541b992"
+    },
+    {
+      "key": "official:equipment:eng:5017604e8c8cf26b7653f80e",
+      "name": "Armor of Invulnerability (Leather)",
+      "sha256": "553cd782b83ead04e08b0514575a42d187c2d6a02b615991586514ac6ccf99fd",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:11b3762d05502efd347d1799"
+    },
+    {
+      "key": "official:equipment:eng:6201e0551c73ab9608c5eddf",
+      "name": "Scout's Amulet",
+      "sha256": "b703d0cdacf458266e5df394a7ee072500793fee0ddf29c7288afab9dd4afedf",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:e6ee8011b040eaf1b2afa84a"
+    },
+    {
+      "key": "official:equipment:eng:699e2b4111108a46c99119b2",
+      "name": "Armor of Vulnerability (Hide)",
+      "sha256": "9e50d77eba597c9c69ecc3aa02b6916fab7ebc5e8af444e3c2b5fd91cf007b08",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:bf9d4777f6761e30002e10a6"
+    },
+    {
+      "key": "official:equipment:eng:69d30e0eadaecaddf6daa5ae",
+      "name": "Chest",
+      "sha256": "053818c9f39b01ca4e06d281257386b7f79f636b95fe89736b77e68f5ad75912",
+      "targetKeys": [
+        "official:equipment:es:363de1b1a70fdde0f95493dd"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:363de1b1a70fdde0f95493dd"
+    },
+    {
+      "key": "official:equipment:eng:6a0488c334e0288b184d0491",
+      "name": "Bit and bridle",
+      "sha256": "dfdb5ad79f882da9a2276a780aa7e60b2ed1970ee8604f82b917adf4657cf724",
+      "targetKeys": [
+        "official:equipment:es:7bd754729288ef8f0a649414"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:7bd754729288ef8f0a649414"
+    },
+    {
+      "key": "official:equipment:eng:6b87a63b5bd22326e3f2ac38",
+      "name": "Mirror, steel",
+      "sha256": "ce647d30a2796a6f198e633a5cb6168c0c5543240415910f628dac4e2e4cbe04",
+      "targetKeys": [
+        "official:equipment:es:1ac6b2061c7994bc5187c113"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:1ac6b2061c7994bc5187c113"
+    },
+    {
+      "key": "official:equipment:eng:7d6f278fcb3806ebc504a04e",
+      "name": "Armor of Vulnerability (Leather)",
+      "sha256": "2b875cc365c0f18917bf4ddc84c9da8ecbc9e16b97be3b1f17642a1d22ddbed0",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:de73b6277de67bf8e74faf46"
+    },
+    {
+      "key": "official:equipment:eng:80f6f5d007ce36ee3fa8caf4",
+      "name": "Flask or tankard",
+      "sha256": "26ac910fecfa7d8b0c20709995704d1b6e6f528c7e3395ab195008f66c3cdb9d",
+      "targetKeys": [
+        "official:equipment:es:f02c595d294730852f45ca1a"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:f02c595d294730852f45ca1a"
+    },
+    {
+      "key": "official:equipment:eng:8401ad902740a08ac183edb9",
+      "name": "Armor of Vulnerability (Padded)",
+      "sha256": "078e938e90ef0c146ce02b8cfeb74b7f31a48ca5e59fcbc9b26a476473ff464a",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:bef8a190f7d416d1e0bf3007"
+    },
+    {
+      "key": "official:equipment:eng:8617eacef08b5edb1a61dded",
+      "name": "Waterskin",
+      "sha256": "94095dfa3a5b253576e6bde4bc7d54c84c09940ffd83110b99b13d4952f5f1a6",
+      "targetKeys": [
+        "official:equipment:es:240e4ce5f914087a513da6a2"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:240e4ce5f914087a513da6a2"
+    },
+    {
+      "key": "official:equipment:eng:8905ba5ca492031a82e42c99",
+      "name": "Bottle, glass",
+      "sha256": "86c615566b0bc1aa0c51dea7471c2391cb6669913e20951663c9c9a1e71c5577",
+      "targetKeys": [
+        "official:equipment:es:bd00cc0985a3ff7fd512cbed"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:bd00cc0985a3ff7fd512cbed"
+    },
+    {
+      "key": "official:equipment:eng:8da5e526dacd6a7ea0a80ac5",
+      "name": "Whetstone",
+      "sha256": "ea462dea7a68cd3fc794fe6479a70ab1ce33cba8b98d80f8c7ae32edca0489f1",
+      "targetKeys": [
+        "official:equipment:es:45377572a3dc72ed495f3e2e"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:45377572a3dc72ed495f3e2e"
+    },
+    {
+      "key": "official:equipment:eng:8f635e606f8377686a9a7090",
+      "name": "Vorpal Shortsword",
+      "sha256": "d35086d5e6d2d9da8ccafc2da8aeb4ff2f35e59d201494d2c770b19a0651270d",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:a159f087514e34df02a92cc1"
+    },
+    {
+      "key": "official:equipment:eng:951ba0691fbc47aec5fdab5b",
+      "name": "Piton",
+      "sha256": "943b6151ac194489745a273cf8c5cce0abc0f4e861ddb4bf6437bfca07048c39",
+      "targetKeys": [
+        "official:equipment:es:5ee19ca247f4fd7289aab395"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:5ee19ca247f4fd7289aab395"
+    },
+    {
+      "key": "official:equipment:eng:973ba1206044fb2003fcc4bc",
+      "name": "Hammer, sledge",
+      "sha256": "4de1b8cda047dba9c8066b04864d5c5d7474c67c1b5369588dc2a4e85dd7268b",
+      "targetKeys": [
+        "official:equipment:es:f43e6f73e06efd6fad6092ef"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:f43e6f73e06efd6fad6092ef"
+    },
+    {
+      "key": "official:equipment:eng:9ccfa8f8a197f837e0845e0a",
+      "name": "Splint Armor",
+      "sha256": "e7cde31872d1efbc6530a3677ea6345796346f9bfc35556c9e4ebac156ea2179",
+      "targetKeys": [
+        "official:equipment:es:5ba550c447e657d6385ce5a3"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:5ba550c447e657d6385ce5a3"
+    },
+    {
+      "key": "official:equipment:eng:9e64fafd5cae08bd63a14482",
+      "name": "Ring Mail",
+      "sha256": "f8d0bcb8cd1f0cc5dfa3104fa841ede068d5ca56c8eda144c5517a8314a2ba90",
+      "targetKeys": [
+        "official:equipment:es:ca890837c10edfc6c4f484bb"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:ca890837c10edfc6c4f484bb"
+    },
+    {
+      "key": "official:equipment:eng:9ea171db843775e1544b6ceb",
+      "name": "Grappling hook",
+      "sha256": "14d165574dfa1779edcdb0f324fa6ba792ec750ed928696b4ea9d02f3533e791",
+      "targetKeys": [
+        "official:equipment:es:47a6d04d7d3433823f7e134c"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:47a6d04d7d3433823f7e134c"
+    },
+    {
+      "key": "official:equipment:eng:9fbf405e807737a57f67b19b",
+      "name": "Bucket",
+      "sha256": "6fa1f6da0d297ede35a9e840ece04941b37c236e7d060848c3cccee8daeeb12a",
+      "targetKeys": [
+        "official:equipment:es:b681ac481c11572110f2f916"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:b681ac481c11572110f2f916"
+    },
+    {
+      "key": "official:equipment:eng:a2de903ec2c8852b0bf5bf4a",
+      "name": "Cart",
+      "sha256": "e06662518ad56eceb85493aec28e63f25dac511bb5fcedb63966a6b644948d48",
+      "targetKeys": [
+        "official:equipment:es:537b7abf6ef905c67da19d09"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:537b7abf6ef905c67da19d09"
+    },
+    {
+      "key": "official:equipment:eng:a35da56210705146e4defaa7",
+      "name": "Armor of Vulnerability (Chain Mail)",
+      "sha256": "2f13f769b928f01a979be08ba4bf219c28db9e0439506cb4dd721d19b32fe664",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:a4b52e8dc344d05be4fab602"
+    },
+    {
+      "key": "official:equipment:eng:a7590a2029da279800f06857",
+      "name": "Belt of Giant Strength",
+      "sha256": "d9288c45ba47ad3fdf16ff4b606284b7850d298f5ade0a3b58736c36e0a547a9",
+      "targetKeys": [
+        "official:equipment:es:0c93e794740cce5c109176b1",
+        "official:equipment:es:0cf8cee92980c8a5ed1a781b",
+        "official:equipment:es:22c9edf3abf6378363d33d2d",
+        "official:equipment:es:703f79dcdde75b6b4ba33f5d",
+        "official:equipment:es:8a9a75437af1c1c8f77ef3c5",
+        "official:equipment:es:f0dafbf516ee2a10110fa094"
+      ],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:a4bb31770f018b43ba0417a9"
+    },
+    {
+      "key": "official:equipment:eng:ad358774a5ca9ac5439821f5",
+      "name": "Hammer",
+      "sha256": "7a46c3b18cd465c838e1968c85b24d244ba985888becd6431478472d58b632a2",
+      "targetKeys": [
+        "official:equipment:es:8c43510ebccc077670038abb"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:8c43510ebccc077670038abb"
+    },
+    {
+      "key": "official:equipment:eng:b57c2773e76bd65008a8959a",
+      "name": "Barrel",
+      "sha256": "2dd095719af17f0791dd7ea07d4401883793340a6ae6bbdbc4ce14ceba588ed8",
+      "targetKeys": [
+        "official:equipment:es:796d69885dabe07b8511c0fc"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:796d69885dabe07b8511c0fc"
+    },
+    {
+      "key": "official:equipment:eng:b745af5cb80bfdce60e98cad",
+      "name": "Saddlebags",
+      "sha256": "a5fa3d727d406ea778599b64f32280784000145407fe1bf3427fbd233a101bc9",
+      "targetKeys": [
+        "official:equipment:es:86cffac954a9cc099e37eccf"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:86cffac954a9cc099e37eccf"
+    },
+    {
+      "key": "official:equipment:eng:c260f61196e86f739fbc0d84",
+      "name": "Armor of Invulnerability (Padded)",
+      "sha256": "e80ff158e577b91dba8767b67da7979ed85241eab994a2b345e86b201d69d08e",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:165c06eba671094a9c4bcf5b"
+    },
+    {
+      "key": "official:equipment:eng:c692ea9fb36151e7ad8edad7",
+      "name": "Shortsword of Sharpness",
+      "sha256": "e750fd122060ae8ccfc2f71c2132135af1387a9789e5196375ca886ac4a98c7e",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:b7803d81192c972fce31d6c9"
+    },
+    {
+      "key": "official:equipment:eng:caf88e3b3ef28671f79b7cd2",
+      "name": "Ladder (10-foot)",
+      "sha256": "a70dec01a8e150c7ff2b83b9e03a651685211d50f09365df769e32458c981410",
+      "targetKeys": [
+        "official:equipment:es:ba07dd39b3d643f4a0b621d4"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:ba07dd39b3d643f4a0b621d4"
+    },
+    {
+      "key": "official:equipment:eng:cb75148011106ae482b2109b",
+      "name": "Leather Armor",
+      "sha256": "4258a2d927887b22fe8fe6092ef57e645a0616e6f4a46a5d7020a86ef1ed2423",
+      "targetKeys": [
+        "official:equipment:es:5f377fb9866d89e509c1b12e"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:5f377fb9866d89e509c1b12e"
+    },
+    {
+      "key": "official:equipment:eng:cc7525ae488993c1256f609c",
+      "name": "Chain Mail",
+      "sha256": "4fb375328bb555631daf02d67f6c91a43baf04cac114a9ab0c8e97373b53cb5e",
+      "targetKeys": [
+        "official:equipment:es:058ac9eece7394605fb4a6f5"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:058ac9eece7394605fb4a6f5"
+    },
+    {
+      "key": "official:equipment:eng:cdbabece15e8f813ae759a4b",
+      "name": "Padded Armor",
+      "sha256": "e4d66582d0d77b753b69e1ddff89d231b0885c0f834d1f63004fc5765f7e98b4",
+      "targetKeys": [
+        "official:equipment:es:6f85e13f9ea355318acc2dc4"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:6f85e13f9ea355318acc2dc4"
+    },
+    {
+      "key": "official:equipment:eng:d241c1b44b04e768fd12fdc0",
+      "name": "Armor of Invulnerability (Chain Mail)",
+      "sha256": "f94aa031850b219342e27d96e7632acd9252d122fe76ec59128f8c2fea93c965",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:78ea275af54bf3abc9e5b449"
+    },
+    {
+      "key": "official:equipment:eng:d2aef6857783e0e6c70b0878",
+      "name": "Clothes, fine",
+      "sha256": "4a59f762da857788dbe5c9defc8594e2b25526ed5b0186c147fd1303fca9cd98",
+      "targetKeys": [
+        "official:equipment:es:efcf9190471450b926304709"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:efcf9190471450b926304709"
+    },
+    {
+      "key": "official:equipment:eng:d2cb1c143aa44a524678d4ec",
+      "name": "Clothes, costume",
+      "sha256": "a4b30bca4dc63277f99facfba622d6d62c5f594f3e72f741126b0d8ef4110538",
+      "targetKeys": [
+        "official:equipment:es:310770d6596b5e33da0fc013"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:310770d6596b5e33da0fc013"
+    },
+    {
+      "key": "official:equipment:eng:d6887c122c771e461ab08257",
+      "name": "Vicious Net",
+      "sha256": "060fc25225a361265ca43b2fa8dc1f8e2f3b346b67b44f7bf77ef7f59298bb16",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:5edb865fbeda1561a0ebc201"
+    },
+    {
+      "key": "official:equipment:eng:dacd534cd2ace2f81a816c16",
+      "name": "Studded Leather Armor",
+      "sha256": "3b52f7bf8b518675d4cc3f8c5ba58cdf6096782c1b1f677627789a86bbf34323",
+      "targetKeys": [
+        "official:equipment:es:0970abfcde2f28aef7323927"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:0970abfcde2f28aef7323927"
+    },
+    {
+      "key": "official:equipment:eng:dec3e10ccb11582bafd1a8ad",
+      "name": "Hide Armor",
+      "sha256": "2140ae075c7cfe4ff92b24886ed0119e0c9475977b3642b6d058a377b2023907",
+      "targetKeys": [
+        "official:equipment:es:8ac40d4c8ade25f6b749fc1a"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:8ac40d4c8ade25f6b749fc1a"
+    },
+    {
+      "key": "official:equipment:eng:e1c2962db00056381a1af4e0",
+      "name": "Chain Shirt",
+      "sha256": "829f0edc699cbd486046296109f3c7e6d2a466a56f9c61e49364f2d5ae76109b",
+      "targetKeys": [
+        "official:equipment:es:1227d4d1b1c71f987ade5f63"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:1227d4d1b1c71f987ade5f63"
+    },
+    {
+      "key": "official:equipment:eng:e3ae46910f75b37f56f0b96f",
+      "name": "Pot, iron",
+      "sha256": "c2046df4410399c71bf62fcaeb7a5b1465ccc92765a99a50b2961a6f92775b09",
+      "targetKeys": [
+        "official:equipment:es:c0ed13a29aca1414ae15f3b9"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:c0ed13a29aca1414ae15f3b9"
+    },
+    {
+      "key": "official:equipment:eng:e4246c3f264b621761344077",
+      "name": "Sack",
+      "sha256": "2f80241bbae876537b0e50a1214f817246a2f398d2f612c6217d281637e0a9cb",
+      "targetKeys": [
+        "official:equipment:es:a6a58ebb5f291eae14e072cd"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:a6a58ebb5f291eae14e072cd"
+    },
+    {
+      "key": "official:equipment:eng:ead40a53806141d3ebdcf265",
+      "name": "Armor of Invulnerability (Hide)",
+      "sha256": "efd11e3418844c05bf0734e976c0b17b7ef0197bf8fcea83df3ff5d5eaab6eeb",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:a1f03e679b7b344f03909718"
+    },
+    {
+      "key": "official:equipment:eng:ec0d0e5c81b4b4e48eeab95e",
+      "name": "Jug or pitcher",
+      "sha256": "824407293f6adeeaeab35693a5e665f85a1571e833ce9168dfea2094d645a72a",
+      "targetKeys": [
+        "official:equipment:es:d5dc5f1b27ae2611d038bfd6"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:d5dc5f1b27ae2611d038bfd6"
+    },
+    {
+      "key": "official:equipment:eng:edb04497e6cb143dc60d6af5",
+      "name": "Saddle, Pack",
+      "sha256": "5b7faffde01364414019683ae8f9abfe24fc795554522b9a9b5646636dbdf07c",
+      "targetKeys": [
+        "official:equipment:es:1e0bd1eccf146b43a2130f6e"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:1e0bd1eccf146b43a2130f6e"
+    },
+    {
+      "key": "official:equipment:eng:eecef0d4c55b9afdff26b557",
+      "name": "Backpack",
+      "sha256": "15c68b5a0a67da6fc3dc3e7a23907b393f66a4d070cfae29ced2adfa561a4356",
+      "targetKeys": [
+        "official:equipment:es:d33208f224791802d5cc9023"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:d33208f224791802d5cc9023"
+    },
+    {
+      "key": "official:equipment:eng:ef6aaccb7d1cbe7046d28cbc",
+      "name": "Carriage",
+      "sha256": "1c0e911cadfc3698b22a447f2623d625e5ab5ef2cf8292136a158ea24c619faa",
+      "targetKeys": [
+        "official:equipment:es:d0ef0cbf3f2c302401e92cdf"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:d0ef0cbf3f2c302401e92cdf"
+    },
+    {
+      "key": "official:equipment:eng:f00a78fe9d9fc3ab48ed6065",
+      "name": "Plate Armor",
+      "sha256": "6e3078c0be4fef2f1766f0a7ecc3d1c49fda9656233b6293bd0f21eedfe2bf3d",
+      "targetKeys": [
+        "official:equipment:es:9f54f2598e5767241a584f1a"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:9f54f2598e5767241a584f1a"
+    },
+    {
+      "key": "official:equipment:eng:fcd9431115e93f42ede63b32",
+      "name": "Sled",
+      "sha256": "cec222559b0a7691e5de67149f1aa74f4402ce61619b3cd3aa30257022482974",
+      "targetKeys": [
+        "official:equipment:es:80e2a613125161d8ac5f1026"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:80e2a613125161d8ac5f1026"
+    },
+    {
+      "key": "official:equipment:eng:fe9f088c2814af0467fdbac4",
+      "name": "Armor of Invulnerability (Studded Leather)",
+      "sha256": "7d8180d2cacee148826001ecd063f0b09c68450766c802e85c757f52ca792922",
+      "targetKeys": [],
+      "reason": "Versión inglesa del objeto cuya retirada o sustitución ya decidió el GM.",
+      "evidence": "official:equipment:es:d222a78fa718fe92c426ab08"
+    },
+    {
+      "key": "official:equipment:eng:febf8ce698efaf7302007040",
+      "name": "Breastplate",
+      "sha256": "a147445267252cd9eb08474fcb916a499df7d91b8503255f0c2153e145ccac6f",
+      "targetKeys": [
+        "official:equipment:es:24e924161eb9531b0a1632c5"
+      ],
+      "reason": "Duplicado de tabla sin prosa ni poderes adicionales: identidad cotejada, clasificación, precio, peso y estadísticas representados en español.",
+      "evidence": "recovery:official:equipment:es:24e924161eb9531b0a1632c5"
+    }
+  ],
+  "preparations": [
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:093e25cc68fc731ffea7ad42",
+      "sha256": "1f8e04c6c01d7dcb1060bcd1e1cfe8cc9c49880e88641a2246bf79b3fb346682"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:11b3762d05502efd347d1799",
+      "sha256": "ff9bbe6ffc5393c2a5cbed2e2833b110f696dcb1f75abba41491a772808269bc"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:165c06eba671094a9c4bcf5b",
+      "sha256": "4fd52503d8502473c10829efbd393f7f2ac52ba9af64190dc2cc83bce0570021"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:3b388b3c27ba18c34a4b26e6",
+      "sha256": "2495d45c5c2e57a27da4f91002d620e92167c69e946ad3a78da7e0fdd9db1f5e"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:5edb865fbeda1561a0ebc201",
+      "sha256": "e7aae1a9543b72616df22576fb39769c57f1ef65e23c78ef3dc5a435e11f55b0"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:78ea275af54bf3abc9e5b449",
+      "sha256": "17858bad5135f8d0898f524c50944b90088293284a4a4957c34b4ab68fcdadae"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:96423b15cf42c0cc4d4bdb38",
+      "sha256": "a0c0bc428087ee0f1a9cf957399f4ad537ccb978dff61508f782b562d830d190"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:9c0b2485bb8e9c16f412c775",
+      "sha256": "e567e423a57bf6a5c48973b6a78f0093ddceb5317bee6c2a55ec9809daefafd3"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:a159f087514e34df02a92cc1",
+      "sha256": "6531edfe71afebf2736ed7c82ab0de5c7962845102c8eafd1f28db8df914a7d0"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:a1f03e679b7b344f03909718",
+      "sha256": "898cd4a946c04c2dc37328f690bfa31628f6861deea0a391c29ee368365cf295"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:a4b52e8dc344d05be4fab602",
+      "sha256": "e8843a4105b841897d5ffdf8aa6403a777b894565bb20fdedda5645d8573b13b"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:a4bb31770f018b43ba0417a9",
+      "sha256": "49186126d3ed71265180a47d7bc426ec6ae83554b01d7508684e20ba801513f2"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:b3b525789bef0a0562bffe54",
+      "sha256": "9dd3167b3e5742b733f45f7fd6c175a3c695611d27b2a3e69d91d929be8eb64d"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:b7803d81192c972fce31d6c9",
+      "sha256": "a415a3aaf1afc56f669c51443c901fc53b1e1361e863fa7082c30ebde4ba3e29"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:bef8a190f7d416d1e0bf3007",
+      "sha256": "e543765216ed04941b6e864a91554fdadb2f0d8bb4229d2f3691fbf0a5d6015c"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:bf9d4777f6761e30002e10a6",
+      "sha256": "1d5708cc6f53817d303d09dcfffcd21292d50e794508e44a1c7f432580f6e14d"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:d222a78fa718fe92c426ab08",
+      "sha256": "5acfcd91ca63463ffc22329f70606559589319c4cd68a93338496d896cde67ff"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:d691c1d7187e8dbbc9c58d0e",
+      "sha256": "c6e58be5f8dfe6dd6f0f7babd964bb79b00727ce96889b135b53ce1cab102c45"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:de73b6277de67bf8e74faf46",
+      "sha256": "3701570bbf80ddd98c7ce0203cc0bf3f6700f8f4dc927f01e28a5a23eb941764"
+    },
+    {
+      "key": "gm:equipment:preparation:recovery:official:equipment:es:e6ee8011b040eaf1b2afa84a",
+      "sha256": "47e9f2828434a0960a17f0cfb3dad60314661b01622e682a66c941bb6c388a4b"
+    }
+  ],
+  "preparationKeys": [
+    "gm:equipment:preparation:recovery:official:equipment:es:093e25cc68fc731ffea7ad42",
+    "gm:equipment:preparation:recovery:official:equipment:es:11b3762d05502efd347d1799",
+    "gm:equipment:preparation:recovery:official:equipment:es:165c06eba671094a9c4bcf5b",
+    "gm:equipment:preparation:recovery:official:equipment:es:3b388b3c27ba18c34a4b26e6",
+    "gm:equipment:preparation:recovery:official:equipment:es:5edb865fbeda1561a0ebc201",
+    "gm:equipment:preparation:recovery:official:equipment:es:78ea275af54bf3abc9e5b449",
+    "gm:equipment:preparation:recovery:official:equipment:es:96423b15cf42c0cc4d4bdb38",
+    "gm:equipment:preparation:recovery:official:equipment:es:9c0b2485bb8e9c16f412c775",
+    "gm:equipment:preparation:recovery:official:equipment:es:a159f087514e34df02a92cc1",
+    "gm:equipment:preparation:recovery:official:equipment:es:a1f03e679b7b344f03909718",
+    "gm:equipment:preparation:recovery:official:equipment:es:a4b52e8dc344d05be4fab602",
+    "gm:equipment:preparation:recovery:official:equipment:es:a4bb31770f018b43ba0417a9",
+    "gm:equipment:preparation:recovery:official:equipment:es:b3b525789bef0a0562bffe54",
+    "gm:equipment:preparation:recovery:official:equipment:es:b7803d81192c972fce31d6c9",
+    "gm:equipment:preparation:recovery:official:equipment:es:bef8a190f7d416d1e0bf3007",
+    "gm:equipment:preparation:recovery:official:equipment:es:bf9d4777f6761e30002e10a6",
+    "gm:equipment:preparation:recovery:official:equipment:es:d222a78fa718fe92c426ab08",
+    "gm:equipment:preparation:recovery:official:equipment:es:d691c1d7187e8dbbc9c58d0e",
+    "gm:equipment:preparation:recovery:official:equipment:es:de73b6277de67bf8e74faf46",
+    "gm:equipment:preparation:recovery:official:equipment:es:e6ee8011b040eaf1b2afa84a"
+  ]
+}

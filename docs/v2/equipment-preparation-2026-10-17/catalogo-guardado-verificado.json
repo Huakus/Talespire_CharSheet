@@ -1,0 +1,21 @@
+{
+  "savedPreparationRows": 806,
+  "newPreparationRows": 785,
+  "existing21Unchanged": true,
+  "sourceReviewedDefinitions": 11,
+  "pendingSourceReview": 795,
+  "relatedEnglishRowsPreserved": 803,
+  "uniqueOriginalArchivesVerified": 3181,
+  "activeSpanishEquipment": 806,
+  "activeCatalogRows": 1609,
+  "activeStartupRequestsPreparation": false,
+  "preparationLoadedOnDemand": true,
+  "charactersUnchanged": true,
+  "npcStockUnchanged": true,
+  "otherCampaignsUnchanged": true,
+  "sharedCatalogUnchanged": true,
+  "definitiveObjectsCreated": 0,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "campaignRevision": 1177
+}

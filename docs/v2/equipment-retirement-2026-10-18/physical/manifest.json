@@ -1,0 +1,2245 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1289,
+  "archiveSha256": "77b6dc57475cfe535d22110c0e36d91708c66f7eac6b5b3b01514fc2b36d9180",
+  "rows": [
+    {
+      "key": "official:equipment:eng:0008e70dab5fac3e981fc6dc",
+      "name": "Mace",
+      "sha256": "b130b9ad0d7e9da53acdee9585f2c8b9ed59132c1df1a6a3a4b90a935da41a70",
+      "targetKeys": [
+        "official:equipment:es:6bfa0d94ba628f50c3ec77ca"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "mace",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:02033f868251459f99681dd1",
+      "name": "Battleaxe +1",
+      "sha256": "776b19bc0315f7e3bd96149aeb265b2ba90a154856a1615b28ee48b701f10b8f",
+      "targetKeys": [
+        "official:equipment:es:461254bffffc17715e5fe044"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "battleaxe",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:02b38bfef970ec9fea09f532",
+      "name": "Greatsword +3",
+      "sha256": "0e0ee5a2190dad2f0b2cf82da77027273f884bff205a722998b5916f5a3e8110",
+      "targetKeys": [
+        "official:equipment:es:a9f599cd755681d95c84889f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatsword",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:0522c13baa758ec7871add4a",
+      "name": "Sling +3",
+      "sha256": "b2f362cbb465660a2f9167a5c4637f7c220aa58872f6b7cce220a6dcd2239448",
+      "targetKeys": [
+        "official:equipment:es:95b2e01e8ec89df784269ff1"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sling",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:05fcde9bbb25deccd1c83944",
+      "name": "Whip",
+      "sha256": "781fe5146decda76e9502f995939362bd9ae036454f5b2931c7c43b1c7b742bb",
+      "targetKeys": [
+        "official:equipment:es:fb0192c97dd80b413295a5d4"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "whip",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:09e7482106c1d4e2071daea2",
+      "name": "Shield +3",
+      "sha256": "c52f350adc3b453186a422b41c4e3a9cdc5404da370fed935a5b8e78bbb7900a",
+      "targetKeys": [
+        "official:equipment:es:71168d41bf97907e2f13c3ed"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shield",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:0b78874094deef8f80d562f2",
+      "name": "Pike +2",
+      "sha256": "561ef2bc6ac629c688afc7adfa236a1ddd2183c26bf1d36f0088503c02c2ea0c",
+      "targetKeys": [
+        "official:equipment:es:91c3a8060ff0b87a15af751b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "pike",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:0cdb6c1e47bb8728a2f209d9",
+      "name": "Half Plate +1",
+      "sha256": "11d76b94f76f01655191fb2b36df8991a81085aa80bc9abee8223dd7b8862193",
+      "targetKeys": [
+        "official:equipment:es:55ddce2d71e95e11f10fa0d1"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "half-plate-armor",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:0e5489fa68bd95b86c6a946e",
+      "name": "Greatclub +3",
+      "sha256": "2382db327df882dba65fc87dad6022adc52debc9d83914499ae0f48c38e67007",
+      "targetKeys": [
+        "official:equipment:es:daca37238aaa877fa46258ea"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatclub",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:0eb905f1f23e8a531450795e",
+      "name": "splint Armor +2",
+      "sha256": "be3f28cc996a337f1469c19b0a6cbd376a2fe6645a3532f7c424a38b1fb05993",
+      "targetKeys": [
+        "official:equipment:es:2d19032cbd0001d46f6922c2"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "splint-armor",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:0fd72e4fa94953dd23a1d416",
+      "name": "War pick +1",
+      "sha256": "9b521e4e8f8a60708aace0b219e1f0f28eecdd4f20e239798cad2b11b8d2a87e",
+      "targetKeys": [
+        "official:equipment:es:8a7be4e4c685821169fcafa0"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "war-pick",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:13565560f77c919245e3ba10",
+      "name": "Blowgun +1",
+      "sha256": "dfc3c0878dcec3d84d2424f5abc712dc6d725b7c435872a07bd5c25a91536749",
+      "targetKeys": [
+        "official:equipment:es:20db866da7bb365eaf43d7a2"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "blowgun",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:1418dd9ea89b63e6cc67a8e2",
+      "name": "Half Plate +3",
+      "sha256": "e2f655e3fe89211d2986307f36a76e34caec71f87f6c7e5d5f0885251d740f76",
+      "targetKeys": [
+        "official:equipment:es:e0cf274b1cea0fc5b14f7a34"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "half-plate-armor",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:18616e2faf1a56d026b322e5",
+      "name": "Sickle",
+      "sha256": "6818a237c9e46c515d79e5062fdae79bdbea2559353cf12c68d20d256e3624e5",
+      "targetKeys": [
+        "official:equipment:es:acef297f82ec71eda9c41b5b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sickle",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:1ca491ea6c406c13db189b97",
+      "name": "Ring Mail +1",
+      "sha256": "0427d532ac0238968419bfb259a56f98989aeacf3b881ca13bbcf34c0ed53886",
+      "targetKeys": [
+        "official:equipment:es:f54d4d85e1e10d66dd2f0b71"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "ring-mail",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:1ca52c1a2b16aab197ff7f96",
+      "name": "Chain Mail +2",
+      "sha256": "2c562ea9c547aeeb831d58c1a49897f01765b62e5efa44f5732f06ae51f9ae97",
+      "targetKeys": [
+        "official:equipment:es:9f9639a65a7cabefc1d9049b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "chain-mail",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:1cfd1724e7d1fd76a53c378b",
+      "name": "Crossbow, hand +2",
+      "sha256": "669dc166b1e1542f0a6fe29a8998659294acf1f6973400f8dbde0afc623134ea",
+      "targetKeys": [
+        "official:equipment:es:7a99a5ccbb3bf6da8e0048ac"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-hand",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:1d626a4b98f762eb995dde35",
+      "name": "Greatsword +2",
+      "sha256": "83a0b9614bdae0ab3fd27dd40440c1cf6768bca3380143030053b77ffab0239f",
+      "targetKeys": [
+        "official:equipment:es:5fd4c566606777a3c02ae011"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatsword",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:1fbdcde3c647c1cb00fe738f",
+      "name": "Halberd +2",
+      "sha256": "ea544182089241a037d1ae0c3458772a7b15345d04b944b495cf410de57beb22",
+      "targetKeys": [
+        "official:equipment:es:e5abba9ae1959b46d21451e4"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "halberd",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:210d47d590d461142c616b4d",
+      "name": "Whip +1",
+      "sha256": "fb49929530dca0cc9b0d2989f9db95a80a03a20aacb4743ea6963de92945b383",
+      "targetKeys": [
+        "official:equipment:es:5040c937a57e1e0b81f3371a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "whip",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:235557cc96c59dac6ec5d573",
+      "name": "Ring Mail +2",
+      "sha256": "a6c758774b28f58cd21e85dfe3d3ee66633b510a02c2d6b445de310cee19bde6",
+      "targetKeys": [
+        "official:equipment:es:6be93bc8a7410c878291438a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "ring-mail",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:2376cd77b5a0ee440918e278",
+      "name": "Spear",
+      "sha256": "e847913d2e01ae21b24efa958404d3a95fdd757a3514f2a5b3f6a81d7ab58c7e",
+      "targetKeys": [
+        "official:equipment:es:ad3f9a876f3556d660d29775"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "spear",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:2392816e9d5062d0c04b5853",
+      "name": "Halberd +3",
+      "sha256": "09c7d4a650c6ced4ec08e186cc1413fb3140ac0c4929e8cf60b5eca0d14508fc",
+      "targetKeys": [
+        "official:equipment:es:d9dc8f660008890da65ff3bb"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "halberd",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:2503df8eecc445a1886e5f33",
+      "name": "Glaive +1",
+      "sha256": "c1dea21d42cf243a8e5a2f684057ae163f7181a0591bd0f16f78f2d9a773f4d9",
+      "targetKeys": [
+        "official:equipment:es:e5e6a1129f543850dd18c677"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "glaive",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:25556308fd54d4e596341738",
+      "name": "Battleaxe +3",
+      "sha256": "1d3a3ad30a2452a100eb51354f34a0408e72b8a849ff70296dfec48992a8f83b",
+      "targetKeys": [
+        "official:equipment:es:b1bed97cb84d92a3b3042a3d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "battleaxe",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:25dbfcdbee9b89933ae753f0",
+      "name": "Breastplate +2",
+      "sha256": "50b454bf5d8eae459258a519dbed3bdea0d3e955c493a39f00c3663ec2e95051",
+      "targetKeys": [
+        "official:equipment:es:b7ee9ad6f87c3d31d0885c59"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "breastplate",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:25f5e786e53ee1f94f9784a0",
+      "name": "Half Plate +2",
+      "sha256": "1033aa5c63efcc4c3e4ad30699caba8293196ae836ba093b3669383430016b2d",
+      "targetKeys": [
+        "official:equipment:es:d995aa33c84484e94ba986a9"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "half-plate-armor",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:263fce2f8e3018f1ecf62abf",
+      "name": "Glaive",
+      "sha256": "a97beed159249ea7736bf3df07d15e33797a9ca2688da33659c71b00b9349388",
+      "targetKeys": [
+        "official:equipment:es:0bb6e53dd291d438a82ed714"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "glaive",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:26cff7b15d8123edd86e2494",
+      "name": "Shortsword +1",
+      "sha256": "7bc05be0b7f9786dd6c5f9ce9cd8fbe3b09bf9513ce37a91f6aa200c29c3589c",
+      "targetKeys": [
+        "official:equipment:es:fbfeabdbf97d67f978564aea"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortsword",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:27c9f8575111f0d152dfae98",
+      "name": "Spear +2",
+      "sha256": "ffa4e38bb5d544f111e0cf8565033b47d5386e71a733b124125bbc6bd12deef4",
+      "targetKeys": [
+        "official:equipment:es:78ad6897fd1843ab3335e9f9"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "spear",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:295fcf0712fc60ffa114e46b",
+      "name": "Warhammer +1",
+      "sha256": "bfb4eeafaec93cd7f6d5d55b39783b16eaed50f50765b8bd38be38a6eb621966",
+      "targetKeys": [
+        "official:equipment:es:cf6934da4fc38c81fb24aa8f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "warhammer",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:2a4291afe698277302203b5d",
+      "name": "Flail +2",
+      "sha256": "0b6d217b06abf32abdea3476b72a25b8f6aaa1a3054b3d8c9776d6ef6f04f2dd",
+      "targetKeys": [
+        "official:equipment:es:6e474e549c4888eda815c1ff"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "flail",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:2c7edd5b0659af645389d82c",
+      "name": "Light hammer",
+      "sha256": "73a4266a345ba298456fcfa6129ff827a5effa463aa6028eb7eafd60c7518ffb",
+      "targetKeys": [
+        "official:equipment:es:1310422427828454622a4a6a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "light-hammer",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:2ce0bd7547da11075e064bc9",
+      "name": "Sling +1",
+      "sha256": "b224ba8f2c6f0296f2fc8378a7ac755b7f5f1af01daf575dbe8988f9419671e0",
+      "targetKeys": [
+        "official:equipment:es:dfc68bcad13ae2c8e2810814"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sling",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:2d69b116b070e4b9be039ef0",
+      "name": "Hide Armor +1",
+      "sha256": "9239652f26a2c91d24959a5551e413aee52393082b8a310f0609668e4b32a0fa",
+      "targetKeys": [
+        "official:equipment:es:bab6db982022a6143a1b1533"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "hide-armor",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:2f430ec79b00563becce5534",
+      "name": "Warhammer +2",
+      "sha256": "a09e35303d0a10a6d953a3edce9369eb7dd1549828227b7e9fc4c3fd43da2b1f",
+      "targetKeys": [
+        "official:equipment:es:0212e1973f7b9e001aeeef61"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "warhammer",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:30cf2ec9bc2d88d126fb9632",
+      "name": "Breastplate +3",
+      "sha256": "e71da75de68e11964c8cd4fe339c19654b1d4b7dfad0e2a2b5dc3caedd0c9131",
+      "targetKeys": [
+        "official:equipment:es:ffd81d86c50bcb1c09a82ff8"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "breastplate",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:3164634f66c895af3debc0dc",
+      "name": "Glaive +3",
+      "sha256": "6e975cdeb026c4b4cd97cf534db5473cffa092ff62cd16d61416697afbe87c87",
+      "targetKeys": [
+        "official:equipment:es:4c7b73d2c7e5619095103c94"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "glaive",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:320fde345b0b444ca43307d0",
+      "name": "Studded Leather +2",
+      "sha256": "f4090d8ebe83daae84ceb12612f26ce53f296ab9ee6b2219120cb537a1745f1f",
+      "targetKeys": [
+        "official:equipment:es:c8fa48c5adb8a687456ca9ee"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "studded-leather-armor",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:347aed9c96d624e9e3969d09",
+      "name": "Handaxe +1",
+      "sha256": "762b1acc21745f402bb10439e1396f0eb72a95bf14b52249560940193e3a9e0b",
+      "targetKeys": [
+        "official:equipment:es:3ff611f37a40a7525548b6a9"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "handaxe",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:35c9892d0375fadca533216e",
+      "name": "Blowgun +2",
+      "sha256": "8aa02a73ea002fdda6a15404f55540d1adb05f04eec46b1be76f86c68ba8caa8",
+      "targetKeys": [
+        "official:equipment:es:8023c335da76b404fa6ad4f6"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "blowgun",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:36d840aab6072161dde57406",
+      "name": "Hide Armor +2",
+      "sha256": "22d7ab26aa6e63c093c836b6b3e87b61a0ad6ee63bd094ac947525e1930da957",
+      "targetKeys": [
+        "official:equipment:es:2beae9ae708fc324d2ff5360"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "hide-armor",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:37370910d88bfce77405f609",
+      "name": "Chain Mail +1",
+      "sha256": "1813d67accd57ba35bc1b86553232aaa8904d53d85a0f1317f78410312f8a194",
+      "targetKeys": [
+        "official:equipment:es:7ec0a3dd884b82f14e197d01"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "chain-mail",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:3975d2890fe8351e50c39e3d",
+      "name": "Dagger +2",
+      "sha256": "55a41da6a709f06543693afdc77fa0c4b2de8d1fb297dc04664eaa355354d1b5",
+      "targetKeys": [
+        "official:equipment:es:6503c6bbf160265a9d48c312"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dagger",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:3a5a2d3e46c7a792ca1980d9",
+      "name": "Greatsword +2",
+      "sha256": "2e8086d2bc75af79b4cf1bfffe653e287155210f94ae31bec754c2f401136030",
+      "targetKeys": [
+        "official:equipment:es:0a0d7b00e6b26351a1e4890e"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatsword",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:3db7aef35a3d51dcdc791808",
+      "name": "Flail +2",
+      "sha256": "1b21ff9349ad5c2971b62faeeb7abfcd8552d7735ec16c98a4a18c10d797a720",
+      "targetKeys": [
+        "official:equipment:es:ce76e80ba20ad50ec12fe5b0"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "flail",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:43f41e2a011a847298d17ada",
+      "name": "Rapier +2",
+      "sha256": "7599dafdd741a81febd0d5de2b799de66f8a8333d8cb76c377854c1e720eff85",
+      "targetKeys": [
+        "official:equipment:es:6e78de1a42fe945f6504e05d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "rapier",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:451f03d69f2fdd51d9176577",
+      "name": "Greataxe",
+      "sha256": "17df5d53d3e67b9c0ec4841d4e583f79091dd13ece4b260a6b04a3768ffe2671",
+      "targetKeys": [
+        "official:equipment:es:2a910832a96a1b3b3ac79b9d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greataxe",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:45fe8d9296bb1f44eaead487",
+      "name": "War pick +3",
+      "sha256": "4f71580f7d310a76ea3865e901b98cfcdd89cd244dc69a9239843f658c7d7055",
+      "targetKeys": [
+        "official:equipment:es:f05bd452e8bb8f561e959c0a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "war-pick",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:46815b494a8b01991d2d2c62",
+      "name": "Maul",
+      "sha256": "cf980217ee85c2d44dce11260be5f0468944e966a516501cdd4776957046ca8d",
+      "targetKeys": [
+        "official:equipment:es:0165391ec89c602c4910157b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "maul",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:46e3ed778f23fdf4da7cfdc3",
+      "name": "Rapier",
+      "sha256": "dda972e9e538c2fc5d74ca36f361e38a4092a1c91d91afbf90c64d61a3a6a0a5",
+      "targetKeys": [
+        "official:equipment:es:01e931e6bad1a06ae2fb2b70"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "rapier",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:49c2df8a84a988bf0d1cf8f0",
+      "name": "Longbow +3",
+      "sha256": "d0183e1cbaa8ab2183ff0ee6bd0b522e22d540c9e39d643218ef863e69b2644d",
+      "targetKeys": [
+        "official:equipment:es:73c49bc298a827cfcde3e2eb"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longbow",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:4a93c148026b153587031525",
+      "name": "Shield",
+      "sha256": "9467a11034f9622a5e1150a7640ad132cf7a9eb929ce4e55f58f8e6936673ddc",
+      "targetKeys": [
+        "official:equipment:es:96c340ebc10ebfe92ec7d74d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shield",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:4b1fee78d9aa6cbfb502b06d",
+      "name": "Javelin",
+      "sha256": "168107ef420fbd7053f607a5ea8a12ef6fedb4fadee2fefe7fcfad2d55b19ca8",
+      "targetKeys": [
+        "official:equipment:es:c36f83bc74b4f36de9aa8cb6"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "javelin",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:4b71c46938a86a216fa1c166",
+      "name": "Blowgun",
+      "sha256": "58c2e67708f3b085d621219000008946c9cc2072c903a95c1561cb236ec3e510",
+      "targetKeys": [
+        "official:equipment:es:a12b234f714485c7962e99c1"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "blowgun",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:4c932f9d97b97bdf701093bd",
+      "name": "Javelin +3",
+      "sha256": "630f483fcbc9852dd55a5762767a74194cc4610fe9a5c2e80664dcba2a45a92a",
+      "targetKeys": [
+        "official:equipment:es:22a8704b10fb30206e133353"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "javelin",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:4f4c16915eb8082e8d570af5",
+      "name": "Mace +2",
+      "sha256": "1e0d77d2621a53ae126da4620cac5672a47e9bf643d0caab7cb19821fee21fa9",
+      "targetKeys": [
+        "official:equipment:es:bb6a547c154319ecb90efc33"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "mace",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:4f9f0ab3c53328950aba11ea",
+      "name": "Scimitar +1",
+      "sha256": "15c106a95a7acf93c0c588dd885d701b0291419675614bf5d4c10bbd2493bfb0",
+      "targetKeys": [
+        "official:equipment:es:a8ea67e8ba5d262c81a55d95"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "scimitar",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:53c90915eb3b2557a925d53b",
+      "name": "Battleaxe +1",
+      "sha256": "8b544cb13692ceaf41ae71e0e907aa5c7ea9859ef42cf6c468cf4d9fa430e832",
+      "targetKeys": [
+        "official:equipment:es:cbd7512b6ae6ef9f5b511d37"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "battleaxe",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:53edad140da061672de03ea9",
+      "name": "Leather Armor +1",
+      "sha256": "7a9007e269568f34ea8bd4f5d1556758e0956371b12aa8b6247b087ef13390b9",
+      "targetKeys": [
+        "official:equipment:es:27f05898e96ee8f4afc5e64f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "leather-armor",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:5955ef9a71f9cd2a6151ab80",
+      "name": "Crossbow, heavy",
+      "sha256": "561f90baf5eca910483358fa1aa64b88cad73008466774a22b34e2cf2a0f1c0e",
+      "targetKeys": [
+        "official:equipment:es:25315b2f0475ce9cdc4df1af"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-heavy",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:5d1018d6334f8dc1d51a2e97",
+      "name": "Shield +1",
+      "sha256": "bf5fa15cbcc4791c30d385f306699320508fd38fa37c699733a61bec93852420",
+      "targetKeys": [
+        "official:equipment:es:a9be83570ee776a70e802364"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shield",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:5ff8d444909b4e9c66a6af9a",
+      "name": "Mace +3",
+      "sha256": "95068e8890dd2530a3c10bf133a3aab0342a63696c46d9ffede878540974bc61",
+      "targetKeys": [
+        "official:equipment:es:638f27ea623149f3e82c01e5"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "mace",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:6084b80c9220f17515aa336b",
+      "name": "Crossbow, heavy +3",
+      "sha256": "9fb9c9af972e00e79740f12916b73682eac2959e20f40f4b1ccac00a8aee2e9a",
+      "targetKeys": [
+        "official:equipment:es:e8423556b042354d9dfc0601"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-heavy",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:6186e8b45f898da03ff76557",
+      "name": "Flail +1",
+      "sha256": "41f6b10fb568cd5589b5a4595730267fe3c1b3e9406f54455c79d37dfaf3b4a1",
+      "targetKeys": [
+        "official:equipment:es:ce2a9f98d1b80c08eb84aeed"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "flail",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:62d166e6d4e92ef299ecdce8",
+      "name": "Club +2",
+      "sha256": "8ba866e11d570f16c4a13d4c96c7a081d75aba2d6ea0c8abcac005dbb5590602",
+      "targetKeys": [
+        "official:equipment:es:cd9889887d735c7699297e55"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "club",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:630702cfa0fc48ba0df829cc",
+      "name": "Maul +3",
+      "sha256": "5113cbb14f73bff688ad10ad1fd8eee4aabfc4cc2b52854f9c1e75e73da61af1",
+      "targetKeys": [
+        "official:equipment:es:f71ad35557ee32b7b241cd2a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "maul",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:64b2bf60aec1bb2841fea119",
+      "name": "Shortsword +2",
+      "sha256": "db1ad8f82ca8ce867b8348b98ac6399e8b1bc3c486e61a9c75afbb62e2f70ff1",
+      "targetKeys": [
+        "official:equipment:es:ac253041189ace2b3a6a664f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortsword",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:65aa400e5f283b75ac7ebbc4",
+      "name": "Mace +1",
+      "sha256": "2a5a19f904422c08ecd191b007efa9a4b3204facaebca168ac9197093348c469",
+      "targetKeys": [
+        "official:equipment:es:cf91ba4ef8fcd557ef9101b6"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "mace",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:664499151fea1649dca667c4",
+      "name": "Breastplate +1",
+      "sha256": "69a6cc99a5a95889891530a55e6bce6e2b66968f77c31c68228df9b4eb12711a",
+      "targetKeys": [
+        "official:equipment:es:120eb2040f33ea4c66ff25c3"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "breastplate",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:66b006ddc3ecd86aa8eb9bb4",
+      "name": "Greatclub +2",
+      "sha256": "15f61252119e73feafc548ae24845ea23ac12cadccc90efe33226e130f4c98e6",
+      "targetKeys": [
+        "official:equipment:es:17e94d5174ef620bae1df448"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatclub",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:67249f337377e37bb9896f96",
+      "name": "Leather Armor +2",
+      "sha256": "6980199bf979ae43f88ba2b0168624547459f010248670956b72633be2473c7b",
+      "targetKeys": [
+        "official:equipment:es:16a7d3c8d1281ab007b8cdec"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "leather-armor",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:691a39d831bdb68ba45b8a74",
+      "name": "Warhammer",
+      "sha256": "2b4c1323f0a9b58996db6e8a228cae44b0c01f585e182459bb2383710c0aca7b",
+      "targetKeys": [
+        "official:equipment:es:b9f78d768a1dc7cadf0b7372"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "warhammer",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:6ad41939b357c3d5bab3a806",
+      "name": "Dart",
+      "sha256": "147e8951db1c0312a4a9dbca616b3e8881f0814a5a1ee6cd217f7b681a96161f",
+      "targetKeys": [
+        "official:equipment:es:293b2a3136b01cf593d89295"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dart",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:6b288109e18f249be913106c",
+      "name": "Sickle +3",
+      "sha256": "81de2ad30a912bae5efb8845dedc93dbd72cda4a7dd48caead2f2447010a5f1d",
+      "targetKeys": [
+        "official:equipment:es:9e2ddb0fdd18943035f0e729"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sickle",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:6d92b07a0b84e5a372a3ae59",
+      "name": "Greatsword",
+      "sha256": "7c4e8898c9d84579e890f20d5de982db971bfd2168140983e170ec7952a83930",
+      "targetKeys": [
+        "official:equipment:es:2ccd240f584c7577f7c9fd63"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatsword",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:6e96c5bef33e17d38b490028",
+      "name": "Pike +1",
+      "sha256": "8cd1f8aa5b84e9b11d7b68d488a2db69f488e4e54e61eef9247c8e42d8645578",
+      "targetKeys": [
+        "official:equipment:es:039b4627c1cd6e5434afaa53"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "pike",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:70bb6ea85d09294a3212e4ab",
+      "name": "Whip +3",
+      "sha256": "9368a2b74e0b36637aceedf9bb3a4d85c214adbd260d8a77295a1e0bf9413612",
+      "targetKeys": [
+        "official:equipment:es:499a495667e6198e30f0b366"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "whip",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:70ded26c542eddc3fe3db833",
+      "name": "splint Armor +3",
+      "sha256": "f68b4d325cf9418b5204c4b812550e19a28d27d7a6b5d193f512eec758106671",
+      "targetKeys": [
+        "official:equipment:es:9c392a061bebd392140a7928"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "splint-armor",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:71af0f396a781b86b0d145fa",
+      "name": "Light hammer +2",
+      "sha256": "f8f785f4cf7eb3f1c85834ba4dbba5c8646f14e09ed4efcfc3bd7511e3bd2c70",
+      "targetKeys": [
+        "official:equipment:es:7830a005ebb24402ef676fd4"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "light-hammer",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:78438c5411a187b4ec2e3c6b",
+      "name": "Light hammer +1",
+      "sha256": "4402924f62c7b278ac43465e9de8acf714c58955a8caa3c0b746a53f271f95d4",
+      "targetKeys": [
+        "official:equipment:es:0a87d509d866a04455fb2ed8"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "light-hammer",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:7a62f58bca605a790a2104af",
+      "name": "Spear +1",
+      "sha256": "d3342c6076ca114466d3a858a03d03a2c39e6592b56fedb0ffc1f714b7797f9d",
+      "targetKeys": [
+        "official:equipment:es:c43ede23da9fd157570dff50"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "spear",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:7b874aaac60116025fea8b8a",
+      "name": "Crossbow, heavy +2",
+      "sha256": "a5ce787fa3495c1447353e6a0b2c7534a737881cd3c7315912461c893d36df00",
+      "targetKeys": [
+        "official:equipment:es:702073415568ee9ebe7dce24"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-heavy",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:7bceb053d8cd43c4547ef76c",
+      "name": "Halberd +3",
+      "sha256": "2a6c5996069c71b4fb3d6ff8c163fba113767a3192d571228d89332477d8564e",
+      "targetKeys": [
+        "official:equipment:es:6591271dc3ec33171abe8a98"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "halberd",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:7d8df226a0ea45a2897c0bd0",
+      "name": "Morningstar +3",
+      "sha256": "7ff61db96587d667eff1671d6c2d9b6b40f2ba1d473f6ef06521089f4b2f3933",
+      "targetKeys": [
+        "official:equipment:es:f447ecc7d52542d2a4a271a2"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "morningstar",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:7ff7446bba35fc80df4ea4c8",
+      "name": "Shortsword +3",
+      "sha256": "b5124d623ba2ee163a9ddc717f6553ade38e595d5a7a860ecc9eea3bb09b72ec",
+      "targetKeys": [
+        "official:equipment:es:e6752c8d546396f2e3f4cf05"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortsword",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:8028ddba790adef50c440dca",
+      "name": "Crossbow, light +3",
+      "sha256": "dc3178c4709b7fcc7a76bdf9c46ffd6af34a7eb4101fa482872f7327d88e1a68",
+      "targetKeys": [
+        "official:equipment:es:771a9bcbb2263ac89ce0fd70"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-light",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:8150edb96eb28336b76206b7",
+      "name": "Dagger +3",
+      "sha256": "9a258f3cafe260fe492679f2ffce4e5ac8a5ae0d6d234a9b56ad179ef944aecf",
+      "targetKeys": [
+        "official:equipment:es:8c1265965296801c84f4f791"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dagger",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:81e487d4cc02caae0a27d354",
+      "name": "Studded Leather +3",
+      "sha256": "a1c60ab1f97f26d0fcc918bda0b703132490574791ff01e044477717b587bd96",
+      "targetKeys": [
+        "official:equipment:es:0b5bdfe22131e9df8dadf58f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "studded-leather-armor",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:831f4a0dd9afacee4db60c18",
+      "name": "Club",
+      "sha256": "2563fbae9ed8736ffa508e50e4e83560c107be83fcca401d281ae5b4b1eb6608",
+      "targetKeys": [
+        "official:equipment:es:7e03bd2f256a0b9ce063c193"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "club",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:846c96718955264a41e4e5ee",
+      "name": "Chain Mail +3",
+      "sha256": "2f3c95055736ff1c2ebafd2c184984c4eb56a7d7389ed285aa56035c3b42b49e",
+      "targetKeys": [
+        "official:equipment:es:62b6151d7d1f6ff522e0fd0f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "chain-mail",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:847c6cac8e6bc2e7e5c4d205",
+      "name": "Greatclub",
+      "sha256": "dd1a56c3eb6bcdb6f414c5c2af973fc7ec2312ebacd4f5e0eb7500f863762050",
+      "targetKeys": [
+        "official:equipment:es:3540479787c16c55359ff60c"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatclub",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:868166a44a6d8489de5cc555",
+      "name": "Battleaxe",
+      "sha256": "30bb8c415941749e70df2426a4e130277d2c9ee3e6f242a32e7e444bfcbddb2d",
+      "targetKeys": [
+        "official:equipment:es:ceb2f9022708a7c4928525a7"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "battleaxe",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:8714c26794a855a7ed576642",
+      "name": "Dart +1",
+      "sha256": "2b4be56424bd304ac195a20df13cabdc373a27f190df698f997bb2295d7eaf98",
+      "targetKeys": [
+        "official:equipment:es:80e99542cf0ca1999073cda9"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dart",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:889e30638eb475151924d448",
+      "name": "Padded Armor +3",
+      "sha256": "7fa53ac17e977ea3f1cf2528538eed4a0c298534c61ceeb33762e39ef29ef6d7",
+      "targetKeys": [
+        "official:equipment:es:f2405c391591b473b8b7b215"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "padded-armor",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:8a4bc74abdd71735079a9661",
+      "name": "Morningstar",
+      "sha256": "425fedb8ea99947f67bf2cbe0a21a716fea28ffd744e0ebc3b528125564110ff",
+      "targetKeys": [
+        "official:equipment:es:3e0a8c8b4c511a0191d0f3ff"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "morningstar",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:8ac292943199c1744183342c",
+      "name": "Quarterstaff +3",
+      "sha256": "39c510d19229ba63ef7ad8e4d60e4f96a18a20b44728e911360f5cf8ab7f6ed5",
+      "targetKeys": [
+        "official:equipment:es:e26218ae485b852b87d5441f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "quarterstaff",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:8bfc5c0a4220f6064ea0f564",
+      "name": "Sling +2",
+      "sha256": "3e33e50118af8c8ec0d7bfdd1973e856865607cf375e295db7b87feecce7d0a1",
+      "targetKeys": [
+        "official:equipment:es:cf777861667924bfa9bd5a0d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sling",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:8dee81ec4572f31fdf94e2fc",
+      "name": "Sickle +1",
+      "sha256": "53e820a21460a0b51d99ac4b016d7e31c86891f2e17d36841f7ac92299b79365",
+      "targetKeys": [
+        "official:equipment:es:84bc85b8c4847ba3e8f24f3a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sickle",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:8ee701df92b9422fb4994fad",
+      "name": "Flail",
+      "sha256": "687196da4f996e00e4aeb8a425fc2948d14e6095311b7e92ffe5164c7e9d8c0b",
+      "targetKeys": [
+        "official:equipment:es:d01f420bac365791b2f973cf"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "flail",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:90107f2c8a45e2168ab29dc0",
+      "name": "Leather Armor +3",
+      "sha256": "0ec5c50ac167dda35a2e93ea564548000e85c24a8ad9e6d2d7064954b26629cc",
+      "targetKeys": [
+        "official:equipment:es:47ca78a92149955639cb961b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "leather-armor",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:90e4929aab034bee7007fb8f",
+      "name": "Longsword +3",
+      "sha256": "15fdaf3eecd9b0187a756c887e5e0dce564c71ee849caaa2991a68d955383576",
+      "targetKeys": [
+        "official:equipment:es:1ae7f189c84264a30991c15d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longsword",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:915f21df87b4fd2e3e216879",
+      "name": "Flail +3",
+      "sha256": "0bb641ab3fcec39aaf2421f1b766be7a8367f9fec6859095d683b161d6d23282",
+      "targetKeys": [
+        "official:equipment:es:b8e1320c356e327aecd4fc0f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "flail",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:9793662bc576f4188ce30923",
+      "name": "Longbow +1",
+      "sha256": "ab43cc9882c6c969f5df6a9945297b72659b1fbc3013bca866f8a12900565e96",
+      "targetKeys": [
+        "official:equipment:es:bfae43b409aca5d74cb9ec31"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longbow",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:9a4c20dd787c36d53781187f",
+      "name": "Crossbow, heavy +1",
+      "sha256": "81971ad7ffcdb45f76012f9211cda055996b779203d02d36e93d7a1bb8540276",
+      "targetKeys": [
+        "official:equipment:es:8556293b4bd509ecd66bc078"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-heavy",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:9dcf7a8bda841f7af78e746f",
+      "name": "Studded Leather +1",
+      "sha256": "92231c7bd6c419e0ef2850e41a8540e1d2cd9c406f43e6f89a2f9733321b07d5",
+      "targetKeys": [
+        "official:equipment:es:55c9bbc182e669a1be9867a5"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "studded-leather-armor",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:9e18a78a4b27b33a97f70c03",
+      "name": "Light hammer +3",
+      "sha256": "0ff4896fd5dfe5c25d5a66727758365121ac8160b9a522d016cfad55f37415dc",
+      "targetKeys": [
+        "official:equipment:es:fc14589ae1f83535be4d9835"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "light-hammer",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:a2f825ccfd7c07a6678d63fe",
+      "name": "Shortbow +1",
+      "sha256": "2c3dc4db61e7a47ccc363bceece372ea5d5f976055c158077457a6571c5150d9",
+      "targetKeys": [
+        "official:equipment:es:1847f444fd005d4b4a3a58c1"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortbow",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:a589c02210d75ff6753db878",
+      "name": "Halberd +1",
+      "sha256": "7bc38178e1f509c3d5f3aa2e0f4d157080ab0cc6e16f21b4291243e103072b0e",
+      "targetKeys": [
+        "official:equipment:es:25cce15da55ed1eaf1917e71"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "halberd",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:a9a0fcde46110363b3d3e9b3",
+      "name": "Padded Armor +2",
+      "sha256": "b8ffd3f14b92528d30b9948024f7f2730ed638a6df9f136968abe6b3da04fa98",
+      "targetKeys": [
+        "official:equipment:es:634d54d5c1f1eb780cc8a4f1"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "padded-armor",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:ab3914a6b244c59f38c8eb9b",
+      "name": "Quarterstaff",
+      "sha256": "100cbbc5b7257838ca6dfa0dd9b6fc372943c018d856cdbff5208f8473145632",
+      "targetKeys": [
+        "official:equipment:es:aef15424fdc190a838bb4939"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "quarterstaff",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:abb8d3c01a2057bb46c9e323",
+      "name": "Quarterstaff +1",
+      "sha256": "d0b4460d02c329a7047672407bbda3625f5993587de7555fce6b624ecd4e7a46",
+      "targetKeys": [
+        "official:equipment:es:5df162b91a2adc377446bc92"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "quarterstaff",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:abc119fbb5be519c8cb1d973",
+      "name": "Crossbow, light +1",
+      "sha256": "7a965c37cada89c66ef83aca55dc2f6ad2b7b45b1e8e7080fd6a8a0a1c846df2",
+      "targetKeys": [
+        "official:equipment:es:08c56f03c7b826e78aa9c2f8"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-light",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:ac942bfacf02ed97341deae3",
+      "name": "Crossbow, hand +1",
+      "sha256": "427b4e8573dbfce7bdd2968622e280dcd00b2aff4fc8c35a11924e7bfbca8220",
+      "targetKeys": [
+        "official:equipment:es:3655000d40ec225ab7ef1d58"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-hand",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:acb7ce83421cccefc750cab4",
+      "name": "Pike +3",
+      "sha256": "b18508e38507e07661ceedb5f1df35dec07daf6fb12a38e18557f0c5fae1c5bb",
+      "targetKeys": [
+        "official:equipment:es:91de7590d205e600f806a1c9"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "pike",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:b06f1cc89bb01282177802c6",
+      "name": "War pick +2",
+      "sha256": "ca0f9cb984a55522c6c20c285ce498f052046680ec37c3f5e43f012d3c0d2144",
+      "targetKeys": [
+        "official:equipment:es:14c90e5978b27c7e2bd00110"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "war-pick",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:b1f823feafbd4d4e79e857b6",
+      "name": "Shortsword",
+      "sha256": "1dade640aa25e990290ba1e930195c9f2a0edb80343c4ac3a59abd90ccedfca4",
+      "targetKeys": [
+        "official:equipment:es:63d3d4ab2a1ce8883fa3bb92"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortsword",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:b3694038cf3df9010adda669",
+      "name": "Shield +2",
+      "sha256": "f014c1366bdfb8920c54e8026378b3145b68545149b2fd30264e58f1fdf113fe",
+      "targetKeys": [
+        "official:equipment:es:9e13963d798973f5b3d0ce0f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shield",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:b5459b8f156cfacdb401427a",
+      "name": "Halberd",
+      "sha256": "764c555b3441370b8db38012433dfbede1069cda243324c08c9cde1210ddc835",
+      "targetKeys": [
+        "official:equipment:es:d19308aa50afd583f9b1aec7"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "halberd",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:b7c55fa35b06634359a6c1a5",
+      "name": "Quarterstaff +2",
+      "sha256": "7a45550f54d5f988b5e36f19863c1658402ae7e2ae3439b7874f730bcea241ec",
+      "targetKeys": [
+        "official:equipment:es:f8e1af7cfa4f2f98cf87df55"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "quarterstaff",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:b94d15aa21cfd51cdb75dd6d",
+      "name": "Scimitar +3",
+      "sha256": "bec9125a47b26de9988535deb323eafa16b3e90b4daeb5ea61bf09c09b876437",
+      "targetKeys": [
+        "official:equipment:es:18a93109fc6ecab4758adac2"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "scimitar",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:bb58731c0383329f75ce6f0b",
+      "name": "Glaive +2",
+      "sha256": "04ea4b94c5055e45e5e97db099a4451c0d1662207d2994b757dac64e269ec03e",
+      "targetKeys": [
+        "official:equipment:es:6fbca2a705b2c6a06a4ee587"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "glaive",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:bc43d2ee12d9756391c9e082",
+      "name": "Handaxe +2",
+      "sha256": "63fd58f9204c46f2a580d2128703edd370aecf91dfd769f2290f50396a170264",
+      "targetKeys": [
+        "official:equipment:es:2ba4bb97a09f0fdd355f7973"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "handaxe",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:bc851269f3c3fa3fb41b0bae",
+      "name": "Blowgun +3",
+      "sha256": "3f60616a6815f5c95e08811c58051bbd9519ce2cabfce2e1bfc1a1244fea323e",
+      "targetKeys": [
+        "official:equipment:es:32a2b4f74ab04defd6d2b6ed"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "blowgun",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:c2b896a99893d264042a8ee9",
+      "name": "Handaxe +3",
+      "sha256": "e17c1deb8d102610fda63504848c6e8331bbc4d044fe13d3f39f053fba1097d6",
+      "targetKeys": [
+        "official:equipment:es:ddd675038f74c5f88dc4e539"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "handaxe",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:c3f7c011e68aa94ef31b0a7f",
+      "name": "Javelin +2",
+      "sha256": "4e45edf27cbfdaff2fa90f8316607dc610fe832499d6397ea81140e46217ff99",
+      "targetKeys": [
+        "official:equipment:es:e3db7822a32880954c5a3edd"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "javelin",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:c8ac488974a6f260e2156e6b",
+      "name": "splint Armor +1",
+      "sha256": "fac50e51ee1905fa914d34da9037486c98ff52f232227383526709722cd8d7e6",
+      "targetKeys": [
+        "official:equipment:es:8e008beb14d9a1218115d432"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "splint-armor",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:c8e366417ddf44ba720a3aaa",
+      "name": "Dagger",
+      "sha256": "aa9fece49bf80a7b9ea2404c96a7761f7f002c73e3cccc68a7d4e4e7f6b70ac6",
+      "targetKeys": [
+        "official:equipment:es:121c1c0140bf7a88549add24"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dagger",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:cbce7c5194d44126300a28c3",
+      "name": "Club +1",
+      "sha256": "28c7edda2442ea78bcbc871acbb83f47a3740f72c3bd39296fe823ab06124505",
+      "targetKeys": [
+        "official:equipment:es:e21a19ef49b400a9fdc7f535"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "club",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:cc2b13819ec1ea26bb155c26",
+      "name": "Greataxe +1",
+      "sha256": "d642be4ccf0e3093c0e0ce4f2dcec3b90a50775561797554d89bd0c0b7e6b618",
+      "targetKeys": [
+        "official:equipment:es:679d721371e4b0885be06590"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greataxe",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:cd8ab2afd20d7c0c1cd82498",
+      "name": "Maul +1",
+      "sha256": "99e097ee43e9b6cbef10497763951c2a0e3b714d6db8169f4dd7f074c969b683",
+      "targetKeys": [
+        "official:equipment:es:44976b83b08dab3990f6fe2b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "maul",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:cdd471ad1e4a18b2af06323b",
+      "name": "Handaxe",
+      "sha256": "27f51c0ff511ba9c3db1fabf50a767c52782d878a598670f2d527bc61bbc936e",
+      "targetKeys": [
+        "official:equipment:es:46e33160932fc77217b82c91"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "handaxe",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:cf1fed9032c0fa16cef65feb",
+      "name": "Scimitar +2",
+      "sha256": "5f131fd634a073e1eeb57b6bb972dcf5813e3eabc8d834da6b4ae2e82be52f7f",
+      "targetKeys": [
+        "official:equipment:es:d879ce56596605f6c73c7aa4"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "scimitar",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:cf5a6d456a17c15d8a0192a6",
+      "name": "Longsword +2",
+      "sha256": "d5d0081a516b70be2e99b0e00156daa868a1102d317b4ef2bc7463a06f499f5b",
+      "targetKeys": [
+        "official:equipment:es:427d7d7894ad022cd2cd4f2e"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longsword",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:cf6777b92bf74a99bee9fad1",
+      "name": "Greatsword +1",
+      "sha256": "70718bc4c7ebb022b98b8c58f55c3a9f7633b81fa6fa7c739c427df9627db6c2",
+      "targetKeys": [
+        "official:equipment:es:0fb78ee87ee268b333966d95"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatsword",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:d3512bc8d5fd6575924214e1",
+      "name": "Shortbow +2",
+      "sha256": "30fdbfb25eb591eb9b27643a85463c748c64b7d30ad3d306818d24b1c7a55ad3",
+      "targetKeys": [
+        "official:equipment:es:afb9e77da087e5ffc73ac765"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortbow",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:d5f27f0f96a572e4b4e8ab04",
+      "name": "Dagger +1",
+      "sha256": "ecfd094ba3bb2c85f441ec66ecdfede13114be8d65508b04c3903146d7ad911f",
+      "targetKeys": [
+        "official:equipment:es:dfdc64a54ce6b53c43d4ea1a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dagger",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:d70400df61f2fcd64c855e7f",
+      "name": "Crossbow, light",
+      "sha256": "8b9e374a88058ff371559084a8a347b901e06cef8280590fd59f5b247b462141",
+      "targetKeys": [
+        "official:equipment:es:ec6c92e57f4e5b957428ab9f"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-light",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:d7fbd03536573b84208351cf",
+      "name": "Shortbow",
+      "sha256": "0b9311bdb8912afc75079fa2143e00330ff64d46d208cfd5f8dc5a7e7daff0e2",
+      "targetKeys": [
+        "official:equipment:es:8275f868a07231e266484435"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortbow",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:da579490e127fdf2dfb21d7c",
+      "name": "Longbow +2",
+      "sha256": "f221d852845f21bfb3b6bd74d882a20e3d798cbf6b9f7a573d103ef8b9ea3c05",
+      "targetKeys": [
+        "official:equipment:es:c19f57566f5600c65eb85dcf"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longbow",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:dbc7d6384ab30974e382894c",
+      "name": "Longsword",
+      "sha256": "cf4cbbd22f616322ce8c49c8d9dd889d7624f51c5ca2cf3b447476d5f39eafa0",
+      "targetKeys": [
+        "official:equipment:es:fb0103e0da3594dccbdf899a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longsword",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:dc9fb4ec04fbcc4b8b408d8f",
+      "name": "Crossbow, light +2",
+      "sha256": "facbb761b18bd6046394f1a46176d5c4e6f85bf8e9115cabaf41cb2a9f18feac",
+      "targetKeys": [
+        "official:equipment:es:88526ef017739e4f43eb5549"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-light",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:dcfde432b9c9c2bfd7778ee8",
+      "name": "Warhammer +3",
+      "sha256": "7dd01bac8e4820faaf366885e14f8b753b9259a53465e413ef48d0865e97e7b2",
+      "targetKeys": [
+        "official:equipment:es:333e7d671c5916a7d3b6990d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "warhammer",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:deba9e1372c556498a57d477",
+      "name": "Crossbow, hand +3",
+      "sha256": "1071940e19d7166d45c4eb8dbba9b7dee1a070c4c0c5ac28d48ac7dbfb95e3ad",
+      "targetKeys": [
+        "official:equipment:es:b4b477f0ceb6a8638f61e659"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-hand",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:e00bb8ac15f0a1059bc9c76b",
+      "name": "Pike",
+      "sha256": "6d056fda35f362dfb38ca4162d5e83562c43e3a49d2fe5fdfb2545c90fed5dc3",
+      "targetKeys": [
+        "official:equipment:es:56389008119a2f14fbebdc5e"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "pike",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:e065b34cb5aa007c7d4e494d",
+      "name": "Spear +3",
+      "sha256": "e633623cae1930b9ef15350866f06717928776c5abb411053a8d630497022e68",
+      "targetKeys": [
+        "official:equipment:es:99bec1539c31938fd5a5f870"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "spear",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:e1dd6c7b1f720ffae2308567",
+      "name": "Morningstar +1",
+      "sha256": "9970a188a555075ef14316ae5e87473f247355b3e1c7770e03267aad9b3a708f",
+      "targetKeys": [
+        "official:equipment:es:eea0c549ca2fd51394afa3db"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "morningstar",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:e2b215409b21e70b65d26dee",
+      "name": "Club +3",
+      "sha256": "37296240bd98b3fc8bf8352907af309a48307cd59d4655a24d3668f13c24625a",
+      "targetKeys": [
+        "official:equipment:es:d10f39ea1b3d040d71c7ec73"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "club",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:e3a17c8fd1a14da7b975585c",
+      "name": "Padded Armor +1",
+      "sha256": "4c47e2b651dcf827585033caceee6fbbb681be0779af6070d27a00f24e309ba9",
+      "targetKeys": [
+        "official:equipment:es:182b00e731897a7e4885ffb0"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "padded-armor",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:e44936f5348c7501506274e1",
+      "name": "War pick",
+      "sha256": "fd0c9b0211a6c9f7122e1c97a281f43bc75c166b2d8139e66771e33f1d87e0bc",
+      "targetKeys": [
+        "official:equipment:es:3cda7dee8f2554603c6f5b04"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "war-pick",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:e5e1f90f0f95992d8a6a4d08",
+      "name": "Ring Mail +3",
+      "sha256": "10253dbe431993ab4e21774543f5c2d2bf9fa60dd73019acbfd880e2cb3db529",
+      "targetKeys": [
+        "official:equipment:es:32da119ee9cc78e069f0cc38"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "ring-mail",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:e66383c51811ef9bbddf97bb",
+      "name": "Sickle +2",
+      "sha256": "59bf1e5a0c41480dff90c633de8016ba3425a1561a52328c19805e7812bacad0",
+      "targetKeys": [
+        "official:equipment:es:1e96267ec9b56f56b6e9c0fe"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sickle",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:e668e2315c5c825a1bac07ce",
+      "name": "Battleaxe +2",
+      "sha256": "44d0de3a115fd56291178454e9f46ba21b228ca5531da27ce0f56561b05ba360",
+      "targetKeys": [
+        "official:equipment:es:68c8440c2dc2a517496af98a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "battleaxe",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:e80cca39f5ccb5e64d281222",
+      "name": "Sling",
+      "sha256": "c628bfddd269c087557d0fe9a2ed2383de2c242f5edbf93da31d096a21ef0c7c",
+      "targetKeys": [
+        "official:equipment:es:7ac0dbf0ddb4186566756f48"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "sling",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:e8a8d23e23329bdc4609fdff",
+      "name": "Crossbow, hand",
+      "sha256": "eb63aff924168ca6bd761b8ff9fa3b2a93d7f585ef88d2c1df42fe0e94bcb87c",
+      "targetKeys": [
+        "official:equipment:es:33fb8bab9e5a248882c17d0a"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "crossbow-hand",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:e8e5344985d287e0dc2050b1",
+      "name": "Greatclub +1",
+      "sha256": "8059166f49bc461d89f2ac8bab52655f9e4feb9d9294af4151d56e2b000a9dee",
+      "targetKeys": [
+        "official:equipment:es:2d3f0176a01c04b4b26ee9c5"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greatclub",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:ea838bfeacc047b910a6ce76",
+      "name": "Shortbow +3",
+      "sha256": "2d7a67d1805df4db78c4953e46e92fd42253c6eda7430f891386c8f8f059b184",
+      "targetKeys": [
+        "official:equipment:es:7c6e7b218899de5cde182cae"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "shortbow",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:eaa26910a29b045a5963dc37",
+      "name": "Scimitar",
+      "sha256": "168c3fd6d14f5ad904e6d60ccef7069a0b619b2ad71dda8bee01214efee5b038",
+      "targetKeys": [
+        "official:equipment:es:6d5554a889e84346a850741e"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "scimitar",
+        "enhancement": 0
+      }
+    },
+    {
+      "key": "official:equipment:eng:ebcf7135ae11c407c540a82e",
+      "name": "Rapier +1",
+      "sha256": "8be15d8a084fcfbfcaa37fe4b02ec3c140a5d149c98d1f2e29473f0cc4d6affb",
+      "targetKeys": [
+        "official:equipment:es:a0dc88a77af046734ca56e1d"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "rapier",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:edca567f2245f88602b16c2e",
+      "name": "Maul +2",
+      "sha256": "ff278d714f63da40675c5ddc0a60c3d46a6af9ec20042c1514dea5d5cc660fef",
+      "targetKeys": [
+        "official:equipment:es:03e1756b1be36a1a4bda44e0"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "maul",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:ee68ecb7844ac396fd8de532",
+      "name": "Glaive +3",
+      "sha256": "bf92b1c93cad8294cfefcb2cb9086440d79351f52c74be045105f42471ad2f68",
+      "targetKeys": [
+        "official:equipment:es:7b531f3e18b96bfdd467ac99"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "glaive",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:eeccaaf4d98524cc116d1833",
+      "name": "Longsword +1",
+      "sha256": "e756274f09bbc94ffdb8255077321d34e64ea6991fe0567efa781127c5d391e4",
+      "targetKeys": [
+        "official:equipment:es:e1a05d8b10f5b9670944a1bd"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longsword",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:f0f305915ff03b8d0c144b05",
+      "name": "Greataxe +3",
+      "sha256": "959012ebfca3a033a830a62f023e67a1bf85e14803d035339e52352e3bc795da",
+      "targetKeys": [
+        "official:equipment:es:0debc76df53740788be592da"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greataxe",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:f2b38d745f27ac085f0b4e31",
+      "name": "Rapier +3",
+      "sha256": "c1c209d23ff8f8da133e0014b8a853d8d2b708401bb19b6e31287e639b6f990e",
+      "targetKeys": [
+        "official:equipment:es:58f31312dd8e6ce7f5b5dd62"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "rapier",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:f3e1bb2d3afd9ab3d2c8e058",
+      "name": "Morningstar +2",
+      "sha256": "3a97445dcba42de8d35942a8570cf01c4afb8ad5d1748439fd1744df5fbbf4c5",
+      "targetKeys": [
+        "official:equipment:es:51c90178f68947f68ab75cf8"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "morningstar",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:f48f321deb05d4a216c66652",
+      "name": "Dart +3",
+      "sha256": "e86e1baad7dcf9ee2977368ebbab1f12d23eddb2bc75c176b9016f7a75d58495",
+      "targetKeys": [
+        "official:equipment:es:2e248517e8fbfc7a7f268662"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dart",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:f75cdcd5dec003db8cc43b3f",
+      "name": "Greataxe +2",
+      "sha256": "40e47c624077d0d93104fcc251f794ca939eb9b215bfc57b97cce1d0e02fa5d4",
+      "targetKeys": [
+        "official:equipment:es:ed61e618e8d82dfa81ee1d7b"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "greataxe",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:f88ce108dacd254bfb23749c",
+      "name": "Hide Armor +3",
+      "sha256": "b94108e78db134029ea024003051e713a5da9cfd5eb025b657c57ac9b63b54e5",
+      "targetKeys": [
+        "official:equipment:es:fc78555eb05f45cfcd3d8c15"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "hide-armor",
+        "enhancement": 3
+      }
+    },
+    {
+      "key": "official:equipment:eng:f9904b7f1b6f4e4c22821d39",
+      "name": "Dart +2",
+      "sha256": "29678cff9666b581b653cd8fc0ae950f44379ac1e1c6326b7358c18fb252099e",
+      "targetKeys": [
+        "official:equipment:es:4f04510bdcba05c0168a8c75"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "dart",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:fd71d8b360c6020eb0ba8081",
+      "name": "Javelin +1",
+      "sha256": "17768943acdaaf740dfc860783cd58121dc0c6578fda4c899e77c6e9e2d32c22",
+      "targetKeys": [
+        "official:equipment:es:d1ef2d97d8a0518d7d44cd01"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "javelin",
+        "enhancement": 1
+      }
+    },
+    {
+      "key": "official:equipment:eng:ff3b5d07ff81e10fa966b426",
+      "name": "Whip +2",
+      "sha256": "0364a4fea4c4629ff5fff813835922cbbfd71d011ee57e94a8b0dd2f7eac07fe",
+      "targetKeys": [
+        "official:equipment:es:88975bc69165b7f4b4073811"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "whip",
+        "enhancement": 2
+      }
+    },
+    {
+      "key": "official:equipment:eng:ff3effdf6239aa4f96625a09",
+      "name": "Longbow",
+      "sha256": "2b10c1e927dbc35baa264e92a479814b1326cf43a99272035b2e68573e05c9ee",
+      "targetKeys": [
+        "official:equipment:es:21020dfe1365d435b3581a49"
+      ],
+      "reason": "Perfil físico cotejado con la tabla oficial de 2014 y, cuando corresponde, la regla genérica +1/+2/+3. La introducción importada no normativa se sustituye por esas reglas; la rareza, peso o restricciones erróneos se corrigen mediante la fuente oficial. Los precios existentes se conservan.",
+      "evidence": {
+        "baseIndex": "longbow",
+        "enhancement": 0
+      }
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

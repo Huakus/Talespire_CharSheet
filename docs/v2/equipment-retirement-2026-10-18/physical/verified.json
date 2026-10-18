@@ -1,0 +1,16 @@
+{
+  "revision": 1290,
+  "deleted": 172,
+  "englishRemaining": 471,
+  "normalized": 839,
+  "preparations": 833,
+  "protectedHashesEqual": true,
+  "hashes": {
+    "shared": "f047b7188bfbcef360e67d11b8df18ed",
+    "content": "fb8d9c8b072a2e242eaadc2a1e32bc40",
+    "revision": 1290,
+    "versions": "474f5f1691b015d2e8e38ec6cc24bc0d",
+    "fragments": "729708253da3bc8ef0b996807ab2336f",
+    "otherCampaigns": "8fc4ee65322cb858c7b22f284a8eef86"
+  }
+}

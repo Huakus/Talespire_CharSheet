@@ -1,0 +1,82 @@
+{
+  "reaperShadow": {
+    "source": {
+      "id": "ece-gm-reaper-shadow-int-and-dawn",
+      "kind": "campaign",
+      "title": "ECE · reglas de Sombra del Segador confirmadas por el GM",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "Indicación del GM en esta conversación, 18 de octubre de 2026: «1 es a proposito 2 al amanecer»; confirma INT +1 y la recuperación de Marca de la Cercanía al amanecer.",
+      "verified": true
+    },
+    "originalInstruction": "1 es a proposito 2 al amanecer",
+    "text": "Mientras estés sintonizado con Sombra del Segador y el objeto esté en contacto con tu cuerpo, tu puntuación de Inteligencia aumenta en 1. Marca de la Cercanía tiene un uso y recupera el uso gastado al amanecer. Los demás poderes, requisitos y contrapartidas conservan sus reglas descritas.",
+    "intelligenceEffect": {
+      "id": "intelligence-plus-one",
+      "kind": "bonus",
+      "condition": "Mientras estés sintonizado y el objeto esté en contacto con tu cuerpo, llevado o vestido.",
+      "target": "intelligence",
+      "operation": "add",
+      "value": 1
+    },
+    "markRecovery": {
+      "kind": "event",
+      "event": "dawn",
+      "explanation": "Recupera el uso gastado al amanecer, según confirmó el GM.",
+      "amount": { "kind": "full" }
+    }
+  },
+  "wisdomAmulet": {
+    "source": {
+      "id": "ece-gm-wisdom-amulet-saves",
+      "kind": "campaign",
+      "title": "ECE · regla del Amuleto de la sabiduría confirmada por el GM",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "Indicación del GM en esta conversación, 18 de octubre de 2026: «+1 a las salvaciones de Sabiduría»",
+      "verified": true
+    },
+    "originalInstruction": "+1 a las salvaciones de Sabiduría",
+    "text": "Mientras lleves puesto este amuleto y estés sintonizado con él, obtienes un bonificador de +1 a las tiradas de salvación de Sabiduría. Este bonificador no aumenta tu puntuación de Sabiduría ni se aplica a las salvaciones de otras características.",
+    "effect": {
+      "id": "wisdom-saving-throws-plus-one",
+      "kind": "bonus",
+      "condition": "Solo tiradas de salvación de Sabiduría; requiere llevar puesto y sintonizado el amuleto.",
+      "target": "wisdom-saves",
+      "operation": "add",
+      "value": 1
+    },
+    "pendingAutomation": [
+      "Aplicar el +1 únicamente a las salvaciones de Sabiduría mientras se cumplan los requisitos de equipo y sintonización.",
+      "Retirar el bono al dejar de cumplir los requisitos y evitar duplicarlo si la copia antigua ya tiene ese efecto."
+    ]
+  },
+  "runedCloak": {
+    "source": {
+      "id": "ece-gm-runed-cloak-spell-slot",
+      "kind": "campaign",
+      "title": "ECE · aclaración del GM sobre la Capa con runas",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "Indicación del GM en esta conversación: «siempre tenes un espacio de conjuro adicional... ese espacio se usa y recupera igual que el resto...»",
+      "verified": true
+    },
+    "originalInstruction": "siempre tenes un espacio de conjuro adicional... ese espacio se usa y recupera igual que el resto...",
+    "text": "Mientras lleves puesta la capa, tienes un espacio de conjuro adicional de nivel 1. Ese espacio se gasta y recupera con las mismas reglas que los demás espacios del portador. Aumenta la capacidad de espacios; no es una carga del objeto ni tiene una recuperación independiente.",
+    "effect": {
+      "id": "additional-level-1-slot",
+      "kind": "spell-slot-capacity",
+      "condition": "Mientras lleves puesta la Capa con runas.",
+      "level": 1,
+      "amount": 1,
+      "pool": "inherit",
+      "recovery": "inherit",
+      "explanation": "Añadir un espacio de nivel 1 a la reserva de conjuros correspondiente del portador y aplicar sus reglas de gasto y recuperación. No elevar su nivel por el nivel de los espacios de Magia del Pacto ni inventar un contador diario del objeto. Si hay varias reservas, resolver a cuál corresponde antes de aplicarlo; no sumarlo a todas automáticamente."
+    },
+    "pendingAutomation": [
+      "Añadir la capacidad al llevar puesta la capa, sin alterar los espacios base de la clase ni duplicar el bono ya existente.",
+      "Asociar el espacio con la reserva correspondiente del portador y heredar sus reglas de gasto y recuperación.",
+      "Conservar el gasto al quitar, volver a poner o transferir la capa para que esas operaciones no funcionen como una recarga."
+    ]
+  }
+}

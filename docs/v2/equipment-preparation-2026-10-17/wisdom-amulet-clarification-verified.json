@@ -1,0 +1,31 @@
+{
+  "item": "Amuleto de la sabiduría",
+  "savedAs": "equipment-preparation",
+  "equipmentRevision": 2,
+  "campaignRevision": 1199,
+  "preparationRows": 853,
+  "effect": {
+    "id": "wisdom-saving-throws-plus-one",
+    "condition": "Solo tiradas de salvación de Sabiduría; requiere llevar puesto y sintonizado el amuleto.",
+    "kind": "bonus",
+    "target": "wisdom-saves",
+    "operation": "add",
+    "value": 1
+  },
+  "previousOriginalsPreserved": true,
+  "gmInstructionArchivedAndVerified": true,
+  "otherContentUnchanged": true,
+  "sharedCatalogUnchanged": true,
+  "charactersUnchanged": true,
+  "merchantStockUnchanged": true,
+  "otherCampaignsUnchanged": true,
+  "activeCopiesChanged": 0,
+  "activeSlotCapacityChanged": false,
+  "executionImplemented": false,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "preparationLoadErrors": 0,
+  "targetedTestsPassed": 26,
+  "typecheckPassed": true,
+  "buildPassed": true
+}

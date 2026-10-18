@@ -1,0 +1,660 @@
+{
+  "sources": [
+    "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf"
+  ],
+  "count": 110,
+  "items": [
+    {
+      "id": "recovery:official:equipment:es:0896a39342fdfdeba982f162",
+      "name": "Escarabajo protector",
+      "page": 246
+    },
+    {
+      "id": "recovery:official:equipment:es:0fdb2edd8391f7440a662f31",
+      "name": "Anillo de influencia animal",
+      "page": 226
+    },
+    {
+      "id": "recovery:official:equipment:es:1292a93cfe7a65cc643acff2",
+      "name": "Poción de forma gaseosa",
+      "page": 261
+    },
+    {
+      "id": "recovery:official:equipment:es:12dbdfe92af7a3f1f15418a0",
+      "name": "Anillo de salto",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:16bfcef27391210d1ed5263a",
+      "name": "Anillo de los tres deseos",
+      "page": 226
+    },
+    {
+      "id": "recovery:official:equipment:es:1841b81ee7964b8aa7381ead",
+      "name": "Capa del charlatán",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:1dc5037c519b0370df4df0ea",
+      "name": "Talismán de la esfera",
+      "page": 263
+    },
+    {
+      "id": "recovery:official:equipment:es:228455e6c8f12bf61d32bd0f",
+      "name": "Capa arácnida",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:25c626a208ba4a32f000c0d0",
+      "name": "Poción de clarividencia",
+      "page": 260
+    },
+    {
+      "id": "recovery:official:equipment:es:285015c1f803ed9cd52a94c8",
+      "name": "Varita de parálisis",
+      "page": 268
+    },
+    {
+      "id": "recovery:official:equipment:es:28901ef2614cdb26e4f09af0",
+      "name": "Filtro de amor",
+      "page": 252
+    },
+    {
+      "id": "recovery:official:equipment:es:29b91b0b62ab8ab131ddf0b1",
+      "name": "Capa de la mantarraya",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:2ce971dab6d5fa7c121bc193",
+      "name": "Poción de velocidad",
+      "page": 261
+    },
+    {
+      "id": "recovery:official:equipment:es:2ff65e228901f70ca8f98828",
+      "name": "Capa élfica",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:31e133f12be930aa336bc88c",
+      "name": "Yelmo de teletransporte",
+      "page": 271
+    },
+    {
+      "id": "recovery:official:equipment:es:3534fedcf685dcdcbdddaa6c",
+      "name": "Babuchas de trepar cual arácnido",
+      "page": 230
+    },
+    {
+      "id": "recovery:official:equipment:es:372fde0046c3e7c354b9b95a",
+      "name": "Cuerda enredadora",
+      "page": 245
+    },
+    {
+      "id": "recovery:official:equipment:es:39453ee81afcebaacb6be012",
+      "name": "Agujero portátil",
+      "page": 223
+    },
+    {
+      "id": "recovery:official:equipment:es:3a81c2f6a557d09b39518381",
+      "name": "Bolsa devoradora",
+      "page": 238
+    },
+    {
+      "id": "recovery:official:equipment:es:3d024672d426c959fbf7c9a1",
+      "name": "Disolvente universal",
+      "page": 246
+    },
+    {
+      "id": "recovery:official:equipment:es:3f024215021b8d6d2f55ce10",
+      "name": "Polvo de estornudar y atragantarse",
+      "page": 262
+    },
+    {
+      "id": "recovery:official:equipment:es:40a2f5363de51d6cb164abd8",
+      "name": "Brazales de arquería",
+      "page": 240
+    },
+    {
+      "id": "recovery:official:equipment:es:40b58116d37541a913e599f0",
+      "name": "Escudo animado",
+      "page": 247
+    },
+    {
+      "id": "recovery:official:equipment:es:40c309135dcff04c75eaedf9",
+      "name": "Túnica de colores hipnóticos",
+      "page": 264
+    },
+    {
+      "id": "recovery:official:equipment:es:42c6717f4067f757367c2635",
+      "name": "Anillo de visión de rayos X",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:452141c2dd6546ad7efa6fbf",
+      "name": "Canica de fuerza",
+      "page": 240
+    },
+    {
+      "id": "recovery:official:equipment:es:456584ec47f3232d734253f5",
+      "name": "Varita de detección mágica",
+      "page": 267
+    },
+    {
+      "id": "recovery:official:equipment:es:467d1b7be14f7d6b4b56ac69",
+      "name": "Brazales de defensa",
+      "page": 240
+    },
+    {
+      "id": "recovery:official:equipment:es:46f6e5386a87b70724f56073",
+      "name": "Talismán del bien puro",
+      "page": 263
+    },
+    {
+      "id": "recovery:official:equipment:es:4a0280fe1a12b371b774bf9f",
+      "name": "Talismán de salud",
+      "page": 263
+    },
+    {
+      "id": "recovery:official:equipment:es:4ab721eddc176d100836952d",
+      "name": "Anteojos de la noche",
+      "page": 228
+    },
+    {
+      "id": "recovery:official:equipment:es:4e36e183be0438f40795afb1",
+      "name": "Botas de velocidad",
+      "page": 239
+    },
+    {
+      "id": "recovery:official:equipment:es:50efd0e45ac3503fcd5c510e",
+      "name": "Sombrero de disfraz",
+      "page": 263
+    },
+    {
+      "id": "recovery:official:equipment:es:54bd24ef297c7d88cdcc3f10",
+      "name": "Decantador de agua interminable",
+      "page": 246
+    },
+    {
+      "id": "recovery:official:equipment:es:594081d8f38c71118bc60395",
+      "name": "Poción de amistad animal",
+      "page": 260
+    },
+    {
+      "id": "recovery:official:equipment:es:5a6e10a599f12e551f1d8566",
+      "name": "Capa de desplazamiento",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:5af4e6bb6390ffae681ef6a5",
+      "name": "Guantes atrapaflechas",
+      "page": 254
+    },
+    {
+      "id": "recovery:official:equipment:es:5b5c9f4db3a6a9bf121717fe",
+      "name": "Pozo de los muchos mundos",
+      "page": 263
+    },
+    {
+      "id": "recovery:official:equipment:es:5e7858f630e21b5d417a1498",
+      "name": "Cuerno de estallido",
+      "page": 245
+    },
+    {
+      "id": "recovery:official:equipment:es:656acc5366e5b282988b132f",
+      "name": "Collar de bolas de fuego",
+      "page": 243
+    },
+    {
+      "id": "recovery:official:equipment:es:65b77c0aa953b874822fa87d",
+      "name": "Cuenco para controlar elementales de agua",
+      "page": 244
+    },
+    {
+      "id": "recovery:official:equipment:es:669dbf2489ed293bb38d8a17",
+      "name": "Manual de rapidez de acción",
+      "page": 256
+    },
+    {
+      "id": "recovery:official:equipment:es:67c4d58203382e9febe67247",
+      "name": "Bastón de escarcha",
+      "page": 233
+    },
+    {
+      "id": "recovery:official:equipment:es:6e0e16ea21a0f01542022994",
+      "name": "Escoba voladora",
+      "page": 247
+    },
+    {
+      "id": "recovery:official:equipment:es:6f505d7deed241155c4e0b85",
+      "name": "Tomo de pensamiento claro",
+      "page": 264
+    },
+    {
+      "id": "recovery:official:equipment:es:74a52ed7f52b736c3d425209",
+      "name": "Portal cúbico",
+      "page": 262
+    },
+    {
+      "id": "recovery:official:equipment:es:769ff7952f0ed75b062d6044",
+      "name": "Poción de crecimiento",
+      "page": 260
+    },
+    {
+      "id": "recovery:official:equipment:es:79ac3b7e18f9352b31f1cde4",
+      "name": "Botas de las tierras invernales",
+      "page": 239
+    },
+    {
+      "id": "recovery:official:equipment:es:7c1a658894dfd5edf11c9260",
+      "name": "Pegamento soberano",
+      "page": 258
+    },
+    {
+      "id": "recovery:official:equipment:es:7c5164541d5c7d2d1179ff8e",
+      "name": "Vara inamovible",
+      "page": 266
+    },
+    {
+      "id": "recovery:official:equipment:es:7fee756c80e074dd2dc47947",
+      "name": "Anteojos de vista de águila",
+      "page": 228
+    },
+    {
+      "id": "recovery:official:equipment:es:837132a2b546795dcbf8cd3c",
+      "name": "Diadema de estallidos",
+      "page": 246
+    },
+    {
+      "id": "recovery:official:equipment:es:8a04f86771d4d29eeccaedd8",
+      "name": "Medallón de los pensamientos",
+      "page": 257
+    },
+    {
+      "id": "recovery:official:equipment:es:8a8fbb6b819be5eeb799cd18",
+      "name": "Poción de heroísmo",
+      "page": 261
+    },
+    {
+      "id": "recovery:official:equipment:es:8b457fb486eaa62761e1af40",
+      "name": "Broche escudo",
+      "page": 240
+    },
+    {
+      "id": "recovery:official:equipment:es:8e9870158921c82b6141bae1",
+      "name": "Botas de levitación",
+      "page": 239
+    },
+    {
+      "id": "recovery:official:equipment:es:8ec089ba90c7b3afc8bb2f17",
+      "name": "Varita de bolas de fuego",
+      "page": 267
+    },
+    {
+      "id": "recovery:official:equipment:es:903dd146fa94bcb540f66067",
+      "name": "Anillo de telequinesis",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:93f1c99090f8be79a17fd06e",
+      "name": "Anteojos de encantamiento",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:9852ab1d5c8a0dd1a28350ee",
+      "name": "Jabalina del relámpago",
+      "page": 255
+    },
+    {
+      "id": "recovery:official:equipment:es:98f0c87fbcf5e4c229ee31c6",
+      "name": "Colgante de inmunidad al veneno",
+      "page": 243
+    },
+    {
+      "id": "recovery:official:equipment:es:998400e4c821f962aeb6cdd5",
+      "name": "Anillo de calidez",
+      "page": 224
+    },
+    {
+      "id": "recovery:official:equipment:es:9c016be8b83c12338a8dad61",
+      "name": "Herraduras de velocidad",
+      "page": 255
+    },
+    {
+      "id": "recovery:official:equipment:es:9e57f5c2c50cbb85a56cb9e4",
+      "name": "Túnica del archimago",
+      "page": 265
+    },
+    {
+      "id": "recovery:official:equipment:es:a5a38836a0abdf55d85abd49",
+      "name": "Anillo de invisibilidad",
+      "page": 226
+    },
+    {
+      "id": "recovery:official:equipment:es:a7fbc04fda77cc66426fa9c3",
+      "name": "Cinturón enano",
+      "page": 243
+    },
+    {
+      "id": "recovery:official:equipment:es:a953a6430afcb4161c27bed0",
+      "name": "Capa de protección",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:ae8df89f9da41aae9d719be2",
+      "name": "Linterna de revelación",
+      "page": 255
+    },
+    {
+      "id": "recovery:official:equipment:es:aee4ecc2761ede53dbfb4ef0",
+      "name": "Cimitarra de velocidad",
+      "page": 242
+    },
+    {
+      "id": "recovery:official:equipment:es:b05f5e537ecf92db2ca2ae7e",
+      "name": "Capa de murciélago",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:b2a16fd04dd10bb6241cffcb",
+      "name": "Anillo de protección",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:b4e79a3cd24aec59f54d746c",
+      "name": "Túnica de los ojos",
+      "page": 264
+    },
+    {
+      "id": "recovery:official:equipment:es:b51442c4161640e2e7a37f88",
+      "name": "Bote plegable",
+      "page": 239
+    },
+    {
+      "id": "recovery:official:equipment:es:b516b1395030f3d0e44512e6",
+      "name": "Carillón de apertura",
+      "page": 241
+    },
+    {
+      "id": "recovery:official:equipment:es:b6c252fadf815e5461e8d2a1",
+      "name": "Poción de invisibilidad",
+      "page": 261
+    },
+    {
+      "id": "recovery:official:equipment:es:b97890f2fdedbce0fbe843c2",
+      "name": "Talismán del mal definitivo",
+      "page": 263
+    },
+    {
+      "id": "recovery:official:equipment:es:bbea1bc3b1ff5ee755a3fe51",
+      "name": "Martillo de rayos",
+      "page": 256
+    },
+    {
+      "id": "recovery:official:equipment:es:c28c2cb011feaf97fdd6402b",
+      "name": "Collar de adaptación",
+      "page": 243
+    },
+    {
+      "id": "recovery:official:equipment:es:c50d2ef062b71da3a562d1f3",
+      "name": "Botas de zancadas y brincos",
+      "page": 239
+    },
+    {
+      "id": "recovery:official:equipment:es:cd01816f1e2741e749410128",
+      "name": "Flauta de las cloacas",
+      "page": 252
+    },
+    {
+      "id": "recovery:official:equipment:es:cf69ef489f5705da5fee89ad",
+      "name": "Bastón de fuego",
+      "page": 233
+    },
+    {
+      "id": "recovery:official:equipment:es:cf92c104e190056bf85689b9",
+      "name": "Flauta de la aparición",
+      "page": 252
+    },
+    {
+      "id": "recovery:official:equipment:es:d12a1e5c8d86194c4729fcff",
+      "name": "Guanteletes de fuerza de ogro",
+      "page": 254
+    },
+    {
+      "id": "recovery:official:equipment:es:d194c1925cd7eed15e88f9d2",
+      "name": "Anillo de evasión",
+      "page": 226
+    },
+    {
+      "id": "recovery:official:equipment:es:d2c9cf7c7304dbd37f8bc7e1",
+      "name": "Escudo atrapaflechas",
+      "page": 247
+    },
+    {
+      "id": "recovery:official:equipment:es:d45091cecb894506094369a2",
+      "name": "Túnica de las estrellas",
+      "page": 264
+    },
+    {
+      "id": "recovery:official:equipment:es:d613ca81a782e29c124eff8f",
+      "name": "Anteojos de visión minuciosa",
+      "page": 228
+    },
+    {
+      "id": "recovery:official:equipment:es:d81d22e38c3ddd4e620b5674",
+      "name": "Anillo de regeneración",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:d837a9dc165434a7ebb4b2bb",
+      "name": "Herraduras del céfiro",
+      "page": 255
+    },
+    {
+      "id": "recovery:official:equipment:es:d857ec4ef6d77131aa567d47",
+      "name": "Brasero para controlar elementales de fuego",
+      "page": 240
+    },
+    {
+      "id": "recovery:official:equipment:es:daca2184e53f2ea25df94b05",
+      "name": "Yelmo de telepatía",
+      "page": 270
+    },
+    {
+      "id": "recovery:official:equipment:es:db68a706e3edbdffed736118",
+      "name": "Guantes de natación y escalada",
+      "page": 254
+    },
+    {
+      "id": "recovery:official:equipment:es:db828358f6811c9a673a2d57",
+      "name": "Botella siemprehumeante",
+      "page": 240
+    },
+    {
+      "id": "recovery:official:equipment:es:e22d639500fbb1d59085b9a5",
+      "name": "Manto de resistencia a conjuros",
+      "page": 256
+    },
+    {
+      "id": "recovery:official:equipment:es:e6f279561dbf73cf66121000",
+      "name": "Alas de vuelo",
+      "page": 223
+    },
+    {
+      "id": "recovery:official:equipment:es:e6fb55a58513814680574185",
+      "name": "Tomo de liderazgo e influencia",
+      "page": 264
+    },
+    {
+      "id": "recovery:official:equipment:es:e71f1a3639d0ca163bea1a3f",
+      "name": "Varita de telaraña",
+      "page": 269
+    },
+    {
+      "id": "recovery:official:equipment:es:e721509cc0c1d5f572afb81d",
+      "name": "Anillo de protección",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:ee2f824a81e843344627dbf3",
+      "name": "Anillo de salto",
+      "page": 227
+    },
+    {
+      "id": "recovery:official:equipment:es:ee49205d290ab9eaafa1108f",
+      "name": "Yelmo de entender idiomas",
+      "page": 270
+    },
+    {
+      "id": "recovery:official:equipment:es:f04899b83f054b78715736ed",
+      "name": "Manual del ejercicio beneficioso",
+      "page": 256
+    },
+    {
+      "id": "recovery:official:equipment:es:f16f5c78093a9e8470217e65",
+      "name": "Cuerda de escalada",
+      "page": 244
+    },
+    {
+      "id": "recovery:official:equipment:es:f3000567c773f6c02cfb2957",
+      "name": "Grilletes dimensionales",
+      "page": 254
+    },
+    {
+      "id": "recovery:official:equipment:es:f49a0cb0ee5dc6d777c153e6",
+      "name": "Anillo de natación",
+      "page": 226
+    },
+    {
+      "id": "recovery:official:equipment:es:f6074a2c384a012868bc89f1",
+      "name": "Incensario de controlar elementales de aire",
+      "page": 255
+    },
+    {
+      "id": "recovery:official:equipment:es:f6aefab76047c5788d5cb069",
+      "name": "Maza del terror",
+      "page": 257
+    },
+    {
+      "id": "recovery:official:equipment:es:f6f7ba7d85aced20808b7e36",
+      "name": "Polvo de sequedad",
+      "page": 262
+    },
+    {
+      "id": "recovery:official:equipment:es:f9667e4c34019878374a5f6c",
+      "name": "Gema del resplandor",
+      "page": 253
+    },
+    {
+      "id": "recovery:official:equipment:es:fdc90a46759c54f9de9bdfd3",
+      "name": "Yelmo de fulgor",
+      "page": 270
+    },
+    {
+      "id": "recovery:official:equipment:es:fe7e7b105892cbe04c051592",
+      "name": "Gema de visión",
+      "page": 253
+    }
+  ],
+  "blocked": [
+    {
+      "id": "recovery:official:equipment:es:1720e219787223e70061991c",
+      "name": "Esfera De Aniquilación",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:23abf7f292bc7bc0f40d9f43",
+      "name": "Cubo de Fuerza",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:25d11d7b5a7b5c94a5f9c0c8",
+      "name": "Anillo de Resistencia",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:288b0e63563a7d6ecda0925b",
+      "name": "Poción de resistencia",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:2d00d208f92c4357d88f466e",
+      "name": "Alfombra Voladora",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:35b4956012293b51dbd948f2",
+      "name": "Bolsa De Judías",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:3ba334460d1fc2fa2a8a2a56",
+      "name": "Bolsa de Trucos",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:4f1318f7cc6681bdee47447e",
+      "name": "Bola de Cristal",
+      "reason": "La fuente contiene variantes con rarezas y reglas diferentes."
+    },
+    {
+      "id": "recovery:official:equipment:es:5249e4cec98afdcbade660b8",
+      "name": "Baraja De Múltiples Cosas",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:5ff00bfd7ee36f8d690360b2",
+      "name": "Manual De Gólems",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:6eaa83f8bf3b7833d32c8ec4",
+      "name": "Vela De Invocación",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:972c534ec917c0ce3dd1011d",
+      "name": "Anillo de Estrellas Fugaces",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+      "name": "Bastón de poder",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:a2667f9e44b993a8c4bedb72",
+      "name": "Collar De Plegarias",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:a2e56acba61a14b044864300",
+      "name": "Frasco De Hierro",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:a4bb31770f018b43ba0417a9",
+      "name": "Cinturón de Fuerza de Gigante",
+      "reason": "La fuente contiene variantes con rarezas y reglas diferentes."
+    },
+    {
+      "id": "recovery:official:equipment:es:a75d7e0eba6a1f4a6b03546d",
+      "name": "Baraja de Ilusiones",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:b98496842c9011838d19a5f5",
+      "name": "Túnica De Objetos Útiles",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:db7d1b79dc665d3f57d5d2c2",
+      "name": "Botella De Ifrit",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    },
+    {
+      "id": "recovery:official:equipment:es:f59d76529bbbad4366ef31ef",
+      "name": "Gema Elemental",
+      "reason": "La tabla oficial requiere cotejo de columnas; se conserva completa en el PDF y los originales."
+    }
+  ]
+}

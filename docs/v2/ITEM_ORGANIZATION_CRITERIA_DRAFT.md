@@ -1,6 +1,10 @@
-# Organización de objetos: criterios propuestos
+# Organización de objetos: criterios acordados
 
-17 de octubre de 2026. Borrador para acordar antes de implementar o modificar datos. Complementa `ITEMS_EXPLORATORY_AUDIT.md`; no autoriza borrar, fusionar, traducir ni reemplazar entradas.
+17 de octubre de 2026. Criterios aceptados por el usuario, con su corrección sobre equivalentes en inglés. Complementa `ITEMS_EXPLORATORY_AUDIT.md`. Primera aplicación: clasificación mediante etiquetas en el catálogo compartido y ECE; las otras campañas conservan sus copias.
+
+**Decisión del 18 de octubre:** utilizar la versión oficial cuando exista una correspondencia inequívoca; retirar las combinaciones importadas incorrectamente en lugar de convertirlas automáticamente en variantes custom. No sustituir un objeto de campaña por otro que solo tenga un nombre o efecto parecido. La [aplicación a las 25 entradas apartadas](EQUIPMENT_OFFICIAL_RESOLUTION_2026-10-18.md) conserva los originales y deja explícitos los ocho casos todavía sin resolver.
+
+**Ampliación posterior acordada:** el orden y el formato de la siguiente etapa se especifican en [Catálogo definitivo y migración sin pérdida](ITEM_DEFINITIVE_CATALOG_SPEC.md). Primero se define e implementa el soporte del formato y se completa toda la base definitiva española recuperando información de ambos idiomas; después se migran personajes y comerciantes; finalmente se retiran las versiones antiguas sin uso y la etiqueta temporal `definitiva`. La prioridad es no perder información útil.
 
 ## Identidad e idioma
 
@@ -8,14 +12,14 @@ Un objeto representa una definición de reglas, no un idioma. La versión ingles
 
 | Situación | Tratamiento propuesto |
 | --- | --- |
-| Inglés y español equivalentes, cotejados | Una entrada principal en español. Conservar el original inglés como referencia y los nombres anteriores como alias. |
+| Inglés y español equivalentes, cotejados | Conservar solo la versión española cuando esté completa. Retirar la entrada inglesa redundante después de comprobar equivalencia y referencias; no mantenerla activa como referencia. |
 | Solo inglés, o equivalencia española no confirmada | Conservar íntegro en Pendientes de traducción. No mezclar con el catálogo principal listo en español. |
 | Español existente pero roto o sin cotejar | Conservarlo junto al original y marcar Pendiente de revisión. Si es ilegible, ubicarlo en pendientes hasta recuperarlo. |
 | Mismo nombre, distintas reglas | Conservar ambas versiones y marcar Conflicto de versión; resolver antes de fusionar. |
 | Una ficha o comercio usa una versión pendiente | Mantener la posesión y sus datos visibles. La organización del catálogo no debe hacer desaparecer equipo existente. |
 | Hay una traducción provisional | Identificarla como provisional; no presentarla como traducción oficial del manual. |
 
-No se elimina una entrada por estar en inglés. Una futura consolidación requiere comprobar equivalencias, preservar originales y variantes, revisar todas las referencias, migrar de forma verificable y mantener recuperación. Archivar una versión no debe cortar el acceso a copias que la usan.
+El idioma por sí solo no justifica eliminar una entrada. Sí se retirarán los equivalentes ingleses cuando exista una versión española completa y se hayan revisado las referencias. Las versiones únicas, distintas o dudosas se conservan hasta resolverlas. Una copia de recuperación no forma parte del catálogo activo; la consolidación tampoco debe cortar el acceso de las posesiones existentes.
 
 En la instantánea del relevamiento hay 803 filas inglesas: 791 comparten un índice heredado con alguna fila española y 12 no. **No son 791 equivalencias certificadas ni 12 objetos necesariamente exclusivos del inglés.** Entre los doce hay candidatos conocidos como Cloak of Charisma +1/Capa de Carisma +1 y Lucent Core/Núcleo Luciente, cuyos índices son distintos. El segundo además contiene una versión adaptada dentro de un JSON pegado: una traducción y un cambio de reglas pueden estar mezclados. Este ejemplo impide decidir la identidad solamente por nombre, idioma o índice.
 
@@ -34,7 +38,7 @@ En la instantánea del relevamiento hay 803 filas inglesas: 791 comparten un ín
 
 La etiqueta actual `official` no es prueba de procedencia. `imported` tampoco demuestra que algo sea casero. Identificar que un objeto proviene de un libro no implica habilitar ese libro. Se conserva la información de los objetos existentes sin ampliar automáticamente los manuales acordados.
 
-No usar etiquetas libres para repetir atributos que ya tienen un campo: idioma, tipo, rareza o sintonización. Los filtros se pueden construir a partir de esos campos. Reservar etiquetas libres para agrupaciones útiles de campaña, si se decide necesitarlas.
+No usar etiquetas de clasificación para repetir tipo, rareza o sintonización. En esta primera etapa se usan etiquetas controladas para fuente y revisiones pendientes, además de las agrupaciones de campaña. Se conservan internamente los marcadores heredados de idioma y carga para mantener la compatibilidad; no se muestran como clasificación. Esto aún no sustituye el modelo de identidad e idiomas propuesto.
 
 ## Definición, variante y posesión
 
@@ -56,6 +60,6 @@ Un objeto puede estar bien descrito y tener efectos manuales. También puede ten
 
 ## Presentación propuesta
 
-El catálogo habitual mostraría las entradas en español habilitadas para ECE. Un área de revisión conservaría Pendientes de traducción, Pendientes de contenido y Conflictos de versión. Los originales y versiones archivadas seguirían siendo consultables. Las posesiones existentes permanecerían en las fichas, con avisos de revisión cuando corresponda.
+El catálogo habitual muestra las entradas españolas habilitadas para ECE. Los filtros de etiquetas permiten revisar problemas de las entradas visibles. Una futura área de revisión incorporaría también las pendientes en inglés; por ahora se consultan en el informe de correspondencias. Las versiones inglesas redundantes se retirarán cuando se confirme una versión española completa. Las posesiones existentes permanecen en las fichas.
 
-El trabajo siguiente, una vez acordados estos criterios, sería aplicar la clasificación al relevamiento y preparar las correspondencias para revisar. Los originales se conservan durante ese proceso; las correcciones, fusiones y funcionalidades se planifican después sobre objetos concretos. Esta propuesta no cambia todavía ningún objeto ni flujo de la aplicación.
+La primera aplicación de etiquetas se documenta en `ITEM_TAG_CLASSIFICATION.md`, junto con los candidatos de equivalencia. Esta fase modifica clasificación y presentación de etiquetas; las correcciones de contenido y funciones se planifican después sobre objetos concretos. No se interpreta un índice heredado como prueba suficiente para retirar una versión inglesa.

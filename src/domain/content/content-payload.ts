@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { SpellDefinition } from "../character/character-spell-model";
-import { CharacterInventoryItemV2Schema, CharacterInventoryItemDraftSchema } from "../character/character-inventory-model";
+import { CharacterInventoryItemV2Schema, CharacterInventoryItemFieldsSchema } from "../character/character-inventory-model";
 import type { EquipmentCatalogDraft } from "../equipment/equipment-catalog";
 import { GmChecklistItemSchema, type GmChecklistItem, type GmShop } from "../gm/gm-global-content";
 import { normalizeMerchantInteraction } from "../commerce/merchant-interaction";
@@ -43,7 +43,8 @@ export const SpellContentPayloadSchema = ContentPayloadMetadataSchema.extend({
   year: z.string(),
 });
 
-const EquipmentDefinitionSchema = CharacterInventoryItemDraftSchema.omit({
+const EquipmentDefinitionSchema = CharacterInventoryItemFieldsSchema.omit({
+  id: true,
   order: true,
   group: true,
   catalog: true,
@@ -60,7 +61,9 @@ const MonsterFeatureSchema = z.object({
   usage: z.string(),
 });
 
-const MonsterInventoryPayloadSchema = CharacterInventoryItemV2Schema.omit({ catalog: true });
+// A nested inventory entry is an owned copy. Its catalog reference belongs to
+// that copy and must survive saving the NPC (unlike the NPC's own metadata).
+const MonsterInventoryPayloadSchema = CharacterInventoryItemV2Schema;
 
 export const MonsterContentPayloadSchema = ContentPayloadMetadataSchema.extend({
   kind: z.literal("monster"),
@@ -180,7 +183,7 @@ export function serializeMonsterContentPayload(value: MonsterDefinition): Record
     ...definition,
     size: definition.size ?? "",
     alignment: definition.alignment ?? "",
-    inventory: definition.inventory.map(({ catalog: _itemCatalog, ...item }) => item),
+    inventory: definition.inventory,
   });
 }
 

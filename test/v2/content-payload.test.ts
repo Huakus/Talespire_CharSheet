@@ -88,4 +88,23 @@ describe("canonical campaign content payloads", () => {
       name: "Incompleto",
     })).toThrow();
   });
+
+  it("preserves a merchant's item references and owned state across serialization and reload", () => {
+    const { rarity: _rarity, ...draft } = normalizeEquipmentDefinition({ name: "Objeto con cargas" });
+    const stock = {
+      ...draft, id: "inv_11111111111111111111111111111111", order: 0, group: "backpack",
+      name: "Nombre del comerciante", quantity: 2, charges: { current: 1, maximum: 3, reset: "at-dawn" },
+      catalog: { contentKey: "equipment:stable-key", origin: "official" as const, tags: ["es", "tesoro"], revision: 7 },
+    };
+    const merchant = normalizeMonsterDefinition({ Id: "merchant", Name: "Mercader", Inventory: [stock] });
+    const payload = serializeMonsterContentPayload(merchant);
+    expect(payload).not.toHaveProperty("catalog");
+    const saved = parseCampaignContentPayload("monster", JSON.parse(JSON.stringify(payload)));
+    expect(normalizeMonsterDefinition(saved).inventory).toEqual([stock]);
+
+    // Older version-1 NPC payloads omitted the nested reference. They still load.
+    const legacy = structuredClone(payload) as { inventory: Array<Record<string, unknown>> };
+    delete legacy.inventory[0]!.catalog;
+    expect(normalizeMonsterDefinition(parseCampaignContentPayload("monster", legacy)).inventory[0]?.catalog).toBeNull();
+  });
 });

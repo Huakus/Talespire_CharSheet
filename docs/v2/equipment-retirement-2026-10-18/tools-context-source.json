@@ -1,0 +1,384 @@
+{
+  "contexts": {
+    "general": {
+      "page": 72,
+      "lines": [
+        "Las herramientas te permiten realizar algo que de ",
+        "otra forma estaría fuera de tu alcance, como fabricar ",
+        "o reparar un objeto, falsificar un documento o forzar ",
+        "una cerradura. Tu raza, clase, trasfondo o dotes ",
+        "pueden hacerte competente con ciertas herra-",
+        "mientas. La competencia con una herramienta te ",
+        "permite sumar tu bonificador por competencia ",
+        "a cualquier prueba de característica que hagas con ",
+        "dicha herramienta. Hay que tener en cuenta que ",
+        "el uso de herramientas no está atado a una única ",
+        "característica, ya que la competencia con ellas ",
+        "representa un conocimiento amplio sobre su empleo. ",
+        "De este modo, tu GM podría pedirte que realices una ",
+        "prueba de Destreza para tallar detalles delicados ",
+        "con unas herramientas de ebanista, mientras que ",
+        "esculpir algo a partir de una madera especialmente ",
+        "dura podría requerir una prueba de Fuerza. "
+      ],
+      "text": "Las herramientas te permiten realizar algo que de otra forma estaría fuera de tu alcance, como fabricar o reparar un objeto, falsificar un documento o forzar una cerradura. Tu raza, clase, trasfondo o dotes pueden hacerte competente con ciertas herramientas. La competencia con una herramienta te permite sumar tu bonificador por competencia a cualquier prueba de característica que hagas con dicha herramienta. Hay que tener en cuenta que el uso de herramientas no está atado a una única característica, ya que la competencia con ellas representa un conocimiento amplio sobre su empleo. De este modo, tu GM podría pedirte que realices una prueba de Destreza para tallar detalles delicados con unas herramientas de ebanista, mientras que esculpir algo a partir de una madera especialmente dura podría requerir una prueba de Fuerza."
+    },
+    "artisan": {
+      "page": 72,
+      "lines": [
+        " Herramientas de artesano. Estas herramientas ",
+        "especiales consisten en los objetos necesarios ",
+        "para llevar a cabo las tareas propias de un oficio. ",
+        "La tabla muestra ejemplos de las herramientas más ",
+        "habituales que proporcionan los útiles apropiados ",
+        "para una profesión concreta. La competencia con ",
+        "las herramientas de un oficio te permite sumar tu ",
+        "bonificador por competencia a cualquier prueba de ",
+        "característica que hagas con dichas herramientas, ",
+        "siempre y cuando las emplees en tareas de ",
+        "la profesión correspondiente. Cada tipo de ",
+        "herramientas de artesano requiere su propia ",
+        "competencia independiente. "
+      ],
+      "text": "Herramientas de artesano. Estas herramientas especiales consisten en los objetos necesarios para llevar a cabo las tareas propias de un oficio. La tabla muestra ejemplos de las herramientas más habituales que proporcionan los útiles apropiados para una profesión concreta. La competencia con las herramientas de un oficio te permite sumar tu bonificador por competencia a cualquier prueba de característica que hagas con dichas herramientas, siempre y cuando las emplees en tareas de la profesión correspondiente. Cada tipo de herramientas de artesano requiere su propia competencia independiente."
+    },
+    "thieves": {
+      "page": 73,
+      "lines": [
+        " Herramientas de ladrón. Este conjunto de ",
+        "herramientas incluye una lima pequeña, un juego de ",
+        "ganzúas, un espejito con un asa metálica, una serie ",
+        "de tijeras de punta estrecha y unas tenazas. Si tienes ",
+        "competencia con estas herramientas, podrás sumar ",
+        "tu bonificador por competencia a las pruebas de ",
+        "característica para desarmar trampas o forzar ",
+        "cerraduras. "
+      ],
+      "text": "Herramientas de ladrón. Este conjunto de herramientas incluye una lima pequeña, un juego de ganzúas, un espejito con un asa metálica, una serie de tijeras de punta estrecha y unas tenazas. Si tienes competencia con estas herramientas, podrás sumar tu bonificador por competencia a las pruebas de característica para desarmar trampas o forzar cerraduras."
+    },
+    "navigator": {
+      "page": 73,
+      "lines": [
+        " Herramientas de navegante. Estos instrumentos ",
+        "se utilizan para orientarse en el mar. Si eres ",
+        "competente con ellos, podrás planear la ruta de ",
+        "un barco e interpretar cartas náuticas, además de ",
+        "sumar tu bonificador por competencia a cualquier ",
+        "prueba de característica que hagas para evitar ",
+        "perderte en el mar. "
+      ],
+      "text": "Herramientas de navegante. Estos instrumentos se utilizan para orientarse en el mar. Si eres competente con ellos, podrás planear la ruta de un barco e interpretar cartas náuticas, además de sumar tu bonificador por competencia a cualquier prueba de característica que hagas para evitar perderte en el mar."
+    },
+    "instrument": {
+      "page": 73,
+      "lines": [
+        " Instrumentos musicales. La tabla muestra ",
+        "ejemplos de los instrumentos musicales más ",
+        "comunes. Si eres competente con uno en concreto, ",
+        "puedes sumar tu bonificador por competencia ",
+        "a las pruebas de característica que hagas para ",
+        "tocar música con él. Los bardos pueden utilizar ",
+        "un instrumento musical como canalizador mágico. ",
+        "Cada tipo de instrumento requiere su propia ",
+        "competencia independiente. "
+      ],
+      "text": "Instrumentos musicales. La tabla muestra ejemplos de los instrumentos musicales más comunes. Si eres competente con uno en concreto, puedes sumar tu bonificador por competencia a las pruebas de característica que hagas para tocar música con él. Los bardos pueden utilizar un instrumento musical como canalizador mágico. Cada tipo de instrumento requiere su propia competencia independiente."
+    },
+    "gaming": {
+      "page": 73,
+      "lines": [
+        " Juegos. Esta categoría de objetos incluye varios ",
+        "tipos de juegos de azar, normalmente basados ",
+        "en dados o cartas (como la Apuesta de los Tres ",
+        "Dragones). En la tabla “Herramientas” aparecen ",
+        "algunos ejemplos comunes, pero existen otros. ",
+        "Si eres competente con un juego, puedes sumar ",
+        "tu bonificador por competencia a las pruebas de ",
+        "característica que hagas para jugar con él. Cada ",
+        "tipo de juego requiere su propia competencia ",
+        "independiente. "
+      ],
+      "text": "Juegos. Esta categoría de objetos incluye varios tipos de juegos de azar, normalmente basados en dados o cartas (como la Apuesta de los Tres Dragones). En la tabla “Herramientas” aparecen algunos ejemplos comunes, pero existen otros. Si eres competente con un juego, puedes sumar tu bonificador por competencia a las pruebas de característica que hagas para jugar con él. Cada tipo de juego requiere su propia competencia independiente."
+    },
+    "poisoner": {
+      "page": 73,
+      "lines": [
+        " Útiles de envenenador. Los útiles de envenenador ",
+        "incluyen viales, productos químicos y todo el equipo ",
+        "necesario para crear venenos. La competencia con ",
+        "estos útiles te permite sumar tu bonificador por ",
+        "competencia a las pruebas de característica que ",
+        "hagas para fabricar o usar venenos. "
+      ],
+      "text": "Útiles de envenenador. Los útiles de envenenador incluyen viales, productos químicos y todo el equipo necesario para crear venenos. La competencia con estos útiles te permite sumar tu bonificador por competencia a las pruebas de característica que hagas para fabricar o usar venenos."
+    },
+    "herbalism": {
+      "page": 73,
+      "lines": [
+        " Útiles de herborista. Este conjunto de objetos ",
+        "incluye una gran variedad de herramientas ",
+        "utilizadas por los herboristas para crear remedios ",
+        "y pociones, como pueden ser unas cizallas, un ",
+        "mortero, bolsas y viales. La competencia con estos ",
+        "útiles te permite sumar tu bonificador por ",
+        "competencia a las pruebas de característica que ",
+        "hagas para identificar o aplicar hierbas. Además, ",
+        "se necesita competencia con estos útiles para ",
+        "elaborar antitoxinas y pociones de curación. "
+      ],
+      "text": "Útiles de herborista. Este conjunto de objetos incluye una gran variedad de herramientas utilizadas por los herboristas para crear remedios y pociones, como pueden ser unas cizallas, un mortero, bolsas y viales. La competencia con estos útiles te permite sumar tu bonificador por competencia a las pruebas de característica que hagas para identificar o aplicar hierbas. Además, se necesita competencia con estos útiles para elaborar antitoxinas y pociones de curación."
+    },
+    "disguise": {
+      "page": 73,
+      "lines": [
+        " Útiles para disfrazarse. Esta bolsa con productos ",
+        "de maquillaje, tinte para el pelo y pequeños ",
+        "accesorios te ayuda a disfrazarte y cambiar así ",
+        "tu apariencia. La competencia con estos útiles te ",
+        "permite sumar tu bonificador por competencia ",
+        "a las pruebas de característica para crear un ",
+        "disfraz que engañe a la vista. "
+      ],
+      "text": "Útiles para disfrazarse. Esta bolsa con productos de maquillaje, tinte para el pelo y pequeños accesorios te ayuda a disfrazarte y cambiar así tu apariencia. La competencia con estos útiles te permite sumar tu bonificador por competencia a las pruebas de característica para crear un disfraz que engañe a la vista."
+    },
+    "forgery": {
+      "page": 73,
+      "lines": [
+        " Útiles para falsificar. Esta cajita contiene varios ",
+        "tipos de papeles y pergaminos, plumas y tintas, ",
+        "sellos y lacres, y láminas de oro y plata, además ",
+        "de otros materiales necesarios para crear ",
+        "falsificaciones de documentos que resulten ",
+        "convincentes. La competencia con estos útiles ",
+        "te permite sumar tu bonificador por competencia ",
+        "a las pruebas de característica que hagas para ",
+        "falsificar un documento. "
+      ],
+      "text": "Útiles para falsificar. Esta cajita contiene varios tipos de papeles y pergaminos, plumas y tintas, sellos y lacres, y láminas de oro y plata, además de otros materiales necesarios para crear falsificaciones de documentos que resulten convincentes. La competencia con estos útiles te permite sumar tu bonificador por competencia a las pruebas de característica que hagas para falsificar un documento."
+    }
+  },
+  "items": [
+    {
+      "key": "official:equipment:es:0cfae63a1a143c1604e3deb0",
+      "index": "tinkers-tools",
+      "group": "artisan",
+      "name": "Herramientas de manitas"
+    },
+    {
+      "key": "official:equipment:es:0df0fce82893a26df93b35e1",
+      "index": "cooks-utensils",
+      "group": "artisan",
+      "name": "Útiles de cocinero"
+    },
+    {
+      "key": "official:equipment:es:0e9469a9b602ef2d1b086290",
+      "index": "cobblers-tools",
+      "group": "artisan",
+      "name": "Herramientas de zapatero"
+    },
+    {
+      "key": "official:equipment:es:11dda2f8fa756b72d355bd89",
+      "index": "navigators-tools",
+      "group": "navigator",
+      "name": "Herramientas de navegante"
+    },
+    {
+      "key": "official:equipment:es:175302cfd38f05a93c9455df",
+      "index": "calligraphers-supplies",
+      "group": "artisan",
+      "name": "Suministros de calígrafo"
+    },
+    {
+      "key": "official:equipment:es:234d31692db9f12b1e42dbb2",
+      "index": "brewers-supplies",
+      "group": "artisan",
+      "name": "Suministros de cervecero"
+    },
+    {
+      "key": "official:equipment:es:264a8de945ade4509efd9ce4",
+      "index": "painters-supplies",
+      "group": "artisan",
+      "name": "Suministros para pintores"
+    },
+    {
+      "key": "official:equipment:es:27449e1bed6d4f91099fb4e4",
+      "index": "three-dragon-ante-set",
+      "group": "gaming",
+      "name": "Set de tres dragones"
+    },
+    {
+      "key": "official:equipment:es:2b08ececa88951ad3a4ac769",
+      "index": "jewelers-tools",
+      "group": "artisan",
+      "name": "Herramientas de joyero"
+    },
+    {
+      "key": "official:equipment:es:326aeb8a8b37e2ee6e3479d7",
+      "index": "drum",
+      "group": "instrument",
+      "name": "Tambor"
+    },
+    {
+      "key": "official:equipment:es:348988e49bc0cfe298620489",
+      "index": "pan-flute",
+      "group": "instrument",
+      "name": "Flauta de pan"
+    },
+    {
+      "key": "official:equipment:es:37f3cfdbd596eae8d96687eb",
+      "index": "disguise-kit",
+      "group": "disguise",
+      "name": "Kit de disfraz"
+    },
+    {
+      "key": "official:equipment:es:393ca8fe9719b61f76997b82",
+      "index": "glassblowers-tools",
+      "group": "artisan",
+      "name": "Herramientas del soplador de vidrio"
+    },
+    {
+      "key": "official:equipment:es:44f9f463d3d4e4e60207ced0",
+      "index": "carpenters-tools",
+      "group": "artisan",
+      "name": "Herramientas de carpintero"
+    },
+    {
+      "key": "official:equipment:es:48a2bedcc6332898d75b780f",
+      "index": "viol",
+      "group": "instrument",
+      "name": "Viola"
+    },
+    {
+      "key": "official:equipment:es:52afc9a130f0d37aed94ef12",
+      "index": "herbalism-kit",
+      "group": "herbalism",
+      "name": "Útiles de herborista"
+    },
+    {
+      "key": "official:equipment:es:5f88a69b0ea9fbb89037ee8c",
+      "index": "masons-tools",
+      "group": "artisan",
+      "name": "Herramientas de albañil"
+    },
+    {
+      "key": "official:equipment:es:680455fdeb92a348fcad1dc5",
+      "index": "dulcimer",
+      "group": "instrument",
+      "name": "Dulcémele"
+    },
+    {
+      "key": "official:equipment:es:728ff87ae9b933c7623d68ca",
+      "index": "weavers-tools",
+      "group": "artisan",
+      "name": "Herramientas del tejedor"
+    },
+    {
+      "key": "official:equipment:es:73d1f95b3a80f2914d62adb4",
+      "index": "poisoners-kit",
+      "group": "poisoner",
+      "name": "Kit de envenenamiento"
+    },
+    {
+      "key": "official:equipment:es:7e70af915a0f0151f102d0a1",
+      "index": "cartographers-tools",
+      "group": "artisan",
+      "name": "Herramientas de cartógrafo"
+    },
+    {
+      "key": "official:equipment:es:88e68c6ea3e6296d75226c8d",
+      "index": "potters-tools",
+      "group": "artisan",
+      "name": "Herramientas de alfarero"
+    },
+    {
+      "key": "official:equipment:es:8af13bb03749f70e9339f0cb",
+      "index": "alchemists-supplies",
+      "group": "artisan",
+      "name": "Suministros de alquimista"
+    },
+    {
+      "key": "official:equipment:es:97f754e822ee88e4525d7d8f",
+      "index": "shawm",
+      "group": "instrument",
+      "name": "Chirimía"
+    },
+    {
+      "key": "official:equipment:es:9d1f464e5c95c694ecfc7713",
+      "index": "forgery-kit",
+      "group": "forgery",
+      "name": "Kit de falsificación"
+    },
+    {
+      "key": "official:equipment:es:a7ef83a006b81b56921e34cd",
+      "index": "woodcarvers-tools",
+      "group": "artisan",
+      "name": "Herramientas del tallador de madera"
+    },
+    {
+      "key": "official:equipment:es:ae5ae8ad7f4f0009e8143b42",
+      "index": "thieves-tools",
+      "group": "thieves",
+      "name": "Herramientas de ladrón"
+    },
+    {
+      "key": "official:equipment:es:b481444e07aad32c36a9d82b",
+      "index": "horn",
+      "group": "instrument",
+      "name": "Cuerno"
+    },
+    {
+      "key": "official:equipment:es:b7d4b8adc9070875fb7690fc",
+      "index": "lute",
+      "group": "instrument",
+      "name": "Laúd"
+    },
+    {
+      "key": "official:equipment:es:c6632056f27d609c9ee846f4",
+      "index": "leatherworkers-tools",
+      "group": "artisan",
+      "name": "Herramientas para trabajar el cuero"
+    },
+    {
+      "key": "official:equipment:es:c7dabdd631c10991973eec3f",
+      "index": "playing-card-set",
+      "group": "gaming",
+      "name": "Juego de cartas para jugar"
+    },
+    {
+      "key": "official:equipment:es:c7f3467c9866f80f6c863f9c",
+      "index": "lyre",
+      "group": "instrument",
+      "name": "Lira"
+    },
+    {
+      "key": "official:equipment:es:cb90976a4748db28834a8e62",
+      "index": "smiths-tools",
+      "group": "artisan",
+      "name": "Herramientas de herrero"
+    },
+    {
+      "key": "official:equipment:es:da1107925e69cb5321432247",
+      "index": "bagpipes",
+      "group": "instrument",
+      "name": "Gaita"
+    },
+    {
+      "key": "official:equipment:es:e14cde6c9aac3e864c054708",
+      "index": "dragonchess-set",
+      "group": "gaming",
+      "name": "Set de ajedrez de dragón"
+    },
+    {
+      "key": "official:equipment:es:fb982a2fc9e8a56c9820d025",
+      "index": "flute",
+      "group": "instrument",
+      "name": "Flauta"
+    },
+    {
+      "key": "official:equipment:es:fc008783161bef8547e593aa",
+      "index": "dice-set",
+      "group": "gaming",
+      "name": "Juego de dados"
+    }
+  ]
+}

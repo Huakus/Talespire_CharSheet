@@ -1,0 +1,711 @@
+{
+  "baselineRevision": 1210,
+  "sourceChecks": [
+    {
+      "id": "recovery:official:equipment:es:01213a8f63ace3ea64f5e250",
+      "name": "Jabalina feroz",
+      "index": "vicious-javelin",
+      "baseIndex": "javelin",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Javelin",
+        "5 sp",
+        "1d6 piercing",
+        "2 lb.",
+        "Thrown (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:01c5dc1bd369314a9f51b7dc",
+      "name": "Mangual feroz",
+      "index": "vicious-flail",
+      "baseIndex": "flail",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Flail",
+        "10 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:01e53a9ef6634e62cefc984e",
+      "name": "Maza a dos manos feroz",
+      "index": "vicious-maul",
+      "baseIndex": "maul",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Maul",
+        "10 gp",
+        "2d6 bludgeoning",
+        "10 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0ba1a16b9c6d2e8701b1e58b",
+      "name": "Ballesta de mano feroz",
+      "index": "vicious-crossbow-hand",
+      "baseIndex": "crossbow-hand",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, hand",
+        "75 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Ammunition (range 30/120), light, loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:11d881cebe78bd3b6034c457",
+      "name": "Espada larga de lengua de fuego",
+      "index": "flame-tongue-longsword",
+      "baseIndex": "longsword",
+      "family": "flame-tongue",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2d37f163346ec0dd009ba51d",
+      "name": "Armadura de bandas de adamantina",
+      "index": "adamantine-splint",
+      "baseIndex": "splint-armor",
+      "family": "adamantine",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 64,
+      "officialRow": [
+        "Splint",
+        "200 gp",
+        "17",
+        "Str 15",
+        "Disadvantage",
+        "60 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:34cbbbaf34a6ecc0fd73e8ca",
+      "name": "Armadura de placas de adamantina",
+      "index": "adamantine-plate",
+      "baseIndex": "plate-armor",
+      "family": "adamantine",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 64,
+      "officialRow": [
+        "Plate",
+        "1,500 gp",
+        "18",
+        "Str 15",
+        "Disadvantage",
+        "65 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:38070df72830c84b3b5c4bea",
+      "name": "Cota de malla de adamantina",
+      "index": "adamantine-chain-mail",
+      "baseIndex": "chain-mail",
+      "family": "adamantine",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 64,
+      "officialRow": [
+        "Chain mail",
+        "75 gp",
+        "16",
+        "Str 13",
+        "Disadvantage",
+        "55 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:39e88b4040a225d6baa7b634",
+      "name": "Maza feroz",
+      "index": "vicious-mace",
+      "baseIndex": "mace",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Mace",
+        "5 gp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3a1cacc0e24f2e0b2016270d",
+      "name": "Pico de guerra feroz",
+      "index": "vicious-war-pick",
+      "baseIndex": "war-pick",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "War pick",
+        "5 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3d3aec52c044be52dd2ff23f",
+      "name": "Estoque feroz",
+      "index": "vicious-rapier",
+      "baseIndex": "rapier",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Rapier",
+        "25 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Finesse"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:412fed1c4f5ada1768df781f",
+      "name": "Látigo feroz",
+      "index": "vicious-whip",
+      "baseIndex": "whip",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Whip",
+        "2 gp",
+        "1d4 slashing",
+        "3 lb.",
+        "Finesse, reach"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:4174a78b2371715a4e15dc13",
+      "name": "Tridente feroz",
+      "index": "vicious-trident",
+      "baseIndex": "trident",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Trident",
+        "5 gp",
+        "1d6 piercing",
+        "4 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:43724e0ebf8db032ebc00277",
+      "name": "Ballesta pesada feroz",
+      "index": "vicious-crossbow-heavy",
+      "baseIndex": "crossbow-heavy",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, heavy",
+        "50 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Ammunition (range 100/400), heavy, loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:43ba30e7be7c03faaaaff52c",
+      "name": "Hoz feroz",
+      "index": "vicious-sickle",
+      "baseIndex": "sickle",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Sickle",
+        "1 gp",
+        "1d4 slashing",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:52c0cef94e13699b0ea2c75d",
+      "name": "Hacha de mano feroz",
+      "index": "vicious-handaxe",
+      "baseIndex": "handaxe",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Handaxe",
+        "5 gp",
+        "1d6 slashing",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5b1a504148920a35312b923e",
+      "name": "Pica feroz",
+      "index": "vicious-pike",
+      "baseIndex": "pike",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Pike",
+        "5 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:670193d18fadb992218eedf7",
+      "name": "Martillo de guerra feroz",
+      "index": "vicious-warhammer",
+      "baseIndex": "warhammer",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Warhammer",
+        "15 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6807f943647e5f66904aab8c",
+      "name": "Cimitarra feroz",
+      "index": "vicious-scimitar",
+      "baseIndex": "scimitar",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Scimitar",
+        "25 gp",
+        "1d6 slashing",
+        "3 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6c18c45b014bd495b9788c25",
+      "name": "Media armadura de adamantina",
+      "index": "adamantine-half-plate",
+      "baseIndex": "half-plate-armor",
+      "family": "adamantine",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 64,
+      "officialRow": [
+        "Half plate",
+        "750 gp",
+        "15 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6deba73e296507e887a4ed1f",
+      "name": "Lucero del alba feroz",
+      "index": "vicious-morningstar",
+      "baseIndex": "morningstar",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Morningstar",
+        "15 gp",
+        "1d8 piercing",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7622f66eede71e94d406bb57",
+      "name": "Cota de malla de adamantina",
+      "index": "adamantine-chain-mail",
+      "baseIndex": "chain-mail",
+      "family": "adamantine",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 64,
+      "officialRow": [
+        "Chain mail",
+        "75 gp",
+        "16",
+        "Str 13",
+        "Disadvantage",
+        "55 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:77c1a86f7bceca1fb79453c1",
+      "name": "Lanza feroz",
+      "index": "vicious-spear",
+      "baseIndex": "spear",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Spear",
+        "1 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7ed1857c411cd63b4a9ae3ec",
+      "name": "Ballesta ligera feroz",
+      "index": "vicious-crossbow-light",
+      "baseIndex": "crossbow-light",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, light",
+        "25 gp",
+        "1d8 piercing",
+        "5 lb.",
+        "Ammunition (range 80/320), loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:957d1a1e835c57b5736aa511",
+      "name": "Espada corta de lengua de fuego",
+      "index": "flame-tongue-shortsword",
+      "baseIndex": "shortsword",
+      "family": "flame-tongue",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Shortsword",
+        "10 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9b4e2e201ea30fe2d31e4c16",
+      "name": "Honda feroz",
+      "index": "vicious-sling",
+      "baseIndex": "sling",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Sling",
+        "1 sp",
+        "1d4 bludgeoning",
+        "—",
+        "Ammunition (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9ed0f1f2ba370de4d8d74dcc",
+      "name": "Espada larga feroz",
+      "index": "vicious-longsword",
+      "baseIndex": "longsword",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a7f27ead1cc4e65c9c4bb23e",
+      "name": "Cerbatana feroz",
+      "index": "vicious-blowgun",
+      "baseIndex": "blowgun",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Blowgun",
+        "10 gp",
+        "1 piercing",
+        "1 lb.",
+        "Ammunition (range 25/100), loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:abd56d7599c6230266eae7ea",
+      "name": "Coraza de adamantina",
+      "index": "adamantine-breastplate",
+      "baseIndex": "breastplate",
+      "family": "adamantine",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 64,
+      "officialRow": [
+        "Breastplate",
+        "400 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "20 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:aec2756204181dbd531cb861",
+      "name": "Arco corto feroz",
+      "index": "vicious-shortbow",
+      "baseIndex": "shortbow",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Shortbow",
+        "25 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Ammunition (range 80/320), two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b53f1d3eda845184553e548c",
+      "name": "Dardo feroz",
+      "index": "vicious-dart",
+      "baseIndex": "dart",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Dart",
+        "5 cp",
+        "1d4 piercing",
+        "1/4 lb.",
+        "Finesse, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bb14d0105c6f290c8ccf2eaa",
+      "name": "Bastón feroz",
+      "index": "vicious-quarterstaff",
+      "baseIndex": "quarterstaff",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Quarterstaff",
+        "2 sp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "Versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bc117e3bd0d7e4cdec3a735a",
+      "name": "Hacha de guerra feroz",
+      "index": "vicious-battleaxe",
+      "baseIndex": "battleaxe",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Battleaxe",
+        "10 gp",
+        "1d8 slashing",
+        "4 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bcca7355919b0bf34749e140",
+      "name": "Hacha a dos manos feroz",
+      "index": "vicious-greataxe",
+      "baseIndex": "greataxe",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Greataxe",
+        "30 gp",
+        "1d12 slashing",
+        "7 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bde6b27f011acff17c7ca62f",
+      "name": "Espadón feroz",
+      "index": "vicious-greatsword",
+      "baseIndex": "greatsword",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Greatsword",
+        "50 gp",
+        "2d6 slashing",
+        "6 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c7cb954c8d7ea77c90cdd4cb",
+      "name": "Garrote feroz",
+      "index": "vicious-club",
+      "baseIndex": "club",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Club",
+        "1 sp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d9b601a829486f58d1edab2a",
+      "name": "Guja feroz",
+      "index": "vicious-glaive",
+      "baseIndex": "glaive",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Glaive",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:dca7ce044bc3a61a7d7975a9",
+      "name": "Garrote grande feroz",
+      "index": "vicious-greatclub",
+      "baseIndex": "greatclub",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Greatclub",
+        "2 sp",
+        "1d8 bludgeoning",
+        "10 lb.",
+        "Two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e195a30cf2bed9617cab705d",
+      "name": "Martillo ligero feroz",
+      "index": "vicious-light-hammer",
+      "baseIndex": "light-hammer",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Light hammer",
+        "2 gp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ea969a49b5350a175ac19b83",
+      "name": "Daga feroz",
+      "index": "vicious-dagger",
+      "baseIndex": "dagger",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Dagger",
+        "2 gp",
+        "1d4 piercing",
+        "1 lb.",
+        "Finesse, light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f76998ec59eb6db8507dc857",
+      "name": "Lanza de caballería feroz",
+      "index": "vicious-lance",
+      "baseIndex": "lance",
+      "family": "vicious",
+      "enhancement": 0,
+      "repairedIndex": false,
+      "page": 66,
+      "officialRow": [
+        "Lance",
+        "10 gp",
+        "1d12 piercing",
+        "6 lb.",
+        "Reach, special"
+      ]
+    }
+  ],
+  "skipped": [],
+  "activeCopiesChanged": 0,
+  "deletedVersions": 0
+}

@@ -24,6 +24,7 @@ import { prepareWizardCast, type WizardCastOptions } from "./wizard-play";
 import { prepareWarlockCast } from "./warlock-play";
 import { itemSpellState } from "./item-spells";
 import { useInventoryFeature } from "./character-inventory";
+import { spendEquipmentSpellSlot, resetEquipmentSlots } from "../equipment/equipment-spell-slots";
 
 export * from "./character-spell-model";
 
@@ -203,7 +204,7 @@ export function castCharacterSpell(
   if (itemCast) {
     const state = itemSpellState(character,spell);
     if (!state.available) throw new Error(state.reason);
-    if (slotLevel !== spell.casting!.level || slotLevel !== spell.level || options.mode && options.mode !== "slot" || options.overchannel || options.recoverSlotLevel) throw new Error("El objeto lanza el conjuro a su nivel indicado, sin espacios ni modos de clase.");
+    if (slotLevel !== spell.casting!.level || slotLevel < spell.level || options.mode && options.mode !== "slot" || options.overchannel || options.recoverSlotLevel) throw new Error("El objeto lanza el conjuro a su nivel indicado, sin espacios ni modos de clase.");
   }
   if (spell.level === 0 && slotLevel !== 0) throw new Error("Un truco se lanza como truco, sin elevarlo con espacios.");
   if (spell.casting?.kind === "at-will" && slotLevel !== spell.level) throw new Error("El lanzamiento a voluntad usa el nivel base, sin espacio.");
@@ -224,8 +225,9 @@ export function castCharacterSpell(
     traits = character.traits.map((group) => ({ ...group, traits: group.traits.map((entry) => entry.id === trait.id ? { ...entry, uses: { ...entry.uses, used: entry.uses.used + 1 } } : entry) }));
   } else if (spell.level > 0 && spell.casting?.kind !== "ritual" && !freeWizardCast) {
     const state = slots[String(slotLevel)] ?? { maximum: 0, used: 0 };
-    if (state.used >= state.maximum) throw new SpellSlotUnavailableError(slotLevel);
-    slots = { ...slots, [String(slotLevel)]: { ...state, used: state.used + 1 } };
+    if (state.used >= state.maximum) {
+      if (!spendEquipmentSpellSlot(character, slotLevel)) throw new SpellSlotUnavailableError(slotLevel);
+    } else slots = { ...slots, [String(slotLevel)]: { ...state, used: state.used + 1 } };
   }
   const combat = options.concentrationCondition && spell.definition?.concentration
     ? {
@@ -250,7 +252,7 @@ export function resetAllSpellSlots(
       { ...state, used: 0 },
     ]),
   );
-  return finish(character, { ...character.spellcasting, slots }, updatedAt);
+  return finish({ ...character, inventory: character.inventory.map((item) => resetEquipmentSlots(item, "long-rest", character)) }, { ...character.spellcasting, slots }, updatedAt);
 }
 
 export function setSpellcastingSettings(

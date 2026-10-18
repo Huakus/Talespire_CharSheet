@@ -1,0 +1,26 @@
+{
+  "state": "preparation-only",
+  "sharedRowsPreserved": 1572,
+  "eceRowsPreserved": 1609,
+  "ownedRowsPreserved": 241,
+  "npcRowsPreserved": 5,
+  "shopRowsPreserved": 5,
+  "currentSourceRows": 3432,
+  "allArchivedFieldsPendingReview": 106893,
+  "retainedSourceArchives": 3432,
+  "archivesReloadedAndVerified": 3432,
+  "syntheticFormatExamples": 7,
+  "definitiveObjectsCreated": 0,
+  "migrated": 0,
+  "deleted": 0,
+  "policyPending": [],
+  "policy": {
+    "existingOfficialItems": "validate-original-2014-rules",
+    "characterBuilderSources": "unchanged",
+    "missingSpanishText": "reviewed-translation-from-english",
+    "preferOfficialSpanishWhenAvailable": true,
+    "execution": "automatic-or-assisted-with-visible-backlog",
+    "umbralDagger": "phase-blade-exclusive-to-stix-variant"
+  },
+  "archiveSha256": "9f2aa8ac6373e38760d88f682ed14f77cebdac7c9d08561033204a00bdb5d989"
+}

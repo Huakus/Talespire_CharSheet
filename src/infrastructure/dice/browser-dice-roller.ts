@@ -4,6 +4,7 @@ import type {
   DiceRoller,
 } from "../../application/ports/dice-roller";
 import { parseDiceExpression } from "../../domain/dice/dice-expression";
+import { resolveAbilityCheckRoll, validateAbilityCheckRoll } from "../../domain/dice/ability-check-roll";
 
 function randomDie(sides: number): number {
   const value = new Uint32Array(1);
@@ -22,7 +23,8 @@ function evaluate(expression: string): number {
 
 export class BrowserDiceRoller implements DiceRoller {
   async roll(request: DiceRollRequest): Promise<DiceRollResult> {
-    const totals = request.expressions.map((expression) => {
+    validateAbilityCheckRoll(request);
+    const rawTotals = request.expressions.map((expression) => {
       if (request.mode === "normal" || !expression.toLowerCase().includes("d20")) {
         return evaluate(expression);
       }
@@ -32,6 +34,7 @@ export class BrowserDiceRoller implements DiceRoller {
         ? Math.max(first, second)
         : Math.min(first, second);
     });
+    const totals = resolveAbilityCheckRoll(request, rawTotals);
     return {
       kind: "rolled",
       summary: `${request.name}: ${totals.join(" / ")}`,

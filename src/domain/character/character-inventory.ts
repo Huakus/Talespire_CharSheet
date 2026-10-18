@@ -5,6 +5,13 @@ import {
   type CharacterV2,
 } from "./character-v2";
 import { CharacterRevisionConflictError } from "./edit-character";
+import { inventoryEquipmentDefinition, equipmentBearerIssue } from "../equipment/equipment-live";
+import { equipmentRollBounds } from "../equipment/equipment-resource-runtime";
+import { resetEquipmentSlots } from "../equipment/equipment-spell-slots";
+import { activateCoreFeature, coreFeatureIssue, isLucentCore, restLucentCore, lucentCoreState, type CoreResonance } from "../equipment/equipment-lucent-core";
+import { inventoryHealingExpression } from "../equipment/equipment-healing";
+import { equipmentClassResourceIssue, restoreEquipmentClassResources } from "../equipment/equipment-class-resources";
+import { abilityModifier, projectAbilityScore } from "./character-projection";
 import {
   CharacterInventoryItemV2Schema,
   type CharacterInventoryItemV2,
@@ -94,7 +101,9 @@ export function inventoryItemsCanStack(
   left: CharacterInventoryItemV2,
   right: CharacterInventoryItemV2,
 ): boolean {
+  if (left.rules?.storage || right.rules?.storage || inventoryEquipmentDefinition(left)?.capabilities.some((c) => c.effects.some((e) => e.kind === "spell-slot-capacity")) || inventoryEquipmentDefinition(right)?.capabilities.some((c) => c.effects.some((e) => e.kind === "spell-slot-capacity"))) return false;
   if (left.equipped || right.equipped || left.attuned || right.attuned) return false;
+  if (left.charges || right.charges || left.features.some((f) => f.uses) || right.features.some((f) => f.uses)) return false;
   const comparable = (item: CharacterInventoryItemV2) => {
     const { id: _id, order: _order, quantity: _quantity, equipped: _equipped, attuned: _attuned, ...rest } = item;
     return rest;
@@ -124,12 +133,16 @@ function finish(
   updatedAt: string,
   actions = character.actions,
 ): CharacterV2 {
+  const constitutionDelta = abilityModifier(projectAbilityScore({ ...character, inventory }, "constitution")) - abilityModifier(projectAbilityScore(character, "constitution"));
+  const hitPointDelta = constitutionDelta * character.identity.level;
+  const maximum = Math.max(0, character.combat.hitPoints.maximum + hitPointDelta);
   return CharacterV2Schema.parse({
     ...character,
     inventory: [...inventory].sort(
       (left, right) => left.order - right.order || left.id.localeCompare(right.id),
     ),
     actions,
+    ...(hitPointDelta ? { combat: { ...character.combat, hitPoints: { ...character.combat.hitPoints, maximum, current: Math.max(0, Math.min(maximum, character.combat.hitPoints.current + hitPointDelta)) } } } : {}),
     revision: character.revision + 1,
     metadata: { ...character.metadata, updatedAt },
   });
@@ -141,7 +154,8 @@ export function upsertInventoryItem(
   options: InventoryMutationOptions,
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
-  const item = CharacterInventoryItemV2Schema.parse(itemInput);
+  const previousItem = character.inventory.find((entry) => entry.id === itemInput.id);
+  const item = CharacterInventoryItemV2Schema.parse({ ...itemInput, ...(previousItem?.rules && !itemInput.rules ? { rules: previousItem.rules } : {}) });
   if (item.equipped && item.quantity !== 1) {
     throw new InventoryEquipmentError("Los objetos equipados deben tener cantidad 1");
   }
@@ -256,7 +270,10 @@ export function setInventoryItemAttuned(
   if (attuned && (!target.requiresAttunement || !target.equipped)) {
     throw new InventoryUseError("The item must require attunement and be equipped first");
   }
-  if (attuned && character.inventory.filter((item) => item.attuned).length >= 3) {
+  const bearerIssue = attuned ? equipmentBearerIssue(character, target) : "";
+  if (bearerIssue) throw new InventoryUseError(bearerIssue);
+  if (attuned && character.inventory.some((item) => item.id !== itemId && item.attuned && (item.rules && target.rules && item.rules.definition.id === target.rules.definition.id || normalized(String(item.rules?.definition.name ?? item.name)) === normalized(String(target.rules?.definition.name ?? target.name))))) throw new InventoryUseError("No podés sintonizarte con dos copias del mismo objeto a la vez");
+  if (attuned && character.inventory.filter((item) => item.id !== itemId && item.attuned).length >= 3) {
     throw new AttunementLimitError(3);
   }
   return finish(
@@ -288,6 +305,10 @@ export function useInventoryItem(
   if (!target.equipped && !target.consumable) {
     throw new InventoryUseError(`${target.name} debe estar equipado para poder usarse`);
   }
+
+  if (target.requiresAttunement && !target.attuned) throw new InventoryUseError("El objeto debe estar sintonizado para poder usarse");
+  const bearerIssue = equipmentBearerIssue(character, target);
+  if (bearerIssue) throw new InventoryUseError(bearerIssue);
 
   let remove = false;
   const inventory = character.inventory.map((item) => {
@@ -331,6 +352,10 @@ export function setInventoryFeatureActive(
   if (!item) throw new InventoryItemNotFoundError(itemId);
   const feature = item.features.find((entry) => entry.id === featureId);
   if (!feature) throw new InventoryFeatureUseError("La capacidad ya no existe en el objeto");
+  const bearerIssue = equipmentBearerIssue(character, item, featureId);
+  if (bearerIssue) throw new InventoryFeatureUseError(bearerIssue);
+  const coreIssue = coreFeatureIssue(item, featureId);
+  if (coreIssue) throw new InventoryFeatureUseError(coreIssue);
   if (!feature.toggleable && active) {
     throw new InventoryFeatureUseError("La capacidad no mantiene un estado activo");
   }
@@ -357,6 +382,10 @@ export function useInventoryFeature(
   if (!item) throw new InventoryItemNotFoundError(itemId);
   const feature = item.features.find((entry) => entry.id === featureId);
   if (!feature) throw new InventoryFeatureUseError("La capacidad ya no existe en el objeto");
+  const bearerIssue = equipmentBearerIssue(character, item, featureId);
+  if (bearerIssue) throw new InventoryFeatureUseError(bearerIssue);
+  const coreIssue = coreFeatureIssue(item, featureId);
+  if (coreIssue) throw new InventoryFeatureUseError(coreIssue);
   if (!item.equipped && !item.consumable) {
     throw new InventoryFeatureUseError("El objeto debe estar equipado para usar esta capacidad");
   }
@@ -372,11 +401,15 @@ export function useInventoryFeature(
   if (feature.uses !== null && feature.uses.current < 1) {
     throw new InventoryFeatureUseError(`${feature.name} no tiene usos disponibles`);
   }
-
-  return finish(character, character.inventory.map((entry) => {
+  const consumeQuantity = inventoryEquipmentDefinition(item)?.capabilities.find((capability) => capability.id === feature.id)?.consumeQuantity ?? 0;
+  if (item.quantity < Math.max(1, consumeQuantity)) throw new InventoryFeatureUseError("No quedan unidades suficientes del objeto");
+  const classResourceIssue = equipmentClassResourceIssue(character, item, featureId);
+  if (classResourceIssue) throw new InventoryFeatureUseError(classResourceIssue);
+  const inventory = character.inventory.map((entry) => {
     if (entry.id !== itemId) return entry;
-    return {
+    return activateCoreFeature({
       ...entry,
+      quantity: entry.quantity - consumeQuantity,
       charges: entry.charges === null || feature.chargeCost === 0
         ? entry.charges
         : { ...entry.charges, current: entry.charges.current - feature.chargeCost },
@@ -387,17 +420,24 @@ export function useInventoryFeature(
           ? null
           : { ...candidate.uses, current: candidate.uses.current - 1 },
       }),
-    };
-  }), updatedAt);
+    }, featureId);
+  }).filter((entry) => entry.id !== itemId || consumeQuantity === 0 || entry.quantity > 0);
+  restoreEquipmentClassResources(character, item, featureId);
+  return finish(character, inventory, updatedAt, consumeQuantity && item.quantity === consumeQuantity ? character.actions.filter((action) => action.inventoryItemId !== itemId) : character.actions);
 }
 
 export function resetInventoryItemResources(
   item: CharacterInventoryItemV2,
   reset: string,
+  character?: CharacterV2,
 ): CharacterInventoryItemV2 {
+  const definition = inventoryEquipmentDefinition(item);
+  const resource = definition?.resources.find((entry) => entry.kind !== "spell-storage");
+  const typedRecovery = resource?.recovery;
+  const mayReset = !definition || typedRecovery?.kind === "event" && typedRecovery.amount.kind === "full" && (typedRecovery.event === reset || reset === "long-rest" && typedRecovery.event === "short-rest");
   return CharacterInventoryItemV2Schema.parse({
-    ...item,
-    charges: item.charges !== null && (item.charges.reset === reset || (reset === "long-rest" && item.charges.reset === "short-rest"))
+    ...restLucentCore(resetEquipmentSlots(item, reset, character), reset),
+    charges: mayReset && item.charges !== null && (item.charges.reset === reset || (reset === "long-rest" && item.charges.reset === "short-rest"))
       ? { ...item.charges, current: item.charges.maximum }
       : item.charges,
     features: item.features.map((feature) => ({
@@ -409,6 +449,114 @@ export function resetInventoryItemResources(
   });
 }
 
+/** Consume and apply a rolled potion to its bearer in one saved character mutation. */
+export function useInventoryHealingFeature(input: CharacterV2, itemId: string, featureId: string, healing: number, options: InventoryMutationOptions): CharacterV2 {
+  const { character }=prepare(input,options), item=character.inventory.find((entry)=>entry.id===itemId);
+  if (character.combat.hitPoints.current <= 0 || character.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key))) throw new InventoryFeatureUseError("Necesitás poder actuar para beber la poción vos mismo; otra criatura puede administrártela.");
+  const expression=item && inventoryHealingExpression(item,featureId);
+  if (!expression) throw new InventoryFeatureUseError("Esta capacidad no es una curación consumible simple.");
+  const bounds=equipmentRollBounds(expression);
+  if (!Number.isInteger(healing) || healing < Math.max(1,bounds.minimum) || healing > bounds.maximum) throw new InventoryFeatureUseError(`Ingresá un resultado válido de ${expression}.`);
+  const spent=useInventoryFeature(character,itemId,featureId,options);
+  if (spent.spellcasting.druid?.form) {
+    const form=spent.spellcasting.druid.form;form.currentHp=Math.min(form.maximumHp,form.currentHp+healing);
+  } else spent.combat.hitPoints.current=Math.min(spent.combat.hitPoints.maximum,spent.combat.hitPoints.current+healing);
+  return CharacterV2Schema.parse(spent);
+}
+
+export type LucentCoreAction =
+  | { kind: "configure"; resonance: CoreResonance; d20: number }
+  | { kind: "wear"; d20: number }
+  | { kind: "recover"; longRestCompleted: boolean; crystalInserted: boolean }
+  | { kind: "repair"; longRestCompleted: boolean; materialsConfirmed: boolean; crystalConfirmed: boolean }
+  | { kind: "elapsed"; rounds: number }
+  | { kind: "end" };
+
+/** Per-copy core state. Confirmed material use is never guessed from a wallet balance. */
+export function performLucentCoreAction(input: CharacterV2, itemIdInput: string, action: LucentCoreAction, options: InventoryMutationOptions): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options), itemId = StableIdSchema.parse(itemIdInput);
+  const item = character.inventory.find((entry) => entry.id === itemId);
+  if (!item || !isLucentCore(item)) throw new InventoryUseError("Este objeto no es el Núcleo Luciente Adaptado.");
+  if (!["elapsed", "end"].includes(action.kind)) {
+    const issue = equipmentBearerIssue(character,item);
+    if (issue) throw new InventoryUseError(issue);
+    if (!item.equipped || item.requiresAttunement && !item.attuned) throw new InventoryUseError("Equipá y sintonizá el núcleo antes de utilizarlo.");
+  }
+  const state = structuredClone(lucentCoreState(item));
+  let charges = item.charges;
+  if (action.kind === "configure" || action.kind === "wear") {
+    if (!Number.isInteger(action.d20) || action.d20 < 1 || action.d20 > 20) throw new InventoryUseError("Ingresá el resultado de un d20, entre 1 y 20.");
+  }
+  if (action.kind === "configure") {
+    if (!["green","blue","violet"].includes(action.resonance)) throw new InventoryUseError("Resonancia inexistente.");
+    if (state.resonance === action.resonance) throw new InventoryUseError("Esta resonancia ya está configurada.");
+    const total = action.d20 + abilityModifier(projectAbilityScore(character,"intelligence")) + 2 + Math.floor((character.identity.level-1)/4);
+    state.lastCheckTotal = total;
+    if (total >= 12) { state.resonance = action.resonance; state.active = null; state.remainingRounds = 0; }
+  } else if (action.kind === "wear") {
+    if (!state.wearCheckPending) throw new InventoryUseError("No hay una tirada de desgaste pendiente.");
+    state.wearCheckPending = false;
+    if (action.d20 === 1) { state.unstable = true; if (state.active === "violet") { state.active = null; state.remainingRounds = 0; } }
+  } else if (action.kind === "recover") {
+    if (action.longRestCompleted !== true || action.crystalInserted !== true) throw new InventoryUseError("La recarga requiere confirmar el descanso largo y un fragmento de Cristal Luciente insertado.");
+    if (state.wearCheckPending) throw new InventoryUseError("Resolvé el desgaste pendiente antes de recargar.");
+    if (!charges || charges.maximum !== 3) throw new InventoryUseError("El contador del núcleo no es válido.");
+    charges = { ...charges, current: 3 };
+    state.spentSinceRest = 0; state.active = null; state.remainingRounds = 0;
+  } else if (action.kind === "repair") {
+    if (!state.unstable) throw new InventoryUseError("El núcleo no está inestable.");
+    if (action.longRestCompleted !== true || action.materialsConfirmed !== true || action.crystalConfirmed !== true) throw new InventoryUseError("Confirmá el descanso largo, los materiales metálicos de 25 po y el fragmento de Cristal Luciente.");
+    state.unstable = false;
+  } else if (action.kind === "elapsed") {
+    if (!Number.isInteger(action.rounds) || action.rounds < 1 || action.rounds > 100) throw new InventoryUseError("El tiempo debe ser de 1 a 100 rondas.");
+    state.remainingRounds = Math.max(0,state.remainingRounds-action.rounds);
+    if (state.remainingRounds === 0) state.active = null;
+  } else if (action.kind === "end") { state.active = null; state.remainingRounds = 0; }
+  else throw new InventoryUseError("Operación del núcleo inexistente.");
+  return finish(character,character.inventory.map((entry) => entry.id !== itemId ? entry : { ...entry, charges, rules: { ...entry.rules!, lucentCore: state } }),updatedAt);
+}
+
+/** Explicitly confirmed recovery event; random recovery never becomes a full reset. */
+export function recoverInventoryItem(input: CharacterV2, itemId: string, event: string, rolled: number | undefined, options: InventoryMutationOptions): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options);
+  const item = character.inventory.find((entry) => entry.id === itemId);
+  if (!item) throw new InventoryItemNotFoundError(itemId);
+  if (isLucentCore(item)) throw new InventoryUseError("Usá la recarga condicionada del núcleo y confirmá el descanso largo y el cristal insertado.");
+  const resources = inventoryEquipmentDefinition(item)?.resources.filter((r) => r.kind !== "spell-storage");
+  if (resources?.length !== 1 || !item.charges) throw new InventoryUseError("El objeto no tiene una reserva recuperable configurada");
+  const recovery = resources[0]!.recovery;
+  if (recovery.kind !== "event" || recovery.event !== event) throw new InventoryUseError("Ese evento no recupera los usos de este objeto");
+  let amount = item.charges.maximum;
+  if (recovery.amount.kind === "fixed") amount = recovery.amount.amount;
+  if (recovery.amount.kind === "roll") {
+    const bounds = equipmentRollBounds(recovery.amount.expression);
+    if (rolled === undefined || !Number.isInteger(rolled) || rolled < bounds.minimum || rolled > bounds.maximum) throw new InventoryUseError(`Se necesita un resultado válido de ${recovery.amount.expression}`);
+    amount = Math.max(0, rolled);
+  }
+  return finish(character, character.inventory.map((entry) => entry.id !== itemId ? entry : { ...entry, charges: { ...item.charges!, current: Math.min(item.charges!.maximum, item.charges!.current + amount) } }), updatedAt);
+}
+
+/** Record an assisted effect's actual cost without guessing which power was used. */
+export function spendInventoryItemCharges(input: CharacterV2, itemId: string, amount: number, options: InventoryMutationOptions): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options);
+  const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item && isLucentCore(item)) throw new InventoryUseError("Usá una resonancia para registrar también su duración y desgaste.");
+  if (!item?.charges || item.quantity < 1) throw new InventoryUseError("El objeto no tiene una reserva disponible.");
+  if ((!item.equipped && !item.consumable) || item.requiresAttunement && !item.attuned) throw new InventoryUseError("Equipá y, si corresponde, sintonizá el objeto antes de usarlo.");
+  const issue = equipmentBearerIssue(character, item); if (issue) throw new InventoryUseError(issue);
+  if (!Number.isSafeInteger(amount) || amount <= 0 || amount > item.charges.current) throw new InventoryUseError("El gasto debe ser positivo y no superar la reserva disponible.");
+  return finish(character, character.inventory.map((entry) => entry.id !== itemId ? entry : { ...entry, charges: { ...item.charges!, current: item.charges!.current - amount } }), updatedAt);
+}
+
+/** Explicit bookkeeping for a whole consumable unit after its assisted resolution. */
+export function consumeInventoryUnit(input: CharacterV2, itemId: string, options: InventoryMutationOptions): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options);
+  const item = character.inventory.find((entry) => entry.id === itemId);
+  if (!item?.consumable || item.quantity < 1) throw new InventoryUseError("No queda una unidad consumible de este objeto.");
+  const inventory = character.inventory.flatMap((entry) => entry.id !== itemId ? [entry] : entry.quantity > 1 ? [{ ...entry, quantity: entry.quantity - 1 }] : []);
+  return finish(character, inventory, updatedAt, item.quantity === 1 ? character.actions.filter((a) => a.inventoryItemId !== itemId) : character.actions);
+}
+
 export function resetInventoryCharges(
   input: CharacterV2,
   reset: string,
@@ -417,7 +565,7 @@ export function resetInventoryCharges(
   const { character, updatedAt } = prepare(input, options);
   return finish(
     character,
-    character.inventory.map((item) => resetInventoryItemResources(item, reset)),
+    character.inventory.map((item) => resetInventoryItemResources(item, reset, character)),
     updatedAt,
   );
 }

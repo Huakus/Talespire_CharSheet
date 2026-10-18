@@ -1,0 +1,780 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1292,
+  "archiveSha256": "2f8f1f6cae887cfdf05ce1b84927ab5c6c3c768816e05bf15ebb5953710c9e5d",
+  "rows": [
+    {
+      "key": "official:equipment:eng:073ae1ec3203b082461932ef",
+      "name": "Shawm",
+      "sha256": "8aa72e6a4ac04e9ee71d30bb3b0d6a314fbefa7f4180dbacc7f9a6214185eb13",
+      "targetKeys": [
+        "official:equipment:es:97f754e822ee88e4525d7d8f"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "shawm",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:131957e0233ccb2b12a6bbf7",
+      "name": "Carpenter's Tools",
+      "sha256": "f770349c134824151e83f3ae4aabeecbc654718cfed4fa571e8fb469691ee18e",
+      "targetKeys": [
+        "official:equipment:es:44f9f463d3d4e4e60207ced0"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "carpenters-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:1deb5530da781ea4d892c8b6",
+      "name": "Dice Set",
+      "sha256": "d5b48a072061552c0cf677d8c77bfb73bc918863e9549fbe0f4b722218023df1",
+      "targetKeys": [
+        "official:equipment:es:fc008783161bef8547e593aa"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "dice-set",
+        "group": "gaming",
+        "officialSpanishContext": [
+          "general",
+          "gaming"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:1e3b00c40048d5ef2d2ec55a",
+      "name": "Drum",
+      "sha256": "f0a032ba4a4d2bed7b389f81ee99eba4c583b9202d294d6b654147d6803dab37",
+      "targetKeys": [
+        "official:equipment:es:326aeb8a8b37e2ee6e3479d7"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "drum",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:1eb048255f5922e6a0c0eeee",
+      "name": "Forgery Kit",
+      "sha256": "764b5d6a22e61523a16277f75470be9bbd5606c46463f6f916834462b023d8d6",
+      "targetKeys": [
+        "official:equipment:es:9d1f464e5c95c694ecfc7713"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "forgery-kit",
+        "group": "forgery",
+        "officialSpanishContext": [
+          "general",
+          "forgery"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:22feeb76070dbd99348ff200",
+      "name": "Disguise Kit",
+      "sha256": "ac2a8a37094b7c62f53e59790caab97bdb39aa0fd6da3cbf1e9166103efd12e5",
+      "targetKeys": [
+        "official:equipment:es:37f3cfdbd596eae8d96687eb"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "disguise-kit",
+        "group": "disguise",
+        "officialSpanishContext": [
+          "general",
+          "disguise"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:235d27410025de846f99dfd3",
+      "name": "Cook's utensils",
+      "sha256": "cad12614b704ead165cb790b6f62099e039c1b1f874b5844b400dcee95bb3d6a",
+      "targetKeys": [
+        "official:equipment:es:0df0fce82893a26df93b35e1"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "cooks-utensils",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:27aef41d31c564e9a72696cb",
+      "name": "Bagpipes",
+      "sha256": "9ba38a0153c282feef99d70cfbccfe56ff287f11220eff4536326bb345c5c3bc",
+      "targetKeys": [
+        "official:equipment:es:da1107925e69cb5321432247"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "bagpipes",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:33b7a4991ad98522601355bd",
+      "name": "Lute",
+      "sha256": "7fae9220b4c529e49441e66c9a295de7b2d74b3105e20b4e1eec89daa35d94f4",
+      "targetKeys": [
+        "official:equipment:es:b7d4b8adc9070875fb7690fc"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "lute",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:3751a135d9897e0189ba580f",
+      "name": "Playing Card Set",
+      "sha256": "15870d38590a8ecf86bb88ced27f91e3569c06b8a1971a48d12589e9692d82c3",
+      "targetKeys": [
+        "official:equipment:es:c7dabdd631c10991973eec3f"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "playing-card-set",
+        "group": "gaming",
+        "officialSpanishContext": [
+          "general",
+          "gaming"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:4f6b30e848c5b5c83d47cd33",
+      "name": "Herbalism Kit",
+      "sha256": "a2c14a1ca3e94335d07cbe6c4d427eb2ff901d3333a4a65663fc0016894cf15a",
+      "targetKeys": [
+        "official:equipment:es:52afc9a130f0d37aed94ef12"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "herbalism-kit",
+        "group": "herbalism",
+        "officialSpanishContext": [
+          "general",
+          "herbalism"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:51c65b6e93319be4cc686cd1",
+      "name": "Smith's Tools",
+      "sha256": "c19779be052601b3530dfc8b3ab327413af0a0498ecb6732331383f0f5333ce9",
+      "targetKeys": [
+        "official:equipment:es:cb90976a4748db28834a8e62"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "smiths-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:56a065fe71df8ff15055d07d",
+      "name": "Tinker's Tools",
+      "sha256": "fc879ac3dabfec9e958c121637f7ed483e857afe7e3d7b67670d28a1cc4dffda",
+      "targetKeys": [
+        "official:equipment:es:0cfae63a1a143c1604e3deb0"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "tinkers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:56baf3ed9391205cd861514d",
+      "name": "Viol",
+      "sha256": "5d93d4f3005fc3a8992a1958a0594237e350e99714c92749c85cf6897e2f81d7",
+      "targetKeys": [
+        "official:equipment:es:48a2bedcc6332898d75b780f"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "viol",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:576ae005e528ff9a7075289a",
+      "name": "Pan flute",
+      "sha256": "3f10e335573d8246d340f6eff26d4861916c763fb7c8934b236e13c50b3c1d51",
+      "targetKeys": [
+        "official:equipment:es:348988e49bc0cfe298620489"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "pan-flute",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:6f3b548048575db1402021b8",
+      "name": "Jeweler's Tools",
+      "sha256": "799792c8b5947fc0c8e49825d03b1f42f9519634abd4b6b05ca5b2faba3eccb8",
+      "targetKeys": [
+        "official:equipment:es:2b08ececa88951ad3a4ac769"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "jewelers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:7fcbd42d594c48df8ccf79ef",
+      "name": "Thieves' Tools",
+      "sha256": "0e9826e951c44274483858e889587444cee5f7e42019e5e6d5ef741dfac1a814",
+      "targetKeys": [
+        "official:equipment:es:ae5ae8ad7f4f0009e8143b42"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "thieves-tools",
+        "group": "thieves",
+        "officialSpanishContext": [
+          "general",
+          "thieves"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:87cae6674ddbe0bfa2b3fcc4",
+      "name": "Flute",
+      "sha256": "64d8efb6bf78a3f16d70aa362cba5091c36497854e6b7dab5ee43308ab64927e",
+      "targetKeys": [
+        "official:equipment:es:fb982a2fc9e8a56c9820d025"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "flute",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:92b7474aab066c90ce2544c8",
+      "name": "Calligrapher's Supplies",
+      "sha256": "8d1460d0db7a9997dba684bd0a75e2231ebabbb972a73c6d5884c5e599bbb38f",
+      "targetKeys": [
+        "official:equipment:es:175302cfd38f05a93c9455df"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "calligraphers-supplies",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:93488489f75600efbacf6c4c",
+      "name": "Dulcimer",
+      "sha256": "8f5ad0e36effe2b87026cb656e0ac9017053801768ee74442605af2dea57bec7",
+      "targetKeys": [
+        "official:equipment:es:680455fdeb92a348fcad1dc5"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "dulcimer",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:a63f8c4e7239d5ebddf28f65",
+      "name": "Navigator's Tools",
+      "sha256": "a9e56cb4ee0a7cc08de5e07108eceac48aa7a7a1c717d42b36b0fb3ac2ee7d9b",
+      "targetKeys": [
+        "official:equipment:es:11dda2f8fa756b72d355bd89"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "navigators-tools",
+        "group": "navigator",
+        "officialSpanishContext": [
+          "general",
+          "navigator"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:ae376d97816c53a067ace6d4",
+      "name": "Mason's Tools",
+      "sha256": "aa8e86bc11093ab95f6cc7be92fc68e088ffd139247f02db4f7f520005dac61f",
+      "targetKeys": [
+        "official:equipment:es:5f88a69b0ea9fbb89037ee8c"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "masons-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:b27b89145decf1e8c912c3c2",
+      "name": "Cobbler's Tools",
+      "sha256": "8dbbfdb9ad20b8666d4669957eef5fccf161b4204e321f2e270d19d1891532e3",
+      "targetKeys": [
+        "official:equipment:es:0e9469a9b602ef2d1b086290"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "cobblers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:bc2fcdeb0e84b6e6627a0c4f",
+      "name": "Horn",
+      "sha256": "1b97df3d17429281649bfaa6c2bc8afc6d2dbb034b3588b43211bc86cf2e5e6f",
+      "targetKeys": [
+        "official:equipment:es:b481444e07aad32c36a9d82b"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "horn",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:be3306e81679e6ee46cec7ff",
+      "name": "Three-Dragon Ante Set",
+      "sha256": "de69b7a8b8d8eaae3908b02842ca9d4ba9e0ddc71c4cf0859f8e65dc2e8e6a84",
+      "targetKeys": [
+        "official:equipment:es:27449e1bed6d4f91099fb4e4"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "three-dragon-ante-set",
+        "group": "gaming",
+        "officialSpanishContext": [
+          "general",
+          "gaming"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:c1454c8d01a352ef2364e365",
+      "name": "Brewer's Supplies",
+      "sha256": "f115dc479776ee5bed8e33cc2d657c68c57b1c38fcfcd714ea2746f11ed33f44",
+      "targetKeys": [
+        "official:equipment:es:234d31692db9f12b1e42dbb2"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "brewers-supplies",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:c312c78167d52d17cf587e43",
+      "name": "Lyre",
+      "sha256": "6fc2d8f1493e8589a2b846f58a57482881efdcac39f624a14a3966e0792a1357",
+      "targetKeys": [
+        "official:equipment:es:c7f3467c9866f80f6c863f9c"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "lyre",
+        "group": "instrument",
+        "officialSpanishContext": [
+          "general",
+          "instrument"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:c6d5118017ad36ca3a593475",
+      "name": "Leatherworker's Tools",
+      "sha256": "24118ea88770a43fef6f9d6c19df642d83fccb95072a4af93889c9e361ca5411",
+      "targetKeys": [
+        "official:equipment:es:c6632056f27d609c9ee846f4"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "leatherworkers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:c8514926f25fc74d6a86ac23",
+      "name": "Painter's Supplies",
+      "sha256": "5e911d6f1ede6eceb338946acf5997e3087ffe465485c1b671115fdb62ee1b69",
+      "targetKeys": [
+        "official:equipment:es:264a8de945ade4509efd9ce4"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "painters-supplies",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:caa56610bc3f032fccacce7a",
+      "name": "Dragonchess Set",
+      "sha256": "e6e78cc0e0fecabd552e76abf35c2ca88e971f6c78c01f25cc09af6570b5ab7a",
+      "targetKeys": [
+        "official:equipment:es:e14cde6c9aac3e864c054708"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "dragonchess-set",
+        "group": "gaming",
+        "officialSpanishContext": [
+          "general",
+          "gaming"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:cc10cc9c609b66cbf48a1c46",
+      "name": "Weaver's Tools",
+      "sha256": "04be301ba71b04393ab0941f446b69131779a4bfd18e6b7bba183b0b9f50f279",
+      "targetKeys": [
+        "official:equipment:es:728ff87ae9b933c7623d68ca"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "weavers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:dae1c2b890ced263013bd963",
+      "name": "Cartographer's Tools",
+      "sha256": "d16a94d97d69900a6d2a6c275e33fcd577399809bd77a39d302f2a0abe7867fb",
+      "targetKeys": [
+        "official:equipment:es:7e70af915a0f0151f102d0a1"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "cartographers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:e23627fd8e22cfef88ddc54c",
+      "name": "Glassblower's Tools",
+      "sha256": "1c3cd99c164b711c0411cb82eb6beafe04df11d7aac0010a5dbe9c97967e5640",
+      "targetKeys": [
+        "official:equipment:es:393ca8fe9719b61f76997b82"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "glassblowers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:e3ecf1b39d766b00fe171d96",
+      "name": "Poisoner's Kit",
+      "sha256": "dbfc6b615e7e77dc088448f44744e6e86fe2e45168b6a76253c957ca2ec0ea28",
+      "targetKeys": [
+        "official:equipment:es:73d1f95b3a80f2914d62adb4"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "poisoners-kit",
+        "group": "poisoner",
+        "officialSpanishContext": [
+          "general",
+          "poisoner"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:e815681292070837b906b50e",
+      "name": "Potter's Tools",
+      "sha256": "0f53d10e4dafd51a52dd00c6141551e1be1297911353cae602623eb430f2e584",
+      "targetKeys": [
+        "official:equipment:es:88e68c6ea3e6296d75226c8d"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "potters-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:e97138f27d06c96527cae6ab",
+      "name": "Alchemist's Supplies",
+      "sha256": "482598bcf1c066b5c864f535133d337940e3658906a94bff29cb652061967550",
+      "targetKeys": [
+        "official:equipment:es:8af13bb03749f70e9339f0cb"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "alchemists-supplies",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:f4b4f10fd7b69bee19210829",
+      "name": "Woodcarver's Tools",
+      "sha256": "c7579060a4f67fd82aa4b645e16852be651370aff625880db58b73380d4aa7a1",
+      "targetKeys": [
+        "official:equipment:es:a7ef83a006b81b56921e34cd"
+      ],
+      "reason": "Texto español completado con las reglas generales y específicas oficiales de herramientas, instrumentos o juegos; se conserva la identidad, precio, peso y originales. Las copias de personajes y comercio ya apuntan a la revisión completa. Las etiquetas antiguas de procedencia no son poderes adicionales.",
+      "evidence": {
+        "index": "woodcarvers-tools",
+        "group": "artisan",
+        "officialSpanishContext": [
+          "general",
+          "artisan"
+        ],
+        "source": "SRD 5.1 español, PDF 72–73",
+        "publishedRevision": 1292
+      }
+    },
+    {
+      "key": "official:equipment:eng:811c3fe04adf741e9e6534ce",
+      "name": "Trident",
+      "sha256": "d13a1937c0b6df2342567ed0038cc7e5013f4f2110cccc12c6977e6b853c541f",
+      "targetKeys": [
+        "official:equipment:es:b47158b1c1218eb8a4a4718c"
+      ],
+      "reason": "Aplicada la preferencia expresa del GM por la versión oficial de 2014. Se conserva el perfil y regla especial españoles ya cotejados con la fuente, así como el precio existente; se descarta el error normativo de la importación y se conserva íntegro fuera del catálogo.",
+      "evidence": {
+        "officialBase": "trident",
+        "enhancement": 0,
+        "originalIssues": [
+          "extra-or-different-damage"
+        ],
+        "correction": "Daño perforante oficial; el cortante inglés era erróneo."
+      }
+    },
+    {
+      "key": "official:equipment:eng:814ec70fec99e9149bf96f16",
+      "name": "Pike",
+      "sha256": "1c9e417f9d1e072a3f219d01a2d4373f83cad38b038ecb336d6adbbbac33bfed",
+      "targetKeys": [
+        "official:equipment:es:56389008119a2f14fbebdc5e"
+      ],
+      "reason": "Aplicada la preferencia expresa del GM por la versión oficial de 2014. Se conserva el perfil y regla especial españoles ya cotejados con la fuente, así como el precio existente; se descarta el error normativo de la importación y se conserva íntegro fuera del catálogo.",
+      "evidence": {
+        "officialBase": "pike",
+        "enhancement": 0,
+        "originalIssues": [
+          "unreviewed-English-prose"
+        ],
+        "correction": "Pica normal; la prosa inglesa de arma feroz estaba asignada erróneamente a esta base."
+      }
+    },
+    {
+      "key": "official:equipment:eng:c8a2e754c270cc4ff608d9d8",
+      "name": "Lance",
+      "sha256": "802309d42a20ee8f40a3e38b093fea9f743b47c8ad45da16a832b6730955a3f4",
+      "targetKeys": [
+        "official:equipment:es:b087ae3550cfea9cb01142cd"
+      ],
+      "reason": "Aplicada la preferencia expresa del GM por la versión oficial de 2014. Se conserva el perfil y regla especial españoles ya cotejados con la fuente, así como el precio existente; se descarta el error normativo de la importación y se conserva íntegro fuera del catálogo.",
+      "evidence": {
+        "officialBase": "lance",
+        "enhancement": 0,
+        "originalIssues": [
+          "special-rule-review"
+        ],
+        "correction": "Regla especial completa ya presente en el bloque español de la misma arma."
+      }
+    },
+    {
+      "key": "official:equipment:eng:ec1509a75f9703cce591fef1",
+      "name": "Net",
+      "sha256": "3ce5187d7cff2921c51ebb67c7a1456a9fc026ccd655cf836da21e30a506b395",
+      "targetKeys": [
+        "official:equipment:es:c452c8155853d2ae14b93ee8"
+      ],
+      "reason": "Aplicada la preferencia expresa del GM por la versión oficial de 2014. Se conserva el perfil y regla especial españoles ya cotejados con la fuente, así como el precio existente; se descarta el error normativo de la importación y se conserva íntegro fuera del catálogo.",
+      "evidence": {
+        "officialBase": "net",
+        "enhancement": 0,
+        "originalIssues": [
+          "special-rule-review"
+        ],
+        "correction": "Regla especial completa ya presente en el bloque español de la misma arma."
+      }
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

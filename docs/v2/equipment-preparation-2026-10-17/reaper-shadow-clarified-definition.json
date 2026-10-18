@@ -1,0 +1,696 @@
+{
+  "id": "recovery:imported:equipment:legacy:7464ea9038f8df5a37722aca",
+  "name": "Sombra del Segador",
+  "armor": null,
+  "format": "equipment-definition-draft",
+  "origin": "campaign",
+  "rarity": "legendary",
+  "review": {
+    "identity": true,
+    "editorial": true,
+    "mechanics": false,
+    "unresolved": [
+      "Cerrar la cobertura de los datos y diferencias antiguos antes de migrar o retirar versiones; las copias y precios comerciales siguen intactos."
+    ],
+    "information": false
+  },
+  "weapon": null,
+  "weight": {
+    "value": 0,
+    "unit": "lb"
+  },
+  "aliases": [
+    "Reaper’s Shadow"
+  ],
+  "economy": {
+    "basePrice": null,
+    "campaignPrice": {
+      "unit": "gp",
+      "quantity": 2500
+    },
+    "explanation": "Precio de campaña anterior conservado por separado; cero no se interpreta como precio oficial ni modifica el stock."
+  },
+  "magical": true,
+  "sources": [
+    {
+      "id": "original:97cf8f9bd555de38d67382147f10edf7352efdce5fa939523f1cc923ae844eb7",
+      "kind": "legacy",
+      "title": "Sombra del Segador",
+      "locator": "imported:equipment:legacy:7464ea9038f8df5a37722aca",
+      "language": "es",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "original:f7fa8079f9f02560acc518bf0c79b73d372123194141f8848f7e6f49e151b47f",
+      "kind": "legacy",
+      "title": "Reaper’s Shadow",
+      "locator": "imported:equipment:eng:5444412e5de171b44702e9be",
+      "language": "en",
+      "verified": false,
+      "rulesEdition": null
+    },
+    {
+      "id": "ece-authored-rule",
+      "kind": "campaign",
+      "title": "ECE · regla de campaña conservada",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "imported:equipment:legacy:7464ea9038f8df5a37722aca",
+      "verified": true
+    },
+    {
+      "id": "ece-gm-reaper-shadow-int-and-dawn",
+      "kind": "campaign",
+      "title": "ECE · reglas de Sombra del Segador confirmadas por el GM",
+      "language": "es",
+      "rulesEdition": "2014",
+      "locator": "Indicación del GM en esta conversación, 18 de octubre de 2026: «1 es a proposito 2 al amanecer»; confirma INT +1 y la recuperación de Marca de la Cercanía al amanecer.",
+      "verified": true
+    }
+  ],
+  "category": "wondrous-item",
+  "language": "es",
+  "revision": 2,
+  "subtypes": [],
+  "resources": [
+    {
+      "id": "marca",
+      "name": "Marca de la Cercanía",
+      "kind": "uses",
+      "maximum": 1,
+      "unit": "usos",
+      "recovery": {
+        "kind": "event",
+        "event": "dawn",
+        "explanation": "Recupera el uso gastado al amanecer, según confirmó el GM.",
+        "amount": {
+          "kind": "full"
+        }
+      },
+      "exhaustion": "No puedes activar la marca sin un uso disponible."
+    }
+  ],
+  "consumable": false,
+  "properties": [
+    "magic"
+  ],
+  "description": [
+    {
+      "id": "campaign-text-0",
+      "section": "flavor",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Un fragmento de tela o un trozo de vidrio (no es clara su naturaleza) que parece devorar la luz. Su superficie no refleja; es un objeto negro sin profundidad, como un vacío donde la iluminación falla. Al sostenerlo, las sombras cercanas se estiran levemente hacia él, como atraídas."
+    },
+    {
+      "id": "campaign-text-1",
+      "section": "flavor",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Existen especulaciones en ámbitos académicos (de un rigor bastante cuestionable) que lo asocian con el paso del 'Grim Reaper'—no la entidad en sí, sino el residuo de su presencia."
+    },
+    {
+      "id": "campaign-text-2",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Propiedades"
+    },
+    {
+      "id": "campaign-text-3",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Velo de Penumbra"
+    },
+    {
+      "id": "campaign-text-4",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Mientras estés vinculado al objeto, la luz en un radio de 3 metros (10 pies) se atenúa ligeramente. La luz brillante pasa a ser luz tenue, y la luz tenue pasa a ser oscuridad no mágica (las criaturas con visión en la oscuridad ven esta área como luz tenue). Las criaturas que dependen de la vista tienen desventaja en las tiradas de Percepción para detectar al portador si permanece inmóvil."
+    },
+    {
+      "id": "campaign-text-5",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Marca de la Cercanía (1/día)"
+    },
+    {
+      "id": "campaign-text-6",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Como acción adicional, puedes marcar a una criatura que veas a 9 metros (30 pies). Durante 1 minuto:"
+    },
+    {
+      "id": "campaign-text-7",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "La primera vez que el objetivo caiga por debajo de la mitad de sus puntos de golpe, recibe 2d6 de daño necrótico adicional."
+      ]
+    },
+    {
+      "id": "campaign-text-8",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "El objetivo no puede beneficiarse de puntos de golpe temporales durante este efecto."
+      ]
+    },
+    {
+      "id": "campaign-text-9",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Este efecto termina antes si pierdes la concentración (como si concentraras un conjuro, CD 10 o la mitad del daño recibido, lo que sea mayor)."
+    },
+    {
+      "id": "campaign-text-10",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Presencia Persistente"
+    },
+    {
+      "id": "campaign-text-11",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Cuando una criatura muere a menos de 4,5 metros (15 pies) de ti, obtienes ventaja en tu siguiente tirada de ataque o tirada de salvación antes del final de tu siguiente turno. Si no usas este beneficio, en su lugar tienes desventaja en tu siguiente tirada de salvación de Sabiduría (el “peso” persiste)."
+    },
+    {
+      "id": "campaign-text-12",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Susurro de Finalidad (desventaja)"
+    },
+    {
+      "id": "campaign-text-13",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Cada vez que uses Marca de la Cercanía, realiza una tirada de salvación de Sabiduría CD 12. Si fallas, quedas afectado por un fatalismo latente hasta tu próximo descanso largo:"
+    },
+    {
+      "id": "campaign-text-14",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Tienes desventaja en las tiradas de salvación contra la muerte."
+      ]
+    },
+    {
+      "id": "campaign-text-15",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "No puedes acercarte voluntariamente a una criatura con todos sus puntos de golpe a menos que superes una prueba de Sabiduría CD 10."
+      ]
+    },
+    {
+      "id": "campaign-text-16",
+      "section": "flavor",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Notas de Ambientación"
+    },
+    {
+      "id": "campaign-text-17",
+      "section": "flavor",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "El objeto es más oscuro que la oscuridad: incluso bajo luz mágica, parece una ausencia en lugar de una superficie."
+      ]
+    },
+    {
+      "id": "campaign-text-18",
+      "section": "flavor",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Los sonidos cercanos se perciben levemente amortiguados, como absorbidos."
+      ]
+    },
+    {
+      "id": "campaign-text-19",
+      "section": "flavor",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Algunos portadores reportan ver fugazmente una silueta alta en la visión periférica que desaparece al mirarla directamente."
+      ]
+    },
+    {
+      "id": "campaign-text-20",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Forma y Uso"
+    },
+    {
+      "id": "campaign-text-21",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "El objeto adopta distintas presentaciones físicas al vincularse con el portador (es un objeto activo que 'elije' la forma):"
+    },
+    {
+      "id": "campaign-text-22",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Capa de tela negra 'mate', conocida como la 'capa de medianoche' (cloak of midnight)"
+      ]
+    },
+    {
+      "id": "campaign-text-23",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Brazalete de tela negra o metal opaco"
+      ]
+    },
+    {
+      "id": "campaign-text-24",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Fragmento incrustado en un cinturón"
+      ]
+    },
+    {
+      "id": "campaign-text-25",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Amuleto o colgante sin brillo"
+      ]
+    },
+    {
+      "id": "campaign-text-26",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Parche o venda que se enrolla en la muñeca o antebrazo"
+      ]
+    },
+    {
+      "id": "campaign-text-27",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-authored-rule"
+      ],
+      "type": "paragraph",
+      "text": "Mientras esté en contacto con tu cuerpo (llevado o vestido de forma visible u oculta), sus propiedades funcionan. No requiere empuñarlo ni ocupar las manos."
+    },
+    {
+      "id": "gm-reaper-clarification",
+      "type": "paragraph",
+      "section": "rules",
+      "provenance": "campaign",
+      "sourceIds": [
+        "ece-gm-reaper-shadow-int-and-dawn"
+      ],
+      "text": "Mientras estés sintonizado con Sombra del Segador y el objeto esté en contacto con tu cuerpo, tu puntuación de Inteligencia aumenta en 1. Marca de la Cercanía tiene un uso y recupera el uso gastado al amanecer. Los demás poderes, requisitos y contrapartidas conservan sus reglas descritas."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "intelligence-bonus",
+      "name": "Inteligencia +1",
+      "activation": "passive",
+      "trigger": "",
+      "requirements": {
+        "attunement": true,
+        "presence": "other",
+        "bearer": [],
+        "explanation": "Requiere sintonización y contacto con el cuerpo, llevado o vestido de forma visible u oculta. No necesita empuñarlo ni ocupar las manos, según la descripción original."
+      },
+      "target": "Portador",
+      "range": "",
+      "duration": "Mientras se cumplan equipo y sintonización.",
+      "concentration": false,
+      "costs": [],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "intelligence-plus-one",
+          "condition": "Mientras estés sintonizado y el objeto esté en contacto con tu cuerpo, llevado o vestido.",
+          "kind": "bonus",
+          "target": "intelligence",
+          "operation": "add",
+          "value": 1
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Falta integrar la regla en el formato nuevo.",
+        "pendingAutomation": [
+          "Aplicar y retirar INT +1 al cumplir o perder los requisitos, recalcular sus estadísticas derivadas y evitar duplicar el bono de una copia antigua."
+        ]
+      },
+      "textBlockIds": [
+        "gm-reaper-clarification"
+      ]
+    },
+    {
+      "id": "veil-of-penumbra",
+      "name": "Velo de Penumbra",
+      "activation": "passive",
+      "trigger": "",
+      "requirements": {
+        "attunement": true,
+        "presence": "other",
+        "bearer": [],
+        "explanation": "Requiere sintonización y contacto con el cuerpo, llevado o vestido de forma visible u oculta. No necesita empuñarlo ni ocupar las manos, según la descripción original."
+      },
+      "target": "Portador",
+      "range": "Radio de 10 pies (3 m)",
+      "duration": "Mientras se cumplan equipo y sintonización.",
+      "concentration": false,
+      "costs": [],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "veil-of-penumbra-0",
+          "condition": "Solo Percepción para detectar visualmente al portador mientras permanece inmóvil.",
+          "kind": "defense",
+          "defense": "disadvantage",
+          "target": "perception-sight-against-bearer"
+        },
+        {
+          "id": "veil-of-penumbra-1",
+          "condition": "",
+          "kind": "unmodeled",
+          "explanation": "Luz brillante pasa a tenue y luz tenue a oscuridad no mágica a 10 pies; conservar la interacción con visión en la oscuridad descrita por el objeto.",
+          "original": {
+            "description": [
+              "Velo de Penumbra",
+              "Mientras estés vinculado al objeto, la luz en un radio de 3 metros (10 pies) se atenúa ligeramente. La luz brillante pasa a ser luz tenue, y la luz tenue pasa a ser oscuridad no mágica (las criaturas con visión en la oscuridad ven esta área como luz tenue). Las criaturas que dependen de la vista tienen desventaja en las tiradas de Percepción para detectar al portador si permanece inmóvil."
+            ]
+          }
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Falta integrar la regla en el formato nuevo.",
+        "pendingAutomation": [
+          "Resolver la iluminación del entorno y la Percepción visual condicionada a que el portador permanezca inmóvil."
+        ]
+      },
+      "textBlockIds": [
+        "campaign-text-3",
+        "campaign-text-4"
+      ]
+    },
+    {
+      "id": "nearness-mark",
+      "name": "Marca de la Cercanía",
+      "activation": "bonus-action",
+      "trigger": "",
+      "requirements": {
+        "attunement": true,
+        "presence": "other",
+        "bearer": [],
+        "explanation": "Requiere sintonización y contacto con el cuerpo, llevado o vestido de forma visible u oculta. No necesita empuñarlo ni ocupar las manos, según la descripción original."
+      },
+      "target": "Una criatura que puedas ver",
+      "range": "30 pies (9 m)",
+      "duration": "Hasta 1 minuto",
+      "concentration": true,
+      "costs": [
+        {
+          "resourceId": "marca",
+          "amount": 1
+        }
+      ],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "nearness-mark-0",
+          "condition": "Solo la primera vez que el objetivo marcado cae por debajo de la mitad de sus PG máximos durante esta marca; no al activarla ni en cada turno.",
+          "kind": "damage",
+          "expression": "2d6",
+          "damageType": "necrotic",
+          "timing": "other"
+        },
+        {
+          "id": "nearness-mark-1",
+          "condition": "",
+          "kind": "unmodeled",
+          "explanation": "El objetivo no puede beneficiarse de PG temporales mientras dure la marca; termina al perder la concentración o al cumplirse 1 minuto.",
+          "original": {
+            "description": [
+              "**Marca de la Cercanía (1/día)**",
+              "Como acción adicional, puedes marcar a una criatura que veas a 9 metros (30 pies). Durante 1 minuto:",
+              "* La primera vez que el objetivo caiga por debajo de la mitad de sus puntos de golpe, recibe 2d6 de daño necrótico adicional.",
+              "* El objetivo no puede beneficiarse de puntos de golpe temporales durante este efecto.",
+              "Este efecto termina antes si pierdes la concentración (como si concentraras un conjuro, CD 10 o la mitad del daño recibido, lo que sea mayor)."
+            ]
+          }
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Falta integrar la regla en el formato nuevo.",
+        "pendingAutomation": [
+          "Consumir el único uso y recuperarlo al amanecer, sin recargarlo por terminar un descanso.",
+          "Vigilar el umbral de PG una sola vez por marca, el bloqueo de PG temporales, la concentración y su duración."
+        ]
+      },
+      "textBlockIds": [
+        "campaign-text-5",
+        "campaign-text-6",
+        "campaign-text-7",
+        "campaign-text-8",
+        "campaign-text-9",
+        "gm-reaper-clarification"
+      ]
+    },
+    {
+      "id": "lingering-presence",
+      "name": "Presencia Persistente",
+      "activation": "trigger",
+      "trigger": "Una criatura muere a 15 pies (4,5 m) o menos de ti.",
+      "requirements": {
+        "attunement": true,
+        "presence": "other",
+        "bearer": [],
+        "explanation": "Requiere sintonización y contacto con el cuerpo, llevado o vestido de forma visible u oculta. No necesita empuñarlo ni ocupar las manos, según la descripción original."
+      },
+      "target": "Portador",
+      "range": "15 pies (4,5 m)",
+      "duration": "Beneficio hasta el final de tu siguiente turno; la contrapartida se resuelve como indica el texto.",
+      "concentration": false,
+      "costs": [],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "lingering-presence-0",
+          "condition": "",
+          "kind": "unmodeled",
+          "explanation": "Ventaja en el siguiente ataque o salvación antes del final del siguiente turno; si no se aprovecha, desventaja en la siguiente salvación de Sabiduría.",
+          "original": {
+            "description": [
+              "**Presencia Persistente**",
+              "Cuando una criatura muere a menos de 4,5 metros (15 pies) de ti, obtienes ventaja en tu siguiente tirada de ataque o tirada de salvación antes del final de tu siguiente turno. Si no usas este beneficio, en su lugar tienes desventaja en tu siguiente tirada de salvación de Sabiduría (el “peso” persiste)."
+            ]
+          }
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Falta integrar la regla en el formato nuevo.",
+        "pendingAutomation": [
+          "Registrar el beneficio pendiente, consumirlo en un ataque o salvación y resolver su contrapartida si no se usa a tiempo."
+        ]
+      },
+      "textBlockIds": [
+        "campaign-text-10",
+        "campaign-text-11"
+      ]
+    },
+    {
+      "id": "whisper-of-finality",
+      "name": "Susurro de Finalidad",
+      "activation": "trigger",
+      "trigger": "Cada vez que uses Marca de la Cercanía.",
+      "requirements": {
+        "attunement": true,
+        "presence": "other",
+        "bearer": [],
+        "explanation": "Requiere sintonización y contacto con el cuerpo, llevado o vestido de forma visible u oculta. No necesita empuñarlo ni ocupar las manos, según la descripción original."
+      },
+      "target": "Portador",
+      "range": "",
+      "duration": "Si fallas la salvación, hasta tu próximo descanso largo.",
+      "concentration": false,
+      "costs": [],
+      "consumeQuantity": 0,
+      "effects": [
+        {
+          "id": "whisper-of-finality-0",
+          "condition": "Solo si fallas la salvación de Sabiduría CD 12 al usar la marca, hasta tu próximo descanso largo.",
+          "kind": "defense",
+          "defense": "disadvantage",
+          "target": "death-saving-throws"
+        },
+        {
+          "id": "whisper-of-finality-1",
+          "condition": "",
+          "kind": "unmodeled",
+          "explanation": "Cada uso de la marca exige Sabiduría CD 12. Fallar también impide acercarse voluntariamente a criaturas con todos sus PG salvo prueba de Sabiduría CD 10. La recuperación al amanecer del uso de la marca no elimina esta penalización.",
+          "original": {
+            "description": [
+              "**Susurro de Finalidad (desventaja)**",
+              "Cada vez que uses *Marca de la Cercanía*, realiza una tirada de salvación de Sabiduría CD 12. Si fallas, quedas afectado por un fatalismo latente hasta tu próximo descanso largo:",
+              "* Tienes desventaja en las tiradas de salvación contra la muerte.",
+              "* No puedes acercarte voluntariamente a una criatura con todos sus puntos de golpe a menos que superes una prueba de Sabiduría CD 10."
+            ]
+          }
+        }
+      ],
+      "execution": {
+        "mode": "unsupported",
+        "handler": null,
+        "explanation": "Falta integrar la regla en el formato nuevo.",
+        "pendingAutomation": [
+          "Solicitar Sabiduría CD 12 al usar la marca y aplicar las penalizaciones solo al fallar, sin consumir un segundo uso.",
+          "Mantener la contrapartida hasta el descanso largo aunque llegue un amanecer o termine la marca."
+        ]
+      },
+      "textBlockIds": [
+        "campaign-text-12",
+        "campaign-text-13",
+        "campaign-text-14",
+        "campaign-text-15"
+      ]
+    }
+  ],
+  "requirements": {
+    "attunement": true,
+    "presence": "other",
+    "bearer": [],
+    "explanation": "Requiere sintonización y contacto con el cuerpo, llevado o vestido de forma visible u oculta. No necesita empuñarlo ni ocupar las manos, según la descripción original."
+  },
+  "schemaVersion": 1,
+  "baseDefinitionId": null,
+  "recoverySourceIds": [
+    "97cf8f9bd555de38d67382147f10edf7352efdce5fa939523f1cc923ae844eb7",
+    "f7fa8079f9f02560acc518bf0c79b73d372123194141f8848f7e6f49e151b47f",
+    "591486daa0ce34a8c83dbcd2ea985f61690f37e281d47edb4b75491e3791303e"
+  ]
+}

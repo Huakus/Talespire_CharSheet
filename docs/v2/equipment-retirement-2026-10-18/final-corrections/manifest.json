@@ -1,0 +1,536 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1299,
+  "archiveSha256": "f55c595851db93045095faab4ccf2783c7aedec262998d38fe9d8c9b0a3e8d25",
+  "rows": [
+    {
+      "key": "official:equipment:eng:24502bb2acbaf22c42721719",
+      "name": "Blowgun needle",
+      "sha256": "cea41e8f8e1ba2c6b52eb21b373abddccabe23a6afc4616da5ddd33f62989af9",
+      "targetKeys": [
+        "official:equipment:es:0b2e37f3e48893c6a5286c48"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 63–83 (sección Equipo) · CC-BY-4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC-BY-4.0",
+            "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque."
+          ],
+          "contexts": []
+        },
+        {
+          "kind": "official-physical-weight-correction",
+          "legacy": 1,
+          "canonical": 0.02
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:24a714c5fd16aefb4dbfcc28",
+      "name": "Ioun Stone (Mastery)",
+      "sha256": "f157cda61819eae2fd6294b6582909fd5abc8637071a05fcc0df45a6f3ae8e7a",
+      "targetKeys": [
+        "official:equipment:es:7d468487c373342123ec2cc0"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "source": "Piedra Ioun",
+          "variant": "Maestría",
+          "page": 259,
+          "kind": "complete-variant"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:2689ad6f86b74f9be6d6b08f",
+      "name": "Potion of Superior Healing",
+      "sha256": "a086025bff59bf94cef3d101da99d6ca15ff823ef2e58c447a4d47c17c4ea71c",
+      "targetKeys": [
+        "official:equipment:es:d82087e9fbb18715cecc5264"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "source": "Poción de curación",
+          "variant": "Curación superior",
+          "page": 260,
+          "kind": "complete-variant",
+          "caption": "El título de la tabla no es una condición adicional del párrafo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:4a25624e63744ec8db599bca",
+      "name": "Flame Tongue Greatsword",
+      "sha256": "eee683b50c59027e39ec6e24c0f133e09593bd123de0880b059d546be3ab7e9b",
+      "targetKeys": [
+        "official:equipment:es:0157632c42b2f0ccb59090f8"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "source": "Lengua de fuego",
+          "page": 255,
+          "kind": "complete-magic-section"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:4d7085b5f7394c271868e390",
+      "name": "String (10 feet)",
+      "sha256": "8ae4d4b9e2a9bb7a3ecd8c37836dee8031df5dbd0c7c048768c6ec0afe75630d",
+      "targetKeys": [
+        "official:equipment:es:89025bb9c91e286ccab71344"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "individually-quoted-pack-component",
+          "quote": "3 m de cordel"
+        },
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 72 · CC BY 4.0"
+          ],
+          "contexts": []
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:5603dc203ac2fd3a58f38f0a",
+      "name": "Cloak of Many Fashions",
+      "sha256": "4004ddb1d3becf64ac0cdc2201dbdddebc2a1f482f377db21f325560d1746eb1",
+      "targetKeys": [
+        "official:equipment:es:3b131c6fcc80d1ebd51cc521"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-supplied-xanathar-section",
+          "page": 141,
+          "translation": "Transcripción del documento aportado; no se acredita editorial externa."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:5b94d60082e14c99c2491f11",
+      "name": "Efficient Quiver",
+      "sha256": "dcfd1e72f211c3e5b8c45962f8f4a57fd3be7e0f0c070d4f1a106bc83b2cb6d7",
+      "targetKeys": [
+        "official:equipment:es:dfac5d1193ee8763411386fa"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "source": "Aljaba eficiente",
+          "page": 224,
+          "kind": "complete-magic-section"
+        },
+        {
+          "kind": "official-physical-weight-correction",
+          "legacy": 0.1,
+          "canonical": 2.2046226218487757
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6a90c065b617b040bffa188b",
+      "name": "Spike, iron",
+      "sha256": "c4bdeb041f51973dc37dfa52236f0a44a23527b30a2ba727d51167930e8822f5",
+      "targetKeys": [
+        "official:equipment:es:d6f94e0376d1900f4c11bb8c"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 63–83 (sección Equipo) · CC-BY-4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC-BY-4.0",
+            "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque."
+          ],
+          "contexts": []
+        },
+        {
+          "kind": "official-physical-weight-correction",
+          "legacy": 5,
+          "canonical": 0.5
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6b32a4fa3d2f515d39d94072",
+      "name": "Amulet of the Devout, +1",
+      "sha256": "b59022657f705df2843b6e7db7a09581473368f9cf0c3dad74f098e47c61565b",
+      "targetKeys": [
+        "official:equipment:es:b2ccc2c141497ce32fa56712"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-reviewed-own-translation",
+          "legacySha256": "dd224630035c6935bdffb8d4063002a617c5c0cf208b1c9d81bd3d79c2aa7a2f",
+          "limitation": "Texto inglés existente en la base y resumen oficial público. No se atribuye la traducción a la editorial ni se afirma haber accedido al texto completo de pago."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:6c9919ea10ce0a5f0912e17c",
+      "name": "Potion of Healing",
+      "sha256": "f9750207c7be61f7f04fcd8b25b77f9418ca317c8035b90f11e2fb55ba00960e",
+      "targetKeys": [
+        "official:equipment:es:c9daa1420a1ebc71f4a3ec40"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "source": "Poción de curación",
+          "variant": "Curación",
+          "page": 260,
+          "kind": "complete-variant",
+          "caption": "El título de la tabla no es una condición adicional del párrafo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:76d89b680acfae012904103d",
+      "name": "Block of incense",
+      "sha256": "465cad15a93c6736fe7f2207b273d8b66d300865c878ee096e9e5f42339554d7",
+      "targetKeys": [
+        "official:equipment:es:5dc4abd6720f5eb80dea925b"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "individually-quoted-pack-component",
+          "quote": "barras de incienso"
+        },
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 72 · CC BY 4.0"
+          ],
+          "contexts": []
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:7db8fd62d5b4c013d87393b7",
+      "name": "Crossbow bolt",
+      "sha256": "d13d84521344f6ab91ac935dd52417dee37970ff85f8cd5e06f49847795c3f21",
+      "targetKeys": [
+        "official:equipment:es:b11618cf556790fc99dcad2d"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 63–83 (sección Equipo) · CC-BY-4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC-BY-4.0",
+            "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque."
+          ],
+          "contexts": []
+        },
+        {
+          "kind": "official-physical-weight-correction",
+          "legacy": 0.08,
+          "canonical": 0.075
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:80f2b34d2794f591551541a7",
+      "name": "Barding: Ring mail",
+      "sha256": "86aa31e7b873e0a33cd32c69923b955956f791e61c8303e6e06171f71ef543f2",
+      "targetKeys": [
+        "official:equipment:es:f54b722030a8cd74d16cb832"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-price-correction",
+          "legacy": {
+            "unit": "gp",
+            "quantity": 12
+          },
+          "canonical": {
+            "unit": "gp",
+            "quantity": 120
+          },
+          "base": {
+            "unit": "gp",
+            "quantity": 120
+          }
+        },
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · páginas PDF 63–65 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · páginas PDF 64 · CC BY 4.0",
+            "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 73 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Barda"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:8789401e8d8915f119d9c636",
+      "name": "Censer",
+      "sha256": "5a46d40afbe261ae1c075b248126dd34874a87876aed0d912c96bed34532d2fa",
+      "targetKeys": [
+        "official:equipment:es:bd719c69d26174bd353e513d"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "individually-quoted-pack-component",
+          "quote": "incensario"
+        },
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 72 · CC BY 4.0"
+          ],
+          "contexts": []
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:9f08befbaec49f71718ae19f",
+      "name": "Saddle, Exotic",
+      "sha256": "7394978fab688fb240ae471f86cfbb9a72b4786e73e6d1ad3ae165e61b9f0ac8",
+      "targetKeys": [
+        "official:equipment:es:290cd1915f462803ca99b78e"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 72 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 73 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Sillas"
+          ]
+        },
+        {
+          "kind": "official-physical-weight-correction",
+          "legacy": 50,
+          "canonical": 40
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bc8c59613b9208fee489f9f9",
+      "name": "Alms box",
+      "sha256": "29a027c59fb7fe8e72e23e2a0e45ea617982ec5d884cd7419aceeab744b1b2b2",
+      "targetKeys": [
+        "official:equipment:es:cc4b1ad17ddbae45d3744f22"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "individually-quoted-pack-component",
+          "quote": "caja para limosnas"
+        },
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 72 · CC BY 4.0"
+          ],
+          "contexts": []
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:bf337376efce144734443617",
+      "name": "Keelboat",
+      "sha256": "4e9fbd308fda4a02de96c88520ebfd99ef5f4c56f1c2235b4108f1d13d2b7a94",
+      "targetKeys": [
+        "official:equipment:es:ada2351ae3c3ff654d40cb56"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 72 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 74 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Barcos de remos"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:db009bbc4aa972740fb12f94",
+      "name": "Rhythm-Maker's Drum, +1",
+      "sha256": "4dfb71061662866348e67169fffeb776bf00fbcce9ceabb50fbcd57fab7f3ce4",
+      "targetKeys": [
+        "official:equipment:es:8c306d2c8891ec0be3ed4ecf"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-reviewed-own-translation",
+          "legacySha256": "5eca4960f2e91b8bf7c5cd98ef050454b563be214a0d3a865c4d2d885c3b68fd",
+          "limitation": "Texto inglés existente en la base y resumen oficial público. No se atribuye la traducción a la editorial ni se afirma haber accedido al texto completo de pago."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:de97c3cd212321977b18e286",
+      "name": "Potion of Greater Healing",
+      "sha256": "7524ad747c1816a1704db736f4013fc492889137b825caf0c762fc9729df8b62",
+      "targetKeys": [
+        "official:equipment:es:7a6854195d181128a66650e7"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "source": "Poción de curación",
+          "variant": "Curación mayor",
+          "page": 260,
+          "kind": "complete-variant",
+          "caption": "El título de la tabla no es una condición adicional del párrafo."
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e0909b292c22d05eb5186495",
+      "name": "Caltrops",
+      "sha256": "b2447123d839d7d9e839f012f8e16c2c11c1390916b01365905edcd136a8a6e3",
+      "targetKeys": [
+        "official:equipment:es:741c6683c6d99e0c4fd359ba"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-price-correction",
+          "legacy": {
+            "unit": "cp",
+            "quantity": 5
+          },
+          "canonical": {
+            "unit": "gp",
+            "quantity": 1
+          },
+          "base": {
+            "unit": "gp",
+            "quantity": 1
+          }
+        },
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 68 · CC-BY-4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC-BY-4.0",
+            "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque."
+          ],
+          "contexts": [
+            "Abrojos"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e1607b2afc65354c0ce1c49d",
+      "name": "Deck of Illusions",
+      "sha256": "7864dfe3d51edcb2bd02f52de907ae252007e369d2d72dfdc0117a0f5bcaacab",
+      "targetKeys": [
+        "official:equipment:es:5249e4cec98afdcbade660b8"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "misnamed-legacy-identity",
+          "actual": "Baraja de múltiples cosas",
+          "basis": "Texto de cartas de marfil o vitela, trece o veintidós cartas; identidad cotejada con el texto oficial completo."
+        },
+        {
+          "source": "Baraja de múltiples cosas",
+          "page": 231,
+          "kind": "complete-magic-section"
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:e2bb6301dffb3d442efbbfc1",
+      "name": "Bell",
+      "sha256": "e3b4ace07216b69e7c98a0a07484187294a0e6c151da42d7ea0ad23c8f222cfd",
+      "targetKeys": [
+        "official:equipment:es:7c30d11f6a708ef8f5e479e7"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://www.dndbeyond.com/sources/dnd/basic-rules-2014/equipment · Other Adventuring Gear y reglas de cada objeto",
+            "D&D - Manual del Jugador 5E (1).pdf · páginas PDF/impresas 125 y 127; cotejo visual. La acreditación editorial de esta traducción sigue pendiente."
+          ],
+          "contexts": []
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fd1e24437b7c209acad80efc",
+      "name": "Rowboat",
+      "sha256": "782813b5e32db8e9c9eb3abeecc7a8a6fd42012f5e7d5ddab73e6a192553ab86",
+      "targetKeys": [
+        "official:equipment:es:198cf5e385f3109703e813d3"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "complete-mundane-context",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 72 · CC BY 4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 74 · CC BY 4.0"
+          ],
+          "contexts": [
+            "Barcos de remos"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:eng:fd4b26c0930a834b8ca3a81f",
+      "name": "Arrow",
+      "sha256": "3be52174a6a6f4770e69afebdfcc6478db3c09ac322571daa304c4282e94775b",
+      "targetKeys": [
+        "official:equipment:es:d2420446c122e6d1d1ade566"
+      ],
+      "reason": "Versión española cotejada con la sección primaria completa, la variante concreta o el contexto y tabla mundanos de la fuente de 2014. Se aplica la preferencia del GM por reglas oficiales frente a estadísticas importadas contradictorias. El texto y metadatos antiguos quedan archivados íntegramente, sin modificar copias de inventario ni precios de campaña.",
+      "evidence": [
+        {
+          "kind": "official-equipment-table",
+          "sources": [
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 63–83 (sección Equipo) · CC-BY-4.0",
+            "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · página PDF 69 · CC-BY-4.0",
+            "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque."
+          ],
+          "contexts": []
+        },
+        {
+          "kind": "official-physical-weight-correction",
+          "legacy": 1,
+          "canonical": 0.05
+        }
+      ]
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

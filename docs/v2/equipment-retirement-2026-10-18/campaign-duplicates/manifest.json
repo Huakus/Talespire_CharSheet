@@ -1,0 +1,233 @@
+{
+  "campaignId": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+  "baselineRevision": 1297,
+  "archiveSha256": "bdca2b479bbff1db8b6779f7905fc2304dcfaa3cc61a93bf72d0c441bab516e4",
+  "rows": [
+    {
+      "key": "imported:equipment:eng:1ebbed29cbf9619987b0e21b",
+      "name": "Cloak of Charisma +1",
+      "sha256": "a88936a7d5990987e714fe63e9fa88addac400b4be394d204be3dfeb6b765e9d",
+      "targetKeys": [
+        "imported:equipment:legacy:7600b9e4640022d731c55428"
+      ],
+      "reason": "Carisma +1, máximo 20 y efecto derivado sobre lanzamiento por Carisma: la versión española incluye todas las condiciones y ambientación. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "0d34a109bccbf785a175eac65eea6869a119a66701cba73e79e730b7371a7248",
+        "reviewedSpanishSha256": "1cff7be5460d74642670e133038c118247bc64ed38133cf45a1119f2bcd7f79b",
+        "review": "Carisma +1, máximo 20 y efecto derivado sobre lanzamiento por Carisma: la versión española incluye todas las condiciones y ambientación."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:46e3aeede45125b23450615a",
+      "name": "Wand of Annoyance",
+      "sha256": "f46db7c49ca72f0f38272f7688fe874cc0d75c285842fffe6064a23d9dbf3509",
+      "targetKeys": [
+        "imported:equipment:legacy:cbefe528bbe7f909a82dcbc9"
+      ],
+      "reason": "Ambas importaciones se sustituyen por la regla de campaña expresamente consolidada por autorización del GM: 3 cargas al amanecer, CD 14, alcance 30 pies y fastidio definido. Peso y rareza siguen la decisión consolidada. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "24fa180ff75e10b3ed7611863e59bc0dbf429d5711a344d4cb0a198d63c756bc",
+        "reviewedSpanishSha256": "755bcee9968b004d61d1936befee41f40935b63b67353c112f5f9078154a3452",
+        "review": "Ambas importaciones se sustituyen por la regla de campaña expresamente consolidada por autorización del GM: 3 cargas al amanecer, CD 14, alcance 30 pies y fastidio definido. Peso y rareza siguen la decisión consolidada."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:5444412e5de171b44702e9be",
+      "name": "Reaper’s Shadow",
+      "sha256": "6355daa1d35292eee86f8fd767300bd82552621686f5f2224b122f59019df2b8",
+      "targetKeys": [
+        "imported:equipment:legacy:7464ea9038f8df5a37722aca"
+      ],
+      "reason": "Texto español completo de velo, marca, concentración, presencia y fatalismo. INT +1 y recuperación al amanecer confirmados por el GM prevalecen sobre el resumen inglés. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "64e536920e4d2bddf81a69ea10170ed8cd77d355d32db21c77d726153394a133",
+        "reviewedSpanishSha256": "d046cb8c14b0a5dae5f80e4113579aae0b7f6c2199c7ca759cf5c39c958e255d",
+        "review": "Texto español completo de velo, marca, concentración, presencia y fatalismo. INT +1 y recuperación al amanecer confirmados por el GM prevalecen sobre el resumen inglés."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:6479e4874253b87ba11bcf25",
+      "name": "Lucent Crystal",
+      "sha256": "a991b4207462de3a0d17396713c1f46ef529250a00f002b6774525493c08cdad",
+      "targetKeys": [
+        "imported:equipment:legacy:243505546e6def658c68be08"
+      ],
+      "reason": "La versión española contiene el consumo, recuperación de espacio, PG temporales, curación en el templo, corrupción, identificación, destrucción y mecanismos del resumen inglés, con más detalle. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "e63020e63cb81fcba36e158331e3b43c278140b8edc9758b1e51667f566ef56f",
+        "reviewedSpanishSha256": "bf6f6e85ee0ffc6f81abf51a8bdb6dcda9f0e8a112d0eec8abfb09731b38d630",
+        "review": "La versión española contiene el consumo, recuperación de espacio, PG temporales, curación en el templo, corrupción, identificación, destrucción y mecanismos del resumen inglés, con más detalle."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:653955bc1d76c0745de3b749",
+      "name": "Wizard Amulet",
+      "sha256": "e5e0a664d2470795dec03b8f9b5df5a835ad3c00410f0d6a853746b5ae1438e7",
+      "targetKeys": [
+        "imported:equipment:legacy:fb36d9c23d740e8f2e5d2d26"
+      ],
+      "reason": "Bono +2 a Arcano al llevarlo puesto y ambientación íntegramente presentes en español. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "d763e0c63fb93e33a2e25a93be2df3cfff5e71d860ca9c7d973144ac10f7be0a",
+        "reviewedSpanishSha256": "542f6e85d2c35eb31509f10db2c9a6c24d6bf1348c90972ead00627b4da21afb",
+        "review": "Bono +2 a Arcano al llevarlo puesto y ambientación íntegramente presentes en español."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:73cfe5c0230c10e45f672252",
+      "name": "Jewelry",
+      "sha256": "25345208f2fef23b8cb2dbf79c3d19d29b9d1637cc4fa10c8f55446f74649b71",
+      "targetKeys": [
+        "imported:equipment:legacy:e69058eb35b858b91875228a"
+      ],
+      "reason": "La descripción inglesa solo dice Jewelry; Joyas conserva su contenido, precio y peso sin añadir poderes. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "dae3c6e9783020f6759fa6ed313abfb5db92e50d22bb97b401ed5578fec525c2",
+        "reviewedSpanishSha256": "a922989252388a06d41a9531e89edd9c8ce0c0a5b0094e074e0825af2cccf734",
+        "review": "La descripción inglesa solo dice Jewelry; Joyas conserva su contenido, precio y peso sin añadir poderes."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:948605895da94b7cb6174c57",
+      "name": "Wand of Mage Armor",
+      "sha256": "fbaf5865587e218252224b0dd261b26468a6e660d1731dca7a0196efa267f03b",
+      "targetKeys": [
+        "imported:equipment:legacy:99f2c411caadf247bd3d459a"
+      ],
+      "reason": "Conjuro Armadura de mago, exención material, acción, 3 cargas, recarga 1d6+1 al amanecer y destrucción con 1 al gastar la última carga, completos en español. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "7c559394be1b7d700cf686e85427f6558a817554935805ed35a90771a9787bad",
+        "reviewedSpanishSha256": "0b1318ece49414fb67afbbd2583009c2e6b7f2ee2f30dd7825fc0991d5a9b8a0",
+        "review": "Conjuro Armadura de mago, exención material, acción, 3 cargas, recarga 1d6+1 al amanecer y destrucción con 1 al gastar la última carga, completos en español."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:984f4d5a3c67343c068c738f",
+      "name": "Lucent Core",
+      "sha256": "c058c4866242365d84ef9224637b5ea3e4e4da5af83cf5c51a8755f0ef6ae08e",
+      "targetKeys": [
+        "imported:equipment:legacy:f9a55f61d3ecdfdc16848447"
+      ],
+      "reason": "Regla Adaptada de campaña ya consolidada: se conservan las tres resonancias, tiempos, costes, requisito de herramientas, recarga con cristal y desgaste/reparación. Corrige el campo antiguo de descanso corto, peso y rareza según la decisión publicada. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "34c45b25e954a1c7c0388a14b9605d46d84e63ffe06825a31026c345b7a6a335",
+        "reviewedSpanishSha256": "6282c27140b34eb1c9f83c576acbd8677264b0b644ab4a06be9eefb773eab75e",
+        "review": "Regla Adaptada de campaña ya consolidada: se conservan las tres resonancias, tiempos, costes, requisito de herramientas, recarga con cristal y desgaste/reparación. Corrige el campo antiguo de descanso corto, peso y rareza según la decisión publicada."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:a027da50e3236a645790ab66",
+      "name": "Agati’s Robe",
+      "sha256": "c12d00401ba39d58ace9b061c25d4d411ec7033d1ea38e1eb724d9a433f6156a",
+      "targetKeys": [
+        "imported:equipment:legacy:da5aa681decf2561baece063"
+      ],
+      "reason": "CA +3 mientras se viste; no es armadura ni impide lanzar conjuros. El español conserva también la historia de Agati. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "ea8419907197ca6f12310a15e11315f0332544c546ec5ac83b589e184cba85d8",
+        "reviewedSpanishSha256": "d6a3347d81b4346426a3a87b95b94bcfff343f30815412c089a39eb0081764e9",
+        "review": "CA +3 mientras se viste; no es armadura ni impide lanzar conjuros. El español conserva también la historia de Agati."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:b88329749547b2057f4682ce",
+      "name": "Staff of Haste",
+      "sha256": "ec3a56c7ccf98386e360c1bd1ffb788e1d0b8c0380b12bcd148e37564f53025b",
+      "targetKeys": [
+        "imported:equipment:legacy:ffa6888520af7c400c801946"
+      ],
+      "reason": "Historia de Isadora, conjuro Acelerar una vez por descanso largo y perfil de bastón conservados en español. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "72410a8854953bbd17181a9a9ecd36f30f7f006a3b2b4af56141a3cb3f84729e",
+        "reviewedSpanishSha256": "85e9dc18d680a29a517e2986c8c9a37ea33030a7bad01da43b4e151eb8d9cd7d",
+        "review": "Historia de Isadora, conjuro Acelerar una vez por descanso largo y perfil de bastón conservados en español."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:c0f8364c3bc08451d2bd84d3",
+      "name": "Reserve Crystal",
+      "sha256": "7b24fe225e0999ae1b39d4b719507efc4b243d0ffa5c88385ba262cda17d62e7",
+      "targetKeys": [
+        "imported:equipment:legacy:bc5bf83aa5545f2bc45f837c"
+      ],
+      "reason": "Tres cargas, recuperación 1d3 al amanecer, costes 1/2/3, Rayo abrasador, corrupción, identificación y destrucción completos en la descripción española. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "965543148dbe4f40ebc1cc5e2c41a6c1496d492a2d92f385475d1fe556743994",
+        "reviewedSpanishSha256": "b214a8f6f85056c5d9e39824827850f05b604ff8fb38d77c7d70a247c2ccd6ec",
+        "review": "Tres cargas, recuperación 1d3 al amanecer, costes 1/2/3, Rayo abrasador, corrupción, identificación y destrucción completos en la descripción española."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:c1e46081d1229dffc469b797",
+      "name": "Crimson Crystal",
+      "sha256": "4968827765cd0801056873fec0adc11e2004ef1ca371d8e57026aff521c58d79",
+      "targetKeys": [
+        "imported:equipment:legacy:9e036c804481226114e6c22c"
+      ],
+      "reason": "La versión española conserva toda la ambientación del cristal. Es una reliquia narrativa confirmada por el GM; no se añaden poderes cuantificados. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "461037802f4e2759fa28e8ea5bdc3fb64147f69d93b532cdec12b08fd05ea106",
+        "reviewedSpanishSha256": "df16781514e6913b304161df87ff63448ee95c31c496e76a8185daf69534aa1c",
+        "review": "La versión española conserva toda la ambientación del cristal. Es una reliquia narrativa confirmada por el GM; no se añaden poderes cuantificados."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:ed6851b4211c8b41e2038171",
+      "name": "Runed Cloak",
+      "sha256": "b6402b7ddd96db45f7d3362f58d1560460f0471c7e07d9ee9af801bfad51ad98",
+      "targetKeys": [
+        "imported:equipment:legacy:ad2b2b095ece73a10323c150"
+      ],
+      "reason": "Espacio adicional de nivel 1 al vestir la capa, aclarado por el GM: gasto y recuperación heredados del portador. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "29052790325890c00b0166094a3b6f06cfce0dbf38a66342a70368a805e12c8b",
+        "reviewedSpanishSha256": "a6cb133af76c48a0c21b0b3a21eb3d4d07bb626dbbd268731e03d12e5b826742",
+        "review": "Espacio adicional de nivel 1 al vestir la capa, aclarado por el GM: gasto y recuperación heredados del portador."
+      }
+    },
+    {
+      "key": "imported:equipment:eng:f48078b81b0aa183480e8283",
+      "name": "Scholar’s Scroll",
+      "sha256": "30d870335914fc625709bd0aecf06c105843a94853d89b786d83abe362f132a5",
+      "targetKeys": [
+        "imported:equipment:legacy:69aec4cb70fbb4be170cf479"
+      ],
+      "reason": "El texto inglés describe un pergamino con notas de estudios o plegarias; la descripción española del Manual del Jugador aportado contiene exactamente ese contenido. No es un pergamino de conjuro. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "76decc823d8489f0b0aa2fe713eff73121c0da9cfb26aeb3ddd2741ad467777a",
+        "reviewedSpanishSha256": "3757ae8945a8e52fb0ef76c674322b1d5ce4539bda4a58feef2b60d123064cc1",
+        "review": "El texto inglés describe un pergamino con notas de estudios o plegarias; la descripción española del Manual del Jugador aportado contiene exactamente ese contenido. No es un pergamino de conjuro."
+      }
+    },
+    {
+      "key": "official:equipment:eng:357057ea2ed932c82ea0e83c",
+      "name": "Amulet of Wisdom",
+      "sha256": "7455d0568007f9d8c1ecefb744444df8b30c2fb49c190f24524fcfb3967d94e6",
+      "targetKeys": [
+        "official:equipment:es:9b9bc630f8db9ca7d472176a"
+      ],
+      "reason": "La regla confirmada por el GM es +1 solo a las salvaciones de Sabiduría, con sintonización. La explicación inglesa de todas las salvaciones queda sustituida por esa decisión. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "8fec8854c891ba9b2f69ec881dfdbdf0fdbbe1c86160f8a93aafcbffca88e7fc",
+        "reviewedSpanishSha256": "405618413f8e7e5baeb4680312235c03bbc863b0a0a054ae9e763c58362f81f7",
+        "review": "La regla confirmada por el GM es +1 solo a las salvaciones de Sabiduría, con sintonización. La explicación inglesa de todas las salvaciones queda sustituida por esa decisión."
+      }
+    },
+    {
+      "key": "official:equipment:eng:bc47945a149c5827db617627",
+      "name": "Wand of Annoyance",
+      "sha256": "e902e2084f1e3eacb116379233f87363b01f35e2ba5b4c1998ccab52cd1c2e29",
+      "targetKeys": [
+        "imported:equipment:legacy:cbefe528bbe7f909a82dcbc9"
+      ],
+      "reason": "Ambas importaciones se sustituyen por la regla de campaña expresamente consolidada por autorización del GM: 3 cargas al amanecer, CD 14, alcance 30 pies y fastidio definido. Peso y rareza siguen la decisión consolidada. Original íntegro archivado fuera del catálogo activo; no se modifican copias de inventario ni estados de uso. La ejecución de efectos se verifica por separado, sin confundir la retirada del duplicado con una certificación de automatización.",
+      "evidence": {
+        "reviewedEnglishSha256": "d73b4876f63d639e83815e78156ace6dc4de596ee35f74b9dc32cd0ce9f637eb",
+        "reviewedSpanishSha256": "755bcee9968b004d61d1936befee41f40935b63b67353c112f5f9078154a3452",
+        "review": "Ambas importaciones se sustituyen por la regla de campaña expresamente consolidada por autorización del GM: 3 cargas al amanecer, CD 14, alcance 30 pies y fastidio definido. Peso y rareza siguen la decisión consolidada."
+      }
+    }
+  ],
+  "preparationKeys": [],
+  "preparations": []
+}

@@ -1,0 +1,288 @@
+{
+  "reviewed": 47,
+  "items": [
+    {
+      "key": "official:equipment:es:043f8e0591e572ca18adfcd9",
+      "page": 142,
+      "index": "moon-touched-sword",
+      "name": "Espada Tocada de Luna"
+    },
+    {
+      "key": "official:equipment:es:05455ce74fdcd23b34a0c3c7",
+      "page": 144,
+      "index": "wand-of-pyrotechnics",
+      "name": "Varita De Pirotecnia"
+    },
+    {
+      "key": "official:equipment:es:06b42638a9689434c22bb471",
+      "page": 143,
+      "index": "walloping-ammunition",
+      "name": "Munición de Embestida"
+    },
+    {
+      "key": "official:equipment:es:0d2fe70e110b7c482fd62e4f",
+      "page": 143,
+      "index": "ersatz-eye",
+      "name": "Ojo de Ersatz"
+    },
+    {
+      "key": "official:equipment:es:0fbd781233c374a307e6151d",
+      "page": 143,
+      "index": "pot-of-awakening",
+      "name": "Matero del Despertar"
+    },
+    {
+      "key": "official:equipment:es:12cc18f6cd52f43208e2766e",
+      "page": 141,
+      "index": "lock-of-trickery",
+      "name": "Cerrojo / Candado de Trucos"
+    },
+    {
+      "key": "official:equipment:es:13846679c7de58e9e7e71b43",
+      "page": 142,
+      "index": "ear-horn-of-hearing",
+      "name": "Cuerno de la Audición"
+    },
+    {
+      "key": "official:equipment:es:1f8f1eb126121522fd0418c5",
+      "page": 141,
+      "index": "staff-of-birdcalls",
+      "name": "Bastón de Cantos de Aves"
+    },
+    {
+      "key": "official:equipment:es:22ead02982c6736091739550",
+      "page": 141,
+      "index": "hewards-handy-spice-pouch",
+      "name": "Bolsa Práctica de Especias de Heward"
+    },
+    {
+      "key": "official:equipment:es:279b82b3a270fa682c9c7463",
+      "page": 144,
+      "index": "wand-of-conducting",
+      "name": "Varita De Conducción"
+    },
+    {
+      "key": "official:equipment:es:28fe6370af3b8127478ffa0c",
+      "page": 144,
+      "index": "candle-of-the-deep",
+      "name": "Vela de las Profundidades"
+    },
+    {
+      "key": "official:equipment:es:2abeb153e2c5efa431eef118",
+      "page": 141,
+      "index": "cast-off-armor",
+      "name": "Armadura Desmontable"
+    },
+    {
+      "key": "official:equipment:es:315aef2f4b81c2c96ad75ba1",
+      "page": 142,
+      "index": "horn-of-silent-alarm",
+      "name": "Cuerno de Alarma Silenciosa"
+    },
+    {
+      "key": "official:equipment:es:3197a4c13048be4426d6c7a7",
+      "page": 141,
+      "index": "staff-of-flowers",
+      "name": "Bastón de Flores"
+    },
+    {
+      "key": "official:equipment:es:349dff67424d2297bd82ab61",
+      "page": 142,
+      "index": "bead-of-refreshment",
+      "name": "Cuenta de Refrescamiento"
+    },
+    {
+      "key": "official:equipment:es:3bfaabab18a9dbda489b287c",
+      "page": 143,
+      "index": "clothes-of-mending",
+      "name": "Ropa de Remendado"
+    },
+    {
+      "key": "official:equipment:es:3dd6975494637a4686fd56c6",
+      "page": 142,
+      "index": "shield-of-expression",
+      "name": "Escudo de Expresión"
+    },
+    {
+      "key": "official:equipment:es:4a1fb288fa56b71185b0637c",
+      "page": 141,
+      "index": "staff-of-adornment",
+      "name": "Bastón de Adornos"
+    },
+    {
+      "key": "official:equipment:es:4c6e0b1e43293b4a31cd9aeb",
+      "page": 143,
+      "index": "pipe-of-smoke-monsters",
+      "name": "Pipa de Monstruos de Humo"
+    },
+    {
+      "key": "official:equipment:es:4e2108321d7bdfa345a3b532",
+      "page": 144,
+      "index": "hat-of-wizardry",
+      "name": "Sombrero de Magia"
+    },
+    {
+      "key": "official:equipment:es:4f71dcffbe96aafbee252bae",
+      "page": 141,
+      "index": "smoldering-armor",
+      "name": "Armadura Ardiente"
+    },
+    {
+      "key": "official:equipment:es:51d5bdcc15355bda895cbc86",
+      "page": 143,
+      "index": "orb-of-time",
+      "name": "Orbe del Tiempo"
+    },
+    {
+      "key": "official:equipment:es:57eba494f4a7db5a84fb0b16",
+      "page": 141,
+      "index": "clockwork-amulet",
+      "name": "Amuleto de Relojería"
+    },
+    {
+      "key": "official:equipment:es:59e2d70bb33932f24e564bcb",
+      "page": 144,
+      "index": "wand-of-scowls",
+      "name": "Varita De Ceños Fruncidos"
+    },
+    {
+      "key": "official:equipment:es:5f2f9bceb8c4ef26e9fcf7cb",
+      "page": 143,
+      "index": "talking-doll",
+      "name": "Muñeca Parlante"
+    },
+    {
+      "key": "official:equipment:es:62d361c598b85c5c557afb85",
+      "page": 141,
+      "index": "veterans-cane",
+      "name": "Caña de Veterano"
+    },
+    {
+      "key": "official:equipment:es:676eb827a4ce1e8dd46472c9",
+      "page": 144,
+      "index": "pole-of-collapsing",
+      "name": "Vara de Colapso"
+    },
+    {
+      "key": "official:equipment:es:69e51880b6f94b751c871ab7",
+      "page": 143,
+      "index": "hat-of-vermin",
+      "name": "Sombrero de Sabandijas"
+    },
+    {
+      "key": "official:equipment:es:6c63bbeea282e0bbcade0547",
+      "page": 143,
+      "index": "tankard-of-sobriety",
+      "name": "Jarra de la Sobriedad"
+    },
+    {
+      "key": "official:equipment:es:72f41df7d2a8c10d774fdeb7",
+      "page": 143,
+      "index": "ruby-of-the-war-mage",
+      "name": "Rubí del Mago Guerrero"
+    },
+    {
+      "key": "official:equipment:es:736d97860c48e80efac95ad5",
+      "page": 143,
+      "index": "orb-of-direction",
+      "name": "Orbe de Dirección"
+    },
+    {
+      "key": "official:equipment:es:7510516ec155c655e2fab8df",
+      "page": 142,
+      "index": "rope-of-mending",
+      "name": "Cuerda de Remendado"
+    },
+    {
+      "key": "official:equipment:es:8a04293239c4fc5646d79a47",
+      "page": 142,
+      "index": "unbreakable-arrow",
+      "name": "Flecha Irrompible"
+    },
+    {
+      "key": "official:equipment:es:8da11044f966512d6addc01a",
+      "page": 143,
+      "index": "enduring-spellbook",
+      "name": "Libro Duradero"
+    },
+    {
+      "key": "official:equipment:es:963e6e150ffd4c0b17157fe7",
+      "page": 140,
+      "index": "dark-shard-amulet",
+      "name": "Amuleto de Esquirla Oscura"
+    },
+    {
+      "key": "official:equipment:es:9f9e914b739d906d64d2c25c",
+      "page": 142,
+      "index": "instrument-of-scribing",
+      "name": "Instrumento de Escritura"
+    },
+    {
+      "key": "official:equipment:es:ad0c7921601d8e090a1a7dc9",
+      "page": 141,
+      "index": "gleaming-armor",
+      "name": "Armadura Resplandeciente"
+    },
+    {
+      "key": "official:equipment:es:b9adb0010ed28070310a84af",
+      "page": 144,
+      "index": "pole-of-angling",
+      "name": "Vara de Pesca"
+    },
+    {
+      "key": "official:equipment:es:bc773dbca706b1f84de882b4",
+      "page": 143,
+      "index": "perfume-of-bewitching",
+      "name": "Perfume de Embrujo"
+    },
+    {
+      "key": "official:equipment:es:d018fb138ed5d52f98d1bf5c",
+      "page": 141,
+      "index": "cloak-of-billowing",
+      "name": "Capa de Hinchazón"
+    },
+    {
+      "key": "official:equipment:es:d12861b48f075c06d035e577",
+      "page": 142,
+      "index": "charlatans-die",
+      "name": "Dado de Charlatán"
+    },
+    {
+      "key": "official:equipment:es:d4390867d1a2cd62b4f77e38",
+      "page": 144,
+      "index": "dread-helm",
+      "name": "Yelmo del Terror"
+    },
+    {
+      "key": "official:equipment:es:dbae6806b8de5b9b0dfdfd25",
+      "page": 142,
+      "index": "instrument-of-illusions",
+      "name": "Instrumento de Ilusiones"
+    },
+    {
+      "key": "official:equipment:es:de82f3e540891c078aa379bc",
+      "page": 143,
+      "index": "mystery-key",
+      "name": "Llave Misteriosa"
+    },
+    {
+      "key": "official:equipment:es:eb3fd646d5b376512553d6e3",
+      "page": 141,
+      "index": "boots-of-false-tracks",
+      "name": "Botas de Pistas Falsas"
+    },
+    {
+      "key": "official:equipment:es:ee6f64eed46d5b15567835f7",
+      "page": 141,
+      "index": "bead-of-nourishment",
+      "name": "Cuenta de Alimentación"
+    },
+    {
+      "key": "official:equipment:es:f5a09e6d10357773fe2ecbd8",
+      "page": 144,
+      "index": "wand-of-smiles",
+      "name": "Varita De Sonrisas"
+    }
+  ],
+  "skipped": []
+}

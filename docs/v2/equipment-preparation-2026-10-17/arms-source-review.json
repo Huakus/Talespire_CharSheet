@@ -1,0 +1,3073 @@
+{
+  "baselineRevision": 1200,
+  "sourceChecks": [
+    {
+      "id": "recovery:official:equipment:es:0165391ec89c602c4910157b",
+      "name": "Maza a dos manos",
+      "index": "maul",
+      "baseIndex": "maul",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Maul",
+        "10 gp",
+        "2d6 bludgeoning",
+        "10 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:01e931e6bad1a06ae2fb2b70",
+      "name": "Estoque",
+      "index": "rapier",
+      "baseIndex": "rapier",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Rapier",
+        "25 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Finesse"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0212e1973f7b9e001aeeef61",
+      "name": "Martillo de guerra +2",
+      "index": "warhammer-2",
+      "baseIndex": "warhammer",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Warhammer",
+        "15 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:039b4627c1cd6e5434afaa53",
+      "name": "Pica +1",
+      "index": "pike-1",
+      "baseIndex": "pike",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Pike",
+        "5 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:03e1756b1be36a1a4bda44e0",
+      "name": "Maza a dos manos +2",
+      "index": "maul-2",
+      "baseIndex": "maul",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Maul",
+        "10 gp",
+        "2d6 bludgeoning",
+        "10 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:058ac9eece7394605fb4a6f5",
+      "name": "Cota de malla",
+      "index": "chain-mail",
+      "baseIndex": "chain-mail",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Chain mail",
+        "75 gp",
+        "16",
+        "Str 13",
+        "Disadvantage",
+        "55 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:08c56f03c7b826e78aa9c2f8",
+      "name": "Ballesta ligera +1",
+      "index": "crossbow-light-1",
+      "baseIndex": "crossbow-light",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, light",
+        "25 gp",
+        "1d8 piercing",
+        "5 lb.",
+        "Ammunition (range 80/320), loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0970abfcde2f28aef7323927",
+      "name": "Armadura de cuero tachonado",
+      "index": "studded-leather-armor",
+      "baseIndex": "studded-leather-armor",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Studded leather",
+        "45 gp",
+        "12 + Dex modifier",
+        "—",
+        "—",
+        "13 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0a0d7b00e6b26351a1e4890e",
+      "name": "Espadón +2",
+      "index": "greatsword-2",
+      "baseIndex": "greatsword",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Greatsword",
+        "50 gp",
+        "2d6 slashing",
+        "6 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0a87d509d866a04455fb2ed8",
+      "name": "Martillo ligero +1",
+      "index": "light-hammer-1",
+      "baseIndex": "light-hammer",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Light hammer",
+        "2 gp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0b5bdfe22131e9df8dadf58f",
+      "name": "Armadura de cuero tachonado +3",
+      "index": "studded-leather-3",
+      "baseIndex": "studded-leather-armor",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Studded leather",
+        "45 gp",
+        "12 + Dex modifier",
+        "—",
+        "—",
+        "13 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0bb6e53dd291d438a82ed714",
+      "name": "Guja",
+      "index": "glaive",
+      "baseIndex": "glaive",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Glaive",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0debc76df53740788be592da",
+      "name": "Hacha a dos manos +3",
+      "index": "greataxe-3",
+      "baseIndex": "greataxe",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Greataxe",
+        "30 gp",
+        "1d12 slashing",
+        "7 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:0fb78ee87ee268b333966d95",
+      "name": "Espadón +1",
+      "index": "greatsword-1",
+      "baseIndex": "greatsword",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Greatsword",
+        "50 gp",
+        "2d6 slashing",
+        "6 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:120eb2040f33ea4c66ff25c3",
+      "name": "Coraza +1",
+      "index": "breastplate-1",
+      "baseIndex": "breastplate",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Breastplate",
+        "400 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "20 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:121c1c0140bf7a88549add24",
+      "name": "Daga",
+      "index": "dagger",
+      "baseIndex": "dagger",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Dagger",
+        "2 gp",
+        "1d4 piercing",
+        "1 lb.",
+        "Finesse, light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:1227d4d1b1c71f987ade5f63",
+      "name": "Camisa de malla",
+      "index": "chain-shirt",
+      "baseIndex": "chain-shirt",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Chain shirt",
+        "50 gp",
+        "13 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "20 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:1310422427828454622a4a6a",
+      "name": "Martillo ligero",
+      "index": "light-hammer",
+      "baseIndex": "light-hammer",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Light hammer",
+        "2 gp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:14c90e5978b27c7e2bd00110",
+      "name": "Pico de guerra +2",
+      "index": "war-pick-2",
+      "baseIndex": "war-pick",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "War pick",
+        "5 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:16a7d3c8d1281ab007b8cdec",
+      "name": "Armadura de cuero +2",
+      "index": "leather-armor-2",
+      "baseIndex": "leather-armor",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Leather",
+        "10 gp",
+        "11 + Dex modifier",
+        "—",
+        "—",
+        "10 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:17e94d5174ef620bae1df448",
+      "name": "Garrote grande +2",
+      "index": "greatclub-2",
+      "baseIndex": "greatclub",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Greatclub",
+        "2 sp",
+        "1d8 bludgeoning",
+        "10 lb.",
+        "Two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:182b00e731897a7e4885ffb0",
+      "name": "Armadura acolchada +1",
+      "index": "padded-armor-1",
+      "baseIndex": "padded-armor",
+      "enhancement": 1,
+      "page": 63,
+      "officialRow": [
+        "Padded",
+        "5 gp",
+        "11 + Dex modifier",
+        "—",
+        "Disadvantage",
+        "8 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:1847f444fd005d4b4a3a58c1",
+      "name": "Arco corto +1",
+      "index": "shortbow-1",
+      "baseIndex": "shortbow",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Shortbow",
+        "25 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Ammunition (range 80/320), two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:18a93109fc6ecab4758adac2",
+      "name": "Cimitarra +3",
+      "index": "scimitar-3",
+      "baseIndex": "scimitar",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Scimitar",
+        "25 gp",
+        "1d6 slashing",
+        "3 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:1ae7f189c84264a30991c15d",
+      "name": "Espada larga +3",
+      "index": "longsword-3",
+      "baseIndex": "longsword",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:1e96267ec9b56f56b6e9c0fe",
+      "name": "Hoz +2",
+      "index": "sickle-2",
+      "baseIndex": "sickle",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Sickle",
+        "1 gp",
+        "1d4 slashing",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:20db866da7bb365eaf43d7a2",
+      "name": "Cerbatana +1",
+      "index": "blowgun-1",
+      "baseIndex": "blowgun",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Blowgun",
+        "10 gp",
+        "1 piercing",
+        "1 lb.",
+        "Ammunition (range 25/100), loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:21020dfe1365d435b3581a49",
+      "name": "Arco largo",
+      "index": "longbow",
+      "baseIndex": "longbow",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Longbow",
+        "50 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Ammunition (range 150/600), heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:22a8704b10fb30206e133353",
+      "name": "Jabalina +3",
+      "index": "javelin-3",
+      "baseIndex": "javelin",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Javelin",
+        "5 sp",
+        "1d6 piercing",
+        "2 lb.",
+        "Thrown (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:24e924161eb9531b0a1632c5",
+      "name": "Coraza",
+      "index": "breastplate",
+      "baseIndex": "breastplate",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Breastplate",
+        "400 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "20 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:25315b2f0475ce9cdc4df1af",
+      "name": "Ballesta pesada",
+      "index": "crossbow-heavy",
+      "baseIndex": "crossbow-heavy",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, heavy",
+        "50 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Ammunition (range 100/400), heavy, loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:25cce15da55ed1eaf1917e71",
+      "name": "Alabarda +1",
+      "index": "halberd-1",
+      "baseIndex": "halberd",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Halberd",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:27f05898e96ee8f4afc5e64f",
+      "name": "Armadura de cuero +1",
+      "index": "leather-armor-1",
+      "baseIndex": "leather-armor",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Leather",
+        "10 gp",
+        "11 + Dex modifier",
+        "—",
+        "—",
+        "10 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:293b2a3136b01cf593d89295",
+      "name": "Dardo",
+      "index": "dart",
+      "baseIndex": "dart",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Dart",
+        "5 cp",
+        "1d4 piercing",
+        "1/4 lb.",
+        "Finesse, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2a910832a96a1b3b3ac79b9d",
+      "name": "Hacha a dos manos",
+      "index": "greataxe",
+      "baseIndex": "greataxe",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Greataxe",
+        "30 gp",
+        "1d12 slashing",
+        "7 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2ba4bb97a09f0fdd355f7973",
+      "name": "Hacha de mano +2",
+      "index": "handaxe-2",
+      "baseIndex": "handaxe",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Handaxe",
+        "5 gp",
+        "1d6 slashing",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2beae9ae708fc324d2ff5360",
+      "name": "Armadura de pieles +2",
+      "index": "hide-armor-2",
+      "baseIndex": "hide-armor",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Hide",
+        "10 gp",
+        "12 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "12 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2ccd240f584c7577f7c9fd63",
+      "name": "Espadón",
+      "index": "greatsword",
+      "baseIndex": "greatsword",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Greatsword",
+        "50 gp",
+        "2d6 slashing",
+        "6 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2d19032cbd0001d46f6922c2",
+      "name": "Armadura de bandas +2",
+      "index": "splint-armor-2",
+      "baseIndex": "splint-armor",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Splint",
+        "200 gp",
+        "17",
+        "Str 15",
+        "Disadvantage",
+        "60 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2d3f0176a01c04b4b26ee9c5",
+      "name": "Garrote grande +1",
+      "index": "greatclub-1",
+      "baseIndex": "greatclub",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Greatclub",
+        "2 sp",
+        "1d8 bludgeoning",
+        "10 lb.",
+        "Two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:2e248517e8fbfc7a7f268662",
+      "name": "Dardo +3",
+      "index": "dart-3",
+      "baseIndex": "dart",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Dart",
+        "5 cp",
+        "1d4 piercing",
+        "1/4 lb.",
+        "Finesse, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:32a2b4f74ab04defd6d2b6ed",
+      "name": "Cerbatana +3",
+      "index": "blowgun-3",
+      "baseIndex": "blowgun",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Blowgun",
+        "10 gp",
+        "1 piercing",
+        "1 lb.",
+        "Ammunition (range 25/100), loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:32da119ee9cc78e069f0cc38",
+      "name": "Cota guarnecida +3",
+      "index": "ring-mail-3",
+      "baseIndex": "ring-mail",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Ring mail",
+        "30 gp",
+        "14",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:333e7d671c5916a7d3b6990d",
+      "name": "Martillo de guerra +3",
+      "index": "warhammer-3",
+      "baseIndex": "warhammer",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Warhammer",
+        "15 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:33fb8bab9e5a248882c17d0a",
+      "name": "Ballesta de mano",
+      "index": "crossbow-hand",
+      "baseIndex": "crossbow-hand",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, hand",
+        "75 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Ammunition (range 30/120), light, loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3540479787c16c55359ff60c",
+      "name": "Garrote grande",
+      "index": "greatclub",
+      "baseIndex": "greatclub",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Greatclub",
+        "2 sp",
+        "1d8 bludgeoning",
+        "10 lb.",
+        "Two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3655000d40ec225ab7ef1d58",
+      "name": "Ballesta de mano +1",
+      "index": "crossbow-hand-1",
+      "baseIndex": "crossbow-hand",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, hand",
+        "75 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Ammunition (range 30/120), light, loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3b8581124ebb69e0130f882e",
+      "name": "Lanza de caballería +3",
+      "index": "lance-3",
+      "baseIndex": "lance",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Lance",
+        "10 gp",
+        "1d12 piercing",
+        "6 lb.",
+        "Reach, special"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3cda7dee8f2554603c6f5b04",
+      "name": "Pico de guerra",
+      "index": "war-pick",
+      "baseIndex": "war-pick",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "War pick",
+        "5 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3e0a8c8b4c511a0191d0f3ff",
+      "name": "Lucero del alba",
+      "index": "morningstar",
+      "baseIndex": "morningstar",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Morningstar",
+        "15 gp",
+        "1d8 piercing",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3f6e5a23723a6523271ed210",
+      "name": "Espada larga +1",
+      "index": "longsword-1",
+      "baseIndex": "longsword",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:3ff611f37a40a7525548b6a9",
+      "name": "Hacha de mano +1",
+      "index": "handaxe-1",
+      "baseIndex": "handaxe",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Handaxe",
+        "5 gp",
+        "1d6 slashing",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:427d7d7894ad022cd2cd4f2e",
+      "name": "Espada larga +2",
+      "index": "longsword-2",
+      "baseIndex": "longsword",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:44976b83b08dab3990f6fe2b",
+      "name": "Maza a dos manos +1",
+      "index": "maul-1",
+      "baseIndex": "maul",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Maul",
+        "10 gp",
+        "2d6 bludgeoning",
+        "10 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:461254bffffc17715e5fe044",
+      "name": "Hacha de guerra +1",
+      "index": "battleaxe-1",
+      "baseIndex": "battleaxe",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Battleaxe",
+        "10 gp",
+        "1d8 slashing",
+        "4 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:46e33160932fc77217b82c91",
+      "name": "Hacha de mano",
+      "index": "handaxe",
+      "baseIndex": "handaxe",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Handaxe",
+        "5 gp",
+        "1d6 slashing",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:47ca78a92149955639cb961b",
+      "name": "Armadura de cuero +3",
+      "index": "leather-armor-3",
+      "baseIndex": "leather-armor",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Leather",
+        "10 gp",
+        "11 + Dex modifier",
+        "—",
+        "—",
+        "10 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:499a495667e6198e30f0b366",
+      "name": "Látigo +3",
+      "index": "whip-3",
+      "baseIndex": "whip",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Whip",
+        "2 gp",
+        "1d4 slashing",
+        "3 lb.",
+        "Finesse, reach"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:4c7b73d2c7e5619095103c94",
+      "name": "Guja +3",
+      "index": "glaive-3",
+      "baseIndex": "glaive",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Glaive",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:4f04510bdcba05c0168a8c75",
+      "name": "Dardo +2",
+      "index": "dart-2",
+      "baseIndex": "dart",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Dart",
+        "5 cp",
+        "1d4 piercing",
+        "1/4 lb.",
+        "Finesse, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:4f77ea44ee87d0a74202f068",
+      "name": "Armadura de placas +1",
+      "index": "plate-mail-1",
+      "baseIndex": "plate-armor",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Plate",
+        "1,500 gp",
+        "18",
+        "Str 15",
+        "Disadvantage",
+        "65 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5040c937a57e1e0b81f3371a",
+      "name": "Látigo +1",
+      "index": "whip-1",
+      "baseIndex": "whip",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Whip",
+        "2 gp",
+        "1d4 slashing",
+        "3 lb.",
+        "Finesse, reach"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:51c90178f68947f68ab75cf8",
+      "name": "Lucero del alba +2",
+      "index": "morningstar-2",
+      "baseIndex": "morningstar",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Morningstar",
+        "15 gp",
+        "1d8 piercing",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:55c9bbc182e669a1be9867a5",
+      "name": "Armadura de cuero tachonado +1",
+      "index": "studded-leather-1",
+      "baseIndex": "studded-leather-armor",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Studded leather",
+        "45 gp",
+        "12 + Dex modifier",
+        "—",
+        "—",
+        "13 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:55ddce2d71e95e11f10fa0d1",
+      "name": "Media armadura +1",
+      "index": "half-plate-1",
+      "baseIndex": "half-plate-armor",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Half plate",
+        "750 gp",
+        "15 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:56389008119a2f14fbebdc5e",
+      "name": "Pica",
+      "index": "pike",
+      "baseIndex": "pike",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Pike",
+        "5 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:58f31312dd8e6ce7f5b5dd62",
+      "name": "Estoque +3",
+      "index": "rapier-3",
+      "baseIndex": "rapier",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Rapier",
+        "25 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Finesse"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5b01996255a88f8d3879f2f0",
+      "name": "Tridente +3",
+      "index": "trident-3",
+      "baseIndex": "trident",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Trident",
+        "5 gp",
+        "1d6 piercing",
+        "4 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5ba550c447e657d6385ce5a3",
+      "name": "Armadura de bandas",
+      "index": "splint-armor",
+      "baseIndex": "splint-armor",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Splint",
+        "200 gp",
+        "17",
+        "Str 15",
+        "Disadvantage",
+        "60 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5df162b91a2adc377446bc92",
+      "name": "Bastón +1",
+      "index": "quarterstaff-1",
+      "baseIndex": "quarterstaff",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Quarterstaff",
+        "2 sp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "Versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5f377fb9866d89e509c1b12e",
+      "name": "Armadura de cuero",
+      "index": "leather-armor",
+      "baseIndex": "leather-armor",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Leather",
+        "10 gp",
+        "11 + Dex modifier",
+        "—",
+        "—",
+        "10 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:5fd4c566606777a3c02ae011",
+      "name": "Espadón +2",
+      "index": "greatsword+2",
+      "baseIndex": "greatsword",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Greatsword",
+        "50 gp",
+        "2d6 slashing",
+        "6 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:61efb0ab40e6bac2ce56ea58",
+      "name": "Media armadura",
+      "index": "half-plate-armor",
+      "baseIndex": "half-plate-armor",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Half plate",
+        "750 gp",
+        "15 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:62b6151d7d1f6ff522e0fd0f",
+      "name": "Cota de malla +3",
+      "index": "chain-mail-3",
+      "baseIndex": "chain-mail",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Chain mail",
+        "75 gp",
+        "16",
+        "Str 13",
+        "Disadvantage",
+        "55 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:634d54d5c1f1eb780cc8a4f1",
+      "name": "Armadura acolchada +2",
+      "index": "padded-armor-2",
+      "baseIndex": "padded-armor",
+      "enhancement": 2,
+      "page": 63,
+      "officialRow": [
+        "Padded",
+        "5 gp",
+        "11 + Dex modifier",
+        "—",
+        "Disadvantage",
+        "8 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:638f27ea623149f3e82c01e5",
+      "name": "Maza +3",
+      "index": "mace-3",
+      "baseIndex": "mace",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Mace",
+        "5 gp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:63d3d4ab2a1ce8883fa3bb92",
+      "name": "Espada corta",
+      "index": "shortsword",
+      "baseIndex": "shortsword",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Shortsword",
+        "10 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6503c6bbf160265a9d48c312",
+      "name": "Daga +2",
+      "index": "dagger-2",
+      "baseIndex": "dagger",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Dagger",
+        "2 gp",
+        "1d4 piercing",
+        "1 lb.",
+        "Finesse, light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6591271dc3ec33171abe8a98",
+      "name": "Alabarda +3",
+      "index": "halberd-3",
+      "baseIndex": "halberd",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Halberd",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:679d721371e4b0885be06590",
+      "name": "Hacha a dos manos +1",
+      "index": "greataxe-1",
+      "baseIndex": "greataxe",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Greataxe",
+        "30 gp",
+        "1d12 slashing",
+        "7 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:68c8440c2dc2a517496af98a",
+      "name": "Hacha de guerra +2",
+      "index": "battleaxe-2",
+      "baseIndex": "battleaxe",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Battleaxe",
+        "10 gp",
+        "1d8 slashing",
+        "4 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6be93bc8a7410c878291438a",
+      "name": "Cota guarnecida +2",
+      "index": "ring-mail-2",
+      "baseIndex": "ring-mail",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Ring mail",
+        "30 gp",
+        "14",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6bfa0d94ba628f50c3ec77ca",
+      "name": "Maza",
+      "index": "mace",
+      "baseIndex": "mace",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Mace",
+        "5 gp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6d5554a889e84346a850741e",
+      "name": "Cimitarra",
+      "index": "scimitar",
+      "baseIndex": "scimitar",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Scimitar",
+        "25 gp",
+        "1d6 slashing",
+        "3 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6e474e549c4888eda815c1ff",
+      "name": "Mangual +2",
+      "index": "flail+2",
+      "baseIndex": "flail",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Flail",
+        "10 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6e78de1a42fe945f6504e05d",
+      "name": "Estoque +2",
+      "index": "rapier-2",
+      "baseIndex": "rapier",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Rapier",
+        "25 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Finesse"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6f85e13f9ea355318acc2dc4",
+      "name": "Armadura acolchada",
+      "index": "padded-armor",
+      "baseIndex": "padded-armor",
+      "enhancement": 0,
+      "page": 63,
+      "officialRow": [
+        "Padded",
+        "5 gp",
+        "11 + Dex modifier",
+        "—",
+        "Disadvantage",
+        "8 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:6fbca2a705b2c6a06a4ee587",
+      "name": "Guja +2",
+      "index": "glaive-2",
+      "baseIndex": "glaive",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Glaive",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:702073415568ee9ebe7dce24",
+      "name": "Ballesta pesada +2",
+      "index": "crossbow-heavy-2",
+      "baseIndex": "crossbow-heavy",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, heavy",
+        "50 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Ammunition (range 100/400), heavy, loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7032cbe638abba93f8addd7a",
+      "name": "Tridente +1",
+      "index": "trident-1",
+      "baseIndex": "trident",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Trident",
+        "5 gp",
+        "1d6 piercing",
+        "4 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:71168d41bf97907e2f13c3ed",
+      "name": "Escudo +3",
+      "index": "shield-3",
+      "baseIndex": "shield",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Shield",
+        "10 gp",
+        "+2",
+        "—",
+        "—",
+        "6 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7341991155e5614334eabe5b",
+      "name": "Armadura de placas +3",
+      "index": "plate-mail-3",
+      "baseIndex": "plate-armor",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Plate",
+        "1,500 gp",
+        "18",
+        "Str 15",
+        "Disadvantage",
+        "65 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:73c49bc298a827cfcde3e2eb",
+      "name": "Arco largo +3",
+      "index": "longbow-3",
+      "baseIndex": "longbow",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Longbow",
+        "50 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Ammunition (range 150/600), heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:771a9bcbb2263ac89ce0fd70",
+      "name": "Ballesta ligera +3",
+      "index": "crossbow-light-3",
+      "baseIndex": "crossbow-light",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, light",
+        "25 gp",
+        "1d8 piercing",
+        "5 lb.",
+        "Ammunition (range 80/320), loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7830a005ebb24402ef676fd4",
+      "name": "Martillo ligero +2",
+      "index": "light-hammer-2",
+      "baseIndex": "light-hammer",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Light hammer",
+        "2 gp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:78ad6897fd1843ab3335e9f9",
+      "name": "Lanza +2",
+      "index": "spear-2",
+      "baseIndex": "spear",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Spear",
+        "1 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:79910f93add94f0d8e5b252d",
+      "name": "Cota de escamas +2",
+      "index": "scale-Mail-2",
+      "baseIndex": "scale-mail",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Scale mail",
+        "50 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "45 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7a99a5ccbb3bf6da8e0048ac",
+      "name": "Ballesta de mano +2",
+      "index": "crossbow-hand-2",
+      "baseIndex": "crossbow-hand",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, hand",
+        "75 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Ammunition (range 30/120), light, loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7ac0dbf0ddb4186566756f48",
+      "name": "Honda",
+      "index": "sling",
+      "baseIndex": "sling",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Sling",
+        "1 sp",
+        "1d4 bludgeoning",
+        "—",
+        "Ammunition (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7b531f3e18b96bfdd467ac99",
+      "name": "Guja +3",
+      "index": "glaive+3",
+      "baseIndex": "glaive",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Glaive",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7c6e7b218899de5cde182cae",
+      "name": "Arco corto +3",
+      "index": "shortbow-3",
+      "baseIndex": "shortbow",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Shortbow",
+        "25 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Ammunition (range 80/320), two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7e03bd2f256a0b9ce063c193",
+      "name": "Garrote",
+      "index": "club",
+      "baseIndex": "club",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Club",
+        "1 sp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:7ec0a3dd884b82f14e197d01",
+      "name": "Cota de malla +1",
+      "index": "chain-mail-1",
+      "baseIndex": "chain-mail",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Chain mail",
+        "75 gp",
+        "16",
+        "Str 13",
+        "Disadvantage",
+        "55 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8023c335da76b404fa6ad4f6",
+      "name": "Cerbatana +2",
+      "index": "blowgun-2",
+      "baseIndex": "blowgun",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Blowgun",
+        "10 gp",
+        "1 piercing",
+        "1 lb.",
+        "Ammunition (range 25/100), loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:80e99542cf0ca1999073cda9",
+      "name": "Dardo +1",
+      "index": "dart-1",
+      "baseIndex": "dart",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Dart",
+        "5 cp",
+        "1d4 piercing",
+        "1/4 lb.",
+        "Finesse, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8275f868a07231e266484435",
+      "name": "Arco corto",
+      "index": "shortbow",
+      "baseIndex": "shortbow",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Shortbow",
+        "25 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Ammunition (range 80/320), two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:84bc85b8c4847ba3e8f24f3a",
+      "name": "Hoz +1",
+      "index": "sickle-1",
+      "baseIndex": "sickle",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Sickle",
+        "1 gp",
+        "1d4 slashing",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8556293b4bd509ecd66bc078",
+      "name": "Ballesta pesada +1",
+      "index": "crossbow-heavy-1",
+      "baseIndex": "crossbow-heavy",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, heavy",
+        "50 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Ammunition (range 100/400), heavy, loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:88526ef017739e4f43eb5549",
+      "name": "Ballesta ligera +2",
+      "index": "crossbow-light-2",
+      "baseIndex": "crossbow-light",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, light",
+        "25 gp",
+        "1d8 piercing",
+        "5 lb.",
+        "Ammunition (range 80/320), loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:88975bc69165b7f4b4073811",
+      "name": "Látigo +2",
+      "index": "whip-2",
+      "baseIndex": "whip",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Whip",
+        "2 gp",
+        "1d4 slashing",
+        "3 lb.",
+        "Finesse, reach"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8a7be4e4c685821169fcafa0",
+      "name": "Pico de guerra +1",
+      "index": "war-pick-1",
+      "baseIndex": "war-pick",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "War pick",
+        "5 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8ac40d4c8ade25f6b749fc1a",
+      "name": "Armadura de pieles",
+      "index": "hide-armor",
+      "baseIndex": "hide-armor",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Hide",
+        "10 gp",
+        "12 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "12 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8c1265965296801c84f4f791",
+      "name": "Daga +3",
+      "index": "dagger-3",
+      "baseIndex": "dagger",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Dagger",
+        "2 gp",
+        "1d4 piercing",
+        "1 lb.",
+        "Finesse, light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:8e008beb14d9a1218115d432",
+      "name": "Armadura de bandas +1",
+      "index": "splint-armor-1",
+      "baseIndex": "splint-armor",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Splint",
+        "200 gp",
+        "17",
+        "Str 15",
+        "Disadvantage",
+        "60 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:91c3a8060ff0b87a15af751b",
+      "name": "Pica +2",
+      "index": "pike-2",
+      "baseIndex": "pike",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Pike",
+        "5 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:91de7590d205e600f806a1c9",
+      "name": "Pica +3",
+      "index": "pike-3",
+      "baseIndex": "pike",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Pike",
+        "5 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:957990f620d129d77c5255ce",
+      "name": "Cota de escamas",
+      "index": "scale-mail",
+      "baseIndex": "scale-mail",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Scale mail",
+        "50 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "45 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:95b2e01e8ec89df784269ff1",
+      "name": "Honda +3",
+      "index": "sling-3",
+      "baseIndex": "sling",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Sling",
+        "1 sp",
+        "1d4 bludgeoning",
+        "—",
+        "Ammunition (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:96c340ebc10ebfe92ec7d74d",
+      "name": "Escudo",
+      "index": "shield",
+      "baseIndex": "shield",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Shield",
+        "10 gp",
+        "+2",
+        "—",
+        "—",
+        "6 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9828fb017c40e4bf29d19851",
+      "name": "Armadura de placas +2",
+      "index": "plate-mail-2",
+      "baseIndex": "plate-armor",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Plate",
+        "1,500 gp",
+        "18",
+        "Str 15",
+        "Disadvantage",
+        "65 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:99bec1539c31938fd5a5f870",
+      "name": "Lanza +3",
+      "index": "spear-3",
+      "baseIndex": "spear",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Spear",
+        "1 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9c392a061bebd392140a7928",
+      "name": "Armadura de bandas +3",
+      "index": "splint-armor-3",
+      "baseIndex": "splint-armor",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Splint",
+        "200 gp",
+        "17",
+        "Str 15",
+        "Disadvantage",
+        "60 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9e13963d798973f5b3d0ce0f",
+      "name": "Escudo +2",
+      "index": "shield-2",
+      "baseIndex": "shield",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Shield",
+        "10 gp",
+        "+2",
+        "—",
+        "—",
+        "6 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9e2ddb0fdd18943035f0e729",
+      "name": "Hoz +3",
+      "index": "sickle-3",
+      "baseIndex": "sickle",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Sickle",
+        "1 gp",
+        "1d4 slashing",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9f54f2598e5767241a584f1a",
+      "name": "Armadura de placas",
+      "index": "plate-armor",
+      "baseIndex": "plate-armor",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Plate",
+        "1,500 gp",
+        "18",
+        "Str 15",
+        "Disadvantage",
+        "65 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:9f9639a65a7cabefc1d9049b",
+      "name": "Cota de malla +2",
+      "index": "chain-mail-2",
+      "baseIndex": "chain-mail",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Chain mail",
+        "75 gp",
+        "16",
+        "Str 13",
+        "Disadvantage",
+        "55 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a0dc88a77af046734ca56e1d",
+      "name": "Estoque +1",
+      "index": "rapier-1",
+      "baseIndex": "rapier",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Rapier",
+        "25 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Finesse"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a12b234f714485c7962e99c1",
+      "name": "Cerbatana",
+      "index": "blowgun",
+      "baseIndex": "blowgun",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Blowgun",
+        "10 gp",
+        "1 piercing",
+        "1 lb.",
+        "Ammunition (range 25/100), loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a155bf5597398f3db007faf0",
+      "name": "Cota de escamas +1",
+      "index": "scale-Mail-1",
+      "baseIndex": "scale-mail",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Scale mail",
+        "50 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "45 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a8ea67e8ba5d262c81a55d95",
+      "name": "Cimitarra +1",
+      "index": "scimitar-1",
+      "baseIndex": "scimitar",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Scimitar",
+        "25 gp",
+        "1d6 slashing",
+        "3 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a9be83570ee776a70e802364",
+      "name": "Escudo +1",
+      "index": "shield-1",
+      "baseIndex": "shield",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Shield",
+        "10 gp",
+        "+2",
+        "—",
+        "—",
+        "6 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:a9f599cd755681d95c84889f",
+      "name": "Espadón +3",
+      "index": "greatsword-3",
+      "baseIndex": "greatsword",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Greatsword",
+        "50 gp",
+        "2d6 slashing",
+        "6 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ac253041189ace2b3a6a664f",
+      "name": "Espada corta +2",
+      "index": "shortsword-2",
+      "baseIndex": "shortsword",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Shortsword",
+        "10 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:acef297f82ec71eda9c41b5b",
+      "name": "Hoz",
+      "index": "sickle",
+      "baseIndex": "sickle",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Sickle",
+        "1 gp",
+        "1d4 slashing",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ad3f9a876f3556d660d29775",
+      "name": "Lanza",
+      "index": "spear",
+      "baseIndex": "spear",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Spear",
+        "1 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:aef15424fdc190a838bb4939",
+      "name": "Bastón",
+      "index": "quarterstaff",
+      "baseIndex": "quarterstaff",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Quarterstaff",
+        "2 sp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "Versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:afb9e77da087e5ffc73ac765",
+      "name": "Arco corto +2",
+      "index": "shortbow-2",
+      "baseIndex": "shortbow",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Shortbow",
+        "25 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Ammunition (range 80/320), two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b087ae3550cfea9cb01142cd",
+      "name": "Lanza de caballería",
+      "index": "lance",
+      "baseIndex": "lance",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Lance",
+        "10 gp",
+        "1d12 piercing",
+        "6 lb.",
+        "Reach, special"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b1bed97cb84d92a3b3042a3d",
+      "name": "Hacha de guerra +3",
+      "index": "battleaxe-3",
+      "baseIndex": "battleaxe",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Battleaxe",
+        "10 gp",
+        "1d8 slashing",
+        "4 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b47158b1c1218eb8a4a4718c",
+      "name": "Tridente",
+      "index": "trident",
+      "baseIndex": "trident",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Trident",
+        "5 gp",
+        "1d6 piercing",
+        "4 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b4b477f0ceb6a8638f61e659",
+      "name": "Ballesta de mano +3",
+      "index": "crossbow-hand-3",
+      "baseIndex": "crossbow-hand",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, hand",
+        "75 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Ammunition (range 30/120), light, loading"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b7799ae500cd0551eb6c8300",
+      "name": "Tridente +2",
+      "index": "trident-2",
+      "baseIndex": "trident",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Trident",
+        "5 gp",
+        "1d6 piercing",
+        "4 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b7ee9ad6f87c3d31d0885c59",
+      "name": "Coraza +2",
+      "index": "breastplate-2",
+      "baseIndex": "breastplate",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Breastplate",
+        "400 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "20 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b8e1320c356e327aecd4fc0f",
+      "name": "Mangual +3",
+      "index": "flail-3",
+      "baseIndex": "flail",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Flail",
+        "10 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:b9f78d768a1dc7cadf0b7372",
+      "name": "Martillo de guerra",
+      "index": "warhammer",
+      "baseIndex": "warhammer",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Warhammer",
+        "15 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bab6db982022a6143a1b1533",
+      "name": "Armadura de pieles +1",
+      "index": "hide-armor-1",
+      "baseIndex": "hide-armor",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Hide",
+        "10 gp",
+        "12 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "12 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bb6a547c154319ecb90efc33",
+      "name": "Maza +2",
+      "index": "mace-2",
+      "baseIndex": "mace",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Mace",
+        "5 gp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:bfae43b409aca5d74cb9ec31",
+      "name": "Arco largo +1",
+      "index": "longbow-1",
+      "baseIndex": "longbow",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Longbow",
+        "50 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Ammunition (range 150/600), heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c19f57566f5600c65eb85dcf",
+      "name": "Arco largo +2",
+      "index": "longbow-2",
+      "baseIndex": "longbow",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Longbow",
+        "50 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "Ammunition (range 150/600), heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c36f83bc74b4f36de9aa8cb6",
+      "name": "Jabalina",
+      "index": "javelin",
+      "baseIndex": "javelin",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Javelin",
+        "5 sp",
+        "1d6 piercing",
+        "2 lb.",
+        "Thrown (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c43ede23da9fd157570dff50",
+      "name": "Lanza +1",
+      "index": "spear-1",
+      "baseIndex": "spear",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Spear",
+        "1 gp",
+        "1d6 piercing",
+        "3 lb.",
+        "Thrown (range 20/60), versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c6929be1c3c6f588eeadcd62",
+      "name": "Lanza de caballería +2",
+      "index": "lance-2",
+      "baseIndex": "lance",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Lance",
+        "10 gp",
+        "1d12 piercing",
+        "6 lb.",
+        "Reach, special"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:c8fa48c5adb8a687456ca9ee",
+      "name": "Armadura de cuero tachonado +2",
+      "index": "studded-leather-2",
+      "baseIndex": "studded-leather-armor",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Studded leather",
+        "45 gp",
+        "12 + Dex modifier",
+        "—",
+        "—",
+        "13 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ca890837c10edfc6c4f484bb",
+      "name": "Cota guarnecida",
+      "index": "ring-mail",
+      "baseIndex": "ring-mail",
+      "enhancement": 0,
+      "page": 64,
+      "officialRow": [
+        "Ring mail",
+        "30 gp",
+        "14",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:cbd7512b6ae6ef9f5b511d37",
+      "name": "Hacha de guerra +1",
+      "index": "battleaxe+1",
+      "baseIndex": "battleaxe",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Battleaxe",
+        "10 gp",
+        "1d8 slashing",
+        "4 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:cd9889887d735c7699297e55",
+      "name": "Garrote +2",
+      "index": "club-2",
+      "baseIndex": "club",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Club",
+        "1 sp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ce2a9f98d1b80c08eb84aeed",
+      "name": "Mangual +1",
+      "index": "flail-1",
+      "baseIndex": "flail",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Flail",
+        "10 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ce76e80ba20ad50ec12fe5b0",
+      "name": "Mangual +2",
+      "index": "flail-2",
+      "baseIndex": "flail",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Flail",
+        "10 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ceb2f9022708a7c4928525a7",
+      "name": "Hacha de guerra",
+      "index": "battleaxe",
+      "baseIndex": "battleaxe",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Battleaxe",
+        "10 gp",
+        "1d8 slashing",
+        "4 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:cf6934da4fc38c81fb24aa8f",
+      "name": "Martillo de guerra +1",
+      "index": "warhammer-1",
+      "baseIndex": "warhammer",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Warhammer",
+        "15 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:cf777861667924bfa9bd5a0d",
+      "name": "Honda +2",
+      "index": "sling-2",
+      "baseIndex": "sling",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Sling",
+        "1 sp",
+        "1d4 bludgeoning",
+        "—",
+        "Ammunition (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:cf91ba4ef8fcd557ef9101b6",
+      "name": "Maza +1",
+      "index": "mace-1",
+      "baseIndex": "mace",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Mace",
+        "5 gp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d01f420bac365791b2f973cf",
+      "name": "Mangual",
+      "index": "flail",
+      "baseIndex": "flail",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Flail",
+        "10 gp",
+        "1d8 bludgeoning",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d10f39ea1b3d040d71c7ec73",
+      "name": "Garrote +3",
+      "index": "club-3",
+      "baseIndex": "club",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Club",
+        "1 sp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d19308aa50afd583f9b1aec7",
+      "name": "Alabarda",
+      "index": "halberd",
+      "baseIndex": "halberd",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Halberd",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d1ef2d97d8a0518d7d44cd01",
+      "name": "Jabalina +1",
+      "index": "javelin-1",
+      "baseIndex": "javelin",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Javelin",
+        "5 sp",
+        "1d6 piercing",
+        "2 lb.",
+        "Thrown (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d879ce56596605f6c73c7aa4",
+      "name": "Cimitarra +2",
+      "index": "scimitar-2",
+      "baseIndex": "scimitar",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Scimitar",
+        "25 gp",
+        "1d6 slashing",
+        "3 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d995aa33c84484e94ba986a9",
+      "name": "Media armadura +2",
+      "index": "half-plate-2",
+      "baseIndex": "half-plate-armor",
+      "enhancement": 2,
+      "page": 64,
+      "officialRow": [
+        "Half plate",
+        "750 gp",
+        "15 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:d9dc8f660008890da65ff3bb",
+      "name": "Alabarda +3",
+      "index": "halberd+3",
+      "baseIndex": "halberd",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Halberd",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:da3415c797431ef012a27635",
+      "name": "Lanza de caballería +1",
+      "index": "lance-1",
+      "baseIndex": "lance",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Lance",
+        "10 gp",
+        "1d12 piercing",
+        "6 lb.",
+        "Reach, special"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:daca37238aaa877fa46258ea",
+      "name": "Garrote grande +3",
+      "index": "greatclub-3",
+      "baseIndex": "greatclub",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Greatclub",
+        "2 sp",
+        "1d8 bludgeoning",
+        "10 lb.",
+        "Two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ddd675038f74c5f88dc4e539",
+      "name": "Hacha de mano +3",
+      "index": "handaxe-3",
+      "baseIndex": "handaxe",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Handaxe",
+        "5 gp",
+        "1d6 slashing",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:dfc68bcad13ae2c8e2810814",
+      "name": "Honda +1",
+      "index": "sling-1",
+      "baseIndex": "sling",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Sling",
+        "1 sp",
+        "1d4 bludgeoning",
+        "—",
+        "Ammunition (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:dfdc64a54ce6b53c43d4ea1a",
+      "name": "Daga +1",
+      "index": "dagger-1",
+      "baseIndex": "dagger",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Dagger",
+        "2 gp",
+        "1d4 piercing",
+        "1 lb.",
+        "Finesse, light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e0cf274b1cea0fc5b14f7a34",
+      "name": "Media armadura +3",
+      "index": "half-plate-3",
+      "baseIndex": "half-plate-armor",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Half plate",
+        "750 gp",
+        "15 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e1a05d8b10f5b9670944a1bd",
+      "name": "Espada larga +1",
+      "index": "longsword-1",
+      "baseIndex": "longsword",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e21a19ef49b400a9fdc7f535",
+      "name": "Garrote +1",
+      "index": "club-1",
+      "baseIndex": "club",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Club",
+        "1 sp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e26218ae485b852b87d5441f",
+      "name": "Bastón +3",
+      "index": "quarterstaff-3",
+      "baseIndex": "quarterstaff",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Quarterstaff",
+        "2 sp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "Versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e3db7822a32880954c5a3edd",
+      "name": "Jabalina +2",
+      "index": "javelin-2",
+      "baseIndex": "javelin",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Javelin",
+        "5 sp",
+        "1d6 piercing",
+        "2 lb.",
+        "Thrown (range 30/120)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e5abba9ae1959b46d21451e4",
+      "name": "Alabarda +2",
+      "index": "halberd-2",
+      "baseIndex": "halberd",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Halberd",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e5e6a1129f543850dd18c677",
+      "name": "Guja +1",
+      "index": "glaive-1",
+      "baseIndex": "glaive",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Glaive",
+        "20 gp",
+        "1d10 slashing",
+        "6 lb.",
+        "Heavy, reach, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e6752c8d546396f2e3f4cf05",
+      "name": "Espada corta +3",
+      "index": "shortsword-3",
+      "baseIndex": "shortsword",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Shortsword",
+        "10 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e8423556b042354d9dfc0601",
+      "name": "Ballesta pesada +3",
+      "index": "crossbow-heavy-3",
+      "baseIndex": "crossbow-heavy",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, heavy",
+        "50 gp",
+        "1d10 piercing",
+        "18 lb.",
+        "Ammunition (range 100/400), heavy, loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:e906a312ff87ccc1916ac4d1",
+      "name": "Cota de escamas +3",
+      "index": "scale-Mail-3",
+      "baseIndex": "scale-mail",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Scale mail",
+        "50 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "Disadvantage",
+        "45 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ec6c92e57f4e5b957428ab9f",
+      "name": "Ballesta ligera",
+      "index": "crossbow-light",
+      "baseIndex": "crossbow-light",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Crossbow, light",
+        "25 gp",
+        "1d8 piercing",
+        "5 lb.",
+        "Ammunition (range 80/320), loading, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ed61e618e8d82dfa81ee1d7b",
+      "name": "Hacha a dos manos +2",
+      "index": "greataxe-2",
+      "baseIndex": "greataxe",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Greataxe",
+        "30 gp",
+        "1d12 slashing",
+        "7 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:eea0c549ca2fd51394afa3db",
+      "name": "Lucero del alba +1",
+      "index": "morningstar-1",
+      "baseIndex": "morningstar",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Morningstar",
+        "15 gp",
+        "1d8 piercing",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f05bd452e8bb8f561e959c0a",
+      "name": "Pico de guerra +3",
+      "index": "war-pick-3",
+      "baseIndex": "war-pick",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "War pick",
+        "5 gp",
+        "1d8 piercing",
+        "2 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f2405c391591b473b8b7b215",
+      "name": "Armadura acolchada +3",
+      "index": "padded-armor-3",
+      "baseIndex": "padded-armor",
+      "enhancement": 3,
+      "page": 63,
+      "officialRow": [
+        "Padded",
+        "5 gp",
+        "11 + Dex modifier",
+        "—",
+        "Disadvantage",
+        "8 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f447ecc7d52542d2a4a271a2",
+      "name": "Lucero del alba +3",
+      "index": "morningstar-3",
+      "baseIndex": "morningstar",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Morningstar",
+        "15 gp",
+        "1d8 piercing",
+        "4 lb.",
+        "—"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f54d4d85e1e10d66dd2f0b71",
+      "name": "Cota guarnecida +1",
+      "index": "ring-mail-1",
+      "baseIndex": "ring-mail",
+      "enhancement": 1,
+      "page": 64,
+      "officialRow": [
+        "Ring mail",
+        "30 gp",
+        "14",
+        "—",
+        "Disadvantage",
+        "40 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f71ad35557ee32b7b241cd2a",
+      "name": "Maza a dos manos +3",
+      "index": "maul-3",
+      "baseIndex": "maul",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Maul",
+        "10 gp",
+        "2d6 bludgeoning",
+        "10 lb.",
+        "Heavy, two-­‐handed"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:f8e1af7cfa4f2f98cf87df55",
+      "name": "Bastón +2",
+      "index": "quarterstaff-2",
+      "baseIndex": "quarterstaff",
+      "enhancement": 2,
+      "page": 66,
+      "officialRow": [
+        "Quarterstaff",
+        "2 sp",
+        "1d6 bludgeoning",
+        "4 lb.",
+        "Versatile (1d8)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:fb0103e0da3594dccbdf899a",
+      "name": "Espada larga",
+      "index": "longsword",
+      "baseIndex": "longsword",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Longsword",
+        "15 gp",
+        "1d8 slashing",
+        "3 lb.",
+        "Versatile (1d10)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:fb0192c97dd80b413295a5d4",
+      "name": "Látigo",
+      "index": "whip",
+      "baseIndex": "whip",
+      "enhancement": 0,
+      "page": 66,
+      "officialRow": [
+        "Whip",
+        "2 gp",
+        "1d4 slashing",
+        "3 lb.",
+        "Finesse, reach"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:fbfeabdbf97d67f978564aea",
+      "name": "Espada corta +1",
+      "index": "shortsword-1",
+      "baseIndex": "shortsword",
+      "enhancement": 1,
+      "page": 66,
+      "officialRow": [
+        "Shortsword",
+        "10 gp",
+        "1d6 piercing",
+        "2 lb.",
+        "Finesse, light"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:fc14589ae1f83535be4d9835",
+      "name": "Martillo ligero +3",
+      "index": "light-hammer-3",
+      "baseIndex": "light-hammer",
+      "enhancement": 3,
+      "page": 66,
+      "officialRow": [
+        "Light hammer",
+        "2 gp",
+        "1d4 bludgeoning",
+        "2 lb.",
+        "Light, thrown (range 20/60)"
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:fc78555eb05f45cfcd3d8c15",
+      "name": "Armadura de pieles +3",
+      "index": "hide-armor-3",
+      "baseIndex": "hide-armor",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Hide",
+        "10 gp",
+        "12 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "12 lb."
+      ]
+    },
+    {
+      "id": "recovery:official:equipment:es:ffd81d86c50bcb1c09a82ff8",
+      "name": "Coraza +3",
+      "index": "breastplate-3",
+      "baseIndex": "breastplate",
+      "enhancement": 3,
+      "page": 64,
+      "officialRow": [
+        "Breastplate",
+        "400 gp",
+        "14 + Dex modifier (max 2)",
+        "—",
+        "—",
+        "20 lb."
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "id": "recovery:official:equipment:es:19907a1ffffb2a058fd67fc1",
+      "name": "Gran hacha +1",
+      "index": "greataxe",
+      "reason": "El índice y el nombre no confirman la misma variante."
+    },
+    {
+      "id": "recovery:official:equipment:es:ac0f80fd1c0f1c938d30b0a8",
+      "name": "Red +3",
+      "index": "net-3",
+      "reason": "La red necesita un perfil sin daño y sus reglas especiales."
+    },
+    {
+      "id": "recovery:official:equipment:es:bd6b6d0bae53fcbd755d2486",
+      "name": "Red +1",
+      "index": "net-1",
+      "reason": "La red necesita un perfil sin daño y sus reglas especiales."
+    },
+    {
+      "id": "recovery:official:equipment:es:c452c8155853d2ae14b93ee8",
+      "name": "Red",
+      "index": "net",
+      "reason": "La red necesita un perfil sin daño y sus reglas especiales."
+    },
+    {
+      "id": "recovery:official:equipment:es:fedd698066b62346698b608a",
+      "name": "Red +2",
+      "index": "net-2",
+      "reason": "La red necesita un perfil sin daño y sus reglas especiales."
+    }
+  ],
+  "activeCopiesChanged": 0,
+  "deletedVersions": 0
+}

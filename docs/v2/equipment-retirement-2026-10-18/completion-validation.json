@@ -1,0 +1,18 @@
+{
+  "revision": 1304,
+  "characters": 16,
+  "characterItems": 241,
+  "runtimeCacheUpdates": 0,
+  "renderedCards": 828,
+  "playerTextIssues": 0,
+  "tests": {
+    "files": 120,
+    "passed": 1166,
+    "failed": 0
+  },
+  "typecheck": true,
+  "build": true,
+  "visualReview": "tmp/equipment-definitions/cards-final-540.png",
+  "unmodeledEffects": 403,
+  "goalComplete": false
+}

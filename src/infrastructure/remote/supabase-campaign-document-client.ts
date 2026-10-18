@@ -263,13 +263,17 @@ export class SupabaseCampaignDocumentClient {
     if (result.error) throwRpcError(result.error);
   }
 
-  async listCampaignContent(campaignId: string): Promise<RemoteCampaignContentEntry[]> {
+  async listCampaignContent(campaignId: string, scope: "all" | "active" | "preparation" = "all"): Promise<RemoteCampaignContentEntry[]> {
     const pageSize = 1000;
     const entries: RemoteCampaignContentEntry[] = [];
     for (let from = 0; ; from += pageSize) {
-      const result = await this.client.from("campaign_content_entries")
+      let query = this.client.from("campaign_content_entries")
         .select("campaign_id,kind,content_key,name,origin,tags,payload,revision,updated_at,deleted_at")
-        .eq("campaign_id", campaignId).is("deleted_at", null)
+        .eq("campaign_id", campaignId).is("deleted_at", null);
+      // Include legacy payloads without a format: SQL <> alone drops NULL values.
+      if (scope === "active") query = query.or("payload->>format.is.null,payload->>format.neq.equipment-preparation");
+      if (scope === "preparation") query = query.eq("kind", "equipment").eq("payload->>format", "equipment-preparation");
+      const result = await query
         .order("kind").order("name").order("content_key")
         .range(from, from + pageSize - 1);
       if (result.error) throwRpcError(result.error);

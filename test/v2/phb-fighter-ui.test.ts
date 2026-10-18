@@ -112,6 +112,8 @@ describe("PHB fighter tutorial", () => {
     await set("asiMode", "feat"); await set("levelFeatKey", "magic-initiate"); await set("levelFeatClass", "druid");
     await set("levelFeatSpell0", "guidance"); await set("levelFeatSpell1", "shillelagh"); await set("levelFeatSpell2", "goodberry");
     await next("Revisar"); submit(); await vi.waitFor(() => expect(onAdvance).toHaveBeenCalledTimes(1));
+    await onAdvance.mock.results[0]!.value;
+    expect(character.identity.level).toBe(4);
     expect(character.builder!.levels.at(-1)!.abilityIncrease).toBeNull();
     expect(character.spellcasting.spells.find((spell) => spell.name === "Buenas bayas")!.casting).toMatchObject({ ability: "wisdom", kind: "innate", level: 1 });
   });

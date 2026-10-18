@@ -1,0 +1,1492 @@
+[
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:1ff88c4e1dc2424f59fec521",
+    "revision": 1,
+    "language": "es",
+    "name": "Piedra Ioun (Intelecto)",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:b021b84edd6a32a2bc73fdefab250f0ad10275286db3776de09ff4735ee9aa06",
+        "kind": "legacy",
+        "title": "Piedra Ioun (Intelecto)",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:1ff88c4e1dc2424f59fec521",
+        "verified": false
+      },
+      {
+        "id": "original:ff4617c3a01dc40aca1c5d9b3ca26eb5a66361f775398b12ee89cef099d9cf33",
+        "kind": "legacy",
+        "title": "Piedra Ioun (Intelecto)",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:1ff88c4e1dc2424f59fec521",
+        "verified": false
+      },
+      {
+        "id": "original:862b4f32dd48a2407847b1f51ed5f7c7152d3ebdabd3f5df1921f7ec4af35b3d",
+        "kind": "legacy",
+        "title": "Ioun Stone (Intellect)",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:d22983faf3865aba43feec1d",
+        "verified": false
+      },
+      {
+        "id": "original:233f881405f07a60718b6395c479eace0379841971debc5eb87dadceba3e6285",
+        "kind": "legacy",
+        "title": "Ioun Stone (Intellect)",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:d22983faf3865aba43feec1d",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 259 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Las piedras Ioun se llaman así por Ioun, un dios del conocimiento y la profecía adorado en algunos mundos. Existen muchos tipos de piedras Ioun, cada uno de ellos con una combinación distinta de forma y color."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Cuando utilices una acción para lanzar una de estas piedras al aire, la piedra girará alrededor de tu cabeza a una distancia de 1d3 × 30 cm y te otorgará un beneficio. A partir de entonces, otra criatura deberá utilizar una acción para agarrar o atrapar la piedra y separarla de ti, ya sea superando una tirada de ataque contra una CA de 24 o una prueba de Destreza (Acrobacias) con CD 24. Puedes utilizar una acción para tomar y guardar la piedra, lo que pone fin a su efecto."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Una piedra tiene una CA de 24, 10 puntos de golpe y resistencia a todo el daño. Se considera un objeto vestido mientras gira alrededor de tu cabeza."
+      },
+      {
+        "id": "official-block-11",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Intelecto (muy rara). Mientras esta esfera jaspeada en tonos rojos y azules gire alrededor de tu cabeza, tu puntuación de Inteligencia aumenta en 2, hasta un máximo de 20."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Objeto maravilloso, rareza variable (requiere sintonización)"
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "ioun-passive",
+        "name": "Beneficio de Intelecto",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Objeto maravilloso, rareza variable (requiere sintonización)"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "ioun-bonus",
+            "condition": "Mientras gira alrededor de la cabeza; hasta un máximo de 20.",
+            "kind": "bonus",
+            "target": "intelligence",
+            "operation": "add",
+            "value": 2
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Se aplica al llevar y sintonizar la piedra; respeta el límite de la característica.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "official-block-11"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "b021b84edd6a32a2bc73fdefab250f0ad10275286db3776de09ff4735ee9aa06",
+      "ff4617c3a01dc40aca1c5d9b3ca26eb5a66361f775398b12ee89cef099d9cf33",
+      "862b4f32dd48a2407847b1f51ed5f7c7152d3ebdabd3f5df1921f7ec4af35b3d",
+      "233f881405f07a60718b6395c479eace0379841971debc5eb87dadceba3e6285"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:603a7612a52f1b0dc500319a",
+    "revision": 1,
+    "language": "es",
+    "name": "Poción de trepar",
+    "aliases": [
+      "Poción de escalada"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:939ef65effb572958cdbcef38aaf21891527b9153ea46bfeadad8f6a93b4dbf3",
+        "kind": "legacy",
+        "title": "Poción de escalada",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:603a7612a52f1b0dc500319a",
+        "verified": false
+      },
+      {
+        "id": "original:cdb38cf705bb3e0b954d0ba97d2f1d127c53e398c2190696b8422f2c89ede295",
+        "kind": "legacy",
+        "title": "Poción de escalada",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:603a7612a52f1b0dc500319a",
+        "verified": false
+      },
+      {
+        "id": "original:29e9dc5cb5f983c71c664975f0052432d412ed19a2066e3d5a5e1f2deb4b9f06",
+        "kind": "legacy",
+        "title": "Potion of Climbing",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:4b7a2dae5ae955b689dc3664",
+        "verified": false
+      },
+      {
+        "id": "original:31c14f057746e9ba81f26150efdae0470ddb1e9611a569b4de2b436ec18bfb58",
+        "kind": "legacy",
+        "title": "Potion of Climbing",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:4b7a2dae5ae955b689dc3664",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 261 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "potion",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "common",
+    "consumable": true,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Cuando bebas esta poción, obtendrás una velocidad trepando igual a tu velocidad caminando durante 1 hora. Durante ese tiempo, tendrás ventaja en las pruebas de Fuerza (Atletismo) que hagas para trepar. La poción se separa en tres capas (marrón, plateada y gris) que parecen los estratos de una roca. Si agitas la botella, los colores no se mezclan."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "Poción, común"
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "official-2014-rule",
+        "name": "Beber o administrar",
+        "activation": "action",
+        "trigger": "",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "Poción, común"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": "spell-dependent",
+        "costs": [],
+        "consumeQuantity": 1,
+        "effects": [
+          {
+            "id": "source-rule",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Resolver las condiciones, objetivos y efectos descritos en la mesa. No concede automáticamente todas las opciones de una familia ni conjuros a la lista de clase.",
+            "original": {
+              "index": "potion-of-climbing",
+              "subtype": null,
+              "source": "srd-5.1-es-equipment"
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "Descripción y variante cotejadas. El consumo de una poción se registra; el resto de efectos y gastos se resuelve según la regla concreta.",
+          "pendingAutomation": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla."
+          ]
+        },
+        "textBlockIds": [
+          "official-block-0"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "939ef65effb572958cdbcef38aaf21891527b9153ea46bfeadad8f6a93b4dbf3",
+      "cdb38cf705bb3e0b954d0ba97d2f1d127c53e398c2190696b8422f2c89ede295",
+      "29e9dc5cb5f983c71c664975f0052432d412ed19a2066e3d5a5e1f2deb4b9f06",
+      "31c14f057746e9ba81f26150efdae0470ddb1e9611a569b4de2b436ec18bfb58"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+    "revision": 1,
+    "language": "es",
+    "name": "Piedra de la buena fortuna (piedra de la suerte)",
+    "aliases": [
+      "Piedra de la buena suerte"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:d7e1840350c6b7a9c9f3b56b80b8b3eef1096ed34be53a1a476d1ce958f2ab2b",
+        "kind": "legacy",
+        "title": "Piedra de la buena suerte",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+        "verified": false
+      },
+      {
+        "id": "original:844a664f0edb481c1072a1c186bc15188d3263e878c3d67045ed12c8a205ab79",
+        "kind": "legacy",
+        "title": "Piedra de la buena suerte",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:6880ccd9a4ad0a0ca9f7b45b",
+        "verified": false
+      },
+      {
+        "id": "original:fe6cf09a366a9014d90fd3a9695846f4c252f4f5f54cd7838b02916ec1995296",
+        "kind": "legacy",
+        "title": "Stone of Good Luck",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:533faf676b3fce1afea970a4",
+        "verified": false
+      },
+      {
+        "id": "original:64e8c6181f31e855173800d000044cea768f879e245ff8cf6c7ba9eb84619b8d",
+        "kind": "legacy",
+        "title": "Stone of Good Luck",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:533faf676b3fce1afea970a4",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 259 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wondrous-item",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras lleves esta ágata pulida contigo, recibirás un bonificador de +1 a las pruebas de característica y las tiradas de salvación."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "worn",
+      "explanation": "Objeto maravilloso, infrecuente (requiere sintonización)"
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "verified-passive-bonuses",
+        "name": "Bonos del objeto",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Objeto maravilloso, infrecuente (requiere sintonización)"
+        },
+        "target": "Portador",
+        "range": "",
+        "duration": "Mientras se cumplen los requisitos.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "passive-0",
+            "condition": "Mientras se lleva o empuña y se cumple la sintonización indicada.",
+            "kind": "bonus",
+            "target": "ability-checks",
+            "operation": "add",
+            "value": 1
+          },
+          {
+            "id": "passive-1",
+            "condition": "Mientras se lleva o empuña y se cumple la sintonización indicada.",
+            "kind": "bonus",
+            "target": "saving-throws",
+            "operation": "add",
+            "value": 1
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Se aplica y retira con los requisitos del objeto.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0"
+        ]
+      },
+      {
+        "id": "official-2014-rule",
+        "name": "Reglas de la variante",
+        "activation": "other",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "worn",
+          "explanation": "Objeto maravilloso, infrecuente (requiere sintonización)"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": "spell-dependent",
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "source-rule",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Resolver las condiciones, objetivos y efectos descritos en la mesa. No concede automáticamente todas las opciones de una familia ni conjuros a la lista de clase.",
+            "original": {
+              "index": "stone-of-good-luck",
+              "subtype": null,
+              "source": "srd-5.1-es-equipment"
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "Descripción y variante cotejadas. El consumo de una poción se registra; el resto de efectos y gastos se resuelve según la regla concreta.",
+          "pendingAutomation": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla."
+          ]
+        },
+        "textBlockIds": [
+          "official-block-0"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "d7e1840350c6b7a9c9f3b56b80b8b3eef1096ed34be53a1a476d1ce958f2ab2b",
+      "844a664f0edb481c1072a1c186bc15188d3263e878c3d67045ed12c8a205ab79",
+      "fe6cf09a366a9014d90fd3a9695846f4c252f4f5f54cd7838b02916ec1995296",
+      "64e8c6181f31e855173800d000044cea768f879e245ff8cf6c7ba9eb84619b8d"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:784bd660a08f0f45bc4bd35e",
+    "revision": 1,
+    "language": "es",
+    "name": "Varita de proyectiles mágicos",
+    "aliases": [
+      "Varita de misiles mágicos"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:30d3f4eadfc6c08656ab6cb2fba4df9beaec4848ccb180f548c8099c3294c8be",
+        "kind": "legacy",
+        "title": "Varita de misiles mágicos",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:784bd660a08f0f45bc4bd35e",
+        "verified": false
+      },
+      {
+        "id": "original:fbdbb959a9700733c0ce8493c2706cae1ba98fd87642bc1dd9757c766845103e",
+        "kind": "legacy",
+        "title": "Varita de misiles mágicos",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:784bd660a08f0f45bc4bd35e",
+        "verified": false
+      },
+      {
+        "id": "original:0b4367520af48749212e0b5ff2ba8c8836dbf82a5934b3c6522715f9595283c2",
+        "kind": "legacy",
+        "title": "Wand of Magic Missiles",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:295ccf1f2cf985e1ecb9d1da",
+        "verified": false
+      },
+      {
+        "id": "original:39712153a6fe91febe6426348857294b649fb75f6336b9cf7fb95bc2c8a2811e",
+        "kind": "legacy",
+        "title": "Wand of Magic Missiles",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:295ccf1f2cf985e1ecb9d1da",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 268 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wand",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Esta varita tiene 7 cargas. Mientras la empuñes, podrás usar una acción y gastar 1 o más de sus cargas para lanzar el conjuro proyectil mágico desde ella. Si empleas 1 carga, podrás lanzar la versión de nivel 1 del conjuro. Puedes aumentar el nivel del espacio de conjuro en 1 por cada carga adicional que emplees."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "La varita recupera 1d6 + 1 cargas empleadas cada día, al amanecer. Si gastas la última carga de la varita, tira 1d20. Si el resultado es 1, la varita se convierte en cenizas y se destruye."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "Varita, infrecuente"
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [
+      {
+        "id": "charges",
+        "name": "Cargas",
+        "kind": "charges",
+        "maximum": 7,
+        "unit": "cargas",
+        "recovery": {
+          "kind": "event",
+          "event": "dawn",
+          "explanation": "Recuperación indicada por la fuente al amanecer.",
+          "amount": {
+            "kind": "roll",
+            "expression": "1d6+1"
+          }
+        },
+        "exhaustion": "Aplicar las consecuencias particulares de la descripción cuando se gasten sus cargas."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "official-2014-rule",
+        "name": "Reglas de la variante",
+        "activation": "other",
+        "trigger": "",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "Varita, infrecuente"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": "spell-dependent",
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "source-rule",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Resolver las condiciones, objetivos y efectos descritos en la mesa. No concede automáticamente todas las opciones de una familia ni conjuros a la lista de clase.",
+            "original": {
+              "index": "wand-of-magic-missiles",
+              "subtype": null,
+              "source": "srd-5.1-es-equipment"
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "Descripción y variante cotejadas. El consumo de una poción se registra; el resto de efectos y gastos se resuelve según la regla concreta.",
+          "pendingAutomation": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla.",
+            "Registrar los gastos reales de cargas y resolver las consecuencias de la última carga según la descripción."
+          ]
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "30d3f4eadfc6c08656ab6cb2fba4df9beaec4848ccb180f548c8099c3294c8be",
+      "fbdbb959a9700733c0ce8493c2706cae1ba98fd87642bc1dd9757c766845103e",
+      "0b4367520af48749212e0b5ff2ba8c8836dbf82a5934b3c6522715f9595283c2",
+      "39712153a6fe91febe6426348857294b649fb75f6336b9cf7fb95bc2c8a2811e"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:963783ee3a520240dda29847",
+    "revision": 1,
+    "language": "es",
+    "name": "Defensora (Espada larga)",
+    "aliases": [
+      "Espada Larga del Defensor"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:b446a935914aff440ed24b56629ebb4b622facfe28bbd6e63b814aedfd7aafed",
+        "kind": "legacy",
+        "title": "Espada Larga del Defensor",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:963783ee3a520240dda29847",
+        "verified": false
+      },
+      {
+        "id": "original:7b45665c99e7caa5320eb3fadd657b8f5dcfa0e4dcdab79808281a9a37a5bfc3",
+        "kind": "legacy",
+        "title": "Espada Larga del Defensor",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:963783ee3a520240dda29847",
+        "verified": false
+      },
+      {
+        "id": "original:f4e78d98ee356455997fbd67ab932eb2cda8d05b034e3763cccac95921cb42a7",
+        "kind": "legacy",
+        "title": "Defender Longsword",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:9791c31e8eed45e7bd8c0887",
+        "verified": false
+      },
+      {
+        "id": "original:5ad02b6e63bb0ce80dd5ea4cd61c19ca7f36e605f08f487696ef8230d4643a3c",
+        "kind": "legacy",
+        "title": "Defender Longsword",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:9791c31e8eed45e7bd8c0887",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 246 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "legendary",
+    "consumable": false,
+    "properties": [
+      "versatile"
+    ],
+    "weight": {
+      "value": 3,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Recibes un bonificador de +3 a las tiradas de ataque y de daño que hagas con esta arma mágica."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "La primera vez que ataques con la espada en cada uno de tus turnos, puedes transferir parte o todo el bonificador de la espada a tu Clase de Armadura en vez de usar el bonificador en los ataques de ese turno. Por ejemplo, puedes reducir el bonificador a tus tiradas de ataque y de daño a +1 y obtener un bonificador de +2 a tu CA. Los bonificadores ajustados permanecen en vigor hasta el principio de tu siguiente turno, aunque debes empuñar la espada para aprovechar el bonificador a la CA que confiere."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "Arma (cualquier espada), legendaria (requiere sintonización)"
+    },
+    "weapon": {
+      "category": "martial",
+      "meleeReachFeet": 5,
+      "thrown": false,
+      "rangeFeet": null,
+      "attackBonus": 3,
+      "damageBonus": 3,
+      "baseDamage": [
+        {
+          "id": "base-damage",
+          "condition": "",
+          "kind": "damage",
+          "expression": "1d8",
+          "damageType": "slashing",
+          "timing": "base"
+        },
+        {
+          "id": "versatile-damage",
+          "condition": "Empleada a dos manos en un ataque cuerpo a cuerpo.",
+          "kind": "damage",
+          "expression": "1d10",
+          "damageType": "slashing",
+          "timing": "versatile"
+        }
+      ]
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "official-2014-rule",
+        "name": "Reglas de la variante",
+        "activation": "other",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "Arma (cualquier espada), legendaria (requiere sintonización)"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": "spell-dependent",
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "source-rule",
+            "condition": "Aplicar únicamente la variante Espada larga.",
+            "kind": "unmodeled",
+            "explanation": "Resolver las condiciones, objetivos y efectos descritos en la mesa. No concede automáticamente todas las opciones de una familia ni conjuros a la lista de clase.",
+            "original": {
+              "index": "defender-longsword",
+              "subtype": "Espada larga",
+              "source": "srd-5.1-es-equipment"
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "Descripción y variante cotejadas. El consumo de una poción se registra; el resto de efectos y gastos se resuelve según la regla concreta.",
+          "pendingAutomation": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla."
+          ]
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "b446a935914aff440ed24b56629ebb4b622facfe28bbd6e63b814aedfd7aafed",
+      "7b45665c99e7caa5320eb3fadd657b8f5dcfa0e4dcdab79808281a9a37a5bfc3",
+      "f4e78d98ee356455997fbd67ab932eb2cda8d05b034e3763cccac95921cb42a7",
+      "5ad02b6e63bb0ce80dd5ea4cd61c19ca7f36e605f08f487696ef8230d4643a3c"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "revision": 1,
+    "language": "es",
+    "name": "Bastón de poder",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:03af344e2dbd05576d85b8d8b19d7f9feb9272511633f4816b50330e1f55fe9d",
+        "kind": "legacy",
+        "title": "Bastón de poder",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+        "verified": false
+      },
+      {
+        "id": "original:9c40e8c32ad3d17fc8f3b449c8038592952adadbe1d4dcd16643a8bbe82ed3a5",
+        "kind": "legacy",
+        "title": "Bastón de poder",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+        "verified": false
+      },
+      {
+        "id": "original:ae78ece6659f370e1275b5b20db5d359241a7b7c9d018d8ed53103117069517f",
+        "kind": "legacy",
+        "title": "Staff of Power",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:3dab6ab3a242400a50d51f2e",
+        "verified": false
+      },
+      {
+        "id": "original:c084235bc4bedc4ffd8283d4a7b3d97126f3952b032e9669475b2dd10768da9d",
+        "kind": "legacy",
+        "title": "Staff of Power",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:3dab6ab3a242400a50d51f2e",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 235 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "staff",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [
+      "versatile"
+    ],
+    "weight": {
+      "value": 4,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Este bastón se puede usar a modo de bastón mágico que otorga un bonificador de +2 a las tiradas de ataque y de daño realizadas con él. Mientras lo empuñes, obtendrás un bonificador de +2 a la Clase de Armadura, las tiradas de salvación y las tiradas de ataque de conjuro."
+      },
+      {
+        "id": "official-block-1",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "El bastón tiene 20 cargas para utilizar las propiedades que se describen a continuación. El bastón recupera 2d8 + 4 cargas empleadas cada día, al amanecer. Si gastas la última carga, tira 1d20. Si el resultado es 1, el bastón conserva su bonifi- cador de +2 a las tiradas de ataque y de daño, pero pierde sus otras propiedades. Si el resultado es 20, el bastón recupera 1d8 + 2 cargas."
+      },
+      {
+        "id": "official-block-2",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Golpe de poder. Cuando impactes con un ataque cuerpo a cuerpo con el bastón, podrás gastar 1 carga para infligir 1d6 de daño de fuerza adicional al objetivo."
+      },
+      {
+        "id": "official-block-3",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Conjuros. Mientras empuñes este bastón, puedes usar una acción y gastar 1 o más de sus cargas para lanzar uno de los siguientes conjuros desde él con tu CD de salvación de conjuros y bonificador de ataque de conjuro: bola de fuego (versión de nivel 5, 5 cargas), cono de frío (5 cargas), globo de invulnerabilidad (6 cargas), inmovilizar monstruo (5 cargas), levitar (2 cargas), muro de fuerza (5 cargas), proyectil mágico (1 carga), rayo debilitador (1 carga) o relámpago (versión de nivel 5, 5 cargas)."
+      },
+      {
+        "id": "official-block-4",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Golpe vengador. Puedes usar una acción para romper el bastón de un rodillazo o contra una superficie sólida, lo que ejecuta un golpe vengador. El bastón se destruye y libera la magia que le queda a modo de explosión que se extiende para cubrir una esfera de 9 m de radio centrada en él."
+      },
+      {
+        "id": "official-block-5",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Tienes un 50 por ciento de probabilidad de viajar en ese instante a un plano de existencia aleatorio y evitar la explosión. Si no logras evitar el efecto, sufrirás una cantidad de daño de fuerza igual a 16 veces el número de cargas del bastón. Todas las demás criaturas situadas en esa zona deberán hacer una tirada de salvación de Destreza con CD 17. Si la fallan, sufrirán daño conforme a la distancia a la que se encuentren del punto de origen, tal y como se muestra en la siguiente tabla. Si la superan, recibirán la mitad de ese daño."
+      },
+      {
+        "id": "official-block-6",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "table",
+        "columns": [
+          "Distancia del origen",
+          "Daño"
+        ],
+        "rows": [
+          [
+            "3 m de distancia o más",
+            "8 veces el número de cargas"
+          ],
+          [
+            "cerca",
+            "del bastón"
+          ],
+          [
+            "De 4 m a 6 m de",
+            "6 veces el número de cargas"
+          ],
+          [
+            "distancia",
+            "del bastón"
+          ],
+          [
+            "De 7 m a 9 m de",
+            "4 veces el número de cargas"
+          ],
+          [
+            "distancia",
+            "del bastón"
+          ]
+        ]
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [
+        {
+          "kind": "class",
+          "keys": [
+            "wizard",
+            "warlock",
+            "sorcerer"
+          ],
+          "explanation": "Bastón, muy raro (requiere sintonización por parte de un brujo, hechicero o mago)"
+        }
+      ],
+      "presence": "held",
+      "explanation": "Bastón, muy raro (requiere sintonización por parte de un brujo, hechicero o mago)"
+    },
+    "weapon": {
+      "category": "simple",
+      "meleeReachFeet": 5,
+      "thrown": false,
+      "rangeFeet": null,
+      "attackBonus": 2,
+      "damageBonus": 2,
+      "baseDamage": [
+        {
+          "id": "base-damage",
+          "condition": "",
+          "kind": "damage",
+          "expression": "1d6",
+          "damageType": "bludgeoning",
+          "timing": "base"
+        },
+        {
+          "id": "versatile-damage",
+          "condition": "Empleada a dos manos en un ataque cuerpo a cuerpo.",
+          "kind": "damage",
+          "expression": "1d8",
+          "damageType": "bludgeoning",
+          "timing": "versatile"
+        }
+      ]
+    },
+    "armor": null,
+    "resources": [
+      {
+        "id": "charges",
+        "name": "Cargas",
+        "kind": "charges",
+        "maximum": 20,
+        "unit": "cargas",
+        "recovery": {
+          "kind": "event",
+          "event": "dawn",
+          "explanation": "Recuperación indicada por la fuente al amanecer.",
+          "amount": {
+            "kind": "roll",
+            "expression": "2d8+4"
+          }
+        },
+        "exhaustion": "Aplicar las consecuencias particulares de la descripción cuando se gasten sus cargas."
+      }
+    ],
+    "capabilities": [
+      {
+        "id": "verified-passive-bonuses",
+        "name": "Bonos del objeto",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "class",
+              "keys": [
+                "wizard",
+                "warlock",
+                "sorcerer"
+              ],
+              "explanation": "Bastón, muy raro (requiere sintonización por parte de un brujo, hechicero o mago)"
+            }
+          ],
+          "presence": "held",
+          "explanation": "Bastón, muy raro (requiere sintonización por parte de un brujo, hechicero o mago)"
+        },
+        "target": "Portador",
+        "range": "",
+        "duration": "Mientras se cumplen los requisitos.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "passive-0",
+            "condition": "Mientras se lleva o empuña y se cumple la sintonización indicada.",
+            "kind": "bonus",
+            "target": "spell-attack",
+            "operation": "add",
+            "value": 2
+          },
+          {
+            "id": "passive-1",
+            "condition": "Mientras se lleva o empuña y se cumple la sintonización indicada.",
+            "kind": "bonus",
+            "target": "saving-throws",
+            "operation": "add",
+            "value": 2
+          },
+          {
+            "id": "passive-2",
+            "condition": "Mientras se lleva o empuña y se cumple la sintonización indicada.",
+            "kind": "bonus",
+            "target": "armor-class",
+            "operation": "add",
+            "value": 2
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Se aplica y retira con los requisitos del objeto.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "official-block-3",
+          "official-block-4",
+          "official-block-5",
+          "official-block-6"
+        ]
+      },
+      {
+        "id": "official-2014-rule",
+        "name": "Reglas de la variante",
+        "activation": "other",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "class",
+              "keys": [
+                "wizard",
+                "warlock",
+                "sorcerer"
+              ],
+              "explanation": "Bastón, muy raro (requiere sintonización por parte de un brujo, hechicero o mago)"
+            }
+          ],
+          "presence": "held",
+          "explanation": "Bastón, muy raro (requiere sintonización por parte de un brujo, hechicero o mago)"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": "spell-dependent",
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "source-rule",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Resolver las condiciones, objetivos y efectos descritos en la mesa. No concede automáticamente todas las opciones de una familia ni conjuros a la lista de clase.",
+            "original": {
+              "index": "staff-of-power",
+              "subtype": null,
+              "source": "srd-5.1-es-equipment"
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "Descripción y variante cotejadas. El consumo de una poción se registra; el resto de efectos y gastos se resuelve según la regla concreta.",
+          "pendingAutomation": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla.",
+            "Registrar los gastos reales de cargas y resolver las consecuencias de la última carga según la descripción."
+          ]
+        },
+        "textBlockIds": [
+          "official-block-0",
+          "official-block-1",
+          "official-block-2",
+          "official-block-3",
+          "official-block-4",
+          "official-block-5",
+          "official-block-6"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "03af344e2dbd05576d85b8d8b19d7f9feb9272511633f4816b50330e1f55fe9d",
+      "9c40e8c32ad3d17fc8f3b449c8038592952adadbe1d4dcd16643a8bbe82ed3a5",
+      "ae78ece6659f370e1275b5b20db5d359241a7b7c9d018d8ed53103117069517f",
+      "c084235bc4bedc4ffd8283d4a7b3d97126f3952b032e9669475b2dd10768da9d"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:9ae2f695fea4ba034c965e44",
+    "revision": 1,
+    "language": "es",
+    "name": "Varita del mago de guerra +2",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:171c5b54a955a237c92e930cef1e7cb252000bf939f7ebf50d9cd618d624db02",
+        "kind": "legacy",
+        "title": "Varita del mago de guerra +2",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:9ae2f695fea4ba034c965e44",
+        "verified": false
+      },
+      {
+        "id": "original:7478e672eb76a5a0d37fb8b9c435cceae79627500604768d33e630c209eabb3c",
+        "kind": "legacy",
+        "title": "Varita del mago de guerra +2",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:9ae2f695fea4ba034c965e44",
+        "verified": false
+      },
+      {
+        "id": "original:81e6524364c799107fed98f23a784dea18eb4001fe50b459a0fdf61e7200bc78",
+        "kind": "legacy",
+        "title": "Wand of the War Mage +2",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:725d6f660b7d85357f2f15ef",
+        "verified": false
+      },
+      {
+        "id": "original:b35ab42b180c29adc13389b80d1debccb81c433e22df1b118f5491749bc3c432",
+        "kind": "legacy",
+        "title": "Wand of the War Mage +2",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:725d6f660b7d85357f2f15ef",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 269 · CC BY 4.0",
+        "verified": true
+      }
+    ],
+    "category": "wand",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "rare",
+    "consumable": false,
+    "properties": [],
+    "weight": null,
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": ""
+    },
+    "description": [
+      {
+        "id": "official-block-0",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "type": "paragraph",
+        "text": "Mientras empuñes esta varita, obtendrás un bonificador a las tiradas de ataque de conjuro determinado por la rareza de la varita. Además, ignorarás la cobertura media cuando realices un ataque de conjuro."
+      }
+    ],
+    "requirements": {
+      "attunement": true,
+      "bearer": [
+        {
+          "kind": "spellcaster",
+          "keys": [],
+          "explanation": "Varita, infrecuente (+1), rara (+2) o muy rara (+3) (requiere sintonización por parte de un lanzador de conjuros)"
+        }
+      ],
+      "presence": "held",
+      "explanation": "Varita, infrecuente (+1), rara (+2) o muy rara (+3) (requiere sintonización por parte de un lanzador de conjuros)"
+    },
+    "weapon": null,
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "verified-passive-bonuses",
+        "name": "Bonos del objeto",
+        "activation": "passive",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "spellcaster",
+              "keys": [],
+              "explanation": "Varita, infrecuente (+1), rara (+2) o muy rara (+3) (requiere sintonización por parte de un lanzador de conjuros)"
+            }
+          ],
+          "presence": "held",
+          "explanation": "Varita, infrecuente (+1), rara (+2) o muy rara (+3) (requiere sintonización por parte de un lanzador de conjuros)"
+        },
+        "target": "Portador",
+        "range": "",
+        "duration": "Mientras se cumplen los requisitos.",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "passive-0",
+            "condition": "Mientras se lleva o empuña y se cumple la sintonización indicada.",
+            "kind": "bonus",
+            "target": "spell-attack",
+            "operation": "add",
+            "value": 2
+          }
+        ],
+        "execution": {
+          "mode": "automatic",
+          "handler": "equipment-passive-bonus",
+          "explanation": "Se aplica y retira con los requisitos del objeto.",
+          "pendingAutomation": []
+        },
+        "textBlockIds": [
+          "official-block-0"
+        ]
+      },
+      {
+        "id": "official-2014-rule",
+        "name": "Reglas de la variante",
+        "activation": "other",
+        "trigger": "",
+        "requirements": {
+          "attunement": true,
+          "bearer": [
+            {
+              "kind": "spellcaster",
+              "keys": [],
+              "explanation": "Varita, infrecuente (+1), rara (+2) o muy rara (+3) (requiere sintonización por parte de un lanzador de conjuros)"
+            }
+          ],
+          "presence": "held",
+          "explanation": "Varita, infrecuente (+1), rara (+2) o muy rara (+3) (requiere sintonización por parte de un lanzador de conjuros)"
+        },
+        "target": "Según la regla oficial.",
+        "range": "",
+        "duration": "Según la regla oficial.",
+        "concentration": "spell-dependent",
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "source-rule",
+            "condition": "",
+            "kind": "unmodeled",
+            "explanation": "Resolver las condiciones, objetivos y efectos descritos en la mesa. No concede automáticamente todas las opciones de una familia ni conjuros a la lista de clase.",
+            "original": {
+              "index": "wand-of-the-war-mage-2",
+              "subtype": null,
+              "source": "srd-5.1-es-equipment"
+            }
+          }
+        ],
+        "execution": {
+          "mode": "assisted",
+          "handler": "equipment-text-assistance",
+          "explanation": "Descripción y variante cotejadas. El consumo de una poción se registra; el resto de efectos y gastos se resuelve según la regla concreta.",
+          "pendingAutomation": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla."
+          ]
+        },
+        "textBlockIds": [
+          "official-block-0"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "171c5b54a955a237c92e930cef1e7cb252000bf939f7ebf50d9cd618d624db02",
+      "7478e672eb76a5a0d37fb8b9c435cceae79627500604768d33e630c209eabb3c",
+      "81e6524364c799107fed98f23a784dea18eb4001fe50b459a0fdf61e7200bc78",
+      "b35ab42b180c29adc13389b80d1debccb81c433e22df1b118f5491749bc3c432"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+      ]
+    }
+  }
+]

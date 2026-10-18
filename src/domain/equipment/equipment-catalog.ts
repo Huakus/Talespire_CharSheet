@@ -4,9 +4,8 @@ import {
 } from "../character/character-inventory-model";
 import { cloneJson, type JsonObject, type JsonValue } from "../../shared/json";
 
-export const EQUIPMENT_RARITIES = [
-  "none", "common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies",
-] as const;
+import { EQUIPMENT_RARITIES } from "./equipment-constants";
+export { EQUIPMENT_RARITIES, EQUIPMENT_CATEGORIES, EQUIPMENT_PROPERTIES, DAMAGE_TYPES } from "./equipment-constants";
 
 const EQUIPMENT_RARITY_ALIASES: Record<string, typeof EQUIPMENT_RARITIES[number]> = {
   "": "none",
@@ -43,21 +42,6 @@ const EQUIPMENT_RARITY_LABELS: Record<typeof EQUIPMENT_RARITIES[number], string>
   artifact: "Artefacto",
   varies: "Variable",
 };
-
-export const EQUIPMENT_CATEGORIES = [
-  "adventuring-gear", "weapon", "armor", "shield", "tool", "ammunition",
-  "potion", "scroll", "wand", "staff", "rod", "ring", "wondrous-item",
-] as const;
-
-export const EQUIPMENT_PROPERTIES = [
-  "ammunition", "finesse", "heavy", "light", "loading", "reach", "special",
-  "thrown", "two-handed", "versatile", "silvered", "magic", "cursed",
-] as const;
-
-export const DAMAGE_TYPES = [
-  "acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic",
-  "piercing", "poison", "psychic", "radiant", "slashing", "thunder",
-] as const;
 
 export type EquipmentCatalogDraft = Omit<CharacterInventoryItemDraft, "order" | "group"> & {
   rarity: string;

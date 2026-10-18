@@ -1,0 +1,1241 @@
+[
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:19907a1ffffb2a058fd67fc1",
+    "revision": 1,
+    "language": "es",
+    "name": "Hacha a dos manos +1",
+    "aliases": [
+      "Gran hacha +1"
+    ],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:aecf7a8ded6b33fbad8388cb46c50d220680d799eb10ac7f21eed038c5a66c86",
+        "kind": "legacy",
+        "title": "Gran hacha +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:19907a1ffffb2a058fd67fc1",
+        "verified": false
+      },
+      {
+        "id": "original:f2cf41adb55df1402c89f3df5d749ea50b30ccae1913fac7c69a9abf29529894",
+        "kind": "legacy",
+        "title": "Gran hacha +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:19907a1ffffb2a058fd67fc1",
+        "verified": false
+      },
+      {
+        "id": "original:56b55859c4a31370e12d0a420fe5b323c51f9b4169b0f1a375a1539651eacd82",
+        "kind": "legacy",
+        "title": "Greataxe",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:451f03d69f2fdd51d9176577",
+        "verified": false
+      },
+      {
+        "id": "original:a51b972a284368f5eebaeaef69936faa1d42d8fd1468e450fcb6f31d805bf6e7",
+        "kind": "legacy",
+        "title": "Greataxe",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:451f03d69f2fdd51d9176577",
+        "verified": false
+      },
+      {
+        "id": "original:d5bae91d46d9e262b961ed261b6a98eae6ad8b76a630bcf7ca1a8a9e0e68592f",
+        "kind": "legacy",
+        "title": "Gran Hacha",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:2a910832a96a1b3b3ac79b9d",
+        "verified": false
+      },
+      {
+        "id": "original:1df47a6beb2f3ecb6d0bcf7b7dd304446b50125a67cbd83c9aa998e370414438",
+        "kind": "legacy",
+        "title": "Gran Hacha",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:2a910832a96a1b3b3ac79b9d",
+        "verified": false
+      },
+      {
+        "id": "original:7f2c96b5d8531d11ba79437fc674fd9ca975ac44a5eb5db57f2e9ec0ac677507",
+        "kind": "legacy",
+        "title": "Gran Hacha +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:679d721371e4b0885be06590",
+        "verified": false
+      },
+      {
+        "id": "original:d28dfa17e19db3ffb44542272d126d6f275297f8fd67c2a5ea2611df2f2a23b6",
+        "kind": "legacy",
+        "title": "Gran Hacha +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:679d721371e4b0885be06590",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · páginas PDF 66–68 · CC BY 4.0; propiedades mágicas página PDF 229"
+      },
+      {
+        "id": "srd-5.1-en-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · original inglés",
+        "language": "en",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · páginas PDF 66 · CC BY 4.0"
+      },
+      {
+        "id": "srd-5.1-attribution",
+        "kind": "srd",
+        "title": "Atribución y licencia del SRD 5.1",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es."
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [
+      "heavy",
+      "two-handed",
+      "magic"
+    ],
+    "weight": {
+      "value": 7,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "La tabla describe el objeto mundano base; no fija el precio de la variante mágica. Precios personales y comerciales conservados en los originales."
+    },
+    "description": [
+      {
+        "id": "official-base-table",
+        "type": "table",
+        "section": "description",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-en-equipment"
+        ],
+        "columns": [
+          "Objeto base",
+          "Precio del objeto mundano",
+          "Peso",
+          "Daño base",
+          "Bonificación mágica al ataque",
+          "Propiedades"
+        ],
+        "rows": [
+          [
+            "Hacha a dos manos",
+            "30 po",
+            "7 lb",
+            "1d12 cortante",
+            "+1",
+            "Pesada, A dos manos"
+          ]
+        ]
+      },
+      {
+        "id": "property-heavy",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Pesada. Las criaturas Pequeñas tienen desventaja en las tiradas de ataque con armas pesadas. Su tamaño y peso hacen que sean demasiado voluminosas para que una criatura Pequeña las use con efectividad."
+      },
+      {
+        "id": "property-two-handed",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "A dos manos. Estas armas requieren el uso de las dos manos."
+      },
+      {
+        "id": "enhancement-rule",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Tienes un bonificador a las tiradas de ataque y de daño que hagas con esta arma mágica. El bonificador depende de la rareza del arma."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+    },
+    "weapon": {
+      "category": "martial",
+      "meleeReachFeet": 5,
+      "thrown": false,
+      "rangeFeet": null,
+      "attackBonus": 1,
+      "damageBonus": 1,
+      "baseDamage": [
+        {
+          "id": "base-damage",
+          "kind": "damage",
+          "expression": "1d12",
+          "damageType": "slashing",
+          "timing": "base",
+          "condition": ""
+        }
+      ]
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [],
+    "recoverySourceIds": [
+      "aecf7a8ded6b33fbad8388cb46c50d220680d799eb10ac7f21eed038c5a66c86",
+      "f2cf41adb55df1402c89f3df5d749ea50b30ccae1913fac7c69a9abf29529894",
+      "56b55859c4a31370e12d0a420fe5b323c51f9b4169b0f1a375a1539651eacd82",
+      "a51b972a284368f5eebaeaef69936faa1d42d8fd1468e450fcb6f31d805bf6e7",
+      "d5bae91d46d9e262b961ed261b6a98eae6ad8b76a630bcf7ca1a8a9e0e68592f",
+      "1df47a6beb2f3ecb6d0bcf7b7dd304446b50125a67cbd83c9aa998e370414438",
+      "7f2c96b5d8531d11ba79437fc674fd9ca975ac44a5eb5db57f2e9ec0ac677507",
+      "d28dfa17e19db3ffb44542272d126d6f275297f8fd67c2a5ea2611df2f2a23b6"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": true,
+      "unresolved": [
+        "Cerrar la cobertura de todos los campos originales antes de migrar o retirar versiones.",
+        "Índice heredado greataxe mal formado: la URL greataxe+1 y los campos explícitos toHitBonus=1 y damageBonus=1 acreditan la variante +1. Las versiones mundanas de sus archivos deben asignarse por separado durante la recuperación."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:ac0f80fd1c0f1c938d30b0a8",
+    "revision": 1,
+    "language": "es",
+    "name": "Red +3",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:aedbcd933215c11942f9d5a180db54159c1e1c3c1ff1b06aec94a492d5a12c6c",
+        "kind": "legacy",
+        "title": "Red +3",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:ac0f80fd1c0f1c938d30b0a8",
+        "verified": false
+      },
+      {
+        "id": "original:a68486053fc299a5acb56aad2fef7b00ef1423857a14138b06d354b7d7680be1",
+        "kind": "legacy",
+        "title": "Red +3",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:ac0f80fd1c0f1c938d30b0a8",
+        "verified": false
+      },
+      {
+        "id": "original:b98c598b77e576b1d31243dca6e8f1183abdc7a91f16ea069ae7594d5e5926b6",
+        "kind": "legacy",
+        "title": "Net +3",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:8b7f8f58501c060b9439140f",
+        "verified": false
+      },
+      {
+        "id": "original:db068542029996225cea9e36ca51cd688947117a8357383fd369eaef5a3d2669",
+        "kind": "legacy",
+        "title": "Net +3",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:8b7f8f58501c060b9439140f",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · páginas PDF 66–68 · CC BY 4.0; propiedades mágicas página PDF 229"
+      },
+      {
+        "id": "srd-5.1-en-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · original inglés",
+        "language": "en",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · páginas PDF 66 · CC BY 4.0"
+      },
+      {
+        "id": "srd-5.1-attribution",
+        "kind": "srd",
+        "title": "Atribución y licencia del SRD 5.1",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es."
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "very-rare",
+    "consumable": false,
+    "properties": [
+      "thrown",
+      "special",
+      "magic"
+    ],
+    "weight": {
+      "value": 3,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "La tabla describe el objeto mundano base; no fija el precio de la variante mágica. Precios personales y comerciales conservados en los originales."
+    },
+    "description": [
+      {
+        "id": "official-base-table",
+        "type": "table",
+        "section": "description",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-en-equipment"
+        ],
+        "columns": [
+          "Objeto base",
+          "Precio del objeto mundano",
+          "Peso",
+          "Daño base",
+          "Bonificación mágica al ataque",
+          "Propiedades",
+          "Alcance normal/largo (pies)"
+        ],
+        "rows": [
+          [
+            "Red",
+            "1 po",
+            "3 lb",
+            "No causa daño",
+            "+3",
+            "Arrojadiza, Especial",
+            "5/15"
+          ]
+        ]
+      },
+      {
+        "id": "property-thrown",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Arrojadiza. Si un arma tiene esta propiedad, puedes lanzarla para realizar un ataque a distancia. Si se trata de un arma cuerpo a cuerpo, harás las tiradas de ataque y de daño con el mismo modificador que emplearías para hacer un ataque cuerpo a cuerpo con el arma. Por ejemplo, si lanzas un hacha de mano, utilizarás tu Fuerza, pero si arrojas una daga, podrás elegir entre usar la Fuerza o la Destreza, ya que la daga también posee la propiedad “sutil”."
+      },
+      {
+        "id": "property-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Especial. Un arma con esta propiedad posee ciertas reglas inusuales que afectan a su uso, tal y como se explica en la descripción del arma (consulta “Armas especiales” en esta misma sección)."
+      },
+      {
+        "id": "net-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+      },
+      {
+        "id": "enhancement-rule",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Tienes un bonificador a las tiradas de ataque y de daño que hagas con esta arma mágica. El bonificador depende de la rareza del arma."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+    },
+    "weapon": {
+      "category": "martial",
+      "meleeReachFeet": null,
+      "thrown": true,
+      "rangeFeet": {
+        "normal": 5,
+        "long": 15
+      },
+      "attackBonus": 3,
+      "damageBonus": 0,
+      "damageMode": "none",
+      "baseDamage": []
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "restrain-target",
+        "name": "Apresar con la red",
+        "activation": "trigger",
+        "trigger": "Impactar con la red a un objetivo susceptible.",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+        },
+        "target": "Criatura Grande o más pequeña con forma definida",
+        "range": "5/15 pies",
+        "duration": "Hasta ser liberada",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "restrained",
+            "kind": "condition",
+            "conditionKey": "restrained",
+            "operation": "add",
+            "condition": "Solo al impactar a un objetivo susceptible; se elimina al liberarlo."
+          },
+          {
+            "id": "net-procedure",
+            "kind": "unmodeled",
+            "condition": "",
+            "explanation": "Solo un ataque por acción, acción adicional o reacción. Liberar con acción y Fuerza CD 10, o destruir la red (CA 10) con 5 de daño cortante. No se inflige ese daño a la criatura.",
+            "original": {
+              "rule": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+            }
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Falta integrar el tamaño/forma del objetivo, el estado apresado y los procedimientos de liberación y destrucción.",
+          "pendingAutomation": [
+            "Aplicar y retirar el estado al objetivo sin añadir dados o bonos de daño.",
+            "Controlar un único ataque y resolver la liberación por prueba o daño cortante."
+          ]
+        },
+        "textBlockIds": [
+          "net-special"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "aedbcd933215c11942f9d5a180db54159c1e1c3c1ff1b06aec94a492d5a12c6c",
+      "a68486053fc299a5acb56aad2fef7b00ef1423857a14138b06d354b7d7680be1",
+      "b98c598b77e576b1d31243dca6e8f1183abdc7a91f16ea069ae7594d5e5926b6",
+      "db068542029996225cea9e36ca51cd688947117a8357383fd369eaef5a3d2669"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Cerrar la cobertura de todos los campos originales antes de migrar o retirar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:bd6b6d0bae53fcbd755d2486",
+    "revision": 1,
+    "language": "es",
+    "name": "Red +1",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:46bf6e877e128033a2a7bf3e70196a1e3924b214c8e2dcb75989e1e9eb1a186e",
+        "kind": "legacy",
+        "title": "Red +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:bd6b6d0bae53fcbd755d2486",
+        "verified": false
+      },
+      {
+        "id": "original:b8fb466a288406c3100ce66a1b15a748a801786d3d7ed38e8aa2cbb7a72c6aa6",
+        "kind": "legacy",
+        "title": "Red +1",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:bd6b6d0bae53fcbd755d2486",
+        "verified": false
+      },
+      {
+        "id": "original:f08d3ec744fc45ad369c00efd9af83446fa0cfee18cf101c3c60ba7977002de9",
+        "kind": "legacy",
+        "title": "Net +1",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:8b8bfdeaa7eea0fdddb3d4bf",
+        "verified": false
+      },
+      {
+        "id": "original:86d2b5152327a5cbdbea47abae0ff44625e313566cbd877fead33aa766446db3",
+        "kind": "legacy",
+        "title": "Net +1",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:8b8bfdeaa7eea0fdddb3d4bf",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · páginas PDF 66–68 · CC BY 4.0; propiedades mágicas página PDF 229"
+      },
+      {
+        "id": "srd-5.1-en-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · original inglés",
+        "language": "en",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · páginas PDF 66 · CC BY 4.0"
+      },
+      {
+        "id": "srd-5.1-attribution",
+        "kind": "srd",
+        "title": "Atribución y licencia del SRD 5.1",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es."
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "uncommon",
+    "consumable": false,
+    "properties": [
+      "thrown",
+      "special",
+      "magic"
+    ],
+    "weight": {
+      "value": 3,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "La tabla describe el objeto mundano base; no fija el precio de la variante mágica. Precios personales y comerciales conservados en los originales."
+    },
+    "description": [
+      {
+        "id": "official-base-table",
+        "type": "table",
+        "section": "description",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-en-equipment"
+        ],
+        "columns": [
+          "Objeto base",
+          "Precio del objeto mundano",
+          "Peso",
+          "Daño base",
+          "Bonificación mágica al ataque",
+          "Propiedades",
+          "Alcance normal/largo (pies)"
+        ],
+        "rows": [
+          [
+            "Red",
+            "1 po",
+            "3 lb",
+            "No causa daño",
+            "+1",
+            "Arrojadiza, Especial",
+            "5/15"
+          ]
+        ]
+      },
+      {
+        "id": "property-thrown",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Arrojadiza. Si un arma tiene esta propiedad, puedes lanzarla para realizar un ataque a distancia. Si se trata de un arma cuerpo a cuerpo, harás las tiradas de ataque y de daño con el mismo modificador que emplearías para hacer un ataque cuerpo a cuerpo con el arma. Por ejemplo, si lanzas un hacha de mano, utilizarás tu Fuerza, pero si arrojas una daga, podrás elegir entre usar la Fuerza o la Destreza, ya que la daga también posee la propiedad “sutil”."
+      },
+      {
+        "id": "property-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Especial. Un arma con esta propiedad posee ciertas reglas inusuales que afectan a su uso, tal y como se explica en la descripción del arma (consulta “Armas especiales” en esta misma sección)."
+      },
+      {
+        "id": "net-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+      },
+      {
+        "id": "enhancement-rule",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Tienes un bonificador a las tiradas de ataque y de daño que hagas con esta arma mágica. El bonificador depende de la rareza del arma."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+    },
+    "weapon": {
+      "category": "martial",
+      "meleeReachFeet": null,
+      "thrown": true,
+      "rangeFeet": {
+        "normal": 5,
+        "long": 15
+      },
+      "attackBonus": 1,
+      "damageBonus": 0,
+      "damageMode": "none",
+      "baseDamage": []
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "restrain-target",
+        "name": "Apresar con la red",
+        "activation": "trigger",
+        "trigger": "Impactar con la red a un objetivo susceptible.",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+        },
+        "target": "Criatura Grande o más pequeña con forma definida",
+        "range": "5/15 pies",
+        "duration": "Hasta ser liberada",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "restrained",
+            "kind": "condition",
+            "conditionKey": "restrained",
+            "operation": "add",
+            "condition": "Solo al impactar a un objetivo susceptible; se elimina al liberarlo."
+          },
+          {
+            "id": "net-procedure",
+            "kind": "unmodeled",
+            "condition": "",
+            "explanation": "Solo un ataque por acción, acción adicional o reacción. Liberar con acción y Fuerza CD 10, o destruir la red (CA 10) con 5 de daño cortante. No se inflige ese daño a la criatura.",
+            "original": {
+              "rule": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+            }
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Falta integrar el tamaño/forma del objetivo, el estado apresado y los procedimientos de liberación y destrucción.",
+          "pendingAutomation": [
+            "Aplicar y retirar el estado al objetivo sin añadir dados o bonos de daño.",
+            "Controlar un único ataque y resolver la liberación por prueba o daño cortante."
+          ]
+        },
+        "textBlockIds": [
+          "net-special"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "46bf6e877e128033a2a7bf3e70196a1e3924b214c8e2dcb75989e1e9eb1a186e",
+      "b8fb466a288406c3100ce66a1b15a748a801786d3d7ed38e8aa2cbb7a72c6aa6",
+      "f08d3ec744fc45ad369c00efd9af83446fa0cfee18cf101c3c60ba7977002de9",
+      "86d2b5152327a5cbdbea47abae0ff44625e313566cbd877fead33aa766446db3"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Cerrar la cobertura de todos los campos originales antes de migrar o retirar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:c452c8155853d2ae14b93ee8",
+    "revision": 1,
+    "language": "es",
+    "name": "Red",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:50ff1affbef1123bc10cfbc29c3bf3d519cdb5244ce7312e9a1f3ed660d5d57d",
+        "kind": "legacy",
+        "title": "Red",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:c452c8155853d2ae14b93ee8",
+        "verified": false
+      },
+      {
+        "id": "original:992a64761f669ab47693dc75a4fd1bebe6fdbdb8e4fc12a71e89cbc61f19de97",
+        "kind": "legacy",
+        "title": "Red",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:c452c8155853d2ae14b93ee8",
+        "verified": false
+      },
+      {
+        "id": "original:3633e06ae138a70f3ecd52ca4b836a61c1b3bbd96ce887dcf5b30e6e955f4a09",
+        "kind": "legacy",
+        "title": "Net",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:ec1509a75f9703cce591fef1",
+        "verified": false
+      },
+      {
+        "id": "original:63d599e0d7e1af3b1b35fbf23fb8bda8c2c3592ba0ba5d6361e7dd26c8cde935",
+        "kind": "legacy",
+        "title": "Net",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:ec1509a75f9703cce591fef1",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · páginas PDF 66–68 · CC BY 4.0"
+      },
+      {
+        "id": "srd-5.1-en-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · original inglés",
+        "language": "en",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · páginas PDF 66 · CC BY 4.0"
+      },
+      {
+        "id": "srd-5.1-attribution",
+        "kind": "srd",
+        "title": "Atribución y licencia del SRD 5.1",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es."
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": false,
+    "rarity": "none",
+    "consumable": false,
+    "properties": [
+      "thrown",
+      "special"
+    ],
+    "weight": {
+      "value": 3,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": {
+        "quantity": 1,
+        "unit": "gp"
+      },
+      "campaignPrice": null,
+      "explanation": "Precio del objeto base según la tabla de 2014. No modifica precios comerciales ni copias poseídas."
+    },
+    "description": [
+      {
+        "id": "official-base-table",
+        "type": "table",
+        "section": "description",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-en-equipment"
+        ],
+        "columns": [
+          "Objeto base",
+          "Precio del objeto mundano",
+          "Peso",
+          "Daño base",
+          "Bonificación mágica al ataque",
+          "Propiedades",
+          "Alcance normal/largo (pies)"
+        ],
+        "rows": [
+          [
+            "Red",
+            "1 po",
+            "3 lb",
+            "No causa daño",
+            "+0",
+            "Arrojadiza, Especial",
+            "5/15"
+          ]
+        ]
+      },
+      {
+        "id": "property-thrown",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Arrojadiza. Si un arma tiene esta propiedad, puedes lanzarla para realizar un ataque a distancia. Si se trata de un arma cuerpo a cuerpo, harás las tiradas de ataque y de daño con el mismo modificador que emplearías para hacer un ataque cuerpo a cuerpo con el arma. Por ejemplo, si lanzas un hacha de mano, utilizarás tu Fuerza, pero si arrojas una daga, podrás elegir entre usar la Fuerza o la Destreza, ya que la daga también posee la propiedad “sutil”."
+      },
+      {
+        "id": "property-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Especial. Un arma con esta propiedad posee ciertas reglas inusuales que afectan a su uso, tal y como se explica en la descripción del arma (consulta “Armas especiales” en esta misma sección)."
+      },
+      {
+        "id": "net-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+    },
+    "weapon": {
+      "category": "martial",
+      "meleeReachFeet": null,
+      "thrown": true,
+      "rangeFeet": {
+        "normal": 5,
+        "long": 15
+      },
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "damageMode": "none",
+      "baseDamage": []
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "restrain-target",
+        "name": "Apresar con la red",
+        "activation": "trigger",
+        "trigger": "Impactar con la red a un objetivo susceptible.",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+        },
+        "target": "Criatura Grande o más pequeña con forma definida",
+        "range": "5/15 pies",
+        "duration": "Hasta ser liberada",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "restrained",
+            "kind": "condition",
+            "conditionKey": "restrained",
+            "operation": "add",
+            "condition": "Solo al impactar a un objetivo susceptible; se elimina al liberarlo."
+          },
+          {
+            "id": "net-procedure",
+            "kind": "unmodeled",
+            "condition": "",
+            "explanation": "Solo un ataque por acción, acción adicional o reacción. Liberar con acción y Fuerza CD 10, o destruir la red (CA 10) con 5 de daño cortante. No se inflige ese daño a la criatura.",
+            "original": {
+              "rule": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+            }
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Falta integrar el tamaño/forma del objetivo, el estado apresado y los procedimientos de liberación y destrucción.",
+          "pendingAutomation": [
+            "Aplicar y retirar el estado al objetivo sin añadir dados o bonos de daño.",
+            "Controlar un único ataque y resolver la liberación por prueba o daño cortante."
+          ]
+        },
+        "textBlockIds": [
+          "net-special"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "50ff1affbef1123bc10cfbc29c3bf3d519cdb5244ce7312e9a1f3ed660d5d57d",
+      "992a64761f669ab47693dc75a4fd1bebe6fdbdb8e4fc12a71e89cbc61f19de97",
+      "3633e06ae138a70f3ecd52ca4b836a61c1b3bbd96ce887dcf5b30e6e955f4a09",
+      "63d599e0d7e1af3b1b35fbf23fb8bda8c2c3592ba0ba5d6361e7dd26c8cde935"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Cerrar la cobertura de todos los campos originales antes de migrar o retirar versiones."
+      ]
+    }
+  },
+  {
+    "format": "equipment-definition-draft",
+    "schemaVersion": 1,
+    "id": "recovery:official:equipment:es:fedd698066b62346698b608a",
+    "revision": 1,
+    "language": "es",
+    "name": "Red +2",
+    "aliases": [],
+    "baseDefinitionId": null,
+    "origin": "official",
+    "sources": [
+      {
+        "id": "original:f44cb8b1c243920d826cee376aa9d8df22e5835f40184477ed8e6f82d4ff5dc3",
+        "kind": "legacy",
+        "title": "Red +2",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:fedd698066b62346698b608a",
+        "verified": false
+      },
+      {
+        "id": "original:a16a06238667a9428b96a8fa3a08f99093903305c4f2330e638e4f94be35c21d",
+        "kind": "legacy",
+        "title": "Red +2",
+        "language": "es",
+        "rulesEdition": null,
+        "locator": "official:equipment:es:fedd698066b62346698b608a",
+        "verified": false
+      },
+      {
+        "id": "original:15aac1a690c97e370471339197dc5aa884790695907b5e253ae955f47f78ff65",
+        "kind": "legacy",
+        "title": "Net +2",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:774705e2ab24cadccbb1a1e8",
+        "verified": false
+      },
+      {
+        "id": "original:cd207ae00a83e6fa64f80d9021727fdeca826c4d13f7679edbbfede6212f0e94",
+        "kind": "legacy",
+        "title": "Net +2",
+        "language": "en",
+        "rulesEdition": null,
+        "locator": "official:equipment:eng:774705e2ab24cadccbb1a1e8",
+        "verified": false
+      },
+      {
+        "id": "srd-5.1-es-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · edición oficial española",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · páginas PDF 66–68 · CC BY 4.0; propiedades mágicas página PDF 229"
+      },
+      {
+        "id": "srd-5.1-en-equipment",
+        "kind": "srd",
+        "title": "SRD 5.1 · original inglés",
+        "language": "en",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1.pdf · páginas PDF 66 · CC BY 4.0"
+      },
+      {
+        "id": "srd-5.1-attribution",
+        "kind": "srd",
+        "title": "Atribución y licencia del SRD 5.1",
+        "language": "es",
+        "rulesEdition": "2014",
+        "verified": true,
+        "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es."
+      }
+    ],
+    "category": "weapon",
+    "subtypes": [],
+    "magical": true,
+    "rarity": "rare",
+    "consumable": false,
+    "properties": [
+      "thrown",
+      "special",
+      "magic"
+    ],
+    "weight": {
+      "value": 3,
+      "unit": "lb"
+    },
+    "economy": {
+      "basePrice": null,
+      "campaignPrice": null,
+      "explanation": "La tabla describe el objeto mundano base; no fija el precio de la variante mágica. Precios personales y comerciales conservados en los originales."
+    },
+    "description": [
+      {
+        "id": "official-base-table",
+        "type": "table",
+        "section": "description",
+        "provenance": "reviewed-translation",
+        "sourceIds": [
+          "srd-5.1-en-equipment"
+        ],
+        "columns": [
+          "Objeto base",
+          "Precio del objeto mundano",
+          "Peso",
+          "Daño base",
+          "Bonificación mágica al ataque",
+          "Propiedades",
+          "Alcance normal/largo (pies)"
+        ],
+        "rows": [
+          [
+            "Red",
+            "1 po",
+            "3 lb",
+            "No causa daño",
+            "+2",
+            "Arrojadiza, Especial",
+            "5/15"
+          ]
+        ]
+      },
+      {
+        "id": "property-thrown",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Arrojadiza. Si un arma tiene esta propiedad, puedes lanzarla para realizar un ataque a distancia. Si se trata de un arma cuerpo a cuerpo, harás las tiradas de ataque y de daño con el mismo modificador que emplearías para hacer un ataque cuerpo a cuerpo con el arma. Por ejemplo, si lanzas un hacha de mano, utilizarás tu Fuerza, pero si arrojas una daga, podrás elegir entre usar la Fuerza o la Destreza, ya que la daga también posee la propiedad “sutil”."
+      },
+      {
+        "id": "property-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Especial. Un arma con esta propiedad posee ciertas reglas inusuales que afectan a su uso, tal y como se explica en la descripción del arma (consulta “Armas especiales” en esta misma sección)."
+      },
+      {
+        "id": "net-special",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+      },
+      {
+        "id": "enhancement-rule",
+        "type": "paragraph",
+        "section": "rules",
+        "provenance": "official-spanish",
+        "sourceIds": [
+          "srd-5.1-es-equipment"
+        ],
+        "text": "Tienes un bonificador a las tiradas de ataque y de daño que hagas con esta arma mágica. El bonificador depende de la rareza del arma."
+      }
+    ],
+    "requirements": {
+      "attunement": false,
+      "bearer": [],
+      "presence": "held",
+      "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+    },
+    "weapon": {
+      "category": "martial",
+      "meleeReachFeet": null,
+      "thrown": true,
+      "rangeFeet": {
+        "normal": 5,
+        "long": 15
+      },
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "damageMode": "none",
+      "baseDamage": []
+    },
+    "armor": null,
+    "resources": [],
+    "capabilities": [
+      {
+        "id": "restrain-target",
+        "name": "Apresar con la red",
+        "activation": "trigger",
+        "trigger": "Impactar con la red a un objetivo susceptible.",
+        "requirements": {
+          "attunement": false,
+          "bearer": [],
+          "presence": "held",
+          "explanation": "No requiere sintonización. La competencia determina los beneficios y restricciones de uso, no es una condición para poseer el objeto."
+        },
+        "target": "Criatura Grande o más pequeña con forma definida",
+        "range": "5/15 pies",
+        "duration": "Hasta ser liberada",
+        "concentration": false,
+        "costs": [],
+        "consumeQuantity": 0,
+        "effects": [
+          {
+            "id": "restrained",
+            "kind": "condition",
+            "conditionKey": "restrained",
+            "operation": "add",
+            "condition": "Solo al impactar a un objetivo susceptible; se elimina al liberarlo."
+          },
+          {
+            "id": "net-procedure",
+            "kind": "unmodeled",
+            "condition": "",
+            "explanation": "Solo un ataque por acción, acción adicional o reacción. Liberar con acción y Fuerza CD 10, o destruir la red (CA 10) con 5 de daño cortante. No se inflige ese daño a la criatura.",
+            "original": {
+              "rule": "Red. Una criatura Grande o más pequeña que sea impactada por una red quedará apresada hasta ser liberada. Esta arma no tendrá efecto sobre objetivos sin forma definida o que sean de tamaño Enorme o mayor. Una criatura puede emplear su acción para hacer una prueba de Fuerza con CD 10. Si tiene éxito, podrá liberarse a sí misma o a otra criatura dentro de su alcance. Infligir 5 de daño cortante a la red (CA 10) también liberará a la criatura sin causarle daño alguno, pondrá fin al efecto y destruirá la red. Cuando utilices una acción, una acción adicional o una reacción para atacar con una red, solo podrás realizar un ataque, incluso aunque normalmente pudieras hacer más de uno."
+            }
+          }
+        ],
+        "execution": {
+          "mode": "unsupported",
+          "handler": null,
+          "explanation": "Falta integrar el tamaño/forma del objetivo, el estado apresado y los procedimientos de liberación y destrucción.",
+          "pendingAutomation": [
+            "Aplicar y retirar el estado al objetivo sin añadir dados o bonos de daño.",
+            "Controlar un único ataque y resolver la liberación por prueba o daño cortante."
+          ]
+        },
+        "textBlockIds": [
+          "net-special"
+        ]
+      }
+    ],
+    "recoverySourceIds": [
+      "f44cb8b1c243920d826cee376aa9d8df22e5835f40184477ed8e6f82d4ff5dc3",
+      "a16a06238667a9428b96a8fa3a08f99093903305c4f2330e638e4f94be35c21d",
+      "15aac1a690c97e370471339197dc5aa884790695907b5e253ae955f47f78ff65",
+      "cd207ae00a83e6fa64f80d9021727fdeca826c4d13f7679edbbfede6212f0e94"
+    ],
+    "review": {
+      "identity": true,
+      "information": false,
+      "editorial": true,
+      "mechanics": false,
+      "unresolved": [
+        "Cerrar la cobertura de todos los campos originales antes de migrar o retirar versiones."
+      ]
+    }
+  }
+]

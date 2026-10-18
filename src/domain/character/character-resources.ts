@@ -14,6 +14,8 @@ import {
   type CharacterV2,
 } from "./character-v2";
 import { resetInventoryItemResources } from "./character-inventory";
+import { adjustEquipmentDamage } from "../equipment/equipment-damage";
+import { DAMAGE_TYPES } from "../equipment/equipment-constants";
 import { CharacterRevisionConflictError } from "./edit-character";
 import { resetTraitsByRest } from "./character-content";
 import { resetWizardAfterRest } from "./wizard-play";
@@ -27,7 +29,7 @@ import {
 const PositiveAmountSchema = z.number().int().positive();
 
 export const CharacterResourceCommandSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("damage"), amount: PositiveAmountSchema }),
+  z.object({ kind: z.literal("damage"), amount: PositiveAmountSchema, damageType: z.enum(DAMAGE_TYPES).optional(), magical: z.boolean().optional() }),
   z.object({ kind: z.literal("heal"), amount: PositiveAmountSchema }),
   z.object({
     kind: z.literal("grant-temporary-hit-points"),
@@ -133,8 +135,9 @@ export function applyCharacterResourceCommand(
 
   switch (command.kind) {
     case "damage": {
-      const absorbed = Math.min(combat.hitPoints.temporary, command.amount);
-      const remainingDamage = druidFormDamage(character,command.amount - absorbed);
+      const damage = command.damageType ? adjustEquipmentDamage(character,command.amount,command.damageType,command.magical) : command.amount;
+      const absorbed = Math.min(combat.hitPoints.temporary, damage);
+      const remainingDamage = druidFormDamage(character,damage - absorbed);
       const previousHp = combat.hitPoints.current;
       combat.hitPoints.temporary -= absorbed;
       combat.hitPoints.current = Math.max(0, previousHp - remainingDamage);
@@ -142,8 +145,8 @@ export function applyCharacterResourceCommand(
       effects.hitPointsChangedBy = combat.hitPoints.current - previousHp;
       const focusedConjuration = character.builder?.classKey === "wizard" && character.identity.level >= 10 && character.builder.levels.find((step) => step.level === 2)?.subclass === "conjuration" && character.spellcasting.wizard?.concentrationSchool === "Conjuración";
       if (combat.hitPoints.current === 0) combat.conditions = combat.conditions.filter((condition) => condition.key !== "concentration");
-      else if (!focusedConjuration && combat.conditions.some((condition) => condition.key === "concentration")) {
-        effects.concentrationCheckDc = Math.max(10, Math.floor(command.amount / 2));
+      else if (damage > 0 && !focusedConjuration && combat.conditions.some((condition) => condition.key === "concentration")) {
+        effects.concentrationCheckDc = Math.max(10, Math.floor(damage / 2));
       }
       break;
     }
@@ -217,7 +220,7 @@ export function applyCharacterResourceCommand(
       effects.hitPointsChangedBy = combat.hitPoints.current - previousHp;
       effects.temporaryHitPointsChangedBy = -previousTemporary;
       effects.hitDiceRecovered = combat.hitDice.remaining - previousDice;
-      inventory = character.inventory.map((item) => resetInventoryItemResources(item, "long-rest"));
+      inventory = character.inventory.map((item) => resetInventoryItemResources(item, "long-rest", character));
       spellcasting = {
         ...character.spellcasting,
         slots: Object.fromEntries(
@@ -236,7 +239,7 @@ export function applyCharacterResourceCommand(
     case "short-rest": {
       elapseDruidHours(character,1);
       if (character.builder?.classKey === "warlock") spellcasting = { ...character.spellcasting,slots: Object.fromEntries(Object.entries(character.spellcasting.slots).map(([level,state]) => [level,{ ...state,used: Number(level) === pactSlots(character.identity.level).level ? 0 : state.used }])) };
-      inventory = character.inventory.map((item) => resetInventoryItemResources(item, "short-rest"));
+      inventory = character.inventory.map((item) => resetInventoryItemResources(item, "short-rest", character));
       traits = resetTraitsByRest(character, "short-rest");
       elapseRogueHours(character,1); spellcasting.spells = character.spellcasting.spells;
       resetWizardAfterRest(character,"short-rest");

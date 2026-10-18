@@ -1,0 +1,179 @@
+{
+  "mode": "local-source-review-only",
+  "reviewedDefinitions": 11,
+  "totalDrafts": 806,
+  "originalArchivesUnchanged": true,
+  "resolvedFields": 220,
+  "definitiveObjects": 0,
+  "migratedCopies": 0,
+  "deletedVersions": 0,
+  "names": [
+    {
+      "name": "Ábaco",
+      "index": "abacus",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Almádena",
+      "index": "hammer-sledge",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Balanza de mercader",
+      "index": "scale-merchants",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Campanilla",
+      "index": "bell",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Espejo de acero",
+      "index": "mirror-steel",
+      "recovery": {
+        "fields": 96,
+        "resolved": 20,
+        "pending": 76
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Martillo",
+      "index": "hammer",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Pala",
+      "index": "shovel",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Pico de minero",
+      "index": "pick-miners",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Reloj de arena",
+      "index": "hourglass",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Piedra de afilar",
+      "index": "whetstone",
+      "recovery": {
+        "fields": 90,
+        "resolved": 20,
+        "pending": 70
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": []
+    },
+    {
+      "name": "Poción de curación",
+      "index": "potion-of-healing",
+      "recovery": {
+        "fields": 100,
+        "resolved": 20,
+        "pending": 80
+      },
+      "blockers": [
+        "El formato nuevo aún no está integrado para su uso en el symbiote.",
+        "Faltan datos de clasificación, procedencia o sintonización.",
+        "drink-or-administer: falta soporte de ejecución.",
+        "La revisión tiene decisiones o comprobaciones pendientes."
+      ],
+      "automation": [
+        {
+          "capabilityId": "drink-or-administer",
+          "capabilityName": "Beber o administrar",
+          "description": "Seleccionar al receptor y aplicar la curación sin superar sus PG máximos."
+        },
+        {
+          "capabilityId": "drink-or-administer",
+          "capabilityName": "Beber o administrar",
+          "description": "Consumir exactamente una unidad y registrar la acción sin duplicar efectos."
+        }
+      ]
+    }
+  ]
+}

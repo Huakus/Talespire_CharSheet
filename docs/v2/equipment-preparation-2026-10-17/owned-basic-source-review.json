@@ -1,0 +1,18 @@
+{
+  "reviewed": 2,
+  "items": [
+    {
+      "key": "official:equipment:es:7863f03eb5565607a7c86b7d",
+      "page": 69,
+      "index": "pouch",
+      "name": "Bolsa"
+    },
+    {
+      "key": "official:equipment:es:310770d6596b5e33da0fc013",
+      "page": 69,
+      "index": "clothes-costume",
+      "name": "Ropa de disfraz"
+    }
+  ],
+  "skipped": []
+}

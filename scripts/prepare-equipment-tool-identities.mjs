@@ -1,0 +1,7 @@
+import{readFileSync,writeFileSync}from"node:fs";
+const rows=JSON.parse(readFileSync("tmp/equipment-definitions/tools-context-reviews.json","utf8"));
+const additional={"alchemists-supplies":["Suministros de alquimista"],"brewers-supplies":["Suministros de cervecero"],"calligraphers-supplies":["Suministros de calígrafo"],"cooks-utensils":["Utensilios de cocinero"],"glassblowers-tools":["Herramientas de soplador de vidrio"],"painters-supplies":["Suministros de pintor"],"woodcarvers-tools":["Herramientas de tallista"],"tinkers-tools":["Herramientas de manitas","Herramientas de artífice"],"disguise-kit":["Kit de disfraz"],"forgery-kit":["Kit de falsificación"],"herbalism-kit":["Kit de herborista"],"poisoners-kit":["Kit de venenos"],"dragonchess-set":["Ajedrez de dragones"],"three-dragon-ante-set":["Apuesta de tres dragones"],shawm:["Caramillo"]};
+const norm=s=>s.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const generic=new Set(["equipoestandar","herramientasdeartesano","instrumentosmusicales","juegos","herramientas"]);
+writeFileSync("src/domain/equipment/equipment-tool-identities.json",JSON.stringify(rows.map(({index,definition:d})=>({key:index,name:d.name,aliases:[...new Set([index,d.name,...d.aliases,...(additional[index]??[])])].filter(alias=>!generic.has(norm(alias))&&!(index==="cooks-utensils"&&norm(alias)==="utensiliosdecocina"))})),null,2));
+console.log("37 tool identities with Spanish, English and builder aliases.");

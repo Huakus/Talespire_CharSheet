@@ -1,0 +1,20 @@
+{
+  "ring": {
+    "name": "Anillo de almacenamiento de conjuros",
+    "charges": null,
+    "storage": {
+      "known": true,
+      "spells": []
+    }
+  },
+  "counts": {
+    "merchant": 24,
+    "character": 241
+  },
+  "revision": 1284,
+  "arturoBow": "Arco largo feroz",
+  "missingRules": 0,
+  "definitionMismatch": 0,
+  "wrongCatalogRevision": 0,
+  "changedIndividualState": 0
+}
