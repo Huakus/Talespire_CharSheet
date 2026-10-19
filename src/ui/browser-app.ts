@@ -1014,7 +1014,7 @@ export class BrowserApp {
         diceRoller: this.runtime.diceRoller,
         onCreate: async (operationId, creation, initialLevels) => {
           requireCampaign();
-          const snapshot = await this.application.createGuidedCharacter({ operationId, creation, initialLevels, expectedCampaignChecksum: base.checksum });
+          const snapshot = await this.application.createGuidedCharacter({ operationId, creation, initialLevels, expectedCampaignChecksum: base.checksum, expectedCampaignId: base.campaign.id });
           this.snapshot = snapshot;
           this.selectedCharacterId = Object.values(snapshot.campaign.characters).find((entry) => entry.builder?.creationOperationId === operationId)?.id ?? this.selectedCharacterId;
           this.rememberSelectedCharacter();

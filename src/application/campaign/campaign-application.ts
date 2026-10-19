@@ -404,23 +404,39 @@ export class CampaignApplication {
     return this.persistUpdatedCharacter(current, character, command.expectedCampaignChecksum, createdAt);
   }
 
-  async createGuidedCharacter(command: { operationId: string; creation: FighterCreationInput; initialLevels?: FighterLevelChoiceInput[]; expectedCampaignChecksum: string; createdAt?: string }): Promise<CampaignSnapshot> {
+  async createGuidedCharacter(command: { operationId: string; creation: FighterCreationInput; initialLevels?: FighterLevelChoiceInput[]; expectedCampaignChecksum: string; expectedCampaignId?: string; createdAt?: string }): Promise<CampaignSnapshot> {
     const operationId = StableIdSchema.parse(command.operationId);
     const creation = validateGuidedCreation(command.creation);
     const initialLevels = (command.initialLevels ?? []).map((step) => FighterLevelChoiceSchema.parse(step));
-    const current = await this.repository.load();
+    let current = await this.repository.load();
     if (!current) throw new CampaignNotFoundError();
+    const campaignId = command.expectedCampaignId ?? current.campaign.id;
+    if (current.campaign.id !== campaignId) throw new Error("La campaña cambió. Abrí el tutorial en la campaña correcta.");
     const id = await createDeterministicId("chr", current.campaign.id, operationId);
-    const previous = current.campaign.characters[id];
-    if (previous) {
-      if (!previous.builder || canonicalJsonStringify(previous.builder.creation as unknown as JsonValue) !== canonicalJsonStringify(creation as unknown as JsonValue)) throw new Error("Esta operación ya creó un personaje con otras elecciones.");
-      if (canonicalJsonStringify(previous.builder.levels.slice(0, creation.startingLevel - 1) as unknown as JsonValue) !== canonicalJsonStringify(initialLevels as unknown as JsonValue)) throw new Error("La operación ya se confirmó con otras elecciones de niveles iniciales.");
-      return current;
-    }
-    this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
     const timestamp = command.createdAt ?? new Date().toISOString();
-    const character = await buildGuidedCharacter(id, operationId, creation, timestamp, initialLevels);
-    return this.persistUpdatedCharacter(current, character, current.checksum, timestamp);
+    let character: CharacterV2 | undefined;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (current.campaign.id !== campaignId) throw new Error("La campaña cambió. Abrí el tutorial en la campaña correcta.");
+      const previous = current.campaign.characters[id];
+      if (previous) {
+        if (!previous.builder || canonicalJsonStringify(previous.builder.creation as unknown as JsonValue) !== canonicalJsonStringify(creation as unknown as JsonValue)) throw new Error("Esta operación ya creó un personaje con otras elecciones.");
+        if (canonicalJsonStringify(previous.builder.levels.slice(0, creation.startingLevel - 1) as unknown as JsonValue) !== canonicalJsonStringify(initialLevels as unknown as JsonValue)) throw new Error("La operación ya se confirmó con otras elecciones de niveles iniciales.");
+        return current;
+      }
+      character ??= await buildGuidedCharacter(id, operationId, creation, timestamp, initialLevels);
+      try {
+        // Creation adds a new identity; unrelated campaign edits during the tutorial
+        // must survive. The write still compares the latest checksum atomically.
+        return await this.persistUpdatedCharacter(current, character, current.checksum, timestamp);
+      } catch (error) {
+        if (!(error instanceof CampaignRepositoryConflictError)) throw error;
+        if (attempt === 3) throw new Error("La campaña está recibiendo cambios continuos. Tus elecciones siguen guardadas; volvé a pulsar Crear personaje.", { cause: error });
+        const latest = await this.repository.load();
+        if (!latest) throw new CampaignNotFoundError();
+        current = latest;
+      }
+    }
+    throw new Error("No se pudo confirmar la creación del personaje.");
   }
 
   async advanceGuidedCharacter(command: { characterId: string; choice: FighterLevelChoiceInput; expectedCharacterRevision: number; expectedCampaignChecksum: string; updatedAt?: string }): Promise<CampaignSnapshot> {
