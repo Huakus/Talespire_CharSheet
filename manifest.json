@@ -1,9 +1,9 @@
 {
   "manifestVersion": 1,
-  "name": "Talespire CharSheet Code",
+  "name": "Talespire CharSheet",
   "summary": "Hoja de personaje colaborativa para TaleSpire",
   "descriptionFilePath": "/README.md",
-  "version": "1.0.29",
+  "version": "1.0.30",
   "license": "MIT",
   "about": {
     "website": "",
@@ -44,7 +44,7 @@
       }
     },
     "interop": {
-      "id": "10f34bc9-dfa2-4623-a691-bf0a1fb2d9d6"
+      "id": "10f34bc9-dfa2-4623-a691-bf0a1fb2d9d4"
     }
   },
   "controls": {
