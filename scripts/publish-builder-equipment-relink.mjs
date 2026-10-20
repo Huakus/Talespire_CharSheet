@@ -1,0 +1,22 @@
+import{readFileSync,writeFileSync}from'node:fs';import{createHash}from'node:crypto';import assert from'node:assert/strict';import{createServer}from'vite';import{postgresJsonbText}from'./postgres-jsonb-text.mjs';
+const root='tmp/equipment-definitions',read=n=>JSON.parse(readFileSync(root+'/'+n,'utf8')),before=read('builder-equipment-relink-before.json'),{mappings,untouched}=read('builder-equipment-relink-mappings.json'),scope=read('builder-equipment-relink-scope.json'),{cid}=scope,q=s=>`'${s.replaceAll("'","''")}'`,j=v=>`$builder$${JSON.stringify(v)}$builder$::jsonb`,md5=v=>createHash('md5').update(postgresJsonbText(v)).digest('hex');
+const server=await createServer({configFile:false,root:process.cwd(),server:{middlewareMode:true,hmr:false},appType:'custom'}),fragments=[];
+try{const{bindReviewedEquipment}=await server.ssrLoadModule('/src/domain/equipment/equipment-live.ts');
+ for(const row of before.inventories){const mapping=mappings.find(m=>m.parentId===row.parent_id&&m.entityId===row.entity_id);assert.ok(mapping);assert.equal(row.payload.catalog,null);assert.ok(!row.payload.rules);
+  const source=before.entries.find(e=>e.content_key===mapping.key);assert.ok(source);const d=source.payload.rules.definition;assert.equal(d.origin,'official');assert.equal(d.magical,false);
+  const payload=bindReviewedEquipment(row.payload,d);payload.catalog={contentKey:source.content_key,origin:source.origin,tags:source.tags,revision:source.revision};
+  for(const field of ['id','order','group','quantity','equipped','attuned','cost','charges','effect'])assert.deepEqual(payload[field],row.payload[field],field);
+  assert.deepEqual(payload.rules.original,row.payload);
+  for(const feature of row.payload.features)assert.deepEqual(payload.features.find(f=>f.id===feature.id),feature);
+  fragments.push({before:row,payload,sourceKey:source.content_key});
+ }
+}finally{await server.close();}
+assert.equal(fragments.length,36);const plan={revision:before.revision,fragments,versions:before.versions,untouched};
+writeFileSync(root+'/builder-equipment-relink-publication.json',JSON.stringify(plan));
+writeFileSync('docs/v2/equipment-completion-2026-10-19/builder-equipment-relink-archive.json',JSON.stringify({before,plan}));
+const guard=Object.entries(scope.guards).map(([k,v])=>`if ${v} is distinct from ${q(before.guards[k])}then raise exception ${q('BUILDER_SCOPE_CHANGED:'+k)};end if;`).join('\n');
+let sql=`begin;lock table public.campaigns,public.campaign_state_fragments,public.campaign_character_versions in share row exclusive mode;lock table public.campaign_content_entries,public.official_content_entries in share mode;do $check$ begin if(select state_revision from public.campaigns where id=${q(cid)})<>${before.revision} then raise exception 'BUILDER_CAMPAIGN_CHANGED';end if;${guard}\n`;
+for(const row of fragments)sql+=`if not exists(select 1 from public.campaign_state_fragments t where campaign_id=${q(cid)} and fragment_kind='character-inventory' and parent_id=${q(row.before.parent_id)} and entity_id=${q(row.before.entity_id)} and md5(to_jsonb(t)::text)=${q(md5(row.before))})then raise exception 'BUILDER_COPY_CHANGED';end if;update public.campaign_state_fragments set payload=${j(row.payload)},revision=revision+1,updated_at=statement_timestamp() where campaign_id=${q(cid)} and fragment_kind='character-inventory' and parent_id=${q(row.before.parent_id)} and entity_id=${q(row.before.entity_id)};\n`;
+for(const version of before.versions)sql+=`if not exists(select 1 from public.campaign_character_versions t where campaign_id=${q(cid)} and character_id=${q(version.character_id)} and md5(to_jsonb(t)::text)=${q(md5(version))})then raise exception 'BUILDER_VERSION_CHANGED';end if;update public.campaign_character_versions set revision=revision+1,updated_at=statement_timestamp() where campaign_id=${q(cid)} and character_id=${q(version.character_id)};\n`;
+sql+=`${guard}\nupdate public.campaigns set state_revision=state_revision+1,state_updated_at=statement_timestamp(),updated_at=statement_timestamp() where id=${q(cid)};end $check$;select jsonb_build_object('copies',${fragments.length},'characters',${before.versions.length},'revision',(select state_revision from public.campaigns where id=${q(cid)})) as result;commit;`;
+writeFileSync(root+'/builder-equipment-relink-publication.sql',sql);writeFileSync(root+'/builder-equipment-relink-dry-run.sql',sql.replace(/commit;$/,'rollback;'));console.log(JSON.stringify({copies:fragments.length,characters:before.versions.length,sqlLength:sql.length}));

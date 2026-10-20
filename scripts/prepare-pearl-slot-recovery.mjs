@@ -1,0 +1,12 @@
+import {readFileSync, writeFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const root='tmp/equipment-definitions', snapshot=JSON.parse(readFileSync(root+'/native-targets-2026-10-19.json','utf8'));
+const row=snapshot.items.find(r=>r.name==='Perla de poder');assert.ok(row);
+const definition=structuredClone(row.payload.rules.definition),cap=definition.capabilities.find(c=>c.id==='official-use');
+assert.equal(cap.effects[0].kind,'unmodeled');cap.effects=[{id:'restore-expended-slot',kind:'spell-slot-recovery',condition:'Pronunciar la palabra de activación.',maximumLevel:3}];
+cap.name='Recuperar un espacio de conjuro';cap.duration='Instantánea';
+cap.execution={mode:'automatic',handler:'equipment-spell-slot-recovery',explanation:'Elegir un espacio gastado, recuperarlo como máximo a nivel 3 y gastar el uso diario en una sola operación. Conserva el origen del espacio y su recuperación normal.',pendingAutomation:[]};
+definition.review={identity:true,information:true,editorial:true,mechanics:true,unresolved:[]};definition.revision++;
+writeFileSync(root+'/pearl-slot-recovery-reviews.json',JSON.stringify([{key:row.content_key,definition}]));
+writeFileSync('docs/v2/equipment-completion-2026-10-19/pearl-slot-recovery-definition.json',JSON.stringify(definition));
+console.log(JSON.stringify({key:row.content_key,name:row.name}));

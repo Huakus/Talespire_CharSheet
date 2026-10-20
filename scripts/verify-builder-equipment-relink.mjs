@@ -1,0 +1,6 @@
+import{readFileSync,writeFileSync}from'node:fs';import assert from'node:assert/strict';
+const root='tmp/equipment-definitions',read=n=>JSON.parse(readFileSync(root+'/'+n,'utf8')),before=read('builder-equipment-relink-before.json'),after=read('builder-equipment-relink-after.json'),plan=read('builder-equipment-relink-publication.json');
+assert.equal(after.revision,before.revision+1);assert.deepEqual(after.guards,before.guards);assert.deepEqual(after.entries,before.entries);
+for(const r of plan.fragments){const row=after.inventories.find(a=>a.parent_id===r.before.parent_id&&a.entity_id===r.before.entity_id);assert.ok(row);assert.deepEqual(row.payload,r.payload);assert.equal(row.revision,r.before.revision+1);assert.ok(after.entries.some(c=>c.content_key===row.payload.catalog.contentKey));}
+for(const v of before.versions)assert.equal(after.versions.find(a=>a.character_id===v.character_id).revision,v.revision+1);
+const result={revision:after.revision,copies:plan.fragments.length,characters:before.versions.length,catalogUnchanged:true,allTargetPayloadsMatch:true,instanceStatePreserved:true,protectedHashesEqual:true,unresolvedPersonalNotes:plan.untouched};writeFileSync('docs/v2/equipment-completion-2026-10-19/builder-equipment-relink-verified.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));

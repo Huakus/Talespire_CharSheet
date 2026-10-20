@@ -1,0 +1,21 @@
+{
+  "revision": 1450,
+  "copies": 36,
+  "characters": 3,
+  "catalogUnchanged": true,
+  "allTargetPayloadsMatch": true,
+  "instanceStatePreserved": true,
+  "protectedHashesEqual": true,
+  "unresolvedPersonalNotes": [
+    {
+      "owner": "chr_191a5bc5f0ce0827eb4ad28da641731f",
+      "item": "inv_9568351fb6a79149221a9d06e776d927",
+      "name": "Notas de estudio y plegarias"
+    },
+    {
+      "owner": "chr_25160f73dc28f54f059e626dcb2ef288",
+      "item": "inv_57305312908ab3b07be3687511c2f0da",
+      "name": "Notas de estudio y plegarias"
+    }
+  ]
+}

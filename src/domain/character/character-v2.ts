@@ -146,6 +146,7 @@ export const CharacterV2Schema = z.object({
     favoriteSpells: z.array(z.string().min(1)).default([]),
     spells: z.array(CharacterSpellV2Schema).default([]),
     slots: SpellSlotsSchema,
+    restoredSlots: z.array(z.object({ sourceItemId: StableIdSchema, sourceLevel: z.number().int().min(1).max(9), level: z.number().int().min(1).max(9), used: z.boolean(), reset: z.enum(["short-rest", "long-rest"]) })).default([]),
   }),
   metadata: z.object({
     createdAt: IsoTimestampSchema,

@@ -1,0 +1,91 @@
+{
+  "healing": [
+    {
+      "name": "Poción de curación",
+      "rarity": "common",
+      "tables": [
+        [
+          [
+            "Curación",
+            "Común",
+            "2d4 + 2"
+          ]
+        ]
+      ],
+      "healing": [
+        "2d4+2"
+      ]
+    },
+    {
+      "name": "Poción de curación mayor",
+      "rarity": "uncommon",
+      "tables": [
+        [
+          [
+            "Curación mayor",
+            "Infrecuente",
+            "4d4 + 4"
+          ]
+        ]
+      ],
+      "healing": [
+        "4d4+4"
+      ]
+    },
+    {
+      "name": "Poción de curación superior",
+      "rarity": "rare",
+      "tables": [
+        [
+          [
+            "Curación superior",
+            "Rara",
+            "8d4 + 8"
+          ]
+        ]
+      ],
+      "healing": [
+        "8d4+8"
+      ]
+    },
+    {
+      "name": "Poción de curación suprema",
+      "rarity": "very-rare",
+      "tables": [
+        [
+          [
+            "Curación suprema",
+            "Muy rara",
+            "10d4 + 20"
+          ]
+        ]
+      ],
+      "healing": [
+        "10d4+20"
+      ]
+    }
+  ],
+  "revision": 1450,
+  "characters": 20,
+  "eceEnglish": 0,
+  "sharedEnglish": 0,
+  "duplicateNames": 0,
+  "eceDefinitions": 828,
+  "merchantCopies": 24,
+  "inventoryCopies": 294,
+  "unboundInventory": [
+    {
+      "id": "inv_9568351fb6a79149221a9d06e776d927",
+      "name": "Notas de estudio y plegarias"
+    },
+    {
+      "id": "inv_57305312908ab3b07be3687511c2f0da",
+      "name": "Notas de estudio y plegarias"
+    }
+  ],
+  "unmodeledEffects": 402,
+  "sharedDefinitions": 757,
+  "unsupportedCapabilities": 158,
+  "brokenMerchantReferences": 0,
+  "brokenInventoryReferences": 0
+}

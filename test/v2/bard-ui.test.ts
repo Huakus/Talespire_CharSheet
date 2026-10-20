@@ -30,7 +30,7 @@ describe("Tutorial y ficha de Bardo",() => {
     }
     if (college === "swords") await set("bardStyle","two-weapon");
     await available("bardExpertise0");const chosen = field("bardExpertise0").value;expect((field("bardExpertise1") as HTMLSelectElement).querySelector<HTMLOptionElement>(`[value="${chosen}"]`)!.disabled).toBe(true);await available("bardExpertise1");await available("bardLearn0");
-    await next("Revisar");submit();await vi.waitFor(() => expect(Object.values(snapshot.campaign.characters)).toHaveLength(1));const c = Object.values(snapshot.campaign.characters)[0]!;expect(c.identity.subclass).toBe(BARD_COLLEGES[college]);expect(c.inventory.some((i) => i.name === "Paquete de actor")).toBe(true);expect(c.checks.skills[c.builder!.levels[1]!.bard.expertise[0] as keyof typeof c.checks.skills].proficiency).toBe(2);
+    await next("Revisar");submit();await vi.waitFor(() => expect(Object.values(snapshot.campaign.characters)).toHaveLength(1));const c = Object.values(snapshot.campaign.characters)[0]!;expect(c.identity.subclass).toBe(BARD_COLLEGES[college]);expect(c.inventory.some((i) => i.name === "Paquete de artista")).toBe(true);expect(c.checks.skills[c.builder!.levels[1]!.bard.expertise[0] as keyof typeof c.checks.skills].proficiency).toBe(2);
   });
   it("ofrece los Secretos adicionales de Conocimiento y oculta conocidos y selecciones repetidas",async () => {
     const c = await bardAt(5);await openCharacterBuilder({ campaignId: "secrets",character: c,diceRoller,onCreate: vi.fn(),onAdvance: vi.fn() });

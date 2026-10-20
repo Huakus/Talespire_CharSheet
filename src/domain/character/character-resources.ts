@@ -15,6 +15,7 @@ import {
 } from "./character-v2";
 import { resetInventoryItemResources } from "./character-inventory";
 import { adjustEquipmentDamage } from "../equipment/equipment-damage";
+import { resetRestoredEquipmentSlots } from "../equipment/equipment-spell-slots";
 import { DAMAGE_TYPES } from "../equipment/equipment-constants";
 import { CharacterRevisionConflictError } from "./edit-character";
 import { resetTraitsByRest } from "./character-content";
@@ -116,6 +117,7 @@ export function applyCharacterResourceCommand(
   }
 
   if (["short-rest","long-rest"].includes(command.kind)) endBarbarianRage(character);
+  if (["short-rest", "long-rest"].includes(command.kind)) resetRestoredEquipmentSlots(character, command.kind);
   if (druidShapeActive(character) && command.kind === "spend-hit-dice") throw new Error("En Forma Salvaje usás los Dados de Golpe de la criatura. Registrá su curación con Curar y sus dados en el bloque de la forma, o revertí para gastar los de la ficha base.");
   if (command.kind === "add-condition" && command.key === "poisoned" && character.builder?.classKey === "druid" && druidCircle(character.builder) === "land" && character.identity.level >= 10) throw new Error("Protección de la Naturaleza te hace inmune al veneno.");
   if (command.kind === "add-condition" && character.builder?.classKey === "barbarian" && command.key === "raging") throw new Error("Inici\u00e1 Furia desde el panel de B\u00e1rbaro para gestionar sus usos.");

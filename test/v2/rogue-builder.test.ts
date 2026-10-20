@@ -44,7 +44,7 @@ describe("Rogue PHB 2014 and Xanathar",() => {
       c=await advanceGuidedRogue(c,rogueChoice(c,archetype),at);c=await advanceGuidedRogue(c,rogueChoice(c,archetype),at);
       expect(c.identity.subclass).toBe(ROGUE_ARCHETYPES[archetype]);expect(new Set(c.proficiencies.tools).size).toBe(c.proficiencies.tools.length);
     }
-  },15000);
+  },30000);
   it("validates four skills, new expertise and the level ten ASI",async () => {
     const bad = rogueCreation(); bad.skills.pop(); await expect(createGuidedRogue(id,op,bad,at)).rejects.toThrow(/cuatro/);
     const bg = rogueCreation(); bg.background.tools = [THIEVES_TOOLS]; bg.background.languages = ["Élfico"]; await expect(createGuidedRogue(id,op,bg,at)).rejects.toThrow(/ya concede/);

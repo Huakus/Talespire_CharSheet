@@ -19,7 +19,9 @@ for (const [entries, expected, key] of [[after.entries, plan.definitions, "conte
 }
 for (const old of before.versions) assert.equal(after.versions.find(v => v.character_id === old.character_id).revision, old.revision + 1);
 const result = { revision: after.revision, catalog: after.entries.length, characterCopies: after.inventories.length, characters: after.versions.length, merchants: after.merchants.length, merchantCopies: before.merchants.reduce((n, m) => n + m.payload.inventory.filter(i => plan.definitions.some(d => d.key === i.catalog?.contentKey)).length, 0), instanceStatePreserved: true, protectedHashesEqual: true, hashes: after.guards };
-writeFileSync(`docs/v2/equipment-retirement-2026-10-18/${batch}-verified.json`, JSON.stringify(result, null, 2));
+const evidenceDirectory = process.argv[3] ?? "docs/v2/equipment-retirement-2026-10-18";
+assert.match(evidenceDirectory, /^docs\/v2\/equipment-(?:retirement|completion)-\d{4}-\d{2}-\d{2}$/);
+writeFileSync(`${evidenceDirectory}/${batch}-verified.json`, JSON.stringify(result, null, 2));
 // Subsequent audits can overlay these current canonical rows on the immutable historical snapshot.
 const patches=existsSync(`${root}/retirement-catalog-patches.json`)?read("retirement-catalog-patches.json"):[];
 writeFileSync(`${root}/retirement-catalog-patches.json`, JSON.stringify([...new Map([...patches,...after.entries].map(row=>[row.content_key,row])).values()]));

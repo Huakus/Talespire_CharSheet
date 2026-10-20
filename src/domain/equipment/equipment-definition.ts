@@ -67,6 +67,7 @@ export const EquipmentEffectSchema = z.discriminatedUnion("kind", [
   z.strictObject({ ...EffectMetadata, kind: z.literal("movement"), mode: Key, operation: z.enum(["add", "set", "minimum"]), feet: Amount }),
   z.strictObject({ ...EffectMetadata, kind: z.literal("storage"), resourceId: Key, content: z.enum(["spells", "items"]), explanation: Key }),
   z.strictObject({ ...EffectMetadata, kind: z.literal("spell-slot-capacity"), level: z.number().int().min(1).max(9), amount: z.number().int().positive(), pool: z.literal("inherit"), recovery: z.literal("inherit"), explanation: Key }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("spell-slot-recovery"), maximumLevel: z.number().int().min(1).max(9) }),
   z.strictObject({ ...EffectMetadata, kind: z.literal("narrative"), instructions: Key }),
   // Preserve unusual mechanics in drafts instead of inventing an adapter or discarding them.
   z.strictObject({ ...EffectMetadata, kind: z.literal("unmodeled"), explanation: Key, original: LosslessJsonObjectSchema }),

@@ -7,7 +7,7 @@ import {
 import { CharacterRevisionConflictError } from "./edit-character";
 import { inventoryEquipmentDefinition, equipmentBearerIssue } from "../equipment/equipment-live";
 import { equipmentRollBounds } from "../equipment/equipment-resource-runtime";
-import { resetEquipmentSlots } from "../equipment/equipment-spell-slots";
+import { resetEquipmentSlots, restoreEquipmentSpellSlot } from "../equipment/equipment-spell-slots";
 import { activateCoreFeature, coreFeatureIssue, isLucentCore, restLucentCore, lucentCoreState, type CoreResonance } from "../equipment/equipment-lucent-core";
 import { inventoryHealingExpression } from "../equipment/equipment-healing";
 import { equipmentClassResourceIssue, restoreEquipmentClassResources } from "../equipment/equipment-class-resources";
@@ -374,7 +374,7 @@ export function useInventoryFeature(
   input: CharacterV2,
   itemIdInput: string,
   featureId: string,
-  options: InventoryMutationOptions,
+  options: InventoryMutationOptions & { recoveredSpellSlotLevel?: number },
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
@@ -386,7 +386,8 @@ export function useInventoryFeature(
   if (bearerIssue) throw new InventoryFeatureUseError(bearerIssue);
   const coreIssue = coreFeatureIssue(item, featureId);
   if (coreIssue) throw new InventoryFeatureUseError(coreIssue);
-  if (!item.equipped && !item.consumable) {
+  const capability = inventoryEquipmentDefinition(item)?.capabilities.find(c => c.id === featureId);
+  if (!item.equipped && !item.consumable && capability?.requirements.presence !== "possessed") {
     throw new InventoryFeatureUseError("El objeto debe estar equipado para usar esta capacidad");
   }
   if (item.requiresAttunement && !item.attuned) {
@@ -405,6 +406,7 @@ export function useInventoryFeature(
   if (item.quantity < Math.max(1, consumeQuantity)) throw new InventoryFeatureUseError("No quedan unidades suficientes del objeto");
   const classResourceIssue = equipmentClassResourceIssue(character, item, featureId);
   if (classResourceIssue) throw new InventoryFeatureUseError(classResourceIssue);
+  restoreEquipmentSpellSlot(character, item, featureId, options.recoveredSpellSlotLevel);
   const inventory = character.inventory.map((entry) => {
     if (entry.id !== itemId) return entry;
     return activateCoreFeature({
@@ -434,7 +436,7 @@ export function resetInventoryItemResources(
   const definition = inventoryEquipmentDefinition(item);
   const resource = definition?.resources.find((entry) => entry.kind !== "spell-storage");
   const typedRecovery = resource?.recovery;
-  const mayReset = !definition || typedRecovery?.kind === "event" && typedRecovery.amount.kind === "full" && (typedRecovery.event === reset || reset === "long-rest" && typedRecovery.event === "short-rest");
+  const mayReset = !definition || !resource || typedRecovery?.kind === "event" && typedRecovery.amount.kind === "full" && (typedRecovery.event === reset || reset === "long-rest" && typedRecovery.event === "short-rest");
   return CharacterInventoryItemV2Schema.parse({
     ...restLucentCore(resetEquipmentSlots(item, reset, character), reset),
     charges: mayReset && item.charges !== null && (item.charges.reset === reset || (reset === "long-rest" && item.charges.reset === "short-rest"))
@@ -452,16 +454,49 @@ export function resetInventoryItemResources(
 /** Consume and apply a rolled potion to its bearer in one saved character mutation. */
 export function useInventoryHealingFeature(input: CharacterV2, itemId: string, featureId: string, healing: number, options: InventoryMutationOptions): CharacterV2 {
   const { character }=prepare(input,options), item=character.inventory.find((entry)=>entry.id===itemId);
-  if (character.combat.hitPoints.current <= 0 || character.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key))) throw new InventoryFeatureUseError("Necesitás poder actuar para beber la poción vos mismo; otra criatura puede administrártela.");
+  assertCanAdministerPotion(character);
   const expression=item && inventoryHealingExpression(item,featureId);
   if (!expression) throw new InventoryFeatureUseError("Esta capacidad no es una curación consumible simple.");
   const bounds=equipmentRollBounds(expression);
   if (!Number.isInteger(healing) || healing < Math.max(1,bounds.minimum) || healing > bounds.maximum) throw new InventoryFeatureUseError(`Ingresá un resultado válido de ${expression}.`);
   const spent=useInventoryFeature(character,itemId,featureId,options);
-  if (spent.spellcasting.druid?.form) {
-    const form=spent.spellcasting.druid.form;form.currentHp=Math.min(form.maximumHp,form.currentHp+healing);
-  } else spent.combat.hitPoints.current=Math.min(spent.combat.hitPoints.maximum,spent.combat.hitPoints.current+healing);
+  healPotionRecipient(spent, healing);
   return CharacterV2Schema.parse(spent);
+}
+
+function assertCanAdministerPotion(character: CharacterV2): void {
+  const hp = character.spellcasting.druid?.form?.currentHp ?? character.combat.hitPoints.current;
+  if (hp <= 0 || character.combat.conditions.some(c => ["incapacitated", "unconscious", "stunned", "paralyzed", "petrified", "dead"].includes(c.key))) throw new InventoryFeatureUseError("Necesitás poder actuar para beber o administrar la poción; otra criatura puede administrártela.");
+}
+function healPotionRecipient(character: CharacterV2, healing: number): void {
+  if (character.combat.conditions.some(c => c.key === "dead") || character.combat.deathSaves.failures >= 3) throw new InventoryFeatureUseError("Una poción de curación no devuelve la vida a una criatura muerta.");
+  if (character.spellcasting.druid?.form) {
+    const form = character.spellcasting.druid.form; form.currentHp = Math.min(form.maximumHp, form.currentHp + healing);
+  } else {
+    const wasUnconsciousAtZero = character.combat.hitPoints.current === 0;
+    character.combat.hitPoints.current = Math.min(character.combat.hitPoints.maximum, character.combat.hitPoints.current + healing);
+    if (character.combat.hitPoints.current > 0) {
+      character.combat.deathSaves = { successes: 0, failures: 0 };
+      if (wasUnconsciousAtZero) character.combat.conditions = character.combat.conditions.filter(c => c.key !== "unconscious");
+    }
+  }
+}
+
+/** Both sheets must be committed by the caller in the same campaign transaction. */
+export function administerInventoryHealingFeature(source: CharacterV2, target: CharacterV2, itemId: string, featureId: string, healing: number, options: InventoryMutationOptions & { expectedTargetRevision: number }): { source: CharacterV2; target: CharacterV2 } {
+  if (source.id === target.id) throw new InventoryFeatureUseError("Usá Beber y curarme para tu propio personaje.");
+  const actor = prepare(source, options).character;
+  assertCanAdministerPotion(actor);
+  const recipient = prepare(target, { ...options, expectedRevision: options.expectedTargetRevision }).character;
+  const item = actor.inventory.find(i => i.id === itemId), expression = item && inventoryHealingExpression(item, featureId);
+  if (!expression) throw new InventoryFeatureUseError("Esta capacidad no es una curación consumible simple.");
+  const bounds = equipmentRollBounds(expression);
+  if (!Number.isInteger(healing) || healing < Math.max(1, bounds.minimum) || healing > bounds.maximum) throw new InventoryFeatureUseError(`Ingresá un resultado válido de ${expression}.`);
+  healPotionRecipient(recipient, healing);
+  const spent = useInventoryFeature(actor, itemId, featureId, options);
+  recipient.revision += 1;
+  recipient.metadata.updatedAt = options.updatedAt;
+  return { source: spent, target: CharacterV2Schema.parse(recipient) };
 }
 
 export type LucentCoreAction =

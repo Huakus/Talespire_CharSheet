@@ -1,0 +1,2 @@
+import{createServer}from'vite';const server=await createServer({configFile:false,root:process.cwd(),server:{middlewareMode:true,hmr:false},appType:'custom'});
+try{const{BUILDER_GEAR,PHB_EQUIPMENT}=await server.ssrLoadModule('/src/domain/character/fighter-builder-catalog.ts');console.log(JSON.stringify({gearWithoutCanonicalIdentity:Object.entries(BUILDER_GEAR).filter(([,i])=>!i.catalog).map(([key,i])=>({key,name:i.name})),totalTemplates:Object.keys(PHB_EQUIPMENT).length}));}finally{await server.close();}

@@ -1,4 +1,5 @@
 import type { SorcererCastOptions } from "./sorcerer-model";
+import { recoverableEquipmentSlotCount, restoreExpendedSpellSlot } from "../equipment/equipment-spell-slots";
 import { CharacterV2Schema, IsoTimestampSchema, StableIdSchema, type CharacterV2 } from "./character-v2";
 import { WizardActionSchema, type WizardAction } from "./wizard-model";
 import { wizardSchool, WIZARD_SCHOOLS, WIZARD_SLOTS, wizardSpellSource, wizardBookDefinition, wizardCopyAccess } from "./wizard-catalog";
@@ -106,9 +107,9 @@ export async function applyWizardAction(input: CharacterV2, actionInput: WizardA
     case "arcane-recovery": {
       if (action.slots.reduce((a,b) => a+b,0) > Math.ceil(level/2)) throw new Error("Recuperación arcana excede la mitad del nivel de mago redondeada arriba.");
       const counts = new Map<number,number>(); action.slots.forEach((n) => counts.set(n,(counts.get(n) ?? 0)+1));
-      for (const [slot,count] of counts) if ((character.spellcasting.slots[String(slot)]?.used ?? 0) < count) throw new Error("Solo podés recuperar espacios que hayas gastado.");
+      for (const [slot,count] of counts) if (recoverableEquipmentSlotCount(character, slot) < count) throw new Error("Solo podés recuperar espacios gastados que no se hayan recuperado ya mediante un objeto.");
       useFeature(character,"arcane-recovery");
-      for (const [slot,count] of counts) character.spellcasting.slots[String(slot)]!.used -= count;
+      for (const [slot,count] of counts) for (let n = 0; n < count; n++) restoreExpendedSpellSlot(character, slot);
       break;
     }
     case "portent-roll":
@@ -197,8 +198,8 @@ export function prepareWizardCast(character: CharacterV2, spell: CharacterSpellV
   }
   if (options.recoverSlotLevel) {
     const recovered = options.recoverSlotLevel;
-    if (school !== "divination" || character.identity.level < 6 || free || slot < 2 || definition.school !== "Adivinación" || !Number.isInteger(recovered) || recovered < 1 || recovered >= slot || recovered > 5 || !character.spellcasting.slots[String(recovered)]?.used) throw new Error("Adivinación experta recupera un espacio gastado inferior al lanzamiento, hasta nivel 5, solo al gastar espacio en adivinación 2+.");
-    character.spellcasting.slots[String(recovered)]!.used--;
+    if (school !== "divination" || character.identity.level < 6 || free || slot < 2 || definition.school !== "Adivinación" || !Number.isInteger(recovered) || recovered < 1 || recovered >= slot || recovered > 5 || !recoverableEquipmentSlotCount(character, recovered)) throw new Error("Adivinación experta recupera un espacio gastado inferior al lanzamiento, hasta nivel 5, solo al gastar espacio en adivinación 2+.");
+    restoreExpendedSpellSlot(character, recovered);
   }
   return free;
 }

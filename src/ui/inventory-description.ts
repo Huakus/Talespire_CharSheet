@@ -1,5 +1,6 @@
 import type { EquipmentDefinitionDraft } from "../domain/equipment/equipment-definition";
 import { SRD_51_ATTRIBUTION } from "../domain/equipment/equipment-attribution";
+import { equipmentVariantDescription } from "../domain/equipment/equipment-variant-description";
 
 // Whitespace-only equivalence keeps distinct numbers, signs, restrictions and custom wording.
 const textKey = (value: string): string => value.replace(/\s+/gu, " ").trim();
@@ -31,7 +32,7 @@ export function inventoryDescriptionText(text: string, definition: EquipmentDefi
 
 export function inventoryDescriptionBlocks(definition: EquipmentDefinitionDraft): EquipmentDefinitionDraft["description"] {
   const seen = new Set<string>();
-  return definition.description.filter(block => {
+  return equipmentVariantDescription(definition).filter(block => {
     if (block.section === "gm-notes" || block.type === "paragraph" && internalParagraph(block.text)) return false;
     const key = block.type === "paragraph" ? `p:${textKey(block.text)}` : block.type === "list" ? JSON.stringify(["list", block.ordered, block.items.map(textKey)]) : JSON.stringify(["table", block.columns.map(textKey), block.rows.map(row => row.map(textKey))]);
     if (seen.has(key)) return false;

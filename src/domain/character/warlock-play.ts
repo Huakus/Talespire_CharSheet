@@ -8,7 +8,7 @@ import { abilityModifier,projectAbilityScore,projectInventory,preferredWeaponAbi
 import { canCastWithEquippedArmor,type WizardCastOptions } from "./wizard-play";
 import { CharacterRevisionConflictError } from "./edit-character";
 import { canonicalJsonStringify,type JsonValue } from "../../shared/json";
-import { equipmentSlotCapacity } from "../equipment/equipment-spell-slots";
+import { equipmentSlotCapacity, resetRestoredEquipmentSlots } from "../equipment/equipment-spell-slots";
 
 export function warlockSpellAvailable(character: CharacterV2,spell: CharacterSpellV2) {
   if (!spell.casting?.source.startsWith("builder:warlock:")) return true;
@@ -33,7 +33,7 @@ export function prepareWarlockCast(character: CharacterV2,spell: CharacterSpellV
   }
   if (spell.casting?.kind === "at-will") { if (level !== spell.level) throw new Error("Una invocación a voluntad se lanza a su nivel base."); return true; }
   if (spell.level > 0 && ["pact","pact-invocation"].includes(spell.casting?.kind ?? "")) {
-    if (level !== pactSlots(character.identity.level).level && !character.inventory.some((item) => equipmentSlotCapacity(item,level) > (item.rules?.slotUsage[String(level)] ?? 0))) throw new Error("Todos tus espacios de magia de pacto tienen el mismo nivel; el objeto debe conceder un espacio adicional válido para usar otro nivel.");
+    if (level !== pactSlots(character.identity.level).level && !character.spellcasting.restoredSlots.some(s => s.level === level && !s.used) && !character.inventory.some((item) => equipmentSlotCapacity(item,level) > (item.rules?.slotUsage[String(level)] ?? 0))) throw new Error("Los espacios de magia de pacto tienen el mismo nivel; para usar otro necesitás un espacio recuperado o concedido por un objeto.");
     if (spell.casting?.kind === "pact-invocation") {
       const trait = character.traits.flatMap((g) => g.traits).find((t) => t.id === spell.casting!.traitId);
       if (!trait || trait.uses.used >= trait.uses.maximum) throw new Error("No quedan usos de esta invocación hasta descanso largo.");
@@ -73,7 +73,7 @@ export async function applyWarlockAction(input: CharacterV2,actionInput: Warlock
     case "eldritch-master": {
       const trait = character.traits.flatMap((g) => g.traits).find((t) => t.id === runtime.resourceIds["eldritch-master"]);
       if (level < 20 || !trait || trait.uses.used >= trait.uses.maximum) throw new Error("Maestro sobrenatural requiere Brujo 20 y un uso disponible.");
-      trait.uses.used++; character.spellcasting.slots[String(pactSlots(level).level)]!.used = 0; break;
+      trait.uses.used++; resetRestoredEquipmentSlots(character, "short-rest"); character.spellcasting.slots[String(pactSlots(level).level)]!.used = 0; break;
     }
     case "dark-blessing":
       if (replay.patron !== "fiend") throw new Error("Bendición del Oscuro requiere patrón Infernal.");

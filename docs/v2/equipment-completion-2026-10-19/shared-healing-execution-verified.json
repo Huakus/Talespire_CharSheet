@@ -1,0 +1,1017 @@
+{
+  "changed": 4,
+  "allCampaignsPreserved": true,
+  "entries": [
+    {
+      "kind": "equipment",
+      "name": "Poción de curación mayor",
+      "tags": [
+        "es",
+        "reglas_2014"
+      ],
+      "origin": "official",
+      "payload": {
+        "cost": {
+          "unit": "gp",
+          "quantity": 100
+        },
+        "kind": "equipment",
+        "name": "Poción de curación mayor",
+        "armor": null,
+        "rules": {
+          "pending": [],
+          "storage": null,
+          "original": {},
+          "slotUsage": {},
+          "definition": {
+            "id": "recovery:official:equipment:es:7a6854195d181128a66650e7",
+            "name": "Poción de curación mayor",
+            "armor": null,
+            "format": "equipment-definition-draft",
+            "origin": "official",
+            "rarity": "uncommon",
+            "review": {
+              "identity": true,
+              "editorial": true,
+              "mechanics": true,
+              "unresolved": [
+                "Cerrar la cobertura de los datos y diferencias antiguos antes de migrar o retirar versiones; las copias y precios comerciales siguen intactos."
+              ],
+              "information": false
+            },
+            "weapon": null,
+            "weight": null,
+            "aliases": [
+              "Poción de mayor curación",
+              "Potion of Greater Healing"
+            ],
+            "economy": {
+              "basePrice": null,
+              "explanation": "La regla no fija precio de venta. Los precios antiguos y personalizaciones permanecen en sus originales; no se alteran tiendas ni copias.",
+              "campaignPrice": null
+            },
+            "magical": true,
+            "sources": [
+              {
+                "id": "original:d10a1a2fc767b40f906ff821a281490f48377b55831063068d7b5bc17a48be22",
+                "kind": "legacy",
+                "title": "Poción de mayor curación",
+                "locator": "official:equipment:es:7a6854195d181128a66650e7",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:1eb728dc25c0f177f4d52cb0a9b71eda04b8c3a8e57687ebf684059367438101",
+                "kind": "legacy",
+                "title": "Poción de mayor curación",
+                "locator": "official:equipment:es:7a6854195d181128a66650e7",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:72edd1b89b95e4f2f8d71153702b6a9a824c1e2ad36ec66647a54655365d0799",
+                "kind": "legacy",
+                "title": "Potion of Greater Healing",
+                "locator": "official:equipment:eng:de97c3cd212321977b18e286",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:97b70eb9e4bc67e0bdb0f272813d052f55763e76d6fc216b8e713d87526dfe8f",
+                "kind": "legacy",
+                "title": "Potion of Greater Healing",
+                "locator": "official:equipment:eng:de97c3cd212321977b18e286",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "srd-5.1-es-equipment",
+                "kind": "srd",
+                "title": "Documento de referencia del sistema 5.1 · edición oficial española",
+                "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 260 · CC-BY-4.0",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              },
+              {
+                "id": "srd-5.1-attribution",
+                "kind": "srd",
+                "title": "Atribución y licencia del SRD 5.1",
+                "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque.",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              }
+            ],
+            "category": "potion",
+            "language": "es",
+            "revision": 3,
+            "subtypes": [],
+            "resources": [],
+            "consumable": true,
+            "properties": [
+              "magic"
+            ],
+            "description": [
+              {
+                "id": "official-magic-0",
+                "text": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.",
+                "type": "paragraph",
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              },
+              {
+                "id": "official-healing-table",
+                "rows": [
+                  [
+                    "Curación mayor",
+                    "Infrecuente",
+                    "4d4 + 4"
+                  ]
+                ],
+                "type": "table",
+                "columns": [
+                  "Poción de...",
+                  "Rareza",
+                  "PG recuperados"
+                ],
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              }
+            ],
+            "capabilities": [
+              {
+                "id": "drink-or-administer",
+                "name": "Beber o administrar",
+                "costs": [],
+                "range": "",
+                "target": "Receptor de la poción",
+                "effects": [
+                  {
+                    "id": "drink-or-administer-0",
+                    "kind": "healing",
+                    "target": "recipient",
+                    "condition": "Al beber o recibir una dosis. No puede superar los puntos de golpe máximos.",
+                    "expression": "4d4+4"
+                  }
+                ],
+                "trigger": "",
+                "duration": "Instantánea",
+                "execution": {
+                  "mode": "automatic",
+                  "handler": "equipment-potion-healing",
+                  "explanation": "Beber y curarme o Administrar y curar valida la tirada, consume una dosis y aplica la curación en una sola operación guardada. La curación respeta los PG máximos, la Forma Salvaje y las salvaciones de muerte.",
+                  "pendingAutomation": []
+                },
+                "activation": "action",
+                "requirements": {
+                  "bearer": [],
+                  "presence": "held",
+                  "attunement": false,
+                  "explanation": "No requiere sintonización."
+                },
+                "textBlockIds": [
+                  "official-magic-0",
+                  "official-healing-table"
+                ],
+                "concentration": false,
+                "consumeQuantity": 1
+              }
+            ],
+            "requirements": {
+              "bearer": [],
+              "presence": "held",
+              "attunement": false,
+              "explanation": "No requiere sintonización."
+            },
+            "schemaVersion": 1,
+            "baseDefinitionId": null,
+            "recoverySourceIds": [
+              "d10a1a2fc767b40f906ff821a281490f48377b55831063068d7b5bc17a48be22",
+              "1eb728dc25c0f177f4d52cb0a9b71eda04b8c3a8e57687ebf684059367438101",
+              "72edd1b89b95e4f2f8d71153702b6a9a824c1e2ad36ec66647a54655365d0799",
+              "97b70eb9e4bc67e0bdb0f272813d052f55763e76d6fc216b8e713d87526dfe8f"
+            ]
+          },
+          "personalDescription": ""
+        },
+        "effect": {
+          "active": false,
+          "description": ""
+        },
+        "rarity": "uncommon",
+        "usable": false,
+        "weapon": null,
+        "attuned": false,
+        "bonuses": [],
+        "charges": null,
+        "category": "potion",
+        "equipped": false,
+        "features": [
+          {
+            "id": "drink-or-administer",
+            "kind": "action",
+            "name": "Beber o administrar",
+            "uses": null,
+            "order": 0,
+            "rolls": [
+              {
+                "mode": "normal",
+                "label": "Curación",
+                "expression": "4d4+4"
+              }
+            ],
+            "active": false,
+            "bonuses": [],
+            "chargeCost": 0,
+            "toggleable": false,
+            "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.\n\nCuración mayor · Infrecuente · 4d4 + 4\n\nDuración: Instantánea.",
+            "showInActions": true
+          }
+        ],
+        "language": "es",
+        "quantity": 1,
+        "consumable": true,
+        "properties": [
+          "magic"
+        ],
+        "unitWeight": 0.5,
+        "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.\n\nPoción de... · Rareza · PG recuperados\nCuración mayor · Infrecuente · 4d4 + 4\n\nEsta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.",
+        "schemaVersion": 1,
+        "requiresAttunement": false
+      },
+      "content_key": "official:equipment:es:7a6854195d181128a66650e7"
+    },
+    {
+      "kind": "equipment",
+      "name": "Poción de curación",
+      "tags": [
+        "es",
+        "reglas_2014"
+      ],
+      "origin": "official",
+      "payload": {
+        "cost": {
+          "unit": "gp",
+          "quantity": 50
+        },
+        "kind": "equipment",
+        "name": "Poción de curación",
+        "armor": null,
+        "rules": {
+          "pending": [],
+          "storage": null,
+          "original": {},
+          "slotUsage": {},
+          "definition": {
+            "id": "recovery:official:equipment:es:c9daa1420a1ebc71f4a3ec40",
+            "name": "Poción de curación",
+            "armor": null,
+            "format": "equipment-definition-draft",
+            "origin": "official",
+            "rarity": "common",
+            "review": {
+              "identity": true,
+              "editorial": true,
+              "mechanics": true,
+              "unresolved": [
+                "Cerrar la cobertura de los datos y diferencias antiguos antes de migrar o retirar versiones; las copias y precios comerciales siguen intactos."
+              ],
+              "information": false
+            },
+            "weapon": null,
+            "weight": {
+              "unit": "lb",
+              "value": 0.5
+            },
+            "aliases": [
+              "Potion of Healing"
+            ],
+            "economy": {
+              "basePrice": {
+                "unit": "gp",
+                "quantity": 50
+              },
+              "explanation": "La regla no fija precio de venta. Los precios antiguos y personalizaciones permanecen en sus originales; no se alteran tiendas ni copias.",
+              "campaignPrice": null
+            },
+            "magical": true,
+            "sources": [
+              {
+                "id": "original:67eab2766f026674e7abf285a8bb0f593b2ed378f7e9dd400ae11399840a50cd",
+                "kind": "legacy",
+                "title": "Poción de curación",
+                "locator": "official:equipment:es:c9daa1420a1ebc71f4a3ec40",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:8d52d13c8cdc468647269e55ce3cdfde6e68d1e1d49297ebf3e470876ec40d0c",
+                "kind": "legacy",
+                "title": "Poción de curación",
+                "locator": "official:equipment:es:c9daa1420a1ebc71f4a3ec40",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:8c3e3199b386e6e1fefea6905bd4f357775c53c7f08b753c77d06e89ea44e411",
+                "kind": "legacy",
+                "title": "Potion of Healing",
+                "locator": "official:equipment:eng:6c9919ea10ce0a5f0912e17c",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:8d4348b39efd754719a280d5b2d301cbf17ec16744b7c7c8b9fd85da5780a677",
+                "kind": "legacy",
+                "title": "Potion of Healing",
+                "locator": "official:equipment:eng:6c9919ea10ce0a5f0912e17c",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "basic-rules-2014-equipment",
+                "kind": "book",
+                "title": "Basic Rules (2014) · Equipment",
+                "locator": "https://www.dndbeyond.com/sources/dnd/basic-rules-2014/equipment · Other Adventuring Gear y reglas de cada objeto",
+                "language": "en",
+                "verified": true,
+                "rulesEdition": "2014"
+              },
+              {
+                "id": "provided-phb-spanish-equipment",
+                "kind": "book",
+                "title": "Manual del Jugador aportado · texto español",
+                "locator": "D&D - Manual del Jugador 5E (1).pdf · páginas PDF/impresas 125 y 127; cotejo visual. La acreditación editorial de esta traducción sigue pendiente.",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              },
+              {
+                "id": "srd-5.1-es-equipment",
+                "kind": "srd",
+                "title": "Documento de referencia del sistema 5.1 · edición oficial española",
+                "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 260 · CC-BY-4.0",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              },
+              {
+                "id": "srd-5.1-attribution",
+                "kind": "srd",
+                "title": "Atribución y licencia del SRD 5.1",
+                "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque.",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              }
+            ],
+            "category": "potion",
+            "language": "es",
+            "revision": 3,
+            "subtypes": [],
+            "resources": [],
+            "consumable": true,
+            "properties": [
+              "magic"
+            ],
+            "description": [
+              {
+                "id": "official-magic-0",
+                "text": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.",
+                "type": "paragraph",
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              },
+              {
+                "id": "official-healing-table",
+                "rows": [
+                  [
+                    "Curación",
+                    "Común",
+                    "2d4 + 2"
+                  ]
+                ],
+                "type": "table",
+                "columns": [
+                  "Poción de...",
+                  "Rareza",
+                  "PG recuperados"
+                ],
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              }
+            ],
+            "capabilities": [
+              {
+                "id": "drink-or-administer",
+                "name": "Beber o administrar",
+                "costs": [],
+                "range": "",
+                "target": "Receptor de la poción",
+                "effects": [
+                  {
+                    "id": "drink-or-administer-0",
+                    "kind": "healing",
+                    "target": "recipient",
+                    "condition": "Al beber o recibir una dosis. No puede superar los puntos de golpe máximos.",
+                    "expression": "2d4+2"
+                  }
+                ],
+                "trigger": "",
+                "duration": "Instantánea",
+                "execution": {
+                  "mode": "automatic",
+                  "handler": "equipment-potion-healing",
+                  "explanation": "Beber y curarme o Administrar y curar valida la tirada, consume una dosis y aplica la curación en una sola operación guardada. La curación respeta los PG máximos, la Forma Salvaje y las salvaciones de muerte.",
+                  "pendingAutomation": []
+                },
+                "activation": "action",
+                "requirements": {
+                  "bearer": [],
+                  "presence": "held",
+                  "attunement": false,
+                  "explanation": "No requiere sintonización."
+                },
+                "textBlockIds": [
+                  "official-magic-0",
+                  "official-healing-table"
+                ],
+                "concentration": false,
+                "consumeQuantity": 1
+              }
+            ],
+            "requirements": {
+              "bearer": [],
+              "presence": "held",
+              "attunement": false,
+              "explanation": "No requiere sintonización."
+            },
+            "schemaVersion": 1,
+            "baseDefinitionId": null,
+            "recoverySourceIds": [
+              "67eab2766f026674e7abf285a8bb0f593b2ed378f7e9dd400ae11399840a50cd",
+              "8d52d13c8cdc468647269e55ce3cdfde6e68d1e1d49297ebf3e470876ec40d0c",
+              "8c3e3199b386e6e1fefea6905bd4f357775c53c7f08b753c77d06e89ea44e411",
+              "8d4348b39efd754719a280d5b2d301cbf17ec16744b7c7c8b9fd85da5780a677"
+            ]
+          },
+          "personalDescription": ""
+        },
+        "effect": {
+          "active": false,
+          "description": ""
+        },
+        "rarity": "common",
+        "usable": false,
+        "weapon": null,
+        "attuned": false,
+        "bonuses": [],
+        "charges": null,
+        "category": "potion",
+        "equipped": false,
+        "features": [
+          {
+            "id": "drink-or-administer",
+            "kind": "action",
+            "name": "Beber o administrar",
+            "uses": null,
+            "order": 0,
+            "rolls": [
+              {
+                "mode": "normal",
+                "label": "Curación",
+                "expression": "2d4+2"
+              }
+            ],
+            "active": false,
+            "bonuses": [],
+            "chargeCost": 0,
+            "toggleable": false,
+            "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.\n\nCuración · Común · 2d4 + 2\n\nDuración: Instantánea.",
+            "showInActions": true
+          }
+        ],
+        "language": "es",
+        "quantity": 1,
+        "consumable": true,
+        "properties": [
+          "magic"
+        ],
+        "unitWeight": 0.5,
+        "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.\n\nPoción de... · Rareza · PG recuperados\nCuración · Común · 2d4 + 2\n\nEsta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.",
+        "schemaVersion": 1,
+        "requiresAttunement": false
+      },
+      "content_key": "official:equipment:es:c9daa1420a1ebc71f4a3ec40"
+    },
+    {
+      "kind": "equipment",
+      "name": "Poción de curación superior",
+      "tags": [
+        "es",
+        "reglas_2014"
+      ],
+      "origin": "official",
+      "payload": {
+        "cost": {
+          "unit": "gp",
+          "quantity": 500
+        },
+        "kind": "equipment",
+        "name": "Poción de curación superior",
+        "armor": null,
+        "rules": {
+          "pending": [],
+          "storage": null,
+          "original": {},
+          "slotUsage": {},
+          "definition": {
+            "id": "recovery:official:equipment:es:d82087e9fbb18715cecc5264",
+            "name": "Poción de curación superior",
+            "armor": null,
+            "format": "equipment-definition-draft",
+            "origin": "official",
+            "rarity": "rare",
+            "review": {
+              "identity": true,
+              "editorial": true,
+              "mechanics": true,
+              "unresolved": [
+                "Cerrar la cobertura de los datos y diferencias antiguos antes de migrar o retirar versiones; las copias y precios comerciales siguen intactos."
+              ],
+              "information": false
+            },
+            "weapon": null,
+            "weight": null,
+            "aliases": [
+              "Potion of Superior Healing"
+            ],
+            "economy": {
+              "basePrice": null,
+              "explanation": "La regla no fija precio de venta. Los precios antiguos y personalizaciones permanecen en sus originales; no se alteran tiendas ni copias.",
+              "campaignPrice": null
+            },
+            "magical": true,
+            "sources": [
+              {
+                "id": "original:4365fe9974e61114818a665aeea23fa3eaf7a2ba33d292fd4cd1f40cdd5b14a7",
+                "kind": "legacy",
+                "title": "Poción de curación superior",
+                "locator": "official:equipment:es:d82087e9fbb18715cecc5264",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:31d61a7d41ff1f0bfa0f81fe533d17a4342e3fefbe00a55d87d14333bf98a346",
+                "kind": "legacy",
+                "title": "Poción de curación superior",
+                "locator": "official:equipment:es:d82087e9fbb18715cecc5264",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:e783e3578ed070e335b8a7d12bbe65283f5cbd6a68802a6e8a46e580f8380e7b",
+                "kind": "legacy",
+                "title": "Potion of Superior Healing",
+                "locator": "official:equipment:eng:2689ad6f86b74f9be6d6b08f",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:01affd667460249758cfe1b6e824c95c9a8e43650315c961fad8e2f9bc1e3b27",
+                "kind": "legacy",
+                "title": "Potion of Superior Healing",
+                "locator": "official:equipment:eng:2689ad6f86b74f9be6d6b08f",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "srd-5.1-es-equipment",
+                "kind": "srd",
+                "title": "Documento de referencia del sistema 5.1 · edición oficial española",
+                "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 260 · CC-BY-4.0",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              },
+              {
+                "id": "srd-5.1-attribution",
+                "kind": "srd",
+                "title": "Atribución y licencia del SRD 5.1",
+                "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque.",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              }
+            ],
+            "category": "potion",
+            "language": "es",
+            "revision": 3,
+            "subtypes": [],
+            "resources": [],
+            "consumable": true,
+            "properties": [
+              "magic"
+            ],
+            "description": [
+              {
+                "id": "official-magic-0",
+                "text": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.",
+                "type": "paragraph",
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              },
+              {
+                "id": "official-healing-table",
+                "rows": [
+                  [
+                    "Curación superior",
+                    "Rara",
+                    "8d4 + 8"
+                  ]
+                ],
+                "type": "table",
+                "columns": [
+                  "Poción de...",
+                  "Rareza",
+                  "PG recuperados"
+                ],
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              }
+            ],
+            "capabilities": [
+              {
+                "id": "drink-or-administer",
+                "name": "Beber o administrar",
+                "costs": [],
+                "range": "",
+                "target": "Receptor de la poción",
+                "effects": [
+                  {
+                    "id": "drink-or-administer-0",
+                    "kind": "healing",
+                    "target": "recipient",
+                    "condition": "Al beber o recibir una dosis. No puede superar los puntos de golpe máximos.",
+                    "expression": "8d4+8"
+                  }
+                ],
+                "trigger": "",
+                "duration": "Instantánea",
+                "execution": {
+                  "mode": "automatic",
+                  "handler": "equipment-potion-healing",
+                  "explanation": "Beber y curarme o Administrar y curar valida la tirada, consume una dosis y aplica la curación en una sola operación guardada. La curación respeta los PG máximos, la Forma Salvaje y las salvaciones de muerte.",
+                  "pendingAutomation": []
+                },
+                "activation": "action",
+                "requirements": {
+                  "bearer": [],
+                  "presence": "held",
+                  "attunement": false,
+                  "explanation": "No requiere sintonización."
+                },
+                "textBlockIds": [
+                  "official-magic-0",
+                  "official-healing-table"
+                ],
+                "concentration": false,
+                "consumeQuantity": 1
+              }
+            ],
+            "requirements": {
+              "bearer": [],
+              "presence": "held",
+              "attunement": false,
+              "explanation": "No requiere sintonización."
+            },
+            "schemaVersion": 1,
+            "baseDefinitionId": null,
+            "recoverySourceIds": [
+              "4365fe9974e61114818a665aeea23fa3eaf7a2ba33d292fd4cd1f40cdd5b14a7",
+              "31d61a7d41ff1f0bfa0f81fe533d17a4342e3fefbe00a55d87d14333bf98a346",
+              "e783e3578ed070e335b8a7d12bbe65283f5cbd6a68802a6e8a46e580f8380e7b",
+              "01affd667460249758cfe1b6e824c95c9a8e43650315c961fad8e2f9bc1e3b27"
+            ]
+          },
+          "personalDescription": ""
+        },
+        "effect": {
+          "active": false,
+          "description": ""
+        },
+        "rarity": "rare",
+        "usable": false,
+        "weapon": null,
+        "attuned": false,
+        "bonuses": [],
+        "charges": null,
+        "category": "potion",
+        "equipped": false,
+        "features": [
+          {
+            "id": "drink-or-administer",
+            "kind": "action",
+            "name": "Beber o administrar",
+            "uses": null,
+            "order": 0,
+            "rolls": [
+              {
+                "mode": "normal",
+                "label": "Curación",
+                "expression": "8d4+8"
+              }
+            ],
+            "active": false,
+            "bonuses": [],
+            "chargeCost": 0,
+            "toggleable": false,
+            "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.\n\nCuración superior · Rara · 8d4 + 8\n\nDuración: Instantánea.",
+            "showInActions": true
+          }
+        ],
+        "language": "es",
+        "quantity": 1,
+        "consumable": true,
+        "properties": [
+          "magic"
+        ],
+        "unitWeight": 0.5,
+        "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse.\n\nPoción de... · Rareza · PG recuperados\nCuración superior · Rara · 8d4 + 8\n\nEsta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.",
+        "schemaVersion": 1,
+        "requiresAttunement": false
+      },
+      "content_key": "official:equipment:es:d82087e9fbb18715cecc5264"
+    },
+    {
+      "kind": "equipment",
+      "name": "Poción de curación suprema",
+      "tags": [
+        "es",
+        "reglas_2014"
+      ],
+      "origin": "official",
+      "payload": {
+        "cost": {
+          "unit": "gp",
+          "quantity": 1350
+        },
+        "kind": "equipment",
+        "name": "Poción de curación suprema",
+        "armor": null,
+        "rules": {
+          "pending": [],
+          "storage": null,
+          "original": {},
+          "slotUsage": {},
+          "definition": {
+            "id": "recovery:official:equipment:es:f0c11341d418fbfe7f966070",
+            "name": "Poción de curación suprema",
+            "armor": null,
+            "format": "equipment-definition-draft",
+            "origin": "official",
+            "rarity": "very-rare",
+            "review": {
+              "identity": true,
+              "editorial": true,
+              "mechanics": true,
+              "unresolved": [
+                "Conservar originales y cerrar su recuperación antes de eliminar versiones."
+              ],
+              "information": false
+            },
+            "weapon": null,
+            "weight": null,
+            "aliases": [
+              "Poción de sanación suprema"
+            ],
+            "economy": {
+              "basePrice": null,
+              "explanation": "",
+              "campaignPrice": null
+            },
+            "magical": true,
+            "sources": [
+              {
+                "id": "original:b2d91f201316f49f3d79d3fdb261b53651d35deccd96df8bdc94588c0f32cccb",
+                "kind": "legacy",
+                "title": "Poción de sanación suprema",
+                "locator": "official:equipment:es:f0c11341d418fbfe7f966070",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:4e6865c60a7ac801a3c1c167a4d20d2775da87fb0b4442b44445503c87e5ec78",
+                "kind": "legacy",
+                "title": "Poción de sanación suprema",
+                "locator": "official:equipment:es:f0c11341d418fbfe7f966070",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:a6b7d7ddbcfeaf4cac1c41382ba05f68832007d45e4637d342625a11958fd519",
+                "kind": "legacy",
+                "title": "Potion of Supreme Healing",
+                "locator": "official:equipment:eng:78aaf6a88cdece56a18b05cc",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:a249d97d265f1b7cecf736c8638147d00abe494c4e8486a59eaa5053708c6f6a",
+                "kind": "legacy",
+                "title": "Potion of Supreme Healing",
+                "locator": "official:equipment:eng:78aaf6a88cdece56a18b05cc",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "srd-5.1-es-equipment",
+                "kind": "srd",
+                "title": "SRD 5.1 · edición oficial española",
+                "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 260 · CC BY 4.0",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              }
+            ],
+            "category": "potion",
+            "language": "es",
+            "revision": 2,
+            "subtypes": [],
+            "resources": [],
+            "consumable": true,
+            "properties": [],
+            "description": [
+              {
+                "id": "official-block-0",
+                "text": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse. Pociones de curación",
+                "type": "paragraph",
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              },
+              {
+                "id": "official-block-1",
+                "rows": [
+                  [
+                    "Curación suprema",
+                    "Muy rara",
+                    "10d4 + 20"
+                  ]
+                ],
+                "type": "table",
+                "columns": [
+                  "Poción de...",
+                  "Rareza",
+                  "PG recuperados"
+                ],
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              }
+            ],
+            "capabilities": [
+              {
+                "id": "official-2014-rule",
+                "name": "Beber o administrar",
+                "costs": [],
+                "range": "",
+                "target": "Según la regla oficial.",
+                "effects": [
+                  {
+                    "id": "supreme-healing",
+                    "kind": "healing",
+                    "target": "recipient",
+                    "condition": "Al beber o administrar una poción.",
+                    "expression": "10d4+20"
+                  }
+                ],
+                "trigger": "",
+                "duration": "Según la regla oficial.",
+                "execution": {
+                  "mode": "automatic",
+                  "handler": "equipment-potion-healing",
+                  "explanation": "Beber y curarme o Administrar y curar valida la tirada, consume una dosis y aplica la curación en una sola operación guardada. La curación respeta los PG máximos, la Forma Salvaje y las salvaciones de muerte.",
+                  "pendingAutomation": []
+                },
+                "activation": "action",
+                "requirements": {
+                  "bearer": [],
+                  "presence": "held",
+                  "attunement": false,
+                  "explanation": "Poción, rareza variable"
+                },
+                "textBlockIds": [
+                  "official-block-0",
+                  "official-block-1"
+                ],
+                "concentration": "spell-dependent",
+                "consumeQuantity": 1
+              }
+            ],
+            "requirements": {
+              "bearer": [],
+              "presence": "held",
+              "attunement": false,
+              "explanation": "Poción, rareza variable"
+            },
+            "schemaVersion": 1,
+            "baseDefinitionId": null,
+            "recoverySourceIds": [
+              "b2d91f201316f49f3d79d3fdb261b53651d35deccd96df8bdc94588c0f32cccb",
+              "4e6865c60a7ac801a3c1c167a4d20d2775da87fb0b4442b44445503c87e5ec78",
+              "a6b7d7ddbcfeaf4cac1c41382ba05f68832007d45e4637d342625a11958fd519",
+              "a249d97d265f1b7cecf736c8638147d00abe494c4e8486a59eaa5053708c6f6a"
+            ]
+          },
+          "personalDescription": ""
+        },
+        "effect": {
+          "active": false,
+          "description": ""
+        },
+        "rarity": "very-rare",
+        "usable": false,
+        "weapon": null,
+        "attuned": false,
+        "bonuses": [],
+        "charges": null,
+        "category": "potion",
+        "equipped": false,
+        "features": [
+          {
+            "id": "official-2014-rule",
+            "kind": "action",
+            "name": "Beber o administrar",
+            "uses": null,
+            "order": 0,
+            "rolls": [
+              {
+                "mode": "normal",
+                "label": "Curación",
+                "expression": "10d4+20"
+              }
+            ],
+            "active": false,
+            "bonuses": [],
+            "chargeCost": 0,
+            "toggleable": false,
+            "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse. Pociones de curación\n\nCuración suprema · Muy rara · 10d4 + 20\n\nDuración: Según la regla oficial..\n\nConcentración: según el conjuro.",
+            "showInActions": true
+          }
+        ],
+        "language": "es",
+        "quantity": 1,
+        "consumable": true,
+        "properties": [
+          "Cura 10d4 + 20"
+        ],
+        "unitWeight": 0.5,
+        "description": "Cuando bebes esta poción, recuperas puntos de golpe. La cantidad depende de la rareza de la poción, como se muestra en la tabla “Pociones de curación”. Independientemente de su potencia, el líquido rojo de la poción brilla al agitarse. Pociones de curación\n\nPoción de... · Rareza · PG recuperados\nCuración suprema · Muy rara · 10d4 + 20\n\nEsta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.",
+        "schemaVersion": 1,
+        "requiresAttunement": false
+      },
+      "content_key": "official:equipment:es:f0c11341d418fbfe7f966070"
+    }
+  ],
+  "protectedHash": "b0845a5c523f2372e37a51c8d01e49ed"
+}

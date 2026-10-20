@@ -38,7 +38,7 @@ describe("complete PHB single-class fighter", () => {
         const creation = phbFighterCreation(race, background);
         const character = await createGuidedFighter(id, operation, creation, time);
         expect(character.identity.background).toBe(BACKGROUND_PRESETS[background].name);
-        expect(character.inventory.some((item) => item.name === "Bolsa de monedas")).toBe(true);
+        expect(character.inventory.some((item) => item.name === "Bolsa" && item.catalog?.contentKey === "official:equipment:es:7863f03eb5565607a7c86b7d")).toBe(true);
         expect(character.traits.flatMap((group) => group.traits).some((trait) => trait.name === creation.background.featureName)).toBe(true);
         expect(character.abilities).toEqual(fighterBuilderScores(character.builder!));
         expect(character.checks.savingThrows.strength.proficiency).toBe(1);

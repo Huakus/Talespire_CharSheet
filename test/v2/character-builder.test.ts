@@ -65,13 +65,13 @@ describe("guided fighter construction and advancement", () => {
       creation.skills = ["perception", "survival"];
       creation.background = { ...BACKGROUND_PRESETS[preset], prayerItem: "prayer-wheel", gamingSet: "cards" };
       const character = await createGuidedFighter(id, operation(1), creation, timestamp);
-      expect(character.inventory.some((item) => item.name === "Bolsa de monedas")).toBe(true);
+      expect(character.inventory.some((item) => item.name === "Bolsa")).toBe(true);
       expect(character.currency.gold).toBe(preset === "acolyte" ? 15 : 10);
       if (preset === "acolyte") {
         expect(character.inventory.some((item) => item.name === "Rueda de plegarias")).toBe(true);
         expect(character.inventory.some((item) => item.name === "Libro de plegarias")).toBe(false);
       }
-      if (preset === "soldier") expect(character.inventory.some((item) => item.name === "Baraja de cartas")).toBe(true);
+      if (preset === "soldier") expect(character.inventory.some((item) => item.name === "Juego de cartas para jugar")).toBe(true);
     }
   });
   it("replaces a duplicate racial skill with any distinct skill of the same kind", async () => {
@@ -103,9 +103,9 @@ describe("guided fighter construction and advancement", () => {
     const creation = defaultFighterCreation("Net"); creation.equipment.primary = "net";
     const character = await createGuidedFighter(id, operation(1), creation, timestamp);
     expect(character.actions.find((action) => action.name === "Red")).toMatchObject({ damageExpression: "", damageBonus: 0 });
-    expect(BUILDER_WEAPONS.net!.description).toContain("solo un ataque");
-    expect(BUILDER_WEAPONS["light-crossbow"]!.description).toContain("aunque tengas Ataque Extra");
-    expect(BUILDER_WEAPONS.lance!.description).toContain("no estás montado");
+    expect(BUILDER_WEAPONS.net!.description).toContain("solo podrás realizar un ataque");
+    expect(BUILDER_WEAPONS["light-crossbow"]!.description).toContain("solo podrás disparar una unidad de munición");
+    expect(BUILDER_WEAPONS.lance!.description).toContain("si no estás sobre una montura");
     creation.equipment.primary = "lance"; creation.style = "dueling";
     const lancer = await createGuidedFighter(id, operation(1), creation, timestamp);
     expect(projectActionDamageBonus(lancer, lancer.actions.find((action) => action.name === "Lanza de caballería")!)).toBe(3);
@@ -176,7 +176,7 @@ describe("guided fighter construction and advancement", () => {
     expect(character.abilities).toEqual({ strength: 16, dexterity: 14, constitution: 15, intelligence: 11, wisdom: 13, charisma: 9 });
     expect(character.combat.hitPoints).toEqual({ current: 12, maximum: 12, temporary: 0 });
     expect(character.combat.armorClass).toBe(19);
-    expect(character.inventory.find((item) => item.name === "Virote")?.quantity).toBe(20);
+    expect(character.inventory.find((item) => item.name === "Virote de ballesta")?.quantity).toBe(20);
     expect(character.currency.gold).toBe(15);
     expect(character.checks.skills.athletics.proficiency).toBe(1);
     expect(character.checks.skills.religion.proficiency).toBe(1);

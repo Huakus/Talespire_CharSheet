@@ -18,7 +18,8 @@ assert.equal(before.entries.length,selected.length);
 const server=await createServer({configFile:false,root:process.cwd(),server:{middlewareMode:true},appType:"custom"});
 const definitions=[],fragments=[],merchants=[];
 try{
- const{refreshEquipmentEditorialDefinition:refresh}=await server.ssrLoadModule("/src/domain/equipment/equipment-editorial-refresh.ts");
+ const module=await server.ssrLoadModule("/src/domain/equipment/equipment-editorial-refresh.ts");
+ const slotRecovery=process.argv.includes('--slot-recovery'),refresh=slotRecovery?module.refreshEquipmentSlotRecoveryDefinition:process.argv.includes('--healing-execution')?module.refreshEquipmentHealingExecution:module.refreshEquipmentEditorialDefinition;
  const{serializeEquipmentContentPayload:serialize}=await server.ssrLoadModule("/src/domain/content/content-payload.ts");
  for(const s of selected){
   const old=before.entries.find(r=>r.content_key===s.key);assert.ok(old);
@@ -30,8 +31,10 @@ try{
  const convert=old=>{
   const target=definitions.find(d=>d.key===old.catalog?.contentKey);if(!target)return old;
   const next=refresh(old,target.definition,target.before.name,{...old.catalog,revision:target.revision});
-  const skip=new Set(["name","category","description","catalog","rules"]);
+  const skip=new Set(["name","category","description","catalog","rules","features"]);
   for(const k of Object.keys(old))if(!skip.has(k))assert.deepEqual(next[k],old[k],k);
+  const featureState=f=>slotRecovery?{id:f.id,order:f.order,active:f.active,toggleable:f.toggleable,chargeCost:f.chargeCost,uses:f.uses,bonuses:f.bonuses}:Object.fromEntries(Object.entries(f).filter(([k])=>k!=='description'));
+  assert.deepEqual(next.features.map(featureState),old.features.map(featureState),'Feature state and mechanics must be preserved');
   const{definition:_a,...oldRules}=old.rules,{definition:_b,...nextRules}=next.rules;assert.deepEqual(nextRules,oldRules);
   return next;
  };

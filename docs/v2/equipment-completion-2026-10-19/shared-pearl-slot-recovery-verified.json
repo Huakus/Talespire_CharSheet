@@ -1,0 +1,264 @@
+{
+  "changed": 1,
+  "allCampaignsPreserved": true,
+  "entries": [
+    {
+      "kind": "equipment",
+      "name": "Perla de poder",
+      "tags": [
+        "es",
+        "reglas_2014"
+      ],
+      "origin": "official",
+      "payload": {
+        "cost": {
+          "unit": "gp",
+          "quantity": 1200
+        },
+        "kind": "equipment",
+        "name": "Perla de poder",
+        "armor": null,
+        "rules": {
+          "pending": [],
+          "storage": null,
+          "original": {},
+          "slotUsage": {},
+          "definition": {
+            "id": "recovery:official:equipment:es:7315505b374dfa1d4dcb8e49",
+            "name": "Perla de poder",
+            "armor": null,
+            "format": "equipment-definition-draft",
+            "origin": "official",
+            "rarity": "uncommon",
+            "review": {
+              "identity": true,
+              "editorial": true,
+              "mechanics": true,
+              "unresolved": [],
+              "information": true
+            },
+            "weapon": null,
+            "weight": null,
+            "aliases": [
+              "Perla De Poder",
+              "Pearl of Power"
+            ],
+            "economy": {
+              "basePrice": null,
+              "explanation": "La regla no fija precio de venta. Los precios antiguos y personalizaciones permanecen en sus originales; no se alteran tiendas ni copias.",
+              "campaignPrice": null
+            },
+            "magical": true,
+            "sources": [
+              {
+                "id": "original:1218cf28e62463ebe52b11a95aa2cb1d2e0c21429b1c3e612a76f1724deea131",
+                "kind": "legacy",
+                "title": "Perla De Poder",
+                "locator": "official:equipment:es:7315505b374dfa1d4dcb8e49",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:57e3b8d037b4e31c384951a87c5ef40b208c3df69bb0b18069b4b2d9716ecc89",
+                "kind": "legacy",
+                "title": "Perla De Poder",
+                "locator": "official:equipment:es:7315505b374dfa1d4dcb8e49",
+                "language": "es",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:cbbd5d18f86b364a5a01d2e12c168cb3e1ff2fbe5d935f32aa9cef0f7e00c4fd",
+                "kind": "legacy",
+                "title": "Pearl of Power",
+                "locator": "official:equipment:eng:9d4a881efa27b95c8e51de43",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "original:d507d02a789877915cdc18a2fbb9895a11ce1d20df4b310bc0f3f7b170ce0f73",
+                "kind": "legacy",
+                "title": "Pearl of Power",
+                "locator": "official:equipment:eng:9d4a881efa27b95c8e51de43",
+                "language": "en",
+                "verified": false,
+                "rulesEdition": null
+              },
+              {
+                "id": "srd-5.1-es-equipment",
+                "kind": "srd",
+                "title": "Documento de referencia del sistema 5.1 · edición oficial española",
+                "locator": "https://media.wizards.com/2023/downloads/dnd/SRD_CC_v5.1_ES.pdf · página PDF 259 · CC-BY-4.0",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              },
+              {
+                "id": "srd-5.1-attribution",
+                "kind": "srd",
+                "title": "Atribución y licencia del SRD 5.1",
+                "locator": "Esta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es. Adaptaciones: separación de párrafos y tablas, datos estructurados y traducciones propias identificadas en cada bloque.",
+                "language": "es",
+                "verified": true,
+                "rulesEdition": "2014"
+              }
+            ],
+            "category": "wondrous-item",
+            "language": "es",
+            "revision": 2,
+            "subtypes": [],
+            "resources": [
+              {
+                "id": "recuperacion-de-espacio",
+                "kind": "uses",
+                "name": "recuperacion-de-espacio",
+                "unit": "usos",
+                "maximum": 1,
+                "recovery": {
+                  "kind": "event",
+                  "event": "dawn",
+                  "amount": {
+                    "kind": "full"
+                  },
+                  "explanation": "Al siguiente amanecer, no al terminar un descanso."
+                },
+                "exhaustion": "No se puede activar sin el recurso necesario."
+              }
+            ],
+            "consumable": false,
+            "properties": [
+              "magic"
+            ],
+            "description": [
+              {
+                "id": "official-magic-0",
+                "text": "Mientras lleves encima esta perla, podrás usar una acción para pronunciar su palabra de activación y recuperar un espacio de conjuro gastado. Si el espacio gastado era de nivel 4 o superior, el que recuperas será de nivel 3. Una vez que utilices la perla, no podrás volver a emplearla hasta el siguiente amanecer.",
+                "type": "paragraph",
+                "section": "rules",
+                "sourceIds": [
+                  "srd-5.1-es-equipment"
+                ],
+                "provenance": "official-spanish"
+              }
+            ],
+            "capabilities": [
+              {
+                "id": "official-use",
+                "name": "Recuperar un espacio de conjuro",
+                "costs": [
+                  {
+                    "amount": 1,
+                    "resourceId": "recuperacion-de-espacio"
+                  }
+                ],
+                "range": "",
+                "target": "Portador",
+                "effects": [
+                  {
+                    "id": "restore-expended-slot",
+                    "kind": "spell-slot-recovery",
+                    "condition": "Pronunciar la palabra de activación.",
+                    "maximumLevel": 3
+                  }
+                ],
+                "trigger": "",
+                "duration": "Instantánea",
+                "execution": {
+                  "mode": "automatic",
+                  "handler": "equipment-spell-slot-recovery",
+                  "explanation": "Elegir un espacio gastado, recuperarlo como máximo a nivel 3 y gastar el uso diario en una sola operación. Conserva el origen del espacio y su recuperación normal.",
+                  "pendingAutomation": []
+                },
+                "activation": "action",
+                "requirements": {
+                  "bearer": [
+                    {
+                      "keys": [],
+                      "kind": "spellcaster",
+                      "explanation": "Requiere sintonización por un lanzador de conjuros."
+                    }
+                  ],
+                  "presence": "possessed",
+                  "attunement": true,
+                  "explanation": "La sintonización y restricciones se aplican a los poderes mágicos, no a la mera posesión ni al uso mundano de un arma."
+                },
+                "textBlockIds": [
+                  "official-magic-0"
+                ],
+                "concentration": false,
+                "consumeQuantity": 0
+              }
+            ],
+            "requirements": {
+              "bearer": [
+                {
+                  "keys": [],
+                  "kind": "spellcaster",
+                  "explanation": "Requiere sintonización por un lanzador de conjuros."
+                }
+              ],
+              "presence": "possessed",
+              "attunement": true,
+              "explanation": "La sintonización y restricciones se aplican a los poderes mágicos, no a la mera posesión ni al uso mundano de un arma."
+            },
+            "schemaVersion": 1,
+            "baseDefinitionId": null,
+            "recoverySourceIds": [
+              "1218cf28e62463ebe52b11a95aa2cb1d2e0c21429b1c3e612a76f1724deea131",
+              "57e3b8d037b4e31c384951a87c5ef40b208c3df69bb0b18069b4b2d9716ecc89",
+              "cbbd5d18f86b364a5a01d2e12c168cb3e1ff2fbe5d935f32aa9cef0f7e00c4fd",
+              "d507d02a789877915cdc18a2fbb9895a11ce1d20df4b310bc0f3f7b170ce0f73"
+            ]
+          },
+          "personalDescription": ""
+        },
+        "effect": {
+          "active": false,
+          "description": ""
+        },
+        "rarity": "uncommon",
+        "usable": false,
+        "weapon": null,
+        "attuned": false,
+        "bonuses": [],
+        "charges": {
+          "reset": "dawn",
+          "current": 1,
+          "maximum": 1
+        },
+        "category": "wondrous-item",
+        "equipped": false,
+        "features": [
+          {
+            "id": "official-use",
+            "kind": "action",
+            "name": "Recuperar un espacio de conjuro",
+            "uses": null,
+            "order": 0,
+            "rolls": [],
+            "active": false,
+            "bonuses": [],
+            "chargeCost": 1,
+            "toggleable": false,
+            "description": "Mientras lleves encima esta perla, podrás usar una acción para pronunciar su palabra de activación y recuperar un espacio de conjuro gastado. Si el espacio gastado era de nivel 4 o superior, el que recuperas será de nivel 3. Una vez que utilices la perla, no podrás volver a emplearla hasta el siguiente amanecer.\n\nDuración: Instantánea.\n\nCoste: 1 recuperacion-de-espacio.",
+            "showInActions": true
+          }
+        ],
+        "language": "es",
+        "quantity": 1,
+        "consumable": false,
+        "properties": [
+          "magic"
+        ],
+        "unitWeight": 0.1,
+        "description": "Mientras lleves encima esta perla, podrás usar una acción para pronunciar su palabra de activación y recuperar un espacio de conjuro gastado. Si el espacio gastado era de nivel 4 o superior, el que recuperas será de nivel 3. Una vez que utilices la perla, no podrás volver a emplearla hasta el siguiente amanecer.\n\nEsta obra incluye materiales extraídos del Documento de referencia del sistema 5.1 (‘SRD 5.1’) de Wizards of the Coast LLC, que está disponible en https://dnd.wizards.com/es/resources/systems-reference-document. El SRD 5.1 tiene la licencia Creative Commons Atribución/Reconocimiento 4.0 Licencia Pública Internacional, que está disponible en https://creativecommons.org/licenses/by/4.0/legalcode.es.",
+        "schemaVersion": 1,
+        "requiresAttunement": true
+      },
+      "content_key": "official:equipment:es:7315505b374dfa1d4dcb8e49"
+    }
+  ],
+  "protectedHash": "b7c2880bd4df9a76486e6a0bccaa4bd8"
+}

@@ -1,7 +1,9 @@
 import { syncMonkActions } from "../../domain/character/martial-builder";
+import { bindGuidedEquipmentCatalog } from "../../domain/equipment/guided-equipment-catalog";
+import type { EquipmentCatalogDraft } from "../../domain/equipment/equipment-catalog";
 import { storeEquipmentSpell, castEquipmentStoredSpell } from "../../domain/equipment/equipment-spell-storage";
 import { syncInventorySpellGrants } from "../../domain/character/item-spells";
-import { spendInventoryItemCharges, consumeInventoryUnit, performLucentCoreAction, useInventoryHealingFeature, type LucentCoreAction } from "../../domain/character/character-inventory";
+import { spendInventoryItemCharges, consumeInventoryUnit, performLucentCoreAction, useInventoryHealingFeature, administerInventoryHealingFeature, type LucentCoreAction } from "../../domain/character/character-inventory";
 import { performMartialAction,martialRuntime,syncMartialEffects } from "../../domain/character/martial-play";
 import type { MartialAction } from "../../domain/character/martial-model";
 import { performSorcererAction } from "../../domain/character/sorcerer-play";
@@ -404,7 +406,7 @@ export class CampaignApplication {
     return this.persistUpdatedCharacter(current, character, command.expectedCampaignChecksum, createdAt);
   }
 
-  async createGuidedCharacter(command: { operationId: string; creation: FighterCreationInput; initialLevels?: FighterLevelChoiceInput[]; expectedCampaignChecksum: string; expectedCampaignId?: string; createdAt?: string }): Promise<CampaignSnapshot> {
+  async createGuidedCharacter(command: { operationId: string; creation: FighterCreationInput; initialLevels?: FighterLevelChoiceInput[]; expectedCampaignChecksum: string; expectedCampaignId?: string; createdAt?: string; equipmentCatalog?: readonly EquipmentCatalogDraft[] }): Promise<CampaignSnapshot> {
     const operationId = StableIdSchema.parse(command.operationId);
     const creation = validateGuidedCreation(command.creation);
     const initialLevels = (command.initialLevels ?? []).map((step) => FighterLevelChoiceSchema.parse(step));
@@ -423,7 +425,7 @@ export class CampaignApplication {
         if (canonicalJsonStringify(previous.builder.levels.slice(0, creation.startingLevel - 1) as unknown as JsonValue) !== canonicalJsonStringify(initialLevels as unknown as JsonValue)) throw new Error("La operación ya se confirmó con otras elecciones de niveles iniciales.");
         return current;
       }
-      character ??= await buildGuidedCharacter(id, operationId, creation, timestamp, initialLevels);
+      character ??= bindGuidedEquipmentCatalog(await buildGuidedCharacter(id, operationId, creation, timestamp, initialLevels), command.equipmentCatalog ?? []);
       try {
         // Creation adds a new identity; unrelated campaign edits during the tutorial
         // must survive. The write still compares the latest checksum atomically.
@@ -814,12 +816,13 @@ export class CampaignApplication {
   }
 
   async useInventoryFeature(
-    command: InventoryFeatureCommand,
+    command: InventoryFeatureCommand & { recoveredSpellSlotLevel?: number },
   ): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command, (character, updatedAt) => {
       const updated = useInventoryFeature(character, command.itemId, command.featureId, {
         expectedRevision: command.expectedCharacterRevision,
         updatedAt,
+        ...(command.recoveredSpellSlotLevel === undefined ? {} : { recoveredSpellSlotLevel: command.recoveredSpellSlotLevel }),
       });
       return updated;
     });
@@ -835,6 +838,15 @@ export class CampaignApplication {
 
   async useInventoryHealingFeature(command: InventoryFeatureCommand & { healing: number }): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command,(character,updatedAt)=>useInventoryHealingFeature(character,command.itemId,command.featureId,command.healing,{expectedRevision:command.expectedCharacterRevision,updatedAt}));
+  }
+
+  async administerInventoryHealingFeature(command: InventoryFeatureCommand & { healing: number; targetCharacterId: string; expectedTargetRevision: number }): Promise<CampaignSnapshot> {
+    const current = await this.loadCurrentForCharacter(command.characterId, command.expectedCampaignChecksum);
+    const target = current.campaign.characters[command.targetCharacterId];
+    if (!target) throw new CharacterNotFoundError(command.targetCharacterId);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const healed = administerInventoryHealingFeature(current.campaign.characters[command.characterId]!, target, command.itemId, command.featureId, command.healing, { expectedRevision: command.expectedCharacterRevision, expectedTargetRevision: command.expectedTargetRevision, updatedAt });
+    return this.persistUpdatedCharacters(current, [healed.source, healed.target], command.expectedCampaignChecksum, updatedAt);
   }
 
   async spendInventoryItemCharges(command: InventoryItemCommand & { amount: number }): Promise<CampaignSnapshot> {

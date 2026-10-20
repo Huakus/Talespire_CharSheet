@@ -24,7 +24,7 @@ import { prepareWizardCast, type WizardCastOptions } from "./wizard-play";
 import { prepareWarlockCast } from "./warlock-play";
 import { itemSpellState } from "./item-spells";
 import { useInventoryFeature } from "./character-inventory";
-import { spendEquipmentSpellSlot, resetEquipmentSlots } from "../equipment/equipment-spell-slots";
+import { spendEquipmentSpellSlot, resetEquipmentSlots, resetRestoredEquipmentSlots } from "../equipment/equipment-spell-slots";
 
 export * from "./character-spell-model";
 
@@ -183,6 +183,8 @@ export function setSpellSlots(
   const { character, updatedAt } = prepare(input, options);
   const level = SpellLevelSchema.min(1).parse(levelInput);
   const slots = SpellSlotStateSchema.parse(slotsInput);
+  const reserved = character.spellcasting.restoredSlots.filter(s => s.sourceLevel === level).length;
+  if (slots.used < reserved) throw new Error("Ese espacio ya se recuperó a otro nivel mediante un objeto; completá su descanso para recuperar la reserva original.");
   return finish(character, {
     ...character.spellcasting,
     slots: { ...character.spellcasting.slots, [String(level)]: slots },
@@ -246,6 +248,7 @@ export function resetAllSpellSlots(
   options: SpellMutationOptions,
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
+  resetRestoredEquipmentSlots(character, "long-rest");
   const slots = Object.fromEntries(
     Object.entries(character.spellcasting.slots).map(([level, state]) => [
       level,

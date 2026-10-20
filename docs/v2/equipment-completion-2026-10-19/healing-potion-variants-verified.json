@@ -1,0 +1,17 @@
+{
+  "revision": 1444,
+  "catalog": 3,
+  "characterCopies": 15,
+  "characters": 7,
+  "merchants": 2,
+  "merchantCopies": 5,
+  "instanceStatePreserved": true,
+  "protectedHashesEqual": true,
+  "hashes": {
+    "shared": "3b8a021ffc9633e4ad5cbebf23529539",
+    "content": "f0841891e5b022ffd27460b56a79fc70",
+    "versions": "afa8bab46d6e2d7fc46f376947ba9fa9",
+    "campaigns": "8fc4ee65322cb858c7b22f284a8eef86",
+    "fragments": "3bda766f0021806fe946353c91cd682d"
+  }
+}

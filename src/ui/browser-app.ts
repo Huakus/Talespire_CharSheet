@@ -130,7 +130,7 @@ import { CORE_RESONANCES, coreFeatureIssue, isLucentCore, lucentCoreState, type 
 import type { LucentCoreAction } from "../domain/character/character-inventory";
 import { DAMAGE_TYPES } from "../domain/equipment/equipment-constants";
 import { inventoryHealingExpression } from "../domain/equipment/equipment-healing";
-import { projectEquipmentSpellSlots } from "../domain/equipment/equipment-spell-slots";
+import { projectEquipmentSpellSlots, inventorySlotRecovery, recoverableEquipmentSlotCount } from "../domain/equipment/equipment-spell-slots";
 import { equipmentTagLabel, visibleEquipmentTags } from "../domain/equipment/equipment-tags";
 import {
   canOpenPersistencePanel,
@@ -1014,7 +1014,7 @@ export class BrowserApp {
         diceRoller: this.runtime.diceRoller,
         onCreate: async (operationId, creation, initialLevels) => {
           requireCampaign();
-          const snapshot = await this.application.createGuidedCharacter({ operationId, creation, initialLevels, expectedCampaignChecksum: base.checksum, expectedCampaignId: base.campaign.id });
+          const snapshot = await this.application.createGuidedCharacter({ operationId, creation, initialLevels, expectedCampaignChecksum: base.checksum, expectedCampaignId: base.campaign.id, equipmentCatalog: this.equipmentCatalog() });
           this.snapshot = snapshot;
           this.selectedCharacterId = Object.values(snapshot.campaign.characters).find((entry) => entry.builder?.creationOperationId === operationId)?.id ?? this.selectedCharacterId;
           this.rememberSelectedCharacter();
@@ -1913,7 +1913,10 @@ export class BrowserApp {
 
   private inventoryFeatureCanBeUsed(item: CharacterInventoryItemV2, feature: InventoryFeature): boolean {
     const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
-    return (!character || !equipmentBearerIssue(character, item, feature.id) && !equipmentClassResourceIssue(character, item, feature.id)) && !coreFeatureIssue(item, feature.id) && item.quantity > 0 && (item.equipped || item.consumable) &&
+    const capability = inventoryEquipmentDefinition(item)?.capabilities.find(c => c.id === feature.id);
+    const recovery = inventorySlotRecovery(item, feature.id);
+    const canRecover = recovery === null || !!character && (character.spellcasting.druid?.form?.currentHp ?? character.combat.hitPoints.current) > 0 && !character.combat.conditions.some(c => ["incapacitated", "unconscious", "stunned", "paralyzed", "petrified", "dead", "silenced"].includes(c.key)) && Array.from({length: 9}, (_, i) => i + 1).some(level => recoverableEquipmentSlotCount(character, level) > 0);
+    return canRecover && (!character || !equipmentBearerIssue(character, item, feature.id) && !equipmentClassResourceIssue(character, item, feature.id)) && !coreFeatureIssue(item, feature.id) && item.quantity > 0 && (item.equipped || item.consumable || capability?.requirements.presence === "possessed") &&
       (!item.requiresAttunement || item.attuned) &&
       (feature.chargeCost === 0 || (item.charges !== null && item.charges.current >= feature.chargeCost)) &&
       (feature.uses === null || feature.uses.current > 0);
@@ -1922,10 +1925,12 @@ export class BrowserApp {
   private renderInventoryFeatureCapability(item: CharacterInventoryItemV2, feature: InventoryFeature, actionCard = false, description = inventoryPlayerText(inventorySupplementalText(feature.description))): string {
     const canUse = this.inventoryFeatureCanBeUsed(item, feature);
     const healingExpression = inventoryHealingExpression(item,feature.id);
+    const slotRecovery = inventorySlotRecovery(item, feature.id);
     const actor = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
     const resourceIssue = actor ? equipmentClassResourceIssue(actor, item, feature.id) : "";
     const owned = actor?.inventory.some((entry)=>entry.id===item.id) === true;
-    const canDrink = canUse && !!actor && actor.combat.hitPoints.current > 0 && !actor.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key));
+    const canDrink = canUse && !!actor && (actor.spellcasting.druid?.form?.currentHp ?? actor.combat.hitPoints.current) > 0 && !actor.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key));
+    const healingRecipients = Object.values(this.snapshot?.campaign.characters ?? {}).filter(c => c.id !== actor?.id);
     const canRoll = !item.rules || item.quantity > 0 && (item.equipped || item.consumable) && (!item.requiresAttunement || item.attuned) && (!actor || !equipmentBearerIssue(actor,item,feature.id));
     const spellGrant = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""]?.spellcasting.spells.some((s) => s.casting?.kind === "item" && s.casting.source === `inventory:${item.id}:${feature.id}`);
     const shouldOfferUse = !["passive", "other"].includes(feature.kind) || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null;
@@ -1940,8 +1945,8 @@ export class BrowserApp {
     return `<article class="inventory-feature-capability ${feature.active ? "active" : ""} ${actionCard ? "play-card action-play-card inventory-feature-action-card" : ""}" data-inventory-card data-inventory-id="${escapeHtml(item.id)}">
       <header><div><span class="card-kicker">${escapeHtml(inventoryFeatureKindLabel(feature.kind))}</span><h${actionCard ? "3" : "4"}>${escapeHtml(feature.name)}</h${actionCard ? "3" : "4"}></div>${resourceLabels.length ? `<span class="card-badge">${escapeHtml(resourceLabels.join(" · "))}</span>` : ""}</header>
       ${description ? `<div class="rich-inventory-text">${this.renderInventoryRichText(description, `${item.name}: ${feature.name}`)}</div>` : ""}
-      ${controls ? `<div class="inventory-feature-controls">${controls}</div>` : ""}
-      ${healingExpression && owned ? `<div class="inventory-feature-controls"><label>Curación (${escapeHtml(healingExpression)})<input type="number" data-equipment-healing-result min="1" placeholder="Vacío para tirar"></label><button type="button" data-equipment-self-healing="${escapeHtml(feature.id)}" ${canDrink ? "" : "disabled"}>Beber y curarme</button><small>Consume la poción y aplica el resultado a tus PG. Para administrarla a otro, Usar registra únicamente el consumo.</small></div>` : ""}
+      ${controls ? `<div class="inventory-feature-controls">${slotRecovery !== null && actor && owned ? `<label>Espacio gastado<select data-equipment-recover-slot><option value="">Elegí el espacio que recuperás</option>${Array.from({length: 9}, (_, i) => i + 1).map(level => { const count = recoverableEquipmentSlotCount(actor, level); return `<option value="${level}" ${count ? "" : 'disabled title="No hay espacios gastados recuperables de este nivel."'}>Nivel ${level}${level > slotRecovery ? ` → recupera nivel ${slotRecovery}` : ""} · ${count} gastados</option>`; }).join("")}</select></label>` : ""}${controls}</div>` : ""}
+      ${healingExpression && owned ? `<div class="inventory-feature-controls"><label>Curación (${escapeHtml(healingExpression)})<input type="number" data-equipment-healing-result min="1" placeholder="Vacío para tirar"></label><button type="button" data-equipment-self-healing="${escapeHtml(feature.id)}" ${canDrink ? "" : "disabled"}>Beber y curarme</button>${healingRecipients.length ? `<label>Administrar a<select data-equipment-healing-recipient><option value="">Elegí un personaje al alcance</option>${healingRecipients.map(c => `<option value="${escapeHtml(c.id)}" ${c.combat.conditions.some(s => s.key === "dead") || c.combat.deathSaves.failures >= 3 ? "disabled" : ""}>${escapeHtml(c.name)}</option>`).join("")}</select></label><button type="button" data-equipment-administer-healing="${escapeHtml(feature.id)}" ${canDrink ? "" : "disabled"}>Administrar y curar</button>` : ""}<small>Consume una dosis y aplica la curación en la misma operación. Beberla o administrarla requiere una acción y tener al receptor al alcance.</small></div>` : ""}
     </article>`;
   }
 
@@ -2123,7 +2128,7 @@ export class BrowserApp {
     const damageBonus = linkedAction ? projectActionDamageBonus(character, linkedAction) : item.weapon?.damageBonus ?? 0;
     const damageExpression = damageBase ? `${damageBase}${damageBonus > 0 ? `+${damageBonus}` : damageBonus < 0 ? damageBonus : ""}` : "";
     const definition = inventoryEquipmentDefinition(item);
-    const displayedText = [description, ...(definition && description === equipmentPlainDescription(definition) ? inventoryDescriptionBlocks(definition).map(block => block.type === "paragraph" ? block.text : block.type === "list" ? block.items.join("\n") : block.rows.map(row => row.join(" · ")).join("\n")) : [])];
+    const displayedText = [description, ...(definition && description === equipmentPlainDescription(definition) ? definition.description.map(block => block.type === "paragraph" ? block.text : block.type === "list" ? block.items.join("\n") : block.rows.map(row => row.join(" · ")).join("\n")) : [])];
     const featureDescriptions = new Map([...item.features].sort((a, b) => a.order - b.order).map(feature => {
       const extra = inventoryPlayerText(inventorySupplementalText(feature.description, displayedText));
       displayedText.push(extra);
@@ -3101,6 +3106,7 @@ export class BrowserApp {
     this.root.querySelectorAll<HTMLButtonElement>("[data-recover-equipment]").forEach((button) => button.addEventListener("click", () => void this.recoverEquipment(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-lucent-core-action]").forEach((button) => button.addEventListener("click", () => void this.handleLucentCore(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-self-healing]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentHealing(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-administer-healing]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentHealing(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-store-equipment-spell], [data-cast-stored-spell]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentSpellStorage(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-assisted-cost]").forEach((button) => button.addEventListener("click", () => void this.handleAssistedEquipmentCost(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-reset-inventory-charges]").forEach((button) => {
@@ -5767,7 +5773,7 @@ export class BrowserApp {
         ? await this.application.setInventoryFeatureActive({ ...command, value: false })
         : spells.length === 1
           ? await this.application.castCharacterSpell({ ...command, spellId: spells[0]!.id, slotLevel: spells[0]!.casting!.level })
-          : await this.application.useInventoryFeature(command);
+          : await this.application.useInventoryFeature({ ...command, ...(inventorySlotRecovery(item, feature.id) === null ? {} : { recoveredSpellSlotLevel: Number(button.closest<HTMLElement>(".inventory-feature-capability")?.querySelector<HTMLSelectElement>("[data-equipment-recover-slot]")?.value) }) });
       this.acceptCharacterSnapshot(snapshot, `${action === "deactivate" ? "Desactivar" : "Usar"} ${item.name}: ${feature.name}`);
       await this.refreshStorageUsage();
       this.message = { kind: "success", text: action === "deactivate" ? "Capacidad desactivada." : "Capacidad usada." };
@@ -5854,19 +5860,24 @@ export class BrowserApp {
 
   private async handleEquipmentHealing(button: HTMLButtonElement): Promise<void> {
     const character=this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""], card=button.closest<HTMLElement>("[data-inventory-id]");
-    const item=character?.inventory.find((entry)=>entry.id===card?.dataset.inventoryId), featureId=button.dataset.equipmentSelfHealing;
+    const item=character?.inventory.find((entry)=>entry.id===card?.dataset.inventoryId), featureId=button.dataset.equipmentSelfHealing ?? button.dataset.equipmentAdministerHealing;
     if (!character || !item || !card || !featureId || !this.snapshot) return;
     const expression=inventoryHealingExpression(item,featureId);if (!expression) return;
     button.disabled=true;
     try {
-      const input=button.closest<HTMLElement>(".inventory-feature-capability")?.querySelector<HTMLInputElement>("[data-equipment-healing-result]");
+      const capability = button.closest<HTMLElement>(".inventory-feature-capability");
+      const input=capability?.querySelector<HTMLInputElement>("[data-equipment-healing-result]");
+      const targetId = capability?.querySelector<HTMLSelectElement>("[data-equipment-healing-recipient]")?.value;
+      const target = button.dataset.equipmentAdministerHealing ? this.snapshot.campaign.characters[targetId ?? ""] : null;
+      if (button.dataset.equipmentAdministerHealing && !target) throw new Error("Elegí el personaje al que le administrás la poción.");
       let healing=Number(input?.value);
       if (!input?.value.trim()) {
-        const roll=await this.runtime.diceRoller.roll({name:`Beber ${item.name}`,expressions:[expression],mode:"normal"});
+        const roll=await this.runtime.diceRoller.roll({name:target ? `${item.name}: curar a ${target.name}` : `Beber ${item.name}`,expressions:[expression],mode:"normal"});
         if (roll.totals[0] === undefined) { this.message={kind:"success",text:"Tirada enviada. Ingresá el resultado para consumir y aplicar la curación; todavía no se gastó la poción."};this.render();return; }
         healing=roll.totals[0];
       }
-      this.acceptCharacterSnapshot(await this.application.useInventoryHealingFeature({characterId:character.id,itemId:item.id,featureId,healing,expectedCharacterRevision:character.revision,expectedCampaignChecksum:this.snapshot.checksum}),`Beber ${item.name}`);
+      const command = {characterId:character.id,itemId:item.id,featureId,healing,expectedCharacterRevision:character.revision,expectedCampaignChecksum:this.snapshot.checksum};
+      this.acceptCharacterSnapshot(target ? await this.application.administerInventoryHealingFeature({...command,targetCharacterId:target.id,expectedTargetRevision:target.revision}) : await this.application.useInventoryHealingFeature(command), target ? `Administrar ${item.name}` : `Beber ${item.name}`);
       this.message={kind:"success",text:"Poción consumida y curación aplicada."};this.render();
     } catch(error) { this.message={kind:"error",text:formatError(error)};this.render(); }
     finally { button.disabled=false; }

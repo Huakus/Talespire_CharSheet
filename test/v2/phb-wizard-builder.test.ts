@@ -41,7 +41,7 @@ describe("complete PHB wizard construction", () => {
       const character = await createGuidedWizard(id,operation,phbWizardCreation(race,background),time);
       expect(character.identity.className).toBe("Mago");
       expect(character.combat.hitDice.dieSize).toBe(6);
-      expect(character.inventory.some((i) => i.name === "Spellbook")).toBe(true);
+      expect(character.inventory.some((i) => i.name === "Libro de conjuros" && i.rules?.definition.language === "es")).toBe(true);
       expect(character.proficiencies.weapons).not.toContain("Armas marciales");
       expect(character.checks.savingThrows.intelligence.proficiency).toBe(1);
       expect(character.checks.savingThrows.wisdom.proficiency).toBe(1);

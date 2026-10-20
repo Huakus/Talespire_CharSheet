@@ -1,0 +1,57 @@
+{
+  "revision": 1450,
+  "goalComplete": false,
+  "typecheck": true,
+  "build": {
+    "command": "npm run build:v2 -- --emptyOutDir=false",
+    "javascript": "v2-ClBAatdA.js",
+    "css": "v2-BIUvw2iY.css"
+  },
+  "fullSuite": {
+    "files": 125,
+    "passed": 1197,
+    "failed": 0,
+    "command": "npx vitest run test/v2 --maxWorkers=2 --testTimeout=30000"
+  },
+  "subsequentChecks": [
+    {
+      "files": 3,
+      "passed": 95,
+      "failed": 0,
+      "scope": "Perla, recuperación de Mago e interfaz de Mago"
+    },
+    {
+      "files": 5,
+      "passed": 32,
+      "failed": 0,
+      "scope": "Últimas variantes de curación, administración, recuperación de espacios y catálogo del generador"
+    }
+  ],
+  "renderedCards": {
+    "loaded": 828,
+    "issues": 0
+  },
+  "visualReview": {
+    "completed": false,
+    "reason": "cua no dispone de navegador iab ni navegadores conectados; vista previa local generada, sin afirmar una validación visual interactiva."
+  },
+  "data": {
+    "characterCopies": 294,
+    "merchantCopies": 24,
+    "brokenInventoryReferences": 0,
+    "brokenMerchantReferences": 0,
+    "spanishEceDefinitions": 828,
+    "spanishSharedDefinitions": 757,
+    "englishDefinitions": 0,
+    "duplicateEceNames": 0,
+    "relinkedRecentCopies": 36,
+    "remainingUnboundPersonalNotes": 2,
+    "unmodeledEffects": 402,
+    "unsupportedCapabilities": 158
+  },
+  "preservedScopes": {
+    "otherCampaigns": true,
+    "localstorageUntouched": true
+  },
+  "goalSystemStatus": "usageLimited"
+}

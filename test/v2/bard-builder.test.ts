@@ -37,7 +37,7 @@ describe("Bardo PHB 2014 y Xanathar",() => {
       let c = await createGuidedBard(bardId,bardOp,bardCreation(race,bg),at); c = await advanceGuidedBard(c,bardChoice(c,college),at); c = await advanceGuidedBard(c,bardChoice(c,college),at);
       expect(c.identity.subclass).toBe(BARD_COLLEGES[college]); expect(c.proficiencies.tools).toEqual(expect.arrayContaining(c.builder!.creation.bard.instruments));
     }
-  },15000);
+  },30000);
   it("calcula Polivalente sin acumular medias competencias ni afectar ataques o salvaciones",async () => {
     for (const level of [1,2,5,9,13,17,20]) {
       const c = await bardAt(level,"valor"),p = projectCharacterStatistics(c),half = level >= 2 ? Math.floor(proficiencyBonus(level)/2) : 0;

@@ -1,0 +1,1187 @@
+[
+  {
+    "index": "club",
+    "key": "official:equipment:es:7e03bd2f256a0b9ce063c193",
+    "name": "Garrote"
+  },
+  {
+    "index": "dagger",
+    "key": "official:equipment:es:121c1c0140bf7a88549add24",
+    "name": "Daga"
+  },
+  {
+    "index": "greatclub",
+    "key": "official:equipment:es:3540479787c16c55359ff60c",
+    "name": "Garrote grande"
+  },
+  {
+    "index": "handaxe",
+    "key": "official:equipment:es:46e33160932fc77217b82c91",
+    "name": "Hacha de mano"
+  },
+  {
+    "index": "javelin",
+    "key": "official:equipment:es:c36f83bc74b4f36de9aa8cb6",
+    "name": "Jabalina"
+  },
+  {
+    "index": "light-hammer",
+    "key": "official:equipment:es:1310422427828454622a4a6a",
+    "name": "Martillo ligero"
+  },
+  {
+    "index": "mace",
+    "key": "official:equipment:es:6bfa0d94ba628f50c3ec77ca",
+    "name": "Maza"
+  },
+  {
+    "index": "quarterstaff",
+    "key": "official:equipment:es:aef15424fdc190a838bb4939",
+    "name": "Bastón"
+  },
+  {
+    "index": "sickle",
+    "key": "official:equipment:es:acef297f82ec71eda9c41b5b",
+    "name": "Hoz"
+  },
+  {
+    "index": "spear",
+    "key": "official:equipment:es:ad3f9a876f3556d660d29775",
+    "name": "Lanza"
+  },
+  {
+    "index": "crossbow-light",
+    "key": "official:equipment:es:ec6c92e57f4e5b957428ab9f",
+    "name": "Ballesta ligera"
+  },
+  {
+    "index": "dart",
+    "key": "official:equipment:es:293b2a3136b01cf593d89295",
+    "name": "Dardo"
+  },
+  {
+    "index": "shortbow",
+    "key": "official:equipment:es:8275f868a07231e266484435",
+    "name": "Arco corto"
+  },
+  {
+    "index": "sling",
+    "key": "official:equipment:es:7ac0dbf0ddb4186566756f48",
+    "name": "Honda"
+  },
+  {
+    "index": "battleaxe",
+    "key": "official:equipment:es:ceb2f9022708a7c4928525a7",
+    "name": "Hacha de guerra"
+  },
+  {
+    "index": "flail",
+    "key": "official:equipment:es:d01f420bac365791b2f973cf",
+    "name": "Mangual"
+  },
+  {
+    "index": "glaive",
+    "key": "official:equipment:es:0bb6e53dd291d438a82ed714",
+    "name": "Guja"
+  },
+  {
+    "index": "greataxe",
+    "key": "official:equipment:es:2a910832a96a1b3b3ac79b9d",
+    "name": "Hacha a dos manos"
+  },
+  {
+    "index": "greatsword",
+    "key": "official:equipment:es:2ccd240f584c7577f7c9fd63",
+    "name": "Espadón"
+  },
+  {
+    "index": "halberd",
+    "key": "official:equipment:es:d19308aa50afd583f9b1aec7",
+    "name": "Alabarda"
+  },
+  {
+    "index": "lance",
+    "key": "official:equipment:es:b087ae3550cfea9cb01142cd",
+    "name": "Lanza de caballería"
+  },
+  {
+    "index": "longsword",
+    "key": "official:equipment:es:fb0103e0da3594dccbdf899a",
+    "name": "Espada larga"
+  },
+  {
+    "index": "maul",
+    "key": "official:equipment:es:0165391ec89c602c4910157b",
+    "name": "Maza a dos manos"
+  },
+  {
+    "index": "morningstar",
+    "key": "official:equipment:es:3e0a8c8b4c511a0191d0f3ff",
+    "name": "Lucero del alba"
+  },
+  {
+    "index": "pike",
+    "key": "official:equipment:es:56389008119a2f14fbebdc5e",
+    "name": "Pica"
+  },
+  {
+    "index": "rapier",
+    "key": "official:equipment:es:01e931e6bad1a06ae2fb2b70",
+    "name": "Estoque"
+  },
+  {
+    "index": "scimitar",
+    "key": "official:equipment:es:6d5554a889e84346a850741e",
+    "name": "Cimitarra"
+  },
+  {
+    "index": "shortsword",
+    "key": "official:equipment:es:63d3d4ab2a1ce8883fa3bb92",
+    "name": "Espada corta"
+  },
+  {
+    "index": "trident",
+    "key": "official:equipment:es:b47158b1c1218eb8a4a4718c",
+    "name": "Tridente"
+  },
+  {
+    "index": "war-pick",
+    "key": "official:equipment:es:3cda7dee8f2554603c6f5b04",
+    "name": "Pico de guerra"
+  },
+  {
+    "index": "warhammer",
+    "key": "official:equipment:es:b9f78d768a1dc7cadf0b7372",
+    "name": "Martillo de guerra"
+  },
+  {
+    "index": "whip",
+    "key": "official:equipment:es:fb0192c97dd80b413295a5d4",
+    "name": "Látigo"
+  },
+  {
+    "index": "blowgun",
+    "key": "official:equipment:es:a12b234f714485c7962e99c1",
+    "name": "Cerbatana"
+  },
+  {
+    "index": "crossbow-hand",
+    "key": "official:equipment:es:33fb8bab9e5a248882c17d0a",
+    "name": "Ballesta de mano"
+  },
+  {
+    "index": "crossbow-heavy",
+    "key": "official:equipment:es:25315b2f0475ce9cdc4df1af",
+    "name": "Ballesta pesada"
+  },
+  {
+    "index": "longbow",
+    "key": "official:equipment:es:21020dfe1365d435b3581a49",
+    "name": "Arco largo"
+  },
+  {
+    "index": "net",
+    "key": "official:equipment:es:c452c8155853d2ae14b93ee8",
+    "name": "Red"
+  },
+  {
+    "index": "padded-armor",
+    "key": "official:equipment:es:6f85e13f9ea355318acc2dc4",
+    "name": "Armadura acolchada"
+  },
+  {
+    "index": "leather-armor",
+    "key": "official:equipment:es:5f377fb9866d89e509c1b12e",
+    "name": "Armadura de cuero"
+  },
+  {
+    "index": "studded-leather-armor",
+    "key": "official:equipment:es:0970abfcde2f28aef7323927",
+    "name": "Armadura de cuero tachonado"
+  },
+  {
+    "index": "hide-armor",
+    "key": "official:equipment:es:8ac40d4c8ade25f6b749fc1a",
+    "name": "Armadura de pieles"
+  },
+  {
+    "index": "chain-shirt",
+    "key": "official:equipment:es:1227d4d1b1c71f987ade5f63",
+    "name": "Camisa de malla"
+  },
+  {
+    "index": "scale-mail",
+    "key": "official:equipment:es:957990f620d129d77c5255ce",
+    "name": "Cota de escamas"
+  },
+  {
+    "index": "breastplate",
+    "key": "official:equipment:es:24e924161eb9531b0a1632c5",
+    "name": "Coraza"
+  },
+  {
+    "index": "half-plate-armor",
+    "key": "official:equipment:es:61efb0ab40e6bac2ce56ea58",
+    "name": "Media armadura"
+  },
+  {
+    "index": "ring-mail",
+    "key": "official:equipment:es:ca890837c10edfc6c4f484bb",
+    "name": "Cota guarnecida"
+  },
+  {
+    "index": "chain-mail",
+    "key": "official:equipment:es:058ac9eece7394605fb4a6f5",
+    "name": "Cota de malla"
+  },
+  {
+    "index": "splint-armor",
+    "key": "official:equipment:es:5ba550c447e657d6385ce5a3",
+    "name": "Armadura de bandas"
+  },
+  {
+    "index": "plate-armor",
+    "key": "official:equipment:es:9f54f2598e5767241a584f1a",
+    "name": "Armadura de placas"
+  },
+  {
+    "index": "shield",
+    "key": "official:equipment:es:96c340ebc10ebfe92ec7d74d",
+    "name": "Escudo"
+  },
+  {
+    "index": "abacus",
+    "key": "official:equipment:es:f88e54bf8b39875147baef8e",
+    "name": "Ábaco"
+  },
+  {
+    "index": "acid-vial",
+    "key": "official:equipment:es:2d32f4a1dfeb0a52c48095f1",
+    "name": "Ácido (vial)"
+  },
+  {
+    "index": "alchemists-fire-flask",
+    "key": "official:equipment:es:e2c6fc0f3a4001fca0154c52",
+    "name": "Fuego de alquimista (frasco)"
+  },
+  {
+    "index": "alms-box",
+    "key": "official:equipment:es:cc4b1ad17ddbae45d3744f22",
+    "name": "Caja para limosnas"
+  },
+  {
+    "index": "arrow",
+    "key": "official:equipment:es:d2420446c122e6d1d1ade566",
+    "name": "Flecha"
+  },
+  {
+    "index": "block-of-incense",
+    "key": "official:equipment:es:5dc4abd6720f5eb80dea925b",
+    "name": "Bloque de incienso"
+  },
+  {
+    "index": "blowgun-needle",
+    "key": "official:equipment:es:0b2e37f3e48893c6a5286c48",
+    "name": "Dardo de cerbatana"
+  },
+  {
+    "index": "censer",
+    "key": "official:equipment:es:bd719c69d26174bd353e513d",
+    "name": "Incensario"
+  },
+  {
+    "index": "crossbow-bolt",
+    "key": "official:equipment:es:b11618cf556790fc99dcad2d",
+    "name": "Virote de ballesta"
+  },
+  {
+    "index": "sling-bullet",
+    "key": "official:equipment:es:787b7ce6af1d2525c342d664",
+    "name": "Balas de honda (bolsa de 20)"
+  },
+  {
+    "index": "amulet",
+    "key": "official:equipment:es:7d150b153865ce199ca4823c",
+    "name": "Amuleto"
+  },
+  {
+    "index": "antitoxin-vial",
+    "key": "official:equipment:es:3d2325ab1ac5aaf2b05117b8",
+    "name": "Antitoxina (vial)"
+  },
+  {
+    "index": "crystal",
+    "key": "official:equipment:es:b68a1e1784bfc6847014f566",
+    "name": "Cristal"
+  },
+  {
+    "index": "orb",
+    "key": "official:equipment:es:f2e134338fbb17f190d3f817",
+    "name": "Orbe"
+  },
+  {
+    "index": "rod",
+    "key": "official:equipment:es:6337e9894a2fe3787473d5a6",
+    "name": "Vara"
+  },
+  {
+    "index": "staff",
+    "key": "official:equipment:es:fc99115af245a6af70c01f2d",
+    "name": "Bastón arcano"
+  },
+  {
+    "index": "wand",
+    "key": "official:equipment:es:7fe5b1f1a76b6720b8dec06f",
+    "name": "Varita mágica"
+  },
+  {
+    "index": "backpack",
+    "key": "official:equipment:es:d33208f224791802d5cc9023",
+    "name": "Mochila"
+  },
+  {
+    "index": "ball-bearings-bag-of-1000",
+    "key": "official:equipment:es:c3ee7379af7aad0425190cf7",
+    "name": "Bolas de metal (bolsa de 1000)"
+  },
+  {
+    "index": "barrel",
+    "key": "official:equipment:es:796d69885dabe07b8511c0fc",
+    "name": "Barril"
+  },
+  {
+    "index": "basket",
+    "key": "official:equipment:es:d4a4618e5fe0191cec822e5d",
+    "name": "Cesta"
+  },
+  {
+    "index": "bedroll",
+    "key": "official:equipment:es:3c51a3c091c8f10097310716",
+    "name": "Petate"
+  },
+  {
+    "index": "bell",
+    "key": "official:equipment:es:7c30d11f6a708ef8f5e479e7",
+    "name": "Campanilla"
+  },
+  {
+    "index": "blanket",
+    "key": "official:equipment:es:ab11ee9a5facf012c567cb18",
+    "name": "Manta"
+  },
+  {
+    "index": "block-and-tackle",
+    "key": "official:equipment:es:4568eca51c17850a6e659f83",
+    "name": "Polipasto"
+  },
+  {
+    "index": "book",
+    "key": "official:equipment:es:886ad6ba49cfdb0b0988802e",
+    "name": "Libro"
+  },
+  {
+    "index": "bottle-glass",
+    "key": "official:equipment:es:bd00cc0985a3ff7fd512cbed",
+    "name": "Botella, vidrio"
+  },
+  {
+    "index": "bucket",
+    "key": "official:equipment:es:b681ac481c11572110f2f916",
+    "name": "Balde"
+  },
+  {
+    "index": "caltrops",
+    "key": "official:equipment:es:741c6683c6d99e0c4fd359ba",
+    "name": "Abrojos (bolsa de 20)"
+  },
+  {
+    "index": "candle",
+    "key": "official:equipment:es:2353d4d34b4c7c673e0e39b4",
+    "name": "Vela"
+  },
+  {
+    "index": "case-crossbow-bolt",
+    "key": "official:equipment:es:8de8fb66d5bee75f24fb3ca2",
+    "name": "Estuche, virote de ballesta"
+  },
+  {
+    "index": "case-map-or-scroll",
+    "key": "official:equipment:es:b730d94858e9db458b9f67f2",
+    "name": "Estuche para mapas o pergaminos"
+  },
+  {
+    "index": "chain-10-feet",
+    "key": "official:equipment:es:e2a48f83cd62b9c237d9db9f",
+    "name": "Cadena (10 pies)"
+  },
+  {
+    "index": "chalk-1-piece",
+    "key": "official:equipment:es:a1f5620ef71c65be6f79a808",
+    "name": "Tiza (1 pieza)"
+  },
+  {
+    "index": "chest",
+    "key": "official:equipment:es:363de1b1a70fdde0f95493dd",
+    "name": "Cofre"
+  },
+  {
+    "index": "clothes-common",
+    "key": "official:equipment:es:460da7e8ff13313e9f1f24ea",
+    "name": "Ropas comunes"
+  },
+  {
+    "index": "clothes-costume",
+    "key": "official:equipment:es:310770d6596b5e33da0fc013",
+    "name": "Ropa de disfraz"
+  },
+  {
+    "index": "clothes-fine",
+    "key": "official:equipment:es:efcf9190471450b926304709",
+    "name": "Ropas de calidad"
+  },
+  {
+    "index": "clothes-travelers",
+    "key": "official:equipment:es:183d3ef114f14c0156ed80d1",
+    "name": "Ropa de viajero"
+  },
+  {
+    "index": "component-pouch",
+    "key": "official:equipment:es:ef0e94b62dccd53d3466b046",
+    "name": "Bolsa de componentes"
+  },
+  {
+    "index": "crowbar",
+    "key": "official:equipment:es:8aa13b5042ba0f4052b7b278",
+    "name": "Palanqueta"
+  },
+  {
+    "index": "sprig-of-mistletoe",
+    "key": "official:equipment:es:708fc72185654ae03cadaf43",
+    "name": "Ramita de muérdago"
+  },
+  {
+    "index": "totem",
+    "key": "official:equipment:es:cbdba9aab3fca9a45891cc6b",
+    "name": "Tótem"
+  },
+  {
+    "index": "wooden-staff",
+    "key": "official:equipment:es:0ad295d1ff31df0157a0e340",
+    "name": "Bastón de madera"
+  },
+  {
+    "index": "yew-wand",
+    "key": "official:equipment:es:8105376de27fa47cc79976b0",
+    "name": "Varita de tejo"
+  },
+  {
+    "index": "emblem",
+    "key": "official:equipment:es:96eecf010fe0c04f3024f662",
+    "name": "Emblema"
+  },
+  {
+    "index": "fishing-tackle",
+    "key": "official:equipment:es:494ef43f15d2dae7b953c1e1",
+    "name": "Aparejos de pesca"
+  },
+  {
+    "index": "flask-or-tankard",
+    "key": "official:equipment:es:f02c595d294730852f45ca1a",
+    "name": "Frasco o jarra"
+  },
+  {
+    "index": "grappling-hook",
+    "key": "official:equipment:es:47a6d04d7d3433823f7e134c",
+    "name": "Garfio de escalada"
+  },
+  {
+    "index": "hammer",
+    "key": "official:equipment:es:8c43510ebccc077670038abb",
+    "name": "Martillo"
+  },
+  {
+    "index": "hammer-sledge",
+    "key": "official:equipment:es:f43e6f73e06efd6fad6092ef",
+    "name": "Almádena"
+  },
+  {
+    "index": "holy-water-flask",
+    "key": "official:equipment:es:6aab8ce7284a16c61edd2e41",
+    "name": "Agua bendita (frasco)"
+  },
+  {
+    "index": "hourglass",
+    "key": "official:equipment:es:6b4e8a7ee89714ac92465871",
+    "name": "Reloj de arena"
+  },
+  {
+    "index": "hunting-trap",
+    "key": "official:equipment:es:4641b0daf44b43be3a95eda4",
+    "name": "Trampa de caza"
+  },
+  {
+    "index": "ink-1-ounce-bottle",
+    "key": "official:equipment:es:fa9ba84b33858e33bab59e7c",
+    "name": "Tinta (frasco de 1 onza)"
+  },
+  {
+    "index": "ink-pen",
+    "key": "official:equipment:es:cb25f6558815b4e93185bb43",
+    "name": "Pluma (para escribir)"
+  },
+  {
+    "index": "jug-or-pitcher",
+    "key": "official:equipment:es:d5dc5f1b27ae2611d038bfd6",
+    "name": "Jarra"
+  },
+  {
+    "index": "climbers-kit",
+    "key": "official:equipment:es:61f89fe62d631f3cdc73f2bc",
+    "name": "Útiles de escalada"
+  },
+  {
+    "index": "disguise-kit",
+    "key": "official:equipment:es:37f3cfdbd596eae8d96687eb",
+    "name": "Kit de disfraz"
+  },
+  {
+    "index": "forgery-kit",
+    "key": "official:equipment:es:9d1f464e5c95c694ecfc7713",
+    "name": "Kit de falsificación"
+  },
+  {
+    "index": "herbalism-kit",
+    "key": "official:equipment:es:52afc9a130f0d37aed94ef12",
+    "name": "Útiles de herborista"
+  },
+  {
+    "index": "healers-kit",
+    "key": "official:equipment:es:19a7ad792dc5ecfb49acd0dd",
+    "name": "Útiles de sanador"
+  },
+  {
+    "index": "mess-kit",
+    "key": "official:equipment:es:b3561afd4baeeaff9340d6cf",
+    "name": "Utensilios de cocina"
+  },
+  {
+    "index": "poisoners-kit",
+    "key": "official:equipment:es:73d1f95b3a80f2914d62adb4",
+    "name": "Kit de envenenamiento"
+  },
+  {
+    "index": "ladder-10-foot",
+    "key": "official:equipment:es:ba07dd39b3d643f4a0b621d4",
+    "name": "Escalera (10 pies)"
+  },
+  {
+    "index": "lamp",
+    "key": "official:equipment:es:8885d34214b355720b48ae25",
+    "name": "Lámpara"
+  },
+  {
+    "index": "lantern-bullseye",
+    "key": "official:equipment:es:0aa19f2c9603e29879a2e214",
+    "name": "Linterna de ojo de buey"
+  },
+  {
+    "index": "lantern-hooded",
+    "key": "official:equipment:es:439d1116c7f5e64e3a8ad11a",
+    "name": "Linterna sorda"
+  },
+  {
+    "index": "little-bag-of-sand",
+    "key": "official:equipment:es:66489d1204f0625b9444507b",
+    "name": "Bolsita con arena"
+  },
+  {
+    "index": "lock",
+    "key": "official:equipment:es:13678f40845e1493325cd2bd",
+    "name": "Cerradura"
+  },
+  {
+    "index": "magnifying-glass",
+    "key": "official:equipment:es:dec16d62f8477362b139d098",
+    "name": "Lupa"
+  },
+  {
+    "index": "manacles",
+    "key": "official:equipment:es:9cb43d663815c002b6dfb91d",
+    "name": "Esposas"
+  },
+  {
+    "index": "mirror-steel",
+    "key": "official:equipment:es:1ac6b2061c7994bc5187c113",
+    "name": "Espejo de acero"
+  },
+  {
+    "index": "oil-flask",
+    "key": "official:equipment:es:f42e832b6b2895b035bada95",
+    "name": "Aceite (frasco)"
+  },
+  {
+    "index": "paper-one-sheet",
+    "key": "official:equipment:es:30d74265c4c216002d67c8c4",
+    "name": "Papel (una hoja)"
+  },
+  {
+    "index": "parchment-one-sheet",
+    "key": "official:equipment:es:20072dcfe12c8dff2410a066",
+    "name": "Pergamino (una hoja)"
+  },
+  {
+    "index": "perfume-vial",
+    "key": "official:equipment:es:2f7c206fec5dc60df24e2645",
+    "name": "Perfume (vial)"
+  },
+  {
+    "index": "pick-miners",
+    "key": "official:equipment:es:c1b3267aa5aef117df0cbb5c",
+    "name": "Pico de minero"
+  },
+  {
+    "index": "piton",
+    "key": "official:equipment:es:5ee19ca247f4fd7289aab395",
+    "name": "Pitón"
+  },
+  {
+    "index": "poison-basic-vial",
+    "key": "official:equipment:es:ac2e2ed021ea21b29f9d85cd",
+    "name": "Veneno, básico (vial)"
+  },
+  {
+    "index": "pole-10-foot",
+    "key": "official:equipment:es:1fafadc4b40af398980615c2",
+    "name": "Pértiga (10 pies)"
+  },
+  {
+    "index": "pot-iron",
+    "key": "official:equipment:es:c0ed13a29aca1414ae15f3b9",
+    "name": "Olla, hierro"
+  },
+  {
+    "index": "pouch",
+    "key": "official:equipment:es:7863f03eb5565607a7c86b7d",
+    "name": "Bolsa"
+  },
+  {
+    "index": "quiver",
+    "key": "official:equipment:es:6717fd92ac73e3765596e309",
+    "name": "Aljaba"
+  },
+  {
+    "index": "ram-portable",
+    "key": "official:equipment:es:378b3a05057eed29aa375cc9",
+    "name": "Ariete portátil"
+  },
+  {
+    "index": "rations-1-day",
+    "key": "official:equipment:es:d915713ec2c391e5dcf80714",
+    "name": "Raciones (1 día)"
+  },
+  {
+    "index": "reliquary",
+    "key": "official:equipment:es:8e43d0d29557eb5e83692b05",
+    "name": "Relicario"
+  },
+  {
+    "index": "robes",
+    "key": "official:equipment:es:afb5b580c85a20384fbf97b5",
+    "name": "Túnica"
+  },
+  {
+    "index": "rope-hempen-50-feet",
+    "key": "official:equipment:es:b8c8c1da43606dcf462e765f",
+    "name": "Cuerda de cáñamo (50 pies)"
+  },
+  {
+    "index": "rope-silk-50-feet",
+    "key": "official:equipment:es:b55296bd6257b7ae74153624",
+    "name": "Cuerda de seda (50 pies)"
+  },
+  {
+    "index": "sack",
+    "key": "official:equipment:es:a6a58ebb5f291eae14e072cd",
+    "name": "Saco"
+  },
+  {
+    "index": "scale-merchants",
+    "key": "official:equipment:es:286c19d8391b36b2d8bd9295",
+    "name": "Balanza de mercader"
+  },
+  {
+    "index": "sealing-wax",
+    "key": "official:equipment:es:dcf9ae72ad3346f46f750894",
+    "name": "Lacre"
+  },
+  {
+    "index": "shovel",
+    "key": "official:equipment:es:0b7e57abff9195ecec3e5f13",
+    "name": "Pala"
+  },
+  {
+    "index": "signal-whistle",
+    "key": "official:equipment:es:e3c10775cb7ba927427f1356",
+    "name": "Silbato de señal"
+  },
+  {
+    "index": "signet-ring",
+    "key": "official:equipment:es:ddfa56929383750182858407",
+    "name": "Anillo de sello"
+  },
+  {
+    "index": "small-knife",
+    "key": "official:equipment:es:2d11feb2e3b65fdcf01e129b",
+    "name": "Cuchillo pequeño"
+  },
+  {
+    "index": "soap",
+    "key": "official:equipment:es:0a534f17ccba42146b444a6a",
+    "name": "Jabón"
+  },
+  {
+    "index": "spellbook",
+    "key": "official:equipment:es:844e28dd6ac8a83fb3ca8ef0",
+    "name": "Libro de conjuros"
+  },
+  {
+    "index": "spike-iron",
+    "key": "official:equipment:es:d6f94e0376d1900f4c11bb8c",
+    "name": "Pincho de hierro"
+  },
+  {
+    "index": "spyglass",
+    "key": "official:equipment:es:1979314dd959de4052e3f286",
+    "name": "Catalejo"
+  },
+  {
+    "index": "string-10-feet",
+    "key": "official:equipment:es:89025bb9c91e286ccab71344",
+    "name": "Cordel (3 m / 10 pies)"
+  },
+  {
+    "index": "tent-two-person",
+    "key": "official:equipment:es:970e20d4fe130f423459a002",
+    "name": "Tienda para dos personas"
+  },
+  {
+    "index": "tinderbox",
+    "key": "official:equipment:es:4e54b43480349f37ef196d17",
+    "name": "Yesquero"
+  },
+  {
+    "index": "torch",
+    "key": "official:equipment:es:d3916bc71ae13afb7a224244",
+    "name": "Antorcha"
+  },
+  {
+    "index": "vestments",
+    "key": "official:equipment:es:43ba25a9060ad452e0f61a55",
+    "name": "Vestiduras"
+  },
+  {
+    "index": "vial",
+    "key": "official:equipment:es:84becffc50fa2fbb219c8931",
+    "name": "Vial"
+  },
+  {
+    "index": "waterskin",
+    "key": "official:equipment:es:240e4ce5f914087a513da6a2",
+    "name": "Cantimplora"
+  },
+  {
+    "index": "whetstone",
+    "key": "official:equipment:es:45377572a3dc72ed495f3e2e",
+    "name": "Piedra de afilar"
+  },
+  {
+    "index": "burglars-pack",
+    "key": "official:equipment:es:1690ade2e005b3d5419276d2",
+    "name": "Paquete de ladrón"
+  },
+  {
+    "index": "diplomats-pack",
+    "key": "official:equipment:es:3e000ccfb949f6041bdb6785",
+    "name": "Paquete de diplomático"
+  },
+  {
+    "index": "dungeoneers-pack",
+    "key": "official:equipment:es:7f88e7a006665acd21818ae9",
+    "name": "Paquete de explorador de mazmorras"
+  },
+  {
+    "index": "entertainers-pack",
+    "key": "official:equipment:es:6e83c9fa1434c8e5af25720e",
+    "name": "Paquete de artista"
+  },
+  {
+    "index": "explorers-pack",
+    "key": "official:equipment:es:a20de6e80ba3ae9fda33cf23",
+    "name": "Paquete de explorador"
+  },
+  {
+    "index": "priests-pack",
+    "key": "official:equipment:es:c503401650f7f2fd8dbe70c5",
+    "name": "Paquete de sacerdote"
+  },
+  {
+    "index": "scholars-pack",
+    "key": "official:equipment:es:a7f39317308a73323479b791",
+    "name": "Paquete de erudito"
+  },
+  {
+    "index": "alchemists-supplies",
+    "key": "official:equipment:es:8af13bb03749f70e9339f0cb",
+    "name": "Suministros de alquimista"
+  },
+  {
+    "index": "brewers-supplies",
+    "key": "official:equipment:es:234d31692db9f12b1e42dbb2",
+    "name": "Suministros de cervecero"
+  },
+  {
+    "index": "calligraphers-supplies",
+    "key": "official:equipment:es:175302cfd38f05a93c9455df",
+    "name": "Suministros de calígrafo"
+  },
+  {
+    "index": "carpenters-tools",
+    "key": "official:equipment:es:44f9f463d3d4e4e60207ced0",
+    "name": "Herramientas de carpintero"
+  },
+  {
+    "index": "cartographers-tools",
+    "key": "official:equipment:es:7e70af915a0f0151f102d0a1",
+    "name": "Herramientas de cartógrafo"
+  },
+  {
+    "index": "cobblers-tools",
+    "key": "official:equipment:es:0e9469a9b602ef2d1b086290",
+    "name": "Herramientas de zapatero"
+  },
+  {
+    "index": "cooks-utensils",
+    "key": "official:equipment:es:0df0fce82893a26df93b35e1",
+    "name": "Útiles de cocinero"
+  },
+  {
+    "index": "glassblowers-tools",
+    "key": "official:equipment:es:393ca8fe9719b61f76997b82",
+    "name": "Herramientas del soplador de vidrio"
+  },
+  {
+    "index": "jewelers-tools",
+    "key": "official:equipment:es:2b08ececa88951ad3a4ac769",
+    "name": "Herramientas de joyero"
+  },
+  {
+    "index": "leatherworkers-tools",
+    "key": "official:equipment:es:c6632056f27d609c9ee846f4",
+    "name": "Herramientas para trabajar el cuero"
+  },
+  {
+    "index": "masons-tools",
+    "key": "official:equipment:es:5f88a69b0ea9fbb89037ee8c",
+    "name": "Herramientas de albañil"
+  },
+  {
+    "index": "painters-supplies",
+    "key": "official:equipment:es:264a8de945ade4509efd9ce4",
+    "name": "Suministros para pintores"
+  },
+  {
+    "index": "potters-tools",
+    "key": "official:equipment:es:88e68c6ea3e6296d75226c8d",
+    "name": "Herramientas de alfarero"
+  },
+  {
+    "index": "smiths-tools",
+    "key": "official:equipment:es:cb90976a4748db28834a8e62",
+    "name": "Herramientas de herrero"
+  },
+  {
+    "index": "tinkers-tools",
+    "key": "official:equipment:es:0cfae63a1a143c1604e3deb0",
+    "name": "Herramientas de manitas"
+  },
+  {
+    "index": "weavers-tools",
+    "key": "official:equipment:es:728ff87ae9b933c7623d68ca",
+    "name": "Herramientas del tejedor"
+  },
+  {
+    "index": "woodcarvers-tools",
+    "key": "official:equipment:es:a7ef83a006b81b56921e34cd",
+    "name": "Herramientas del tallador de madera"
+  },
+  {
+    "index": "dice-set",
+    "key": "official:equipment:es:fc008783161bef8547e593aa",
+    "name": "Juego de dados"
+  },
+  {
+    "index": "playing-card-set",
+    "key": "official:equipment:es:c7dabdd631c10991973eec3f",
+    "name": "Juego de cartas para jugar"
+  },
+  {
+    "index": "bagpipes",
+    "key": "official:equipment:es:da1107925e69cb5321432247",
+    "name": "Gaita"
+  },
+  {
+    "index": "drum",
+    "key": "official:equipment:es:326aeb8a8b37e2ee6e3479d7",
+    "name": "Tambor"
+  },
+  {
+    "index": "dulcimer",
+    "key": "official:equipment:es:680455fdeb92a348fcad1dc5",
+    "name": "Dulcémele"
+  },
+  {
+    "index": "flute",
+    "key": "official:equipment:es:fb982a2fc9e8a56c9820d025",
+    "name": "Flauta"
+  },
+  {
+    "index": "lute",
+    "key": "official:equipment:es:b7d4b8adc9070875fb7690fc",
+    "name": "Laúd"
+  },
+  {
+    "index": "lyre",
+    "key": "official:equipment:es:c7f3467c9866f80f6c863f9c",
+    "name": "Lira"
+  },
+  {
+    "index": "horn",
+    "key": "official:equipment:es:b481444e07aad32c36a9d82b",
+    "name": "Cuerno"
+  },
+  {
+    "index": "pan-flute",
+    "key": "official:equipment:es:348988e49bc0cfe298620489",
+    "name": "Flauta de pan"
+  },
+  {
+    "index": "shawm",
+    "key": "official:equipment:es:97f754e822ee88e4525d7d8f",
+    "name": "Chirimía"
+  },
+  {
+    "index": "viol",
+    "key": "official:equipment:es:48a2bedcc6332898d75b780f",
+    "name": "Viola"
+  },
+  {
+    "index": "navigators-tools",
+    "key": "official:equipment:es:11dda2f8fa756b72d355bd89",
+    "name": "Herramientas de navegante"
+  },
+  {
+    "index": "thieves-tools",
+    "key": "official:equipment:es:ae5ae8ad7f4f0009e8143b42",
+    "name": "Herramientas de ladrón"
+  },
+  {
+    "index": "camel",
+    "key": "official:equipment:es:36b554eb203ac85cfe44699d",
+    "name": "Camello"
+  },
+  {
+    "index": "donkey",
+    "key": "official:equipment:es:7669f31b87e57d13af60430a",
+    "name": "Burro"
+  },
+  {
+    "index": "mule",
+    "key": "official:equipment:es:3ff4dd36b7f7add3d8539341",
+    "name": "Mula"
+  },
+  {
+    "index": "elephant",
+    "key": "official:equipment:es:8436adcd81a5ccb945920165",
+    "name": "Elefante"
+  },
+  {
+    "index": "horse-draft",
+    "key": "official:equipment:es:466d3e34918225cb60fa5f9a",
+    "name": "Caballo de tiro"
+  },
+  {
+    "index": "horse-riding",
+    "key": "official:equipment:es:587fb93a831f3718d1ebc8fc",
+    "name": "Caballo de monta"
+  },
+  {
+    "index": "mastiff",
+    "key": "official:equipment:es:55c9dbeff68a625e39467fdd",
+    "name": "Mastín"
+  },
+  {
+    "index": "pony",
+    "key": "official:equipment:es:1bbb5a6d73812d5aebafdf52",
+    "name": "Pony"
+  },
+  {
+    "index": "warhorse",
+    "key": "official:equipment:es:75e60fc4a570f34cda60902b",
+    "name": "Caballo de guerra"
+  },
+  {
+    "index": "barding-padded",
+    "key": "official:equipment:es:8e82386c079eaff60b255689",
+    "name": "Barda: Armadura acolchada"
+  },
+  {
+    "index": "barding-leather",
+    "key": "official:equipment:es:94cc6be390252602527efa75",
+    "name": "Barda: Armadura de cuero"
+  },
+  {
+    "index": "barding-studded-leather",
+    "key": "official:equipment:es:a4909975068e6186190596aa",
+    "name": "Barda: Armadura de cuero tachonado"
+  },
+  {
+    "index": "barding-hide",
+    "key": "official:equipment:es:1441e31bea46dfaf31b4ac5c",
+    "name": "Barda: Armadura de pieles"
+  },
+  {
+    "index": "barding-chain-shirt",
+    "key": "official:equipment:es:e629d6f51a5a9f80c19a2b4e",
+    "name": "Barda: Camisa de malla"
+  },
+  {
+    "index": "barding-scale-mail",
+    "key": "official:equipment:es:64afc941ef9c5161f4368409",
+    "name": "Barda: Cota de escamas"
+  },
+  {
+    "index": "barding-breastplate",
+    "key": "official:equipment:es:c69a2c5afe146cf1ea5d6010",
+    "name": "Barda: Coraza"
+  },
+  {
+    "index": "barding-half-plate",
+    "key": "official:equipment:es:5545001556a49bda7f0727f9",
+    "name": "Barda: Media armadura"
+  },
+  {
+    "index": "barding-ring-mail",
+    "key": "official:equipment:es:f54b722030a8cd74d16cb832",
+    "name": "Barda: Cota guarnecida"
+  },
+  {
+    "index": "barding-chain-mail",
+    "key": "official:equipment:es:d13c18c1982dca096ccc9cb5",
+    "name": "Barda: Cota de malla"
+  },
+  {
+    "index": "barding-splint",
+    "key": "official:equipment:es:91a07be41ee8d7a742570207",
+    "name": "Barda: Armadura de bandas"
+  },
+  {
+    "index": "barding-plate",
+    "key": "official:equipment:es:3ff21cd542767fee7b128dfb",
+    "name": "Barda: Armadura de placas"
+  },
+  {
+    "index": "bit-and-bridle",
+    "key": "official:equipment:es:7bd754729288ef8f0a649414",
+    "name": "Bocado y brida"
+  },
+  {
+    "index": "carriage",
+    "key": "official:equipment:es:d0ef0cbf3f2c302401e92cdf",
+    "name": "Carruaje"
+  },
+  {
+    "index": "cart",
+    "key": "official:equipment:es:537b7abf6ef905c67da19d09",
+    "name": "Carreta"
+  },
+  {
+    "index": "chariot",
+    "key": "official:equipment:es:28f864c07b796f73e541b992",
+    "name": "Carro de guerra"
+  },
+  {
+    "index": "animal-feed-1-day",
+    "key": "official:equipment:es:ec94c2515d9c391b94afa713",
+    "name": "Alimentación animal (1 día)"
+  },
+  {
+    "index": "saddle-exotic",
+    "key": "official:equipment:es:290cd1915f462803ca99b78e",
+    "name": "Silla de montar exótica"
+  },
+  {
+    "index": "saddle-military",
+    "key": "official:equipment:es:2a314816a4d97bac5926841a",
+    "name": "Silla de montar militar"
+  },
+  {
+    "index": "saddle-pack",
+    "key": "official:equipment:es:1e0bd1eccf146b43a2130f6e",
+    "name": "Silla de carga"
+  },
+  {
+    "index": "saddle-riding",
+    "key": "official:equipment:es:122a5b42fc5eb1a251f32b5f",
+    "name": "Silla de montar"
+  },
+  {
+    "index": "saddlebags",
+    "key": "official:equipment:es:86cffac954a9cc099e37eccf",
+    "name": "Alforjas"
+  },
+  {
+    "index": "sled",
+    "key": "official:equipment:es:80e2a613125161d8ac5f1026",
+    "name": "Trineo"
+  },
+  {
+    "index": "stabling-1-day",
+    "key": "official:equipment:es:f739db0167df5f7d1eca2d70",
+    "name": "Estabulación (1 día)"
+  },
+  {
+    "index": "wagon",
+    "key": "official:equipment:es:5dfd4a037c647bbe917932a0",
+    "name": "Carro"
+  },
+  {
+    "index": "galley",
+    "key": "official:equipment:es:f8647e911c5455c047842128",
+    "name": "Galera"
+  },
+  {
+    "index": "keelboat",
+    "key": "official:equipment:es:ada2351ae3c3ff654d40cb56",
+    "name": "Barcaza"
+  },
+  {
+    "index": "longship",
+    "key": "official:equipment:es:9051b7284367c6f605464859",
+    "name": "Barco largo"
+  },
+  {
+    "index": "rowboat",
+    "key": "official:equipment:es:198cf5e385f3109703e813d3",
+    "name": "Bote de remos"
+  },
+  {
+    "index": "sailing-ship",
+    "key": "official:equipment:es:11428b06fe82e2010dc6af96",
+    "name": "Velero"
+  },
+  {
+    "index": "warship",
+    "key": "official:equipment:es:0f2da68fc4617fc88a6cee6a",
+    "name": "Buque de guerra"
+  }
+]

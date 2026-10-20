@@ -1,0 +1,48 @@
+{
+  "baselineRevision": 1443,
+  "scope": "ECE y catálogo compartido",
+  "healingVariants": [
+    {
+      "key": "official:equipment:es:c9daa1420a1ebc71f4a3ec40",
+      "name": "Poción de curación",
+      "rarity": "common",
+      "healing": [
+        "2d4+2"
+      ]
+    },
+    {
+      "key": "official:equipment:es:7a6854195d181128a66650e7",
+      "name": "Poción de curación mayor",
+      "rarity": "uncommon",
+      "healing": [
+        "4d4+4"
+      ]
+    },
+    {
+      "key": "official:equipment:es:d82087e9fbb18715cecc5264",
+      "name": "Poción de curación superior",
+      "rarity": "rare",
+      "healing": [
+        "8d4+8"
+      ]
+    },
+    {
+      "key": "official:equipment:es:f0c11341d418fbfe7f966070",
+      "name": "Poción de curación suprema",
+      "rarity": "very-rare",
+      "healing": [
+        "10d4+20"
+      ]
+    }
+  ],
+  "healingDuplicates": [],
+  "otherDistinctions": [
+    "Las pociones de fuerza de gigante de hielo y de piedra son variantes distintas que comparten Fuerza 23 y rareza rara en la tabla del SRD; conservar ambas identidades.",
+    "La poción de veneno se conserva separada de las de curación."
+  ],
+  "changes": [
+    "official:equipment:es:c9daa1420a1ebc71f4a3ec40",
+    "official:equipment:es:7a6854195d181128a66650e7",
+    "official:equipment:es:d82087e9fbb18715cecc5264"
+  ]
+}

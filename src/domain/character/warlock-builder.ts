@@ -123,6 +123,7 @@ export async function applyWarlockBenefits(input: CharacterV2): Promise<Characte
   const slots = pactSlots(level), used = Object.values(character.spellcasting.slots).reduce((n,s) => n+s.used,0);
   if (used > slots.maximum) throw new Error("Los espacios gastados exceden el máximo de magia de pacto.");
   for (let n=1;n<=9;n++) character.spellcasting.slots[String(n)] = { maximum: n === slots.level ? slots.maximum : 0,used: n === slots.level ? used : 0 };
+  character.spellcasting.restoredSlots = character.spellcasting.restoredSlots.map(s => s.reset === "short-rest" ? { ...s, sourceLevel: slots.level } : s);
   for (const key of ["deception","persuasion"] as const) {
     if (replay.invocations.includes("beguiling-influence")) {
       runtime.influenceProficiencies[key] ??= character.checks.skills[key].proficiency;

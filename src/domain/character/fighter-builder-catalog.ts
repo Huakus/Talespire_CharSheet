@@ -4,6 +4,7 @@ import srdEquipment from "./phb-srd-equipment.json";
 import type { SkillKey } from "./character-checks";
 import type { EquipmentCatalogDraft } from "../equipment/equipment-catalog";
 import { normalizeEquipmentDefinition } from "../equipment/equipment-catalog";
+import { canonicalBuilderEquipment } from "../equipment/builder-equipment";
 
 export const FIGHTER_SKILLS: readonly SkillKey[] = ["acrobatics", "animalHandling", "athletics", "history", "insight", "intimidation", "perception", "survival"];
 export const FIGHTER_ASI_LEVELS = [4, 6, 8, 12, 14, 16, 19];
@@ -142,6 +143,9 @@ export const PHB_EQUIPMENT: Record<string, EquipmentCatalogDraft> = {
   })),
   ...BUILDER_GEAR, ...BUILDER_WEAPONS,
 };
+for (const [key, value] of Object.entries(BUILDER_WEAPONS)) BUILDER_WEAPONS[key] = canonicalBuilderEquipment(key, value);
+for (const [key, value] of Object.entries(BUILDER_GEAR)) BUILDER_GEAR[key] = canonicalBuilderEquipment(key, value);
+for (const [key, value] of Object.entries(PHB_EQUIPMENT)) PHB_EQUIPMENT[key] = canonicalBuilderEquipment(key, value);
 export function equipmentGoldCost(key: string): number {
   const cost = PHB_EQUIPMENT[key]?.cost;
   return cost ? cost.quantity * ({ cp: .01, sp: .1, ep: .5, gp: 1, pp: 10 }[cost.unit.toLowerCase()] ?? 1) : Infinity;
