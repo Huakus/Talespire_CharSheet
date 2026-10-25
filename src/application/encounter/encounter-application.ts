@@ -34,6 +34,7 @@ export interface TaleSpireInitiativeQueueInput {
   items: { id: string; name: string; kind: string }[];
   activeItemIndex: number;
   roundDelta?: number;
+  retainUnlisted?: boolean;
 }
 
 export interface EncounterMiniatureInput {
@@ -272,24 +273,72 @@ export class EncounterApplication {
     );
   }
 
+  async associateCharacter(command: Omit<EncounterMutationCommand, "action"> & {
+    combatantId: string; characterId: string;
+  }): Promise<CampaignSnapshot> {
+    const current = await this.requireCurrent(command.expectedCampaignChecksum);
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new Error("CHARACTER_NOT_FOUND");
+    const encounter = this.requireEncounter(current, command.encounterId);
+    const previous = encounter.combatants.find((entry) => entry.id === command.combatantId);
+    if (!previous?.taleSpireCreatureId) throw new Error("COMBATANT_MINIATURE_NOT_FOUND");
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const association: EncounterCombatant = {
+      ...previous, kind: "player", characterId: character.id, taleSpireClientId: null,
+      name: character.name, armorClass: character.combat.armorClass,
+      hitPoints: structuredClone(character.combat.hitPoints), conditions: structuredClone(character.combat.conditions),
+    };
+    const result = applyEncounterCommand(encounter, {
+      kind: "set-combatant-association", combatantId: previous.id, association,
+    }, { expectedRevision: command.expectedEncounterRevision, updatedAt });
+    const associations = { ...(current.campaign.gm.miniatureAssociations ?? {}) };
+    associations[previous.taleSpireCreatureId] = this.associationForCombatant(association, {
+      creatureId: previous.taleSpireCreatureId, displayName: previous.taleSpireDisplayName ?? previous.name,
+      boardAssetId: previous.taleSpireBoardAssetId ?? "",
+    }, associations[previous.taleSpireCreatureId], updatedAt);
+    return this.persistState(current, { ...current.campaign.encounters, [encounter.id]: result.encounter },
+      { ...current.campaign.gm, miniatureAssociations: associations }, updatedAt);
+  }
+
+  async clearCombatantAssociation(command: Omit<EncounterMutationCommand, "action"> & {
+    combatantId: string;
+  }): Promise<CampaignSnapshot> {
+    const current = await this.requireCurrent(command.expectedCampaignChecksum);
+    const encounter = this.requireEncounter(current, command.encounterId);
+    const previous = encounter.combatants.find((entry) => entry.id === command.combatantId);
+    if (!previous?.taleSpireCreatureId) throw new Error("COMBATANT_MINIATURE_NOT_FOUND");
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const result = applyEncounterCommand(encounter, {
+      kind: "set-combatant-association", combatantId: previous.id,
+      association: { ...previous, kind: "custom", name: previous.taleSpireDisplayName ?? previous.name,
+        armorClass: null, hitPoints: { current: 1, maximum: 1, temporary: 0 }, conditions: [] },
+    }, { expectedRevision: command.expectedEncounterRevision, updatedAt });
+    const associations = { ...(current.campaign.gm.miniatureAssociations ?? {}) };
+    associations[previous.taleSpireCreatureId] = {
+      displayName: previous.taleSpireDisplayName ?? previous.name,
+      boardAssetId: previous.taleSpireBoardAssetId ?? "", monster: null, characterId: null, updatedAt,
+    };
+    return this.persistState(current, { ...current.campaign.encounters, [encounter.id]: result.encounter },
+      { ...current.campaign.gm, miniatureAssociations: associations }, updatedAt);
+  }
+
   async synchronizeTaleSpireInitiative(
     command: Omit<EncounterMutationCommand, "action"> & { queue: TaleSpireInitiativeQueueInput },
   ): Promise<CampaignSnapshot> {
     const current = await this.requireCurrent(command.expectedCampaignChecksum);
     const items = await Promise.all(command.queue.items
-      .filter((item) => item.kind === "creature" && item.id.trim() && item.name.trim())
+      .filter((item) => item.kind === "creature" && item.id.trim())
       .map(async (item) => {
         const creatureId = item.id.trim();
         const association = current.campaign.gm.miniatureAssociations?.[creatureId];
         const character = Object.values(current.campaign.characters).find((entry) =>
-          entry.taleSpire?.creatureId === creatureId
-          || association?.characterId === entry.id && (!entry.taleSpire || entry.taleSpire.creatureId === creatureId)
+          association ? association.characterId === entry.id : entry.taleSpire?.creatureId === creatureId
         );
         const associatedCombatant: EncounterCombatant | undefined = character ? {
           kind: "player",
           id: await createRandomId("cmb"),
           taleSpireCreatureId: creatureId,
-          taleSpireDisplayName: item.name.trim(),
+          taleSpireDisplayName: item.name.trim() || "Miniatura sin nombre",
           taleSpireBoardAssetId: character.taleSpire?.boardAssetId ?? association?.boardAssetId ?? null,
           name: character.name,
           initiative: null,
@@ -308,7 +357,7 @@ export class EncounterApplication {
           kind: "monster",
           id: await createRandomId("cmb"),
           taleSpireCreatureId: creatureId,
-          taleSpireDisplayName: item.name.trim(),
+          taleSpireDisplayName: item.name.trim() || "Miniatura sin nombre",
           taleSpireBoardAssetId: association.boardAssetId || null,
           name: association.monster.name,
           initiative: null,
@@ -321,7 +370,7 @@ export class EncounterApplication {
         } : undefined;
         return {
           creatureId,
-          name: item.name.trim(),
+          name: item.name.trim() || "Miniatura sin nombre",
           combatantId: await createRandomId("cmb"),
           ...(associatedCombatant ? { associatedCombatant } : {}),
         };
@@ -337,6 +386,7 @@ export class EncounterApplication {
         items,
         activeCreatureId: active?.kind === "creature" ? active.id : null,
         roundDelta: command.queue.roundDelta ?? 0,
+        ...(command.queue.retainUnlisted === undefined ? {} : { retainUnlisted: command.queue.retainUnlisted }),
       },
     })).snapshot;
   }

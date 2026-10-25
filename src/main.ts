@@ -21,6 +21,7 @@ import { EncounterApplication } from "./application/encounter/encounter-applicat
 import { GmApp } from "./ui/gm-app";
 import { TaleSpireGmCollaboration } from "./infrastructure/talespire/talespire-gm-collaboration";
 import { GmWorkspaceApplication } from "./application/gm/gm-workspace-application";
+import { CombatSessionRepository } from "./infrastructure/persistence/combat-session-repository";
 import { mountBackendStatus } from "./ui/backend-status";
 import { configureRemotePersistence, type RemoteCampaignServices } from "./ui/remote-persistence-setup";
 
@@ -31,6 +32,7 @@ declare global {
     handleRollResult?: (event: unknown) => void;
     logSymbioteEvent?: (event: unknown) => void;
     onCreatureStateChange?: (event: unknown) => void;
+    handleContentPackEvents?: (event: unknown) => void;
     handleSyncEvents?: (event: unknown) => void;
     handleSyncClientEvents?: (event: unknown) => void;
     handleClientEvents?: (event: unknown) => void;
@@ -49,6 +51,7 @@ let started = false;
 let activeCollaboration: TaleSpirePlayerCollaboration | null = null;
 let activeGmCollaboration: TaleSpireGmCollaboration | null = null;
 let activeTaleSpireDiceRoller: TaleSpireDiceRoller | null = null;
+let activeMiniatureAdapter: TaleSpireMiniatureAdapter | null = null;
 
 function reportStartupFailure(error: unknown): void {
   const panel = document.createElement("section");
@@ -102,6 +105,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   const clientRole = api.clients ? await resolveTaleSpireClientRole(api.clients) : "player";
   const diceRoller = api.dice ? new TaleSpireDiceRoller(api.dice) : new BrowserDiceRoller();
   const miniature = new TaleSpireMiniatureAdapter(api);
+  activeMiniatureAdapter = miniature;
   if (diceRoller instanceof TaleSpireDiceRoller) activeTaleSpireDiceRoller = diceRoller;
   if (clientRole === "gm") {
     if (campaignContent) await campaignContent.seedOfficialContent().catch(() => 0);
@@ -114,9 +118,11 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
       : null;
     activeGmCollaboration = collaboration;
     if (collaboration) await collaboration.initialize();
-    const gmWorkspace = new GmWorkspaceApplication(repository);
-    void new GmApp(appRoot, new EncounterApplication(repository), {
+    const combatRepository = new CombatSessionRepository(repository);
+    const gmWorkspace = new GmWorkspaceApplication(combatRepository);
+    void new GmApp(appRoot, new EncounterApplication(combatRepository), {
       diceRoller,
+      ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceCancellations: (listener: (key: string) => void) => diceRoller.subscribeCancellations(listener) } : {}),
       ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges, issueReporter: services.issueReporter } : {}),
       ...(services ? { loreReader: services.lore } : {}),
       ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceResults: (listener: Parameters<typeof diceRoller.subscribe>[0]) => diceRoller.subscribe(listener) } : {}),
@@ -150,7 +156,12 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
         publishEncounter: (encounter) => collaboration.publishEncounter(encounter),
         subscribeTransferStatus: (listener) => collaboration.subscribeTransferStatus(listener),
       } : {}),
-      ...(api.creatures ? { selectMiniature: () => miniature.selectFirst() } : {}),
+      getMiniatureImageDiagnostics: () => miniature.getImageDiagnostics(),
+      ...(api.creatures ? {
+        selectMiniature: () => miniature.selectFirst(),
+        createMiniatureThumbnail: (creatureId) => miniature.createCreatureThumbnail(creatureId),
+        subscribeMiniatureChanges: (listener) => miniature.subscribeChanges(listener),
+      } : {}),
     }).start().catch(reportStartupFailure);
     return;
   }
@@ -161,7 +172,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   if (collaboration) await collaboration.initialize();
   if (diceRoller instanceof TaleSpireDiceRoller) {
     diceRoller.subscribe((result) => {
-      if (result.name.startsWith("Iniciativa:")) void activeCollaboration?.sendInitiative(result.total);
+      if (result.name.startsWith("Iniciativa:")) void activeCollaboration?.sendInitiative(result.total, result.characterId);
     });
   }
   void new BrowserApp(appRoot, application, {
@@ -209,7 +220,8 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
 const taleSpireApi = detectTaleSpireApi(window.TS);
 window.handleRollResult = (event) => { void activeTaleSpireDiceRoller?.handleRollEvent(event); };
 window.logSymbioteEvent = () => undefined;
-window.onCreatureStateChange = () => undefined;
+window.onCreatureStateChange = (event) => { activeMiniatureAdapter?.handleStateChange(event); };
+window.handleContentPackEvents = (event) => { activeMiniatureAdapter?.handleContentPackChange(event); };
 window.handleSyncEvents = (event) => {
   void activeCollaboration?.handleSyncEvent(event);
   void activeGmCollaboration?.handleSyncEvent(event);

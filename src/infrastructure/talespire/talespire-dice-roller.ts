@@ -18,17 +18,25 @@ export interface TaleSpireDiceApi {
 export interface TaleSpireResolvedRoll {
   name: string;
   total: number;
+  characterId?: string;
+  correlationId?: string;
 }
 
 export class TaleSpireDiceRoller implements DiceRoller {
   private readonly pending = new Map<string, DiceRollRequest>();
   private readonly listeners = new Set<(result: TaleSpireResolvedRoll) => void>();
+  private readonly cancellationListeners = new Set<(correlationId: string) => void>();
 
   constructor(private readonly api: TaleSpireDiceApi) {}
 
   subscribe(listener: (result: TaleSpireResolvedRoll) => void): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
+  }
+
+  subscribeCancellations(listener: (correlationId: string) => void): () => void {
+    this.cancellationListeners.add(listener);
+    return () => this.cancellationListeners.delete(listener);
   }
 
   async roll(request: DiceRollRequest): Promise<DiceRollResult> {
@@ -62,10 +70,18 @@ export class TaleSpireDiceRoller implements DiceRoller {
   }
 
   async handleRollEvent(event: unknown): Promise<void> {
-    if (event === null || typeof event !== "object" || Reflect.get(event, "kind") !== "rollResults") return;
+    if (event === null || typeof event !== "object") return;
+    const kind = Reflect.get(event, "kind");
     const payload = Reflect.get(event, "payload");
     if (payload === null || typeof payload !== "object") return;
     const rollId = Reflect.get(payload, "rollId");
+    if (kind === "rollRemoved" && typeof rollId === "string") {
+      const request = this.pending.get(rollId);
+      this.pending.delete(rollId);
+      if (request?.correlationId) this.cancellationListeners.forEach((listener) => listener(request.correlationId!));
+      return;
+    }
+    if (kind !== "rollResults") return;
     const groups = Reflect.get(payload, "resultsGroups");
     if (typeof rollId !== "string" || !Array.isArray(groups)) return;
     const request = this.pending.get(rollId);
@@ -75,7 +91,10 @@ export class TaleSpireDiceRoller implements DiceRoller {
     const resolvedGroups = this.resolveGroups(request, groups, totals);
     const total = resolveAbilityCheckRoll(request, resolvedGroups.totals)[0];
     if (total !== undefined && Number.isFinite(total)) {
-      const resolved = { name: request.name, total };
+      const resolved = { name: request.name, total,
+        ...(request.characterId ? { characterId: request.characterId } : {}),
+        ...(request.correlationId ? { correlationId: request.correlationId } : {}),
+      };
       this.listeners.forEach((listener) => listener(resolved));
     }
     await this.api.sendDiceResult?.(resolvedGroups.groups, rollId);

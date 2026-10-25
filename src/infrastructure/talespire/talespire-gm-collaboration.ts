@@ -76,11 +76,15 @@ function nativeInitiativeQueue(value: unknown): TaleSpireNativeInitiativeQueue |
     const id = Reflect.get(item, "id");
     const name = Reflect.get(item, "name");
     const kind = Reflect.get(item, "kind");
-    return typeof id === "string" && id.trim() && typeof name === "string" && name.trim() && typeof kind === "string"
-      ? [{ id: id.trim(), name: name.trim(), kind }]
+    return typeof id === "string" && id.trim() && typeof name === "string" && typeof kind === "string"
+      ? [{ id: id.trim(), name: name.trim() || "Miniatura sin nombre", kind }]
       : [];
   });
-  return { items, activeItemIndex };
+  const active = rawItems[activeItemIndex];
+  const activeId = active !== null && typeof active === "object" ? Reflect.get(active, "id") : null;
+  const activeKind = active !== null && typeof active === "object" ? Reflect.get(active, "kind") : null;
+  return { items, activeItemIndex: typeof activeId === "string"
+    ? items.findIndex((item) => item.id === activeId.trim() && item.kind === activeKind) : -1 };
 }
 
 function initiativeQueueFromEvent(event: unknown): TaleSpireNativeInitiativeQueue | null {

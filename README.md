@@ -19,6 +19,13 @@ npm run check
 The application entry point is `v2.html`; production assets are generated in
 `dist-v2/` and loaded by `manifest.json`.
 
+The GM **Combate** panel follows TaleSpire's native turn queue, restores saved
+miniature-to-character/creature associations, and receives character initiative
+rolls automatically. One active combat is saved automatically per campaign,
+including initiative and creature HP/conditions, and restored when reopened.
+Character statistics continue to come from their sheets. See
+[native combat](docs/v2/NATIVE_COMBAT.md) for behavior and validation.
+
 The guided builder supports single-class 2014 Fighters, Wizards, Warlocks,
 Clerics, Rogues, Barbarians, Bards, Druids, Rangers, Sorcerers, Monks and Paladins from level 1 to 20, with PHB and Xanathar options: six Fighter
 archetypes, nine Wizard traditions, five Warlock patrons, nine Cleric domains,

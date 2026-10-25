@@ -4594,6 +4594,7 @@ export class BrowserApp {
       const manualMode = manualState?.mode ?? "normal";
       const result = await this.runtime.diceRoller.roll({
         name: `Iniciativa: ${character.name}`,
+        characterId: character.id,
         expressions: [`1d20${modifier >= 0 ? "+" : ""}${modifier}`],
         mode: combineRollModes(baseMode, manualMode, useInspiration ? "advantage" : "normal"),
       });

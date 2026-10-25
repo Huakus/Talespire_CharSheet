@@ -1432,6 +1432,11 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .issue-report-dialog .issue-report-feedback { margin: 0; font-size: .8rem; overflow-wrap: anywhere; }
 .issue-report-dialog footer { justify-content: flex-end; }
 .issue-report-dialog [hidden] { display: none; }
+.miniature-image-diagnostics ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.miniature-image-diagnostics li { padding: 8px; border: 1px solid var(--ui-border-subtle); border-radius: 5px; overflow-wrap: anywhere; font-size: .8rem; }
+.miniature-image-diagnostics li p { margin: 4px 0 0; color: var(--ui-text-muted); line-height: 1.5; }
+.miniature-image-diagnostics textarea { font: .7rem/1.5 monospace; }
+.miniature-image-diagnostics footer { flex-wrap: wrap; }
 .notification-center > summary {
   position: relative;
   display: grid;
@@ -1677,7 +1682,7 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .gm-combatant > summary { list-style: none; }
 .gm-combatant > summary::-webkit-details-marker { display: none; }
 .gm-combatant-summary { display: grid; grid-template-columns: minmax(90px, 1fr) auto auto minmax(72px, auto); align-items: center; gap: 3px 7px; padding: 6px; cursor: pointer; }
-.gm-combatant-summary > span:not(.gm-combatant-identity):not(.gm-summary-conditions) { display: grid; justify-items: center; }
+.gm-combatant-summary > :where(span:not(.gm-combatant-identity):not(.gm-summary-conditions)) { display: grid; justify-items: center; }
 .gm-combatant-summary small { color: var(--ui-text-faint); font-size: .58rem; }
 .gm-combatant-summary strong { color: var(--ui-text); font-size: .7rem; }
 .gm-combatant-identity { display: grid; min-width: 0; }
@@ -1967,6 +1972,62 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 .catalog-editor-meta label { min-width: 0; }
 .catalog-editor-meta input { width: 100%; }
 
+/* Monster editor: wide identity fields, grouped statistics and structured features. */
+.gm-custom-monster-form { gap: 10px; min-width: 0; }
+.gm-monster-editor-toolbar { position: sticky; top: 0; z-index: 12; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 0; background: var(--ui-bg-surface); border-bottom: 1px solid var(--ui-border-subtle); }
+.gm-monster-editor-toolbar > small { flex: 1 1 130px; color: var(--ui-text-muted); font-size: .63rem; }
+.gm-monster-editor-toolbar button { flex: 0 0 auto; }
+.gm-custom-monster-form .gm-monster-section { min-width: 0; margin: 0; padding: 0; border: 1px solid var(--ui-border-subtle); border-radius: 5px; background: var(--ui-bg-sunken); }
+.gm-monster-section > legend { margin-left: 8px; padding: 0 4px; color: var(--character-color); font-weight: 800; }
+.gm-monster-section > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 9px; color: var(--character-color); cursor: pointer; list-style: none; font-size: .72rem; font-weight: 800; }
+.gm-monster-section > summary::-webkit-details-marker { display: none; }
+.gm-monster-section > summary::before { content: "▸"; flex: 0 0 auto; }
+.gm-monster-section[open] > summary::before { content: "▾"; }
+.gm-monster-section > summary > small, .gm-monster-section > summary > .catalog-origin { margin-left: auto; color: var(--ui-text-muted); font-size: .59rem; font-weight: 500; }
+.gm-monster-section-body { display: grid; gap: 9px; min-width: 0; padding: 9px; }
+.gm-monster-section[open] > summary { border-bottom: 1px solid var(--ui-border-subtle); }
+.gm-custom-monster-form label { min-width: 0; gap: 4px; }
+.gm-custom-monster-form :is(input,select,textarea) { width: 100%; min-width: 0; }
+.gm-custom-monster-form label.checkbox { display: flex; flex-wrap: nowrap; align-items: center; justify-content: start; gap: 6px; }
+.gm-custom-monster-form input[type="checkbox"] { flex: 0 0 auto; width: 14px !important; min-width: 14px; height: 14px; min-height: 14px; margin: 0; padding: 0; accent-color: var(--character-color); }
+.gm-monster-identity-fields { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.gm-monster-field-wide { grid-column: 1 / -1; }
+.gm-monster-combat-fields { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.gm-monster-initiative-fields { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: end; gap: 8px; }
+.gm-monster-initiative-fields > .checkbox { min-height: 29px; }
+.gm-custom-monster-form .gm-monster-abilities { grid-template-columns: repeat(6,minmax(0,1fr)); gap: 5px; }
+.gm-monster-abilities output { color: var(--character-color); font-size: .65rem; font-weight: 800; }
+.gm-monster-feature-list { display: grid; gap: 8px; min-width: 0; }
+.gm-monster-feature-row { display: grid; gap: 7px; min-width: 0; padding: 8px; border: 1px solid var(--ui-border-subtle); border-radius: 4px; background: var(--ui-bg-surface); }
+.gm-monster-feature-heading { display: grid; grid-template-columns: minmax(0,1fr) minmax(100px,.6fr) auto; align-items: end; gap: 6px; }
+.gm-monster-feature-heading label small { display: inline; color: var(--ui-text-faint); font-size: .56rem; }
+.gm-monster-feature-heading > button { align-self: end; min-height: 27px; }
+.gm-custom-monster-form .gm-monster-feature-row textarea { min-height: 84px; line-height: 1.5; resize: vertical; }
+.gm-monster-feature-section [data-add-feature] { justify-self: start; }
+.gm-monster-empty { margin: 0; color: var(--ui-text-muted); font-size: .65rem; }
+.gm-monster-damage-matrix { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: .64rem; }
+.gm-monster-damage-matrix caption { padding-bottom: 6px; color: var(--ui-text-secondary); text-align: left; font-weight: 700; }
+.gm-monster-damage-matrix th, .gm-monster-damage-matrix td { padding: 5px 3px; border-bottom: 1px solid var(--ui-border-subtle); text-align: center; overflow-wrap: anywhere; }
+.gm-monster-damage-matrix thead th { color: var(--ui-text-muted); font-size: .59rem; font-weight: 700; }
+.gm-monster-damage-matrix th:first-child { width: 40%; text-align: left; }
+.gm-monster-damage-matrix tbody th { color: var(--ui-text-secondary); font-weight: 500; }
+.gm-monster-damage-matrix tr:has(input:checked) { background: var(--ui-accent-surface); }
+.gm-custom-monster-form .gm-monster-damage-matrix label { display: flex; justify-content: center; align-items: center; min-height: 23px; cursor: pointer; }
+.gm-custom-monster-form .gm-checkbox-group { padding: 6px; }
+.gm-custom-monster-form .gm-checkbox-group > div { max-height: none; overflow: visible; }
+.gm-custom-monster-form .gm-checkbox-group label { max-width: 100%; min-width: 0; }
+.gm-custom-monster-form .gm-checkbox-group label span { min-width: 0; overflow-wrap: anywhere; }
+.gm-monster-spell-search { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 7px; }
+.gm-custom-monster-form .gm-monster-spells .gm-checkbox-group > div { max-height: 240px; overflow-x: hidden; overflow-y: auto; scrollbar-width: thin; }
+.gm-custom-monster-form [hidden] { display: none !important; }
+@media (max-width: 430px) {
+  .gm-monster-feature-heading { grid-template-columns: minmax(0,1fr) auto; }
+  .gm-monster-feature-heading > label:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  .gm-monster-feature-heading > button { grid-column: 2; grid-row: 1; }
+  .gm-monster-spell-search { grid-template-columns: minmax(0,1fr); }
+  .gm-monster-initiative-fields { grid-template-columns: minmax(0,1fr); }
+}
+
 /* Capacidades estructuradas de objetos mágicos */
 .field-help { margin: 0 0 6px; color: var(--ui-text-muted); font-size: .64rem; }
 .structured-bonus-fieldset, .structured-feature-fieldset { min-width: 0; padding: 8px; border: 1px solid var(--ui-border-subtle); border-radius: 6px; }
@@ -2088,6 +2149,101 @@ dialog { color: var(--ui-text); }
   .gm-character-state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gm-character-ability-strip { grid-template-columns: repeat(3, minmax(54px, 1fr)) !important; }
   .gm-card-associations { grid-template-columns: 1fr; }
+}
+/* Native combat follows TaleSpire's queue; the centre is the associated sheet. */
+.gm-combat-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 0; }
+.gm-combat-toolbar > strong { margin-right: auto; color: var(--character-color); font: 700 .85rem Georgia, serif; }
+.gm-combat-toolbar button { font-size: .66rem; }
+.gm-native-combat { min-height: 0; grid-template-rows: auto auto; }
+.gm-combat-caption { margin: 0 0 3px; color: var(--ui-text-muted); font-size: .65rem; line-height: 1.5; }
+.gm-native-combat.gm-encounter-board .gm-combatant-summary { grid-template-columns: 56px minmax(0, 1fr) 34px 64px 58px 8px; gap: 5px; padding: 6px; align-items: stretch; }
+.gm-native-combat .gm-combatant-summary > .gm-combatant-miniature { display: flex; flex-direction: column; align-items: center; justify-content: start; gap: 4px; min-width: 0; }
+.gm-miniature-image { display: grid; place-items: center; flex: 0 0 56px; width: 56px; height: 56px; overflow: hidden; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-radius: 5px; }
+.gm-miniature-image > .gm-miniature-placeholder { color: var(--ui-text-faint); font-size: 2rem; }
+.gm-miniature-image > .gm-miniature-render { max-width: none; max-height: none; zoom: .875; }
+.gm-combatant-miniature > small { display: -webkit-box; width: 100%; max-height: 2.6em; overflow: hidden; overflow-wrap: anywhere; text-align: center; line-height: 1.3; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.gm-native-combat .gm-combatant-summary > .gm-combatant-core { display: grid; grid-template-columns: minmax(0, 1fr); grid-auto-rows: max-content; align-content: start; align-items: start; justify-items: stretch; justify-content: stretch; gap: 6px; min-width: 0; padding: 3px 6px; text-align: left; border: 1px solid transparent; border-radius: 4px; container: combat-info / inline-size; }
+.gm-native-combat .gm-combatant-identity { display: grid; align-content: start; gap: 4px; min-width: 0; }
+.gm-native-combat .gm-combatant-identity > strong { display: -webkit-box; min-width: 0; max-height: 2.4em; overflow: hidden; color: var(--character-color); font-size: .85rem; line-height: 1.2; white-space: normal; overflow-wrap: anywhere; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.gm-native-combat .gm-combatant-identity > small { display: flex; align-items: baseline; min-width: 0; gap: 6px; line-height: 1.4; }
+.gm-combat-identity-type { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gm-combat-identity-rank { flex: 0 0 auto; padding: 1px 4px; color: var(--ui-text-secondary); background: var(--ui-bg-sunken); border-radius: 3px; white-space: nowrap; }
+.gm-combat-status { display: inline-block; max-width: 100%; padding: 1px 5px; color: var(--ui-text-secondary); background: var(--ui-bg-surface); border: 1px solid var(--ui-border-subtle); border-radius: 4px; font-size: .57rem; line-height: 1.5; overflow-wrap: anywhere; }
+.gm-combat-status[data-condition-key="concentration"] { color: var(--character-color); border-color: color-mix(in srgb, var(--character-color) 35%, var(--ui-border-subtle)); }
+.gm-combat-status[data-condition-key="bloodied"], .gm-combat-status[data-condition-key="exhaustion"] { color: var(--ui-danger); background: var(--ui-danger-surface); border-color: var(--ui-danger-border); }
+.gm-combat-vitals { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.gm-combat-ac { display: grid; justify-items: center; gap: 2px; min-width: 24px; }
+.gm-native-combat.gm-encounter-board .gm-combatant-hp-readout { grid-column: auto; align-self: stretch; width: 100%; height: 100%; min-height: 0; padding: 4px 2px; }
+.gm-native-combat .gm-combatant-hp-readout > strong { font-size: 1.05rem; line-height: 1.15; }
+.gm-native-combat .gm-combatant-hp-readout > small { color: var(--ui-text-secondary); font-size: .57rem; }
+.gm-combat-temp-hp { margin-top: 3px; color: var(--ui-info); font-size: .56rem; font-weight: 700; }
+.gm-native-combat .gm-combatant-summary > .gm-combat-ac { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-radius: 4px; }
+.gm-native-combat .gm-combat-ac strong { font-size: .9rem; }
+.gm-native-combat .missing-association .gm-combatant-core { grid-column: 2 / 5; }
+.gm-native-combat .gm-summary-conditions { display: flex; flex-wrap: wrap; align-items: start; justify-content: start; gap: 3px; padding-top: 5px; border-top: 1px solid var(--ui-border-subtle); overflow: visible; white-space: normal; line-height: 1.4; }
+.gm-combat-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; min-width: 0; }
+.gm-combat-fact { display: grid; align-content: start; justify-items: start; gap: 2px; min-width: 0; padding: 4px 5px; background: var(--ui-bg-sunken); border-radius: 3px; }
+.gm-native-combat .gm-combat-fact > small { min-width: 0; max-width: 100%; overflow: hidden; color: var(--ui-text-muted); font-size: .53rem; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.gm-native-combat .gm-combat-fact > strong { color: var(--ui-text); font-size: .75rem; line-height: 1.3; overflow-wrap: anywhere; }
+@container combat-info (min-width: 240px) {
+  .gm-combat-facts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.gm-native-combat .needs-association { background: var(--ui-danger-surface); border-color: var(--ui-danger-border) !important; }
+.gm-native-combat .needs-association .gm-combatant-identity strong { color: var(--ui-danger); white-space: normal; }
+.gm-native-combat .gm-combatant-core.needs-association { align-content: center; justify-content: stretch; gap: 8px; padding: 8px; }
+.gm-associate-actions { display: flex; flex-wrap: wrap; align-items: start; justify-content: start; gap: 4px; }
+.gm-associate-actions button { font-size: .63rem !important; }
+.gm-native-combat .gm-combatant-summary > .gm-combat-initiative { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-width: 0; padding: 3px 2px; border: 1px solid var(--ui-border-subtle); border-radius: 4px; }
+.gm-combat-initiative button { width: 100%; min-height: 28px; font-size: .92rem !important; font-weight: 800; }
+.gm-combat-initiative > small { text-align: center; }
+.gm-native-combat .gm-combat-initiative.needs-initiative { background: var(--ui-danger-surface); border-color: var(--ui-danger-border); }
+.gm-native-combat .needs-initiative > small { color: var(--ui-danger); }
+.gm-order-correction { color: var(--character-color); font-size: .68rem; font-weight: 800; }
+.gm-combat-order { display: grid; justify-items: center; gap: 2px; width: 100%; padding: 3px 2px; border: 1px solid transparent; border-radius: 4px; }
+.gm-combat-order.needs-order { background: var(--ui-danger-surface); border-color: var(--ui-danger-border); }
+.gm-combat-order.needs-order > small, .gm-combat-order.needs-order > .gm-order-correction { color: var(--ui-danger); }
+.gm-combat-active-label { color: var(--character-color); background: color-mix(in srgb, var(--character-color) 10%, var(--ui-bg-surface)); border-color: color-mix(in srgb, var(--character-color) 40%, var(--ui-border-subtle)); font-weight: 800; }
+.gm-native-combat .gm-combatant-summary > .gm-combat-expand { align-content: center; color: var(--character-color); }
+.gm-native-combat .gm-card-associations { grid-template-columns: 1fr; }
+.gm-combat-missing-notice { margin: 0; padding: 7px; color: var(--ui-danger); background: var(--ui-danger-surface); border-radius: 4px; font-size: .68rem; }
+.gm-native-combat .gm-combat-details { gap: 6px; padding: 7px; }
+.gm-combat-detail-toolbar, .gm-combat-condition-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.gm-combat-detail-toolbar .gm-combatant-control-row { align-items: center; }
+.gm-combat-detail-toolbar .gm-combatant-control-row label { grid-template-columns: auto 44px; }
+.gm-combat-health-actions { display: flex; align-items: center; }
+.gm-combat-health-actions > input { width: 38px; }
+.gm-combat-binding { position: relative; margin-left: auto; font-size: .64rem; }
+.gm-combat-binding > summary { color: var(--ui-text-muted); cursor: pointer; padding: 4px; }
+.gm-combat-binding > div { position: absolute; right: 0; top: 100%; z-index: 30; display: grid; gap: 5px; width: min(260px, calc(100vw - 40px)); padding: 8px; color: var(--ui-text); background: var(--ui-bg-surface); border: 1px solid var(--ui-border); border-radius: 5px; box-shadow: 0 8px 18px #0005; }
+.gm-combat-condition-toolbar .gm-condition-pills { display: flex; flex-wrap: wrap; gap: 3px; }
+.gm-combat-condition-toolbar .gm-condition-control { display: flex; flex-wrap: wrap; align-items: center; margin-left: auto; }
+.gm-combat-condition-toolbar .gm-condition-control select { width: auto; min-width: 100px; }
+.gm-native-combat .gm-monster-details { margin: 0; padding: 6px; }
+.gm-native-combat .gm-monster-roll-toolbar { margin: 3px 0; }
+.gm-native-combat .gm-monster-rolls { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; margin: 4px 0; }
+.gm-native-combat .gm-monster-rolls button { min-width: 0; }
+.gm-monster-facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 2px 10px; }
+.gm-monster-sections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); align-items: start; gap: 6px 12px; }
+.gm-native-combat .gm-monster-sections-grid > section { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--ui-border-subtle); }
+.gm-native-combat .gm-monster-details p { margin: 3px 0; font-size: .68rem; line-height: 1.4; overflow-wrap: anywhere; }
+.gm-native-combat .gm-character-overview { margin-top: 0; }
+.gm-character-identity-details { margin: 0 0 5px; color: var(--ui-text-muted); font-size: .65rem; line-height: 1.4; overflow-wrap: anywhere; }
+.gm-native-combat .gm-character-state-grid { display: flex; flex-wrap: wrap; gap: 3px; }
+.gm-native-combat .gm-character-state-grid > span { flex: 1 1 100px; }
+.gm-native-combat .gm-passive-strip small { white-space: normal; font-size: .55rem; }
+.gm-combat-association-picker { display: grid; gap: 6px; padding: 7px; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-radius: 5px; }
+.gm-association-search { display: grid; grid-template-columns: minmax(0, 1fr) minmax(90px, .7fr) auto; gap: 5px; }
+.gm-association-search input, .gm-association-search select { width: 100%; min-width: 0; }
+.gm-combat-association-results { display: grid; gap: 4px; max-height: 260px; overflow-y: auto; }
+.gm-combat-association-results button { display: grid; gap: 3px; text-align: left; padding: 7px !important; }
+.gm-combat-association-results small, .gm-combat-association-results p { color: var(--ui-text-muted); font-size: .63rem; }
+@media (max-width: 430px) {
+  .gm-native-combat.gm-encounter-board .gm-combatant-summary { grid-template-columns: 48px minmax(0, 1fr) 30px 54px 50px 7px; gap: 3px; padding: 4px; }
+  .gm-miniature-image { flex-basis: 48px; width: 48px; height: 48px; }
+  .gm-miniature-image > .gm-miniature-render { max-width: none; max-height: none; zoom: .75; }
+  .gm-native-combat .gm-combatant-summary > .gm-combatant-core { padding: 4px; }
+  .gm-association-search { grid-template-columns: minmax(0, 1fr) auto; }
+  .gm-association-search select { grid-row: 2; grid-column: 1 / -1; }
 }
 .builder-content-notice { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; }
 .character-progression { padding: 18px; max-width: 1080px; margin: 0 auto; line-height: 1.55; }

@@ -19,6 +19,8 @@ export type EncounterCommand =
   | { kind: "previous-turn" }
   | { kind: "set-active-combatant"; combatantId: string }
   | { kind: "set-initiative"; combatantId: string; initiative: number | null }
+  | { kind: "clear-initiatives" }
+  | { kind: "set-combatant-association"; combatantId: string; association: EncounterCombatant }
   | { kind: "set-visibility"; combatantId: string; visibleToPlayers: boolean }
   | {
       kind: "set-talespire-creature";
@@ -51,6 +53,7 @@ export type EncounterCommand =
       items: { creatureId: string; name: string; combatantId: string; associatedCombatant?: EncounterCombatant }[];
       activeCreatureId: string | null;
       roundDelta: number;
+      retainUnlisted?: boolean;
     };
 
 export interface EncounterCommandResult {
@@ -108,8 +111,19 @@ export function applyEncounterCommand(
     if (removed.taleSpireCreatureId) throw new Error("LINKED_COMBATANT_CANNOT_BE_REMOVED");
     encounter.combatants = encounter.combatants.filter((combatant) => combatant.id !== command.combatantId);
     if (encounter.activeCombatantId === command.combatantId) encounter.activeCombatantId = null;
+  } else if (command.kind === "clear-initiatives") {
+    encounter.combatants.forEach((combatant) => { combatant.initiative = null; });
+  } else if (command.kind === "set-combatant-association") {
+    const previous = requireCombatant(encounter, command.combatantId);
+    encounter.combatants[encounter.combatants.indexOf(previous)] = {
+      ...structuredClone(command.association), id: previous.id, order: previous.order,
+      taleSpireCreatureId: previous.taleSpireCreatureId,
+      taleSpireDisplayName: previous.taleSpireDisplayName,
+      taleSpireBoardAssetId: previous.taleSpireBoardAssetId,
+      initiative: null,
+    };
   } else if (command.kind === "synchronize-talespire-initiative") {
-    synchronizeTaleSpireInitiative(encounter, command.items, command.activeCreatureId);
+    synchronizeTaleSpireInitiative(encounter, command.items, command.activeCreatureId, command.retainUnlisted ?? true);
     const roundDelta = Math.max(-1, Math.min(1, Math.trunc(command.roundDelta)));
     const previousRound = encounter.round;
     encounter.round = Math.max(1, encounter.round + roundDelta);
@@ -130,7 +144,7 @@ export function applyEncounterCommand(
       taleSpireDisplayName: previous.taleSpireDisplayName,
       taleSpireBoardAssetId: previous.taleSpireBoardAssetId,
       name: command.monster.name,
-      initiative: previous.initiative,
+      initiative: previous.kind === "monster" && previous.monsterDefinitionId === command.monster.definitionId ? previous.initiative : null,
       order: previous.order,
       monsterDefinitionId: command.monster.definitionId,
       armorClass: command.monster.armorClass,
@@ -195,6 +209,7 @@ function synchronizeTaleSpireInitiative(
   encounter: Encounter,
   items: { creatureId: string; name: string; combatantId: string; associatedCombatant?: EncounterCombatant }[],
   activeCreatureId: string | null,
+  retainUnlisted: boolean,
 ): void {
   const linkedByCreatureId = new Map(
     encounter.combatants
@@ -220,6 +235,11 @@ function synchronizeTaleSpireInitiative(
     }
     if (combatant) {
       unclaimed.delete(combatant);
+      if (!retainUnlisted && associated && (combatant.kind !== associated.kind
+        || combatant.kind === "player" && associated.kind === "player" && combatant.characterId !== associated.characterId
+        || combatant.kind === "monster" && associated.kind === "monster" && combatant.monsterDefinitionId !== associated.monsterDefinitionId)) {
+        combatant = { ...structuredClone(associated), id: combatant.id, initiative: null };
+      }
       combatant.taleSpireCreatureId = item.creatureId;
       combatant.taleSpireDisplayName = item.name;
       combatant.taleSpireBoardAssetId = item.associatedCombatant?.taleSpireBoardAssetId ?? combatant.taleSpireBoardAssetId;
@@ -252,7 +272,7 @@ function synchronizeTaleSpireInitiative(
     synchronizedIds.set(item.creatureId, created.id);
   }
 
-  const retained = [...unclaimed]
+  const retained = (retainUnlisted ? [...unclaimed] : [])
     .map((combatant, index) => ({
       ...combatant,
       taleSpireCreatureId: null,

@@ -93,6 +93,17 @@ describe("TaleSpire GM collaboration", () => {
     expect(observed).toEqual([queue]);
   });
 
+  it("keeps unnamed minis and preserves the active turn when invalid queue entries are filtered", async () => {
+    const collaboration = new TaleSpireGmCollaboration({
+      sync: { send: async () => undefined },
+      clients: { whoAmI: async () => ({ id: "gm" }), getClientsInThisBoard: async () => [], getMoreInfo: async () => [] },
+      initiative: { getQueue: async () => ({ items: [null, { id: "mini-a", name: "", kind: "creature" }], activeItemIndex: 1 }) },
+    });
+    expect(await collaboration.getNativeInitiative()).toEqual({
+      items: [{ id: "mini-a", name: "Miniatura sin nombre", kind: "creature" }], activeItemIndex: 0,
+    });
+  });
+
   it("publishes the initiative view and a checksummed change notification", async () => {
     const sent: { message: string; target: string }[] = [];
     const collaboration = collaborationFixture(sent);

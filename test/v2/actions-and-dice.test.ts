@@ -9,6 +9,31 @@ import { projectActionAttackModifier } from "../../src/domain/character/characte
 import { BrowserDiceRoller } from "../../src/infrastructure/dice/browser-dice-roller";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import { TaleSpireDiceRoller } from "../../src/infrastructure/talespire/talespire-dice-roller";
+
+describe("initiative result routing", () => {
+  it("preserves the originating character and request independently from the displayed name", async () => {
+    const results: unknown[] = [];
+    const roller = new TaleSpireDiceRoller({ putDiceInTray: async () => "roll-one", evaluateDiceResultsGroup: async () => 18 });
+    roller.subscribe((result) => results.push(result));
+    await roller.roll({ name: "Iniciativa: Delerion", expressions: ["1d20+3"], mode: "normal",
+      characterId: "character-one", correlationId: "request-one" });
+    await roller.handleRollEvent({ kind: "rollResults", payload: { rollId: "roll-one", resultsGroups: [{}] } });
+    expect(results).toEqual([{ name: "Iniciativa: Delerion", total: 18, characterId: "character-one", correlationId: "request-one" }]);
+  });
+
+  it("releases a cancelled request and ignores any late result", async () => {
+    const cancellations: string[] = [];
+    const results: unknown[] = [];
+    const roller = new TaleSpireDiceRoller({ putDiceInTray: async () => "roll-one" });
+    roller.subscribeCancellations((id) => cancellations.push(id));
+    roller.subscribe((result) => results.push(result));
+    await roller.roll({ name: "Iniciativa: Goblin", expressions: ["1d20+2"], mode: "normal", correlationId: "request-one" });
+    await roller.handleRollEvent({ kind: "rollRemoved", payload: { rollId: "roll-one" } });
+    await roller.handleRollEvent({ kind: "rollResults", payload: { rollId: "roll-one", resultsGroups: [{}] } });
+    expect(cancellations).toEqual(["request-one"]);
+    expect(results).toEqual([]);
+  });
+});
 import { createTestCampaign, createTestCharacter } from "../fixtures/native-campaign";
 
 describe("actions", () => {
