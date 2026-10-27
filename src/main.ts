@@ -121,6 +121,30 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     const combatRepository = new CombatSessionRepository(repository);
     const gmWorkspace = new GmWorkspaceApplication(combatRepository);
     void new GmApp(appRoot, new EncounterApplication(combatRepository), {
+      ...(services?.canManageCharacters === false ? {} : {
+        manageCharacter: (command) => application.administerCharacter(command),
+        openCharacter: async (id: string) => {
+          const dialog = document.createElement("dialog"); dialog.className = "gm-character-sheet-dialog";
+          const close = document.createElement("button"); close.type = "button"; close.textContent = "Guardar y volver al control GM";
+          const body = document.createElement("div"); dialog.append(close, body); document.body.append(dialog); dialog.showModal();
+          const sheet = new BrowserApp(body, application, { storageLabel: "Hoja administrada por el GM", diceRoller, allowArchivedCharacters: true, canManageCharacters: true,
+            ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges } : {}),
+            ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), refreshCustomContent: () => campaignContent.reload() } : {}),
+            ...(api.creatures ? { selectMiniature: () => miniature.selectFirst(), createMiniatureThumbnail: link => miniature.createThumbnail(link) } : {}),
+          });
+          await sheet.start();
+          const select = body.querySelector<HTMLSelectElement>("#character-title-select");
+          if (select) { select.value = id; select.dispatchEvent(new Event("change", { bubbles: true })); }
+          const saveAndClose = async () => {
+            close.disabled = true;
+            if (await sheet.savePendingChanges()) dialog.close();
+            else close.disabled = false;
+          };
+          close.addEventListener("click", () => { void saveAndClose(); });
+          dialog.addEventListener("cancel", event => { event.preventDefault(); void saveAndClose(); });
+          dialog.addEventListener("close", () => { sheet.stop(); dialog.remove(); }, { once: true });
+        },
+      }),
       diceRoller,
       ...(diceRoller instanceof TaleSpireDiceRoller ? { subscribeDiceCancellations: (listener: (key: string) => void) => diceRoller.subscribeCancellations(listener) } : {}),
       ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges, issueReporter: services.issueReporter } : {}),
@@ -172,7 +196,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   if (collaboration) await collaboration.initialize();
   if (diceRoller instanceof TaleSpireDiceRoller) {
     diceRoller.subscribe((result) => {
-      if (result.name.startsWith("Iniciativa:")) void activeCollaboration?.sendInitiative(result.total, result.characterId);
+      if (result.purpose === "initiative" ? Boolean(result.encounterId) : result.name.startsWith("Iniciativa:")) void activeCollaboration?.sendInitiative(result.total, result.characterId, result.correlationId ? { rollId: result.correlationId, ...(result.encounterId ? { encounterId: result.encounterId } : {}), ...(result.initiativeEpoch === undefined ? {} : { epoch: result.initiativeEpoch }) } : undefined).catch(error => console.warn("No se confirmó la iniciativa", error));
     });
   }
   void new BrowserApp(appRoot, application, {
@@ -185,7 +209,8 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     ...(collaboration
       ? {
           requestInitiativeList: () => collaboration.requestInitiativeList(),
-          sendInitiative: (value: number, characterId?: string) => collaboration.sendInitiative(value, characterId ?? null),
+          sendInitiative: (value, characterId, context) => collaboration.sendInitiative(value, characterId ?? null, context),
+          subscribeInitiativeDelivery: (listener) => collaboration.subscribeInitiativeDelivery(listener),
           sendCharacterSummary: (character: Parameters<typeof collaboration.sendCharacterSummary>[0]) => collaboration.sendCharacterSummary(character),
           subscribeInitiative: (listener: Parameters<typeof collaboration.subscribe>[0]) => collaboration.subscribe(listener),
           runSyncTransportProbe: (messageCharacters: number) => collaboration.runTransportProbe(messageCharacters),

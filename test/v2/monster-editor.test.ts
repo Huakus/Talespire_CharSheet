@@ -44,6 +44,14 @@ function enter(control: HTMLInputElement | HTMLTextAreaElement, value: string) {
 }
 
 describe("monster editor", () => {
+  it("edits saving throws and skills with numeric controls and preserves zero bonuses", async () => {
+    const f = await editor();
+    f.form().querySelector<HTMLInputElement>('[name="monster-saves-strength"]')!.value = "0";
+    f.form().querySelector<HTMLInputElement>('[name="monster-skills-perception"]')!.value = "7";
+    f.submit(); await vi.waitFor(() => expect(f.save).toHaveBeenCalledTimes(1));
+    const [saved] = f.save.mock.calls[0]!;
+    expect(saved.saves).toContain("Fuerza +0"); expect(saved.skills).toContain("Percepción +7");
+  });
   it("round trips multiline descriptions, pipe characters, usage and custom defenses without losing entries", async () => {
     const f = await editor();
     const trait = f.form().querySelector('[data-feature-section="traits"]')!;

@@ -5,6 +5,8 @@ import { EncounterSchema, type Encounter, type EncounterCombatant } from "../../
 import { applyEncounterCommand, type EncounterCommand, type EncounterCommandResult } from "../../domain/encounter/encounter";
 import { createRandomId } from "../../shared/id";
 import { createDeterministicId } from "../../shared/id";
+import { checksumJson } from "../../shared/hash";
+import type { JsonValue } from "../../shared/json";
 import type { CharacterSummary } from "../../domain/encounter/encounter-protocol";
 import { GmWorkspaceSchema, type GmWorkspace, type MiniatureAssociation } from "../../domain/gm/gm-workspace";
 
@@ -20,6 +22,7 @@ export interface EncounterMutationCommand {
   expectedEncounterRevision: number;
   expectedCampaignChecksum: string;
   action: EncounterCommand;
+  operationId?: string;
   updatedAt?: string;
 }
 
@@ -125,19 +128,41 @@ export class EncounterApplication {
   }
 
   async apply(command: EncounterMutationCommand): Promise<{ snapshot: CampaignSnapshot; effects: EncounterCommandResult["effects"] }> {
-    const current = await this.requireCurrent(command.expectedCampaignChecksum);
-    const encounter = this.requireEncounter(current, command.encounterId);
+    const base = await this.requireCurrent(command.expectedCampaignChecksum);
+    const original = this.requireEncounter(base, command.encounterId);
+    if (original.revision !== command.expectedEncounterRevision) throw new Error("El combate cambió. Actualizá la vista y revisá la acción.");
+    const operationId = command.operationId ?? globalThis.crypto.randomUUID();
+    const operation = JSON.stringify([operationId, await checksumJson(command.action as unknown as JsonValue)]);
     const updatedAt = command.updatedAt ?? new Date().toISOString();
-    const result = applyEncounterCommand(encounter, command.action, {
-      expectedRevision: command.expectedEncounterRevision,
-      updatedAt,
-    });
-    const snapshot = await this.persist(
-      current,
-      { ...current.campaign.encounters, [result.encounter.id]: result.encounter },
-      updatedAt,
-    );
-    return { snapshot, effects: result.effects };
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const current = await this.repository.load();
+      if (!current || current.campaign.id !== base.campaign.id) throw new Error("La campaña cambió. Volvé a abrir el combate.");
+      const encounter = this.requireEncounter(current, command.encounterId);
+      const previous = encounter.appliedOperations.find(value => JSON.parse(value)[0] === operationId);
+      if (previous) {
+        if (previous !== operation) throw new Error("La operación ya se confirmó con otros datos.");
+        return { snapshot: current, effects: { roundChangedBy: 0, hitPointsChangedBy: 0, temporaryHitPointsChangedBy: 0 } };
+      }
+      const action = command.action;
+      if (encounter.revision !== original.revision) {
+        const before = "combatantId" in action ? original.combatants.find(c => c.id === action.combatantId) : null;
+        const now = "combatantId" in action ? encounter.combatants.find(c => c.id === action.combatantId) : null;
+        const safe = action.kind === "damage" || action.kind === "heal" || action.kind === "synchronize-talespire-initiative"
+          || action.kind === "set-initiative" && (action.onlyIfMissing || before?.initiative === now?.initiative)
+          || action.kind === "set-visibility" && before?.visibleToPlayers === now?.visibleToPlayers;
+        if (!safe) throw new Error("Otro GM modificó el combate. Se conservaron sus cambios; actualizá y revisá la acción.");
+      }
+      const result = applyEncounterCommand(encounter, action, { expectedRevision: encounter.revision, updatedAt });
+      if (result.encounter === encounter) return { snapshot: current, effects: result.effects };
+      result.encounter.appliedOperations = [...encounter.appliedOperations, operation].slice(-1024);
+      try {
+        const snapshot = await this.persist(current, { ...current.campaign.encounters, [encounter.id]: result.encounter }, updatedAt);
+        return { snapshot, effects: result.effects };
+      } catch (error) {
+        if (!(error instanceof CampaignRepositoryConflictError) || attempt === 4) throw error;
+      }
+    }
+    throw new Error("El combate sigue recibiendo cambios. Volvé a intentar.");
   }
 
   async updateConnectedPlayer(
@@ -383,6 +408,7 @@ export class EncounterApplication {
       ...(command.updatedAt === undefined ? {} : { updatedAt: command.updatedAt }),
       action: {
         kind: "synchronize-talespire-initiative",
+        queueKey: JSON.stringify([command.queue.items.map(item => [item.id, item.name, item.kind]), command.queue.activeItemIndex]),
         items,
         activeCreatureId: active?.kind === "creature" ? active.id : null,
         roundDelta: command.queue.roundDelta ?? 0,

@@ -1,0 +1,489 @@
+{
+  "date": "2026-10-26",
+  "patches": [
+    {
+      "table": "campaign_content_entries",
+      "key": "imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+      "name": "🟥 ⚔️Caballero Resonante",
+      "revision": 35,
+      "changes": [
+        {
+          "path": [
+            "traits"
+          ],
+          "before": [
+            {
+              "name": "Disciplina Residual",
+              "usage": "",
+              "content": "Si hay otro caballero a 5 pies: ventaja en ataques."
+            },
+            {
+              "name": "Formación Forzada",
+              "usage": "",
+              "content": "Si hay 2 o más juntos: +2 CA"
+            },
+            {
+              "name": "Corrección del Eco",
+              "usage": "",
+              "content": "1 vez por turno:"
+            },
+            {
+              "name": "Si fallan un ataque: repiten la tirada.",
+              "usage": "",
+              "content": ""
+            }
+          ],
+          "after": [
+            {
+              "name": "Disciplina Residual",
+              "usage": "",
+              "content": "Si hay otro caballero a 5 pies: ventaja en ataques."
+            },
+            {
+              "name": "Formación Forzada",
+              "usage": "",
+              "content": "Si hay 2 o más juntos: +2 CA"
+            },
+            {
+              "name": "Corrección del Eco",
+              "usage": "",
+              "content": "1 vez por turno:\nSi fallan un ataque: repiten la tirada."
+            }
+          ]
+        }
+      ],
+      "evidence": "La entrada anterior termina en «una vez por turno:»; la entrada siguiente es la continuación sin descripción. La variante conservada confirma el mismo texto."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "imported:monster:eng:e197d5323760a7256c740e04",
+      "name": "🟥 ⚔️Resonant Knight",
+      "revision": 1,
+      "changes": [
+        {
+          "path": [
+            "traits"
+          ],
+          "before": [
+            {
+              "name": "Residual Discipline",
+              "usage": "",
+              "content": "If another knight is within 5 feet, the knight has advantage on attack rolls."
+            },
+            {
+              "name": "Forced Formation",
+              "usage": "",
+              "content": "If 2 or more knights are together, they gain +2 AC."
+            },
+            {
+              "name": "Echo Correction",
+              "usage": "",
+              "content": "Once per turn:"
+            },
+            {
+              "name": "If they miss an attack, they reroll the attack roll.",
+              "usage": "",
+              "content": ""
+            }
+          ],
+          "after": [
+            {
+              "name": "Residual Discipline",
+              "usage": "",
+              "content": "If another knight is within 5 feet, the knight has advantage on attack rolls."
+            },
+            {
+              "name": "Forced Formation",
+              "usage": "",
+              "content": "If 2 or more knights are together, they gain +2 AC."
+            },
+            {
+              "name": "Echo Correction",
+              "usage": "",
+              "content": "Once per turn:\nIf they miss an attack, they reroll the attack roll."
+            }
+          ]
+        }
+      ],
+      "evidence": "La entrada anterior termina en «una vez por turno:»; la entrada siguiente es la continuación sin descripción. La variante conservada confirma el mismo texto."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "gm:monster:91f84ed5-d941-4f42-82c9-b4c55da9204a",
+      "name": "Caballero Resonante",
+      "revision": 1,
+      "changes": [
+        {
+          "path": [
+            "traits"
+          ],
+          "before": [
+            {
+              "name": "Disciplina Residual",
+              "usage": "",
+              "content": "Si hay otro caballero a 5 pies: ventaja en ataques."
+            },
+            {
+              "name": "Formación Forzada",
+              "usage": "",
+              "content": "Si hay 2 o más juntos: +2 CA"
+            },
+            {
+              "name": "Corrección del Eco",
+              "usage": "",
+              "content": "1 vez por turno:"
+            },
+            {
+              "name": "Si fallan un ataque: repiten la tirada.",
+              "usage": "",
+              "content": ""
+            }
+          ],
+          "after": [
+            {
+              "name": "Disciplina Residual",
+              "usage": "",
+              "content": "Si hay otro caballero a 5 pies: ventaja en ataques."
+            },
+            {
+              "name": "Formación Forzada",
+              "usage": "",
+              "content": "Si hay 2 o más juntos: +2 CA"
+            },
+            {
+              "name": "Corrección del Eco",
+              "usage": "",
+              "content": "1 vez por turno:\nSi fallan un ataque: repiten la tirada."
+            }
+          ]
+        }
+      ],
+      "evidence": "La entrada anterior termina en «una vez por turno:»; la entrada siguiente es la continuación sin descripción. La variante conservada confirma el mismo texto."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "gm:monster:eng:9469b6e4de8a6cfc22032d2c",
+      "name": "Resonant Knight",
+      "revision": 0,
+      "changes": [
+        {
+          "path": [
+            "traits"
+          ],
+          "before": [
+            {
+              "name": "Residual Discipline",
+              "usage": "",
+              "content": "If another knight is within 5 feet, the knight has advantage on attack rolls."
+            },
+            {
+              "name": "Forced Formation",
+              "usage": "",
+              "content": "If 2 or more knights are together, they gain +2 AC."
+            },
+            {
+              "name": "Echo Correction",
+              "usage": "",
+              "content": "Once per turn:"
+            },
+            {
+              "name": "If they miss an attack, they reroll the attack roll.",
+              "usage": "",
+              "content": ""
+            }
+          ],
+          "after": [
+            {
+              "name": "Residual Discipline",
+              "usage": "",
+              "content": "If another knight is within 5 feet, the knight has advantage on attack rolls."
+            },
+            {
+              "name": "Forced Formation",
+              "usage": "",
+              "content": "If 2 or more knights are together, they gain +2 AC."
+            },
+            {
+              "name": "Echo Correction",
+              "usage": "",
+              "content": "Once per turn:\nIf they miss an attack, they reroll the attack roll."
+            }
+          ]
+        }
+      ],
+      "evidence": "La entrada anterior termina en «una vez por turno:»; la entrada siguiente es la continuación sin descripción. La variante conservada confirma el mismo texto."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "imported:monster:legacy:be0e81d85f7ca25d150d36c4",
+      "name": "Troll de Hielo",
+      "revision": 2,
+      "changes": [
+        {
+          "path": [
+            "traits"
+          ],
+          "before": [
+            {
+              "name": "Regeneración",
+              "usage": "",
+              "content": "Recupera 10 PG al inicio de su turno."
+            },
+            {
+              "name": "La regeneración deja de funcionar hasta el inicio de su siguiente turno si recibe:",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Daño de fuego; daño ácido.",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Si comienza su turno con 0 PG y sin haber recibido fuego o ácido desde su último turno, recupera 10 PG.",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Sangre Congelante",
+              "usage": "",
+              "content": "Cuando una criatura golpea al troll con un ataque cuerpo a cuerpo desde 5 ft. o menos, recibe:"
+            },
+            {
+              "name": "5 (1d10) de daño por frío.",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Variante Luciente (opcional)",
+              "usage": "",
+              "content": "Como estos trolls viven junto a la gran grieta de cristales lucientes, puedes añadir el siguiente rasgo a algunos individuos sin alterar demasiado la dificultad."
+            },
+            {
+              "name": "Mutación Cristalina.",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Cuando el troll cae por debajo de la mitad de sus puntos de golpe, fragmentos cristalinos emergen de su piel.",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Durante el resto del combate:",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "obtiene ventaja en salvaciones contra magia. Inflige 1d6 daño radiante con todos sus ataques.",
+              "usage": "",
+              "content": ""
+            },
+            {
+              "name": "Visualmente, esta transformación debería resultar inquietante para los jugadores, pues constituye una de las primeras evidencias de que los cristales lucientes alteran profundamente a los seres vivos.",
+              "usage": "",
+              "content": ""
+            }
+          ],
+          "after": [
+            {
+              "name": "Regeneración",
+              "usage": "",
+              "content": "Recupera 10 PG al inicio de su turno.\n\nLa regeneración deja de funcionar hasta el inicio de su siguiente turno si recibe:\n\nDaño de fuego; daño ácido.\n\nSi comienza su turno con 0 PG y sin haber recibido fuego o ácido desde su último turno, recupera 10 PG."
+            },
+            {
+              "name": "Sangre Congelante",
+              "usage": "",
+              "content": "Cuando una criatura golpea al troll con un ataque cuerpo a cuerpo desde 5 ft. o menos, recibe:\n\n5 (1d10) de daño por frío."
+            },
+            {
+              "name": "Variante Luciente (opcional)",
+              "usage": "",
+              "content": "Como estos trolls viven junto a la gran grieta de cristales lucientes, puedes añadir el siguiente rasgo a algunos individuos sin alterar demasiado la dificultad.\n\nMutación Cristalina.\n\nCuando el troll cae por debajo de la mitad de sus puntos de golpe, fragmentos cristalinos emergen de su piel.\n\nDurante el resto del combate:\n\nobtiene ventaja en salvaciones contra magia. Inflige 1d6 daño radiante con todos sus ataques.\n\nVisualmente, esta transformación debería resultar inquietante para los jugadores, pues constituye una de las primeras evidencias de que los cristales lucientes alteran profundamente a los seres vivos."
+            }
+          ]
+        }
+      ],
+      "evidence": "La variante Ice Troll conservada agrupa Regeneration, Freezing Blood y Lucent Variant. Se mantiene literalmente todo el texto español, incluidos los avisos de variante."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "official:monster:es:9a6ada0a930142596e9ef78a",
+      "name": "Gigante De Escarcha",
+      "revision": 0,
+      "changes": [
+        {
+          "path": [
+            "Abilities",
+            "Sab"
+          ],
+          "before": 0,
+          "after": 10
+        }
+      ],
+      "evidence": "Frost Giant conserva Wisdom 10, coincidiendo con los demás atributos y salvaciones de la variante española."
+    },
+    {
+      "table": "official_content_entries",
+      "key": "official:monster:es:9a6ada0a930142596e9ef78a",
+      "name": "Gigante De Escarcha",
+      "changes": [
+        {
+          "path": [
+            "Abilities",
+            "Sab"
+          ],
+          "before": 0,
+          "after": 10
+        }
+      ],
+      "evidence": "Frost Giant conserva Wisdom 10, coincidiendo con los demás atributos y salvaciones de la variante española."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "official:monster:es:f2c817d2081d243b756368af",
+      "name": "Cría De Dragón De Bronce",
+      "revision": 0,
+      "changes": [
+        {
+          "path": [
+            "Skills",
+            "1",
+            "Name"
+          ],
+          "before": "Siilo",
+          "after": "Sigilo"
+        }
+      ],
+      "evidence": "Bronze Dragon Wyrmling conserva Stealth +2; «Siilo» es una etiqueta truncada."
+    },
+    {
+      "table": "official_content_entries",
+      "key": "official:monster:es:f2c817d2081d243b756368af",
+      "name": "Cría De Dragón De Bronce",
+      "changes": [
+        {
+          "path": [
+            "Skills",
+            "1",
+            "Name"
+          ],
+          "before": "Siilo",
+          "after": "Sigilo"
+        }
+      ],
+      "evidence": "Bronze Dragon Wyrmling conserva Stealth +2; «Siilo» es una etiqueta truncada."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "official:monster:es:be1be0a1f106e33442d1f3c5",
+      "name": "Diablo Óseo",
+      "revision": 0,
+      "changes": [
+        {
+          "path": [
+            "Skills",
+            "0",
+            "Name"
+          ],
+          "before": "Egao",
+          "after": "Engaño"
+        }
+      ],
+      "evidence": "Bone Devil conserva Deception +7 y la misma otra habilidad Insight +6; «Egao» está truncado."
+    },
+    {
+      "table": "official_content_entries",
+      "key": "official:monster:es:be1be0a1f106e33442d1f3c5",
+      "name": "Diablo Óseo",
+      "changes": [
+        {
+          "path": [
+            "Skills",
+            "0",
+            "Name"
+          ],
+          "before": "Egao",
+          "after": "Engaño"
+        }
+      ],
+      "evidence": "Bone Devil conserva Deception +7 y la misma otra habilidad Insight +6; «Egao» está truncado."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "official:monster:es:18945677c9581bf3967859d6",
+      "name": "Diablo Punzante",
+      "revision": 0,
+      "changes": [
+        {
+          "path": [
+            "Saves",
+            "0",
+            "Name"
+          ],
+          "before": "Feu",
+          "after": "Fue"
+        }
+      ],
+      "evidence": "Barbed Devil conserva Strength +6, Constitution +7, Wisdom +5, Charisma +5; «Feu» está transpuesto."
+    },
+    {
+      "table": "official_content_entries",
+      "key": "official:monster:es:18945677c9581bf3967859d6",
+      "name": "Diablo Punzante",
+      "changes": [
+        {
+          "path": [
+            "Saves",
+            "0",
+            "Name"
+          ],
+          "before": "Feu",
+          "after": "Fue"
+        }
+      ],
+      "evidence": "Barbed Devil conserva Strength +6, Constitution +7, Wisdom +5, Charisma +5; «Feu» está transpuesto."
+    },
+    {
+      "table": "campaign_content_entries",
+      "key": "official:monster:es:67aa1d55b8a02cc7588c83f9",
+      "name": "Aboleth",
+      "revision": 3,
+      "evidence": "El editor anterior buscaba Str/Dex/Wis/Cha en una fuente con Fue/Des/Sab/Car y guardó el valor de reserva 10. Los otros atributos, las salvaciones y el catálogo original español conservado confirman la pérdida. Se restauran sólo esos cuatro valores, preservando el resto de cambios de la ficha.",
+      "changes": [
+        {
+          "path": [
+            "abilities",
+            "Str"
+          ],
+          "before": 10,
+          "after": 21
+        },
+        {
+          "path": [
+            "abilities",
+            "Dex"
+          ],
+          "before": 10,
+          "after": 9
+        },
+        {
+          "path": [
+            "abilities",
+            "Wis"
+          ],
+          "before": 10,
+          "after": 15
+        },
+        {
+          "path": [
+            "abilities",
+            "Cha"
+          ],
+          "before": 10,
+          "after": 18
+        }
+      ]
+    }
+  ]
+}

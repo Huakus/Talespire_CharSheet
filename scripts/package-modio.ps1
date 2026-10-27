@@ -70,6 +70,9 @@ Copy-Item -LiteralPath $sourceStylePath -Destination (Join-Path $packageRoot 'st
 Copy-Item -LiteralPath (Join-Path $repoRoot 'README.md') -Destination (Join-Path $packageRoot 'README.md')
 
 $manifest.entryPoint = '/index.html'
+$manifest.name = 'Talespire CharSheet'
+# Keep the public communication channel stable while the local Code installation stays isolated.
+$manifest.api.interop.id = '10f34bc9-dfa2-4623-a691-bf0a1fb2d9d4'
 $manifest.descriptionFilePath = '/README.md'
 if ([string]::IsNullOrWhiteSpace([string]$manifest.about.website)) {
   $manifest.about.website = 'https://github.com/Huakus/Talespire_CharSheet'

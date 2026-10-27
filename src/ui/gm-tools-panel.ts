@@ -29,7 +29,7 @@ import {
   renderInventoryFeatureEditor,
 } from "./inventory-capability-editor";
 
-export type GmSection = "encounter" | "content" | "lore" | "notes" | "tools";
+export type GmSection = "encounter" | "characters" | "content" | "lore" | "notes" | "tools";
 export type GmContentSection = "spell" | "equipment" | "shop";
 export type GmToolSection = "checklist" | "tables" | "travel" | "npc" | "reference" | "docs";
 

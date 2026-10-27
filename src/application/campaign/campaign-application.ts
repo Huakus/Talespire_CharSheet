@@ -441,37 +441,90 @@ export class CampaignApplication {
     throw new Error("No se pudo confirmar la creación del personaje.");
   }
 
-  async advanceGuidedCharacter(command: { characterId: string; choice: FighterLevelChoiceInput; expectedCharacterRevision: number; expectedCampaignChecksum: string; updatedAt?: string }): Promise<CampaignSnapshot> {
-    const current = await this.repository.load();
+  async advanceGuidedCharacter(command: { characterId: string; choice: FighterLevelChoiceInput; expectedCharacterRevision: number; expectedCampaignChecksum: string; expectedCampaignId?: string; updatedAt?: string }): Promise<CampaignSnapshot> {
+    const choice = FighterLevelChoiceSchema.parse(command.choice);
+    let current = await this.repository.load();
     if (!current) throw new CampaignNotFoundError();
-    const character = current.campaign.characters[command.characterId];
-    if (!character) throw new CharacterNotFoundError(command.characterId);
-    if (character.builder?.levels.some((step) => step.operationId === command.choice.operationId)) {
-      await advanceGuidedCharacter(character, command.choice, command.updatedAt ?? character.metadata.updatedAt);
-      return current;
-    }
-    this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
-    if (character.revision !== command.expectedCharacterRevision) throw new CharacterRevisionConflictError(command.expectedCharacterRevision, character.revision);
+    const campaignId = command.expectedCampaignId ?? current.campaign.id;
     const timestamp = command.updatedAt ?? new Date().toISOString();
-    const updated = await advanceGuidedCharacter(character, command.choice, timestamp);
-    return this.persistUpdatedCharacter(current, updated, current.checksum, timestamp);
+    for (let attempt = 0; attempt < 4; attempt++) {
+      if (current.campaign.id !== campaignId) throw new Error("La campaña cambió. Abrí el tutorial en la campaña correcta.");
+      const character = current.campaign.characters[command.characterId];
+      if (!character) throw new CharacterNotFoundError(command.characterId);
+      if (character.builder?.levels.some((step) => step.operationId === choice.operationId)) {
+        await advanceGuidedCharacter(character, choice, command.updatedAt ?? character.metadata.updatedAt);
+        return current;
+      }
+      // Other players and combat can change the campaign while the wizard is open.
+      // Only an unchanged character can accept these reviewed choices; each write
+      // still compares the latest campaign checksum atomically.
+      if (character.revision !== command.expectedCharacterRevision) throw new CharacterRevisionConflictError(command.expectedCharacterRevision, character.revision);
+      const updated = await advanceGuidedCharacter(character, choice, timestamp);
+      try {
+        return await this.persistUpdatedCharacter(current, updated, current.checksum, timestamp);
+      } catch (error) {
+        if (!(error instanceof CampaignRepositoryConflictError)) throw error;
+        if (attempt === 3) throw new Error("La campaña está recibiendo cambios continuos. Tus elecciones siguen guardadas; volvé a pulsar Confirmar nivel.", { cause: error });
+        const latest = await this.repository.load();
+        if (!latest) throw new CampaignNotFoundError();
+        current = latest;
+      }
+    }
+    throw new Error("No se pudo confirmar la subida de nivel.");
   }
 
   async deleteCharacter(command: DeleteCharacterCommand): Promise<CampaignSnapshot> {
     const current = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
     if (!current) throw new CampaignNotFoundError();
     this.assertCurrentChecksum(current, command.expectedCampaignChecksum);
-    if (!current.campaign.characters[command.characterId]) throw new CharacterNotFoundError(command.characterId);
-    const updatedAt = command.updatedAt ?? new Date().toISOString();
-    const characters = { ...current.campaign.characters };
-    delete characters[command.characterId];
-    const campaign = CampaignV2Schema.parse({
-      ...current.campaign,
-      revision: current.campaign.revision + 1,
-      characters,
-      metadata: { ...current.campaign.metadata, updatedAt },
-    });
-    return this.repository.save(campaign, { kind: "checksum", checksum: command.expectedCampaignChecksum });
+    const character = current.campaign.characters[command.characterId];
+    if (!character) throw new CharacterNotFoundError(command.characterId);
+    return this.administerCharacter({ characterId: character.id, expectedCharacterRevision: character.revision, expectedCampaignId: current.campaign.id, action: "delete" });
+  }
+
+  /** Server persistence additionally enforces GM permission for archive/delete. */
+  async administerCharacter(command: { characterId: string; expectedCharacterRevision: number; expectedCampaignId: string; action: "archive" | "restore" | "delete" | "rename" | "unlink"; name?: string }): Promise<CampaignSnapshot> {
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const current = await this.repository.load();
+      if (!current || current.campaign.id !== command.expectedCampaignId) throw new Error("La campaña cambió.");
+      const character = current.campaign.characters[command.characterId];
+      if (!character) {
+        if (command.action === "delete") return current;
+        throw new CharacterNotFoundError(command.characterId);
+      }
+      if (character.revision !== command.expectedCharacterRevision) throw new Error("La hoja cambió. Revisá la versión actual antes de administrarla.");
+      const campaign = structuredClone(current.campaign), now = new Date().toISOString();
+      if (command.action === "delete") delete campaign.characters[character.id];
+      else {
+        const next = campaign.characters[character.id]!;
+        if (command.action === "rename") {
+          const name = command.name?.trim();
+          if (!name) throw new Error("Ingresá el nombre del personaje.");
+          next.name = name;
+        } else if (command.action === "unlink") next.taleSpire = null;
+        else next.archived = command.action === "archive";
+        next.revision++; next.metadata.updatedAt = now;
+      }
+      if (command.action === "delete" || command.action === "unlink") {
+        for (const [miniature, association] of Object.entries(campaign.gm.miniatureAssociations ?? {})) {
+          if (association.characterId === character.id) campaign.gm.miniatureAssociations![miniature] = { ...association, characterId: null, monster: null, updatedAt: now };
+        }
+        for (const encounter of Object.values(campaign.encounters)) {
+          let changed = false;
+          encounter.combatants = encounter.combatants.map(c => {
+            if (c.kind !== "player" || c.characterId !== character.id) return c;
+            changed = true;
+            const { characterId: _id, taleSpireClientId: _client, ...base } = c;
+            return { ...base, kind: "custom" as const, name: c.taleSpireDisplayName || c.name, initiative: null, armorClass: null, hitPoints: { current: 1, maximum: 1, temporary: 0 }, conditions: [] };
+          });
+          if (changed) { encounter.revision++; encounter.initiativeEpoch++; encounter.metadata.updatedAt = now; }
+        }
+      }
+      campaign.revision++; campaign.metadata.updatedAt = now;
+      try { return await this.repository.save(CampaignV2Schema.parse(campaign), { kind: "checksum", checksum: current.checksum }); }
+      catch (error) { if (!(error instanceof CampaignRepositoryConflictError) || attempt === 3) throw error; }
+    }
+    throw new Error("No se pudo administrar el personaje.");
   }
 
   async linkCharacterMiniature(command: LinkCharacterMiniatureCommand): Promise<CampaignSnapshot> {

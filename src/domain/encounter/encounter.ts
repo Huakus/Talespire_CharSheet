@@ -18,7 +18,7 @@ export type EncounterCommand =
   | { kind: "advance-turn" }
   | { kind: "previous-turn" }
   | { kind: "set-active-combatant"; combatantId: string }
-  | { kind: "set-initiative"; combatantId: string; initiative: number | null }
+  | { kind: "set-initiative"; combatantId: string; initiative: number | null; onlyIfMissing?: boolean; epoch?: number }
   | { kind: "clear-initiatives" }
   | { kind: "set-combatant-association"; combatantId: string; association: EncounterCombatant }
   | { kind: "set-visibility"; combatantId: string; visibleToPlayers: boolean }
@@ -54,6 +54,7 @@ export type EncounterCommand =
       activeCreatureId: string | null;
       roundDelta: number;
       retainUnlisted?: boolean;
+      queueKey?: string;
     };
 
 export interface EncounterCommandResult {
@@ -113,7 +114,9 @@ export function applyEncounterCommand(
     if (encounter.activeCombatantId === command.combatantId) encounter.activeCombatantId = null;
   } else if (command.kind === "clear-initiatives") {
     encounter.combatants.forEach((combatant) => { combatant.initiative = null; });
+    encounter.initiativeEpoch++;
   } else if (command.kind === "set-combatant-association") {
+    encounter.initiativeEpoch++;
     const previous = requireCombatant(encounter, command.combatantId);
     encounter.combatants[encounter.combatants.indexOf(previous)] = {
       ...structuredClone(command.association), id: previous.id, order: previous.order,
@@ -123,7 +126,10 @@ export function applyEncounterCommand(
       initiative: null,
     };
   } else if (command.kind === "synchronize-talespire-initiative") {
+    if (command.queueKey && encounter.nativeQueueKey === command.queueKey) return { encounter: source, effects };
+    if ((encounter.combatants.length === 0) !== (command.items.length === 0)) encounter.initiativeEpoch++;
     synchronizeTaleSpireInitiative(encounter, command.items, command.activeCreatureId, command.retainUnlisted ?? true);
+    encounter.nativeQueueKey = command.queueKey ?? null;
     const roundDelta = Math.max(-1, Math.min(1, Math.trunc(command.roundDelta)));
     const previousRound = encounter.round;
     encounter.round = Math.max(1, encounter.round + roundDelta);
@@ -134,6 +140,7 @@ export function applyEncounterCommand(
     requireCombatant(encounter, command.combatantId);
     encounter.activeCombatantId = command.combatantId;
   } else if (command.kind === "set-monster-association") {
+    encounter.initiativeEpoch++;
     const index = encounter.combatants.findIndex((candidate) => candidate.id === command.combatantId);
     if (index < 0) throw new Error(`COMBATANT_NOT_FOUND:${command.combatantId}`);
     const previous = encounter.combatants[index]!;
@@ -159,6 +166,7 @@ export function applyEncounterCommand(
   } else {
     const combatant = requireCombatant(encounter, command.combatantId);
     if (command.kind === "set-initiative") {
+      if (command.onlyIfMissing && (combatant.initiative !== null || command.epoch !== undefined && command.epoch !== encounter.initiativeEpoch)) return { encounter: source, effects };
       if (command.initiative !== null && !Number.isSafeInteger(command.initiative)) {
         throw new Error("INVALID_INITIATIVE");
       }

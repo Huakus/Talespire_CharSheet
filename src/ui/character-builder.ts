@@ -260,6 +260,7 @@ export async function openCharacterBuilder(options: BuilderOptions): Promise<voi
     }
     if (token !== generation || !dialog.isConnected) return;
     let content = body();
+    let reviewValid = true;
     if (step === stages.length - 1) {
       try {
         const built = await preview();
@@ -273,7 +274,7 @@ export async function openCharacterBuilder(options: BuilderOptions): Promise<voi
           ${built.spellcasting.spells.length ? `<h4>Conjuros</h4><p>${built.spellcasting.spells.map((spell) => html(spell.name)).join(" · ")}</p>` : ""}
           ${built.builder?.classKey === "wizard" && !built.spellcasting.wizard?.bookAvailable ? '<p class="builder-help">Tu compra inicial no incluye libro de conjuros. Conservás la preparación inicial, pero necesitás conseguir un libro y reconstruirlo o copiar los conjuros antes de cambiar la preparación o realizar rituales del libro.</p>' : ""}
           <p class="builder-help">Resistencias, críticos, repeticiones de dados y activaciones condicionales están registrados como rasgos para resolver durante el juego. ${built.builder?.classKey === "warlock" ? "Magia de pacto, invocaciones y Arcanos se administran desde los recursos de Brujo. Efectos sobre objetivos y componentes se resuelven en la mesa." : built.builder?.classKey === "wizard" ? "Libro, preparación, espacios y recursos de escuela se administran desde Libro y recursos de Mago. Objetivos, componentes y efectos sobre otras criaturas se resuelven en la mesa." : "Arquería, Defensa, Duelo y Atleta notable se calculan en sus situaciones admitidas."}</p>`;
-      } catch (failure) { error = failure instanceof Error ? failure.message : "Revisá tus elecciones."; content = "<p>Volvé al paso anterior para resolver las elecciones pendientes.</p>"; }
+      } catch (failure) { reviewValid = false; error = failure instanceof Error ? failure.message : "Revisá tus elecciones."; content = "<p>Volvé al paso anterior para resolver las elecciones pendientes.</p>"; }
     }
     if (token !== generation || !dialog.isConnected) return;
     dropdowns?.dispose();
@@ -284,7 +285,7 @@ export async function openCharacterBuilder(options: BuilderOptions): Promise<voi
       <footer><small>${stored ? "Borrador guardado en este dispositivo." : "El borrador se conserva al escribir si el almacenamiento está disponible."}</small><div>
         <button type="button" data-builder-discard ${busy ? "disabled" : ""}>Descartar</button>
         ${step > 0 ? `<button type="button" data-builder-back ${busy ? "disabled" : ""}>Atrás</button>` : ""}
-        <button type="submit" ${busy || step === stages.length-1 && Boolean(error) ? "disabled" : ""}>${busy ? "Guardando…" : step === stages.length-1 ? character ? "Confirmar nivel" : "Crear personaje" : "Continuar"}</button></div></footer></form>`;
+        <button type="submit" ${busy || step === stages.length-1 && !reviewValid ? "disabled" : ""}>${busy ? "Guardando…" : step === stages.length-1 ? character ? "Confirmar nivel" : "Crear personaje" : "Continuar"}</button></div></footer></form>`;
     const form = dialog.querySelector<HTMLFormElement>("form")!;
     // Restore values explicitly after rebuilding a step, including resumed drafts.
     form.querySelectorAll<HTMLSelectElement>("select").forEach((control) => {

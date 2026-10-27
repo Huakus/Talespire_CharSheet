@@ -1,0 +1,19 @@
+{
+  "verifiedAt": "2026-10-27T03:11:16.050Z",
+  "results": [
+    {
+      "table": "campaign_content_entries",
+      "total": 450,
+      "unchanged": 440,
+      "corrected": 10,
+      "unexpected": []
+    },
+    {
+      "table": "official_content_entries",
+      "total": 430,
+      "unchanged": 426,
+      "corrected": 4,
+      "unexpected": []
+    }
+  ]
+}

@@ -548,6 +548,7 @@ function mountRemoteControls(
 }
 
 export interface RemoteCampaignServices {
+  canManageCharacters: boolean;
   content: SupabaseCampaignContentStore;
   lore: SupabaseCampaignLoreClient;
   issueReporter: SupabaseCampaignIssueClient;
@@ -617,7 +618,13 @@ export async function configureRemotePersistence(
     window.localStorage.setItem(bindingKey, campaign.id);
     const campaignChangeListeners = new Set<(snapshot: CampaignSnapshot) => void>();
     const content = new SupabaseCampaignContentStore(client, campaign.id);
+    let canManageCharacters = false;
+    try {
+      const permission = await supabase.rpc("can_manage_campaign_content", { p_campaign_id: campaign.id });
+      canManageCharacters = !permission.error && permission.data === true;
+    } catch { /* Permission lookup failure hides administration, without bypassing server checks. */ }
     onServices?.({
+      canManageCharacters,
       content,
       issueReporter: new SupabaseCampaignIssueClient(supabase, campaign.id, campaign.name, () => content.captureLoadedEntries()),
       lore: new SupabaseCampaignLoreClient(supabase, campaign.id),

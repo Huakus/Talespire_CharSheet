@@ -9,7 +9,7 @@ import { resolveAbilityCheckRoll, validateAbilityCheckRoll } from "../../domain/
 export interface TaleSpireDiceApi {
   putDiceInTray(
     rolls: { name: string; roll: string }[],
-    clearBeforeAdding: boolean,
+    quietResults: boolean,
   ): Promise<unknown>;
   evaluateDiceResultsGroup?(group: unknown): Promise<number>;
   sendDiceResult?(groups: unknown[], rollId: string): Promise<unknown>;
@@ -20,6 +20,10 @@ export interface TaleSpireResolvedRoll {
   total: number;
   characterId?: string;
   correlationId?: string;
+  purpose?: "initiative";
+  encounterId?: string;
+  initiativeEpoch?: number;
+  detail?: string;
 }
 
 export class TaleSpireDiceRoller implements DiceRoller {
@@ -46,9 +50,10 @@ export class TaleSpireDiceRoller implements DiceRoller {
       : request.mode === "disadvantage"
         ? " (Desventaja)"
         : "";
+    const publicName = request.visibility === "total" ? request.name.replace(/\d*d\d+(?:[+-]\d+)?|[+-]\s*\d+/gi, "").trim() || "Tirada de criatura" : request.name;
     const rolls = request.expressions.flatMap((expression, index) => {
       const roll = {
-        name: `${request.name}${request.expressions.length > 1 ? ` ${index + 1}` : ""}${suffix}`,
+        name: `${publicName}${request.expressions.length > 1 ? ` ${index + 1}` : ""}${suffix}`,
         roll: normalizeDiceExpression(expression),
       };
       return request.mode === "normal" || !expression.toLowerCase().includes("d20")
@@ -92,12 +97,20 @@ export class TaleSpireDiceRoller implements DiceRoller {
     const total = resolveAbilityCheckRoll(request, resolvedGroups.totals)[0];
     if (total !== undefined && Number.isFinite(total)) {
       const resolved = { name: request.name, total,
+        detail: groups.map((group, i) => `${request.name}${groups.length > 1 ? ` ${i + 1}` : ""}: ${describeResult(group && typeof group === "object" ? Reflect.get(group, "result") : group)} = ${totals[i]}`).join(" · "),
+        ...(request.purpose ? { purpose: request.purpose } : {}),
+        ...(request.encounterId ? { encounterId: request.encounterId } : {}),
+        ...(request.initiativeEpoch === undefined ? {} : { initiativeEpoch: request.initiativeEpoch }),
         ...(request.characterId ? { characterId: request.characterId } : {}),
         ...(request.correlationId ? { correlationId: request.correlationId } : {}),
       };
       this.listeners.forEach((listener) => listener(resolved));
     }
-    await this.api.sendDiceResult?.(resolvedGroups.groups, rollId);
+    if (Reflect.get(payload, "gmOnly") === true) return;
+    const publicGroups = request.visibility === "total"
+      ? resolvedGroups.totals.map((value, index) => ({ name: `${request.name.replace(/\d*d\d+(?:[+-]\d+)?|[+-]\s*\d+/gi, "").trim() || "Tirada de criatura"}${request.expressions.length > 1 ? ` ${index + 1}` : ""}`, result: { value } }))
+      : resolvedGroups.groups;
+    await this.api.sendDiceResult?.(publicGroups, rollId);
   }
 
   private resolveGroups(
@@ -147,4 +160,14 @@ export class TaleSpireDiceRoller implements DiceRoller {
       ? (values[0] ?? 0) - values.slice(1).reduce((sum, entry) => sum + entry, 0)
       : values.reduce((sum, entry) => sum + entry, 0);
   }
+}
+
+function describeResult(input: unknown): string {
+  if (!input || typeof input !== "object") return "resultado de TaleSpire";
+  const dice = Reflect.get(input, "results"), kind = Reflect.get(input, "kind");
+  if (Array.isArray(dice)) return `${String(kind ?? "dados")}[${dice.join(", ")}]`;
+  const value = Reflect.get(input, "value");
+  if (typeof value === "number") return String(value);
+  const operands = Reflect.get(input, "operands");
+  return Array.isArray(operands) ? `(${operands.map(describeResult).join(` ${String(Reflect.get(input, "operator"))} `)})` : "resultado de TaleSpire";
 }

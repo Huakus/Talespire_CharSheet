@@ -116,7 +116,7 @@ export class TaleSpireGmCollaboration {
   private players: TaleSpireGmPlayer[] = [];
   private playersListener: ((players: TaleSpireGmPlayer[]) => void) | null = null;
   private summaryListener: ((summary: ReceivedCharacterSummary) => void) | null = null;
-  private initiativeListener: ((clientId: string, initiative: number, characterId: string | null) => void) | null = null;
+  private initiativeListener: ((clientId: string, initiative: number, characterId: string | null, context?: import("../../domain/encounter/encounter-protocol").InitiativeDeliveryContext) => unknown) | null = null;
   private nativeInitiativeListener: ((queue: TaleSpireNativeInitiativeQueue) => void) | null = null;
   private transferStatusListener: ((status: EncounterTransferStatus) => void) | null = null;
   private latestEncounter: Encounter | null = null;
@@ -141,7 +141,7 @@ export class TaleSpireGmCollaboration {
     return () => { if (this.summaryListener === listener) this.summaryListener = null; };
   }
 
-  subscribeInitiative(listener: (clientId: string, initiative: number, characterId: string | null) => void): () => void {
+  subscribeInitiative(listener: NonNullable<TaleSpireGmCollaboration["initiativeListener"]>): () => void {
     this.initiativeListener = listener;
     return () => { if (this.initiativeListener === listener) this.initiativeListener = null; };
   }
@@ -230,7 +230,9 @@ export class TaleSpireGmCollaboration {
       return;
     }
     if (protocol?.payload.type === "player/set-character-initiative") {
-      this.initiativeListener?.(incoming.from.id, protocol.payload.initiative, protocol.payload.characterId);
+      const p = protocol.payload;
+      const accepted = await this.initiativeListener?.(incoming.from.id, p.initiative, p.characterId, p);
+      if (accepted === true && p.rollId) await this.api.sync.send(JSON.stringify(createGmProtocolMessage({ type: "gm/initiative-received", requestId: protocol.messageId })), incoming.from.id);
     } else if (protocol?.payload.type === "player/request-encounter" && this.latestEncounter) {
       await this.publishEncounter(this.latestEncounter);
     }

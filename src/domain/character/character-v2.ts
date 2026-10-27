@@ -46,6 +46,7 @@ export const CharacterV2Schema = z.object({
   id: StableIdSchema,
   revision: z.number().int().nonnegative(),
   name: z.string().min(1),
+  archived: z.boolean().default(false),
   color: z.string().regex(/^#[0-9a-f]{6}$/i).default("#d9bd73"),
   builder: CharacterBuilderStateSchema.nullable().default(null),
   identity: z.object({

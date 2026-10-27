@@ -6,7 +6,11 @@ import { BUILDER_WEAPONS,PHB_EQUIPMENT } from "../domain/character/fighter-build
 import { BACKGROUND_EQUIPMENT } from "../domain/character/phb-character-options";
 import type { WarlockPatron } from "../domain/character/warlock-model";
 const html = (s: string) => s.replace(/[&<>"']/g,(c) => ({ "&": "&amp;","<": "&lt;",">": "&gt;",'"': "&quot;","'": "&#39;" })[c]!);
-const select = (name: string,label: string,values: Record<string,string>,value = "") => `<label>${html(label)}<select name="${name}"><option value="">Elegí una opción</option>${Object.entries(values).map(([key,text]) => `<option value="${key}" ${key === value ? "selected" : ""}>${html(text)}</option>`).join("")}</select></label>`;
+const invocationRequirements = (key: string) => {
+  const inv = INVOCATIONS[key]!;
+  return [`Brujo ${inv.level}+`, inv.boon ? `Pacto: ${PACT_BOONS[inv.boon]}` : "", inv.blast ? "Descarga sobrenatural" : "", inv.curse ? "Capacidad de maldecir" : ""].filter(Boolean).join(" · ");
+};
+const select = (name: string,label: string,values: Record<string,string>,value = "") => `<label>${html(label)}<select name="${name}"><option value="">Elegí una opción</option>${Object.entries(values).map(([key,text]) => `<option value="${key}" ${key === value ? "selected" : ""} ${name.startsWith("warlockInvocation") && INVOCATIONS[key] ? `data-description="${html(INVOCATIONS[key]!.description)}" data-requirements="${html(invocationRequirements(key))}"` : ""}>${html(text)}</option>`).join("")}</select></label>`;
 const spells = (keys: string[]) => Object.fromEntries(keys.map((key) => [key,`${PHB_SPELLS[key]!.name} · N${PHB_SPELLS[key]!.level}`]));
 const descriptions = (keys: string[]) => [...new Set(keys)].filter((key) => PHB_SPELLS[key]).map((key) => { const s = PHB_SPELLS[key]!; return `<details><summary>${html(s.name)}</summary><p>${html(s.castingTime)} · ${html(s.range)} · ${html(s.components)} · ${html(s.duration)}${s.ritual ? " · Ritual" : ""}${s.concentration ? " · Concentración" : ""}</p><p>${html(s.description)}</p>${s.material ? `<p>Material: ${html(s.material)}</p>` : ""}<p>${html(s.higherLevels)}</p></details>`; }).join("");
 export function warlockEquipmentFields(creation: FighterCreation) {

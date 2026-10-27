@@ -74,7 +74,7 @@ describe("natural d20 minimum across dice backends",()=>{
   const resolved:{name:string;total:number}[]=[];
   const dice=new TaleSpireDiceRoller({putDiceInTray:async()=>"roll-tools",evaluateDiceResultsGroup:async g=>Number(g)});dice.subscribe(r=>resolved.push(r));
   await dice.roll(request);await dice.handleRollEvent({kind:"rollResults",payload:{rollId:"roll-tools",resultsGroups:[2,5,3]}});
-  expect(resolved).toEqual([{name:request.name,total:20}]);
+  expect(resolved).toEqual([expect.objectContaining({name:request.name,total:20})]);
   await dice.roll({...request,mode:"disadvantage"});await dice.handleRollEvent({kind:"rollResults",payload:{rollId:"roll-tools",resultsGroups:[18,15,2]}});
   expect(resolved[1]!.total).toBe(24);
  });

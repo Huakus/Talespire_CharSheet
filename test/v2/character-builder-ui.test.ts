@@ -123,7 +123,7 @@ describe("guided character user flow", () => {
     expect(dialog().querySelector("elf")).toBeNull();
   });
   it("blocks invalid choices and preserves the review draft when persistence fails", async () => {
-    const onCreate = vi.fn(async () => { throw new Error("La campaña cambió. Reabrí el borrador."); });
+    const onCreate = vi.fn(async () => {}).mockRejectedValueOnce(new Error("La campaña cambió. Reabrí el borrador."));
     await openCharacterBuilder({ campaignId: "failure-test", name: "Ada", diceRoller, onCreate, onAdvance: vi.fn() });
     submit(); await waitStage("Atributos");
     set("ability_strength", "14");
@@ -137,6 +137,10 @@ describe("guided character user flow", () => {
     submit(); await vi.waitFor(() => expect(dialog().querySelector('[role="alert"]')?.textContent).toContain("La campaña cambió"));
     expect(localStorage.getItem("talespire-builder-v1:failure-test:create")).not.toBeNull();
     expect(dialog().open).toBe(true);
+    expect(dialog().querySelector<HTMLButtonElement>('button[type="submit"]')!.disabled).toBe(false);
+    submit(); await vi.waitFor(() => expect(document.querySelector(".character-builder-dialog")).toBeNull());
+    expect(onCreate).toHaveBeenCalledTimes(2);
+    expect(localStorage.getItem("talespire-builder-v1:failure-test:create")).toBeNull();
   });
   it("uses the same review flow for subclass selection and rolls HP without changing the live sheet", async () => {
     let character = await createGuidedFighter("chr_11111111111111111111111111111111", "build_11111111111111111111111111111111", defaultFighterCreation("Ada"), "2026-10-12T12:00:00.000Z");
@@ -152,6 +156,47 @@ describe("guided character user flow", () => {
     expect(character.identity.level).toBe(2);
     submit(); await vi.waitFor(() => expect(onAdvance).toHaveBeenCalledTimes(1));
     await vi.waitFor(() => expect(character.identity).toMatchObject({ level: 3, subclass: "Campeón" }));
+  });
+  it("confirms a level from the real sheet after another player changes the campaign", async () => {
+    const repository = new InMemoryCampaignRepository(), application = new CampaignApplication(repository);
+    const empty = await application.createCampaign();
+    const base = await application.createGuidedCharacter({ operationId: "build_11111111111111111111111111111111", creation: defaultFighterCreation("Ada"), expectedCampaignChecksum: empty.checksum });
+    const character = Object.values(base.campaign.characters)[0]!;
+    const root = document.createElement("div"); document.body.append(root);
+    const app = new BrowserApp(root, application, { storageLabel: "test", diceRoller });
+    const harness = app as unknown as { snapshot: typeof base; selectedCharacterId: string; openGuidedBuilder(advance: boolean): Promise<void> };
+    harness.snapshot = base; harness.selectedCharacterId = character.id;
+    await harness.openGuidedBuilder(true);
+    submit(); await waitStage("Revisar");
+    const changed = await application.createCharacter({ name: "Otro jugador", expectedCampaignChecksum: base.checksum });
+    const other = Object.values(changed.campaign.characters).find(c => c.id !== character.id)!;
+    submit();
+    await vi.waitFor(() => expect(document.querySelector(".character-builder-dialog")).toBeNull());
+    const saved = (await repository.load())!;
+    expect(saved.campaign.characters[character.id]!.identity.level).toBe(2);
+    expect(saved.campaign.characters[other.id]).toEqual(other);
+    expect(localStorage.getItem(`talespire-builder-v1:${base.campaign.id}:${character.id}:2`)).toBeNull();
+  });
+  it("shows recovery instructions and keeps the level draft when the same character changes", async () => {
+    const repository = new InMemoryCampaignRepository(), application = new CampaignApplication(repository);
+    const empty = await application.createCampaign();
+    const base = await application.createGuidedCharacter({ operationId: "build_11111111111111111111111111111111", creation: defaultFighterCreation("Ada"), expectedCampaignChecksum: empty.checksum });
+    const character = Object.values(base.campaign.characters)[0]!;
+    const root = document.createElement("div"); document.body.append(root);
+    const app = new BrowserApp(root, application, { storageLabel: "test", diceRoller });
+    const harness = app as unknown as { snapshot: typeof base; selectedCharacterId: string; openGuidedBuilder(advance: boolean): Promise<void> };
+    harness.snapshot = base; harness.selectedCharacterId = character.id;
+    await harness.openGuidedBuilder(true);
+    submit(); await waitStage("Revisar");
+    await application.editCharacter({ characterId: character.id, expectedCharacterRevision: character.revision, expectedCampaignChecksum: base.checksum, patch: { combat: { hitPoints: { current: 4 } } } });
+    submit();
+    await vi.waitFor(() => expect(dialog().querySelector('[role="alert"]')?.textContent).toContain("La hoja del personaje cambió"));
+    expect(dialog().textContent).not.toContain("Character revision conflict");
+    expect(dialog().textContent).toContain("Tus elecciones siguen guardadas");
+    expect(localStorage.getItem(`talespire-builder-v1:${base.campaign.id}:${character.id}:2`)).not.toBeNull();
+    expect((await repository.load())!.campaign.characters[character.id]!.combat.hitPoints.current).toBe(4);
+    expect((await repository.load())!.campaign.characters[character.id]!.identity.level).toBe(1);
+    expect(dialog().querySelector<HTMLButtonElement>('button[type="submit"]')!.disabled).toBe(false);
   });
   it("exposes the tutorial from the real sheet management menu", async () => {
     const application = new CampaignApplication(new InMemoryCampaignRepository());

@@ -159,6 +159,8 @@ import {
 import { normalizeRollShortcut } from "../domain/dice/dice-expression";
 
 export interface BrowserAppRuntime {
+  allowArchivedCharacters?: boolean;
+  canManageCharacters?: boolean;
   issueReporter?: CampaignIssueReporter;
   storageLabel: string;
   storageEventKey?: string;
@@ -169,7 +171,8 @@ export interface BrowserAppRuntime {
   selectMiniature?: () => Promise<NonNullable<CharacterV2["taleSpire"]>>;
   createMiniatureThumbnail?: (link: NonNullable<CharacterV2["taleSpire"]>) => Promise<HTMLElement | null>;
   requestInitiativeList?: () => Promise<void>;
-  sendInitiative?: (value: number, characterId?: string) => Promise<void>;
+  sendInitiative?: (value: number, characterId?: string, context?: import("../domain/encounter/encounter-protocol").InitiativeDeliveryContext) => Promise<void>;
+  subscribeInitiativeDelivery?: (listener: (state: { kind: "success" | "error"; text: string }) => void) => () => void;
   sendCharacterSummary?: (character: CharacterV2) => Promise<void>;
   subscribeInitiative?: (listener: (state: TaleSpireInitiativeState) => void) => () => void;
   runSyncTransportProbe?: (messageCharacters: number) => Promise<void>;
@@ -757,8 +760,8 @@ export class BrowserApp {
   }
 
   async start(): Promise<void> {
-    subscribeAppConnectionStatus(() => this.refreshConnectionIndicators());
-    this.runtime.subscribeCampaignChanges?.((snapshot) => this.handleRemoteCampaignChange(snapshot));
+    this.stops.push(subscribeAppConnectionStatus(() => this.refreshConnectionIndicators()));
+    if (this.runtime.subscribeCampaignChanges) this.stops.push(this.runtime.subscribeCampaignChanges(snapshot => this.handleRemoteCampaignChange(snapshot)));
     this.runtime.subscribeDiceResults?.((result) => {
       this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
       if (this.pendingMerchantChallenges.has(result.name)) {
@@ -772,6 +775,7 @@ export class BrowserApp {
       this.initiativeState = state;
       this.render();
     });
+    this.runtime.subscribeInitiativeDelivery?.((state) => { this.message = state; this.render(); });
     this.runtime.subscribeTransportDiagnostics?.((state) => {
       this.transportDiagnostics = state;
       this.render();
@@ -806,6 +810,21 @@ export class BrowserApp {
         if (event.key === this.runtime.storageEventKey) void this.handleLocalExternalChange();
       });
     }
+  }
+
+  private readonly stops: Array<() => void> = [];
+
+  stop(): void {
+    this.stops.splice(0).forEach(stop => stop());
+    if (this.autoSaveTimer !== null) window.clearTimeout(this.autoSaveTimer);
+    this.autoSaveTimer = null;
+  }
+
+  async savePendingChanges(): Promise<boolean> {
+    if (this.autoSaveTimer !== null) window.clearTimeout(this.autoSaveTimer);
+    this.autoSaveTimer = null;
+    const form = this.root.querySelector<HTMLFormElement>("#character-form");
+    return form && this.characterFormDirty ? this.persistCharacterForm(form) : true;
   }
 
   private handleRemoteCampaignChange(snapshot: CampaignSnapshot): void {
@@ -881,6 +900,11 @@ export class BrowserApp {
   }
 
   private render(): void {
+    if (this.snapshot && !this.runtime.allowArchivedCharacters && this.selectedCharacterId && this.snapshot.campaign.characters[this.selectedCharacterId]?.archived) {
+      this.selectedCharacterId = Object.values(this.snapshot.campaign.characters).find(c => !c.archived)?.id ?? null;
+      this.characterFormDirty = false;
+      this.rememberSelectedCharacter();
+    }
     if (this.autoSaveTimer !== null) {
       window.clearTimeout(this.autoSaveTimer);
       this.autoSaveTimer = null;
@@ -1027,7 +1051,13 @@ export class BrowserApp {
         onAdvance: async (choice) => {
           requireCampaign();
           if (!character) throw new Error("No hay personaje para subir de nivel.");
-          const snapshot = await this.application.advanceGuidedCharacter({ characterId: character.id, choice, expectedCharacterRevision: character.revision, expectedCampaignChecksum: base.checksum });
+          let snapshot: CampaignSnapshot;
+          try {
+            snapshot = await this.application.advanceGuidedCharacter({ characterId: character.id, choice, expectedCharacterRevision: character.revision, expectedCampaignChecksum: base.checksum, expectedCampaignId: base.campaign.id });
+          } catch (error) {
+            if (error instanceof CharacterRevisionConflictError) throw new Error("La hoja del personaje cambió mientras el asistente estaba abierto. Guardá y cerrá el asistente, actualizá la hoja y volvé a abrirlo para revisar la subida. Tus elecciones siguen guardadas en este dispositivo.", { cause: error });
+            throw error;
+          }
           this.selectedCharacterId = character.id;
           this.acceptCharacterSnapshot(snapshot, `Subir a Guerrero ${choice.level}`);
           this.rememberSelectedCharacter();
@@ -1078,7 +1108,7 @@ export class BrowserApp {
     const projection = projectCharacterStatistics(character);
     const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
     const initiativeMode = projectAdjustedRollMode(character, "skills", ["Initiative"], character.checks.initiative.rollMode);
-    const characters = Object.values(this.snapshot?.campaign.characters ?? {}).sort((a, b) => a.name.localeCompare(b.name));
+    const characters = Object.values(this.snapshot?.campaign.characters ?? {}).filter(c => !c.archived || this.runtime.allowArchivedCharacters).sort((a, b) => a.name.localeCompare(b.name));
     return `
       <section class="character-sheet-shell" data-sheet-mode="${this.sheetMode}" style="${uiAccentStyle(character.color, this.theme)}">
         <header class="sheet-hero" style="border-top-color:${character.color}">
@@ -1106,7 +1136,7 @@ export class BrowserApp {
               <details class="color-picker menu-color-picker"><summary title="Cambiar color del personaje"><span>Color</span><i style="--swatch-color:${character.color}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${UI_ACCENT_PRESETS.map((color) => `<button type="button" class="color-swatch ${color.toLowerCase() === character.color.toLowerCase() ? "active" : ""}" style="--swatch-color:${color}" data-character-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color.toLowerCase() === character.color.toLowerCase()}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="character-color" type="text" value="${character.color}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal" placeholder="#RRGGBB"></label><button type="button" id="apply-character-color">Aplicar</button></div></div></details>
               <label>Tema<select id="theme"><option value="dark" ${this.theme === "dark" ? "selected" : ""}>Oscuro</option><option value="light" ${this.theme === "light" ? "selected" : ""}>Claro</option></select></label>
               ${this.runtime.selectMiniature ? '<button type="button" class="secondary-button" id="link-miniature">Vincular mini</button>' : ""}
-              <button type="button" class="secondary-button danger" id="delete-character">Eliminar personaje</button>
+              ${this.runtime.canManageCharacters ? '<button type="button" class="secondary-button danger" id="delete-character">Eliminar personaje</button>' : ""}
               <button type="button" id="guided-level-up" ${character.builder && character.identity.level < 20 ? "" : "disabled"} title="${character.builder ? "Continuar el tutorial de tu clase" : "Disponible para personajes creados con el tutorial"}">Subir de nivel con tutorial</button>
               <details class="menu-section"><summary>Administrar personajes</summary>${this.renderCharacterManagement()}</details>
               ${this.renderTransportDiagnostics()}
@@ -1255,7 +1285,7 @@ export class BrowserApp {
   private transferTargetOptions(sourceCharacterId: string): string {
     if (!this.snapshot) return "";
     return Object.values(this.snapshot.campaign.characters)
-      .filter((character) => character.id !== sourceCharacterId)
+      .filter((character) => character.id !== sourceCharacterId && (!character.archived || this.runtime.allowArchivedCharacters))
       .sort((left, right) => left.name.localeCompare(right.name, "es", { sensitivity: "base" }))
       .map((character) => `<option value="${character.id}">${escapeHtml(character.name)}</option>`)
       .join("");
@@ -1930,7 +1960,7 @@ export class BrowserApp {
     const resourceIssue = actor ? equipmentClassResourceIssue(actor, item, feature.id) : "";
     const owned = actor?.inventory.some((entry)=>entry.id===item.id) === true;
     const canDrink = canUse && !!actor && (actor.spellcasting.druid?.form?.currentHp ?? actor.combat.hitPoints.current) > 0 && !actor.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key));
-    const healingRecipients = Object.values(this.snapshot?.campaign.characters ?? {}).filter(c => c.id !== actor?.id);
+    const healingRecipients = Object.values(this.snapshot?.campaign.characters ?? {}).filter(c => c.id !== actor?.id && (!c.archived || this.runtime.allowArchivedCharacters));
     const canRoll = !item.rules || item.quantity > 0 && (item.equipped || item.consumable) && (!item.requiresAttunement || item.attuned) && (!actor || !equipmentBearerIssue(actor,item,feature.id));
     const spellGrant = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""]?.spellcasting.spells.some((s) => s.casting?.kind === "item" && s.casting.source === `inventory:${item.id}:${feature.id}`);
     const shouldOfferUse = !["passive", "other"].includes(feature.kind) || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null;
@@ -4448,6 +4478,7 @@ export class BrowserApp {
   }
 
   private async rollDice(button: HTMLButtonElement): Promise<void> {
+    if (button.classList.contains("hero-initiative")) return this.rollInitiative();
     if (button.disabled) return;
     try {
       const rawExpression = button.dataset.rollExpression;
@@ -4592,9 +4623,13 @@ export class BrowserApp {
       const useInspiration = character.combat.inspiration && this.armedInspirationCharacterIds.has(character.id);
       const manualState = this.manualRollModes.get(character.id) ?? null;
       const manualMode = manualState?.mode ?? "normal";
+      const combat = Object.values(this.snapshot?.campaign.encounters ?? {}).find(e => e.combatants.some(c => c.kind === "player" && c.characterId === character.id));
+      const context = { rollId: globalThis.crypto.randomUUID(), ...(combat ? { encounterId: combat.id, epoch: combat.initiativeEpoch } : {}) };
       const result = await this.runtime.diceRoller.roll({
         name: `Iniciativa: ${character.name}`,
         characterId: character.id,
+        purpose: "initiative", correlationId: context.rollId,
+        ...(combat ? { encounterId: combat.id, initiativeEpoch: combat.initiativeEpoch } : {}),
         expressions: [`1d20${modifier >= 0 ? "+" : ""}${modifier}`],
         mode: combineRollModes(baseMode, manualMode, useInspiration ? "advantage" : "normal"),
       });
@@ -4605,10 +4640,10 @@ export class BrowserApp {
       this.appendActionLog(`Iniciativa: ${character.name}: ${result.summary}`, "roll");
       const total = result.totals[0];
       if (total !== undefined) {
-        await this.runtime.sendInitiative?.(total, character.id);
-        this.message = { kind: "success", text: `${result.summary}.${useInspiration ? " Inspiración usada." : ""} Resultado enviado al GM.` };
+        if (combat) await this.runtime.sendInitiative?.(total, character.id, context);
+        this.message = { kind: "success", text: `${result.summary}.${useInspiration ? " Inspiración usada." : ""}${combat ? " Resultado confirmado por el GM." : ""}` };
       } else {
-        this.message = { kind: "success", text: `${result.summary}${useInspiration ? " · Inspiración usada." : ""} El resultado se enviará automáticamente al GM al completarse la tirada; también podés ingresarlo manualmente.` };
+        this.message = { kind: "success", text: `${result.summary}${useInspiration ? " · Inspiración usada." : ""}${combat ? " El resultado se enviará automáticamente al GM al completarse la tirada; también podés ingresarlo manualmente." : ""}` };
       }
     } catch (error) {
       this.message = { kind: "error", text: formatError(error) };

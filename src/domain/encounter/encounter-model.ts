@@ -62,6 +62,9 @@ export const EncounterSchema = z.object({
   round: z.number().int().positive(),
   activeCombatantId: StableIdSchema.nullable(),
   combatants: z.array(EncounterCombatantSchema),
+  appliedOperations: z.array(z.string()).default([]),
+  initiativeEpoch: z.number().int().nonnegative().default(0),
+  nativeQueueKey: z.string().nullable().default(null),
   metadata: z.object({
     createdAt: TimestampSchema,
     updatedAt: TimestampSchema,

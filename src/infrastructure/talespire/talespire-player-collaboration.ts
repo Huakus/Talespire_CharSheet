@@ -153,6 +153,13 @@ function objectData(value: unknown): Record<string, unknown> | null {
 }
 
 export class TaleSpirePlayerCollaboration {
+  private initiativeAcks = new Map<string, () => void>();
+  private deliveryListener: ((state: { kind: "success" | "error"; text: string }) => void) | null = null;
+
+  subscribeInitiativeDelivery(listener: NonNullable<TaleSpirePlayerCollaboration["deliveryListener"]>): () => void {
+    this.deliveryListener = listener;
+    return () => { this.deliveryListener = null; };
+  }
   private me: ClientFragment | null = null;
   private gm: ClientFragment | null = null;
   private peers: TaleSpireTransportPeer[] = [];
@@ -285,6 +292,11 @@ export class TaleSpirePlayerCollaboration {
   async handleSyncEvent(event: unknown): Promise<void> {
     const incoming = payload(event);
     if (!incoming || incoming.fromClient?.id === this.me?.id || incoming.value === null || typeof incoming.value !== "object") return;
+    const receipt = parseGmProtocolMessage(incoming.raw);
+    if (receipt?.payload.type === "gm/initiative-received" && incoming.fromClient?.id === this.gm?.id) {
+      this.initiativeAcks.get(receipt.payload.requestId)?.();
+      return;
+    }
     const type = Reflect.get(incoming.value, "type");
     const data = objectData(Reflect.get(incoming.value, "data"));
     if (type === "toolset-sync-probe") {
@@ -369,12 +381,33 @@ export class TaleSpirePlayerCollaboration {
     }));
   }
 
-  async sendInitiative(value: number, characterId: string | null = this.latestCharacter?.id ?? null): Promise<void> {
-    await this.sendToGm(createGmProtocolMessage({
+  async sendInitiative(value: number, characterId: string | null = this.latestCharacter?.id ?? null, context?: import("../../domain/encounter/encounter-protocol").InitiativeDeliveryContext): Promise<void> {
+    const message = createGmProtocolMessage({
       type: "player/set-character-initiative",
       characterId,
       initiative: value,
-    }));
+      ...context,
+    });
+    if (!context?.rollId) return this.sendToGm(message);
+    try {
+      await new Promise<void>((resolve, reject) => {
+        let attempts = 0, timer: ReturnType<typeof setTimeout>;
+        const finish = () => { clearTimeout(timer); this.initiativeAcks.delete(message.messageId); resolve(); };
+        this.initiativeAcks.set(message.messageId, finish);
+        const send = async () => {
+          if (!this.initiativeAcks.has(message.messageId)) return;
+          if (++attempts > 4) { this.initiativeAcks.delete(message.messageId); reject(new Error("No se confirmó la iniciativa. Verificá que el GM tenga abierta la misma versión del symbiote.")); return; }
+          timer = setTimeout(() => { void send(); }, attempts * 1500);
+          try { await this.sendToGm(message); }
+          catch (error) { if (attempts === 4) { clearTimeout(timer); this.initiativeAcks.delete(message.messageId); reject(error); } }
+        };
+        void send();
+      });
+      this.deliveryListener?.({ kind: "success", text: "El GM confirmó la recepción de la iniciativa. Se conserva cualquier iniciativa ya asignada." });
+    } catch (error) {
+      this.deliveryListener?.({ kind: "error", text: error instanceof Error ? error.message : "La iniciativa está pendiente de entrega." });
+      throw error;
+    }
   }
 
   async sendCharacterSummary(character: CharacterV2, requestId: string | null = null): Promise<void> {

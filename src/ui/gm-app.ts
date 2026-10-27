@@ -29,6 +29,9 @@ import { renderUiEmptyState } from "./design-system/primitives";
 import { FormDraftStore } from "./form-draft-store";
 import { bindMonsterEditor, readMonsterFeatures, renderMonsterDefenses, renderMonsterFeatures, renderMonsterSpells } from "./monster-editor";
 import { APP_BUILD } from "../build-info";
+import { monsterDiceExpressions } from "../domain/monsters/monster-audit";
+import { MONSTER_SAVES, MONSTER_SKILLS, parseMonsterChecks, monsterSavingThrow } from "../domain/monsters/monster-checks";
+import { renderMonsterChecksEditor, readMonsterChecksEditor } from "./monster-checks-editor";
 import { inspectMiniatureImage, openMiniatureImageDiagnostics, type MiniatureImageReport } from "./miniature-image-diagnostics";
 
 export { calculateFloatingPanelPosition } from "./floating-panel";
@@ -36,15 +39,17 @@ export { calculateFloatingPanelPosition } from "./floating-panel";
 type GmContentKind = "monster" | GmContentSection;
 
 export interface GmAppRuntime extends GmToolsRuntime {
+  manageCharacter?: (command: { characterId: string; expectedCharacterRevision: number; expectedCampaignId: string; action: "archive" | "restore" | "delete" | "rename" | "unlink"; name?: string }) => Promise<unknown>;
+  openCharacter?: (id: string) => Promise<void>;
   issueReporter?: CampaignIssueReporter;
   diceRoller: DiceRoller;
   subscribeCampaignChanges?: (listener: () => void) => () => void;
-  subscribeDiceResults?: (listener: (result: { name: string; total: number; correlationId?: string }) => void) => () => void;
+  subscribeDiceResults?: (listener: (result: import("../infrastructure/talespire/talespire-dice-roller").TaleSpireResolvedRoll) => void) => () => void;
   subscribeDiceCancellations?: (listener: (correlationId: string) => void) => () => void;
   monsters: readonly MonsterDefinition[];
   subscribePlayers?: (listener: (players: TaleSpireGmPlayer[]) => void) => () => void;
   subscribeCharacterSummaries?: (listener: (summary: ReceivedCharacterSummary) => void) => () => void;
-  subscribeInitiative?: (listener: (clientId: string, initiative: number, characterId: string | null) => void) => () => void;
+  subscribeInitiative?: (listener: (clientId: string, initiative: number, characterId: string | null, context?: import("../domain/encounter/encounter-protocol").InitiativeDeliveryContext) => Promise<boolean>) => () => void;
   subscribeNativeInitiative?: (listener: (queue: TaleSpireNativeInitiativeQueue) => void) => () => void;
   getNativeInitiative?: () => Promise<TaleSpireNativeInitiativeQueue | null>;
   refreshPlayers?: () => Promise<void>;
@@ -269,6 +274,7 @@ const GM_CONDITIONS = [
 ] as const;
 
 export class GmApp {
+  private monsterRollVisibility: "full" | "total" = "full";
   private readonly formDrafts = new FormDraftStore();
   private snapshot: CampaignSnapshot | null = null;
   private selectedEncounterId: string | null = null;
@@ -363,7 +369,7 @@ export class GmApp {
       this.playerSummaries.set(received.clientId, received.summary);
       void this.applyReceivedSummary(received);
     });
-    this.runtime.subscribeInitiative?.((clientId, initiative, characterId) => { void this.applyReceivedInitiative(clientId, initiative, characterId); });
+    this.runtime.subscribeInitiative?.((clientId, initiative, characterId, context) => this.applyReceivedInitiative(clientId, initiative, characterId, context));
     this.runtime.subscribeNativeInitiative?.((queue) => {
       if (!this.snapshot) return;
       void this.enqueueTaleSpireInitiativeSync(queue);
@@ -448,15 +454,15 @@ export class GmApp {
   private render(): void {
     const selected = this.snapshot && this.selectedEncounterId ? this.snapshot.campaign.encounters[this.selectedEncounterId] ?? null : null;
     const sections: readonly GmSection[] = this.loreBrowser
-      ? ["encounter", "content", "lore", "notes", "tools"]
-      : ["encounter", "content", "notes", "tools"];
+      ? ["encounter", "characters", "content", "lore", "notes", "tools"]
+      : ["encounter", "characters", "content", "notes", "tools"];
     this.root.innerHTML = `
       <section class="gm-shell" style="${uiAccentStyle(this.gmColor, currentUiThemeMode())}">
         <header class="gm-header">
           <strong class="gm-header-title">Control de GM</strong>
           <div class="gm-header-controls">${this.renderActionHistoryControls()}${renderAppConnectionIndicators()}${this.renderNotificationCenter()}<details class="sheet-menu gm-menu"><summary>⋯</summary><div><button type="button" class="secondary-button" data-open-persistence ${canOpenPersistencePanel() ? "" : "disabled"}>Persistencia</button><button type="button" class="secondary-button" data-open-image-diagnostics>Diagnóstico de imágenes</button>${this.renderColorPicker()}</div></details></div>
         </header>
-        <nav class="sheet-tabs gm-section-nav" style="--gm-section-count:${sections.length}">${sections.map((section) => `<button type="button" data-gm-section="${section}" class="sheet-tab-button ${this.activeSection === section ? "active" : ""}">${section === "encounter" ? "Combate" : section === "content" ? "Contenido" : section === "lore" ? "Campaña" : section === "notes" ? "Notas" : "Herramientas"}</button>`).join("")}</nav>
+        <nav class="sheet-tabs gm-section-nav" style="--gm-section-count:${sections.length}">${sections.map((section) => `<button type="button" data-gm-section="${section}" class="sheet-tab-button ${this.activeSection === section ? "active" : ""}">${section === "encounter" ? "Combate" : section === "characters" ? "Personajes" : section === "content" ? "Contenido" : section === "lore" ? "Campaña" : section === "notes" ? "Notas" : "Herramientas"}</button>`).join("")}</nav>
         ${this.activeSection === "encounter" ? `<div class="gm-combat-toolbar">
           <strong>Combate de TaleSpire</strong>
           <span class="gm-connected-count">${this.players.length} conectado${this.players.length === 1 ? "" : "s"}</span>
@@ -467,6 +473,7 @@ export class GmApp {
 
         ${this.activeSection === "content" ? `<div class="gm-content-source-bar"><span>Catálogo de esta campaña · Supabase</span></div>${this.renderContentNavigation()}${this.activeContentKind === "monster" ? this.renderCustomMonsterManager() : this.toolsPanel.render("content", this.snapshot?.campaign.gm ?? { noteGroups: [], randomTables: [], googleDocsUrl: "" }, this.activeContentKind)}` : ""}
         ${this.activeSection === "lore" ? this.loreBrowser?.render() ?? "" : ""}
+        ${this.activeSection === "characters" ? this.renderCharacters() : ""}
         ${this.activeSection === "notes" && this.snapshot ? this.toolsPanel.render("notes", this.snapshot.campaign.gm) : ""}
         ${this.activeSection === "tools" && this.snapshot ? this.toolsPanel.render("tools", this.snapshot.campaign.gm) : ""}
       </section>`;
@@ -477,6 +484,11 @@ export class GmApp {
 
   private renderColorPicker(): string {
     return `<details class="color-picker"><summary title="Cambiar color de la interfaz GM"><span>Color</span><i style="--swatch-color:${this.gmColor}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${UI_ACCENT_PRESETS.map((color) => `<button type="button" class="color-swatch ${color === this.gmColor ? "active" : ""}" style="--swatch-color:${color}" data-gm-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color === this.gmColor}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="gm-interface-color" value="${this.gmColor}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal"></label><button type="button" id="apply-gm-interface-color">Aplicar</button></div></div></details>`;
+  }
+
+  private renderCharacters(): string {
+    const characters = Object.values(this.snapshot?.campaign.characters ?? {}).sort((a, b) => a.name.localeCompare(b.name, "es"));
+    return `<section class="gm-character-manager"><header><h2>Personajes</h2><p>Archivá una hoja para quitarla del selector de jugadores sin eliminarla.</p></header><div class="gm-character-filters"><label>Buscar<input type="search" data-character-search placeholder="Nombre, jugador o clase"></label><label>Disponibilidad<select data-character-filter><option value="all">Todos</option><option value="active">Disponibles</option><option value="archived">Archivados</option></select></label></div><div class="gm-character-list">${characters.map(c => `<article class="gm-character-row" data-managed-character="${c.id}" data-character-archived="${c.archived}" data-character-text="${escapeHtml(normalizedSearch([c.name, c.identity.playerName, c.identity.className].join(" ")))}"><div class="gm-character-identity"><strong>${escapeHtml(c.name)}</strong><small>${escapeHtml(c.identity.className || "Sin clase")} · Nivel ${c.identity.level} · ${escapeHtml(c.identity.playerName || "Sin jugador indicado")}</small><span>${c.archived ? "Archivado" : "Disponible"}${c.taleSpire ? " · Miniatura vinculada" : ""}</span></div><div class="gm-character-actions"><button type="button" data-character-action="open" ${this.runtime.openCharacter ? "" : "disabled"}>Abrir hoja</button><button type="button" data-character-action="export">Exportar</button><button type="button" data-character-action="${c.archived ? "restore" : "archive"}" ${this.runtime.manageCharacter ? "" : "disabled"}>${c.archived ? "Reactivar" : "Archivar"}</button><button type="button" class="danger secondary-button" data-character-action="delete" ${this.runtime.manageCharacter ? "" : "disabled"}>Eliminar</button></div><details><summary>Nombre y miniatura</summary><label>Nombre<input data-character-name value="${escapeHtml(c.name)}"></label><button type="button" data-character-action="rename" ${this.runtime.manageCharacter ? "" : "disabled"}>Guardar nombre</button><button type="button" data-character-action="unlink" ${this.runtime.manageCharacter ? "" : "disabled"}>Desvincular miniatura</button></details></article>`).join("") || '<p>No hay personajes.</p>'}</div></section>`;
   }
 
   private renderActionHistoryControls(): string {
@@ -738,6 +750,9 @@ export class GmApp {
 
   private renderMonsterDetails(monster: MonsterDefinition): string {
     const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
+    const checkButton = (label: string, bonus: number) => `<button type="button" class="gm-roll" data-roll-name="${escapeHtml(monster.name)} · ${escapeHtml(label)}" data-roll-expression="1d20${signed(bonus)}"><span>${escapeHtml(label)}</span><strong>${signed(bonus)}</strong></button>`;
+    const saves = parseMonsterChecks(monster.saves, "saves"), skills = parseMonsterChecks(monster.skills, "skills");
+    const checks = `<section class="gm-monster-check-rolls"><strong>Salvaciones</strong><div>${MONSTER_SAVES.map(d => checkButton(`Salvación de ${d.label}`, monsterSavingThrow(monster, d.key))).join("")}</div>${skills.unparsed.length || saves.unparsed.length ? `<p class="builder-help">Entradas importadas por revisar: ${escapeHtml([...saves.unparsed, ...skills.unparsed].join(" · "))}</p>` : ""}${Object.keys(skills.bonuses).length ? `<strong>Habilidades</strong><div>${MONSTER_SKILLS.filter(d => skills.bonuses[d.key] !== undefined).map(d => checkButton(d.label, skills.bonuses[d.key]!)).join("")}</div>` : ""}</section>`;
     const abilityButtons = Object.entries(monster.abilities).map(([key, value]) => {
       const modifier = Math.floor((value - 10) / 2);
       return `<button type="button" class="gm-roll" data-roll-name="${escapeHtml(monster.name)} · ${escapeHtml(key.toUpperCase())}" data-roll-expression="1d20${signed(modifier)}"><small>${escapeHtml(key.toUpperCase())}</small><strong>${value}</strong><em>${signed(modifier)}</em></button>`;
@@ -753,9 +768,9 @@ export class GmApp {
       ["Reacciones", monster.reactions], ["Acciones legendarias", monster.legendaryActions],
     ] as const;
     return `<details class="gm-monster-details" open><summary>${escapeHtml(monster.type || "Estadísticas")} · VD ${escapeHtml(monster.challenge || "—")} · ${escapeHtml(monster.speed.join(", "))}</summary>
-      <div class="gm-monster-roll-toolbar"><label>Modo <select data-monster-roll-mode><option value="normal">Normal</option><option value="advantage">Ventaja</option><option value="disadvantage">Desventaja</option></select></label></div>
+      <div class="gm-monster-roll-toolbar"><label>Modo <select data-monster-roll-mode><option value="normal">Normal</option><option value="advantage">Ventaja</option><option value="disadvantage">Desventaja</option></select></label><label title="Solo total omite el desglose publicado. Las caras de los dados físicos pueden seguir siendo visibles en TaleSpire.">Publicar <select data-monster-result-visibility><option value="full" ${this.monsterRollVisibility === "full" ? "selected" : ""}>Resultado completo</option><option value="total" ${this.monsterRollVisibility === "total" ? "selected" : ""}>Solo total (experimental)</option></select></label></div>
       <div class="gm-abilities gm-monster-rolls">${abilityButtons}</div>
-      <div class="gm-monster-facts-grid">${this.monsterFact("Salvaciones", monster.saves)}${this.monsterFact("Habilidades", monster.skills)}
+      ${checks}<div class="gm-monster-facts-grid">
       ${this.monsterFact("Vulnerabilidades", monster.damageVulnerabilities)}${this.monsterFact("Resistencias", monster.damageResistances)}
       ${this.monsterFact("Inmunidades", monster.damageImmunities)}${this.monsterFact("Inmunidad a condiciones", monster.conditionImmunities)}
       ${this.monsterFact("Sentidos", monster.senses)}${this.monsterFact("Idiomas", monster.languages)}</div>
@@ -830,11 +845,10 @@ export class GmApp {
       </div></fieldset>
       <fieldset class="gm-monster-section"><legend>Características</legend><div class="gm-monster-section-body gm-monster-abilities">${[["Str", "FUE"], ["Dex", "DES"], ["Con", "CON"], ["Int", "INT"], ["Wis", "SAB"], ["Cha", "CAR"]].map(([key, label]) => { const score = ability(key!); const modifier = Math.floor((score - 10) / 2); return `<label>${label}<input name="ability${key}" type="number" step="1" value="${score}" data-monster-ability><output data-ability-modifier>${modifier >= 0 ? "+" : ""}${modifier}</output></label>`; }).join("")}</div></fieldset>
       <details class="gm-monster-section" open><summary>Aptitudes y sentidos</summary><div class="gm-monster-section-body gm-monster-identity-fields">
-        <label>Salvaciones<input name="saves" value="${list(monster?.saves ?? [])}" placeholder="FUE +6, CON +6"></label>
-        <label>Habilidades<input name="skills" value="${list(monster?.skills ?? [])}" placeholder="Percepción +4"></label>
         <label class="gm-monster-field-wide">Sentidos<input name="senses" value="${list(monster?.senses ?? [])}" placeholder="Visión en la oscuridad 60 pies, Percepción pasiva 14"></label>
         <label class="gm-monster-field-wide">Idiomas<input name="languages" value="${list(monster?.languages ?? [])}" placeholder="Común, élfico"></label>
       </div></details>
+      ${renderMonsterChecksEditor(monster)}
       ${renderMonsterDefenses(monster, GM_CONDITIONS.slice(0, 14).map(([value, label]) => ({ value, label })))}
       ${renderMonsterFeatures(monster)}
       ${renderMonsterSpells(spellNames, monster?.spells ?? [])}
@@ -847,11 +861,42 @@ export class GmApp {
   }
 
   private renderDiceButtons(name: string, content: string): string {
-    const expressions = [...new Set(content.match(/\b\d+d\d+(?:\s*[+-]\s*\d+)?/gi) ?? [])];
+    const expressions = monsterDiceExpressions(content);
     return expressions.map((expression) => `<button type="button" class="gm-roll" data-roll-name="${escapeHtml(name)}" data-roll-expression="${escapeHtml(expression.replaceAll(" ", ""))}">${escapeHtml(expression)}</button>`).join(" ");
   }
 
   private bindEvents(): void {
+    this.root.querySelectorAll<HTMLSelectElement>("[data-monster-result-visibility]").forEach(select => select.addEventListener("change", () => { this.monsterRollVisibility = select.value === "total" ? "total" : "full"; }));
+    const filterCharacters = () => {
+      const q = normalizedSearch(this.root.querySelector<HTMLInputElement>("[data-character-search]")?.value ?? "");
+      const filter = this.root.querySelector<HTMLSelectElement>("[data-character-filter]")?.value ?? "all";
+      this.root.querySelectorAll<HTMLElement>("[data-managed-character]").forEach(row => { row.hidden = !row.dataset.characterText?.includes(q) || filter !== "all" && (row.dataset.characterArchived === "true") !== (filter === "archived"); });
+    };
+    this.root.querySelector("[data-character-search]")?.addEventListener("input", filterCharacters);
+    this.root.querySelector("[data-character-filter]")?.addEventListener("change", filterCharacters);
+    this.root.querySelectorAll<HTMLButtonElement>("[data-character-action]").forEach(button => button.addEventListener("click", () => {
+      void (async () => {
+        const row = button.closest<HTMLElement>("[data-managed-character]")!;
+        const character = this.snapshot?.campaign.characters[row.dataset.managedCharacter ?? ""];
+        if (!character) return;
+        const action = button.dataset.characterAction!;
+        if (action === "open") { await this.runtime.openCharacter?.(character.id); return; }
+        if (action === "export") {
+          const url = URL.createObjectURL(new Blob([JSON.stringify(character, null, 2)], { type: "application/json" }));
+          const a = document.createElement("a"); a.href = url; a.download = `${character.name.replace(/[^\p{L}\p{N}_-]/gu, "_")}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); return;
+        }
+        if (!this.runtime.manageCharacter) return;
+        if (action === "delete" && !window.confirm(`¿Eliminar a «${character.name}»? Se eliminará su hoja y se quitarán sus asociaciones. Esta acción no se puede deshacer.`)) return;
+        button.disabled = true;
+        try {
+          await this.runtime.manageCharacter({ characterId: character.id, expectedCharacterRevision: character.revision, expectedCampaignId: this.requireSnapshot().campaign.id,
+            action: action as "archive" | "restore" | "delete" | "rename" | "unlink", ...(action === "rename" ? { name: row.querySelector<HTMLInputElement>("[data-character-name]")!.value } : {}) });
+          this.snapshot = await this.application.loadCampaign(); this.undoStack = []; this.redoStack = [];
+          this.message = { kind: "success", text: "Personaje actualizado." };
+        } catch (error) { this.message = { kind: "error", text: this.formatError(error) }; }
+        this.render();
+      })().catch(error => { this.message = { kind: "error", text: this.formatError(error) }; this.render(); });
+    }));
     this.root.querySelector<HTMLButtonElement>('[data-report-issue]')?.addEventListener('click', () => {
       if (this.runtime.issueReporter) openIssueReportDialog(this.runtime.issueReporter, this.issueUiContext());
     });
@@ -1039,7 +1084,7 @@ export class GmApp {
       if (!expression) return;
       const mode = button.closest(".gm-monster-details")?.querySelector<HTMLSelectElement>("[data-monster-roll-mode]")?.value;
       const rollMode = mode === "advantage" || mode === "disadvantage" ? mode : "normal";
-      void this.runtime.diceRoller.roll({ name: button.dataset.rollName || "Monstruo", expressions: [expression], mode: rollMode })
+      void this.runtime.diceRoller.roll({ name: button.dataset.rollName || "Monstruo", expressions: [expression], mode: rollMode, visibility: this.monsterRollVisibility })
         .then((result) => { this.appendActionLog(`${button.dataset.rollName || "Tirada"}: ${result.summary}`, "roll"); this.message = { kind: "success", text: result.summary }; this.render(); })
         .catch((error) => { this.message = { kind: "error", text: this.formatError(error) }; this.render(); });
     }));
@@ -1108,11 +1153,20 @@ export class GmApp {
   private execute(operation: () => Promise<CampaignSnapshot>, success?: string, record = true): Promise<void> {
     const pending = this.operations.then(async () => {
       const before = this.snapshot ? this.captureHistoryState(this.snapshot) : null;
+      const beforeRevision = this.snapshot?.campaign.revision;
       try {
         const snapshot = await operation();
         const changed = snapshot.checksum !== this.snapshot?.checksum;
         if (!changed && !success) return;
-        if (record && changed && before) this.recordReversibleAction(success ?? "Actualizar combate", before, this.captureHistoryState(snapshot));
+        if (record && changed && before) {
+          if (beforeRevision !== undefined && snapshot.campaign.revision === beforeRevision + 1) {
+            this.recordReversibleAction(success ?? "Actualizar combate", before, this.captureHistoryState(snapshot));
+          } else {
+            // A rebased write includes another author's changes; restoring the old view would erase them.
+            this.undoStack = []; this.redoStack = [];
+            this.appendActionLog(success ?? "Actualizar combate");
+          }
+        }
         this.snapshot = snapshot;
         this.message = success ? { kind: "success", text: success } : null;
         this.selectAvailableEncounter();
@@ -1138,7 +1192,8 @@ export class GmApp {
   }
 
   private acceptSnapshot(snapshot: CampaignSnapshot, label: string): void {
-    if (this.snapshot) this.recordReversibleAction(label, this.captureHistoryState(this.snapshot), this.captureHistoryState(snapshot));
+    if (this.snapshot && snapshot.campaign.revision === this.snapshot.campaign.revision + 1) this.recordReversibleAction(label, this.captureHistoryState(this.snapshot), this.captureHistoryState(snapshot));
+    else { this.undoStack = []; this.redoStack = []; }
     this.snapshot = snapshot;
   }
 
@@ -1156,8 +1211,11 @@ export class GmApp {
 
   private async restoreHistoryEntry(entry: ReversibleGmAction, state: "before" | "after"): Promise<CampaignSnapshot> {
     const target = entry[state];
+    const latest = await this.application.loadCampaign();
+    const expected = entry[state === "before" ? "after" : "before"];
+    if (!latest || JSON.stringify(this.captureHistoryState(latest)) !== JSON.stringify(expected)) throw new Error("El combate o las notas cambiaron desde esta acción. No se pueden deshacer sin afectar cambios posteriores.");
     return this.application.restoreGmControlState({
-      expectedCampaignChecksum: this.requireSnapshot().checksum,
+      expectedCampaignChecksum: latest.checksum,
       encounters: target.encounters,
       workspace: target.workspace,
     });
@@ -1263,7 +1321,7 @@ export class GmApp {
         InitiativeAdvantage: data.get("initiativeAdvantage") === "on",
         Speed: list("speed"),
         Abilities: Object.fromEntries(["Str", "Dex", "Con", "Int", "Wis", "Cha"].map((key) => [key, integer(data.get(`ability${key}`), 10)])),
-        Saves: list("saves"), Skills: list("skills"), Senses: list("senses"), Languages: list("languages"),
+        Saves: readMonsterChecksEditor(data, "saves"), Skills: readMonsterChecksEditor(data, "skills"), Senses: list("senses"), Languages: list("languages"),
         DamageVulnerabilities: list("vulnerabilities"), DamageResistances: list("resistances"),
         DamageImmunities: list("immunities"), ConditionImmunities: list("conditionImmunities"),
         Traits: featureData("traits"), Actions: featureData("actions"), Reactions: featureData("reactions"),
@@ -1348,16 +1406,22 @@ export class GmApp {
     }, undefined, false);
   }
 
-  private async applyReceivedInitiative(clientId: string, initiative: number, characterId: string | null): Promise<void> {
+  private async applyReceivedInitiative(clientId: string, initiative: number, characterId: string | null, context?: import("../domain/encounter/encounter-protocol").InitiativeDeliveryContext): Promise<boolean> {
+    let accepted = false;
     await this.execute(async () => {
       const encounter = this.requireEncounter();
+      if (context?.encounterId && context.encounterId !== encounter.id) { accepted = true; return this.requireSnapshot(); }
       const combatant = findPlayerInitiativeCombatant(encounter, clientId, characterId, this.playerSummaries.get(clientId)?.characterId ?? null);
       if (!combatant) return this.requireSnapshot();
       this.cancelCombatantRoll(combatant.id);
-      return (await this.application.apply({ encounterId: encounter.id, expectedEncounterRevision: encounter.revision,
+      const result = await this.application.apply({ encounterId: encounter.id, expectedEncounterRevision: encounter.revision,
         expectedCampaignChecksum: this.requireSnapshot().checksum,
-        action: { kind: "set-initiative", combatantId: combatant.id, initiative } })).snapshot;
+        ...(context?.rollId ? { operationId: context.rollId } : {}),
+        action: { kind: "set-initiative", combatantId: combatant.id, initiative, onlyIfMissing: true, ...(context?.epoch === undefined ? {} : { epoch: context.epoch }) } });
+      accepted = true;
+      return result.snapshot;
     }, undefined, false);
+    return accepted;
   }
 
   private cancelCombatantRoll(combatantId: string): void {
@@ -1366,8 +1430,13 @@ export class GmApp {
     }
   }
 
-  private async handleResolvedDiceResult(result: { name: string; total: number; correlationId?: string }): Promise<void> {
-    this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
+  private async handleResolvedDiceResult(result: import("../infrastructure/talespire/talespire-dice-roller").TaleSpireResolvedRoll): Promise<void> {
+    this.appendActionLog(result.detail ?? `${result.name}: resultado ${result.total}`, "roll");
+    if (result.purpose === "initiative" && result.characterId) {
+      if (!result.encounterId) return;
+      await this.applyReceivedInitiative("gm", result.total, result.characterId, { rollId: result.correlationId, encounterId: result.encounterId, epoch: result.initiativeEpoch });
+      return;
+    }
     const key = result.correlationId ?? result.name;
     const pending = this.pendingInitiativeRolls.get(key);
     const combatantId = pending?.shift();
@@ -1396,6 +1465,7 @@ export class GmApp {
     try {
       const result = await this.runtime.diceRoller.roll({
         name: `Iniciativa: ${combatant.name}`, correlationId,
+        ...(monster ? { visibility: this.monsterRollVisibility } : {}),
         expressions: [`1d20${modifier >= 0 ? "+" : ""}${modifier}`],
         mode: character ? projectAdjustedRollMode(character, "skills", ["Initiative"], character.checks.initiative.rollMode)
           : monster?.initiativeAdvantage ? "advantage" : "normal",

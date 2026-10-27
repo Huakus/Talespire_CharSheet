@@ -1,0 +1,4540 @@
+{
+  "capturedAt": "2026-10-27T03:12:28.689Z",
+  "total": 450,
+  "summary": {
+    "requires-source-review": 17,
+    "requires-review": 4,
+    "matches-preserved-catalog": 429
+  },
+  "monsters": [
+    {
+      "contentKey": "gm:monster:54e149bd-cd32-4168-be76-cbc000c7f6cf",
+      "name": "Edran",
+      "revision": 0,
+      "origin": "gm",
+      "sourceHash": "70939fa3b6cb45deb093eefc52ef02a99835240a5a561f1726c918c7d04dbe6b",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "gm:monster:91f84ed5-d941-4f42-82c9-b4c55da9204a",
+      "name": "Caballero Resonante",
+      "revision": 2,
+      "origin": "gm",
+      "sourceHash": "9f1242ca9ac1a6781d86b3b248a70a717dce94588fe8a7587aa99e3dcfc1e1a6",
+      "status": "requires-source-review",
+      "evidence": "Conserva legacyData; revisar diferencias y personalizaciones.",
+      "issues": []
+    },
+    {
+      "contentKey": "gm:monster:9a82e451-94c6-451b-a06b-821360b52a65",
+      "name": "Lagarto Juancho",
+      "revision": 17,
+      "origin": "gm",
+      "sourceHash": "c76f253978c3c19765cfe67c53ede86febfd754145577db2ee50e7964d2240f8",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "gm:monster:b2f1a201-4a98-48d4-b057-4c12ffb29981",
+      "name": "Enredadera",
+      "revision": 2,
+      "origin": "gm",
+      "sourceHash": "99f244f52c1a2e6a2f30fb40d7f6724f94f93d8f7dcfa98c7875b5d7104b1de0",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "gm:monster:eng:1526c61732bc5215f39efdd8",
+      "name": "Juancho the Lizard",
+      "revision": 3,
+      "origin": "gm",
+      "sourceHash": "b635754aa2fed548a34c135666d73db4fa517895456a86aac91cb42fcbd450fe",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "gm:monster:eng:9469b6e4de8a6cfc22032d2c",
+      "name": "Resonant Knight",
+      "revision": 1,
+      "origin": "gm",
+      "sourceHash": "f6d842a6c1654ab522c1eb50da4f7e08abb7adb24534e09c67b54d97537f9ed7",
+      "status": "requires-source-review",
+      "evidence": "Conserva legacyData; revisar diferencias y personalizaciones.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:eng:1cf5dd88e72815fbc27141e2",
+      "name": "Petro",
+      "revision": 0,
+      "origin": "imported",
+      "sourceHash": "a9e687312fff8c2ff5c908d848878f7c16c319c97bd9f3b4c110d7cf61c5bece",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:eng:3a8de9f2c766b3a55f3383a9",
+      "name": "Green Cloaks",
+      "revision": 0,
+      "origin": "imported",
+      "sourceHash": "b9f76cb8b4776436183cc94ffe0de43095a3ac185d255edde0045ee8e67434b2",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:eng:49d0a2ef6a4c367014569688",
+      "name": "Ice Troll",
+      "revision": 0,
+      "origin": "imported",
+      "sourceHash": "93ceac55d761499373fb8c651951d316f83577b04d854d8c188e10f9511fbfa7",
+      "status": "requires-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": [
+        {
+          "field": "hitPointFormula",
+          "code": "hp-formula",
+          "detail": "Fórmula a cotejar: 116"
+        }
+      ]
+    },
+    {
+      "contentKey": "imported:monster:eng:e197d5323760a7256c740e04",
+      "name": "🟥 ⚔️Resonant Knight",
+      "revision": 2,
+      "origin": "imported",
+      "sourceHash": "a43d2c5f94f6dad454e3bd82191d91faeb0d7ba95fab4d749c9f29eee2d5d499",
+      "status": "requires-source-review",
+      "evidence": "Conserva legacyData; revisar diferencias y personalizaciones.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:eng:f05ef55df6d7747b480bca99",
+      "name": "Lucent Two-Headed Troll",
+      "revision": 0,
+      "origin": "imported",
+      "sourceHash": "85866e6cd8328ab44ffc2c4935b7a62d11e70cc888e0d641269ae23043be055d",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:eng:f0baf30e312c56d95acde5fd",
+      "name": "🟥 Knight of the Broken Echo",
+      "revision": 0,
+      "origin": "imported",
+      "sourceHash": "3e2add35a9b95fd22f1c87c2f49531121d6f5d986c2c8872ec7bbc28b1e5c790",
+      "status": "requires-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": [
+        {
+          "field": "hitPointFormula",
+          "code": "hp-formula",
+          "detail": "Fórmula a cotejar: 21d80+64"
+        }
+      ]
+    },
+    {
+      "contentKey": "imported:monster:eng:f7412d85e3067b7d6326dbb3",
+      "name": "🟥 Echo Specter",
+      "revision": 0,
+      "origin": "imported",
+      "sourceHash": "7cd290755de6ce405fad50a47a76f3609a62e0d5825c1dc703cb80ea7006b286",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:legacy:06ff00b55d2a5b396911e8e5",
+      "name": "🟥 Espectro del Eco",
+      "revision": 5,
+      "origin": "imported",
+      "sourceHash": "2e40066f324b35c1bb94080318898228f1f86c69fe169899b262ecd7519dced0",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+      "name": "🟥 ⚔️Caballero Resonante",
+      "revision": 36,
+      "origin": "imported",
+      "sourceHash": "56b276094b11a8bcba71235a4b4c5f88aa0de189fc630082b37bd1b93116f654",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:legacy:b38aaf70c77a32388efc33ee",
+      "name": "Capas Verdes",
+      "revision": 1,
+      "origin": "imported",
+      "sourceHash": "22e1665b2410c1588117d3350d944e4e0a76f74aeb841b8f4c422c8cadb673de",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:legacy:b4e2340488beba746830e241",
+      "name": "Troll Bicéfalo Luciente",
+      "revision": 1,
+      "origin": "imported",
+      "sourceHash": "8929f1ca73a1cd36bf03f31676ef7babf80319c8a5170e6d049bdd71a18954ac",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "imported:monster:legacy:be0e81d85f7ca25d150d36c4",
+      "name": "Troll de Hielo",
+      "revision": 3,
+      "origin": "imported",
+      "sourceHash": "bc8065bbd8cf217fb45f43e6d3fcfc1b85eb52d359824f465d6b04411b938123",
+      "status": "requires-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": [
+        {
+          "field": "hitPointFormula",
+          "code": "hp-formula",
+          "detail": "Fórmula a cotejar: 116"
+        },
+        {
+          "field": "actions.0",
+          "code": "unnamed-feature",
+          "detail": "Hay contenido sin nombre de rasgo o acción."
+        }
+      ]
+    },
+    {
+      "contentKey": "imported:monster:legacy:f9db3dfab889ad4ad1fe057b",
+      "name": "🟥 Caballero del Eco Roto",
+      "revision": 1,
+      "origin": "imported",
+      "sourceHash": "005ffadc56f18891286d7db2211b1eb28382168b9e7957d2c8b19415a6c34b8f",
+      "status": "requires-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": [
+        {
+          "field": "hitPointFormula",
+          "code": "hp-formula",
+          "detail": "Fórmula a cotejar: 21d80+64"
+        }
+      ]
+    },
+    {
+      "contentKey": "imported:monster:legacy:fdd43a55b99fd035a52b57ea",
+      "name": "Petro",
+      "revision": 1,
+      "origin": "imported",
+      "sourceHash": "7324631c60dab63c33d0897c29120c2f85a4cae6fde82bd221f0843b4edd3de4",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:00146237811966089f45cad9",
+      "name": "Clay Golem",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "33e898d55d23fc2ac98368c47429fa5695c3505f279ff049698f8d93ce5cb6b1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:00d2e9fe571d384fdbdaf631",
+      "name": "Otyugh",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "bb7356f57cb5fd6f99a4c5cdabc33868a016abc5d463cb71495e9b77c6a4bb46",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0290144e701a07bcc6048296",
+      "name": "Owl",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7a21249d6530cc1536a7c1c79a3040aceef09de16294716924fbabb99ea77593",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:03aa173063f6c6fd2e9b599d",
+      "name": "Pegasus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d9254b43a76ebe1978e8bdae51bcf4558c8c7704d93a39be10537698418f2d7b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:043359b4f94c0003f83e6f24",
+      "name": "Lizard",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "962b66d7ba5c2b7ec221eccc15a2c7015ac460d481e6080b47ace4a14a7dc892",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:05dfdafe0c4a4cc40852e2b0",
+      "name": "Brass Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2e9c90782a20309c5eb3045e4da898678b7713cd2106d24398e9f4894b517f86",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:060a252d9051169339dce101",
+      "name": "Chimera",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9b43a2b3d1f1476a15fca06ed51f2016752c3c1bb8cc8538ac607f70a7f74909",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:06307ddfb58c13fc1f67d598",
+      "name": "Brown Bear",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1c3765eab616c222172610074452260f79b4929b60a7436853615dac60ef9642",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:097c3ce48095771694a80397",
+      "name": "Griffon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "05344b91819f6e4edec1023ac02f696346e34302c794307ed88664865e8ef470",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0bc00756e71f07f8c0cd8d9f",
+      "name": "Wraith",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "361fbad85d5a78ffe484ef352b41b5f4cb975a0738c9f72db3d6f08f6ca910ea",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0c6d97decf257f3ea9ee7a12",
+      "name": "Bat",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6866ffce59969af8045f37f53c6954768971aa045e02e65d972611a81df544af",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0d60a9a120ab5aeef6d8014c",
+      "name": "Hill Giant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "dba2afce9c0751a8c9f426e0857f99b5a38899ff5a7896f5ccacaab21f8ae7aa",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0df4dee45e10eae72ce0762a",
+      "name": "Riding Horse",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "65e028b3d80126bef49354c828c7c19b33c17c51e176f14db53d86755082e0f5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0f001c5032c87508cdececb4",
+      "name": "Panther",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c7c8d99e07ea01347364bccec4a6219c021786d05a23199f5dd4dbc01fdb3e9c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0f4e4bf1dc1717e74949ac48",
+      "name": "Vampire",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "998599b6af54fc0bde236861aa1b217f9c87bb4a9da574651cbf2e0379036550",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:0f978b7ee643bd24ef22c4fd",
+      "name": "Ochre Jelly",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "082a54447ccc339e9af6a1b4dcfff4867e26da82d1e557495c2273eacf0b8fcb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1017bdb2ba16f45feba881f5",
+      "name": "Shrieker",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7406bf66d320f3abbb0fc1b54070e2a2b3232484da5a8a47ce3b1c2f94ec5859",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1339cfbc60f0eb400a44c841",
+      "name": "Efreeti",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fb4b5a47fcec89387ff5dd5b756b251041c3895a20d16f0542ad3cb1c7780dc0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:13415e3d55ce534c654407ca",
+      "name": "Ettercap",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "24673698af0bad76dc9727dce09861bd65f2ff3e6654263e9a0544e40ae12fbe",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:15cc35dc5f0636306c4fe473",
+      "name": "Gargoyle",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1d8a546c31853c102feddbdb3e20550ef7f9e380cd9b54e9168ab4e2e7cf070a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:17d994734f94a6eb0a98744d",
+      "name": "Octopus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "dc7d7fdf1ccced66b548ae8baae871dd531fd36fe63b0a30b42eaac3056c542a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:17e25d35141d5ef4d6ae6c64",
+      "name": "Draven, Guard Commander",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "17b8055ec8ff1766c0aded9d011f20ba75f9fa4b86bc46908a448047855d7ca1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:18bb189111391acfe32bb25b",
+      "name": "Cockatrice",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "bf71aa02d909e2f4cfd40b25000234719abe334164739374953923bd363a8ace",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:18c218105dc9e0e448cc33b1",
+      "name": "Behir",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "259c8d38f38f7e388a1c5b1a36dd6a6269996607aa9ccb7bf1ceb560882c8863",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1bc7f39e7fe22161fd3fdd3e",
+      "name": "Barbed Devil",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9bc4a24e78baa4e351a3f131e19b0efd1e4ff797c830b3292d102ffa806575b1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1c9db3d25bc88ec23d6ed5bf",
+      "name": "Xorn",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ec53860268c5ebd773d64ef540ae7e5e08d0c7a416b6e1ddf3cfd49d531e0f8d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1cc3c3a1e97fb739207f1dd4",
+      "name": "Bearded Devil",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "14c9e5742fd20b074ded86fed5a0b7ba200b7a3bbaa0405783b856d72421f46b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1cdee863043be05a3f2f7d10",
+      "name": "Blue Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "63929c86fb98ef8868664c169362de1db71339b1388d996241a9158b30b7d39a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1dc322ebc76648e450b84712",
+      "name": "Dust Mephit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8fe913fcb45025e5592db855c0bfc7ef99d934345ef662645a4b1682acab3bf0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1e46f8db8131051bf07058a2",
+      "name": "Ankylosaurus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4f37b83877514f8b9a598fc6b61293fdf84195d9a0faa1ec2f63fb53d9aebcd2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:1f2781ff784656ee2c1ff77e",
+      "name": "Azer",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "af207040780418bfcfe05d45cf8ef9caa5c8774759e0557dd7949cab5c3eaecb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2013dac1ba4445ce26671f18",
+      "name": "Tyrannosaurus Rex",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6687a04fe58e7f40b1fddc968ae94ea524318cdc59d9d45679b995b016c563da",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:20efb2b2572bbdaa19fce4f6",
+      "name": "Gelatinous Cube",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1ee7dd9a37b56791d6ffb0c474315717d1581a6a5876e0bd8628a94cce811e8d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:22b79af8b89faafdccddca9e",
+      "name": "Hell Hound",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2e81057de1f23707871be8eb12e51d7428c2515caf3e5ab546003e40d80407c5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:23854850465385b8c9c44d84",
+      "name": "Black Pudding",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cc42c3327f98fbcb259963d4f3fca3c487703da06058607e59da2280b266db06",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2511e16311a7a98f1cc363d6",
+      "name": "Medusa",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4b4531d75086cced0f22f58123004d4f426c77f76deec7352e6c3dd8d874f75a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:25a35267700530dbc8bd05ef",
+      "name": "Quasit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fb0324bc9e1a0ae03d0f8fd8bb8fae661dbfdb98045d8d68a276ad7e905a7816",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:26db5be08857cd8b4809bae5",
+      "name": "Giant Owl",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2335b7c795d86c7b189fbe5e79b53f20a11e9d72964abbf93a94d38eedc2f300",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2bdd8990a18d0b41691df7d2",
+      "name": "Constrictor Snake",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3f31d70f96a5d9278c8f6d855b68e8f222a72d7d8189fc664e5f17f8a1cf5645",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2c096aeacce810745b00c352",
+      "name": "Ice Devil",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e64dae0ad1c629fd1dd6dc14000036cba05cf1c82f37a1943d64a414b485642d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2caaa61b9b4584c9238127b6",
+      "name": "Shambling Mound",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "14b3f52af801967c0c57e4592c55f9afc7a43a35de28c8fbcfc47c9e93cb5aed",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2d5edacf23e06abb2cb83aa7",
+      "name": "Mummy",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d2e7840002567d817108f5c8190f50e89e9a3d8d288d5ed293f027bd710baa36",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2e12783301a4efb401c0776c",
+      "name": "Adult Red Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fee1ae237ca74257e2f0bf87fd27e63d0c76a1d6c21dd41022e12c758774aa48",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2e82322a8cfb6bd13fb81cb5",
+      "name": "Minotaur",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c01cfa6c8f37e5953201a99dcf30d9131a3c43cd9e3044eacd263df0f760cee2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2efc4c6c63907d28173a834d",
+      "name": "Pit Fiend",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2efb062cee53f3f6e2523c4ff13661fa9e4b14e274448bdf3a50676b06f5390d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:2f41151d324f5f8d95f686e9",
+      "name": "Plesiosaurus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4b44d5b89b61ead0609eb73e77a2d18e8a51381934b0600dba70fb0f74bf95ea",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:30b11f3f3f767fcafad9ae81",
+      "name": "Green Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f53be5b1dbf7c9e57aad03a2511e9211075fa6d56ae59100049d9eb6210763ca",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3110695d5b778c88c1813d39",
+      "name": "Deva",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4ce6856fa48d6ca9daec975ac1c881c88d4363b92a3d56a0cd42c2081d3012f7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:31892970b8454bfff9576a7e",
+      "name": "Oni",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5503a8ccdc017a49f471f5006d494b41caa87394044be02a1a8162b7eacaf029",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:33c4783ecf61621cf314c983",
+      "name": "Hezrou",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "90b70a4a861f43b79eeb21209377e274a26d4c10439c5c372951b67d0dd75629",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:344a014a5a0ec0aa6960d190",
+      "name": "Frost Giant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b2df68d7bc7ec9929bae8f06236f6323f66782273fc0094be94878b1aa3b7ef0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:358c7d87ca1781ca7da2a40a",
+      "name": "Rug of Smothering",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f30183af325365665806f6bec14d85beb10056870c3a350f3ceefd162e915358",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:365b5d7d10ab55ccc14475ea",
+      "name": "Young Blue Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "20cac1532d2e5a42752dbf2c94a05636c485a0577fc2dde90e160f10a1012ff6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:372763fd490e4b2e17d6a7c3",
+      "name": "Glabrezu",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d67edbaa5d01868abb6cef62ff0df4e8572dc4972a6d6af3f1fbfced95b1c380",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:39963762f9d16e8bb5ac5d04",
+      "name": "Djinni",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a4466d98ea523adf66d6e1243194a286a695163b348a2fe3c1815af5597052e1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3afce97f948930dffd739e88",
+      "name": "Stone Golem",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e02674a3389d33fd4cf65ecef77dd98da8c8c01d581ab9c5af24b8b8b563da9b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3bc3b86a48346178680956d2",
+      "name": "Drider",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "abf9a1e898ce53433972dd60dc48630594be37bdbd455f02b626c9006e1526aa",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3d5c758916de78f8901c6180",
+      "name": "Darkmantle",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2f63204133b6fd40c16c3e0765601a3116db7670d11f8aeb074fb34bec1ebf90",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3e43845e22c8dbf841c1edad",
+      "name": "Giant Eagle",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "39098d6d09429ccbed903980922da3b6fd96f58025a19ac0b6f302d738bd98c4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3e7ea36ae5cde27d6e2c8086",
+      "name": "Young Brass Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0379633b7ff1762dd6f542bb7b408289961aa37869995d334405eaa036922530",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:3f004a9a35711b43c709678b",
+      "name": "Crocodile",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ecd4f9ebd41bd9eb92fa6767f401c35684186ebcef2888aacdada0c6e0817dc5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:40cb04da759bd137f4b4f417",
+      "name": "Poisonous Snake",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "32e59f84d4b070a74277e3f151a501ea6c91fdffba380095f54b1837d34b1b5f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:42edb845ee7be5c9da01335a",
+      "name": "Rat",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "aabaa656c52f378a895e872592ed561e0dcf98d420e9edf78f16e65e213544c2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:42f6645b8815bd3f7a611d0c",
+      "name": "Shield Guardian",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "185def8c1adb3b45d1d5dc039aa4d8da491dc85894fdf9b244b0be20e195f2ca",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:43552397c2bac33756b589ac",
+      "name": "Ancient Blue Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "83fd3ce52709d40fdc58c9b8932ae7f443c84e9440ebc9964834753adff96500",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:493c0c4d88f9c2f932de51f9",
+      "name": "Weasel",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "31187e7e0d9e1545b7b0c842df19eb3e5693104cfdfcceb7d5d6e55d9d1e30fb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:49bcd03b90d02f3e279a68c9",
+      "name": "Dragon Turtle",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9f85af05075db24d9e0618330d2348360ea4eb8c22cb40e0bbff3ce7ddb13c76",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:4ce0efd4a52abb23a53fc99d",
+      "name": "Gynosphinx",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "08ea013c5383968594c13bc5038a9591a81215504eb2b49a7af1adafc4fdbd37",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:4dbb621415522fb7c40df610",
+      "name": "Young White Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a0a6594ae669526d470042fc4e245734cf1034a449c7ebedabc34859e33c57f0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:4ec24ec1aeb3603f6c9c00df",
+      "name": "Centaur",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f0780401e51fd884762394ce4d9157e65a7def7b404ff317982ac4afdf079191",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:4ee2bc0af41b1682631f085c",
+      "name": "Bullywug",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9c6f0ea2eea8288aac4bb9a59bad486a09db1732d3ff0a8c0b0a73bfaa7287cc",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:4f18882f8445e30233c34531",
+      "name": "Allosaurus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7be81e57e95c324a766ec1bf5f6bb6122c24f865a9a461feaf9a1232cedaa959",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:4f6b76b2b16ace007965a08e",
+      "name": "Raven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c04aedda0bbe91d16820acf5c723097731ad32a3800cbb481857fc191fc090d7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:507cc2058dd682fbd1aa1d04",
+      "name": "Young Red Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2ce75da34d71be15f68e3ea3aefd97c7dfc72d1b827072f989465973f6930093",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:5174634cae22fe93da039a46",
+      "name": "Warhorse",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8c025ba4102b618d6c1202b6a0035aea6d96a49bd3ade70311f493d318cffeb2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:518dd8f75b62900c1ac3fa9c",
+      "name": "Triceratops",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ada3943e2281d9d0feabac16d34627fb4382ce5ec9645c26a63882165d6ef75c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:55583051e340e6944f668938",
+      "name": "Bulette",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8e089534df9c103b0851068d3051683462a536b4e3cf87a216178056c6c1d345",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:5560214a13d5731aadf7c845",
+      "name": "Ancient Red Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "93c10e8e21f34e98ea264fc3309c3785ec408535fb06f7bbf5a03a984e6d634f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:586ae0a716a489206bc548ba",
+      "name": "Imp",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2f36922facf8ff2b4cbc9b635c9ede4e1191d53db78def2b7266e0c0f05112f7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:58e89e4cccde3ccab552652c",
+      "name": "Red Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cc108cae8735173d45cb0f124a8bcf602097a016b221f9b5fa27f2ad7c971658",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:59189b8470bd1f041af0a1b5",
+      "name": "Air Elemental",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f48a847d5c3b773b7504b833a80485a8f16ea60ce134184739eb22c64ab0b207",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:5940f472f3b8548a6a3a2e1d",
+      "name": "Adult Green Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1dbe149b5d2fe51312e21791ef27cd6e875748c6457bc49915e43b842aa3834b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:59bc6cdbf8cd7752d4a1673c",
+      "name": "Orc",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "039c6e28eadbed4ab7994686b2542761927bd164eb2110fce9323f663669afe6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:5e6484a8010f57fc61ddc05e",
+      "name": "Duergar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d79a9385ebd6ee6c857976fa0a9770a9bd9e229359dfe538a13a9b89eaa4af16",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:5ec7d0ce6ae7a3a66a9f2724",
+      "name": "Chuul",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e4d998c9b5c85b0f756d5b1ed6f29f6d76ef1a77d83e54c2ad7fe8910e6b6674",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:622316ed38c4fe282c5c3b6a",
+      "name": "Manticore",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c2c1ddaf39ae723ee738aedf6de1bc22fe5ad301084c63dfe239701a4ac19453",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:62755c932d7ebdc782d8b591",
+      "name": "Magma Mephit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "abb22d2c80a034a79e02b18148af93b21ff924facd61c70b548b85ed58896bed",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:62b689fb971c3e1d1eab79df",
+      "name": "Mimic",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "27faea385fc4bfe1aede8ee2afeff589e713e7ec10747214fe245f8f61b6d245",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:64c3108dcfa6871f7709d963",
+      "name": "Ghost",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ef0fbf57cb44b947c60ae1f9bbcf014836f62d63317cab212b0dd535790787c3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:64e762bf1dd233313308b982",
+      "name": "Horned Devil",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "18d801d8f48a2168d1e6ac5991d48353d7c78702dac3ef1eb9709895296adbe3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:653d04cca02675959ae78805",
+      "name": "Earth Elemental",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ae96282b904794574163dabb9accce3769fcf3e20586dfb2e5cf2470125abbff",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:65dff65e389c2716a4a6d228",
+      "name": "Boar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "18d99fb75714582c6cd0c93951528162832bae752b9a5c8baceddedf320e2d9c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:66c8708f441f1bbffdddbcb9",
+      "name": "Merrow",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5823b36fda4ed5d05d20c67488178da7f62f97a5a25255f583419c38f5063b5e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6936f5021ea62b665d8b8b0b",
+      "name": "Iron Golem",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9f08807475e8c2284274d1fde11717f0b929657f12f62bc9a26209855ea9b880",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6b2b31c10ab61bde2296fa60",
+      "name": "Young Silver Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1aaf61ad591cecdc3fd7bb527157d4b61e986696b2f2055878748cff645768f0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6b30c6cb67aa7223ac46188b",
+      "name": "Flesh Golem",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7d78605e5ce922c83579eefe32e4d26c9a841cc12f503b6781d5e6a3d267ab26",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6c06acf68a4e12ffe2f1e911",
+      "name": "Unicorn",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2fa3129bdbb4de67099e04955acbbd01afb5d2e5d330d469f4bfcf3899a04399",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6c11330b5235eced852fd36b",
+      "name": "Dretch",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "56133b0e4a4e43cbbad1f01adc0adf1ecca5010d41050858e6a3f1289a671cbe",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6c997aabb4674f19e96145bb",
+      "name": "Ice Mephit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8063a2a34f8c11812a9b0af5d4acf45de89acf71f16fce51c9c25cd157abbb4c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6cc28d6a7a2cc90159eff3fa",
+      "name": "Ghast",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f593cac3a10543a7cb24ed83704e7765b90c83e6fb7dc264e8aa96a51e9bd321",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6e558109992c686546082afa",
+      "name": "Lizardfolk",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "bb15c679f294fdc136258a83ff3cf5392afe5cdb7876556188173d0da9037526",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6eb456b6b9f9b0fef4e6f6eb",
+      "name": "White Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7687672bce27c38f4aa571b737d8c987893d95c1e8dac44192f461be92e2ea0d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:6f2f9551c53aba8b9e7e573a",
+      "name": "Fire Elemental",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3c14eca408f029040b183bbaa3b9ab1aebeff92e05766ca34374a99da68c03e3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:702b6f015f631d61c259f4b1",
+      "name": "Seahorse",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b4ce9d4ce2f282d188d85f83c47191865b577196a9bbdcda96836030cf17b1b5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:73f6e52d619d6e74e7afd663",
+      "name": "Erinyes",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "55c8b99b5940723c7cd2dfe7362a13b80d990699f155b9d386e8338917547dab",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7757d0b8c730f97ed2ce4e97",
+      "name": "Minotaur Skeleton",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a37e8898ee65084016dd3360b441e7ced047ed29a4653b13e4fe105611025cf2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:77b3f1af784c2c43660667ef",
+      "name": "Black Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0f6784d82c3e042000b67aa1bfc3385b9980a4b00e23e04ffd7aaf4c95fd74b4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:77ebc99523fb9a697511152c",
+      "name": "Bone Devil",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fc95d3a48c29df1b2568909cbabe197fbe356bbea95dc37d8b82e965cbdf818f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:780860156d80ac7fa6dff9ae",
+      "name": "Young Green Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a8f257fef3681fe8fe31fec158205f0e384a3947776ce57a8cf8fbe73ce0b8d6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7af107cd880747d10c68a3b3",
+      "name": "Frog",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a9cf610c0d802087eb4ca599e0b9dbea8e27ab811573568801c36c1c5cbfd9fe",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7b67985615fccd48d2f2238c",
+      "name": "Kraken",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "bd76d451c30cf68149d5e4f62e875cc17b292292b7b1e9594e067e2e591db680",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7cfc6e6ec4d0f480acbc3437",
+      "name": "Pteranodon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f789da10ec469be688f1960c2b14b510f864671a669dbfe5fd694a06207b7172",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7dd18b6f9cde05a8c38ed88f",
+      "name": "Gorgon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3956e093fd2a56daa78511922ccfb87fee1f705ebbee4805e1bdcce2778e536b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7e538c51c9451e67989266f8",
+      "name": "Harpy",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3b5051fa54039f51f31ed83b43e944bd2fef5561debcbad88d65d3a555774104",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7f675ecf9881e2cc55de6d8c",
+      "name": "Black Bear",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "87fa31361818ff77fb92b3d3c1314711df88be94fd99ccf03daa5ff29e0c2dc6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:7fbe4ad8326fe824ccea7b9f",
+      "name": "Tarrasque",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0faa8dce860a4fc111fb04133c3b3a510e4d21c285225e5e96c3538262c1a277",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:81891bed5778bdd958d0de41",
+      "name": "Remorhaz",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e934348220be20b7337f364670425814737d51b37efa4b4aa79bcfbe26ae572b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:87bd7cc9b79cc87276d840f5",
+      "name": "Rust Monster",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e396f5b27dfc59c64e919339af7e1abad3be0d0791ff2d3e4e4f470f863667b1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:893792eb7a0a88e0643417a5",
+      "name": "Solar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ad9f939083570379c503c415c548353a38e2687b39293b593cff96d5d458973d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:8a8f55388afd1660e9a2bb20",
+      "name": "Wyvern",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d08714621554383f94c03dd6ba365dfa0a6dbe819644612abdef9b9af1e6f336",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:8af2cefaecf86c515be2dec1",
+      "name": "Stone Giant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f145c38582986e0d701a740033632e4442cd945394c42cd4a6ea8f48a02db543",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:8cfe7be5309323bc8bc5e1a2",
+      "name": "Cloaker",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "429238aa31059a2e75350c311efc5a4f14252e54c224572dbddb38d9f7e62000",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:8e9f56db220f3082a23821db",
+      "name": "Invisible Stalker",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f943d2c78f57b3785c4c9b23d017193a2ab34f7aa75dd69f6e49a5b72c747043",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:8ec4ece8b9395a3c76099640",
+      "name": "Androsphinx",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "612d24fa039fbe90c2dbbf1559a77bc39d499a675c68bef00b3eb4544dd63c46",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:902746e4695b53c770c2948c",
+      "name": "Couatl",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d7a78212cac50d9c8ea77a00a42a6f2278cbf52664fad23f4d666a08fda7cd2e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:9107480cd22a7e8b4da4d22c",
+      "name": "Nightmare",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "014d5b6992752f64fc5b86d1033d8cbd481f77282c8114b777bac0bb10d510da",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:9194fad3a9b73358ee756144",
+      "name": "Adult Gold Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "994103fe8e6cf15d76d26144aedd96cd860e0ec81db5259f3aae5fc3b0d00a36",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:91e50947a4f95911074c50c9",
+      "name": "Adult Brass Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "97133257d60bca117676d505f1c805683092bf58c339e33cf5fabd0e5d8b39b5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:92322e123873ff953508e57d",
+      "name": "Magmin",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0aa3c7ac5581ade788af9d274f1cc9d1fc4a69b92e6f08af712c185b1665839e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:93c375be0b79078c4a25b63b",
+      "name": "Mastiff",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d366104cbf1875732c2de8c7bfb22931ab31c687fcd86a4f020056e83bc7e479",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:93fc93883fd34a9b56ef6771",
+      "name": "Young Gold Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3989fa27057d938f7f9e47803827f0896f3b62b56df449ff53aa850607eb2519",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:97e8dada6cdb8c56246a4dba",
+      "name": "Rakshasa",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9549685aa9b1673b62acce8da36ec3c63b2e97ccb61b8b614fa1465ffd93028f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:9c8bdcea22ccb0d5b9b46fa9",
+      "name": "Ancient Copper Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2ee0853f75edcd805ddef2d31bfdfba3241562289e47374973aa5309759a0045",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:9cd0134a437dec36aa2aa92c",
+      "name": "Balor",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c63b52c31e5ba57d120a66423c7f15bd743ab939d324343ee6985a6026b0135e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:9e5e4c96cd6b2fb2c14cbb6f",
+      "name": "Cloud Giant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c28a89612b2227ab5d50bca57da6123f9626ba92c661af8de19310b54a38d013",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a09b21ae79377779d59d5858",
+      "name": "Water Elemental",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "01e6a84ee56d98afbdbf33f09a0639ad865e2239005101044aa5b59c9fe5fa80",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a18c6760f9aa5c1c6f0ae444",
+      "name": "Satyr",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f0037f2643e7a401396f1983bac7b7845fb80084e51380bbb0854ceb975d8ce1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a28fa3255df00b80f3306843",
+      "name": "Gold Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c02b63e06dc99f1ad8a8a6471ea18251b37e8362f4120dd9e73b66442667a285",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a3ca4bd5cea256f5ec49f8b5",
+      "name": "Treant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7693c3607e49d5c01a12ccefb78d2c77a032defec80289adca744e4ba82cd19e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a70bd055d1b9a8664e6c396d",
+      "name": "Spider",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e3297f90670df8b18c4891bcdeaeffd8aabfb9335887336a92f51286034f1251",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a829296265f855e0f9e59485",
+      "name": "Lemure",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2a96bef616fb210613ca0c8925e1f3df8af70ee2522a6bf2d2668fb8f6742e35",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a906f92143bd9fd187faea53",
+      "name": "Merfolk",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "71d42035a8c696bec7150da9a434cd54908a09651bf9ef53801f4e6639787cf8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:a9984638e36002b979903f20",
+      "name": "Grimlock",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6e02c4b9e2fd71a808f4b5be3a547c2a8282eb3c2ad0561738c36d5bca78c7e5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:aa601ee06187fc8bee8194a9",
+      "name": "Young Bronze Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "09950188cc371dd1cdf90f357a3ee1277dfea50f70811b79d0ac3a3dc49aa480",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ab03492060872abcf8a3c11a",
+      "name": "Specter",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "71963e0854d297f88d4be01d38293555bc7d18a2a912eb08ce4763c97c98bf0a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ac4ca3a63e24bbfb0af7d9d7",
+      "name": "Storm Giant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5df600d29b081eed886c40f4ef1d3b47fab49eaddf1d7b4b9d1bef1e687e838b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:acfd8f0b79fdcfa1f513c219",
+      "name": "Ancient White Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "528180059b66f7be15ab4ea532c50ff7207d5940047d6f94334a72f8a6ae22cd",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ae298e7c0ec35dc02cd0942e",
+      "name": "Ancient Gold Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e568606ee167a56317e8b7911cc9759dcf6291586963ae329ce54c19d3f8ca0e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ae4a30be180479808e7f9a48",
+      "name": "Dire Wolf",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "adb64fa411fbf5ae71659d7abcb204fccad62b76df73bbedb14e33c1d663624c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:b01c45dc97615e9f2f273867",
+      "name": "Ancient Green Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ca7d371d5996df0fb76560d65d0f9a6bb3ca23b1108c7e63b6d31a6359c5b5b6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:b238bf83018f5e9c65b30919",
+      "name": "Flying Sword",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4aa51aa7dd3c5dbb8bc002fe6f6dc34e09dfd10222ec19405f589bd27af3b317",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:b769107ec7329990d02abb29",
+      "name": "Ghoul",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8e68c09c3da7ff2ff7fcb06453b4c4c6fdaff5c025e7add56c66c7fd9bddb361",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:b9a42f0beb8de8b427a4a6f8",
+      "name": "Hawk",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3b443f8cdbad852a08ddb414a7f88cffd9e9ae1b80adec8865a08202037a1757",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:bd9a6cf7c38fbc4ba69674d1",
+      "name": "Wight",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cf17a284c239d837a54c6402e73b1186282a95e576368398d81ba9581a252339",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c064119b6f66a5c81a611faf",
+      "name": "Ancient Bronze Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3860a5a47caf9723aa572fee7a7ec71c4dcc8a798985ee57fdf40bc40b6ab4cf",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c0683b0f17d9b5cdaa7f2e2c",
+      "name": "Green Hag",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0b77333a2a470bd861aefcf69693db04d3ae743bb1c683cf66314786caf96589",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c2839dcfbf598c09251523f8",
+      "name": "Roper",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c5cdfa9826a1ea19379987b159ffb24c138e5c7aaaf08b7f12ae0b608156d6b9",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c29eb859683264fe89a3a8e0",
+      "name": "Gnoll",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "bd543b70560eb8587b9c2c88e8c116d41666d9fdc3d2f2f36efe1cc444f11a53",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c351d616fe11da27aecac163",
+      "name": "Adult Silver Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6e4bcc40156d9efc34c5f0fb367963f6e7355784e2352b5732b12a11dd1c2239",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c410030fb47468347238e056",
+      "name": "Stirge",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "433dfbb37be7401ad079280102f682fe55e72c2e10994606f1098fe7264af6ff",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c4cbf0847842d0700df7500f",
+      "name": "Violet Fungus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cb66054e66630a8e444758d1d799efd003e7331c945a96edb50f9e290e9dad46",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c5bb46f77e04c183d4fec6fa",
+      "name": "Purple Worm",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "47930af981c0806092861b20c0ccd1743d547cc2c46c92f9c22fd6aa04147e12",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c6f8e7e569e7eb4c5a72b7d9",
+      "name": "Ettin",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "90adb5721b4015455a6ab269a093838f1194d0bc5d36a0250a655cb9ea1cdf4d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c7389df94a51398ea56fb421",
+      "name": "Marilith",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5f13dd22bc3a9324165eb5aceb968db60cd4a4c5a9f65daf35622828446c198c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c790d2025c3d0d5780da7b67",
+      "name": "Adult Copper Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "739e77265471b7ce702c82df6c51e68a69581c4a5b9ca46d327f5fcbef6e8096",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c7fdd3378ac03180451ce44b",
+      "name": "Ancient Black Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1a3a327d54fb48699e98b7e26bd191dee816a1a36f0cf5472a1f985ba54555d9",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:c9ee21e7a0b1cdbc67c5e309",
+      "name": "Steam Mephit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "11b2a6dffd607f98a6dbfae5d9680187dd0d038496fcaf4f023097601fc5d18c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:cba3534b1492c8376eb79c82",
+      "name": "Ankheg",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d3753a3e3faa36cebb4d7f9dda27911d840ec4bd5f287b81a401ac991d19001c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:cbb001f99a9eee6bef819e6d",
+      "name": "Tiger",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e7556e8de1f7b54016c48f8704afc4af26a632b4efb7d3b7e8fbc0dc6f4133de",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:cd285f0f8bfdcf75a6e8054e",
+      "name": "Skeleton",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cf52eb215ca27fcf9c12679a8edc1fd7c55832047f43938caa1534d671320da8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:cd72304bbb5f3a61f2d9243a",
+      "name": "Night Hag",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5e70859a28562321d943a85936d616c614b680c457c5f509c344abd2e64bcd2b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ceef6d13192fd2fbdac2fc0c",
+      "name": "Ancient Silver Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8d0bc4c68a9f9061080993740ffd67e12bda9378650ecaf64704c30241bff36a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d0002f2f1925963d1252f95f",
+      "name": "Silver Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "032e9360f4db4c4adc5918b223c01709453674fcfe7fb72c23da1fdaf8db9d10",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d033a9d9254c55ff8d35e3b6",
+      "name": "Hippogriff",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "715cf375403493a8e85e3389c35c68e338fb317e744bb425fd09aa839487e86d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d41e70d7134c5b42e5160c63",
+      "name": "Cat",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "50297afafad9c10c315a11a09336b001011998191ec8a59f6c6ea9b926cc87d7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d4b9894df3107fedb012cedb",
+      "name": "Sea Hag",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d42df70fbe36ddf0b70562b72b87ec4328cc386a784d81faa0321467a09a2749",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d4e7f82e229318015354cd7d",
+      "name": "Adult Bronze Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0e3d71d2227d56bf1e81aeab56d1dd226ccaffc34297e0e9ac99af5245cabc61",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d53975ed6a5cc353583aa29d",
+      "name": "Hydra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "52d6b50c91b81201aa131e43bce316f8d11c8a22be15497dbe94facbcd70a980",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d62bd75d96350c99a714e786",
+      "name": "Aarakocra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d1f14f5160b592da01838ad0f838a2426f9fea2713afc0ce721e7c5cd2c31397",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d656b15ed4782c42532e472b",
+      "name": "Giant Spider",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "606d691e0583f714c5dddd7192c12e9725e1c1e91e4e09c02534ab483ab7dbd0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d69b042e116dc5931366d3e5",
+      "name": "Sprite",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6410353b994337edbfe976d5ccf231993cc269cad022b9ef9ecfa1388f0ab360",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d786f23d0ac0b236ead6a1c9",
+      "name": "Troll",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "73b7ba6d9e45b7db3171e8a11ccfc1ce2f357740766f4f2b5cfb832f71325c34",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d80233376f3ba9551415e215",
+      "name": "Gibbering Mouther",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f6c34fc221ef9b3093a49a99fb24c1e0061a212e316e2c0f91ed0ec2c3470e08",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d884523d93f8a3845ac85803",
+      "name": "Lich",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8bae21c45aaecae17d9836af1afa6a1acafd8a79a65855dfab6b932d63366d61",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:d8ce0ec74aafcfa932e83b4c",
+      "name": "Guardian Naga",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f9fd76ccb3a5688172d61f80177bd7fbc581c1d2d555ad8545bbb26c2d0c4844",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:dc0b7de38c88ec6875ec950e",
+      "name": "Adult Black Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c1b381f80d15f813644674460594f083093c111f0b0f109f2fd7cf1b89587dac",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:dc3c4949618a9e0e1a94a3e9",
+      "name": "Chain Devil",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7d1a95e950401671a356c1e4988505f76c3ac7f347a7491e5db865103a5fea9a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:dd77c7a4a8c7103b742d33f1",
+      "name": "Nalfeshnee",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b44a80fcc6c18cf3c812ccf6284a9a8a248eab2128cdc4eb04865e393f2ca415",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:dde880dfb9611bbeabf91d1d",
+      "name": "Dorian de Nocte",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e3d14a85f9acfaf3ce906042d064d481dd61872e26a89b494be87a85ab17145e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:deafaf63f3481a5be6b6a407",
+      "name": "Vampire Spawn",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4207b6a7cdf106f942613c90775528f13fecd6a4d1719231344922bc904035f3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e0dd8a5cadfe31a20c7ba04a",
+      "name": "Planetar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d45509c83e8199cd89aa6d50b86fa758e6694b5225436244f53449bd1c1a49a2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e133650e7e6e3e0981b19ca2",
+      "name": "Young Black Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8dfbbbd16128b10904061caf8afa6aab079cbacd5fdf2b71a06922e55c11cec3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e400df514e920a042daef80c",
+      "name": "Bronze Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a6f26868e94d6ae30f896f62659660ff83d54248a3dd853e5e2de900db2bab07",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e5034f988c4a7bcd72a3f9a7",
+      "name": "Kobold",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5b40d3a30c426266a2505aadf3ad40ff47a607e25817b91ef9cee05b0b573961",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e599a299e94f08545aac096d",
+      "name": "Lion",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "16a157f767dd4da7aa5f38adac6de104b70de4446153d015d5fe15e82fa23141",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e6e9e939c4f920d68da19e9d",
+      "name": "Sahuagin",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "234fcd2b7675f92a88b7c7b0a8218643b1e6d7fd783168e4881d9ff38977746b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e886bccd86aaa705065b8b0c",
+      "name": "Aboleth",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "37c0a61149bc0520dbb1aa72865dac92e1123a9e2c809233c2f26e9d8f1833d8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:e8c1575896aecdebd5640576",
+      "name": "Wolf",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5459ad0633b5522b3952b6c862e7fea11f4e66c255291b45471d7da367ad5407",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ea57f24364d9ecae35e9755b",
+      "name": "Pseudodragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "94d5b7f007e8933defd597875f232b8978141e1435258cd27d55115f7d2ed558",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:eb27bfec875c1ac71b5eb9cc",
+      "name": "Reef Shark",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d1ab91be0759df1b7454ba0531db42601c5322d0181a551128b09751f8098549",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:eb39dfe54070b361f8f4a55b",
+      "name": "Zombie",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2bc87153f7816370dff548970f8218dbc174d791124dac603cac26eab169955f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ecdca9cf9918dca0f3087fab",
+      "name": "Salamander",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "71ab8fce1f8907ae5d17d970cb6879eec0fd3da46b9d588f608476f0e73713d2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ed2556a63460cfa54d4e7c1e",
+      "name": "Adult White Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c5ba37807cd96f65062b6dad2a83533efc64e3b3eba20ac381984b6468003f99",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:ef0bc15eeec2eab03d08ddd0",
+      "name": "Roc",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "efdc8d1660bc2364b481d868b99bde13128b3607078a7febe5bc4c61c885bd6c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:f0e0cbed5ad8a86abac85f67",
+      "name": "Lamia",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fec1979c7d67477704dd60ea02a88d6e88d7ff8b2f91539264d61bf3fc0a4be2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:f3a62d422c727f229a7b0027",
+      "name": "Gray Ooze",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0cb81b71d4b1e1a100a68dc3e60cac01080ca973e78a73245cc0c06081f916b5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:f3c97f3467f9ddd64624ca0d",
+      "name": "Mule",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "dfad775f57b0abf0afeed98cfc3030d103930b5b0953ba3ba3a992dd88958f16",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:f6603c0f48f5e42ac4b9bb27",
+      "name": "Warhorse Skeleton",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7a0b1ae245381bf82db2f728e69b40bf3e21c07ace5d6f591ef34a2471c153eb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:f8ec69b549b88c10b7515d9d",
+      "name": "Homunculus",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ec60a87271564b089a7c108c397f93d1787506b09f3a2892349c7acd0032cf47",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:f9f73802a904e13b81b1b6f1",
+      "name": "Fire Giant",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "17241461f69f2bcd67b1816c806a43195c1ecb4ccf49f6b50c1abfe48c440d31",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:fa2d833b089df093a2c051da",
+      "name": "Young Copper Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f21a6aabc6efd12ce7051c5f00113aa524146b64ebee0074eb2c8843c8e142b5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:fa30019cb7761e46202d7996",
+      "name": "Copper Dragon Wyrmling",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b2c01276900c00cc13bae185bfb5498fdd05a0ea24fc86458f1a531f836e6b5e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:fb319e41658488b085c68348",
+      "name": "Dryad",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7cc316a2c36a5573c7ae6907e6d64c714bc1d2b61ce27fa3ba40b3bec17615cf",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:fba78a4bde1f7a3c7f8ea6d2",
+      "name": "Mummy Lord",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f7c7976530821a6c88055a92d861de42ceea8410d1ff6cf5a8dada2a0af064a1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:eng:fda9c989968309f20bab38e9",
+      "name": "Ancient Brass Dragon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "790ffbac6617103ab7f4c6d69884bceca813e4c9aca6034b47a6ec699a9f2e91",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:00e11f02b1d4a503fa4b0da8",
+      "name": "Cuervo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "82bfd0a1cb845418737512be2f37de297330959917ff95c7c125562125c86552",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:01d7b21b2636ac3a9a0fb8d7",
+      "name": "Troll",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "775e0a50f1ebc3a87a158deee91ebb705c55751c3b3d7492586d13d4a4979b98",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:02b7eef8425cffe0a61d9c3b",
+      "name": "Cubo Gelatinoso",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7962c87d4d65fb2f20cf09579822a48634052830ea54493d655fbbc55cb12566",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:0329743f813cc7a086a1be0a",
+      "name": "Homúnculo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "25f10f20792d4802e3b9776b8e8b0b86888b81c08b9863bf813bc0a3b83940a9",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:05990e9309aca20916bd422c",
+      "name": "Gólem De Carne",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "afc8f1d46e319fe91045c2b7eb1920a562d0999c5b817345f535e8115555d196",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:07e1cec8bf7f0d7c536d0862",
+      "name": "Unicornio",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "13d0dfc0b7545d17408171712274000003737d103dc9a236bf09097cddb5307c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:096c603c34dd91abb101e3bc",
+      "name": "Dragón De Bronce Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "edf6c85a022f0cc4ad406d9190f19c4587e3031c4fe06654f031b8f697c03ecd",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:0a01fb1fef40bbfcdd315c08",
+      "name": "Oni",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2817c8437d655ff1ffe427f976750a1dc602a009539027cbfbc2061fdf1afb87",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:0aa5080562e585c21bfd0b9f",
+      "name": "Lamia",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c34eae63040fe874f22576b0bdab323769295083620f36614671e58527d4ca88",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:0b18e1853e351d78d4b256c0",
+      "name": "Behir",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "70c1420397c9352c1159c497d8543b2619b22fab3a4045966ce816fd927f3504",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:0ff458e91cdf335f5906e2cd",
+      "name": "Erinia",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "59646ebe35c7109eeae6219cf1ff163cbc0c2428a94f502b007b283e6deabba0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:10bd2f8c240db3f3bac5672f",
+      "name": "Oso Negro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "473e3bcb32b0495dcb4bbb5dd2ce992d0c3533539a66310d8a089c571add4e7a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:119793ac35c2a70034465906",
+      "name": "Hongo Violeta",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "960e302087e83e8a9a14d09f442aa69811e977f43a18d2d994ebd6949c6fe4a1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:11e26e18c1ea1b2e3d8ea226",
+      "name": "Engendro Vampírico",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "552a69f2223ce0d110e0e2c519bac20f24a3f9feb9ef0d52e00b783c77bdb687",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:123864e4fef980070ce3a73a",
+      "name": "Bullywug",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9aca3d62ca1a5e2a100f9bb8a09614d4d7c7233902c33ecabd089eacf0767764",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:1442377ca34188b29220d56d",
+      "name": "Ifrit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "38ccd6a846b4c6ab7be4c5f4b157f5f617396e9f154b63d6958631233a590645",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:14fafdd72affec9e5e50000c",
+      "name": "Tiranosaurio Rex",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8642d10b8601017200700323ef6767064b6a117fae278a51e378cd9a5b2e8139",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:18945677c9581bf3967859d6",
+      "name": "Diablo Punzante",
+      "revision": 1,
+      "origin": "official",
+      "sourceHash": "06745767677fb34adce77040e37aafcf9e392944935daf4f2e63fc5c524de153",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:18b52bf7031c708d70d489f5",
+      "name": "Mastín",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "315b7db85b7899fccf4b421439f6d3f1d84e4881fbbf3a6195b346ca53deea83",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:18e249dc0ba12bff7a2b9cfe",
+      "name": "Guardián Escudo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ed7d2b3fc560e9adfa6e065333e34059078a91ca9914bc38aa2ed0d7dbb76917",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:1986dc031107aa0a1aa9ad51",
+      "name": "Cría De Dragón Azul",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3b322b39eb35bf64d1fd7fb3858c923393fea11f253dc7028bd40f9aa56796c4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:1f1503c0cf4d40262f428558",
+      "name": "Caballo de Guerra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0f4ce52f81facfe1b3f52024077d6d1e28b2874c9124c599a984a12b02510b0a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2073ed04b4091b2905c035c6",
+      "name": "Chuul",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9dccebd403671e8c250e78c27b338714cd68828f25f78feeb55e8c2e3eafac80",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:22650f79217e0171c668dc37",
+      "name": "Rana",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1947181acdc33fefe72ba15a9730579635b299b6138b3ef6b98567f004c6297c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2268bae7538637a03eefc657",
+      "name": "Dragón Tortuga",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f4e432d7d35da50b0e24c258e661bcb3b68cca5cf3417a0c0a6f7a338c09ebfd",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2378bf9cfdd14f64c328cdd4",
+      "name": "Cocodrilo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "921ac996f60c84fa7d3de3f4a8937bb3a19a87c5f0a5507a2b3651626dfa685a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:24edb15465a51efa47105388",
+      "name": "Quasit",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "aa94780f35b3c12220ec0af655377b20da3b8f3c34101b7c7306789ff260ddb9",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2680c380663ea77bd3dbab7e",
+      "name": "Gárgola",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "be7dbd3db8043f34802d5eacddbc92ce7f7f608f3f2cc2ac8437a873643930a1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:27b3bad7b38e2048a1c4fb0b",
+      "name": "Centauro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7b1e4763d6ad67ff9768464c468e68ce7898955eec821c23abaab11018d7efbd",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:29a2724f11a4f3b659bc9e56",
+      "name": "Dragon negro anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "124504493368fcc916ace5f383dd5a051517888f9d03443d80ba462f19e15018",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2cd550fbbfe723be19bc6903",
+      "name": "Diablo Barbado",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f90d9722dc7c6670ea0e4ae9151e7be75a892f05ab4dce7bebd3e4d230f94b73",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2d203498c84b9c1165e556ba",
+      "name": "Diablo De La Sima",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "49b6a118037f529297dfef99ae8e167ab1d60d74202c6120b635923cabd562d4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2e3f6fc8ba6e3b2621cc2d3c",
+      "name": "Lobo Terrible",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fec9fd71c3bb486bf2f04c4680b28e160bba9b306931493de6f36c02e560fc38",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:2f5d6d23624e42281409fa74",
+      "name": "Gul",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fedcf36d930b42f85fd6ff46ecd0e0dc30884dbb76d2f7e44880184587119fdc",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:30144397e2d64a3499f7007a",
+      "name": "Glabrezu",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "075f63bd62b1278c13afb72290e249f494e5b7c9f69d4c3bfcd309fa3adb9e1b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3018c46f957a100e5fd559a0",
+      "name": "Cieno Gris",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "eb5b4a668ca8ef04badf44eaba8068ca860212bab54417ee9872d4fb324cd506",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3251fc78b01e01d32cc3678d",
+      "name": "Cría De Dragón Verde",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b07e6b40e0f295ea88b027d70c0e0c50082be28e7f9572557ccf61036a5a125f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:33750e54650d36a7e0e627d3",
+      "name": "Ettin",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "35779891b13baf3c883f96cd30da764f6733bdeef1ec62b9ae0dd31b043d19fe",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:33866dc3b32d8a8db1d94af7",
+      "name": "Cocatriz",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a41906ac541e37561a7f54557fc8366ebb52703c7b12348c8524f580349bf798",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:342f35612348056047ccd531",
+      "name": "Diablo Gélido",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "32ae2d23d92420b42bd962cff82469354be235a46bedcfee53bce88d52e1f238",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3440609e112189fd5469d292",
+      "name": "Marilith",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "25c5e75c510a8d23a3b0a2297feeceff103bbc82f68ab1102c8696783c924ec4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:360780458ff8e48619366889",
+      "name": "Zombi",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e6a2e752fc97b5c761455f8b5ef033d7e165bcb9023561e02bb1a5155775920c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3631869f5d85bab914b37f86",
+      "name": "Otyugh",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a683f8a245dd0567f47feea6b4a38309ab436235bdf66ef6bda99fce782b212b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:365d066d1c0b9bdd8232178a",
+      "name": "Hidra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b1061926c6039715bac7baf1e0fab5a833c2771a5f88b9330729d49d0cc6ac7b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3774175a7d28c4a961a3d263",
+      "name": "Espectro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "79ac77312c88a73ade8438d8d2368d8a53d644badb0862271fcf5842441b8db7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:386b0b6c20a561abf6ee3714",
+      "name": "Magmin",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "69c9de8ccce4897f86aa1ddf2e34de6986871e7b8931a8af28df31ed042f61b1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:38bc1b5375e37f71b216d9bb",
+      "name": "Gigante De Las Colinas",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "dccfa00f28d54d11cfcd59772cbc6060b95b04ec85532898d4a4e4a2213de9d0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:393bf6b3be03e416679157bb",
+      "name": "Dragón Verde Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a0aee59e9a34c9d1279ec45b0433aa3abc3c4a57d98e740b2181c9dca5a0cc23",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3a16049626f94f9e0d006cc2",
+      "name": "Duende",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ac295533d507c8bebc0f280012bebe034c1c3bfc6381f8e9df346c1bcf5444c6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3bb07b8c8cb37a48743f4a54",
+      "name": "Comadreja",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "201fbe67b4c8a9c387a39fa425b9ec5214bc2814ac7a9075ee740c24c36908a3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3c4bcd7f14acbdc17920d4fd",
+      "name": "Elemental De Agua",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "efa190fdc32c9db025a8b5ebe760533c79302beb06075490c3dec6bc0cbdd2e7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:3d5fa980e6a029027578de17",
+      "name": "Arpía",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2ed4c3b410160475f31babb6bcf3d889c66e5d3d03715bc155301236204112c0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:40949dd4778eccb279b48627",
+      "name": "Dragón Blanco Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "861deeb956667a9e7f45436222679aadbfad6314db30b71c88c8ec2780ee8a21",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:42d2bf1e7b7f6d7a086a376a",
+      "name": "Caballo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a84583d51942e781c402e36b3c9fc3069426153c2596ff2810364374a21fb067",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:44db28c0e0f44e92973c9913",
+      "name": "Plesiosaurio",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "efe0ffdc9b35709a4bf2a9fce0e86f9bf5c79c768ca970abe3207f5393f508af",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:455ddd85be12c2fd09a9562a",
+      "name": "Androsfinge",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "af88dc9ed651a491793b7f3e04d1795dad87234b6ad11b06e96456ba84e9f843",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4699576e95fbed53df3d303f",
+      "name": "Rakshasa",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "32bc8072f01bdb980f5e925c243a5308f5c7675fafb1b5e56c28ed8ebda2f2c2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4779d95bdc1b9450f960a189",
+      "name": "Momia",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7fc5d919d9c83b447cb5c86ec9b4069ba74bf608bd4a7a221f859250b894e8a1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:495bf346085496d46de22724",
+      "name": "Esqueleto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f5333b985f8ea26c1047841162b20cfee608052a62ba1ecac031bbb72e294a18",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:49803f122c003b671b8340e8",
+      "name": "Tiburón de Arrecife",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c26e4249a8b930d8a73382ca168ac052612de6e033c93911e11a71e6c575acbb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:49f81344261bd9986988bf46",
+      "name": "Gigante De Piedra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7bb934f9b719d95f5cc546e1e71702726f6a85759eaf49523738c237188b73e8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4a2c4c5a9ef3526be192a025",
+      "name": "Vampiro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1ca934cd5d461fe7f6dfe989ab5dc9f8e934bfabc46d684f9a4ce40560f91bcc",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4bc02e9aa6f95b32b99eddc3",
+      "name": "Tarasca",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8ae97789f7cb4253c8f83fc65c8b85f4174934807930f0ab37cd7dc7a61c1455",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4bfc05847f9d0e9eefd30ede",
+      "name": "Araña",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8776e5a15cac98c68a91d0039dfe95da58dd7250d62f059770182b25cc3d2c85",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4c3e566373073c8b95a20950",
+      "name": "Dragón Azul Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "aebf992019c15c20499aacd03a7e3e005940357fe27eab9454dd9d003903e1dd",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4ca86983adc592b9101072c3",
+      "name": "Cría De Dragón De Oropel",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "40682f7695879031ee53bb79e9722bf5c6e7f82eff3bc5e030ee6ea0b39833b6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4d04a6ca5d2751d769e140d0",
+      "name": "Orco",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d742f0feac8f858efac3cd70c8ef29d84fe8b6ee1fa434e7816a884e759df706",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4dd4a71c30b171a6732420a0",
+      "name": "Gólem De Arcilla",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f5559d7b76e3b65574ddd51e289ca105c8b77cec13b89cec096eee90555ca499",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4dda74cc610d4ab6c765efae",
+      "name": "Dragón De Oropel Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "08304f6687e8b56fa72dced01c7c0de2858174257adcf62ed5e6ba2ffd4c1ae6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:4f61cc4e55250df3e6548eaf",
+      "name": "Ankheg",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a05657a0867347dbcc913bb7e8b4a9fd4ec828eb0488dae0182dfabfc2c2edfa",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:516f0e1b0060a94c8b046c94",
+      "name": "Pulpo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7a09ae3e5ef595cd2c4ca45a1267c3a15159d1129c3afe7a068803ad3cffc3db",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:54217186061a5194d5eb2687",
+      "name": "Gólem De Hierro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3cfbd5864eab90b51f5a7e9cbea27b2a51d037aa4dce7af3199e600992416f4c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:54a01e4e71c8ed75d9c19c60",
+      "name": "Mephit De Magma",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b2cade0dada6d622f00201da20472a41f6ab02eeab41f587001c4d864d6dc4e1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:55bbadd3a5507442cd9d7801",
+      "name": "Monstruo Corrosivo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7b9408ed159743e19639278374250fbf495b8026cff6adc68c845c9a7b4151e6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:5628662d5e91087ab40172f7",
+      "name": "Estirge",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3a29031c496881ca89c4be5dc4501c5748505ee16c3da627b215ab27d9fa070f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:56b510e03c18f7bf2ee6d564",
+      "name": "Cría De Dragón Rojo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a2c8128cad65345c996befa858c5ad1dcef9e7153308f836bb1e321e683db5f7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:57e08cb365242acd3271a859",
+      "name": "Dragón De Bronce Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "48829ca53a398a871eed19fe9689dfba04d56e912f5195477283406969e97664",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:58000bcbec69059270305f17",
+      "name": "Mephit De Polvo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1cf0edc6d10f737a37c91a4036f0c059a595a108e66ce3a3dfd6d10c2fe88d03",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:5a2488f2db320638ee456a2f",
+      "name": "Caballo De Guerra Esqueleto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "60883d553c0b01dfd2c9d76413aefcb43c58b9c0ee0a79373129cd5adf4eae39",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:5a2812f268d6769b012735f1",
+      "name": "Kobold",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b84310e64463450eb741e7e949b3d92a256aa0b71b6f0930a3dc3281bfedeb4f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:5e050f9949c5de88336ce29a",
+      "name": "Gynoesfinge",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9da937599e0974e2a71ace866a49d8c9fe5b7c535fbb409857a6fdad8295b2c5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:5e2c341a34c6f8cd44576987",
+      "name": "Bulette",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3cb8c2fd4810a55b8955adf3d348aab2469d3dc479715da57862a0d0113244e3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:5f92736c0e536082591083a8",
+      "name": "Fantasma",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ab2c989ef9c942daf08110b2375d5a21977209fd5fbb84942c541952d15cccc6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:61e41cbaaee8ecb073a52df6",
+      "name": "Hipogrifo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "83379087f471c9ba0ce2326e45a921d7e852e6164a35a13778dd721db3973f95",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:621355fb7c4c9254ce2b887f",
+      "name": "Mantícora",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "77ec29f34d841abaf4b756964f777d32e93541fea9805e0583d27b1f1bef2717",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:63692f9b87e0fdedacc5f111",
+      "name": "Lobo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "233ffac35d9dbb83c0f7639f5ff49f6c46ea33e41c4d5b3b387edd878d3c0b22",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:663773c1d16b2f44c9d81374",
+      "name": "Saga Cetrina",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c0384b27a90baac434bf9012c5e43dbf53066682e4ecc8be112bfd8b2cd284d7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:67aa1d55b8a02cc7588c83f9",
+      "name": "Aboleth",
+      "revision": 4,
+      "origin": "official",
+      "sourceHash": "9df6fb2a705e9b855bf0871dcb54faf24185ca6994bf1bd3e9d9011da0e0d45d",
+      "status": "requires-source-review",
+      "evidence": "Texto actual conservado; no hay un original independiente en esta captura.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:67bcf7bf036a20223561694d",
+      "name": "Medusa",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "06cc028f6bf564e355647a1f2024d1a12f5d7f37112d1df4890cc9c296f212fe",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:68ccd3cebe05febcab04bee5",
+      "name": "Cría De Dragón Negro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0f2fea2aa1db47ce62c646dbf4dcd33afc7ad312212d564e2882e52521841072",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:6919acc5c7a9f5763abe4f97",
+      "name": "Remorhaz",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f8b7b7f704caebb07b8f8b2ab645f4059872ed7cab528cc35f0721b4249f5f7e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:69213f4f7a8c69bafcdad83a",
+      "name": "Dragón Blanco Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c01e1d44989462492f398fbb5f49174452fc15077f10e6e5da33ab5f1f970d4c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:6bb162beaee5a26a09f6e754",
+      "name": "Aarakocra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2da06d540f3dafa62e0de581149f2fbe6d2b37baf3849b890f597cb3da3ffd22",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:6f4f43c59d2b6e344bb4df6f",
+      "name": "Mantoscuro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6da1d7964788b5e5e222bbf40501b1d56cb1f47cbb253cf0ce2115f80a79ec44",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:7071f9f9893f7b028aa421dd",
+      "name": "Dragón Negro Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "caae36081c827ae478e11c0806554547d34f93b38656a07df6ade333d2327e0f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:7084ef5c9fb58aadc8edf203",
+      "name": "Búho Gigante",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1e3db890a5e04c804c5c2ad19ee3747c0529ead174844eefa72b469e6ac145f7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:733ebb142cf87d6c1d7ac518",
+      "name": "Pteranodon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ed21c203f37338ac33667cf991c08b4ee12b3355ca1d10e1f16944081a7b2cb5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:7408894ca13d73988e8ce5ee",
+      "name": "Pesadilla",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b983e950b1371e437d2a12b551eeab8c7652e6cffe084389e3be3cafc3fd2c72",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:748feb1bc1357cf1d8d750a3",
+      "name": "Gólem De Piedra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "95aa9fd8e11896eb59c6731d2944fe03a6006019ab444f58ccf47b614a44b92f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:76fbd39a5baf921e7f72d4a9",
+      "name": "Búho",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "640c930042be7527588f9315f2156ecf1f2eb5fcee63f7a84eaecc4fe1d62df7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:778fe9258e50fada6c78ff80",
+      "name": "Pantera",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f7d345c91c566bc23303d9860119a3301711a71be15f4c8cbf479ef2cf97cc8e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:7ad04e464f165cecd60243ee",
+      "name": "Minotauro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ffbf1d745a12d579ba0cde7f2c09578064177044fb0da9fba16c5b279309e8c8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:7f2fd8e1bbaf07678b91ece4",
+      "name": "Ghast",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "345f011724824d0522524a5e594679c56231c3d08ef9e0522f4fad143e231108",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8042187c71d4887eb897ad28",
+      "name": "Triceratops",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4943a963d44088c5ca4da24aedd5765e98a02acc7d0913710bfeb47665175496",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:824cade62d62aa0b5e10169e",
+      "name": "Saga De Los Mares",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7314d4fd4471c91614d66306c5d60c05e7177c6b48ed38182e82dfb430357f8a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8341e99c92fc2d8e5b89dce4",
+      "name": "Gigante De Las Tormentas",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2551f592883ec69449e15b5c4432c2d7db35e97e3db2d310a3defe5e98e0626b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:85c04857bb4fa2eb57b47fe0",
+      "name": "Alfombra Asfixiante",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1be8324b46618f035eeeda868057500b113d7bc602f5d91a08b528596698165d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8849ee3885ba2bbfc38db1fb",
+      "name": "Pseudodragón",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "70d284ded50f0c1aff98168a9a2a9059c30237c1eff26a22cdc5b76fc656dd82",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:893859e2d0282da2b3076462",
+      "name": "Mimeto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c87c791d3c82f5c8be4cfd7acd9f5d756f3673d6cbc954847d6f00ae959c0f72",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:89a7b7773e600a088f7836e8",
+      "name": "Lacero",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3c90357d45b6af7e1091cbe53da8077e0a7456adf995453d8bf199e01141fd7d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8aa71d61e044c759f17d91b5",
+      "name": "Chillon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c7cd0a88b4719ea528313eb911753fc7dc745b6c2b6af30b4a74778c64571c6e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8bb3db70862bf47dd7057b8c",
+      "name": "Dragón Azul Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8aa05aaece5545a770f8c81eda6a4790276ccd25b1be84f1a96e7a59edd1deb7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8cf11e0748d9d9272573bba5",
+      "name": "Hezrou",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "42dec3a4a65cd5c5e8616b5842a1305c33c9010ed57cb962d223f0ed17867eb6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8d283ee47e905e7e85f511b7",
+      "name": "Manto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7645cbf2f0a96f414f998203da8ff51a559fab15234fac4c97e40025f91c7eeb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8e38a7e7f81a93c1b7afc1e1",
+      "name": "Dragón Verde Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "555a70ac26d29651bf0b1deddcd29f309a3bd2dad3df3d0633ef7cb57c4d6a58",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:8e56932e212855c06ed46cfb",
+      "name": "Ettercap",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d483134f83e6224fb57d75c17683d62e8a252c6dc1fa1b57a044f9c344c6cc5d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:90c70b884db6770e8b246c5f",
+      "name": "Balor",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "39fa3727dbc810ad21168fac4af3ffcd0a084689c2983881f7a813ff5be25654",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:92fd7df3cde9b38e9abadec6",
+      "name": "Lagarto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7214ed6c9ed8432753cf8a8cb28cae20dff4792a47d71236beaa243b96d8d121",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:93a5a02d67c3bbd5862895ad",
+      "name": "Dragón De Plata Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "752fa522d57a5a5f1f75d5d9181050e22edada87307c79884251c015154dffc5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9537b843c38dfd5fbb9c5e20",
+      "name": "Cría De Dragón Blanco",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "3cea7084e9ff7b12fb1cea0bf4a58aff96b21dd131f40ebfdded70fbc7b414b7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:954a84334cdf5fff9a4b1ec1",
+      "name": "Lemur",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b47ff56d2545bf1c71945e5ec971b634bc986d082c1765c1c3f8041054911ce6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:97394716eb9ff9fb6c8e186a",
+      "name": "León",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "af3f24b3112981e618a311c98f0433d195a9544424b1cccab32aa6813ad1333a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:97e9d2d2741b23a232308a61",
+      "name": "Sahuagin",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e82097983c1f3f12ed51eaad6a54d36080bd62bc687a9884618c079d3ab734a0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:985b3e97e45bd28d4184bfba",
+      "name": "Grimlock",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b808c04061b9803e49d389427cad1b162ade8277f198456e15b91a19ae34eddb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9875c6cce502908ec0f4272f",
+      "name": "Duergar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "96e0ebda0736854122d649cd2acbb35d2c9e578758985dcb048aff57cea522a1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:98cdab10483e8c3e0423c261",
+      "name": "Cría De Dragón De Plata",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "5f7e59bc49c666da42bcc4364f48f98ba1d22a0ffbfd96b2ec6af22d8c7f4951",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:999ecfdf47033fa20666a6b6",
+      "name": "Ent",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fb930a57f1a1301802f41972a43197d3affd254865f30fe77e4093a45ae8ffa5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9a6ada0a930142596e9ef78a",
+      "name": "Gigante De Escarcha",
+      "revision": 1,
+      "origin": "official",
+      "sourceHash": "44fb093a84f0a9a5ab1db7d227b2c01f14997b4fba88914a9187eabae5b686ae",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9bbcec014403c7c089bca89a",
+      "name": "Gigante De Las Nubes",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c5e74f48dec613a401b96eba0703a26f99d74ece182a3ab278222feed84590a5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9c504d6a3e6cc757fb0b7615",
+      "name": "Saga De La Noche",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cd7efab6d2c93d55f9befb8a640c685247daa14960c4dde7c7b23afa19228440",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9cea4fa7447d14c4784665c2",
+      "name": "Anquilosaurio",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9d09102ae8d1fc66a3b92ee8bcc319a098922cf2370675755de0431ad086cfd4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9d299620f1698f64529e2c7c",
+      "name": "Bocón Barbotante",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ff21db294114bbfd3ebe58e7bcbfdc7f40a5c15dd92e2df84491c93c97a927f2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9f29a1372160c30e2e408595",
+      "name": "Mephit De Hielo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "302645d51fd9455103a2497f323396c719fb16920e5309e6b08c247117abc7c7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:9f93c4b9a874a360094036ee",
+      "name": "Draña",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "08fd2d49bde0937ab3c679252127a0971f533a0151a3f0636a4c6f9c93092032",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a0b3e8c431a9e926481728e8",
+      "name": "Dragón De Oropel Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b257f56c307d1c32f368374e1ed819bf372c34cda217990e4e56fcce9bbb83f8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a150ef8c0ce750f99b6311e9",
+      "name": "Hombre Lagarto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "26d4cb295158dd4c07aecef013f95257cb73f52ee4e11d8e0d8d36f310e39c18",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a15a36fd4a038d7332263f34",
+      "name": "Draven, Guard Commander",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "17b8055ec8ff1766c0aded9d011f20ba75f9fa4b86bc46908a448047855d7ca1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a32826db33c03637a1e16ece",
+      "name": "Pudin Negro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "a0691ebf25bc46464c75a3f2df451a4ae4a35a2e61cd36440821d4a0f2403e15",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a32bd27af644b34a121f3ad7",
+      "name": "Oso Pardo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "9f3586e757287bb3929e2107cdfda0048905e0c8162760342115850edad5f78c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a560652736ec009997419ab5",
+      "name": "Liche",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e8feac7ee680c663f185dc8259587c483dcbd552d33821ec8e0e19c881353304",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:a5e3e221fcf27a83942a293f",
+      "name": "Mula",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c74e18331335fd18c83254201a8afe4efca6ba5b5d2c2ced810219c870fce793",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:aa753cfe3dac166cb5434c85",
+      "name": "Dríade",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "acb4d2e4aa6a6b53e589765e32cce7748ba65e7bd2a33a2aa3654ea8634c79ed",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ad19c988ce5aee5cbdb28078",
+      "name": "Caballito de Mar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d0575cecb40048240f94ec659a5340aff7742037f9cd42a4adeef332a34c55b0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ae58134ba9255b29921c80e5",
+      "name": "Broza Movediza",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6b930a891688ae49c5cab31c384058ee533b5b30b6c00e262439c9305e5ad3eb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:aef9dccfee8961f2037bf5e9",
+      "name": "Dragón De Bronce Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7108c1a51587fed561a62b7b0424817d886fd2716c323ce230a5e1c522d2672f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b17dc0aae01b82e75b579a1d",
+      "name": "Halcón",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1cc89cfc93aef52338ecae65e1fb3764d131bad3b760b9a493b51fb1e6eae03c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b341c592a1ae843c152d80bb",
+      "name": "Deva",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "39214393c4ecf3031c411fcfc1212e22201ac28a13ec5be8be7334a95677b828",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b4ad9ed4aaa60ad4e4191261",
+      "name": "Gigante De Fuego",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "7e59bd08ffa3efbcabda001631009e21244264166661c639778e32d3a22c4157",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b5918d024fb4a364f2a982ae",
+      "name": "Minotauro Esqueleto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "98f0a3aa6581644c2dbb7789f8238d6136876819dbc07da16d9525810db84c18",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b5e9f2ba6a3f0145124151f2",
+      "name": "Jabalí",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "2dda2ba42011336bc8b0480db7fc4d55df2dcaf2adc6e6c741896694f3ae4907",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b71d1c6b51dd3e660f83e1d1",
+      "name": "Couatl",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "455976747a196e96235c32de88a0bbf81d24c11507932de2ce49f39255dee5b5",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b7227522455c0246ff7b98ef",
+      "name": "Gorgon",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "69aa0d83e53772ee540036d474c86b92e9d91c91ba1bcf97a0533f30ea696817",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:b78d5728e72c1e7da77e48af",
+      "name": "Dragón Blanco Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e19b875d190299dd6d2a7745249316c6c650a5fbd877b237b5e11f8cc585ccd1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ba2295b0461a07b3a14ce87a",
+      "name": "Kraken",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "db53d8c918e47a8a5fab99c5be9b6b521c5c6378185d5dd2bb758bbcc2891442",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:bc8d666f53c05a3e907571fb",
+      "name": "Tigre",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4b0c760b3c08834832319788afcfa4cbfffe9a48db956dc0205832c7570e8956",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:bd41e179dbb953da70372a82",
+      "name": "Quimera",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d13ff1fdf114f1a4c41a78399abb72624c5d5e5a67bf335291f3f5d98a5459e2",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:be1be0a1f106e33442d1f3c5",
+      "name": "Diablo Óseo",
+      "revision": 1,
+      "origin": "official",
+      "sourceHash": "76f46422347346489cc739354b3c0ed74e2441e025f471c96a5b4c15c4b1a5e4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c1014db6d8154a83718de2cf",
+      "name": "Merrow",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "de28449c00b1e2f8c6a77d4ffa1eb2e78d4c7a487213889f39dd025f565179d6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c12d1b893c155a64d31578bf",
+      "name": "Serpiente Venenosa",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c2bdb7a34c1167272684a65a7c32fed73f7cdeff5f34a619de213d1aa679d062",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c44e573a86721cebbe18b9bf",
+      "name": "Dretch",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "99acb7d609115c707979efba22f55339584622a7acde28d32b022aa321598afe",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c67bba6c4b09a76fdf7cc090",
+      "name": "Elemental De Tierra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "09ec74a286d23c0c816720e08f3fd14aef3b59ddf60f4c5a39bb0a928ba485eb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c7738dbb99103eae60456b52",
+      "name": "Gusano Púrpura",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8f2b55c95786c4e9f545cb0be17f847eb74f53e568413b30dd3cd7b5ebcd4912",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c8308daaf08a350e2bde43e9",
+      "name": "Dragón Negro Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "149159ff6d0f1e16298f73b1c906644dd7debed931455c8d5ed2f74035e3a274",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c85b896c6c77ef26ae0e5e06",
+      "name": "Dragón De Cobre Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "97d21a342668e2092520206bd92b9bd56bd5c0274989b177ea428dc9e8d66509",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c92089afd219cd8b4b2e5804",
+      "name": "Dorian de Nocte",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e3d14a85f9acfaf3ce906042d064d481dd61872e26a89b494be87a85ab17145e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c92d2ae48e844d5561d60f32",
+      "name": "Acechador Invisible",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ab1186e77707171168b521609b6e3d53074241b1c244e41a4b0726498b90228a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c9c119e47efdb1a8a70d248e",
+      "name": "Sabueso Infernal",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "0909d0ffe96870b254dbf163c195869015cf854b419ca8b80b8493287e75eab3",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c9e93e8fe4c960512131ffff",
+      "name": "Nalfeshnee",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ffdf6cf0c11e780502977633040c1112bf3fd20f250d562f260ded05c5ca5097",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:c9f2089998764c0023b3346e",
+      "name": "Dragón Verde Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8494f2025eacdcae1a980cfd552ce95681a6040560df198d40d324715f443acf",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:cd4a6357df3f7443a07dcf89",
+      "name": "Rata",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "be533905622bba4aff27d85875299e6a87f2d4ac7784bf3b6d56c87ac3db7d19",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:cdd36b204032a62359f53fa9",
+      "name": "Pegaso",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "59eef51625d8a495f07884f0fab694a09a8efc12658445f0bd763676a5ed980d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ce381a063ab656fc6cb46fb4",
+      "name": "Aparición",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "442cc522a4785cf0d21c55b974b0fbe2dd0ffba6cacc662db0f62968087d9db8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:cf0d6ce760e2a310cd1d62cc",
+      "name": "Gelatina Ocre",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b373ef55d7b499f3dd0e692234bebd004bf5d47ba17790e249b41f50939e0b6a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:cf94816cb84327461b7017a4",
+      "name": "Mephit De Vapor",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "6dc5b127166a83bcd9b5d40fa059325a8fed43b2d139af07cca2bc747437946e",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d1960e015bcbf8f6be4a9195",
+      "name": "Planetar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "941956e2a71015e6c88177f1b8b6f6e65027ca6d271b7692297da3f26a9bdfca",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d2bbda02308c556fb1a612a5",
+      "name": "Dragón Rojo Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8e4e898c85ef751099de51e02e6bda4b0a962b3f3dfeaa19f3728bab6c940ad4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d579c873219fb2d5ab18d459",
+      "name": "Salamandra",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d674f883dc90999a98844f2fe3f7929b913cf12036b06c827c9d25cfd6db24c0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d61059b82d8cf5ecac996ce6",
+      "name": "Araña Gigante",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "be66808b21b83a1731749e5cecb3876ea07c814c5756bc81c497c5f0452d1550",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d6766eb059c1ff97c1253d56",
+      "name": "Guiverno",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ed500e7218370d34b940782e4630aa575a9d0d458028d93a7da43ed7762f98e0",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d6f2a6b2b10fc581d8f0e251",
+      "name": "Cría De Dragón De Cobre",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "515fff7b586ad92f21ad86fd0c92a2a8fd8b85221dec0cc9003087a6c0be61f1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d75d26b1690bae2366d9cd6d",
+      "name": "Dragón De Oropel Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "89306fd12b70c69afde6d64021c26afe8d6eeeb5162c802046c041ab5be719a7",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d7e90e830b7e2ffcf9fe03c0",
+      "name": "Dragón De Oro Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4b7a044865ce081ff4c9308891debbf420d8be095419e982402b3521fb7f5698",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d82cbfd3d48d53d235f72055",
+      "name": "Grifo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "fbf8692bcf968f50a7d38019c274d9bf0e32de108b8d60d67a91fc85d55cc1df",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:d9416fa4c56ba96bf9c2409d",
+      "name": "Satiro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "4315196648de539637431262a9f5f308211a05fcd9b1e68466c1210a6ff7aaca",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:da9a4b89587382130493f481",
+      "name": "Dragón De Cobre Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ed415b7191df462463e46457bd95a37c7725622c09a82c19675a97bea34d5c36",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:dcf0e0df91571f9fd1e61a7f",
+      "name": "Dragón De Cobre Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1995bf03bf889760815728dbc9303609426ead54d7e44f57ee242ef7073c9dbb",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ddf7f04759fd3a34c209dc59",
+      "name": "Dragón De Plata Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "04878fc8ef564e9e1727635d718aa6f191f2f89e6a82164820fb755d42b3c06c",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:de4f0f1ef28ed7230d3df933",
+      "name": "Diablo Astado",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "b18f49b755cfac699cf0d05fda1a8e3439d0e173821bafbff6c1d36fea023595",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e06de90e9311f246374ed42b",
+      "name": "Dragón De Oro Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f22d8e7027fd0fca0e6490cf235369b04b79ddf80d6fa9cfa6702e04ea72de25",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e2dfcedc5b1600b2ab2d6a71",
+      "name": "Gato",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "bb9aae4193a1af23f3133f9a3b0235fb918486798330cdf64e73fe9302d02a57",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e3f1dd1ed10b327a9cf571b6",
+      "name": "Roc",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e3eb3d0444430160b2aa161036c0bf036078dcd6e539ab8345f61b5294e74eab",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e4be76d550fd503db1e6163a",
+      "name": "Naga Guardiana",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ab37d3a88937632b013746d3e7861c396e2a959631dd63f97e062ce5ef310691",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e5488b0c7051030725addfa0",
+      "name": "Azer",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "cceb399be410c12067e3cb6a63ad96a63208bed9ecdaca3a46dec09c1fd59a17",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e5536308d5f187e1b4d04e2b",
+      "name": "Elemental De Fuego",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "68eb3e1cbe9e43abb0262694f04e031a67e20922e64d8d344bc3cb36843ef6a6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e61a5d357c79967890f175c6",
+      "name": "Diablillo",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "c60e79c3c6ba47f8a4a5ee4442dfff68e8819b9451cb3c0dbb97cd12d83db5b6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e71452ecff9be1a10a63d578",
+      "name": "Gnoll",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "abdbfa344afd7ec44e34c9df6cb736ab48d928b8f57b1185c8ebe6d695590e45",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e8d91294be7fb3757034dd7d",
+      "name": "Xorn",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "1891a9551b6f0b14b248eb1509ad459fe3c1efd407c807b0943e780c5932645a",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e8e1453b0b4bec2a531dfeb9",
+      "name": "Dragón De Plata Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d834208b96f4a25652468ca90de61b296fe683c09ed5f00940edbee8c4096b03",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:e9a7dbed83af235f26609171",
+      "name": "Elemental De Aire",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "8dd4e5d561cee471b20e4237cbd6a23a7a3604da0ceb8fb52e0975247dfc0c6b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ece3deaf616bc137b9b29dff",
+      "name": "Dragón Rojo Joven",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "56e9446e9d5efa614b646ddac23fcae1347319deda01016cf9e7d90eda053b77",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ed441d9a52879656c0587188",
+      "name": "Serpiente Constrictora",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "95a50c8db2f4d019789605c62760c41f80dc12b3a6f7fd3aa1204e2d7f30f9c8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ed6d2fc8f6b8520734262cde",
+      "name": "Diablo De Las Cadenas",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "867120acd0b3cd392a69824c0cf27e0d0ab9a203e176526aa9fae830428cc8df",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ee904505a79721945ee475ff",
+      "name": "Dragón De Oro Adulto",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "996c11527e1b8a6b05ef43d1f6e7ca36020af7de67087636585998c120869907",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f1c06a4c5dafbee6a8edadee",
+      "name": "Murciélago",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ff6b65f98d3d1b507e8ebed806bd632c384ec65d36188bf518e35253c5b66e93",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f2b711ab91e0a15337cf08a8",
+      "name": "Cría De Dragón De Oro",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "05069b270fb5c7a3029806e366dde35f26d75f3fdda676ad4af81f78e9b2073f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f2c817d2081d243b756368af",
+      "name": "Cría De Dragón De Bronce",
+      "revision": 1,
+      "origin": "official",
+      "sourceHash": "434aada6535d749d93ffe7ca41c4d7a19cd17129f921265d9d6f28ba0a168df8",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f54761e6384d27f384fc1a25",
+      "name": "Solar",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "75ea1d6775faf2a8a999e98ced28c3e9419c0a1ccb2e13ab0210500d113be1f4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f616aa95a5c009606f125f38",
+      "name": "Águila Gigante",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "f0c8d5759a3a97fb385d869da045c0ed329e1b6b872695414146d2cac23d5ab1",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f82ddfdecf696576a6c1b935",
+      "name": "Sirénido",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d3a6a3d849c1a97041ea87601cedca990de4bbb2fdf32f0d18c25bb4fa5016c4",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f844099c834b8db8f3755bc3",
+      "name": "Tumulario",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "31cb85c49548bf5729bfaa0e0adb604646d6fbfa64ad40b21edf2e408795b578",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:f9cf0239efac01ec6be47b44",
+      "name": "Espada Voladora",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "dd0ad0563790e24694eddc784eafaf4fdfde7a742fbd48bda3f7b665c91a34cd",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:fa56a532734c86f6ddb9bf5c",
+      "name": "Dragón Rojo Anciano",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "ac0f10b56a0791924d19bcd21ba0c3714d984820978738beb409a9c15c8ec1e6",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:fd794ec958d44c2e57d8706a",
+      "name": "Alosaurio",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "acab52266e0820776615d502f141ed356b568adfa17771bc09b8c0af75a5b06b",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:fd9036d947aeb53e013df657",
+      "name": "Señor De Las Momias",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "d3ca03617e63b130a7e666f48064c3e5b6126e91bbdf26b1b60a8b822fb3e00f",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    },
+    {
+      "contentKey": "official:monster:es:ffe85f728c2335fd667d3f53",
+      "name": "Djinn",
+      "revision": 0,
+      "origin": "official",
+      "sourceHash": "e9e417d2bbb090e604e0aa966eb3b0618b3964b4ccbfb8869a3b35266194a52d",
+      "status": "matches-preserved-catalog",
+      "evidence": "Coincide con el catálogo original conservado; no equivale a un cotejo editorial de las reglas.",
+      "issues": []
+    }
+  ]
+}

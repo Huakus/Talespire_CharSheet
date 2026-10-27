@@ -1,3 +1,5 @@
+import { APP_BUILD } from "../build-info";
+
 interface RemoteStartupRecovery {
   message: string;
   account?: string;
@@ -28,6 +30,10 @@ export function mountRemoteStartupFailure(appRoot: HTMLElement, recovery: Remote
     recovery.campaign ? `Campaña: ${recovery.campaign}` : "",
   ].filter(Boolean).join(" · ");
   panel.querySelector(".remote-failure-detail")!.textContent = recovery.message;
+  const build = document.createElement("small");
+  build.className = "remote-failure-build";
+  build.textContent = `Versión ${APP_BUILD.version} · Build ${APP_BUILD.sourceHash?.slice(0, 12) ?? "desarrollo"} · ${APP_BUILD.builtAt ?? "sin fecha"}`;
+  panel.append(build);
   panel.querySelector('[data-startup-action="retry"]')!.addEventListener("click", recovery.retry);
   const change = panel.querySelector<HTMLButtonElement>('[data-startup-action="change"]')!;
   change.hidden = !recovery.changeCampaign;

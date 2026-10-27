@@ -167,7 +167,10 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     initiativeModifier: integer(source.InitiativeModifier ?? source.initiativeModifier),
     initiativeAdvantage: boolean(source.InitiativeAdvantage ?? source.initiativeAdvantage),
     speed: strings(source.Speed ?? source.speed),
-    abilities: Object.fromEntries(Object.entries(abilityData).map(([key, score]) => [key, integer(score)])),
+    abilities: Object.fromEntries(Object.entries(abilityData).map(([key, score]) => {
+      const aliases: Record<string, string> = { str: "Str", fue: "Str", strength: "Str", fuerza: "Str", dex: "Dex", des: "Dex", dexterity: "Dex", destreza: "Dex", con: "Con", constitution: "Con", constitucion: "Con", int: "Int", intelligence: "Int", inteligencia: "Int", wis: "Wis", sab: "Wis", wisdom: "Wis", sabiduria: "Wis", cha: "Cha", car: "Cha", charisma: "Cha", carisma: "Cha" };
+      return [aliases[key.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()] ?? key, integer(score)];
+    })),
     saves: strings(source.Saves ?? source.saves),
     skills: strings(source.Skills ?? source.skills),
     senses: strings(source.Senses ?? source.senses),

@@ -11,6 +11,7 @@ import {
 
 export class InMemoryCampaignRepository implements CampaignRepository {
   private current: CampaignSnapshot | null = null;
+  private writes: Promise<unknown> = Promise.resolve();
 
   async load(): Promise<CampaignSnapshot | null> {
     return this.current === null
@@ -18,12 +19,16 @@ export class InMemoryCampaignRepository implements CampaignRepository {
       : createCampaignSnapshot(this.current.campaign);
   }
 
-  async save(
+  save(
     campaign: CampaignV2,
     expectation: SaveExpectation,
   ): Promise<CampaignSnapshot> {
-    assertSaveExpectation(expectation, this.current);
-    this.current = await createCampaignSnapshot(campaign);
-    return createCampaignSnapshot(this.current.campaign);
+    const operation = this.writes.then(async () => {
+      assertSaveExpectation(expectation, this.current);
+      this.current = await createCampaignSnapshot(campaign);
+      return createCampaignSnapshot(this.current.campaign);
+    });
+    this.writes = operation.catch(() => undefined);
+    return operation;
   }
 }

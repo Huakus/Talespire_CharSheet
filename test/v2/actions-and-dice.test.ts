@@ -18,7 +18,7 @@ describe("initiative result routing", () => {
     await roller.roll({ name: "Iniciativa: Delerion", expressions: ["1d20+3"], mode: "normal",
       characterId: "character-one", correlationId: "request-one" });
     await roller.handleRollEvent({ kind: "rollResults", payload: { rollId: "roll-one", resultsGroups: [{}] } });
-    expect(results).toEqual([{ name: "Iniciativa: Delerion", total: 18, characterId: "character-one", correlationId: "request-one" }]);
+    expect(results).toEqual([{ name: "Iniciativa: Delerion", total: 18, characterId: "character-one", correlationId: "request-one", detail: "Iniciativa: Delerion: resultado de TaleSpire = 18" }]);
   });
 
   it("releases a cancelled request and ignores any late result", async () => {

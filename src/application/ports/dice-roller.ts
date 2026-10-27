@@ -6,6 +6,10 @@ export interface DiceRollRequest {
   /** Stable routing metadata, never included in the dice label. */
   characterId?: string;
   correlationId?: string;
+  purpose?: "initiative";
+  encounterId?: string;
+  initiativeEpoch?: number;
+  visibility?: "full" | "total";
   expressions: string[];
   mode: z.infer<typeof RollModeSchema>;
   abilityCheck?: { modifier: number; minimum: number };

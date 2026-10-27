@@ -3,6 +3,7 @@ import { STABLE_ID_PATTERN } from "../../shared/id";
 
 export const GM_PROTOCOL = "talespire-5e-toolset-gm";
 export const GM_PROTOCOL_VERSION = 1;
+export interface InitiativeDeliveryContext { rollId?: string | undefined; encounterId?: string | undefined; epoch?: number | undefined }
 
 const StableIdSchema = z.string().regex(STABLE_ID_PATTERN);
 const MessageIdSchema = z.string().regex(/^msg_[a-f0-9]{16}$/);
@@ -23,7 +24,8 @@ export const CharacterSummarySchema = z.object({
 const PayloadSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("gm/request-character-summary"), requestId: MessageIdSchema }),
   z.object({ type: z.literal("player/character-summary"), requestId: MessageIdSchema.nullable(), summary: CharacterSummarySchema }),
-  z.object({ type: z.literal("player/set-character-initiative"), characterId: StableIdSchema.nullable(), initiative: z.number().int() }),
+  z.object({ type: z.literal("player/set-character-initiative"), characterId: StableIdSchema.nullable(), initiative: z.number().int(), rollId: z.string().optional(), encounterId: StableIdSchema.optional(), epoch: z.number().int().nonnegative().optional() }),
+  z.object({ type: z.literal("gm/initiative-received"), requestId: MessageIdSchema }),
   z.object({ type: z.literal("player/request-encounter"), knownRevision: z.number().int().nonnegative().nullable() }),
   z.object({
     type: z.literal("gm/encounter-changed"),

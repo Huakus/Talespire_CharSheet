@@ -77,6 +77,32 @@ export function bindDialogSelects(dialog: HTMLDialogElement) {
     help.textContent = "Elegí con clic o Enter. Flechas para recorrer; Esc para cancelar.";
     select.setAttribute("aria-describedby", [select.getAttribute("aria-describedby"),help.id].filter(Boolean).join(" "));
     panel.append(select,help); field.append(label,button,panel);
+    if ([...select.options].some(option => option.dataset.description)) {
+      const preview = document.createElement("section"); preview.className = "dialog-option-preview";
+      preview.dataset.optionPreview = select.name;
+      const heading = document.createElement("strong"), requirements = document.createElement("small"), description = document.createElement("p");
+      preview.append(heading, requirements, description); panel.append(preview);
+      const show = (option: HTMLOptionElement | undefined) => {
+        heading.textContent = option?.dataset.description ? option.label : "Consultá una invocación";
+        requirements.textContent = [option?.dataset.requirements, option?.title].filter(Boolean).join(" · ");
+        description.textContent = option?.dataset.description ?? "Recorré la lista con las flechas o pasá el mouse por una opción para leer qué hace antes de elegirla.";
+      };
+      const selected = () => show(select.selectedOptions[0]);
+      selected();
+      select.addEventListener("mouseover", event => { if (event.target instanceof HTMLOptionElement) show(event.target); });
+      select.addEventListener("keydown", () => queueMicrotask(selected));
+      select.addEventListener("input", selected);
+      button.addEventListener("click", selected);
+      const catalog = document.createElement("details"); catalog.className = "dialog-option-catalog";
+      const summary = document.createElement("summary"); summary.textContent = "Consultar invocaciones y requisitos"; catalog.append(summary);
+      for (const option of select.options) {
+        if (!option.dataset.description) continue;
+        const detail = document.createElement("details"), title = document.createElement("summary"), text = document.createElement("p"), req = document.createElement("small");
+        title.textContent = option.label; text.textContent = option.dataset.description; req.textContent = [option.dataset.requirements, option.title].filter(Boolean).join(" · ");
+        detail.append(title, req, text); catalog.append(detail);
+      }
+      field.append(catalog);
+    }
     button.addEventListener("click", () => { if (active === control) close(false,true); else open(control); });
     label.addEventListener("click", (event) => { event.preventDefault(); open(control); });
     button.addEventListener("keydown", (event) => {
