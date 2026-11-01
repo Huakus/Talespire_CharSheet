@@ -1,0 +1,20 @@
+{
+  "revision": 1748,
+  "equipment": 828,
+  "character_copies": 229,
+  "merchant_copies": 24,
+  "catalogReadOnly": true,
+  "uniqueCatalogKeys": 828,
+  "totalEntries": 829,
+  "allEntriesHaveStatusAndPendingText": true,
+  "unknownsExplicitlyLabeled": true,
+  "filters": {
+    "testedIn": "Happy DOM",
+    "totalRows": 829,
+    "healingPotionVariants": 4,
+    "usedEntries": 158,
+    "unknownStatusEntries": 611,
+    "emptySearch": true
+  },
+  "noLiveMechanicChangesInThisTask": true
+}

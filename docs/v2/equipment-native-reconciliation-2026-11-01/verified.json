@@ -1,0 +1,30 @@
+{
+  "revision": 1741,
+  "reviewed": 224,
+  "changed": 179,
+  "ece": 105,
+  "shared": 74,
+  "exactPublishedDefinitions": true,
+  "otherCampaignsUnchanged": true,
+  "brokenReferences": 0,
+  "staleSnapshots": 0,
+  "counters": {
+    "tools": 30,
+    "narrative": 51,
+    "stats": 5,
+    "weapons": 79,
+    "books": 12,
+    "storage": 4
+  },
+  "tests": {
+    "files": 147,
+    "passedTests": 1338,
+    "failedTests": 1,
+    "failedSuiteRetest": {
+      "file": "player-interface.test.ts",
+      "passedTests": 25,
+      "failedTests": 0
+    }
+  },
+  "note": "La suite general detectó una expectativa literal del tooltip. Se conservó el texto anterior para atributos sin beneficios de libros y la suite afectada pasó al repetirla."
+}

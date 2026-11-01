@@ -19,7 +19,7 @@ export const MartialRuntimeSchema = z.object({
   actions: z.array(z.object({ operationId: z.string().regex(STABLE_ID_PATTERN),payload: z.string() })).default([]),
 }).prefault({});
 export const MartialActionSchema = z.discriminatedUnion("kind",[
-  z.object({ kind: z.literal("feature"),key: z.string().min(1),amount: z.number().int().min(0).max(100).default(0),target: z.string().max(120).default(""),requirementsConfirmed: z.literal(true) }),
+  z.object({ kind: z.literal("feature"),key: z.string().min(1),amount: z.number().int().min(0).max(100).default(0),target: z.string().max(120).default(""),requirementsConfirmed: z.literal(true),channelItemId:z.string().regex(STABLE_ID_PATTERN).optional() }),
   z.object({ kind: z.literal("smite"),slotLevel: z.number().int().min(1).max(9),undeadOrFiend: z.boolean(),critical: z.boolean(),meleeWeaponHit: z.literal(true) }),
   z.object({ kind: z.literal("lay-hands"),points: z.number().int().min(0).max(100),cures: z.number().int().min(0).max(20),neutralizePoison: z.boolean().default(false),self: z.boolean(),validLivingTarget: z.literal(true) }),
   z.object({ kind: z.literal("prepare"),keys: z.array(z.string()).max(30),afterLongRest: z.literal(true) }),

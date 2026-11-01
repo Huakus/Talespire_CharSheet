@@ -2,11 +2,15 @@ import type { EquipmentDefinitionDraft } from "../domain/equipment/equipment-def
 import { equipmentPlainDescription } from "../domain/equipment/equipment-live";
 import { inventoryDescriptionBlocks, inventoryDescriptionText } from "./inventory-description";
 import { normalizeRollShortcut } from "../domain/dice/dice-expression";
+import type { InventoryViewItem } from "./inventory-view";
+import { inventorySummaryTable, renderInventorySummary } from "./inventory-summary";
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 
-export function renderCollapsibleInventoryDescription(description: string, key: string, definition: EquipmentDefinitionDraft | null = null, expanded = false): string {
-  const structured = definition && description === equipmentPlainDescription(definition);
-  const html = structured ? inventoryDescriptionBlocks(definition).map((block) => block.type === "paragraph" ? renderInventoryRichText(block.text, "Tirada") : block.type === "list" ? `<${block.ordered ? "ol" : "ul"}>${block.items.map((text) => `<li>${renderInventoryRichText(text, "Tirada")}</li>`).join("")}</${block.ordered ? "ol" : "ul"}>` : `<div class="inventory-rule-table"><table><thead><tr>${block.columns.map((text) => `<th>${escapeHtml(text)}</th>`).join("")}</tr></thead><tbody>${block.rows.map((row) => `<tr>${row.map((text) => `<td>${renderInventoryRichText(text, "Tirada")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`).join("") : renderInventoryRichText(inventoryDescriptionText(description, definition), "Tirada");
+export function renderCollapsibleInventoryDescription(description: string, key: string, definition: EquipmentDefinitionDraft | null = null, expanded = false, item?: InventoryViewItem): string {
+  const structured = definition && inventoryDescriptionText(description,definition) === inventoryDescriptionText(equipmentPlainDescription(definition),definition);
+  const blocks = structured ? inventoryDescriptionBlocks(definition) : [];
+  const summary = item && blocks.some(b => inventorySummaryTable(b,item)) ? renderInventorySummary(item) : "";
+  const html = structured ? summary + blocks.filter(b => !item || !inventorySummaryTable(b,item)).map((block) => block.type === "paragraph" ? renderInventoryRichText(block.text, "Tirada") : block.type === "list" ? `<${block.ordered ? "ol" : "ul"}>${block.items.map((text) => `<li>${renderInventoryRichText(text, "Tirada")}</li>`).join("")}</${block.ordered ? "ol" : "ul"}>` : `<div class="inventory-rule-table"><table><thead><tr>${block.columns.map((text) => `<th>${escapeHtml(text)}</th>`).join("")}</tr></thead><tbody>${block.rows.map((row) => `<tr>${row.map((text) => `<td>${renderInventoryRichText(text, "Tirada")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`).join("") : renderInventoryRichText(inventoryDescriptionText(description, definition), "Tirada");
   return `<div class="spell-description inventory-description ${expanded ? "expanded" : ""}" data-inventory-description="${escapeHtml(key)}"><div class="card-description rich-inventory-text">${html}</div><button type="button" class="spell-description-more" data-toggle-inventory-description aria-expanded="${expanded}">${expanded ? "Leer menos" : "Leer más"}</button></div>`;
 }
 

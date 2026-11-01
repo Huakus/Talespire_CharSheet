@@ -7,6 +7,7 @@ import { CharacterRevisionConflictError } from "./edit-character";
 import { canonicalJsonStringify, type JsonValue } from "../../shared/json";
 import { canCastWithEquippedArmor, type WizardCastOptions } from "./wizard-play";
 import type { CharacterSpellV2 } from "./character-spell-model";
+import { spendEquipmentChannelDivinity } from "../equipment/equipment-channel-divinity";
 
 export function prepareClericCast(character: CharacterV2, spell: CharacterSpellV2, slot: number, options: WizardCastOptions) {
   if (!canCastWithEquippedArmor(character)) throw new Error("No podés lanzar con armadura o escudo sin competencia.");
@@ -38,7 +39,7 @@ export async function performClericAction(input: CharacterV2, operation: string,
     for (const spell of character.spellcasting.spells) if (spell.casting?.kind === "cleric") spell.prepared = spell.level === 0 || free.includes(spell.casting.key) || action.keys.includes(spell.casting.key);
   } else if (action.kind === "channel") {
     if (level < 2 || action.key !== "turn-undead" && !CLERIC_FEATURES[domain].some((f) => f.channel && f.key === action.key && f.level <= level)) throw new Error("Esta opción de Canalizar Divinidad no está disponible.");
-    spend("channel");
+    if(action.channelItemId)spendEquipmentChannelDivinity(character,action.channelItemId);else spend("channel");
   } else if (action.kind === "intervention") {
     if (level < 10 || runtime.interventionCooldownDays > 0) throw new Error("Intervención Divina todavía no está disponible.");
     if (level < 20 && action.roll === null) throw new Error("Registrá el resultado del d100 (01–100).");

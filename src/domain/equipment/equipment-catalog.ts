@@ -118,11 +118,16 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
     ...raw,
     order: raw.order ?? 0,
     group: raw.group ?? "backpack",
+    ...(raw.rules && typeof raw.rules === "object" && !Array.isArray(raw.rules)
+      ? { rules: { ...raw.rules, original: (raw.rules as Record<string, unknown>).original ?? {} } }
+      : {}),
   });
   if (normalizedDraft.success) {
     const { order: _order, group: _group, ...definition } = normalizedDraft.data;
     return { ...definition, rarity };
   }
+  // A damaged native record must never silently become a legacy template with no resources.
+  if (raw.rules != null) throw new Error(`La definición de ${String(raw.name ?? "este objeto")} no es válida: ${normalizedDraft.error.message}`);
   const data = cloneJson(input as JsonObject);
   const category = object(data.equipment_category);
   const cost = object(data.cost);

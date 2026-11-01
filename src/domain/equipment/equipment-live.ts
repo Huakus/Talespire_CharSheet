@@ -4,6 +4,8 @@ import { SRD_51_ATTRIBUTION } from "./equipment-attribution";
 import { equipmentRecoveryLabel } from "./equipment-resource-runtime";
 import type { JsonObject } from "../../shared/json";
 import type { CharacterV2 } from "../character/character-v2";
+import { cleanEquipmentPlayerText } from "./equipment-player-content";
+import { independentEquipmentUses } from "./equipment-independent-uses";
 
 const definitionCache = new WeakMap<object, EquipmentDefinitionDraft>();
 export function inventoryEquipmentDefinition(item: Pick<CharacterInventoryItemV2, "rules">): EquipmentDefinitionDraft | null {
@@ -15,7 +17,7 @@ export function inventoryEquipmentDefinition(item: Pick<CharacterInventoryItemV2
   return definition;
 }
 export function equipmentPlainDescription(definition: EquipmentDefinitionDraft): string {
-  const text = definition.description.filter((b) => b.section !== "gm-notes").map((b) => b.type === "paragraph" ? b.text : b.type === "list" ? b.items.map((s, i) => `${b.ordered ? `${i + 1}.` : "•"} ${s}`).join("\n") : [b.columns.join(" · "), ...b.rows.map((row) => row.join(" · "))].join("\n")).join("\n\n");
+  const text = cleanEquipmentPlayerText(definition.description.filter((b) => b.section !== "gm-notes").map((b) => b.type === "paragraph" ? b.text : b.type === "list" ? b.items.map((s, i) => `${b.ordered ? `${i + 1}.` : "•"} ${s}`).join("\n") : [b.columns.join(" · "), ...b.rows.map((row) => row.join(" · "))].join("\n")).join("\n\n"));
   return definition.sources.some((s) => s.verified && s.kind === "srd") && !text.includes(SRD_51_ATTRIBUTION) ? `${text}\n\n${SRD_51_ATTRIBUTION}` : text;
 }
 const normalized = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9+]/g, "");
@@ -50,7 +52,7 @@ export function bindReviewedEquipment(original: JsonObject, definition: Equipmen
   if (old.rules?.definition.id === definition.id) return old;
   const text = equipmentPlainDescription(definition);
   const authoredTexts = new Set(definition.description.filter((b) => b.type === "paragraph").map((b) => b.text));
-  const personalDescription = old.description.trim() && old.description.trim() !== text.trim() && !authoredTexts.has(old.description) && !/^(Equipo descrito|La ficha registra)/.test(old.description) ? old.description : "";
+  const personalDescription = old.description.trim() && old.description.trim() !== text.trim() && !authoredTexts.has(old.description) && !/^(Equipo descrito|La ficha registra)/.test(old.description) ? cleanEquipmentPlayerText(old.description) : "";
   item.rules = { definition: JSON.parse(JSON.stringify(definition)) as JsonObject, pending, original: structuredClone(original), personalDescription, slotUsage: {}, storage: definition.resources.some((r) => r.kind === "spell-storage") ? { known: false, spells: [] } : null };
   if (!options.preserveName) item.name = definition.name.replace(/ · [^·]+$/, definition.id.startsWith("personal:") ? "" : "$&");
   if (text) item.description = text;
@@ -93,14 +95,21 @@ export function bindReviewedEquipment(original: JsonObject, definition: Equipmen
     else pending.push(`${cap.name}: el bono requiere resolución asistida según su condición.`);
   }
   for (const entry of generated) {
+    // A source alias is the same typed bonus, not a second grant from the item.
+    if (entry.category === "saves" && entry.key === "wisdom" && definition.capabilities.some(c => c.effects.some(e => e.kind === "bonus" && e.target === "wisdom-saves"))) {
+      item.bonuses = item.bonuses.filter(b => !(normalized(b.category) === "saves" && ["wis", "wisdom"].includes(normalized(b.key))));
+    }
     const existing = item.bonuses.find((b) => normalized(b.category) === normalized(entry.category) && normalized(b.key) === normalized(entry.key));
     if (!existing) item.bonuses.push(entry);
     else if (existing.value !== entry.value) pending.push(`${entry.key}: se conserva el bono propio ${existing.value}; la definición indica ${entry.value}.`);
   }
   const ordinaryResources = definition.resources.filter((r) => r.kind !== "spell-storage");
+  const independentUses = independentEquipmentUses(definition);
   if (definition.resources.some((r) => r.kind === "spell-storage")) {
     item.charges = null; item.usable = false;
     pending.push("El contenido almacenado se gestiona como conjuros y niveles, nunca como cargas. El contador antiguo se conserva en el original.");
+  } else if (independentUses.length) {
+    item.charges = null;
   } else if (ordinaryResources.length === 1 && ordinaryResources[0]!.maximum !== null) {
     const r = ordinaryResources[0]!, recovery = r.recovery;
     const current = old.charges ? Math.min(old.charges.current, r.maximum!) : 0;
@@ -112,12 +121,13 @@ export function bindReviewedEquipment(original: JsonObject, definition: Equipmen
     const unmodeled = cap.effects.some((e) => e.kind === "unmodeled");
     const activation = cap.activation === "trigger" || cap.activation === "other" ? "other" : cap.activation;
     const costsSupported = cap.costs.every((c) => ordinaryResources.length === 1 && ordinaryResources[0]!.id === c.resourceId);
+    const independent = independentUses.find(e=>e.capability!.id===cap.id)?.resource;
     const ruleText = definition.description.filter((block) => cap.textBlockIds.includes(block.id)).map((block) => block.type === "paragraph" ? block.text : block.type === "list" ? block.items.join("\n") : block.rows.map((row) => row.join(" · ")).join("\n")).join("\n\n");
     const automaticPassive = cap.activation === "passive" && cap.effects.every((effect) => effect.kind === "spell-slot-capacity" || effect.kind === "bonus" && ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma", "armor-class", "wisdom-saves", "arcana", "spell-attack", "spell-save-dc", "bard-spell-attack", "bard-spell-save-dc"].includes(effect.target));
     if (!automaticPassive && (unmodeled || cap.execution.mode !== "automatic")) pending.push(...cap.execution.pendingAutomation.map((note) => `${cap.name}: ${note}`));
-    return { id: cap.id, order: old.features.length + index, kind: !costsSupported || unmodeled && cap.consumeQuantity === 0 && !cap.costs.length ? "other" : activation, name: cap.name, description: [ruleText, ...cap.effects.flatMap((effect) => effect.kind === "unmodeled" ? [effect.explanation] : effect.kind === "narrative" ? [effect.instructions] : []), cap.duration ? `Duración: ${cap.duration}.` : "", cap.range ? `Alcance: ${cap.range}.` : "", cap.concentration ? `Concentración: ${cap.concentration === "spell-dependent" ? "según el conjuro" : "sí"}.` : "", ...cap.costs.map((cost) => `Coste: ${cost.amount} ${definition.resources.find((r) => r.id === cost.resourceId)?.name ?? cost.resourceId}.`), !automaticPassive && ["unsupported", "assisted"].includes(cap.execution.mode) ? "Resolución asistida: aplicar las condiciones y resultados descritos; el botón registra el gasto cuando corresponda. Las automatizaciones pendientes se detallan en el objeto." : ""].filter(Boolean).join("\n\n"), active: false, toggleable: false, showInActions: !["passive", "other"].includes(activation) && (!unmodeled || cap.consumeQuantity > 0 || cap.costs.length > 0), chargeCost: costsSupported ? cap.costs.reduce((n, c) => n + c.amount, 0) : 0, uses: null, rolls: cap.effects.flatMap((effect) => effect.kind === "damage" || effect.kind === "healing" ? [{ label: effect.kind === "healing" ? "Curación" : `Daño${effect.condition ? " condicionado" : ""}`, expression: effect.expression, mode: "normal" as const }] : []), bonuses: [] };
+    return { id: cap.id, order: old.features.length + index, kind: !costsSupported && !independent || unmodeled && cap.consumeQuantity === 0 && !cap.costs.length ? "other" : activation, name: cap.name, description: [ruleText, ...cap.effects.flatMap((effect) => effect.kind === "unmodeled" ? [effect.explanation] : effect.kind === "narrative" ? [effect.instructions] : []), cap.duration ? `Duración: ${cap.duration}.` : "", cap.range ? `Alcance: ${cap.range}.` : "", cap.concentration ? `Concentración: ${cap.concentration === "spell-dependent" ? "según el conjuro" : "sí"}.` : "", ...cap.costs.map((cost) => `Coste: ${cost.amount} ${definition.resources.find((r) => r.id === cost.resourceId)?.name ?? cost.resourceId}.`), !automaticPassive && ["unsupported", "assisted"].includes(cap.execution.mode) ? "Resolución asistida: aplicar las condiciones y resultados descritos; el botón registra el gasto cuando corresponda. Las automatizaciones pendientes se detallan en el objeto." : ""].filter(Boolean).join("\n\n"), active: false, toggleable: false, showInActions: !["passive", "other"].includes(activation) && (!unmodeled || cap.consumeQuantity > 0 || cap.costs.length > 0), chargeCost: costsSupported ? cap.costs.reduce((n, c) => n + c.amount, 0) : 0, uses: independent && independent.recovery.kind === "event" ? {current:0,maximum:1,reset:independent.recovery.event} : null, rolls: cap.effects.flatMap((effect) => effect.kind === "damage" || effect.kind === "healing" ? [{ label: effect.kind === "healing" ? "Curación" : `Daño${effect.condition ? " condicionado" : ""}`, expression: effect.expression, mode: "normal" as const }] : []), bonuses: [] };
   });
-  item.features = [...old.features, ...features];
+  item.features = [...old.features, ...features].map(feature => ({...feature,description:cleanEquipmentPlayerText(feature.description)}));
   if (features.length) item.usable = false; // The capability owns its cost; no second generic Use button.
   if (!definition.review.editorial) pending.push("La descripción o sus reglas de campaña todavía requieren información; se conserva íntegra la copia anterior.");
   pending.push(...definition.review.unresolved.filter((note) => !/^(Cerrar la cobertura|Conservar originales|Conservar los originales|Conservar.*cerrar|La descripción oficial española está recuperada íntegramente)/.test(note)));

@@ -1,0 +1,1826 @@
+{
+  "revision": 1758,
+  "technicalFlagsAreNotExhaustive": true,
+  "usedDefinitions": [
+    {
+      "key": "official:equipment:es:f88e54bf8b39875147baef8e",
+      "name": "Ábaco",
+      "copies": 3,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:741c6683c6d99e0c4fd359ba",
+      "name": "Abrojos (bolsa de 20)",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "mundane-use",
+          "mode": "unsupported",
+          "name": "Uso del objeto",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:f42e832b6b2895b035bada95",
+      "name": "Aceite (frasco)",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "mundane-use",
+          "mode": "unsupported",
+          "name": "Uso del objeto",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:2d32f4a1dfeb0a52c48095f1",
+      "name": "Ácido (vial)",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": [
+        {
+          "id": "mundane-use",
+          "mode": "assisted",
+          "name": "Uso del objeto",
+          "effects": [
+            "consumable-action"
+          ],
+          "handler": "equipment-consumable",
+          "pending": [
+            "Objetivos objeto o monstruo sin ficha de personaje y sus defensas particulares.",
+            "Cobertura, ocultación y situaciones que dan ventaja o desventaja se confirman en el control de tirada.",
+            "Las reglas generales de daño a cero PG aún no se resuelven desde este recorrido."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:079105286daecce94d961d55",
+      "name": "Alabarda feroz",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:86cffac954a9cc099e37eccf",
+      "name": "Alforjas",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:6717fd92ac73e3765596e309",
+      "name": "Aljaba",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:dfac5d1193ee8763411386fa",
+      "name": "Aljaba eficiente",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "official-use",
+          "mode": "unsupported",
+          "name": "Propiedades oficiales",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:7d150b153865ce199ca4823c",
+      "name": "Amuleto",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:2bda57073d4de65a9fc99b84",
+      "name": "Amuleto a prueba de detección y localización",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "official-use",
+          "mode": "unsupported",
+          "name": "Propiedades oficiales",
+          "effects": [
+            "defense"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:9b9bc630f8db9ca7d472176a",
+      "name": "Amuleto de la sabiduría",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:5fcf7a51d08d0aecbe269fd4",
+      "name": "Anillo de invocar djinns",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "official-use",
+          "mode": "unsupported",
+          "name": "Propiedades oficiales",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:ddfa56929383750182858407",
+      "name": "Anillo de sello",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:d3916bc71ae13afb7a224244",
+      "name": "Antorcha",
+      "copies": 6,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "mundane-use",
+          "mode": "unsupported",
+          "name": "Uso del objeto",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:8275f868a07231e266484435",
+      "name": "Arco corto",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:c19f57566f5600c65eb85dcf",
+      "name": "Arco largo +2",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:6d448708b838897d955a51eb",
+      "name": "Arco largo feroz",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_12f1ec5a1cb0ebb47f63bf0f4f6d9732",
+      "name": "Armadura de campo Korr · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:5f377fb9866d89e509c1b12e",
+      "name": "Armadura de cuero",
+      "copies": 5,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:16a7d3c8d1281ab007b8cdec",
+      "name": "Armadura de cuero +2",
+      "copies": 3,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:0970abfcde2f28aef7323927",
+      "name": "Armadura de cuero tachonado",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:55c9bbc182e669a1be9867a5",
+      "name": "Armadura de cuero tachonado +1",
+      "copies": 2,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:4f77ea44ee87d0a74202f068",
+      "name": "Armadura de placas +1",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:3655000d40ec225ab7ef1d58",
+      "name": "Ballesta de mano +1",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:ec6c92e57f4e5b957428ab9f",
+      "name": "Ballesta ligera",
+      "copies": 4,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:aef15424fdc190a838bb4939",
+      "name": "Bastón",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:7863f03eb5565607a7c86b7d",
+      "name": "Bolsa",
+      "copies": 5,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_6a6ac05b61e07639932c9c40b37b1521",
+      "name": "Bolsa conservadora (Bolsa de contención replicada) · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:ef0e94b62dccd53d3466b046",
+      "name": "Bolsa de componentes",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_6ebef557e867217868bf2f78d20b7929",
+      "name": "Bomba incendiaria experimental · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:1a642ca8b6c9c5446ce9f228",
+      "name": "Botas aladas",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:f7cc21b1535dd5ae98118d7b",
+      "name": "Botas élficas",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7f416944c8f5e55faccadf7a238bc5e3",
+      "name": "Brújula · Draven Korr",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_b0c7123bdc4b442fbc26d2816fe83520",
+      "name": "Brújula · Garrick Vhal",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_76ade230dcb42e7c56f52c02a7fdc323",
+      "name": "Brújula · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_6fec6ef86183992779382cd4ef45845d",
+      "name": "Brújula de latón · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:240e4ce5f914087a513da6a2",
+      "name": "Cantimplora",
+      "copies": 5,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:ad2b2b095ece73a10323c150",
+      "name": "Capa con runas",
+      "copies": 4,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:7600b9e4640022d731c55428",
+      "name": "Capa de Carisma +1",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:3b131c6fcc80d1ebd51cc521",
+      "name": "Capa de Muchos Estilos",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_b935626903ae074cc0314a11a812f47b:inv_d1ca6d36842a5fc238786b8c34c18314",
+      "name": "Carta con una pregunta pendiente · Adler 2",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:1979314dd959de4052e3f286",
+      "name": "Catalejo",
+      "copies": 3,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_3d974cbd3e501ec9a5ecfb8b075df826",
+      "name": "Colección de tintas especiales · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:ece-collar-hablar-con-los-muertos",
+      "name": "Collar de hablar con los muertos",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "speak-with-dead",
+          "mode": "unsupported",
+          "name": "Hablar con los muertos",
+          "effects": [
+            "spell"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:957990f620d129d77c5255ce",
+      "name": "Cota de escamas",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:bc5bf83aa5545f2bc45f837c",
+      "name": "Cristal de Reserva",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "reserve-crystal",
+          "mode": "unsupported",
+          "name": "Reserva arcana y descarga",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "imported:equipment:legacy:243505546e6def658c68be08",
+      "name": "Cristal Luciente",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "consume-crystal",
+          "mode": "unsupported",
+          "name": "Consumir cristal: elegir un efecto",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_a505d191e9350f17b3789543cb40152d",
+      "name": "Cristales de reserva · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7aed2618b9cc521263644c62d69e7b4f",
+      "name": "Cuaderno de investigación · Draven Korr",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:2d11feb2e3b65fdcf01e129b",
+      "name": "Cuchillo pequeño",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:b8c8c1da43606dcf462e765f",
+      "name": "Cuerda de cáñamo (50 pies)",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_7270c57cc06abc2653d7824cee79ec8e",
+      "name": "Cuerda de seda (30 m) · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:b55296bd6257b7ae74153624",
+      "name": "Cuerda de seda (50 pies)",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:121c1c0140bf7a88549add24",
+      "name": "Daga",
+      "copies": 6,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:8c1265965296801c84f4f791",
+      "name": "Daga +3",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:f92abc1a-849e-47e0-995b-0602c7156af8",
+      "name": "Daga del Umbral",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+      "name": "Daga del Umbral · variante de Stix",
+      "copies": 2,
+      "revision": 17,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "shadow-step",
+          "mode": "unsupported",
+          "name": "Salto entre Sombras",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:0b2e37f3e48893c6a5286c48",
+      "name": "Dardo de cerbatana",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:0c9cd0117d738dbe2f69d163",
+      "name": "Diadema de intelecto",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_bbd8bac336c381a5f35988ebfbd5b10c",
+      "name": "Diario de campo de Vaelaris · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_013eba4a4ca231434b1d83290db4ffc3",
+      "name": "Diario de exploración · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:96c340ebc10ebfe92ec7d74d",
+      "name": "Escudo",
+      "copies": 3,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:a9be83570ee776a70e802364",
+      "name": "Escudo +1",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:63d3d4ab2a1ce8883fa3bb92",
+      "name": "Espada corta",
+      "copies": 2,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:fbfeabdbf97d67f978564aea",
+      "name": "Espada corta +1",
+      "copies": 2,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:48a1fa2051aaf151a240831d",
+      "name": "Espada corta feroz",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:fb0103e0da3594dccbdf899a",
+      "name": "Espada larga",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:3f6e5a23723a6523271ed210",
+      "name": "Espada larga +1",
+      "copies": 2,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:0157632c42b2f0ccb59090f8",
+      "name": "Espadón de lengua de fuego",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:a0dc88a77af046734ca56e1d",
+      "name": "Estoque +1",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:b730d94858e9db458b9f67f2",
+      "name": "Estuche para mapas o pergaminos",
+      "copies": 3,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:d2420446c122e6d1d1ade566",
+      "name": "Flecha",
+      "copies": 3,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_758dda1df814fb0c512a897ad464b965",
+      "name": "Flecha con cuerda · Edrick Voss",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_7f48bb3c0a1111cedcd07b4e739cc262",
+      "name": "Flecha de plata · Edrick Voss",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_a4633c38349bb1caab2f4f0c1833ee9b",
+      "name": "Flecha incendiaria · Edrick Voss",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_2c97b5cdce1d4d8bb5c824de3f8cdf51",
+      "name": "Fragmento de Acero Ancestral · Garrick Vhal",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_093a211c1bc85c9f07c0d821f8f8741b",
+      "name": "Fragmento de cristal luciente negro · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:e2c6fc0f3a4001fca0154c52",
+      "name": "Fuego de alquimista (frasco)",
+      "copies": 3,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:47a6d04d7d3433823f7e134c",
+      "name": "Garfio de escalada",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:7e70af915a0f0151f102d0a1",
+      "name": "Herramientas de cartógrafo",
+      "copies": 3,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:cb90976a4748db28834a8e62",
+      "name": "Herramientas de herrero",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:ae5ae8ad7f4f0009e8143b42",
+      "name": "Herramientas de ladrón",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:0cfae63a1a143c1604e3deb0",
+      "name": "Herramientas de manitas",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_46667982e5bed1d21e1185e440312614",
+      "name": "Instrumentos de medición · Draven Korr",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:c36f83bc74b4f36de9aa8cb6",
+      "name": "Jabalina",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:0a534f17ccba42146b444a6a",
+      "name": "Jabón",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:e69058eb35b858b91875228a",
+      "name": "Joyas",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:fc008783161bef8547e593aa",
+      "name": "Juego de dados",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:37f3cfdbd596eae8d96687eb",
+      "name": "Kit de disfraz",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_53a3994e4981a78f55381c6884191818",
+      "name": "Kit de exploración de ruinas · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_6ae88f0d55be4e45852f7b6605db6a10",
+      "name": "Kit de mantenimiento de armaduras · Garrick Vhal",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:ad3f9a876f3556d660d29775",
+      "name": "Lanza",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_02aa25a497c8692d327129ee30be1c44",
+      "name": "Laúd de los Ecos Profundos (Laúd de Doss) · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": [
+        {
+          "id": "doss-charm-focus",
+          "mode": "assisted",
+          "name": "Encantamiento mediante el instrumento",
+          "effects": [
+            "defense"
+          ],
+          "handler": null,
+          "pending": [
+            "Conectar la selección de objetivos y la salvación condicionada del conjuro interpretado."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:844e28dd6ac8a83fb3ca8ef0",
+      "name": "Libro de conjuros",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_788323ff63cd06f7bc86856ef6d2331f",
+      "name": "Linterna de cristal luciente drow · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7041f0940d4df74a167f61890b790b5c",
+      "name": "Linterna protegida · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:ab11ee9a5facf012c567cb18",
+      "name": "Manta",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_1991c2153c25d5370d0891c14780eb46",
+      "name": "Manta térmica · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_66d20bab050341aeb23298bce7b9b35d",
+      "name": "Manta térmica · Garrick Vhal",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_02e86dca10663446f5b4a0912c1e6660",
+      "name": "Manta térmica · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_5276a80d096484f18a80e5b492952cf3",
+      "name": "Mapa de la región · Draven Korr",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_da4fe7c71d3d63fe7c477182b93e83da",
+      "name": "Mapa de la región · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_8207f48927d7420e911e143ca69a6e5a",
+      "name": "Mapa regional · Garrick Vhal",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_0764eba775eec790c1fa40566cfedd43",
+      "name": "Mapa regional · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:8c43510ebccc077670038abb",
+      "name": "Martillo",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:6bfa0d94ba628f50c3ec77ca",
+      "name": "Maza",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:3b1581c937cbc58988d337c0",
+      "name": "Maza disruptiva",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 0,
+      "flaggedcapabilities": [
+        {
+          "id": "official-2014-rule",
+          "mode": "assisted",
+          "name": "Reglas de la variante",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": "equipment-text-assistance",
+          "pending": [
+            "Conectar las elecciones, objetivos, costes variables, duración y efectos particulares de esta regla."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:61efb0ab40e6bac2ce56ea58",
+      "name": "Media armadura",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:d33208f224791802d5cc9023",
+      "name": "Mochila",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_cd497ad537a743bdc064ad8ba403b642",
+      "name": "Monóculo analítico · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "preserved-personal-rule",
+          "mode": "unsupported",
+          "name": "Reglas de la variante personal",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver condiciones y efectos propios de esta variante antes de ejecutar o migrar."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_9a5d864abfda580db6a8b26bcd25282a:inv_15822e4bf49ed9b21c402e48bee95694",
+      "name": "Notas de estudio y plegarias · Delerion 3",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_6468441ce1833cebafdd2a531d6dc09b",
+      "name": "Núcleo luciente fragmentado · Draven Korr",
+      "copies": 1,
+      "revision": 1,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:f2e134338fbb17f190d3f817",
+      "name": "Orbe",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:8aa13b5042ba0f4052b7b278",
+      "name": "Palanqueta",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_985453d649d1e9bfa13bbebcddee85d2",
+      "name": "Papel impermeabilizado · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:a7f39317308a73323479b791",
+      "name": "Paquete de erudito",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:a20de6e80ba3ae9fda33cf23",
+      "name": "Paquete de explorador",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:1690ade2e005b3d5419276d2",
+      "name": "Paquete de ladrón",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:c503401650f7f2fd8dbe70c5",
+      "name": "Paquete de sacerdote",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:7315505b374dfa1d4dcb8e49",
+      "name": "Perla de poder",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:3c51a3c091c8f10097310716",
+      "name": "Petate",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_ab9574010796889b993e4ecacfe2b758",
+      "name": "Pieles para clima extremo · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_46471fe957244d4b8842c3ece0610007",
+      "name": "Pieles para clima extremo · Garrick Vhal",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_10ffc9c10f35eb8b36b3641a53e7d09c",
+      "name": "Pieles para clima extremo · Maelion Vaelaris",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_50a01a99cf1a452ba4e0810f953acd59",
+      "name": "Piezas de tecnología aeloriana — Engranaje · Garrick Vhal",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:d6f94e0376d1900f4c11bb8c",
+      "name": "Pincho de hierro",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:5ee19ca247f4fd7289aab395",
+      "name": "Pitón",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:cb25f6558815b4e93185bb43",
+      "name": "Pluma (para escribir)",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:c9daa1420a1ebc71f4a3ec40",
+      "name": "Poción de curación",
+      "copies": 6,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:7a6854195d181128a66650e7",
+      "name": "Poción de curación mayor",
+      "copies": 6,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:d82087e9fbb18715cecc5264",
+      "name": "Poción de curación superior",
+      "copies": 5,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:976d98f889add0f9fff0501e",
+      "name": "Poción de veneno",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:63387bbd35bbb15be6d09c3e",
+      "name": "Polvo de desaparición",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "official-use",
+          "mode": "unsupported",
+          "name": "Propiedades oficiales",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:d915713ec2c391e5dcf80714",
+      "name": "Raciones (1 día)",
+      "copies": 6,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6136f43e35880d3d64991bd05fd63d6d:inv_88a3d3e9fc38ccf3c359d80f22e1d5ea",
+      "name": "Regalo de un admirador · Arturo",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:6b4e8a7ee89714ac92465871",
+      "name": "Reloj de arena",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:310770d6596b5e33da0fc013",
+      "name": "Ropa de disfraz",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:460da7e8ff13313e9f1f24ea",
+      "name": "Ropas comunes",
+      "copies": 3,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:efcf9190471450b926304709",
+      "name": "Ropas de calidad",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:7464ea9038f8df5a37722aca",
+      "name": "Sombra del Segador",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 4,
+      "unsupported": 5,
+      "flaggedcapabilities": [
+        {
+          "id": "intelligence-bonus",
+          "mode": "unsupported",
+          "name": "Inteligencia +1",
+          "effects": [
+            "bonus"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar INT +1 al cumplir o perder los requisitos, recalcular sus estadísticas derivadas y evitar duplicar el bono de una copia antigua."
+          ]
+        },
+        {
+          "id": "veil-of-penumbra",
+          "mode": "unsupported",
+          "name": "Velo de Penumbra",
+          "effects": [
+            "defense",
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Resolver la iluminación del entorno y la Percepción visual condicionada a que el portador permanezca inmóvil."
+          ]
+        },
+        {
+          "id": "nearness-mark",
+          "mode": "unsupported",
+          "name": "Marca de la Cercanía",
+          "effects": [
+            "damage",
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Consumir el único uso y recuperarlo al amanecer, sin recargarlo por terminar un descanso.",
+            "Vigilar el umbral de PG una sola vez por marca, el bloqueo de PG temporales, la concentración y su duración."
+          ]
+        },
+        {
+          "id": "lingering-presence",
+          "mode": "unsupported",
+          "name": "Presencia Persistente",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Registrar el beneficio pendiente, consumirlo en un ataque o salvación y resolver su contrapartida si no se usa a tiempo."
+          ]
+        },
+        {
+          "id": "whisper-of-finality",
+          "mode": "unsupported",
+          "name": "Susurro de Finalidad",
+          "effects": [
+            "defense",
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Solicitar Sabiduría CD 12 al usar la marca y aplicar las penalizaciones solo al fallar, sin consumir un segundo uso.",
+            "Mantener la contrapartida hasta el descanso largo aunque llegue un amanecer o termine la marca."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:8af13bb03749f70e9339f0cb",
+      "name": "Suministros de alquimista",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:175302cfd38f05a93c9455df",
+      "name": "Suministros de calígrafo",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:234d31692db9f12b1e42dbb2",
+      "name": "Suministros de cervecero",
+      "copies": 1,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7b6ee7be6b0ffd06343b25da310af3af",
+      "name": "Tienda individual · Draven Korr",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:970e20d4fe130f423459a002",
+      "name": "Tienda para dos personas",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:fa9ba84b33858e33bab59e7c",
+      "name": "Tinta (frasco de 1 onza)",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:6f6157682bba7d1b46c44ff2",
+      "name": "Tomo de entendimiento",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:b47158b1c1218eb8a4a4718c",
+      "name": "Tridente",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:afb5b580c85a20384fbf97b5",
+      "name": "Túnica",
+      "copies": 1,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:da5aa681decf2561baece063",
+      "name": "Túnica de Agati",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:b3561afd4baeeaff9340d6cf",
+      "name": "Utensilios de cocina",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:61f89fe62d631f3cdc73f2bc",
+      "name": "Útiles de escalada",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "mundane-use",
+          "mode": "unsupported",
+          "name": "Uso del objeto",
+          "effects": [
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:52afc9a130f0d37aed94ef12",
+      "name": "Útiles de herborista",
+      "copies": 4,
+      "revision": 5,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "imported:equipment:legacy:99f2c411caadf247bd3d459a",
+      "name": "Varita de Armadura de Mago",
+      "copies": 1,
+      "revision": 4,
+      "unmodeled": 1,
+      "unsupported": 1,
+      "flaggedcapabilities": [
+        {
+          "id": "mage-armor",
+          "mode": "unsupported",
+          "name": "Armadura de mago",
+          "effects": [
+            "spell",
+            "unmodeled"
+          ],
+          "handler": null,
+          "pending": [
+            "Aplicar y retirar los efectos al cambiar los requisitos, sin duplicar los de la copia antigua."
+          ]
+        }
+      ]
+    },
+    {
+      "key": "official:equipment:es:b11618cf556790fc99dcad2d",
+      "name": "Virote de ballesta",
+      "copies": 2,
+      "revision": 3,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_36bbc37543309781b46ab629b5714ee1",
+      "name": "Yesca impermeable · Edrick Voss",
+      "copies": 1,
+      "revision": 2,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    },
+    {
+      "key": "official:equipment:es:4e54b43480349f37ef196d17",
+      "name": "Yesquero",
+      "copies": 2,
+      "revision": 4,
+      "unmodeled": 0,
+      "unsupported": 0,
+      "flaggedcapabilities": []
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "version": "1.0.43",
+  "date": "2026-11-01",
+  "typecheck": "passed",
+  "testCommand": "npx vitest run test/v2 --maxWorkers=2",
+  "testFiles": 161,
+  "tests": 1425,
+  "passed": 1425,
+  "failed": 0,
+  "buildCommand": "npm run package:modio",
+  "productionBuild": "passed",
+  "entryPoint": "dist-v2/v2.html",
+  "bundle": "dist-v2/assets/v2-C2YpZPhL.js",
+  "package": "release/Talespire_CharSheet-1.0.43-modio.zip",
+  "packageSha256": "FF160E7EBB2391940D4EA6C2E3E06F42B7EB2A6AAB8FFBB26669560FBB9878B2",
+  "packagedScriptMatchesProduction": true,
+  "savedDravenCharacterReconstruction": "passed",
+  "equipmentCompletionGoal": "in-progress",
+  "visualValidation": "not-completed"
+}

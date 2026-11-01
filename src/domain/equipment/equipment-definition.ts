@@ -57,6 +57,15 @@ export const EquipmentResourceDefinitionSchema = z.strictObject({
 
 const EffectMetadata = { id: Key, condition: z.string() };
 export const EquipmentEffectSchema = z.discriminatedUnion("kind", [
+  z.strictObject({ ...EffectMetadata, kind: z.literal("food"), days: z.number().int().positive() }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("consumable-action"), rule: z.enum(["alchemist-fire", "potion-poison", "acid"]) }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("unpack"), contents: z.array(z.strictObject({ contentKey: Key, quantity: z.number().int().positive() })).min(1) }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("last-charge-resolution"), sides: z.literal(20).nullable(), outcome: z.enum(["destroy", "replace", "nonmagical", "keep"]), replacementKey: Key.nullable(), refillOnMaximum: Dice.nullable() }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("last-charge-destruction"), sides: z.number().int().min(2).max(100), destroyAtOrBelow: z.number().int().positive() }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("flight-reserve"), minutes: z.number().int().positive(), minimumFlightMinutes: z.number().int().positive(), recoveryHoursUnused: z.number().int().positive(), recoveryMinutes: z.number().int().positive(), descentFeetPerRound: z.number().positive() }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("channel-divinity-use") }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("tool-check"), toolKey: Key }),
+  z.strictObject({ ...EffectMetadata, kind: z.literal("study"), ability: z.enum(["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"]), hours: z.number().int().positive(), days: z.number().int().positive(), increase: z.number().int().positive(), maximumIncrease: z.number().int().positive() }),
   z.strictObject({ ...EffectMetadata, kind: z.literal("bonus"), target: Key, operation: z.enum(["add", "set", "minimum"]), value: z.number().finite() }),
   z.strictObject({ ...EffectMetadata, kind: z.literal("damage"), expression: Dice, damageType: z.enum(DAMAGE_TYPES), timing: z.enum(["base", "versatile", "on-hit", "critical", "activation", "other"]) }),
   z.strictObject({ ...EffectMetadata, kind: z.literal("healing"), expression: Dice, target: Key }),

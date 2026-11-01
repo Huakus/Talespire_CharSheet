@@ -1,0 +1,17 @@
+{
+  "revision": 1704,
+  "definitions": 4,
+  "copies": 4,
+  "merchants": 2,
+  "exactPublishedPayloads": true,
+  "unrelatedGuardsUnchanged": true,
+  "instanceStatePreserved": true,
+  "checks": [
+    "Botas: cero preservado y recuperación 120 funcional",
+    "Daga: portador admitido chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+    "Tomo: equipar no concede Sabiduría",
+    "Daga: portador admitido chr_c0d4a321021830d8dc5e7313710d762a",
+    "Amuleto: +1 SAB en imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+    "Amuleto: +1 SAB en imported:monster:eng:e197d5323760a7256c740e04"
+  ]
+}

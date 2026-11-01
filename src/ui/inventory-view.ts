@@ -2,6 +2,8 @@ import type { CharacterInventoryItemV2 } from "../domain/character/character-inv
 import type { EquipmentCatalogDraft } from "../domain/equipment/equipment-catalog";
 import { equipmentTagLabel, visibleEquipmentTags } from "../domain/equipment/equipment-tags";
 import { equipmentPropertyLabel } from "../domain/equipment/equipment-constants";
+import {inventoryEquipmentDefinition} from "../domain/equipment/equipment-live";
+import {inventoryToolIdentity} from "../domain/equipment/equipment-tool-checks";
 
 export type InventoryViewItem = CharacterInventoryItemV2 | EquipmentCatalogDraft;
 
@@ -30,7 +32,11 @@ export function inventoryViewMatchesBasicFilter(item: InventoryViewItem, filter:
   if (filter === "weapon") return item.weapon !== null || category.includes("weapon") || category.includes("arma");
   if (filter === "armor") return item.armor !== null || category.includes("armor") || category.includes("armadura") || category.includes("shield") || category.includes("escudo");
   if (filter === "consumable") return item.consumable;
-  if (filter === "usable") return item.usable || item.consumable || item.features.some(feature => feature.kind !== "passive" && (feature.kind !== "other" || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null));
+  if (filter === "usable") {
+    const caps=inventoryEquipmentDefinition(item)?.capabilities??[];
+    const native=caps.some(c=>["vicious-natural-20","flaming-hit","phase-blade"].includes(c.id)||c.effects.some(e=>["unpack","study","flight-reserve","tool-check","storage","channel-divinity-use"].includes(e.kind)||e.kind==="defense"&&e.defense==="advantage"&&["dexterity-stealth","strength-leverage"].includes(e.target)));
+    return native || !!inventoryToolIdentity(item) || item.usable || item.consumable || item.features.some(feature => feature.kind !== "passive" && (feature.kind !== "other" || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null));
+  }
   if (filter === "attunement") return item.requiresAttunement;
   return false;
 }

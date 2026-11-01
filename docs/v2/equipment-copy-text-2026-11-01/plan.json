@@ -1,0 +1,221 @@
+{
+  "baselineRevision": 1757,
+  "changes": [
+    {
+      "owner": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+      "id": "inv_10a5e40589c97bca4bbb608b6641b031",
+      "hash": "5ed68cb953a6b24ee6de68c98f1c1bbf",
+      "name": "Cuerda de seda (50 pies)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_116845116f22e81490bfe826e33bd37a",
+      "id": "inv_17d70437e6fcbbd187008753b2f69ee1",
+      "hash": "9b01447a4931327599147b2fac06c90b",
+      "name": "Ácido (vial)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_116845116f22e81490bfe826e33bd37a",
+      "id": "inv_1ae894ba17ac163d4f36349f7f2d9a51",
+      "hash": "2c786eac65f151e58169525bb3d199a5",
+      "name": "Catalejo",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_25160f73dc28f54f059e626dcb2ef288",
+      "id": "inv_287ad8a6f407e5a55c1a734ca4ae1247",
+      "hash": "bc5e61eaca01b561a0691020c012dd83",
+      "name": "Bolsa de componentes",
+      "reason": "El texto auxiliar inglés está íntegramente cubierto por la regla oficial española.",
+      "before": "A component pouch is a small, watertight leather belt pouch that has compartments to hold all the material components and other special items you need to cast your spells, except for those components that have a specific cost (as indicated in a spell's description).",
+      "after": ""
+    },
+    {
+      "owner": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+      "id": "inv_2c90e08561281c86aa29961873e928ad",
+      "hash": "9907c91d41809313c43d49fe9c1ad482",
+      "name": "Armadura de cuero tachonado +1",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_b935626903ae074cc0314a11a812f47b",
+      "id": "inv_3291b2c39524476b818bd6c416a3aba7",
+      "hash": "4d284c531607925348b72e29b5531742",
+      "name": "Amuleto",
+      "reason": "El texto auxiliar inglés está íntegramente cubierto por la regla oficial española.",
+      "before": "A holy symbol is a representation of a god or pantheon. It might be an amulet depicting a symbol representing a deity, the same symbol carefully engraved or inlaid as an emblem on a shield, or a tiny box holding a fragment of a sacred relic.\n\nAppendix B lists the symbols commonly associated with many gods in the multiverse. A cleric or paladin can use a holy symbol as a spellcasting focus. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_4852ea9397914f320ed77d587f339159",
+      "hash": "5f18ceaa3d6991409fe8ea03e3706b89",
+      "name": "Aljaba eficiente",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+      "id": "inv_506af51e3cb4f69ce901410364c79540",
+      "hash": "8f279f9e9dc84985d964b77371283556",
+      "name": "Catalejo",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_5ebd293927069a742e602f5ffb566b21",
+      "hash": "ea3e5fc1738ceb579ecd023edd9f2302",
+      "name": "Armadura de cuero tachonado +1",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+      "id": "inv_656140117ccb36eb644901ebb4f16f31",
+      "hash": "a42491b0a091e3097ec2d8320280a119",
+      "name": "Luz de Penumbra (Estoque +1)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_116845116f22e81490bfe826e33bd37a",
+      "id": "inv_68fb88a0772f4ac195a46f37fb7f9c32",
+      "hash": "ce00c30eb9d57e08d8143802c22df3b3",
+      "name": "Raciones (1 día)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_73e6aa72a5a7eb31c946141d17e78113",
+      "hash": "970d37fd135a3f05b616c56701ddcd05",
+      "name": "Raciones (1 día)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_7473fc98c68e89631d2c18432b97e75c",
+      "hash": "87ae90b8df5c143edc48718c21962a73",
+      "name": "Catalejo",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_92ede3fc7cc4ac9f782ccb4429214a10",
+      "hash": "78d74d41ae0d20838128bd4f012d1726",
+      "name": "Cantimplora",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_9539e2639ff798d3781f84162fcec60a",
+      "hash": "c1bd0aa156ad37854b2158b38405f2a7",
+      "name": "Vigía Invernal (Arco largo +2)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+      "id": "inv_a0e9d804b4c352c54f9bf661f87578df",
+      "hash": "fe9bd5802e36df209d9242e385268632",
+      "name": "Raciones (1 día)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_a76a3a8e729eb8a58bc0d2c5c59cfaaf",
+      "hash": "e10594300ffb14ea050b4fded0d3f6ad",
+      "name": "Útiles de escalada",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_9a5d864abfda580db6a8b26bcd25282a",
+      "id": "inv_abcec5552b1d22eca585a6948f9a5fce",
+      "hash": "3ef2ec829410babb9670afe60ea91556",
+      "name": "Orbe",
+      "reason": "El texto auxiliar inglés está íntegramente cubierto por la regla oficial española.",
+      "before": "An arcane focus is a special item--an orb, a crystal, a rod, a specially constructed staff, a wand-like length of wood, or some similar item--designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_ae268b21476ffd6ae5841072bc1c4805",
+      "hash": "b48f80aeee43d914eec69c0fb7afebc4",
+      "name": "Antorcha",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+      "id": "inv_b2fbe646371fb14716a7ee7e55a4dc30",
+      "hash": "c03004168e10de1da40104bb9fe3696e",
+      "name": "Cantimplora",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_b50e71d78f4ab75f1ec6b24ba5900274",
+      "hash": "56fab3d9b6d2fe9ef17a6f5fd9bdb0c8",
+      "name": "Aceite (frasco)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_d46c2e37cebea72be9f629cd15137673",
+      "hash": "8b7721935f48259436a8f22a5f19e243",
+      "name": "Fuego de alquimista (frasco)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_800d3e58b5b497357fe501c441398697",
+      "id": "inv_d8e87725d7d50ee264c5f44bb968cfc9",
+      "hash": "9faec067d11a0ad1861517dbb71d6154",
+      "name": "Colmillo Gris (Espada corta +1)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    },
+    {
+      "owner": "chr_116845116f22e81490bfe826e33bd37a",
+      "id": "inv_ff87d0edefc9ba6089c0f996c535946d",
+      "hash": "3df8412c5d2e92fb15acd62678b293c5",
+      "name": "Fuego de alquimista (frasco)",
+      "reason": "Nota interna sin contenido de juego.",
+      "before": "Entrada oficial reutilizada del catálogo de campaña.",
+      "after": ""
+    }
+  ]
+}

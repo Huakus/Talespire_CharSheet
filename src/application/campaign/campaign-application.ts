@@ -4,7 +4,10 @@ import { bindGuidedEquipmentCatalog } from "../../domain/equipment/guided-equipm
 import type { EquipmentCatalogDraft } from "../../domain/equipment/equipment-catalog";
 import { storeEquipmentSpell, castEquipmentStoredSpell } from "../../domain/equipment/equipment-spell-storage";
 import { syncInventorySpellGrants } from "../../domain/character/item-spells";
-import { spendInventoryItemCharges, consumeInventoryUnit, performLucentCoreAction, useInventoryHealingFeature, administerInventoryHealingFeature, type LucentCoreAction } from "../../domain/character/character-inventory";
+import { spendInventoryItemCharges, consumeInventoryUnit, performLucentCoreAction, useInventoryHealingFeature, administerInventoryHealingFeature, unpackInventoryPack, eatInventoryFood, type LucentCoreAction } from "../../domain/character/character-inventory";
+import { equipmentPackContents } from "../../domain/equipment/equipment-packs";
+import { useEquipmentConsumable, performEquipmentEffectAction, type EquipmentConsumableAction, type EquipmentEffectAction } from "../../domain/equipment/equipment-consumables";
+import { reconcileEquipmentActiveEffects } from "../../domain/equipment/equipment-active-effects";
 import { performMartialAction,martialRuntime,syncMartialEffects } from "../../domain/character/martial-play";
 import type { MartialAction } from "../../domain/character/martial-model";
 import { performSorcererAction } from "../../domain/character/sorcerer-play";
@@ -63,12 +66,16 @@ import {
   setInventoryItemEquipped,
   upsertInventoryItem,
   useInventoryFeature,
+  studyInventoryBook,
+  performEquipmentFlightAction,
+  resolveInventoryLastCharge,
   recoverInventoryItem,
   useInventoryItem,
   type CharacterInventoryItemDraft,
   type CharacterInventoryItemV2,
 } from "../../domain/character/character-inventory";
-import { abilityModifier, projectInventory, preferredWeaponAbility, projectUpdatedBuilderSpeed } from "../../domain/character/character-projection";
+import { abilityModifier, projectInventory, projectUpdatedBuilderSpeed } from "../../domain/character/character-projection";
+import { inventoryWeaponAction } from "../../domain/equipment/equipment-weapon-actions";
 import {
   adjustCurrency,
   type CurrencyDenomination,
@@ -227,6 +234,7 @@ export interface InventoryFeatureCommand extends InventoryItemCommand {
 export interface RecoverInventoryItemCommand extends InventoryItemCommand {
   event: string;
   rolled?: number;
+  conditionConfirmed?: boolean;
 }
 
 export interface StoreEquipmentSpellCommand extends InventoryItemCommand {
@@ -932,7 +940,60 @@ export class CampaignApplication {
   }
 
   async recoverInventoryItem(command: RecoverInventoryItemCommand): Promise<CampaignSnapshot> {
-    return this.applyCharacterMutation(command, (character, updatedAt) => recoverInventoryItem(character, command.itemId, command.event, command.rolled, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+    return this.applyCharacterMutation(command, (character, updatedAt) => recoverInventoryItem(character, command.itemId, command.event, command.rolled, { expectedRevision: command.expectedCharacterRevision, updatedAt, ...(command.conditionConfirmed===undefined?{}:{conditionConfirmed:command.conditionConfirmed}) }));
+  }
+
+  async unpackInventoryPack(command: InventoryItemCommand & { catalog: readonly EquipmentCatalogDraft[] }): Promise<CampaignSnapshot> {
+    const current = await this.loadCurrentForCharacter(command.characterId, command.expectedCampaignChecksum);
+    const character = current.campaign.characters[command.characterId]!, item = character.inventory.find(i => i.id === command.itemId);
+    if (!item) throw new Error("El paquete ya no está en el inventario.");
+    const contents = equipmentPackContents(item);
+    if (!contents) throw new Error("Este objeto no es un paquete de equipo.");
+    const components: CharacterInventoryItemV2[] = [];
+    for (const part of contents) {
+      const candidates = command.catalog.filter(i => i.catalog?.contentKey === part.contentKey);
+      if (candidates.length !== 1) throw new Error("Cargá el catálogo completo para obtener cada componente del paquete.");
+      components.push({ ...candidates[0]!, id: await createRandomId("inv"), order: 0, group: item.group, quantity: part.quantity });
+    }
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const next = unpackInventoryPack(character, item.id, components, { expectedRevision: command.expectedCharacterRevision, updatedAt });
+    return this.persistUpdatedCharacter(current, next, command.expectedCampaignChecksum, updatedAt);
+  }
+
+  async useEquipmentConsumable(command: InventoryItemCommand & { targetCharacterId: string; expectedTargetRevision: number; action: EquipmentConsumableAction }): Promise<CampaignSnapshot> {
+    const current = await this.loadCurrentForCharacter(command.characterId, command.expectedCampaignChecksum), target = current.campaign.characters[command.targetCharacterId];
+    if (!target) throw new CharacterNotFoundError(command.targetCharacterId);
+    const updatedAt = command.updatedAt ?? new Date().toISOString();
+    const next = useEquipmentConsumable(current.campaign.characters[command.characterId]!, target, command.itemId, command.action, {
+      expectedSourceRevision: command.expectedCharacterRevision, expectedTargetRevision: command.expectedTargetRevision, updatedAt, effectId: await createRandomId("ite"),
+    });
+    return this.persistUpdatedCharacters(current, next.source.id === next.target.id ? [next.source] : [next.source, next.target], command.expectedCampaignChecksum, updatedAt);
+  }
+
+  async equipmentEffectAction(command: { characterId: string; effectId: string; action: EquipmentEffectAction; actorCharacterId?: string; expectedCharacterRevision: number; expectedCampaignChecksum: string; updatedAt?: string }): Promise<CampaignSnapshot> {
+    const current=await this.loadCurrentForCharacter(command.characterId,command.expectedCampaignChecksum);
+    const actor=current.campaign.characters[command.actorCharacterId??command.characterId];
+    if(!actor)throw new CharacterNotFoundError(command.actorCharacterId??command.characterId);
+    if(command.actorCharacterId&&command.action.kind!=="extinguish")throw new Error("La otra criatura solo puede ayudar a extinguir las llamas.");
+    const updatedAt=command.updatedAt??new Date().toISOString();
+    const next=performEquipmentEffectAction(current.campaign.characters[command.characterId]!,command.effectId,command.action,{expectedRevision:command.expectedCharacterRevision,updatedAt,actor});
+    return this.persistUpdatedCharacter(current,next,command.expectedCampaignChecksum,updatedAt);
+  }
+
+  async studyInventoryBook(command: InventoryItemCommand & { day: number; hours: number }): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command,(character,updatedAt)=>studyInventoryBook(character,command.itemId,command.day,command.hours,{expectedRevision:command.expectedCharacterRevision,updatedAt}));
+  }
+
+  async equipmentFlightAction(command:InventoryItemCommand&{action:import("../../domain/equipment/equipment-flight").EquipmentFlightAction}):Promise<CampaignSnapshot>{
+    return this.applyCharacterMutation(command,(character,updatedAt)=>performEquipmentFlightAction(character,command.itemId,command.action,{expectedRevision:command.expectedCharacterRevision,updatedAt}));
+  }
+
+  async resolveInventoryLastCharge(command: InventoryItemCommand & { roll: number | null } & import("../../domain/equipment/equipment-last-charge").EquipmentLastChargeOptions): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command, (character, updatedAt) => resolveInventoryLastCharge(character, command.itemId, command.roll, {
+      expectedRevision: command.expectedCharacterRevision, updatedAt,
+      ...(command.replacement ? { replacement: command.replacement } : {}),
+      ...(command.recoveryRoll === undefined ? {} : { recoveryRoll: command.recoveryRoll }),
+    }));
   }
 
   async performLucentCoreAction(command: InventoryItemCommand & { action: LucentCoreAction }): Promise<CampaignSnapshot> {
@@ -958,6 +1019,10 @@ export class CampaignApplication {
 
   async consumeInventoryUnit(command: InventoryItemCommand): Promise<CampaignSnapshot> {
     return this.applyCharacterMutation(command, (character, updatedAt) => consumeInventoryUnit(character, command.itemId, { expectedRevision: command.expectedCharacterRevision, updatedAt }));
+  }
+
+  async eatInventoryFood(command: InventoryItemCommand & { day: number }): Promise<CampaignSnapshot> {
+    return this.applyCharacterMutation(command,(c,updatedAt)=>eatInventoryFood(c,command.itemId,command.day,{expectedRevision:command.expectedCharacterRevision,updatedAt}));
   }
 
   async storeEquipmentSpell(command: StoreEquipmentSpellCommand): Promise<CampaignSnapshot> {
@@ -1516,37 +1581,7 @@ export class CampaignApplication {
     item: CharacterInventoryItemV2,
     actionId: string,
   ): CampaignV2["characters"][string]["actions"][number] {
-    const weapon = item.weapon!;
-    const ability = preferredWeaponAbility(character.abilities, item);
-    const proficiencyText = character.proficiencies.weapons.join(" ").toLowerCase();
-    const proficient = [weapon.category, item.name]
-      .filter(Boolean)
-      .some((value) => proficiencyText.includes(value.toLowerCase())) ||
-      (weapon.category.startsWith("simple") && proficiencyText.includes("armas sencillas")) ||
-      (weapon.category.startsWith("martial") && proficiencyText.includes("armas marciales"));
-    const reach = weapon.range.toLowerCase().includes("ranged") ? weapon.longRange === null
-      ? weapon.normalRange === null ? weapon.range : `${weapon.normalRange} ft`
-      : `${weapon.normalRange ?? 0}/${weapon.longRange} ft`
-      : item.properties.includes("reach") ? "10 ft" : "5 ft";
-    return {
-      id: actionId,
-      order: character.actions.length,
-      name: item.name,
-      categories: ["attack", "action"],
-      activation: "Acción",
-      reach,
-      ability,
-      proficient,
-      attackBonus: weapon.attackBonus,
-      damageExpression: weapon.damageExpression,
-      damageBonus: (weapon.damageExpression ? abilityModifier(character.abilities[ability]) : 0) + weapon.damageBonus,
-      damageType: weapon.damageType,
-      weaponType: weapon.category,
-      properties: item.properties.join(", "),
-      description: item.description,
-      inventoryItemId: item.id,
-      rollMode: "normal",
-    };
+    return inventoryWeaponAction(character,item,actionId);
   }
 
   private assertCurrentChecksum(
@@ -1593,6 +1628,7 @@ export class CampaignApplication {
     const characters = { ...current.campaign.characters };
     for (const character of charactersToUpdate) {
       const previous = current.campaign.characters[character.id];
+      reconcileEquipmentActiveEffects(character);
       await syncInventorySpellGrants(character);
       syncMartialEffects(character);
       if (character.builder?.classKey === "monk") await syncMonkActions(character,previous ?? null);

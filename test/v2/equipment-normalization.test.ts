@@ -1,0 +1,6 @@
+import{it,expect}from'vitest';import{readFileSync}from'node:fs';
+import{normalizeEquipmentDefinition}from'../../src/domain/equipment/equipment-catalog';
+const rows=JSON.parse(readFileSync('docs/v2/equipment-last-charge-outcomes-2026-11-01/targets-before.json','utf8'));
+it('un export sin archivo interno conserva las cargas gastadas, capacidades y reglas activas',()=>{const source=structuredClone(rows.find((r:{payload:{name:string}})=>r.payload.name==='Varita De Sonrisas').payload);source.charges.current=0;const normalized=normalizeEquipmentDefinition(source);expect(normalized.charges).toEqual(source.charges);expect(normalized.features).toEqual(source.features);expect(normalized.rules!.definition).toEqual(source.rules.definition);});
+it('un registro nativo dañado se rechaza en vez de perder sus cargas y degradarse a otro formato',()=>{const source=structuredClone(rows[0].payload);source.quantity='cantidad inválida';expect(()=>normalizeEquipmentDefinition(source)).toThrow(/no es válida/);});
+it('una ausencia explícita de reglas no impide importar un objeto del formato anterior',()=>{const item=normalizeEquipmentDefinition({name:'Varita de prueba',rules:null,hasCharges:true,chargesOptions:{maxCharges:3,chargeReset:'dawn'}});expect(item.charges).toEqual({current:3,maximum:3,reset:'dawn'});});

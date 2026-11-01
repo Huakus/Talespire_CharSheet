@@ -1,0 +1,1929 @@
+{
+  "items": [
+    {
+      "key": "official:equipment:es:741c6683c6d99e0c4fd359ba",
+      "hash": "b5c68f452c3c9269f76ff1e3e384b640",
+      "name": "Abrojos (bolsa de 20)",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Caballero Resonante",
+          "itemId": "inv_3128122158ade4324b1e3043296abfea",
+          "ownerId": "imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+          "definitionId": "recovery:official:equipment:es:741c6683c6d99e0c4fd359ba",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Resonant Knight",
+          "itemId": "inv_3128122158ade4324b1e3043296abfea",
+          "ownerId": "imported:monster:eng:e197d5323760a7256c740e04",
+          "definitionId": "recovery:official:equipment:es:741c6683c6d99e0c4fd359ba",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:f42e832b6b2895b035bada95",
+      "hash": "b54d56787040b399896018c9c1ff6bdb",
+      "name": "Aceite (frasco)",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_0a4f82ec5759406eaf8d317fbcc997fc",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:f42e832b6b2895b035bada95",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_b50e71d78f4ab75f1ec6b24ba5900274",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:f42e832b6b2895b035bada95",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:2d32f4a1dfeb0a52c48095f1",
+      "hash": "f63f89d4fc37ebc589daba12436eab7a",
+      "name": "Ácido (vial)",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_17d70437e6fcbbd187008753b2f69ee1",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:2d32f4a1dfeb0a52c48095f1",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_4bb1849813f243cf973a2f6f0f6f58a4",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:2d32f4a1dfeb0a52c48095f1",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:079105286daecce94d961d55",
+      "hash": "8d0d42b6914a43e5f3c5e90a27eb3e22",
+      "name": "Alabarda feroz",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Caballero Resonante",
+          "itemId": "inv_dca02de1e1798c40dd263805f3d9991d",
+          "ownerId": "imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+          "definitionId": "recovery:official:equipment:es:079105286daecce94d961d55",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Resonant Knight",
+          "itemId": "inv_dca02de1e1798c40dd263805f3d9991d",
+          "ownerId": "imported:monster:eng:e197d5323760a7256c740e04",
+          "definitionId": "recovery:official:equipment:es:079105286daecce94d961d55",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:6717fd92ac73e3765596e309",
+      "hash": "0d70a2564eaba95ca94cc24a8516abba",
+      "name": "Aljaba",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Arturo",
+          "itemId": "inv_7f224460c16783fcbd080121a6af7062",
+          "ownerId": "chr_6136f43e35880d3d64991bd05fd63d6d",
+          "definitionId": "recovery:official:equipment:es:6717fd92ac73e3765596e309",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_ab29f134c3a433df9f3748bb0f74ffbd",
+          "ownerId": "chr_c0d4a321021830d8dc5e7313710d762a",
+          "definitionId": "recovery:official:equipment:es:6717fd92ac73e3765596e309",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:dfac5d1193ee8763411386fa",
+      "hash": "b151d4452070c3ab0ee0c2523a2ace57",
+      "name": "Aljaba eficiente",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_4852ea9397914f320ed77d587f339159",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:dfac5d1193ee8763411386fa",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:7d150b153865ce199ca4823c",
+      "hash": "4fad8cdacad5beae62574224ebb918d7",
+      "name": "Amuleto",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Adler",
+          "itemId": "inv_3291b2c39524476b818bd6c416a3aba7",
+          "ownerId": "chr_b935626903ae074cc0314a11a812f47b",
+          "definitionId": "recovery:official:equipment:es:7d150b153865ce199ca4823c",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:2bda57073d4de65a9fc99b84",
+      "hash": "d2b5b6a8c3bb7040a57bfad8452649de",
+      "name": "Amuleto a prueba de detección y localización",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_fa72ad1cae2c4a80acfb50e1de2ada97",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:2bda57073d4de65a9fc99b84",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:9b9bc630f8db9ca7d472176a",
+      "hash": "3dd02b216d405805f1d209d0d0699585",
+      "name": "Amuleto de la sabiduría",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Caballero Resonante",
+          "itemId": "inv_9912b69031c83b5ef94294a26443f1b2",
+          "ownerId": "imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+          "definitionId": "recovery:official:equipment:es:9b9bc630f8db9ca7d472176a",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Resonant Knight",
+          "itemId": "inv_9912b69031c83b5ef94294a26443f1b2",
+          "ownerId": "imported:monster:eng:e197d5323760a7256c740e04",
+          "definitionId": "recovery:official:equipment:es:9b9bc630f8db9ca7d472176a",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:5fcf7a51d08d0aecbe269fd4",
+      "hash": "949d37747eb41b5edc73963543e2d803",
+      "name": "Anillo de invocar djinns",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Caballero Resonante",
+          "itemId": "inv_65c877dc5910197bd1d9d22610ab2356",
+          "ownerId": "imported:monster:legacy:1f706ea5cb33f5940fe687b5",
+          "definitionId": "recovery:official:equipment:es:5fcf7a51d08d0aecbe269fd4",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "merchant",
+          "owner": "🟥 ⚔️Resonant Knight",
+          "itemId": "inv_65c877dc5910197bd1d9d22610ab2356",
+          "ownerId": "imported:monster:eng:e197d5323760a7256c740e04",
+          "definitionId": "recovery:official:equipment:es:5fcf7a51d08d0aecbe269fd4",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:d3916bc71ae13afb7a224244",
+      "hash": "649b2853692df16f7c6fbc10c61eb79b",
+      "name": "Antorcha",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_3bf0e8a833ce92332fac03a3e9f0cb18",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:official:equipment:es:d3916bc71ae13afb7a224244",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Varka",
+          "itemId": "inv_329544edb4402c093443542da4598c57",
+          "ownerId": "chr_31b5cf3abda27cf3910182c6e1a6f82e",
+          "definitionId": "recovery:official:equipment:es:d3916bc71ae13afb7a224244",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_6adcd06545174a7287401c93c599b685",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:d3916bc71ae13afb7a224244",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_26b62a1f3fc3915431891bb0f57a8d00",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:official:equipment:es:d3916bc71ae13afb7a224244",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_ae268b21476ffd6ae5841072bc1c4805",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:d3916bc71ae13afb7a224244",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Borgar",
+          "itemId": "inv_3fddd736de90e2950bcb9d6f1c12cf20",
+          "ownerId": "chr_9a776b0e541fb73ab6bceb871f78edce",
+          "definitionId": "recovery:official:equipment:es:d3916bc71ae13afb7a224244",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:6d448708b838897d955a51eb",
+      "hash": "878f7c0f1a3472b8c32eec7c6b264bbb",
+      "name": "Arco largo feroz",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Arturo",
+          "itemId": "inv_a6acf8e590c6d8dfcc4cced76745a835",
+          "ownerId": "chr_6136f43e35880d3d64991bd05fd63d6d",
+          "definitionId": "recovery:official:equipment:es:6d448708b838897d955a51eb",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_12f1ec5a1cb0ebb47f63bf0f4f6d9732",
+      "hash": "1395da77abfae000738353f1c570f9a0",
+      "name": "Armadura de campo Korr · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_12f1ec5a1cb0ebb47f63bf0f4f6d9732",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_12f1ec5a1cb0ebb47f63bf0f4f6d9732",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_6a6ac05b61e07639932c9c40b37b1521",
+      "hash": "dbf01d7d4f6fccec4b19141777786316",
+      "name": "Bolsa conservadora (Bolsa de contención replicada) · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_6a6ac05b61e07639932c9c40b37b1521",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_6a6ac05b61e07639932c9c40b37b1521",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:ef0e94b62dccd53d3466b046",
+      "hash": "50a2f6af3fb4ee181b04bcdc37a4798e",
+      "name": "Bolsa de componentes",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_287ad8a6f407e5a55c1a734ca4ae1247",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:official:equipment:es:ef0e94b62dccd53d3466b046",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_6ebef557e867217868bf2f78d20b7929",
+      "hash": "e8afa25934e6296d3ab3076098a2255f",
+      "name": "Bomba incendiaria experimental · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_6ebef557e867217868bf2f78d20b7929",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_6ebef557e867217868bf2f78d20b7929",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:1a642ca8b6c9c5446ce9f228",
+      "hash": "c2fa75f0397e171965d47e676eb33f5a",
+      "name": "Botas aladas",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_3af20f083b688edfa98e2b6ab330e558",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": null,
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:f7cc21b1535dd5ae98118d7b",
+      "hash": "407fddd1010496b491372c48a7ce5c77",
+      "name": "Botas élficas",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_f3451ccfa101847572eed1826f0164f1",
+          "ownerId": "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+          "definitionId": "recovery:official:equipment:es:f7cc21b1535dd5ae98118d7b",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_df0f0d60fa767a43d423847b8e2e9872",
+          "ownerId": "chr_c0d4a321021830d8dc5e7313710d762a",
+          "definitionId": "recovery:official:equipment:es:f7cc21b1535dd5ae98118d7b",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7f416944c8f5e55faccadf7a238bc5e3",
+      "hash": "a4fecf49418a751485d2d7c727117841",
+      "name": "Brújula · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_7f416944c8f5e55faccadf7a238bc5e3",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_7f416944c8f5e55faccadf7a238bc5e3",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_b0c7123bdc4b442fbc26d2816fe83520",
+      "hash": "f77002bd848375c14467ac8f9b60a6c4",
+      "name": "Brújula · Garrick Vhal",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_b0c7123bdc4b442fbc26d2816fe83520",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_b0c7123bdc4b442fbc26d2816fe83520",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_76ade230dcb42e7c56f52c02a7fdc323",
+      "hash": "1d697f1971ec6c42c4cd5b5935f62e7b",
+      "name": "Brújula · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_76ade230dcb42e7c56f52c02a7fdc323",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_76ade230dcb42e7c56f52c02a7fdc323",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_6fec6ef86183992779382cd4ef45845d",
+      "hash": "5783be4f4c56b4e0c988dd4d2f547d56",
+      "name": "Brújula de latón · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_6fec6ef86183992779382cd4ef45845d",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_6fec6ef86183992779382cd4ef45845d",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "imported:equipment:legacy:ad2b2b095ece73a10323c150",
+      "hash": "a1f60fb4ac6b4b2e8d9e7b17e3729d07",
+      "name": "Capa con runas",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_49a722b1f8c9fc07d67f8b6b3b5b849a",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:imported:equipment:legacy:ad2b2b095ece73a10323c150",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_4b5036edf1e0aabee229ae2087fa2543",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:imported:equipment:legacy:ad2b2b095ece73a10323c150",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_9d6aa791ef793353a533cb45401d1be0",
+          "ownerId": "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+          "definitionId": "recovery:imported:equipment:legacy:ad2b2b095ece73a10323c150",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_88f24da7c256ca8d2ad6f316d64a0694",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:imported:equipment:legacy:ad2b2b095ece73a10323c150",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "imported:equipment:legacy:7600b9e4640022d731c55428",
+      "hash": "088e4b6269fe6d7ee4db735cecd509a4",
+      "name": "Capa de Carisma +1",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_a2fda2e808a1b2d6a9723afb7372b2e7",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:imported:equipment:legacy:7600b9e4640022d731c55428",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_b935626903ae074cc0314a11a812f47b:inv_d1ca6d36842a5fc238786b8c34c18314",
+      "hash": "9554230a7ada4ed74199b5256c482970",
+      "name": "Carta con una pregunta pendiente · Adler 2",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Adler",
+          "itemId": "inv_d1ca6d36842a5fc238786b8c34c18314",
+          "ownerId": "chr_b935626903ae074cc0314a11a812f47b",
+          "definitionId": "personal:chr_b935626903ae074cc0314a11a812f47b:inv_d1ca6d36842a5fc238786b8c34c18314",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:1979314dd959de4052e3f286",
+      "hash": "f842675205e5ad53180a788b2d8e11d2",
+      "name": "Catalejo",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_1ae894ba17ac163d4f36349f7f2d9a51",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:1979314dd959de4052e3f286",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_506af51e3cb4f69ce901410364c79540",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "recovery:official:equipment:es:1979314dd959de4052e3f286",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_7473fc98c68e89631d2c18432b97e75c",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:1979314dd959de4052e3f286",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_3d974cbd3e501ec9a5ecfb8b075df826",
+      "hash": "6cec52384d9e4d3e58615bbcfaee3f2e",
+      "name": "Colección de tintas especiales · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_3d974cbd3e501ec9a5ecfb8b075df826",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_3d974cbd3e501ec9a5ecfb8b075df826",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:ece-collar-hablar-con-los-muertos",
+      "hash": "776fdcbab852b7a3221bfec09e352784",
+      "name": "Collar de hablar con los muertos",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_febc4cabea611de7ed258d0ced8f45b4",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:gm:equipment:ece-collar-hablar-con-los-muertos",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "imported:equipment:legacy:bc5bf83aa5545f2bc45f837c",
+      "hash": "0699375eeb7e0842ef9fafa85d3bb783",
+      "name": "Cristal de Reserva",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_54dfc3b2e9967a5866a8898a5654c8c5",
+          "ownerId": "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+          "definitionId": "recovery:imported:equipment:legacy:bc5bf83aa5545f2bc45f837c",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_e5cbf01d9f6c577a71250d86bc8f0ea5",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:imported:equipment:legacy:bc5bf83aa5545f2bc45f837c",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "imported:equipment:legacy:243505546e6def658c68be08",
+      "hash": "aa7f97bb8282aa142ff967159c5aab2a",
+      "name": "Cristal Luciente",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_6612d379d91199e1a09f0054f73afe78",
+          "ownerId": "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+          "definitionId": "recovery:imported:equipment:legacy:243505546e6def658c68be08",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_180e5bbb51570469f30e9ace730dd92a",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:imported:equipment:legacy:243505546e6def658c68be08",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_a505d191e9350f17b3789543cb40152d",
+      "hash": "94d7bc64140d7e41743b17c62b117070",
+      "name": "Cristales de reserva · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_a505d191e9350f17b3789543cb40152d",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_a505d191e9350f17b3789543cb40152d",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7aed2618b9cc521263644c62d69e7b4f",
+      "hash": "981e16328044889e7d6a72dfa44cea0d",
+      "name": "Cuaderno de investigación · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_7aed2618b9cc521263644c62d69e7b4f",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_7aed2618b9cc521263644c62d69e7b4f",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:b8c8c1da43606dcf462e765f",
+      "hash": "1b0fc20d702bbe0c841811d85050b670",
+      "name": "Cuerda de cáñamo (50 pies)",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_095e97b0da220b5b427239b6fce4c4e9",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:official:equipment:es:b8c8c1da43606dcf462e765f",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Borgar",
+          "itemId": "inv_313ed8fa89e6b9a86a2a5243b27953b5",
+          "ownerId": "chr_9a776b0e541fb73ab6bceb871f78edce",
+          "definitionId": "recovery:official:equipment:es:b8c8c1da43606dcf462e765f",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_7270c57cc06abc2653d7824cee79ec8e",
+      "hash": "1f2e19fb81634ca2fac9e605b54d6962",
+      "name": "Cuerda de seda (30 m) · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_7270c57cc06abc2653d7824cee79ec8e",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_7270c57cc06abc2653d7824cee79ec8e",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:b55296bd6257b7ae74153624",
+      "hash": "53d5597de36d8024284c4e8c9bb3cbe7",
+      "name": "Cuerda de seda (50 pies)",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_10a5e40589c97bca4bbb608b6641b031",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "recovery:official:equipment:es:b55296bd6257b7ae74153624",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_eb226d68d6c54faca11466a50a0e8935",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:b55296bd6257b7ae74153624",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+      "hash": "88d715074f9a01b6d40a0f03b8f65550",
+      "name": "Daga del Umbral · variante de Stix",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_d4bc3a889409ff88865ba0e0633d39fb",
+          "ownerId": "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+          "definitionId": "recovery:gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+          "snapshotRevision": 14
+        },
+        {
+          "kind": "character",
+          "owner": "Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_f0437da48a839a9472a94e2e679a9f94",
+          "ownerId": "chr_c0d4a321021830d8dc5e7313710d762a",
+          "definitionId": "recovery:gm:equipment:1b428562-bbef-4bec-8445-a76f7e16f854",
+          "snapshotRevision": 14
+        }
+      ],
+      "revision": 14
+    },
+    {
+      "key": "official:equipment:es:0c9cd0117d738dbe2f69d163",
+      "hash": "c195470f17b16ba5f1b1dc572569e6e7",
+      "name": "Diadema de intelecto",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_efca9ea4eaa2c07b40b6e11474d8f9a2",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:official:equipment:es:0c9cd0117d738dbe2f69d163",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_013eba4a4ca231434b1d83290db4ffc3",
+      "hash": "cd68f64bebb75c81e51b9dbe0a9aa82c",
+      "name": "Diario de exploración · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_013eba4a4ca231434b1d83290db4ffc3",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_013eba4a4ca231434b1d83290db4ffc3",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:48a1fa2051aaf151a240831d",
+      "hash": "6f1a8365b59400f6a1950b6b5975e5af",
+      "name": "Espada corta feroz",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_5ec27f6fae673969edca3f3a8386a458",
+          "ownerId": "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+          "definitionId": "recovery:official:equipment:es:48a1fa2051aaf151a240831d",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:0157632c42b2f0ccb59090f8",
+      "hash": "2c2b1bcf7f603a4fc7c2dbcf6cabb8a7",
+      "name": "Espadón de lengua de fuego",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "Lagarto Juancho",
+          "itemId": "inv_3eb85e46764b419ba3e7c67a86288d72",
+          "ownerId": "gm:monster:9a82e451-94c6-451b-a06b-821360b52a65",
+          "definitionId": "recovery:official:equipment:es:0157632c42b2f0ccb59090f8",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:b730d94858e9db458b9f67f2",
+      "hash": "1352a7be06b36b7361065168c869b769",
+      "name": "Estuche para mapas o pergaminos",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_c6b689460f52b7d7bdde2cb340ac360b",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:official:equipment:es:b730d94858e9db458b9f67f2",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_bafbc4e36cb7fc24099e9d804852a483",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "recovery:official:equipment:es:b730d94858e9db458b9f67f2",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_90ae7e619c0ab29675365744f575a35e",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:official:equipment:es:b730d94858e9db458b9f67f2",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_758dda1df814fb0c512a897ad464b965",
+      "hash": "77ea7ac23b2bbec6336e3433e8b8e18f",
+      "name": "Flecha con cuerda · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_758dda1df814fb0c512a897ad464b965",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_758dda1df814fb0c512a897ad464b965",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_7f48bb3c0a1111cedcd07b4e739cc262",
+      "hash": "05180b43d905a6d2edd9c428ede653ae",
+      "name": "Flecha de plata · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_7f48bb3c0a1111cedcd07b4e739cc262",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_7f48bb3c0a1111cedcd07b4e739cc262",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_a4633c38349bb1caab2f4f0c1833ee9b",
+      "hash": "5b92b787390fd9da084f7d9949470d51",
+      "name": "Flecha incendiaria · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_a4633c38349bb1caab2f4f0c1833ee9b",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_a4633c38349bb1caab2f4f0c1833ee9b",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:e2c6fc0f3a4001fca0154c52",
+      "hash": "5ef882e3b8bd60e79ac8f4417a0b2189",
+      "name": "Fuego de alquimista (frasco)",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_ff87d0edefc9ba6089c0f996c535946d",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:e2c6fc0f3a4001fca0154c52",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_8a6e688e982f482aa7893cd6a6d17ac9",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:e2c6fc0f3a4001fca0154c52",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_d46c2e37cebea72be9f629cd15137673",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:e2c6fc0f3a4001fca0154c52",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:7e70af915a0f0151f102d0a1",
+      "hash": "f757303b101afe77daba5e8ee35819ff",
+      "name": "Herramientas de cartógrafo",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_15542c5cbb844f6c665aa92505534567",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:7e70af915a0f0151f102d0a1",
+          "snapshotRevision": 3
+        },
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_bf1e0afc816429b04e5f76367a1e49c0",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "recovery:official:equipment:es:7e70af915a0f0151f102d0a1",
+          "snapshotRevision": 3
+        },
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_89ce12a51c68147ff69ed153c86ea4cb",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:official:equipment:es:7e70af915a0f0151f102d0a1",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "official:equipment:es:cb90976a4748db28834a8e62",
+      "hash": "f363650e461d4a357efc023c0237ae2e",
+      "name": "Herramientas de herrero",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_aee96a5a7c9f10db7e215b35eee2ee93",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:cb90976a4748db28834a8e62",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "official:equipment:es:ae5ae8ad7f4f0009e8143b42",
+      "hash": "dc7706f209cc5dc24bb713dfee5deb99",
+      "name": "Herramientas de ladrón",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_997af72fbd24fc95193796e4d131b5e3",
+          "ownerId": "chr_c0d4a321021830d8dc5e7313710d762a",
+          "definitionId": "recovery:official:equipment:es:ae5ae8ad7f4f0009e8143b42",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "official:equipment:es:0cfae63a1a143c1604e3deb0",
+      "hash": "21a688d0c6ff791b2e392bf59a653c15",
+      "name": "Herramientas de manitas",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_7864d6cfd26ff2a3ec8c166d0281e3d3",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:0cfae63a1a143c1604e3deb0",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_46667982e5bed1d21e1185e440312614",
+      "hash": "3a6c54d07407e341dc9767302a8d6aec",
+      "name": "Instrumentos de medición · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_46667982e5bed1d21e1185e440312614",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_46667982e5bed1d21e1185e440312614",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:fc008783161bef8547e593aa",
+      "hash": "60da0737b955d5d2a412cb0bce181210",
+      "name": "Juego de dados",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Borgar",
+          "itemId": "inv_b567a4af472a9a818c0f490a85a9e23d",
+          "ownerId": "chr_9a776b0e541fb73ab6bceb871f78edce",
+          "definitionId": "recovery:official:equipment:es:fc008783161bef8547e593aa",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "official:equipment:es:37f3cfdbd596eae8d96687eb",
+      "hash": "1bfc42e159f21ba5ae75ec63418f6983",
+      "name": "Kit de disfraz",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_058c8377210e8115cf71478a1d2b8199",
+          "ownerId": "chr_c0d4a321021830d8dc5e7313710d762a",
+          "definitionId": "recovery:official:equipment:es:37f3cfdbd596eae8d96687eb",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_6ae88f0d55be4e45852f7b6605db6a10",
+      "hash": "68efd53ddea53293dcf37f405cd27c87",
+      "name": "Kit de mantenimiento de armaduras · Garrick Vhal",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_6ae88f0d55be4e45852f7b6605db6a10",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_6ae88f0d55be4e45852f7b6605db6a10",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_02aa25a497c8692d327129ee30be1c44",
+      "hash": "d9872f7057145b8830728eb232bd3a38",
+      "name": "Laúd de los Ecos Profundos (Laúd de Doss) · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_02aa25a497c8692d327129ee30be1c44",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_02aa25a497c8692d327129ee30be1c44",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:844e28dd6ac8a83fb3ca8ef0",
+      "hash": "1bf3caa87d2123ac0d5a8c329e1f38a0",
+      "name": "Libro de conjuros",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_8be5a4fb130d90fb69039466952763b5",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:official:equipment:es:844e28dd6ac8a83fb3ca8ef0",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_788323ff63cd06f7bc86856ef6d2331f",
+      "hash": "fe0611abddb7ed3f69fd6769be6ebe7a",
+      "name": "Linterna de cristal luciente drow · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_788323ff63cd06f7bc86856ef6d2331f",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_788323ff63cd06f7bc86856ef6d2331f",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7041f0940d4df74a167f61890b790b5c",
+      "hash": "ad6d73a240aef4426ec3ff48f0411a4b",
+      "name": "Linterna protegida · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_7041f0940d4df74a167f61890b790b5c",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_7041f0940d4df74a167f61890b790b5c",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_1991c2153c25d5370d0891c14780eb46",
+      "hash": "2190d6abe157ed355bc5ee017f7087ff",
+      "name": "Manta térmica · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_1991c2153c25d5370d0891c14780eb46",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_1991c2153c25d5370d0891c14780eb46",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_66d20bab050341aeb23298bce7b9b35d",
+      "hash": "510bf929e2c777fc872e3bd4c6cd93a4",
+      "name": "Manta térmica · Garrick Vhal",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_66d20bab050341aeb23298bce7b9b35d",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_66d20bab050341aeb23298bce7b9b35d",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_02e86dca10663446f5b4a0912c1e6660",
+      "hash": "bacb52d769d9788dc795c54cfc885ee0",
+      "name": "Manta térmica · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_02e86dca10663446f5b4a0912c1e6660",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_02e86dca10663446f5b4a0912c1e6660",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_5276a80d096484f18a80e5b492952cf3",
+      "hash": "4ba2b2397c5819c47d27455974fd5b86",
+      "name": "Mapa de la región · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_5276a80d096484f18a80e5b492952cf3",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_5276a80d096484f18a80e5b492952cf3",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_da4fe7c71d3d63fe7c477182b93e83da",
+      "hash": "6ad3af97a946805d63628ba9e0e628ec",
+      "name": "Mapa de la región · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_da4fe7c71d3d63fe7c477182b93e83da",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_da4fe7c71d3d63fe7c477182b93e83da",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_8207f48927d7420e911e143ca69a6e5a",
+      "hash": "d58344dbe9cae3eaf20ce898274c12ba",
+      "name": "Mapa regional · Garrick Vhal",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_8207f48927d7420e911e143ca69a6e5a",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_8207f48927d7420e911e143ca69a6e5a",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_0764eba775eec790c1fa40566cfedd43",
+      "hash": "c85bcd3fea7b49fa1fb1396534408f0e",
+      "name": "Mapa regional · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_0764eba775eec790c1fa40566cfedd43",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_0764eba775eec790c1fa40566cfedd43",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:3b1581c937cbc58988d337c0",
+      "hash": "10320463a35403dafc1ee3ff71eed9d9",
+      "name": "Maza disruptiva",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Adler",
+          "itemId": "inv_ebb896618eca067fb9bbe3dab7a2d60d",
+          "ownerId": "chr_b935626903ae074cc0314a11a812f47b",
+          "definitionId": "recovery:official:equipment:es:3b1581c937cbc58988d337c0",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_cd497ad537a743bdc064ad8ba403b642",
+      "hash": "295f45e318c0d914798c9f3c74901d16",
+      "name": "Monóculo analítico · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_cd497ad537a743bdc064ad8ba403b642",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_cd497ad537a743bdc064ad8ba403b642",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_9a5d864abfda580db6a8b26bcd25282a:inv_15822e4bf49ed9b21c402e48bee95694",
+      "hash": "99371dc9aa0c00b1679caaa46cc60990",
+      "name": "Notas de estudio y plegarias · Delerion 3",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_15822e4bf49ed9b21c402e48bee95694",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "personal:chr_9a5d864abfda580db6a8b26bcd25282a:inv_15822e4bf49ed9b21c402e48bee95694",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:f2e134338fbb17f190d3f817",
+      "hash": "2afdc4e48196a93df237a8232dd20062",
+      "name": "Orbe",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_abcec5552b1d22eca585a6948f9a5fce",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:official:equipment:es:f2e134338fbb17f190d3f817",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:8aa13b5042ba0f4052b7b278",
+      "hash": "be24e8c0e42a1c81ca18eb293e8a392a",
+      "name": "Palanqueta",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_44f45df2c303f93a3246a8ba52d8ed95",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:official:equipment:es:8aa13b5042ba0f4052b7b278",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_985453d649d1e9bfa13bbebcddee85d2",
+      "hash": "4cbbb958f719eb84dc8042dec8447d64",
+      "name": "Papel impermeabilizado · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_985453d649d1e9bfa13bbebcddee85d2",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_985453d649d1e9bfa13bbebcddee85d2",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:1690ade2e005b3d5419276d2",
+      "hash": "5623be4ab4f0cbc8b2b0aac89f25fc76",
+      "name": "Paquete de ladrón",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Skitrixx \"Stix Ernesto\" Koboldtanz",
+          "itemId": "inv_2c2807551bd79648d79183dd28857f46",
+          "ownerId": "chr_c0d4a321021830d8dc5e7313710d762a",
+          "definitionId": "recovery:official:equipment:es:1690ade2e005b3d5419276d2",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_ab9574010796889b993e4ecacfe2b758",
+      "hash": "88eabc2d348cad9592ecf4d7f94caa37",
+      "name": "Pieles para clima extremo · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_ab9574010796889b993e4ecacfe2b758",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_ab9574010796889b993e4ecacfe2b758",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_46471fe957244d4b8842c3ece0610007",
+      "hash": "502f6d280b93278add5f7aee382695d5",
+      "name": "Pieles para clima extremo · Garrick Vhal",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_46471fe957244d4b8842c3ece0610007",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_46471fe957244d4b8842c3ece0610007",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_10ffc9c10f35eb8b36b3641a53e7d09c",
+      "hash": "bd52d14f12fda439c0eaf85daf511b95",
+      "name": "Pieles para clima extremo · Maelion Vaelaris",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_10ffc9c10f35eb8b36b3641a53e7d09c",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "personal:chr_345a4e8763475f1c2acbd5c2a56bcf36:inv_10ffc9c10f35eb8b36b3641a53e7d09c",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_50a01a99cf1a452ba4e0810f953acd59",
+      "hash": "5326d2771fcaad429f4579cd05a6f082",
+      "name": "Piezas de tecnología aeloriana — Engranaje · Garrick Vhal",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_50a01a99cf1a452ba4e0810f953acd59",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "personal:chr_6e02527e3880499aaa59ea5182ca2c7e:inv_50a01a99cf1a452ba4e0810f953acd59",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:976d98f889add0f9fff0501e",
+      "hash": "3e67c55cf0278fa04381902dd0d26691",
+      "name": "Poción de veneno",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "Juancho the Lizard",
+          "itemId": "inv_92f03ecb6c0a488f5d62125761b9226d",
+          "ownerId": "gm:monster:eng:1526c61732bc5215f39efdd8",
+          "definitionId": "recovery:official:equipment:es:976d98f889add0f9fff0501e",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:63387bbd35bbb15be6d09c3e",
+      "hash": "94a08b71f656dda92651c0da6499f4ec",
+      "name": "Polvo de desaparición",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "-ELIMINAR- Adler",
+          "itemId": "inv_cc3ff73071dd94f70c64cb13448fb38f",
+          "ownerId": "chr_95bf954ca413abf652b08d64b690ac0b",
+          "definitionId": "recovery:official:equipment:es:63387bbd35bbb15be6d09c3e",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:d915713ec2c391e5dcf80714",
+      "hash": "7f90b91b6fbb2bc950a59ae5e7795ac1",
+      "name": "Raciones (1 día)",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_68fb88a0772f4ac195a46f37fb7f9c32",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:d915713ec2c391e5dcf80714",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_a0e9d804b4c352c54f9bf661f87578df",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "recovery:official:equipment:es:d915713ec2c391e5dcf80714",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_8c102792186f4599b127ddbff19bbd69",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:d915713ec2c391e5dcf80714",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_ab0a0bc3287dddebffa795628c78acf1",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:official:equipment:es:d915713ec2c391e5dcf80714",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_73e6aa72a5a7eb31c946141d17e78113",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:d915713ec2c391e5dcf80714",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Borgar",
+          "itemId": "inv_83a4152d5b72ec08b801e4bafd8e4b3f",
+          "ownerId": "chr_9a776b0e541fb73ab6bceb871f78edce",
+          "definitionId": "recovery:official:equipment:es:d915713ec2c391e5dcf80714",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_6136f43e35880d3d64991bd05fd63d6d:inv_88a3d3e9fc38ccf3c359d80f22e1d5ea",
+      "hash": "0942ad14d7c3ff61f9283ec3c0e0b8da",
+      "name": "Regalo de un admirador · Arturo",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Arturo",
+          "itemId": "inv_88a3d3e9fc38ccf3c359d80f22e1d5ea",
+          "ownerId": "chr_6136f43e35880d3d64991bd05fd63d6d",
+          "definitionId": "personal:chr_6136f43e35880d3d64991bd05fd63d6d:inv_88a3d3e9fc38ccf3c359d80f22e1d5ea",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "imported:equipment:legacy:7464ea9038f8df5a37722aca",
+      "hash": "c99d011d48a60812b55b14b2be14ab5c",
+      "name": "Sombra del Segador",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_a3f66bf2477fa1d5316cd5f74a9c1219",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:imported:equipment:legacy:7464ea9038f8df5a37722aca",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_e55fd8d793e58bdf33ae7ea0d6597ca4",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:imported:equipment:legacy:7464ea9038f8df5a37722aca",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:8af13bb03749f70e9339f0cb",
+      "hash": "dcd61d4a511d3a7579d98e37a731777a",
+      "name": "Suministros de alquimista",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_1f8aae9bf057e66fc27919fc21922d3d",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "recovery:official:equipment:es:8af13bb03749f70e9339f0cb",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "official:equipment:es:175302cfd38f05a93c9455df",
+      "hash": "141c51de6115ce8b6ad61fe8a4acc5b5",
+      "name": "Suministros de calígrafo",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Maelion Vaelaris",
+          "itemId": "inv_4a772e80ea6c75b7f884cac90644cf3a",
+          "ownerId": "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+          "definitionId": "recovery:official:equipment:es:175302cfd38f05a93c9455df",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "official:equipment:es:234d31692db9f12b1e42dbb2",
+      "hash": "b7f381a03a8e82e8244b5c894909d426",
+      "name": "Suministros de cervecero",
+      "uses": [
+        {
+          "kind": "merchant",
+          "owner": "Lagarto Juancho",
+          "itemId": "inv_304e1df7c339ba61596750a2883cb812",
+          "ownerId": "gm:monster:9a82e451-94c6-451b-a06b-821360b52a65",
+          "definitionId": "recovery:official:equipment:es:234d31692db9f12b1e42dbb2",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_116845116f22e81490bfe826e33bd37a:inv_7b6ee7be6b0ffd06343b25da310af3af",
+      "hash": "7f3ef2c0aa98993c63cef0f4e7d04fb9",
+      "name": "Tienda individual · Draven Korr",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Draven Korr",
+          "itemId": "inv_7b6ee7be6b0ffd06343b25da310af3af",
+          "ownerId": "chr_116845116f22e81490bfe826e33bd37a",
+          "definitionId": "personal:chr_116845116f22e81490bfe826e33bd37a:inv_7b6ee7be6b0ffd06343b25da310af3af",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:970e20d4fe130f423459a002",
+      "hash": "faf3a0990bf8f80a4a64c25d4cf94970",
+      "name": "Tienda para dos personas",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_c79296d80ca8445bac36973672efa58a",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:970e20d4fe130f423459a002",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:6f6157682bba7d1b46c44ff2",
+      "hash": "4375e2baa3825d9081d930c158f8dd54",
+      "name": "Tomo de entendimiento",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_aeea6bc64bcf70d8a37b4ff86c58ef6c",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:official:equipment:es:6f6157682bba7d1b46c44ff2",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "imported:equipment:legacy:da5aa681decf2561baece063",
+      "hash": "00d90c3bcca40c84f63d304b72ffa384",
+      "name": "Túnica de Agati",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_1611bca69dcab876392c1a1d4e6e809b",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:imported:equipment:legacy:da5aa681decf2561baece063",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:b3561afd4baeeaff9340d6cf",
+      "hash": "eeabf13edf8d4287bb3b28bafc8cafa2",
+      "name": "Utensilios de cocina",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Borgar",
+          "itemId": "inv_2565137d4e08b3c8b7c7722b25c2d079",
+          "ownerId": "chr_9a776b0e541fb73ab6bceb871f78edce",
+          "definitionId": "recovery:official:equipment:es:b3561afd4baeeaff9340d6cf",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:61f89fe62d631f3cdc73f2bc",
+      "hash": "9b8a2a9a314faaf38c09dd71c99de051",
+      "name": "Útiles de escalada",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Garrick Vhal",
+          "itemId": "inv_26edd2837738414aa2f6cb80036f3596",
+          "ownerId": "chr_6e02527e3880499aaa59ea5182ca2c7e",
+          "definitionId": "recovery:official:equipment:es:61f89fe62d631f3cdc73f2bc",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_a76a3a8e729eb8a58bc0d2c5c59cfaaf",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:61f89fe62d631f3cdc73f2bc",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "official:equipment:es:52afc9a130f0d37aed94ef12",
+      "hash": "2c5d0820afafcc7158fa1ef5ead51dbe",
+      "name": "Útiles de herborista",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_7d56b62cdfb4e04aac89fd02b8889431",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:official:equipment:es:52afc9a130f0d37aed94ef12",
+          "snapshotRevision": 3
+        },
+        {
+          "kind": "character",
+          "owner": "Varka",
+          "itemId": "inv_8a119a9a815ec4078d3f29b426d1ca62",
+          "ownerId": "chr_25160f73dc28f54f059e626dcb2ef288",
+          "definitionId": "recovery:official:equipment:es:52afc9a130f0d37aed94ef12",
+          "snapshotRevision": 3
+        },
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_9f3baadabc00ce5701102acfda177ede",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "recovery:official:equipment:es:52afc9a130f0d37aed94ef12",
+          "snapshotRevision": 3
+        },
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_bdf552de3729a268a174a3df143ae4f0",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:official:equipment:es:52afc9a130f0d37aed94ef12",
+          "snapshotRevision": 3
+        }
+      ],
+      "revision": 3
+    },
+    {
+      "key": "imported:equipment:legacy:99f2c411caadf247bd3d459a",
+      "hash": "7bf3985ddeadf601d855445c92a34df2",
+      "name": "Varita de Armadura de Mago",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Delerion",
+          "itemId": "inv_c0a20bc76968c397df5b520f6cd21eb1",
+          "ownerId": "chr_9a5d864abfda580db6a8b26bcd25282a",
+          "definitionId": "recovery:imported:equipment:legacy:99f2c411caadf247bd3d459a",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    },
+    {
+      "key": "gm:equipment:owned:personal:chr_800d3e58b5b497357fe501c441398697:inv_36bbc37543309781b46ab629b5714ee1",
+      "hash": "aa31ee55889b1b6fe463b4e065339119",
+      "name": "Yesca impermeable · Edrick Voss",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Edrick Voss",
+          "itemId": "inv_36bbc37543309781b46ab629b5714ee1",
+          "ownerId": "chr_800d3e58b5b497357fe501c441398697",
+          "definitionId": "personal:chr_800d3e58b5b497357fe501c441398697:inv_36bbc37543309781b46ab629b5714ee1",
+          "snapshotRevision": 0
+        }
+      ],
+      "revision": 0
+    },
+    {
+      "key": "official:equipment:es:4e54b43480349f37ef196d17",
+      "hash": "bbf0119f149aa3603daae968ad63d72a",
+      "name": "Yesquero",
+      "uses": [
+        {
+          "kind": "character",
+          "owner": "Mercion",
+          "itemId": "inv_4e1487bfd21bae3227a8feaadf7297ed",
+          "ownerId": "chr_76486598066828133b7c1f1235e75f82",
+          "definitionId": "recovery:official:equipment:es:4e54b43480349f37ef196d17",
+          "snapshotRevision": 2
+        },
+        {
+          "kind": "character",
+          "owner": "Borgar",
+          "itemId": "inv_a252bc1d36f23be404ff51cb7578a3d0",
+          "ownerId": "chr_9a776b0e541fb73ab6bceb871f78edce",
+          "definitionId": "recovery:official:equipment:es:4e54b43480349f37ef196d17",
+          "snapshotRevision": 2
+        }
+      ],
+      "revision": 2
+    }
+  ],
+  "revision": 1703,
+  "versions": [
+    {
+      "revision": 99,
+      "created_at": "2026-10-14T22:50:21.621+00:00",
+      "updated_at": "2026-10-27T22:58:41.282+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_9a5d864abfda580db6a8b26bcd25282a"
+    },
+    {
+      "revision": 9,
+      "created_at": "2026-07-26T03:35:34.464+00:00",
+      "updated_at": "2026-10-27T18:39:48.816+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_76486598066828133b7c1f1235e75f82"
+    },
+    {
+      "revision": 11,
+      "created_at": "2026-08-17T01:44:02.859+00:00",
+      "updated_at": "2026-10-27T18:39:53.652+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_345a4e8763475f1c2acbd5c2a56bcf36"
+    },
+    {
+      "revision": 9,
+      "created_at": "2026-08-17T00:42:47.620802+00:00",
+      "updated_at": "2026-10-27T18:40:06.002+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_6e02527e3880499aaa59ea5182ca2c7e"
+    },
+    {
+      "revision": 37,
+      "created_at": "2026-10-17T04:04:15.943+00:00",
+      "updated_at": "2026-10-27T22:54:36.482+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_b935626903ae074cc0314a11a812f47b"
+    },
+    {
+      "revision": 18,
+      "created_at": "2026-10-15T03:42:24.329+00:00",
+      "updated_at": "2026-10-27T22:54:54.312+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_6136f43e35880d3d64991bd05fd63d6d"
+    },
+    {
+      "revision": 5,
+      "created_at": "2026-08-17T01:44:02.859+00:00",
+      "updated_at": "2026-10-27T18:40:09.058+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_800d3e58b5b497357fe501c441398697"
+    },
+    {
+      "revision": 24,
+      "created_at": "2026-10-19T01:08:16.305+00:00",
+      "updated_at": "2026-10-27T22:55:07.15+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_c0d4a321021830d8dc5e7313710d762a"
+    },
+    {
+      "revision": 30,
+      "created_at": "2026-10-19T00:47:09.928+00:00",
+      "updated_at": "2026-10-27T22:55:16.903+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_25160f73dc28f54f059e626dcb2ef288"
+    },
+    {
+      "revision": 137,
+      "created_at": "2026-07-26T03:35:34.464+00:00",
+      "updated_at": "2026-10-27T18:40:44.304+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_95bf954ca413abf652b08d64b690ac0b"
+    },
+    {
+      "revision": 23,
+      "created_at": "2026-08-17T01:44:02.859+00:00",
+      "updated_at": "2026-10-27T18:40:13.171+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_116845116f22e81490bfe826e33bd37a"
+    },
+    {
+      "revision": 3,
+      "created_at": "2026-07-26T03:35:34.464+00:00",
+      "updated_at": "2026-10-27T18:40:17.409+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_9a776b0e541fb73ab6bceb871f78edce"
+    },
+    {
+      "revision": 89,
+      "created_at": "2026-07-26T03:35:34.464+00:00",
+      "updated_at": "2026-10-27T18:40:24.654+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_31b5cf3abda27cf3910182c6e1a6f82e"
+    },
+    {
+      "revision": 69,
+      "created_at": "2026-07-26T03:35:34.464+00:00",
+      "updated_at": "2026-10-27T18:40:27.51+00:00",
+      "updated_by": "bfb475fe-b9a3-4362-9cf7-fc419491a405",
+      "campaign_id": "9e5f3b10-be82-456c-9e9a-c2ec4a6b97cd",
+      "character_id": "chr_2de8dab74a76cdd8d2b0d37cc84725ea"
+    }
+  ],
+  "scopeHash": "e55b131f343a6de283c396333bda8544",
+  "campaignUpdatedAt": "2026-11-01T03:06:13.857+00:00"
+}

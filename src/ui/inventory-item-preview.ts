@@ -17,7 +17,7 @@ export function renderInventoryItemPreview(item: InventoryViewItem, options: {
   const definition = inventoryEquipmentDefinition(item) ?? (options.catalogDefinition ? inventoryEquipmentDefinition(options.catalogDefinition) : null);
   const description = definition ? equipmentPlainDescription(definition) : item.description.trim() || options.catalogDefinition?.description.trim() || "";
   const displayed = [description, ...(definition ? inventoryDescriptionBlocks(definition).map(block => block.type === "paragraph" ? block.text : block.type === "list" ? block.items.join("\n") : block.rows.map(row => row.join(" · ")).join("\n")) : [])];
-  const descriptionHtml = options.showDescriptions && description ? renderCollapsibleInventoryDescription(description, options.key, definition, options.expanded) : "";
+  const descriptionHtml = options.showDescriptions && description ? renderCollapsibleInventoryDescription(description, options.key, definition, options.expanded, item) : "";
   const notes = definition ? inventoryPlayerText(inventorySupplementalText([item.description, item.rules?.personalDescription ?? ""].join("\n\n"), displayed)) : "";
   displayed.push(notes);
   const features = [...item.features].sort((a, b) => a.order - b.order).map(feature => {

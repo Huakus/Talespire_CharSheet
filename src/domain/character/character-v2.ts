@@ -29,6 +29,7 @@ import { GmWorkspaceSchema } from "../gm/gm-workspace";
 import { CharacterBuilderStateSchema } from "./character-builder-model";
 import { WarlockRuntimeSchema } from "./warlock-model";
 import { WizardRuntimeSchema } from "./wizard-model";
+import { EquipmentActiveEffectSchema } from "../equipment/equipment-active-effects";
 
 export const StableIdSchema = z.string().regex(STABLE_ID_PATTERN);
 export const IsoTimestampSchema = z.string().datetime({ offset: true });
@@ -68,6 +69,14 @@ export const CharacterV2Schema = z.object({
     wisdom: z.number().int(),
     charisma: z.number().int(),
   }),
+  equipmentBenefits: z.array(z.object({
+    source: z.string().min(1), name: z.string().min(1),
+    ability: z.enum(["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"]),
+    increase: z.number().int().positive(), maximumIncrease: z.number().int().positive(),
+    completedAt: IsoTimestampSchema,
+  })).default([]),
+  equipmentEffects: z.array(EquipmentActiveEffectSchema).default([]),
+  equipmentMeals: z.array(z.object({ day: z.number().int().nonnegative(), days: z.number().int().positive(), sourceItemId: StableIdSchema, sourceName: z.string().min(1), recordedAt: IsoTimestampSchema })).default([]),
   combat: z.object({
     armorClass: z.number().int(),
     speed: z.string(),

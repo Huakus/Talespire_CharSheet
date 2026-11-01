@@ -97,9 +97,9 @@ export const InventoryFeatureSchema = z.object({
   bonuses: z.array(InventoryBonusSchema).default([]),
 });
 
-function omitUndefinedCore<T extends { lucentCore?: unknown }>(value: T): Omit<T,"lucentCore"> & { lucentCore?: NonNullable<T["lucentCore"]> } {
-  const { lucentCore, ...rest } = value;
-  return lucentCore == null ? rest : { ...rest, lucentCore: lucentCore as NonNullable<T["lucentCore"]> };
+function omitUndefinedCore<T extends { lucentCore?: unknown; study?: unknown; flight?: unknown; lastChargePending?:unknown }>(value: T): Omit<T,"lucentCore"|"study"|"flight"|"lastChargePending"> & { lucentCore?: NonNullable<T["lucentCore"]>; study?: NonNullable<T["study"]>; flight?: NonNullable<T["flight"]>;lastChargePending?:NonNullable<T["lastChargePending"]> } {
+  const { lucentCore, study, flight, lastChargePending, ...rest } = value;
+  return { ...rest, ...(lucentCore == null ? {} : {lucentCore:lucentCore as NonNullable<T["lucentCore"]>}), ...(study == null ? {} : {study:study as NonNullable<T["study"]>}), ...(flight == null ? {} : {flight:flight as NonNullable<T["flight"]>}),...(lastChargePending==null?{}:{lastChargePending:lastChargePending as NonNullable<T["lastChargePending"]>}) };
 }
 
 export const CharacterInventoryItemFieldsSchema = z.object({
@@ -131,6 +131,15 @@ export const CharacterInventoryItemFieldsSchema = z.object({
     original: LosslessJsonObjectSchema,
     personalDescription: z.string(),
     slotUsage: z.record(z.string(), z.number().int().nonnegative()).default({}),
+    study: z.object({
+      cycle: z.number().int().nonnegative(),
+      sessions: z.array(z.object({ readerId: z.string().regex(STABLE_ID_PATTERN), day: z.number().int().nonnegative(), hours: z.number().positive().max(24) })),
+    }).optional(),
+    flight: z.object({
+      flying:z.boolean(),descending:z.boolean(),prepaidSeconds:z.number().int().nonnegative(),
+      idleSeconds:z.number().int().nonnegative(),altitudeFeet:z.number().nonnegative(),
+    }).optional(),
+    lastChargePending:z.boolean().optional(),
     lucentCore: z.object({
       resonance: z.enum(["green", "blue", "violet"]).nullable(),
       active: z.enum(["green", "blue", "violet"]).nullable(),

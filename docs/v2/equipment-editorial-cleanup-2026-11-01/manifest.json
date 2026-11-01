@@ -1,0 +1,150 @@
+{
+  "stats": {
+    "reviewed": 1585,
+    "changed": {
+      "ece": 434,
+      "shared": 374,
+      "inventory": 153,
+      "merchant": 4
+    },
+    "emptyDescriptions": []
+  },
+  "batches": [
+    {
+      "index": 0,
+      "rows": 49,
+      "expectedRevision": 1704
+    },
+    {
+      "index": 1,
+      "rows": 27,
+      "expectedRevision": 1705
+    },
+    {
+      "index": 2,
+      "rows": 39,
+      "expectedRevision": 1706
+    },
+    {
+      "index": 3,
+      "rows": 40,
+      "expectedRevision": 1707
+    },
+    {
+      "index": 4,
+      "rows": 41,
+      "expectedRevision": 1708
+    },
+    {
+      "index": 5,
+      "rows": 44,
+      "expectedRevision": 1709
+    },
+    {
+      "index": 6,
+      "rows": 39,
+      "expectedRevision": 1710
+    },
+    {
+      "index": 7,
+      "rows": 42,
+      "expectedRevision": 1711
+    },
+    {
+      "index": 8,
+      "rows": 39,
+      "expectedRevision": 1712
+    },
+    {
+      "index": 9,
+      "rows": 48,
+      "expectedRevision": 1713
+    },
+    {
+      "index": 10,
+      "rows": 38,
+      "expectedRevision": 1714
+    },
+    {
+      "index": 11,
+      "rows": 49,
+      "expectedRevision": 1715
+    },
+    {
+      "index": 12,
+      "rows": 53,
+      "expectedRevision": 1716
+    },
+    {
+      "index": 13,
+      "rows": 49,
+      "expectedRevision": 1717
+    },
+    {
+      "index": 14,
+      "rows": 47,
+      "expectedRevision": 1718
+    },
+    {
+      "index": 15,
+      "rows": 51,
+      "expectedRevision": 1719
+    },
+    {
+      "index": 16,
+      "rows": 50,
+      "expectedRevision": 1720
+    },
+    {
+      "index": 17,
+      "rows": 52,
+      "expectedRevision": 1721
+    },
+    {
+      "index": 18,
+      "rows": 36,
+      "expectedRevision": 1722
+    },
+    {
+      "index": 19,
+      "rows": 34,
+      "expectedRevision": 1723
+    },
+    {
+      "index": 20,
+      "rows": 34,
+      "expectedRevision": 1724
+    },
+    {
+      "index": 21,
+      "rows": 33,
+      "expectedRevision": 1725
+    },
+    {
+      "index": 22,
+      "rows": 28,
+      "expectedRevision": 1726
+    },
+    {
+      "index": 23,
+      "rows": 3,
+      "expectedRevision": 1727
+    }
+  ],
+  "affectedCharacters": [
+    "chr_116845116f22e81490bfe826e33bd37a",
+    "chr_25160f73dc28f54f059e626dcb2ef288",
+    "chr_2de8dab74a76cdd8d2b0d37cc84725ea",
+    "chr_31b5cf3abda27cf3910182c6e1a6f82e",
+    "chr_345a4e8763475f1c2acbd5c2a56bcf36",
+    "chr_6136f43e35880d3d64991bd05fd63d6d",
+    "chr_6e02527e3880499aaa59ea5182ca2c7e",
+    "chr_76486598066828133b7c1f1235e75f82",
+    "chr_800d3e58b5b497357fe501c441398697",
+    "chr_95bf954ca413abf652b08d64b690ac0b",
+    "chr_9a5d864abfda580db6a8b26bcd25282a",
+    "chr_9a776b0e541fb73ab6bceb871f78edce",
+    "chr_b935626903ae074cc0314a11a812f47b",
+    "chr_c0d4a321021830d8dc5e7313710d762a"
+  ]
+}

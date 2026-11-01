@@ -7,9 +7,11 @@ import { THIEVES_EXPERTISE } from "../character/rogue-catalog";
 import { inventoryEquipmentDefinition } from "./equipment-live";
 
 const key = (text: string): string => text.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
-export function inventoryToolIdentity(item: CharacterInventoryItemV2) {
+export function inventoryToolIdentity(item: Pick<CharacterInventoryItemV2,"category"|"name"|"rules">) {
   const definition = inventoryEquipmentDefinition(item);
   if (definition?.category !== "tool" && item.category !== "tool") return null;
+  const explicit=definition?.capabilities.flatMap(c=>c.effects).find(e=>e.kind==="tool-check");
+  if(explicit?.kind==="tool-check")return identities.find(identity=>identity.key===explicit.toolKey)??null;
   const names = [definition?.name ?? item.name, ...(definition?.aliases ?? [])].map(key);
   return identities.find(identity => identity.aliases.some(alias => names.includes(key(alias)))) ?? null;
 }

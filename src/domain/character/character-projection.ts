@@ -205,8 +205,8 @@ export function projectAbilityScore(character: CharacterV2, ability: AbilityKey)
     strength: "STR", dexterity: "DEX", constitution: "CON",
     intelligence: "INT", wisdom: "WIS", charisma: "CHA",
   };
-  let score = character.abilities[ability] + traitBonus(character, "attributes", [ability, short[ability]]) + inventoryBonus(character, "attributes", [ability, short[ability]]);
-  const effects = character.inventory.filter((item) => item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned)).flatMap((item) => (inventoryEquipmentDefinition(item)?.capabilities ?? []).filter((cap) => cap.activation === "passive").flatMap((cap) => cap.effects)).filter((effect) => effect.kind === "bonus" && effect.target === ability);
+  let score = character.abilities[ability] + character.equipmentBenefits.filter(b => b.ability === ability).reduce((sum,b) => sum+b.increase,0) + traitBonus(character, "attributes", [ability, short[ability]]) + inventoryBonus(character, "attributes", [ability, short[ability]]);
+  const effects = character.inventory.filter((item) => item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character,item)).flatMap((item) => (inventoryEquipmentDefinition(item)?.capabilities ?? []).filter((cap) => cap.activation === "passive").flatMap((cap) => cap.effects)).filter((effect) => effect.kind === "bonus" && effect.target === ability && !/48 horas|aumento permanente|misma lectura/i.test(effect.condition));
   for (const effect of effects) if (effect.kind === "bonus" && effect.operation === "add") {
     const next = score + effect.value;
     score = /(?:máximo|maximo|encima de)(?: de)? 20/i.test(effect.condition) ? Math.max(score, Math.min(20, next)) : next;
@@ -214,6 +214,11 @@ export function projectAbilityScore(character: CharacterV2, ability: AbilityKey)
   for (const effect of effects) if (effect.kind === "bonus" && effect.operation === "set") score = effect.value;
   for (const effect of effects) if (effect.kind === "bonus" && effect.operation === "minimum") score = Math.max(score, effect.value);
   return score;
+}
+
+export function projectAbilityMaximum(character: CharacterV2, ability: AbilityKey): number {
+  const primalChampion=character.builder?.classKey==="barbarian"&&character.identity.level>=20&&["strength","constitution"].includes(ability);
+  return (primalChampion?24:20) + character.equipmentBenefits.filter(b => b.ability === ability).reduce((sum,b) => sum+b.maximumIncrease,0);
 }
 
 function projectedAbilityModifier(character: CharacterV2, ability: AbilityKey): number {
@@ -308,9 +313,9 @@ export function projectActionAttackModifier(
   const proficiency = action.proficient
     ? proficiencyBonus(character.identity.level)
     : 0;
-  const ranged = normalizedKey(action.reach).includes("ranged") || normalizedKey(action.weaponType).includes("ranged");
-  const keys = ["toHitBonus", "AttackandDamage", ranged ? "RangedAttackRolls" : "MeleeAttackRolls"];
   const item = character.inventory.find((entry) => entry.id === action.inventoryItemId);
+  const ranged = /ranged|adistancia/.test(normalizedKey(item?.weapon?.range ?? "")) || /ranged|adistancia/.test(normalizedKey(action.reach) + normalizedKey(action.weaponType));
+  const keys = ["toHitBonus", "AttackandDamage", ranged ? "RangedAttackRolls" : "MeleeAttackRolls"];
   const archery = hasBuilderStyle(character, "archery") && (item?.weapon?.range.includes("ranged") || normalizedKey(action.weaponType).includes("ranged")) ? 2 : 0;
   const martial = character.spellcasting.monk?.effects.find((e) => e.key === "sharpen" && e.target === action.inventoryItemId)?.amount ?? 0;
   const sacred = character.spellcasting.paladin?.effects.some((e) => e.key === "sacred-weapon" && e.target === action.inventoryItemId) ? Math.max(1,projectedAbilityModifier(character,"charisma")) : 0;
@@ -320,7 +325,8 @@ export function projectActionAttackModifier(
 }
 
 export function projectActionDamageBonus(character: CharacterV2, action: CharacterActionV2): number {
-  const ranged = normalizedKey(action.reach).includes("ranged") || normalizedKey(action.weaponType).includes("ranged");
+  const linkedItem = character.inventory.find((entry) => entry.id === action.inventoryItemId);
+  const ranged = /ranged|adistancia/.test(normalizedKey(linkedItem?.weapon?.range ?? "")) || /ranged|adistancia/.test(normalizedKey(action.reach) + normalizedKey(action.weaponType));
   const weapon = character.inventory.find((item) => item.id === action.inventoryItemId)?.weapon;
   // Linked weapon actions already include the base ability modifier in damageBonus.
   // Apply only the derived adjustment, preserving authored damage and weapon bonuses.

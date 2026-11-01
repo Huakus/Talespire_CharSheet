@@ -1,0 +1,41 @@
+import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import { createCharacter } from "../../src/domain/character/create-character";
+import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
+import { unpackInventoryPack, useInventoryFeature } from "../../src/domain/character/character-inventory";
+import { projectInventory } from "../../src/domain/character/character-projection";
+import { equipmentPackContents } from "../../src/domain/equipment/equipment-packs";
+import { CampaignApplication } from "../../src/application/campaign/campaign-application";
+import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
+import { createTestCampaign } from "../fixtures/native-campaign";
+import { packContents } from "../../scripts/equipment-pack-contents.mjs";
+const root = 'docs/v2/equipment-packs-2026-11-01/', read = (s: string) => JSON.parse(readFileSync(root+s,'utf8'));
+const changes = read('reviews.json').changes.filter((r:{scope:string})=>r.scope==='ece');
+const catalog = [0,1,2].flatMap(i=>read(`parts-${i}.json`)).map(r=>({ ...normalizeEquipmentDefinition(r.payload), catalog: { contentKey:r.key,origin:'official' as const,tags:[],revision:r.revision } }));
+const time='2026-11-01T15:00:00.000Z', id='inv_11111111111111111111111111111111';
+function fixture(name:string,quantity=1){const row=changes.find((r:{name:string})=>r.name===name),c=createCharacter('chr_11111111111111111111111111111111','Prueba',time);
+ c.inventory=[{...normalizeEquipmentDefinition({name}),id,order:0,group:'Mochila',quantity,unitWeight:row.unitWeight,features:row.features,rules:{definition:row.definition,original:{},pending:[],personalDescription:'',slotUsage:{},storage:null}}];return c;}
+const options=(c:{revision:number})=>({expectedRevision:c.revision,updatedAt:time});
+function components(c:ReturnType<typeof fixture>){return equipmentPackContents(c.inventory[0]!)!.map((part,i)=>({...catalog.find(c=>c.catalog!.contentKey===part.contentKey)!,id:`inv_${String(i+2).padStart(32,'0')}`,order:0,group:'Equipo',quantity:part.quantity}));}
+describe('Paquetes de equipo con componentes canónicos',()=>{
+ it.each(Object.keys(packContents))('%s entrega exactamente su contenido y mantiene el peso',name=>{const c=fixture(name),before=projectInventory(c).totalWeight,next=unpackInventoryPack(c,id,components(c),options(c));
+  expect(next.inventory.some(i=>i.id===id)).toBe(false);expect(projectInventory(next).totalWeight).toBeCloseTo(before,8);
+  expect(next.inventory.every(i=>i.rules&&i.catalog&&!i.equipped&&!i.attuned)).toBe(true);
+  expect(next.inventory.map(i=>[i.name,i.quantity])).toEqual(packContents[name]);
+ });
+ it('abre una unidad, conserva las otras y no agrega copias de lo que el personaje ya tenía',()=>{const c=fixture('Paquete de explorador',2),additions=components(c),torch=additions.find(i=>i.name==='Antorcha')!;
+  c.inventory.push({...torch,id:'inv_ffffffffffffffffffffffffffffffff',quantity:3,order:1});const before=projectInventory(c).totalWeight,next=unpackInventoryPack(c,id,additions,options(c));
+  expect(next.inventory.find(i=>i.id===id)!.quantity).toBe(1);expect(next.inventory.find(i=>i.id.endsWith('ffffffff'))!.quantity).toBe(3);
+  expect(next.inventory.filter(i=>i.name==='Antorcha').reduce((n,i)=>n+i.quantity,0)).toBe(13);expect(projectInventory(next).totalWeight).toBeCloseTo(before,8);
+ });
+ it('valida todos los componentes antes de gastar y no permite consumir el paquete sin entregarlos',()=>{const c=fixture('Paquete de ladrón'),before=JSON.stringify(c),parts=components(c);
+  parts[0]!.quantity++;expect(()=>unpackInventoryPack(c,id,parts,options(c))).toThrow(/no coinciden/);expect(JSON.stringify(c)).toBe(before);
+  expect(()=>useInventoryFeature(c,id,c.inventory[0]!.features[0]!.id,options(c))).toThrow(/Desembalar/);
+ });
+ it('guarda la operación de forma atómica, exige catálogo completo y rechaza repetir con el estado anterior',async()=>{const c=fixture('Paquete de erudito'),repo=new InMemoryCampaignRepository(),app=new CampaignApplication(repo),s=await repo.save(createTestCampaign({character:c}),{kind:'empty'});
+  const command={characterId:c.id,itemId:id,expectedCharacterRevision:c.revision,expectedCampaignChecksum:s.checksum};
+  await expect(app.unpackInventoryPack({...command,catalog:[]})).rejects.toThrow(/catálogo/);expect((await repo.load())!.checksum).toBe(s.checksum);
+  const next=await app.unpackInventoryPack({...command,catalog});expect(next.campaign.characters[c.id]!.inventory).toHaveLength(7);
+  await expect(app.unpackInventoryPack({...command,catalog})).rejects.toThrow(/conflict/i);
+ });
+});

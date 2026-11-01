@@ -1,0 +1,72 @@
+{
+  "definitions": 179,
+  "ece": 105,
+  "shared": 74,
+  "batches": [
+    {
+      "index": 0,
+      "definitions": 24,
+      "expectedRevision": 1728
+    },
+    {
+      "index": 1,
+      "definitions": 15,
+      "expectedRevision": 1729
+    },
+    {
+      "index": 2,
+      "definitions": 13,
+      "expectedRevision": 1730
+    },
+    {
+      "index": 3,
+      "definitions": 14,
+      "expectedRevision": 1731
+    },
+    {
+      "index": 4,
+      "definitions": 13,
+      "expectedRevision": 1732
+    },
+    {
+      "index": 5,
+      "definitions": 13,
+      "expectedRevision": 1733
+    },
+    {
+      "index": 6,
+      "definitions": 12,
+      "expectedRevision": 1734
+    },
+    {
+      "index": 7,
+      "definitions": 12,
+      "expectedRevision": 1735
+    },
+    {
+      "index": 8,
+      "definitions": 13,
+      "expectedRevision": 1736
+    },
+    {
+      "index": 9,
+      "definitions": 14,
+      "expectedRevision": 1737
+    },
+    {
+      "index": 10,
+      "definitions": 12,
+      "expectedRevision": 1738
+    },
+    {
+      "index": 11,
+      "definitions": 13,
+      "expectedRevision": 1739
+    },
+    {
+      "index": 12,
+      "definitions": 11,
+      "expectedRevision": 1740
+    }
+  ]
+}

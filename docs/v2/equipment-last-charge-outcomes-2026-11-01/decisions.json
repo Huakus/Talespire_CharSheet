@@ -1,0 +1,79 @@
+[
+  {
+    "key": "official:equipment:es:16bfcef27391210d1ed5263a",
+    "sides": null,
+    "outcome": "nonmagical",
+    "replacementKey": null,
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:cbfbeb4aafdeb42aa1660850",
+    "sides": 20,
+    "outcome": "replace",
+    "replacementKey": "official:equipment:es:aef15424fdc190a838bb4939",
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:45c8ee7602d853f90c15821e",
+    "sides": 20,
+    "outcome": "replace",
+    "replacementKey": "official:equipment:es:aef15424fdc190a838bb4939",
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:21c4865b127dd7942ad60f2f",
+    "sides": 20,
+    "outcome": "replace",
+    "replacementKey": "official:equipment:es:aef15424fdc190a838bb4939",
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:2b9317ec14536ced5520b06e",
+    "sides": 20,
+    "outcome": "keep",
+    "replacementKey": null,
+    "refillOnMaximum": "1d12+1"
+  },
+  {
+    "key": "official:equipment:es:9a1b04c90dc0a3418eadcb5a",
+    "sides": 20,
+    "outcome": "replace",
+    "replacementKey": "official:equipment:es:f8e1af7cfa4f2f98cf87df55",
+    "refillOnMaximum": "1d8+2"
+  },
+  {
+    "key": "official:equipment:es:0896a39342fdfdeba982f162",
+    "sides": null,
+    "outcome": "destroy",
+    "replacementKey": null,
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:46f6e5386a87b70724f56073",
+    "sides": null,
+    "outcome": "destroy",
+    "replacementKey": null,
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:b97890f2fdedbce0fbe843c2",
+    "sides": null,
+    "outcome": "destroy",
+    "replacementKey": null,
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:59e2d70bb33932f24e564bcb",
+    "sides": 20,
+    "outcome": "replace",
+    "replacementKey": "official:equipment:es:f5a09e6d10357773fe2ecbd8",
+    "refillOnMaximum": null
+  },
+  {
+    "key": "official:equipment:es:f5a09e6d10357773fe2ecbd8",
+    "sides": 20,
+    "outcome": "replace",
+    "replacementKey": "official:equipment:es:59e2d70bb33932f24e564bcb",
+    "refillOnMaximum": null
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "inv_aee96a5a7c9f10db7e215b35eee2ee93",
+    "name": "Herramientas de herrero",
+    "position": 5,
+    "itemValid": true,
+    "definitionValid": true,
+    "issues": []
+  },
+  {
+    "id": "inv_7864d6cfd26ff2a3ec8c166d0281e3d3",
+    "name": "Herramientas de manitas",
+    "position": 6,
+    "itemValid": true,
+    "definitionValid": true,
+    "issues": []
+  },
+  {
+    "id": "inv_15542c5cbb844f6c665aa92505534567",
+    "name": "Herramientas de cartógrafo",
+    "position": 7,
+    "itemValid": true,
+    "definitionValid": true,
+    "issues": []
+  },
+  {
+    "id": "inv_1f8aae9bf057e66fc27919fc21922d3d",
+    "name": "Suministros de alquimista",
+    "position": 8,
+    "itemValid": true,
+    "definitionValid": true,
+    "issues": []
+  },
+  {
+    "id": "inv_68fb88a0772f4ac195a46f37fb7f9c32",
+    "name": "Raciones (1 día)",
+    "position": 11,
+    "itemValid": true,
+    "definitionValid": true,
+    "issues": []
+  }
+]

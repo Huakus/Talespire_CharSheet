@@ -1,0 +1,12 @@
+{
+  "definitions": 4,
+  "ece": 2,
+  "shared": 2,
+  "batches": [
+    {
+      "index": 0,
+      "definitions": 4,
+      "expectedRevision": 1752
+    }
+  ]
+}

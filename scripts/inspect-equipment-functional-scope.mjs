@@ -1,0 +1,5 @@
+import{readFileSync}from'node:fs';
+const base='docs/v2/equipment-functional-audit-2026-11-01',read=n=>JSON.parse(readFileSync(base+'/'+n,'utf8')),scope=read('scope.json'),rows=Array.from({length:10},(_,n)=>read('catalog-'+String(n).padStart(2,'0')+'.json')).flat(),start=Number(process.argv[2]??1)-1,end=Number(process.argv[3]??93);
+for(const [index,item]of scope.items.entries()){if(index<start||index>=end)continue;const row=rows.find(r=>r.key===item.key),d=row.payload.rules.definition;
+ console.log(JSON.stringify({n:index+1,key:item.key,name:item.name,category:d.category,resources:d.resources,weapon:d.weapon,armor:d.armor,bonuses:row.payload.bonuses,capabilities:d.capabilities.map(c=>({id:c.id,name:c.name,activation:c.activation,target:c.target,duration:c.duration,costs:c.costs,consume:c.consumeQuantity,mode:c.execution.mode,effects:c.effects.map(e=>({...e,...(e.kind==='unmodeled'?{original:Object.keys(e.original)}:{})}))})),text:d.description.filter(b=>b.type==='paragraph'||b.type==='list').map(b=>b.type==='paragraph'?b.text:b.items.join(' / '))}));
+}

@@ -1,0 +1,13 @@
+{
+  "nativeApplicationsAvailable": false,
+  "browserHostAvailable": false,
+  "visualValidationCompleted": false,
+  "interactionTests": "Happy DOM, controles reales de BrowserApp",
+  "blockedAttempt": {
+    "action": "Iniciar Chrome oculto con perfil de prueba y depuración remota para inspeccionar la vista aislada.",
+    "executed": false,
+    "automaticReviewRejected": true,
+    "statedReason": "blocked by policy"
+  },
+  "scope": "No se abrió TaleSpire ni se obtuvo una captura de los controles."
+}

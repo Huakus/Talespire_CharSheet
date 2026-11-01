@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-01",
+  "campaignRevision": 1748,
+  "catalog": 828,
+  "sharedIncluded": 757,
+  "personalOutsideCatalog": 1,
+  "entries": 829,
+  "characterCopies": 229,
+  "merchantCopies": 24,
+  "usedDefinitions": 157,
+  "statuses": {
+    "partial": 90,
+    "rules": 19,
+    "verified": 71,
+    "table": 38,
+    "unknown": 611
+  },
+  "unknownScope": 793,
+  "developmentNotPublished": 11,
+  "rawUnmodeled": 340,
+  "rawUnsupported": 58,
+  "catalogReadOnly": true
+}

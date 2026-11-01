@@ -1,6 +1,17 @@
 # Changelog
 
-Changes to Talespire CharSheet from **1.0.29 through 1.0.42**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+Changes to Talespire CharSheet from **1.0.29 through 1.0.43**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+
+## 1.0.43 — 2026-11-01
+
+- Added item workflows for tool checks, conditional advantage, stat-book study, winged-boot flight reserves and additional Channel Divinity uses, with resource recovery and bearer requirements.
+- Added last-charge checks and item-specific destruction, transformation and recharge outcomes. Replacement items preserve instance identity and applicable state; destroyed items relinquish their spell grants.
+- Equipment packs can be unpacked into their canonical components. Rations record consumption by campaign day. Alchemist's fire, poison potions and acid resolve consumption and target effects together, including ongoing damage, saves, extinguishing and concentration checks where applicable.
+- Connected the Doss lute's seven item spells to independent dawn-recovering uses. Item casting stays separate from class spell learning, preparation and spell slots.
+- Corrected weapon proficiency matching, linked ranged-weapon bonuses, natural-20 weapon effects and a missing equipped-weapon action. Native equipment imports without an internal archive preserve charges and rules instead of silently reverting to another format.
+- Removed repeated editorial text and redundant English auxiliary descriptions covered by Spanish rules. Inventory cards replace known static base-item summary tables with current instance values while retaining healing, armor timing, package quantities, random effects and custom rule tables.
+- Updated Spanish equipment templates for character creation and retained audit records, publication guards and regression coverage. The complete equipment-automation objective remains in progress.
+- **Shared campaigns:** players must update their Symbiote to this release before opening campaigns that use the new equipment mechanics. Earlier clients do not recognize these rule types and can reject otherwise valid inventory definitions.
 
 ## 1.0.42 — 2026-10-31
 

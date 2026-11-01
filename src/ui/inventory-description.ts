@@ -1,16 +1,17 @@
 import type { EquipmentDefinitionDraft } from "../domain/equipment/equipment-definition";
 import { SRD_51_ATTRIBUTION } from "../domain/equipment/equipment-attribution";
 import { equipmentVariantDescription } from "../domain/equipment/equipment-variant-description";
+import { cleanEquipmentPlayerText, equipmentInternalParagraph } from "../domain/equipment/equipment-player-content";
 
 // Whitespace-only equivalence keeps distinct numbers, signs, restrictions and custom wording.
 const textKey = (value: string): string => value.replace(/\s+/gu, " ").trim();
 const paragraphs = (value: string): string[] => value.split(/\r?\n\s*\r?\n/).map(p => p.trim()).filter(Boolean);
 
-const internalParagraph = (text: string): boolean => /^(?:Resolución asistida: aplicar las condiciones y resultados descritos;|Regla custom consolidada por autorización del GM\. Las versiones antiguas discrepaban|Esta ficha aplica la versión Adaptada[^\n]*se corrige el campo antiguo|La ficha registra «[^»]+»\. No aporta una descripción propia)/.test(text.trim());
+const internalParagraph = equipmentInternalParagraph;
 
 /** Editorial history stays in the stored definition; player text contains game rules. */
 export function inventoryPlayerText(text: string): string {
-  return paragraphs(text.replace(/<br\s*\/?\s*>/gi, "\n").replace(/\bRequires\s+attunement\b/gi, "Requiere sintonización")).filter(p => !internalParagraph(p)).join("\n\n");
+  return cleanEquipmentPlayerText(text);
 }
 
 /** Keep supplementary rules once, without changing any stored description or mechanic. */

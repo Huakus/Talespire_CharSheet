@@ -1,0 +1,35 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createServer } from 'vite';
+import assert from 'node:assert/strict';
+const root='docs/v2/equipment-doss-2026-11-01/',before=JSON.parse(readFileSync(root+'before.json','utf8'));
+assert.equal(before.length,1);
+const server=await createServer({configFile:false,server:{middlewareMode:true,hmr:false},appType:'custom'});
+try{
+ const{EquipmentDefinitionDraftSchema}=await server.ssrLoadModule('/src/domain/equipment/equipment-definition.ts');
+ const{bindReviewedEquipment,equipmentPlainDescription}=await server.ssrLoadModule('/src/domain/equipment/equipment-live.ts');
+ const{normalizeEquipmentDefinition}=await server.ssrLoadModule('/src/domain/equipment/equipment-catalog.ts');
+ const{PHB_SPELLS}=await server.ssrLoadModule('/src/domain/character/phb-spells.ts');
+ const row=before[0],definition=EquipmentDefinitionDraftSchema.parse(row.payload.rules.definition);
+ const source='wotc-nerds-2021-doss',errata='dmg-2014-errata-instrument';
+ definition.sources.push({id:source,kind:'book',title:'Wizards of the Coast · Restoring Harmony (2021), ficha del bardo',language:'en',rulesEdition:'2014',locator:'https://bombardgames.com/wp-content/uploads/2021/09/DND-NERDS-Adventure-7-Full-Party.pdf · texto indexado de la ficha; descarga actualmente devuelve 403',verified:true});
+ definition.sources.push({id:errata,kind:'book',title:'Dungeon Master’s Guide (2014) · errata de Instrument of the Bards',language:'en',rulesEdition:'2014',locator:'https://www.dndbeyond.com/sources/dnd/sae/dungeon-masters-guide-2014',verified:true});
+ const ruleText='Laúd de Doss, instrumento de los bardos. Requiere sintonización por un bardo. Como acción, puedes tocarlo para lanzar uno de sus conjuros. Cada conjuro tiene un uso independiente y lo recupera al amanecer. Usan tu aptitud para lanzar conjuros y tu CD de salvación. Protección contra la energía solo permite elegir fuego.';
+ const charmText='Si tocas el instrumento mientras lanzas un conjuro que deja hechizados a sus objetivos al fallar una salvación, esos objetivos tienen desventaja en dicha salvación. El conjuro debe tener un componente somático o material.';
+ const story=row.payload.description.slice(row.payload.description.indexOf('Durante una expedición'));
+ assert.ok(story.startsWith('Durante una expedición'));
+ definition.description=[{id:'doss-rules',section:'rules',provenance:'reviewed-translation',sourceIds:[source],type:'paragraph',text:ruleText},{id:'doss-charm',section:'rules',provenance:'reviewed-translation',sourceIds:[errata],type:'paragraph',text:charmText},{id:'doss-story',section:'flavor',provenance:'campaign',sourceIds:definition.description[0].sourceIds,type:'paragraph',text:story}];
+ definition.requirements={attunement:true,bearer:[{kind:'class',keys:['bard'],explanation:'Requiere sintonización por un bardo.'}],presence:'held',explanation:'Tocar el instrumento para lanzar sus conjuros.'};
+ const keys=['animal-friendship','fly','invisibility','levitate','protection-from-energy','protection-from-evil-and-good','protection-from-poison'];
+ definition.resources=keys.map(key=>({id:'doss-'+key,name:PHB_SPELLS[key].name,kind:'uses',maximum:1,unit:'uso',recovery:{kind:'event',event:'dawn',amount:{kind:'full'},explanation:'Recupera el uso de este conjuro al amanecer.'},exhaustion:'No se puede volver a lanzar este conjuro hasta recuperar su uso.'}));
+ definition.capabilities=keys.map(key=>({id:'doss-'+key,name:PHB_SPELLS[key].name,activation:'action',trigger:'',requirements:structuredClone(definition.requirements),target:'Según el conjuro',range:PHB_SPELLS[key].range,duration:PHB_SPELLS[key].duration,concentration:PHB_SPELLS[key].concentration,costs:[{resourceId:'doss-'+key,amount:1}],consumeQuantity:0,effects:[{id:'spell-'+key,kind:'spell',condition:key==='protection-from-energy'?'Solo fuego.':'',spellKey:key,level:PHB_SPELLS[key].level,ability:'charisma',saveDc:null,attackBonus:null,components:'waived',explanation:key==='protection-from-energy'?'Solo fuego. Requiere tocar el laúd.':'Requiere tocar el laúd.'}],execution:{mode:'automatic',handler:'equipment-independent-spells',explanation:'Lanzamiento desde el objeto, sin espacio de clase, con un uso independiente hasta el amanecer.',pendingAutomation:[]},textBlockIds:['doss-rules']}));
+ definition.capabilities.push({id:'doss-charm-focus',name:'Encantamiento mediante el instrumento',activation:'passive',trigger:'Lanzar un conjuro con componente somático o material que hechice tras una salvación fallida.',requirements:structuredClone(definition.requirements),target:'Objetivos del conjuro',range:'Según el conjuro',duration:'Según el conjuro',concentration:'spell-dependent',costs:[],consumeQuantity:0,effects:[{id:'doss-charm-save',kind:'defense',defense:'disadvantage',target:'charm-spell-save',condition:'Solo salvaciones contra el efecto de hechizado del conjuro interpretado con el laúd.'}],execution:{mode:'assisted',handler:null,explanation:'La regla condicionada está descrita; no modifica todas las salvaciones de una criatura.',pendingAutomation:['Conectar la selección de objetivos y la salvación condicionada del conjuro interpretado.']},textBlockIds:['doss-charm']});
+ definition.review.unresolved=['Falta conectar la salvación condicionada al tocar el instrumento como foco y verificar la regla de tocarlo sin sintonización contra el texto primario completo.'];
+ definition.review.mechanics=false;
+ const parsed=EquipmentDefinitionDraftSchema.parse(definition);
+ const{rules:oldRules,...base}=normalizeEquipmentDefinition({...row.payload,rules:{...row.payload.rules,original:{}}});
+ const item=bindReviewedEquipment({...base,id:'inv_00000000000000000000000000000000',order:0,group:'Equipo',features:[]},parsed);
+ const features=item.features.map(f=>f.uses?{...f,uses:{...f.uses,current:1}}:f);
+ const change={...row,definition:parsed,features,charges:null,description:equipmentPlainDescription(parsed)};
+ writeFileSync(root+'review.json',JSON.stringify(change));
+ console.log(JSON.stringify({spells:keys.length,independentUses:features.filter(f=>f.uses).length,charges:item.charges,remaining:definition.review.unresolved}));
+}finally{await server.close();}

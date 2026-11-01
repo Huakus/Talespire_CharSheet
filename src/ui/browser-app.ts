@@ -42,6 +42,7 @@ import {
   projectSpellDamageExpression,
   projectAdjustedRollMode,
   projectAbilityCheckModifier,
+  projectAbilityMaximum,
 } from "../domain/character/character-projection";
 import type { CharacterStatisticsProjection, InventoryProjection } from "../domain/character/character-projection";
 import {
@@ -111,7 +112,7 @@ import {
   normalizeEquipmentRarity,
   type EquipmentCatalogDraft,
 } from "../domain/equipment/equipment-catalog";
-import { SPELL_CLASS_OPTIONS, spellClassLabel, spellClassLabels } from "../domain/spells/spell-catalog";
+import { SPELL_CLASS_OPTIONS, spellClassLabel, spellClassLabels, spellDamageTypeName } from "../domain/spells/spell-catalog";
 import { CampaignStorageCapacityError } from "../infrastructure/persistence/blob-campaign-repository";
 import type { CampaignStorageUsage } from "../infrastructure/persistence/blob-campaign-repository";
 import type { DiceRoller } from "../application/ports/dice-roller";
@@ -132,6 +133,21 @@ import { CORE_RESONANCES, coreFeatureIssue, isLucentCore, lucentCoreState, type 
 import type { LucentCoreAction } from "../domain/character/character-inventory";
 import { DAMAGE_TYPES } from "../domain/equipment/equipment-constants";
 import { inventoryHealingExpression } from "../domain/equipment/equipment-healing";
+import { equipmentStudyRule, equipmentStudyHours } from "../domain/equipment/equipment-study";
+import { hasNativeWeaponEffects, projectWeaponHitDamage, type WeaponHitOutcome } from "../domain/equipment/equipment-weapon-effects";
+import { renderConditionalEquipmentChecks } from "./equipment-conditional-checks";
+import { equipmentChannelCapability, equipmentChannelChoices } from "../domain/equipment/equipment-channel-divinity";
+import { renderEquipmentChannelUse } from "./equipment-channel-divinity";
+import { equipmentFlightRule,equipmentFlightState,type EquipmentFlightAction } from "../domain/equipment/equipment-flight";
+import { renderEquipmentFlight } from "./equipment-flight";
+import {equipmentLastChargeRule}from"../domain/equipment/equipment-last-charge";
+import {renderEquipmentLastCharge}from"./equipment-last-charge";
+import { equipmentPackContents } from "../domain/equipment/equipment-packs";
+import { equipmentConsumableRule, equipmentImprovisedRangedAttack, type EquipmentConsumableAction, type EquipmentEffectAction } from "../domain/equipment/equipment-consumables";
+import { renderEquipmentConsumable, renderEquipmentActiveEffects } from "./equipment-consumables";
+import { independentEquipmentUses } from "../domain/equipment/equipment-independent-uses";
+import { equipmentFoodCapability } from "../domain/equipment/equipment-food";
+import { abilityModifier, projectAbilityScore } from "../domain/character/character-projection";
 import { projectEquipmentSpellSlots, inventorySlotRecovery, recoverableEquipmentSlotCount } from "../domain/equipment/equipment-spell-slots";
 import { equipmentTagLabel, visibleEquipmentTags } from "../domain/equipment/equipment-tags";
 import {
@@ -1589,6 +1605,7 @@ export class BrowserApp {
     ] as const;
     const proficiencyCount = proficiencyGroups.reduce((total, group) => total + group.values.length, 0);
     const activeEffects = [
+      ...character.inventory.filter(item=>item.equipped&&(!item.requiresAttunement||item.attuned)&&!equipmentBearerIssue(character,item)&&equipmentFlightRule(item)&&(equipmentFlightState(item).flying||equipmentFlightState(item).descending)).map(item=>({source:item.name,description:equipmentFlightState(item).flying?`Vuelo activo: velocidad igual a caminar (${character.combat.speed}).`:`Descenso controlado: ${equipmentFlightState(item).altitudeFeet} pies hasta el suelo.`,kind:"Objeto"})),
       ...character.spellcasting.spells.filter((spell) => spell.effect.active && spell.effect.description.trim()).map((spell) => ({ source: spell.name, description: spell.effect.description, kind: "Conjuro" })),
       ...character.inventory.filter((item) => item.equipped && (!item.requiresAttunement || item.attuned) && item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
       ...character.inventory.flatMap((item) => item.equipped && (!item.requiresAttunement || item.attuned) ? item.features.filter((feature) => feature.active && feature.description.trim()).map((feature) => ({ source: `${item.name} · ${feature.name}`, description: feature.description, kind: inventoryFeatureKindLabel(feature.kind) })) : []),
@@ -1601,7 +1618,7 @@ export class BrowserApp {
       <section class="play-section checks-play-section" aria-label="Características, habilidades y salvaciones">
         <div class="ability-cards">${(Object.keys(abilityLabels) as (keyof CharacterV2["abilities"])[]).map((key) => {
           const mode = projectAdjustedRollMode(character, "skills", [key, abilityLabels[key]], "normal");
-          return `<button type="button" class="ability-card roll-button" data-roll-name="Prueba de ${abilityLabels[key]}" data-roll-expression="1d20${signed(projectAbilityCheckModifier(character, key))}" data-roll-mode="${mode}"><span>${abilityLabels[key]}</span><strong>${signed(projection.abilityModifiers[key])}</strong><small title="Base: ${character.abilities[key]}">${projection.abilityScores[key]}</small></button>`;
+          return `<button type="button" class="ability-card roll-button" data-roll-name="Prueba de ${abilityLabels[key]}" data-roll-expression="1d20${signed(projectAbilityCheckModifier(character, key))}" data-roll-mode="${mode}"><span>${abilityLabels[key]}</span><strong>${signed(projection.abilityModifiers[key])}</strong><small title="Base: ${character.abilities[key]}${character.equipmentBenefits.some(b=>b.ability===key)?` · Máximo: ${projectAbilityMaximum(character,key)}${character.equipmentBenefits.filter(b=>b.ability===key).map(b=>` · ${escapeHtml(b.name)}: +${b.increase} permanente`).join("")}`:""}">${projection.abilityScores[key]}</small></button>`;
         }).join("")}</div>
         <div class="passive-score-strip" title="Puntuaciones pasivas" aria-label="Puntuaciones pasivas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg><div><span>Percepción</span><strong>${projection.passives.perception}</strong></div><div><span>Investigación</span><strong>${projection.passives.investigation}</strong></div><div><span>Perspicacia</span><strong>${projection.passives.insight}</strong></div></div>
         <div class="checks-roll-layout"><div class="quick-roll-list skills">${(Object.keys(SKILL_DEFINITIONS) as SkillKey[]).map((key) => {
@@ -1889,8 +1906,8 @@ export class BrowserApp {
     </div>`;
   }
 
-  private renderCollapsibleInventoryDescription(description: string, key: string, definition: ReturnType<typeof inventoryEquipmentDefinition> = null): string {
-    return renderCollapsibleInventoryDescription(description, key, definition, this.expandedInventoryDescriptions.has(key));
+  private renderCollapsibleInventoryDescription(description: string, key: string, definition: ReturnType<typeof inventoryEquipmentDefinition> = null, item?: CharacterInventoryItemV2 | EquipmentCatalogDraft): string {
+    return renderCollapsibleInventoryDescription(description, key, definition, this.expandedInventoryDescriptions.has(key), item);
   }
 
   private renderInventoryRichText(description: string, rollName: string): string {
@@ -1915,11 +1932,12 @@ export class BrowserApp {
     const actor = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
     const resourceIssue = actor ? equipmentClassResourceIssue(actor, item, feature.id) : "";
     const owned = actor?.inventory.some((entry)=>entry.id===item.id) === true;
+    if(actor&&owned&&equipmentChannelCapability(item)?.id===feature.id)return `<article class="inventory-feature-capability" data-inventory-card data-inventory-id="${escapeHtml(item.id)}"><header><h4>${escapeHtml(feature.name)}</h4></header>${description?`<div class="rich-inventory-text">${this.renderInventoryRichText(description,item.name)}</div>`:""}${renderEquipmentChannelUse(actor,item)}</article>`;
     const canDrink = canUse && !!actor && (actor.spellcasting.druid?.form?.currentHp ?? actor.combat.hitPoints.current) > 0 && !actor.combat.conditions.some((condition)=>["incapacitated","unconscious","stunned","paralyzed","petrified","dead"].includes(condition.key));
     const healingRecipients = Object.values(this.snapshot?.campaign.characters ?? {}).filter(c => c.id !== actor?.id && (!c.archived || this.runtime.allowArchivedCharacters));
     const canRoll = !item.rules || item.quantity > 0 && (item.equipped || item.consumable) && (!item.requiresAttunement || item.attuned) && (!actor || !equipmentBearerIssue(actor,item,feature.id));
     const spellGrant = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""]?.spellcasting.spells.some((s) => s.casting?.kind === "item" && s.casting.source === `inventory:${item.id}:${feature.id}`);
-    const shouldOfferUse = !["passive", "other"].includes(feature.kind) || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null;
+    const shouldOfferUse = !equipmentPackContents(item) && !equipmentConsumableRule(item) && !equipmentFoodCapability(item) && (!["passive", "other"].includes(feature.kind) || feature.toggleable || feature.chargeCost > 0 || feature.uses !== null);
     const resourceLabels = [
       feature.uses ? `${feature.uses.current}/${feature.uses.maximum} usos` : "",
       feature.chargeCost > 0 ? `${feature.chargeCost} ${feature.chargeCost === 1 ? "carga" : "cargas"}` : "",
@@ -1956,9 +1974,12 @@ export class BrowserApp {
         const mode = projectActionRollMode(character,action);
         const executionKey = `action:${character.id}:${action.id}`;
         const armed = this.combatExecutions.get(executionKey);
-        return `<article class="play-card spell-play-card action-play-card" data-combat-execution-key="${executionKey}" data-combat-name="${escapeHtml(action.name)}">
+        const weaponItem=character.inventory.find(i=>i.id===action.inventoryItemId),nativeWeapon=!!weaponItem&&hasNativeWeaponEffects(weaponItem);
+        return `<article class="play-card spell-play-card action-play-card" data-combat-execution-key="${executionKey}" data-combat-name="${escapeHtml(action.name)}" ${nativeWeapon?`data-weapon-action-id="${escapeHtml(action.id)}"`:""}>
           <header class="spell-play-header"><div class="spell-title"><div class="spell-meta-line"><span class="card-kicker">${escapeHtml(action.activation || action.categories.join(" · "))}</span><span class="action-kind-label">Acción</span></div><div class="spell-name-line"><h3>${escapeHtml(action.name)}</h3><span class="spell-inline-facts">${escapeHtml(action.reach || "—")}${action.damageType ? ` · ${escapeHtml(action.damageType)}` : ""}</span></div></div><div class="spell-card-controls"><button type="button" data-arm-combat-action>Lanzar</button><button type="button" class="roll-button" data-combat-roll="attack" data-roll-name="Ataque: ${escapeHtml(action.name)}" data-roll-expression="1d20${signedAttack}" data-roll-mode="${mode}" ${armed?.has("attack") ? "" : "disabled"}>Ataque</button>${damage ? `<button type="button" class="roll-button" data-combat-roll="damage" data-roll-name="Daño: ${escapeHtml(action.name)}" data-roll-expression="${escapeHtml(damage)}" data-roll-mode="normal" ${armed?.has("damage") ? "" : "disabled"}>Daño</button>` : ""}</div></header>
           ${action.description && this.showSpellDescriptions ? this.renderCollapsibleSpellDescription(action.description, `action:${action.id}`) : ""}
+          ${nativeWeapon?'<label>Resultado del impacto<select data-weapon-hit-outcome><option value="hit">Impacto normal</option><option value="critical">Crítico sin 20 natural</option><option value="natural-20">20 natural</option></select></label><small>Elegí el resultado real antes de tirar daño. Se aplican los dados de crítico y solo los poderes que correspondan al arma.</small>':""}
+          ${weaponItem&&inventoryEquipmentDefinition(weaponItem)?.capabilities.some(c=>c.id==="phase-blade")?'<label><input type="checkbox" data-weapon-phase-blade checked>Usar Hoja Fásica si el ataque obtuvo un 20 natural</label>':""}
           <div class="action-readouts"><span>Ataque <strong>${signedAttack}</strong></span>${damage ? `<span>Daño <strong>${escapeHtml(damage)}</strong>${action.damageType ? ` <em class="damage-badge" data-damage-tone="${spellDamageTone(action.damageType)}">${escapeHtml(action.damageType)}</em>` : ""}</span>` : ""}</div>
         </article>`;
       }).join("")}${inventoryFeatures.map(({ item, feature }) => this.renderInventoryFeatureCapability(item, feature, true)).join("")}</div>` : embedded ? '<p class="combined-empty">Sin acciones configuradas.</p>' : this.renderEmptyPanel("Agregá acciones y ataques desde el modo Edición.")}
@@ -2085,6 +2106,8 @@ export class BrowserApp {
     const stored = items.filter((item) => !item.equipped);
     const catalog = this.inventoryCatalogEntries(character);
     return `<section class="play-section collection-play">
+      ${renderEquipmentActiveEffects(character, Object.values(this.snapshot?.campaign.characters??{}).filter(c=>!c.archived||c.id===character.id))}
+      ${character.equipmentMeals.length?`<details class="equipment-meals"><summary>Alimentos registrados</summary><ul>${[...new Set(character.equipmentMeals.map(m=>m.day))].sort((a,b)=>b-a).slice(0,7).map(day=>`<li>Día ${day}: ${character.equipmentMeals.filter(m=>m.day===day).reduce((n,m)=>n+m.days,0)} ración(es) de un día.</li>`).join("")}</ul></details>`:""}
       ${this.renderInventoryDiscoveryTools(character)}
       ${equipped.length ? `<section class="inventory-list-group equipped-group"><h3>Equipado <small>${equipped.length}</small></h3><div class="inventory-dense-list">${equipped.map((item) => this.renderInventoryPlayCard(character, item)).join("")}</div></section>` : ""}
       ${stored.length ? `<section class="inventory-list-group"><h3>Inventario <small>${stored.length}</small></h3><div class="inventory-dense-list">${stored.map((item) => this.renderInventoryPlayCard(character, item)).join("")}</div></section>` : ""}
@@ -2135,28 +2158,52 @@ export class BrowserApp {
     const effectActive = Boolean(effectAvailable && ownedItem?.effect.active);
     const effectText = ownedItem ? inventorySupplementalText(ownedItem.effect.description, displayedText) : "";
     const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect ${effectAvailable ? "" : "unavailable"}"><span>${escapeHtml(effectText || "Efecto del objeto")}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto" title="${effectAvailable ? "Estado del efecto" : "El objeto debe estar equipado y, cuando corresponda, sintonizado"}" ${effectAvailable ? "" : "disabled"}><option value="off" ${effectActive ? "" : "selected"}>Inactivo</option><option value="on" ${effectActive ? "selected" : ""}>Activo</option></select></div>` : "";
-    const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`, inventoryEquipmentDefinition(item)) : "";
+    const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`, inventoryEquipmentDefinition(item), item) : "";
     const transferControl = ownedItem ? `<details class="inventory-item-transfer"><summary>Transferir</summary><div><select data-item-transfer-target aria-label="Personaje destinatario"><option value="">Destinatario…</option>${targets}</select><div><input data-item-transfer-quantity type="number" min="1" max="${quantity}" step="1" value="1" aria-label="Cantidad a transferir"><button type="button" data-transfer-inventory-item disabled>Confirmar</button></div></div></details>` : "";
     const inventoryHeaderControl = ownedItem ? `<div class="inventory-card-controls"><div class="inventory-card-primary"><label class="inventory-card-quantity"><span>Cant.</span><input data-inventory-quantity-input type="number" min="1" step="1" value="${quantity}" aria-label="Cantidad de ${escapeHtml(item.name)}"></label><button type="button" class="inventory-state-toggle ${ownedItem.equipped ? "active" : ""}" data-inventory-action="equip" aria-pressed="${ownedItem.equipped}" aria-label="${ownedItem.equipped ? "Quitar" : "Equipar"} ${escapeHtml(item.name)}" title="${ownedItem.equipped ? "Quitar" : "Equipar"}">${ownedItem.equipped ? "✓" : "✕"}</button></div>${transferControl}</div>` : '<span class="inventory-catalog-state">No adquirido</span>';
-    const actionsHtml = commerce ? "" : `<div class="inventory-row-actions">${catalog ? `<button type="button" data-add-catalog-inventory="${escapeHtml(item.name)}">Agregar</button>` : `${ownedItem?.usable ? `<button type="button" data-inventory-action="use" ${useDisabled ? "disabled" : ""} title="${useDisabled && !ownedItem.consumable && !ownedItem.equipped ? "Debe estar equipado" : "Usar objeto"}">Usar</button>` : ""}${ownedItem?.requiresAttunement && ownedItem.equipped ? `<button type="button" class="secondary-button" data-inventory-action="attune">${ownedItem.attuned ? "Desintonizar" : "Sintonizar"}</button>` : ""}`}</div>`;
+    const actionsHtml = commerce ? "" : `<div class="inventory-row-actions">${catalog ? `<button type="button" data-add-catalog-inventory="${escapeHtml(item.name)}">Agregar</button>` : `${ownedItem?.usable && !equipmentConsumableRule(ownedItem) && !equipmentFoodCapability(ownedItem) ? `<button type="button" data-inventory-action="use" ${useDisabled ? "disabled" : ""} title="${useDisabled && !ownedItem.consumable && !ownedItem.equipped ? "Debe estar equipado" : "Usar objeto"}">Usar</button>` : ""}${ownedItem?.requiresAttunement && ownedItem.equipped ? `<button type="button" class="secondary-button" data-inventory-action="attune">${ownedItem.attuned ? "Desintonizar" : "Sintonizar"}</button>` : ""}`}</div>`;
     return renderSharedInventoryCard({
       item, rarity, rarityLabel: equipmentRarityLabel(rarity), categoryTone, categoryLabel: inventoryCategoryLabel(item), quantity: quantity || 1,
       catalog, commerce: !!commerce, ...(commerce ? { disabled: commerce.disabled } : {}),
       articleAttributes: ownedItem ? (commerce ? `data-merchant-commerce-item="${escapeHtml(ownedItem.id)}"` : "data-inventory-card") : "",
       headerControlHtml: commerceControl || inventoryHeaderControl,
-      statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${damageExpression ? `<button type="button" class="roll-button inventory-damage-roll" data-roll-name="Daño: ${escapeHtml(item.name)}" data-roll-expression="${escapeHtml(damageExpression)}" data-roll-mode="normal">${escapeHtml(damageExpression)} ${escapeHtml(item.weapon?.damageType ?? "")}</button>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} cargas</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
-      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml: actionsHtml + (!commerce && ownedItem ? renderEquipmentToolCheck(ownedItem) + this.renderEquipmentRecovery(ownedItem) + this.renderEquipmentSpellStorage(ownedItem) + this.renderLucentCore(character, ownedItem) + this.renderAssistedEquipmentCosts(character, ownedItem) : ""),
+      statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${damageExpression ? `<button type="button" class="roll-button inventory-damage-roll" data-roll-name="Daño: ${escapeHtml(item.name)}" data-roll-expression="${escapeHtml(damageExpression)}" data-roll-mode="normal">${escapeHtml(damageExpression)} ${escapeHtml(item.weapon?.damageType ?? "")}</button>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} ${equipmentFlightRule(item) ? "min de vuelo" : "cargas"}</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
+      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml: actionsHtml + (!commerce && ownedItem ? this.renderEquipmentFood(character,ownedItem) + renderEquipmentConsumable(character, ownedItem, Object.values(this.snapshot?.campaign.characters ?? {}).filter(c=>!c.archived||c.id===character.id)) + this.renderEquipmentPack(ownedItem) + renderEquipmentToolCheck(ownedItem) + renderConditionalEquipmentChecks(character,ownedItem) + renderEquipmentFlight(character,ownedItem) + renderEquipmentLastCharge(ownedItem) + this.renderEquipmentStudy(character,ownedItem) + this.renderEquipmentRecovery(ownedItem) + this.renderEquipmentSpellStorage(ownedItem) + this.renderLucentCore(character, ownedItem) + this.renderAssistedEquipmentCosts(character, ownedItem) : ""),
     });
+  }
+
+  private renderEquipmentStudy(character: CharacterV2, item: CharacterInventoryItemV2): string {
+    const rule=equipmentStudyRule(item); if(!rule || rule.kind!=="study")return "";
+    const lastDay=Math.max(0,...(item.rules?.study?.sessions??[]).map(s=>s.day));
+    const hours=equipmentStudyHours(item,character.id,lastDay);
+    return `<details class="inventory-study"><summary>Estudiar el libro · ${hours}/${rule.hours} horas</summary><p>Completá ${rule.hours} horas dentro de ${rule.days} días de campaña. El aumento de atributo y de su máximo es permanente; no requiere equipar el libro.</p><label>Día de campaña<input type="number" data-study-day min="0" step="1" value="${lastDay}"></label><label>Horas de esta sesión<input type="number" data-study-hours min="0.25" max="24" step="0.25" value="8"></label><button type="button" data-equipment-study ${item.charges?.current ? "" : "disabled"}>Registrar estudio</button>${item.charges?.current ? "" : "<p>El libro ha perdido su magia. Solo vuelve a recuperarla al cumplirse su periodo de recuperación.</p>"}</details>`;
+  }
+
+  private renderEquipmentPack(item: CharacterInventoryItemV2): string {
+    const contents = equipmentPackContents(item); if (!contents) return "";
+    const catalog = this.equipmentCatalog(), complete = contents.every(p => catalog.some(c => c.catalog?.contentKey === p.contentKey));
+    return `<details class="inventory-pack"><summary>Contenido del paquete</summary><ul>${contents.map(p => `<li>${escapeHtml(catalog.find(c => c.catalog?.contentKey === p.contentKey)?.name ?? "Componente del paquete")} × ${p.quantity}</li>`).join("")}</ul><p>Desembalar reemplaza una unidad del paquete por su contenido. Las demás pertenencias se conservan.</p><button type="button" data-equipment-unpack ${complete && item.quantity > 0 ? "" : "disabled"}>Desembalar una unidad</button>${complete ? "" : '<p>Cargá el catálogo para obtener todos sus componentes.</p>'}</details>`;
+  }
+
+  private renderEquipmentFood(character:CharacterV2,item:CharacterInventoryItemV2):string{
+    const food=equipmentFoodCapability(item);if(!food)return"";
+    return `<details class="equipment-food"><summary>Comer una ración</summary><p>Consume una unidad y registra alimento para ${food.days} día(s). El agua se lleva por separado.</p><label>Día de campaña<input type="number" data-food-day min="0" step="1" value="${Math.max(0,...character.equipmentMeals.map(m=>m.day))}"></label><button type="button" data-equipment-food ${item.quantity?"":"disabled"}>Comer y registrar</button></details>`;
   }
 
   private renderEquipmentRecovery(item: CharacterInventoryItemV2): string {
     if (isLucentCore(item)) return "";
+    const independent=independentEquipmentUses(inventoryEquipmentDefinition(item));
+    if(independent.length){
+      const events=[...new Set(independent.flatMap(e=>e.resource.recovery.kind==="event"?[e.resource.recovery.event]:[]))];
+      const spent=independent.some(e=>(item.features.find(f=>f.id===e.capability!.id)?.uses?.current??0)<1);
+      return `<details class="inventory-recovery"><summary>Usos independientes</summary><p>Cada conjuro tiene su propio uso; lanzar uno no gasta los demás.</p>${events.map(event=>`<button type="button" class="secondary-button" data-recover-equipment="${event}" ${spent?"":"disabled"}>Confirmar ${event==="dawn"?"amanecer":event} y recuperar usos</button>`).join("")}</details>`;
+    }
     const resources = inventoryEquipmentDefinition(item)?.resources.filter((r) => r.kind !== "spell-storage");
     if (resources?.length !== 1 || !item.charges) return "";
     const resource = resources[0]!, recovery = resource.recovery;
     if (recovery.kind !== "event") return "";
     const event = ({ dawn: "al amanecer", dusk: "al anochecer", "short-rest": "tras descanso corto", "long-rest": "tras descanso largo", other: "al cumplir la condición" })[recovery.event];
-    return `<details class="inventory-recovery"><summary>Recuperación ${event}</summary><p>${escapeHtml(recovery.explanation)}</p>${recovery.amount.kind === "roll" ? `<label>Resultado de ${escapeHtml(recovery.amount.expression)}<input type="number" data-equipment-recovery-roll inputmode="numeric" placeholder="Vacío para tirar"></label>` : ""}<button type="button" class="secondary-button" data-recover-equipment="${escapeHtml(recovery.event)}" ${item.charges.current >= item.charges.maximum ? "disabled" : ""}>Confirmar evento y recuperar${recovery.amount.kind === "roll" ? ` ${escapeHtml(recovery.amount.expression)}` : ""}</button><small>Usar cuando se cumpla el evento indicado. Conserva lo gastado y respeta el máximo.</small></details>`;
+    return `<details class="inventory-recovery"><summary>Recuperación ${event}</summary><p>${escapeHtml(recovery.explanation)}</p>${recovery.event==="other"?'<label><input type="checkbox" data-equipment-recovery-condition>Se cumplió la condición especial indicada</label>':""}${recovery.amount.kind === "roll" ? `<label>Resultado de ${escapeHtml(recovery.amount.expression)}<input type="number" data-equipment-recovery-roll inputmode="numeric" placeholder="Vacío para tirar"></label>` : ""}<button type="button" class="secondary-button" data-recover-equipment="${escapeHtml(recovery.event)}" ${item.charges.current >= item.charges.maximum ? "disabled" : ""}>Confirmar evento y recuperar${recovery.amount.kind === "roll" ? ` ${escapeHtml(recovery.amount.expression)}` : ""}</button><small>Usar cuando se cumpla el evento indicado. Conserva lo gastado y respeta el máximo.</small></details>`;
   }
 
   private renderLucentCore(character: CharacterV2, item: CharacterInventoryItemV2): string {
@@ -2177,7 +2224,7 @@ export class BrowserApp {
     const storage = item.rules?.storage;
     const capacity = inventoryEquipmentDefinition(item)?.resources.find((r) => r.kind === "spell-storage")?.maximum;
     if (!storage || !capacity) return "";
-    if (!storage.known) return '<p>Contenido antiguo sin identificar. No se deduce a partir de las cargas anteriores.</p>';
+    if (!storage.known) return '<p>Contenido sin identificar. Registrá qué conjuros contiene el anillo antes de lanzarlos.</p>';
     const used = storage.spells.reduce((n, s) => n + s.slotLevel, 0);
     const ready = item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned);
     const spells = this.spellCatalog().filter((s) => s.level > 0 && s.level <= capacity - used).sort((a,b) => a.name.localeCompare(b.name, "es"));
@@ -3089,6 +3136,14 @@ export class BrowserApp {
       button.addEventListener("click", () => void this.handleInventoryFeatureAction(button));
     });
     this.root.querySelectorAll<HTMLButtonElement>("[data-recover-equipment]").forEach((button) => button.addEventListener("click", () => void this.recoverEquipment(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-study]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentStudy(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-channel-use]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentChannelUse(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-flight]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentFlight(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-last-charge]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentLastCharge(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-unpack]").forEach(button => button.addEventListener("click", () => void this.handleEquipmentUnpack(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-food]").forEach(button=>button.addEventListener("click",()=>void this.handleEquipmentFood(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-consumable]").forEach(button=>button.addEventListener("click",()=>void this.handleEquipmentConsumable(button)));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-effect-action]").forEach(button=>button.addEventListener("click",()=>void this.handleEquipmentEffectAction(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-lucent-core-action]").forEach((button) => button.addEventListener("click", () => void this.handleLucentCore(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-self-healing]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentHealing(button)));
     this.root.querySelectorAll<HTMLButtonElement>("[data-equipment-administer-healing]").forEach((button) => button.addEventListener("click", () => void this.handleEquipmentHealing(button)));
@@ -4429,7 +4484,7 @@ export class BrowserApp {
         character?.combat.conditions.map((condition) => condition.key) ?? [],
       );
       const abilityCheck = button.dataset.rollCheckModifier === undefined ? undefined : { modifier: Number(button.dataset.rollCheckModifier), minimum: Number(button.dataset.rollCheckMinimum) };
-      const expressions = abilityCheck ? ["1d20", ...(conditionKeys.has("guidance") ? ["1d4"] : [])] : rawExpression.split("/").map((expression) => {
+      let expressions = abilityCheck ? ["1d20", ...(conditionKeys.has("guidance") ? ["1d4"] : [])] : rawExpression.split("/").map((expression) => {
         if (!expression.toLowerCase().includes("d20")) return expression;
         let adjusted = expression;
         if (conditionKeys.has("bless") || conditionKeys.has("guidance")) {
@@ -4438,6 +4493,10 @@ export class BrowserApp {
         if (conditionKeys.has("bane")) adjusted += "-1d4";
         return adjusted;
       });
+      const weaponCard=button.dataset.combatRoll==="damage"?button.closest<HTMLElement>("[data-weapon-action-id]"):null;
+      const weaponAction=character?.actions.find(a=>a.id===weaponCard?.dataset.weaponActionId);
+      const weaponComponents=character&&weaponAction?projectWeaponHitDamage(character,weaponAction,(weaponCard?.querySelector<HTMLSelectElement>("[data-weapon-hit-outcome]")?.value??"hit") as WeaponHitOutcome,weaponCard?.querySelector<HTMLInputElement>("[data-weapon-phase-blade]")?.checked!==false):null;
+      if(weaponComponents)expressions=weaponComponents.map(c=>c.expression);
       const baseMode = button.dataset.rollMode === "advantage"
         ? "advantage"
         : button.dataset.rollMode === "disadvantage"
@@ -4452,7 +4511,7 @@ export class BrowserApp {
       const manualMode = manualState?.mode ?? "normal";
       const mode = combineRollModes(baseMode, manualMode, useInspiration ? "advantage" : "normal");
       const result = await this.runtime.diceRoller.roll({
-        name: button.dataset.rollName ?? "Tirada",
+        name: `${button.dataset.rollName ?? "Tirada"}${weaponComponents?` · ${weaponComponents.map(c=>`${c.name} (${spellDamageTypeName(c.damageType)||c.damageType})`).join(" + ")}`:""}`,
         expressions,
         mode,
         ...(abilityCheck ? { abilityCheck } : {}),
@@ -5791,6 +5850,186 @@ export class BrowserApp {
     }
   }
 
+  private async handleEquipmentUnpack(button: HTMLButtonElement): Promise<void> {
+    const c = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""], id = button.closest<HTMLElement>("[data-inventory-id]")?.dataset.inventoryId;
+    if (!c || !id || !this.snapshot) return;
+    button.disabled = true;
+    try {
+      this.acceptCharacterSnapshot(await this.application.unpackInventoryPack({ characterId: c.id, itemId: id, catalog: this.equipmentCatalog(), expectedCharacterRevision: c.revision, expectedCampaignChecksum: this.snapshot.checksum }), "Desembalar paquete");
+      this.message = { kind: "success", text: "Paquete desembalado; sus componentes están en el inventario." };
+    } catch (error) { this.message = { kind: "error", text: formatError(error) }; }
+    this.render();
+  }
+
+  private async handleEquipmentFood(button:HTMLButtonElement):Promise<void>{
+    const c=this.snapshot?.campaign.characters[this.selectedCharacterId??""],id=button.closest<HTMLElement>("[data-inventory-id]")?.dataset.inventoryId;
+    if(!c||!id||!this.snapshot)return;button.disabled=true;
+    try{
+      const value=button.closest<HTMLElement>(".equipment-food")?.querySelector<HTMLInputElement>("[data-food-day]")?.value;
+      if(!value?.trim())throw new Error("Ingresá el día de campaña.");const day=Number(value);
+      this.acceptCharacterSnapshot(await this.application.eatInventoryFood({characterId:c.id,itemId:id,day,expectedCharacterRevision:c.revision,expectedCampaignChecksum:this.snapshot.checksum}),"Comer ración");this.message={kind:"success",text:`Ración consumida y registrada para el día ${day}.`};
+    }catch(error){this.message={kind:"error",text:formatError(error)};}this.render();
+  }
+
+  private async equipmentFormRoll(panel: HTMLElement, key: string, expression: string, name: string, mode: "normal" | "advantage" | "disadvantage" = "normal"): Promise<number | undefined> {
+    const input = panel.querySelector<HTMLInputElement>(`[data-consumable-${key}]`);
+    if (input?.value.trim()) return Number(input.value);
+    const roll = await this.runtime.diceRoller.roll({ name, expressions: [expression], mode });
+    if (roll.totals[0] !== undefined && input) input.value = String(roll.totals[0]);
+    if (roll.totals[0] === undefined) { const status=panel.querySelector<HTMLElement>("[data-consumable-status]");if(status)status.textContent="Tirada enviada. Ingresá su resultado; todavía no se guardó ningún cambio."; }
+    return roll.totals[0];
+  }
+
+  private async handleEquipmentConsumable(button: HTMLButtonElement): Promise<void> {
+    const c=this.snapshot?.campaign.characters[this.selectedCharacterId??""],panel=button.closest<HTMLElement>(".equipment-consumable-use"),id=button.closest<HTMLElement>("[data-inventory-id]")?.dataset.inventoryId;
+    if(!c||!panel||!id||!this.snapshot)return;
+    const target=this.snapshot.campaign.characters[panel.querySelector<HTMLSelectElement>("[data-consumable-target]")?.value??""];
+    const item=c.inventory.find(i=>i.id===id),rule=item&&equipmentConsumableRule(item),status=panel.querySelector<HTMLElement>("[data-consumable-status]");
+    if(!target||!item||!rule){if(status)status.textContent="Elegí el objetivo del consumible.";return;}
+    button.disabled=true;
+    try {
+      const selected=panel.querySelector<HTMLSelectElement>("[data-consumable-mode]")?.value;
+      const mode=selected==="advantage"||selected==="disadvantage"?selected:"normal";
+      const confirmed=panel.querySelector<HTMLInputElement>("[data-consumable-confirm]")?.checked===true;
+      if(!confirmed)throw new Error("Confirmá el uso y los requisitos del objetivo antes de tirar.");
+      let action:EquipmentConsumableAction;
+      if(rule.rule==="potion-poison"){
+        const rolled=await this.equipmentFormRoll(panel,"damage","3d6",`${item.name}: daño inicial`);if(rolled===undefined)return;
+        const bonus=projectCharacterStatistics(target).savingThrows.constitution;
+        const save=await this.equipmentFormRoll(panel,"save",`1d20${bonus>=0?"+":""}${bonus}`,`${target.name}: salvación contra veneno`,mode);if(save===undefined)return;
+        action={kind:"potion-poison",damageRoll:rolled,saveTotal:save,ingested:confirmed};
+      }else{
+        const delivery=panel.querySelector<HTMLSelectElement>("[data-consumable-delivery]")?.value === "splash" ? "splash" : "throw";
+        const distanceText=panel.querySelector<HTMLInputElement>("[data-consumable-distance]")?.value.trim(),distance=Number(distanceText),range=rule.rule==="acid"&&delivery==="splash"?5:20;
+        if(!distanceText||!Number.isFinite(distance)||distance<0||distance>range)throw new Error(`Ingresá una distancia de 0 a ${range} pies.`);
+        const attack=await this.equipmentFormRoll(panel,"attack","1d20",`${item.name}: ataque improvisado`,mode);if(attack===undefined)return;
+        if(rule.rule==="acid"){
+          const result=equipmentImprovisedRangedAttack(c,target,attack);
+          const damage=result.hit?await this.equipmentFormRoll(panel,"damage",result.critical?"4d6":"2d6",`${item.name}: dados de daño de ácido`):undefined;
+          if(result.hit&&damage===undefined)return;
+          action={kind:"acid",attackRoll:attack,distanceFeet:distance,targetConfirmed:confirmed,delivery,...(damage===undefined?{}:{damageRoll:damage})};
+        }else action={kind:"alchemist-fire",attackRoll:attack,distanceFeet:distance,targetConfirmed:confirmed};
+      }
+      this.acceptCharacterSnapshot(await this.application.useEquipmentConsumable({characterId:c.id,itemId:id,targetCharacterId:target.id,expectedTargetRevision:target.revision,action,expectedCharacterRevision:c.revision,expectedCampaignChecksum:this.snapshot.checksum}),`Usar ${item.name}`);
+      this.message={kind:"success",text:`${item.name}: unidad consumida y resultado registrado en ${target.name}.`};this.render();
+    }catch(error){if(status)status.textContent=formatError(error);}finally{button.disabled=false;}
+  }
+
+  private async handleEquipmentEffectAction(button:HTMLButtonElement):Promise<void>{
+    const c=this.snapshot?.campaign.characters[this.selectedCharacterId??""],panel=button.closest<HTMLElement>("[data-equipment-effect-id]");
+    if(!c||!panel||!this.snapshot)return;const effect=c.equipmentEffects.find(e=>e.id===panel.dataset.equipmentEffectId);if(!effect)return;
+    button.disabled=true;
+    try{
+      let action:EquipmentEffectAction;const kind=button.dataset.equipmentEffectAction;
+      const helper=kind==="extinguish"?this.snapshot.campaign.characters[panel.querySelector<HTMLSelectElement>("[data-equipment-effect-helper]")?.value??c.id]:undefined;
+      if(kind==="damage"){
+        const roll=await this.equipmentFormRoll(panel,"tick",effect.kind==="potion-poison"?`${effect.dice}d6`:"1d4",`${effect.sourceName}: daño del turno`);if(roll===undefined)return;
+        action={kind,damageRoll:roll};
+      }else if(kind==="extinguish"){
+        const bonus=abilityModifier(projectAbilityScore(helper??c,"dexterity"));const roll=await this.equipmentFormRoll(panel,"extinguish",`1d20${bonus>=0?"+":""}${bonus}`,"Extinguir fuego de alquimista");if(roll===undefined)return;
+        action={kind,checkTotal:roll};
+      }else if(kind==="concentration"||kind==="end-turn"){
+        let save:number|undefined;
+        if(kind==="concentration"||effect.kind==="potion-poison"){
+          const bonus=projectCharacterStatistics(c).savingThrows.constitution;
+          save=await this.equipmentFormRoll(panel,kind==="concentration"?"concentration":"save",`1d20${bonus>=0?"+":""}${bonus}`,`${effect.sourceName}: salvación de Constitución`);if(save===undefined)return;
+        }
+        action=kind==="concentration"?{kind,saveTotal:save!}:{kind,...(save===undefined?{}:{saveTotal:save})};
+      }else return;
+      this.acceptCharacterSnapshot(await this.application.equipmentEffectAction({characterId:c.id,effectId:effect.id,action,...(helper?{actorCharacterId:helper.id}:{}),expectedCharacterRevision:c.revision,expectedCampaignChecksum:this.snapshot.checksum}),`${effect.sourceName}: ${kind}`);
+      this.message={kind:"success",text:"Efecto y recursos actualizados."};this.render();
+    }catch(error){const status=panel.querySelector<HTMLElement>("[data-consumable-status]");if(status)status.textContent=formatError(error);}finally{button.disabled=false;}
+  }
+
+  private async handleEquipmentLastCharge(button: HTMLButtonElement): Promise<void> {
+    const c = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""], card = button.closest<HTMLElement>("[data-inventory-id]"), item = c?.inventory.find(i => i.id === card?.dataset.inventoryId);
+    const panel = button.closest<HTMLElement>(".inventory-last-charge");
+    if (!c || !item || !this.snapshot || !panel) return;
+    const rule = equipmentLastChargeRule(item);
+    if (!rule) return;
+    button.disabled = true;
+    const status = panel.querySelector<HTMLElement>("[data-equipment-last-charge-status]");
+    try {
+      const readRoll = async (selector: string, expression: string): Promise<number | undefined> => {
+        const input = panel.querySelector<HTMLInputElement>(selector);
+        if (input?.value.trim()) return Number(input.value);
+        const result = await this.runtime.diceRoller.roll({ name: `Última carga: ${item.name}`, expressions: [expression], mode: "normal" });
+        const total = result.totals[0];
+        if (total !== undefined && input) input.value = String(total);
+        return total;
+      };
+      const roll = rule.sides === null ? null : await readRoll("[data-equipment-last-charge-roll]", `1d${rule.sides}`);
+      if (roll === undefined) {
+        if (status) status.textContent = "Tirada enviada. Ingresá su resultado para continuar.";
+        return;
+      }
+      const recoveryRoll = rule.refillOnMaximum && roll === rule.sides
+        ? await readRoll("[data-equipment-last-charge-recovery]", rule.refillOnMaximum) : undefined;
+      if (rule.refillOnMaximum && roll === rule.sides && recoveryRoll === undefined) {
+        if (status) status.textContent = `Ingresá el resultado de ${rule.refillOnMaximum}. El d${rule.sides} ya está registrado en este formulario.`;
+        return;
+      }
+      const replacement = rule.outcome === "replace" && (roll === null || roll <= rule.threshold)
+        ? this.equipmentCatalog().find(d => d.catalog?.contentKey === rule.replacementKey) : undefined;
+      const next = await this.application.resolveInventoryLastCharge({
+        characterId: c.id, itemId: item.id, roll,
+        ...(replacement ? { replacement: { ...replacement, order: item.order, group: item.group } } : {}),
+        ...(recoveryRoll === undefined ? {} : { recoveryRoll }),
+        expectedCharacterRevision: c.revision, expectedCampaignChecksum: this.snapshot.checksum,
+      });
+      this.acceptCharacterSnapshot(next, `Última carga: ${item.name}`);
+      const remaining = next.campaign.characters[c.id]?.inventory.find(i => i.id === item.id);
+      this.message = { kind: "success", text: !remaining ? `${item.name} se destruye.` : remaining.rules?.definition.id !== item.rules?.definition.id ? `El ejemplar ahora es ${remaining.name}.` : recoveryRoll !== undefined ? `${item.name}: ${remaining.charges?.current ?? 0} cargas disponibles.` : `${item.name} conserva sus propiedades y permanece sin cargas hasta recuperarlas.` };
+      this.render();
+    } catch (error) {
+      // Keep both entered rolls in the form, including a d20 already resolved in TaleSpire.
+      if (status) status.textContent = formatError(error);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  private async handleEquipmentFlight(button:HTMLButtonElement):Promise<void>{
+    const c=this.snapshot?.campaign.characters[this.selectedCharacterId??""],card=button.closest<HTMLElement>("[data-inventory-id]"),item=c?.inventory.find(i=>i.id===card?.dataset.inventoryId),panel=button.closest<HTMLElement>(".inventory-flight");
+    if(!c||!item||!this.snapshot||!panel)return;button.disabled=true;
+    try{
+      const kind=button.dataset.equipmentFlight;
+      const action:EquipmentFlightAction=kind==="start"||kind==="altitude"?{kind,altitudeFeet:Number(panel.querySelector<HTMLInputElement>("[data-flight-altitude]")?.value)}:kind==="land"?{kind}:{kind:"elapsed",seconds:Number(panel.querySelector<HTMLInputElement>("[data-flight-time]")?.value)*Number(panel.querySelector<HTMLSelectElement>("[data-flight-time-unit]")?.value)};
+      this.acceptCharacterSnapshot(await this.application.equipmentFlightAction({characterId:c.id,itemId:item.id,action,expectedCharacterRevision:c.revision,expectedCampaignChecksum:this.snapshot.checksum}),`${item.name}: vuelo`);
+      this.message={kind:"success",text:"Vuelo, tiempo y reserva actualizados."};
+    }catch(error){this.message={kind:"error",text:formatError(error)};}
+    this.render();
+  }
+
+  private async handleEquipmentChannelUse(button:HTMLButtonElement):Promise<void>{
+    const c=this.snapshot?.campaign.characters[this.selectedCharacterId??""],card=button.closest<HTMLElement>("[data-inventory-card]"),item=c?.inventory.find(i=>i.id===card?.dataset.inventoryId),panel=button.closest<HTMLElement>(".inventory-channel-use");
+    if(!c||!item||!this.snapshot||!panel)return;button.disabled=true;
+    try{
+      const choice=equipmentChannelChoices(c).find(v=>v.key===panel.querySelector<HTMLSelectElement>("[data-equipment-channel-choice]")?.value);
+      if(!choice)throw new Error("Elegí una opción disponible de Canalizar Divinidad.");
+      if(!panel.querySelector<HTMLInputElement>("[data-equipment-channel-confirm]")?.checked)throw new Error("Confirmá los requisitos del poder elegido.");
+      const command={characterId:c.id,operationId:await createRandomId("class"),expectedCharacterRevision:c.revision,expectedCampaignChecksum:this.snapshot.checksum};
+      const next=choice.classKey==="cleric"?await this.application.clericAction({...command,action:{kind:"channel",key:choice.key,channelItemId:item.id}}):await this.application.martialAction({...command,action:{kind:"feature",key:choice.key,channelItemId:item.id,requirementsConfirmed:true,target:panel.querySelector<HTMLInputElement>("[data-equipment-channel-target]")?.value??""}});
+      this.acceptCharacterSnapshot(next,`${item.name}: ${choice.name}`);this.message={kind:"success",text:`${choice.name}: uso del amuleto gastado; usos de clase conservados.`};
+    }catch(error){this.message={kind:"error",text:formatError(error)};}
+    this.render();
+  }
+
+  private async handleEquipmentStudy(button: HTMLButtonElement): Promise<void> {
+    const character=this.snapshot?.campaign.characters[this.selectedCharacterId??""],card=button.closest<HTMLElement>("[data-inventory-id]");
+    const item=character?.inventory.find(i=>i.id===card?.dataset.inventoryId);
+    if(!character||!item||!this.snapshot)return;
+    button.disabled=true;
+    try{
+      const day=Number(card?.querySelector<HTMLInputElement>("[data-study-day]")?.value),hours=Number(card?.querySelector<HTMLInputElement>("[data-study-hours]")?.value);
+      const next=await this.application.studyInventoryBook({characterId:character.id,itemId:item.id,day,hours,expectedCharacterRevision:character.revision,expectedCampaignChecksum:this.snapshot.checksum});
+      this.acceptCharacterSnapshot(next,`Estudiar ${item.name}`);
+      const completed=next.campaign.characters[character.id]!.equipmentBenefits.length>character.equipmentBenefits.length;
+      this.message={kind:"success",text:completed?"Lectura completada. Aumento de atributo y máximo permanente aplicado; magia del libro consumida.":"Sesión de estudio registrada."};
+    }catch(error){this.message={kind:"error",text:formatError(error)};}
+    this.render();
+  }
+
   private async recoverEquipment(button: HTMLButtonElement): Promise<void> {
     const character = this.snapshot?.campaign.characters[this.selectedCharacterId ?? ""];
     const card = button.closest<HTMLElement>("[data-inventory-id]");
@@ -5810,7 +6049,7 @@ export class BrowserApp {
           if (rolled === undefined) { this.message = { kind: "success", text: "Tirada enviada. Ingresá el resultado para confirmar la recuperación; todavía no se cambiaron los usos." }; this.render(); return; }
         }
       }
-      this.acceptCharacterSnapshot(await this.application.recoverInventoryItem({ characterId: character.id, itemId: item.id, event: recovery.event, ...(rolled === undefined ? {} : { rolled }), expectedCharacterRevision: character.revision, expectedCampaignChecksum: this.snapshot.checksum }), `Recuperar usos: ${item.name}`);
+      this.acceptCharacterSnapshot(await this.application.recoverInventoryItem({ characterId: character.id, itemId: item.id, event: recovery.event, conditionConfirmed:card?.querySelector<HTMLInputElement>("[data-equipment-recovery-condition]")?.checked===true, ...(rolled === undefined ? {} : { rolled }), expectedCharacterRevision: character.revision, expectedCampaignChecksum: this.snapshot.checksum }), `Recuperar usos: ${item.name}`);
       this.message = { kind: "success", text: "Recuperación aplicada según la regla del objeto." }; this.render();
     } catch (error) { this.message = { kind: "error", text: formatError(error) }; this.render(); }
     finally { button.disabled = false; }

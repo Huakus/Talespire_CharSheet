@@ -11,7 +11,14 @@ import { resetEquipmentSlots, restoreEquipmentSpellSlot } from "../equipment/equ
 import { activateCoreFeature, coreFeatureIssue, isLucentCore, restLucentCore, lucentCoreState, type CoreResonance } from "../equipment/equipment-lucent-core";
 import { inventoryHealingExpression } from "../equipment/equipment-healing";
 import { equipmentClassResourceIssue, restoreEquipmentClassResources } from "../equipment/equipment-class-resources";
+import { recordEquipmentStudy, equipmentStudyRule } from "../equipment/equipment-study";
+import { applyEquipmentFlightAction, stopEquipmentFlight, equipmentFlightRule, equipmentFlightState, type EquipmentFlightAction } from "../equipment/equipment-flight";
+import {markEquipmentLastCharge,assertEquipmentLastChargeResolved,resolveEquipmentLastCharge,type EquipmentLastChargeOptions} from "../equipment/equipment-last-charge";
 import { abilityModifier, projectAbilityScore } from "./character-projection";
+import { equipmentPackContents } from "../equipment/equipment-packs";
+import { equipmentConsumableRule } from "../equipment/equipment-consumables";
+import { independentEquipmentUses } from "../equipment/equipment-independent-uses";
+import { equipmentFoodCapability } from "../equipment/equipment-food";
 import {
   CharacterInventoryItemV2Schema,
   type CharacterInventoryItemV2,
@@ -202,6 +209,7 @@ export function setInventoryItemEquipped(
   }
 
   const targetSlot = inventoryEquipmentSlot(target);
+  if(target.equipped!==equipped)stopEquipmentFlight(target);
   const targetHandCost = inventoryItemHandCost(target);
   const occupiedHands = character.inventory
     .filter((item) => item.equipped && item.id !== itemId)
@@ -254,6 +262,7 @@ export function setInventoryItemEquipped(
   const actions = equipped
     ? character.actions
     : character.actions.filter((action) => action.inventoryItemId !== itemId);
+  for(const item of inventory)if(!item.equipped||item.requiresAttunement&&!item.attuned)stopEquipmentFlight(item);
   return finish(character, inventory, updatedAt, actions);
 }
 
@@ -272,6 +281,7 @@ export function setInventoryItemAttuned(
   }
   const bearerIssue = attuned ? equipmentBearerIssue(character, target) : "";
   if (bearerIssue) throw new InventoryUseError(bearerIssue);
+  if(target.attuned!==attuned)stopEquipmentFlight(target);
   if (attuned && character.inventory.some((item) => item.id !== itemId && item.attuned && (item.rules && target.rules && item.rules.definition.id === target.rules.definition.id || normalized(String(item.rules?.definition.name ?? item.name)) === normalized(String(target.rules?.definition.name ?? target.name))))) throw new InventoryUseError("No podés sintonizarte con dos copias del mismo objeto a la vez");
   if (attuned && character.inventory.filter((item) => item.id !== itemId && item.attuned).length >= 3) {
     throw new AttunementLimitError(3);
@@ -302,6 +312,10 @@ export function useInventoryItem(
   const target = character.inventory.find((item) => item.id === itemId);
   if (!target) throw new InventoryItemNotFoundError(itemId);
   if (!target.usable) throw new InventoryUseError(`${target.name} is not usable`);
+  if (equipmentConsumableRule(target)) throw new InventoryUseError("Elegí el objetivo y resolvé el uso del consumible.");
+  if (equipmentFoodCapability(target)) throw new InventoryUseError("Usá Comer para registrar el alimento y su día de campaña.");
+  if (equipmentPackContents(target)) throw new InventoryUseError("Usá Desembalar para incorporar los componentes del paquete.");
+  assertEquipmentLastChargeResolved(target);
   if (!target.equipped && !target.consumable) {
     throw new InventoryUseError(`${target.name} debe estar equipado para poder usarse`);
   }
@@ -317,10 +331,10 @@ export function useInventoryItem(
       if (item.charges.current < 1) {
         throw new InventoryUseError(`${item.name} has no charges remaining`);
       }
-      return {
+      return markEquipmentLastCharge({
         ...item,
         charges: { ...item.charges, current: item.charges.current - 1 },
-      };
+      },item.charges.current);
     }
     if (!item.consumable) return item;
     if (item.quantity < 1) {
@@ -374,12 +388,13 @@ export function useInventoryFeature(
   input: CharacterV2,
   itemIdInput: string,
   featureId: string,
-  options: InventoryMutationOptions & { recoveredSpellSlotLevel?: number },
+  options: InventoryMutationOptions & { recoveredSpellSlotLevel?: number; resolvedConsumable?: boolean; resolvedFood?: boolean },
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
   const item = character.inventory.find((entry) => entry.id === itemId);
   if (!item) throw new InventoryItemNotFoundError(itemId);
+  assertEquipmentLastChargeResolved(item);
   const feature = item.features.find((entry) => entry.id === featureId);
   if (!feature) throw new InventoryFeatureUseError("La capacidad ya no existe en el objeto");
   const bearerIssue = equipmentBearerIssue(character, item, featureId);
@@ -387,6 +402,12 @@ export function useInventoryFeature(
   const coreIssue = coreFeatureIssue(item, featureId);
   if (coreIssue) throw new InventoryFeatureUseError(coreIssue);
   const capability = inventoryEquipmentDefinition(item)?.capabilities.find(c => c.id === featureId);
+  if (equipmentFoodCapability(item) && !options.resolvedFood) throw new InventoryFeatureUseError("Usá Comer para registrar el alimento y su día de campaña.");
+  const independentUse=independentEquipmentUses(inventoryEquipmentDefinition(item)).find(e=>e.capability!.id===featureId);
+  if(independentUse&&(!feature.uses||feature.uses.maximum!==1||feature.uses.reset!==(independentUse.resource.recovery.kind==="event"?independentUse.resource.recovery.event:"")))throw new InventoryFeatureUseError("Falta configurar el uso independiente de esta capacidad.");
+  if (equipmentConsumableRule(item) && !options.resolvedConsumable) throw new InventoryFeatureUseError("Elegí el objetivo y resolvé el uso del consumible.");
+  if (equipmentPackContents(item)) throw new InventoryFeatureUseError("Usá Desembalar para incorporar los componentes del paquete.");
+  if(capability?.effects.some(e=>e.kind==="channel-divinity-use"))throw new InventoryFeatureUseError("Elegí una opción de Canalizar Divinidad para usar el amuleto junto con el poder de clase.");
   if (!item.equipped && !item.consumable && capability?.requirements.presence !== "possessed") {
     throw new InventoryFeatureUseError("El objeto debe estar equipado para usar esta capacidad");
   }
@@ -409,7 +430,7 @@ export function useInventoryFeature(
   restoreEquipmentSpellSlot(character, item, featureId, options.recoveredSpellSlotLevel);
   const inventory = character.inventory.map((entry) => {
     if (entry.id !== itemId) return entry;
-    return activateCoreFeature({
+    return markEquipmentLastCharge(activateCoreFeature({
       ...entry,
       quantity: entry.quantity - consumeQuantity,
       charges: entry.charges === null || feature.chargeCost === 0
@@ -422,7 +443,7 @@ export function useInventoryFeature(
           ? null
           : { ...candidate.uses, current: candidate.uses.current - 1 },
       }),
-    }, featureId);
+    }, featureId),item.charges?.current??0);
   }).filter((entry) => entry.id !== itemId || consumeQuantity === 0 || entry.quantity > 0);
   restoreEquipmentClassResources(character, item, featureId);
   return finish(character, inventory, updatedAt, consumeQuantity && item.quantity === consumeQuantity ? character.actions.filter((action) => action.inventoryItemId !== itemId) : character.actions);
@@ -436,7 +457,7 @@ export function resetInventoryItemResources(
   const definition = inventoryEquipmentDefinition(item);
   const resource = definition?.resources.find((entry) => entry.kind !== "spell-storage");
   const typedRecovery = resource?.recovery;
-  const mayReset = !definition || !resource || typedRecovery?.kind === "event" && typedRecovery.amount.kind === "full" && (typedRecovery.event === reset || reset === "long-rest" && typedRecovery.event === "short-rest");
+  const mayReset = !item.rules?.lastChargePending && (!definition || !resource || typedRecovery?.kind === "event" && typedRecovery.amount.kind === "full" && (typedRecovery.event === reset || reset === "long-rest" && typedRecovery.event === "short-rest"));
   return CharacterInventoryItemV2Schema.parse({
     ...restLucentCore(resetEquipmentSlots(item, reset, character), reset),
     charges: mayReset && item.charges !== null && (item.charges.reset === reset || (reset === "long-rest" && item.charges.reset === "short-rest"))
@@ -464,9 +485,9 @@ export function useInventoryHealingFeature(input: CharacterV2, itemId: string, f
   return CharacterV2Schema.parse(spent);
 }
 
-function assertCanAdministerPotion(character: CharacterV2): void {
+function assertCanAdministerPotion(character: CharacterV2, context: "potion" | "food" = "potion"): void {
   const hp = character.spellcasting.druid?.form?.currentHp ?? character.combat.hitPoints.current;
-  if (hp <= 0 || character.combat.conditions.some(c => ["incapacitated", "unconscious", "stunned", "paralyzed", "petrified", "dead"].includes(c.key))) throw new InventoryFeatureUseError("Necesitás poder actuar para beber o administrar la poción; otra criatura puede administrártela.");
+  if (hp <= 0 || character.combat.conditions.some(c => ["incapacitated", "unconscious", "stunned", "paralyzed", "petrified", "dead"].includes(c.key))) throw new InventoryFeatureUseError(context === "food" ? "Necesitás poder actuar para comer." : "Necesitás poder actuar para beber o administrar la poción; otra criatura puede administrártela.");
 }
 function healPotionRecipient(character: CharacterV2, healing: number): void {
   if (character.combat.conditions.some(c => c.key === "dead") || character.combat.deathSaves.failures >= 3) throw new InventoryFeatureUseError("Una poción de curación no devuelve la vida a una criatura muerta.");
@@ -552,15 +573,26 @@ export function performLucentCoreAction(input: CharacterV2, itemIdInput: string,
 }
 
 /** Explicitly confirmed recovery event; random recovery never becomes a full reset. */
-export function recoverInventoryItem(input: CharacterV2, itemId: string, event: string, rolled: number | undefined, options: InventoryMutationOptions): CharacterV2 {
+export function recoverInventoryItem(input: CharacterV2, itemId: string, event: string, rolled: number | undefined, options: InventoryMutationOptions & { conditionConfirmed?: boolean }): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const item = character.inventory.find((entry) => entry.id === itemId);
   if (!item) throw new InventoryItemNotFoundError(itemId);
   if (isLucentCore(item)) throw new InventoryUseError("Usá la recarga condicionada del núcleo y confirmá el descanso largo y el cristal insertado.");
+  assertEquipmentLastChargeResolved(item);
   const resources = inventoryEquipmentDefinition(item)?.resources.filter((r) => r.kind !== "spell-storage");
+  const independent=independentEquipmentUses(inventoryEquipmentDefinition(item));
+  if(independent.length){
+    if(rolled!==undefined)throw new InventoryUseError("Los usos independientes se recuperan sin tirada.");
+    const eligible=independent.filter(e=>e.resource.recovery.kind==="event"&&e.resource.recovery.event===event);
+    if(!eligible.length)throw new InventoryUseError("Ese evento no recupera los usos independientes del objeto.");
+    for(const e of eligible){const feature=item.features.find(f=>f.id===e.capability!.id);if(!feature?.uses||feature.uses.maximum!==1)throw new InventoryUseError("Falta el contador independiente de una capacidad.");feature.uses.current=1;}
+    return finish(character,character.inventory,updatedAt);
+  }
   if (resources?.length !== 1 || !item.charges) throw new InventoryUseError("El objeto no tiene una reserva recuperable configurada");
   const recovery = resources[0]!.recovery;
   if (recovery.kind !== "event" || recovery.event !== event) throw new InventoryUseError("Ese evento no recupera los usos de este objeto");
+  if (event === "other" && !options.conditionConfirmed) throw new InventoryUseError(recovery.explanation || "Confirmá la condición especial de recuperación.");
+  if(equipmentFlightRule(item)&&equipmentFlightState(item).flying)throw new InventoryUseError("No se recuperan minutos mientras el vuelo está activo.");
   let amount = item.charges.maximum;
   if (recovery.amount.kind === "fixed") amount = recovery.amount.amount;
   if (recovery.amount.kind === "roll") {
@@ -568,7 +600,74 @@ export function recoverInventoryItem(input: CharacterV2, itemId: string, event: 
     if (rolled === undefined || !Number.isInteger(rolled) || rolled < bounds.minimum || rolled > bounds.maximum) throw new InventoryUseError(`Se necesita un resultado válido de ${recovery.amount.expression}`);
     amount = Math.max(0, rolled);
   }
+  if(equipmentStudyRule(item) && item.charges.current===0 && item.rules) item.rules.study={cycle:(item.rules.study?.cycle??0)+1,sessions:[]};
+  if(equipmentFlightRule(item)&&item.rules){stopEquipmentFlight(item);if(item.rules.flight)item.rules.flight.idleSeconds=0;}
   return finish(character, character.inventory.map((entry) => entry.id !== itemId ? entry : { ...entry, charges: { ...item.charges!, current: Math.min(item.charges!.maximum, item.charges!.current + amount) } }), updatedAt);
+}
+
+export function studyInventoryBook(input: CharacterV2, itemId: string, day: number, hours: number, options: InventoryMutationOptions): CharacterV2 {
+  const {character,updatedAt}=prepare(input,options), item=character.inventory.find(i=>i.id===itemId);
+  if(!item)throw new InventoryItemNotFoundError(itemId);
+  const previousConstitution=abilityModifier(projectAbilityScore(character,"constitution"));
+  recordEquipmentStudy(character,item,day,hours,updatedAt);
+  const hpIncrease=(abilityModifier(projectAbilityScore(character,"constitution"))-previousConstitution)*character.identity.level;
+  if(hpIncrease){character.combat.hitPoints.maximum+=hpIncrease;character.combat.hitPoints.current+=hpIncrease;}
+  return finish(character,character.inventory,updatedAt);
+}
+
+export function performEquipmentFlightAction(input:CharacterV2,itemId:string,action:EquipmentFlightAction,options:InventoryMutationOptions):CharacterV2{
+  const{character,updatedAt}=prepare(input,options),item=character.inventory.find(i=>i.id===itemId);
+  if(!item)throw new InventoryItemNotFoundError(itemId);
+  applyEquipmentFlightAction(character,item,action);
+  return finish(character,character.inventory,updatedAt);
+}
+
+export function resolveInventoryLastCharge(input: CharacterV2, itemId: string, roll: number | null, options: InventoryMutationOptions & EquipmentLastChargeOptions): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options), item = character.inventory.find(i => i.id === itemId);
+  if (!item) throw new InventoryItemNotFoundError(itemId);
+  const next = resolveEquipmentLastCharge(item, roll, options);
+  if (!next) return finish(character, character.inventory.filter(i => i.id !== itemId), updatedAt, character.actions.filter(a => a.inventoryItemId !== itemId));
+  let actions = character.actions;
+  if (next.rules?.definition.id !== item.rules?.definition.id) {
+    const weapon = next.weapon;
+    actions = actions.flatMap(a => a.inventoryItemId !== itemId ? [a] : !weapon ? [] : [{
+      ...a, name: a.name === item.name ? next.name : a.name,
+      attackBonus: a.attackBonus - (item.weapon?.attackBonus ?? 0) + weapon.attackBonus,
+      damageBonus: a.damageBonus - (item.weapon?.damageBonus ?? 0) + weapon.damageBonus,
+      damageExpression: weapon.damageExpression, damageType: weapon.damageType,
+      weaponType: weapon.category, properties: next.properties.join(", "), description: next.description,
+    }]);
+    if (weapon && !actions.some(a => a.inventoryItemId === itemId)) actions.push({
+      id: `act-transformed_${itemId.split("_").at(-1)}`, order: actions.length,
+      name: next.name, categories: ["attack", "action"], activation: "Acción", reach: "5 ft",
+      ability: "strength", proficient: character.proficiencies.weapons.some(p => /simple|sencill|bastón|baston|quarterstaff/i.test(p)),
+      attackBonus: weapon.attackBonus, damageExpression: weapon.damageExpression,
+      damageBonus: abilityModifier(projectAbilityScore(character, "strength")) + weapon.damageBonus,
+      damageType: weapon.damageType, weaponType: weapon.category,
+      properties: next.properties.join(", "), description: next.description, inventoryItemId: itemId, rollMode: "normal",
+    });
+  }
+  return finish(character, character.inventory.map(i => i.id === itemId ? next : i), updatedAt, actions);
+}
+
+/** Expand exactly one sealed pack atomically. Existing possessions are never replaced or merged. */
+export function unpackInventoryPack(input: CharacterV2, itemId: string, components: CharacterInventoryItemV2[], options: InventoryMutationOptions): CharacterV2 {
+  const { character, updatedAt } = prepare(input, options), item = character.inventory.find(i => i.id === itemId);
+  if (!item) throw new InventoryItemNotFoundError(itemId);
+  const contents = equipmentPackContents(item);
+  if (!contents || item.quantity < 1) throw new InventoryUseError("No queda un paquete completo para desembalar.");
+  if (new Set(contents.map(c => c.contentKey)).size !== contents.length || components.length !== contents.length) throw new InventoryUseError("El contenido debe coincidir exactamente con el paquete.");
+  const ids = new Set(character.inventory.map(i => i.id));
+  const additions = contents.map((part, index) => {
+    const candidate = components[index];
+    if (!candidate) throw new InventoryUseError("Falta un componente del paquete.");
+    const parsed = CharacterInventoryItemV2Schema.parse(candidate);
+    if (parsed.catalog?.contentKey !== part.contentKey || parsed.quantity !== part.quantity || !inventoryEquipmentDefinition(parsed) || ids.has(parsed.id)) throw new InventoryUseError("Los componentes no coinciden con sus definiciones o identidades.");
+    ids.add(parsed.id);
+    return { ...parsed, equipped: false, attuned: false, order: Math.max(0, ...character.inventory.map(i => i.order)) + index + 1, group: item.group };
+  });
+  const inventory = character.inventory.flatMap(i => i.id !== itemId ? [i] : i.quantity > 1 ? [{ ...i, quantity: i.quantity - 1 }] : []);
+  return finish(character, [...inventory, ...additions], updatedAt, item.quantity > 1 ? character.actions : character.actions.filter(a => a.inventoryItemId !== itemId));
 }
 
 /** Record an assisted effect's actual cost without guessing which power was used. */
@@ -577,10 +676,22 @@ export function spendInventoryItemCharges(input: CharacterV2, itemId: string, am
   const item = character.inventory.find((entry) => entry.id === itemId);
   if (item && isLucentCore(item)) throw new InventoryUseError("Usá una resonancia para registrar también su duración y desgaste.");
   if (!item?.charges || item.quantity < 1) throw new InventoryUseError("El objeto no tiene una reserva disponible.");
+  assertEquipmentLastChargeResolved(item);
   if ((!item.equipped && !item.consumable) || item.requiresAttunement && !item.attuned) throw new InventoryUseError("Equipá y, si corresponde, sintonizá el objeto antes de usarlo.");
   const issue = equipmentBearerIssue(character, item); if (issue) throw new InventoryUseError(issue);
   if (!Number.isSafeInteger(amount) || amount <= 0 || amount > item.charges.current) throw new InventoryUseError("El gasto debe ser positivo y no superar la reserva disponible.");
-  return finish(character, character.inventory.map((entry) => entry.id !== itemId ? entry : { ...entry, charges: { ...item.charges!, current: item.charges!.current - amount } }), updatedAt);
+  return finish(character, character.inventory.map((entry) => entry.id !== itemId ? entry : markEquipmentLastCharge({ ...entry, charges: { ...item.charges!, current: item.charges!.current - amount } },item.charges!.current)), updatedAt);
+}
+
+/** Explicit bookkeeping for a whole consumable unit after its assisted resolution. */
+export function eatInventoryFood(input:CharacterV2,itemId:string,day:number,options:InventoryMutationOptions):CharacterV2{
+  const{character,updatedAt}=prepare(input,options),item=character.inventory.find(i=>i.id===itemId),food=item&&equipmentFoodCapability(item);
+  if(!item||!food||food.capability.consumeQuantity!==1)throw new InventoryUseError("Este objeto no tiene una ración completa configurada.");
+  if(!Number.isSafeInteger(day)||day<0)throw new InventoryUseError("Ingresá un día de campaña válido.");
+  assertCanAdministerPotion(character,"food");
+  const next=useInventoryFeature(character,itemId,food.capability.id,{...options,resolvedFood:true});
+  next.equipmentMeals.push({day,days:food.days,sourceItemId:item.id,sourceName:item.name,recordedAt:updatedAt});
+  return CharacterV2Schema.parse(next);
 }
 
 /** Explicit bookkeeping for a whole consumable unit after its assisted resolution. */

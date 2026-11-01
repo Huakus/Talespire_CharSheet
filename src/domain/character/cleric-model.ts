@@ -18,7 +18,7 @@ export const ClericRuntimeSchema = z.object({
 }).prefault({});
 export const ClericActionSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("prepare"), keys: z.array(z.string()).max(30), afterLongRest: z.literal(true) }),
-  z.object({ kind: z.literal("channel"), key: z.string() }),
+  z.object({ kind: z.literal("channel"), key: z.string(), channelItemId: z.string().regex(STABLE_ID_PATTERN).optional() }),
   z.object({ kind: z.literal("intervention"), roll: z.number().int().min(1).max(100).nullable().default(null) }),
   z.object({ kind: z.literal("elapsed-days"), days: z.number().int().min(1).max(365) }),
 ]);

@@ -7,6 +7,7 @@ import { canCastWithEquippedArmor,type WizardCastOptions } from "./wizard-play";
 import { ELEMENTAL_DISCIPLINES,elementalKiLimit,martialDefinitions,oathSpells,paladinOath } from "./martial-catalog";
 import { monkSpellEntries,paladinPreparationLimit,paladinSpellKeys,replayMartialChoices } from "./martial-builder";
 import type { CharacterSpellV2 } from "./character-spell-model";
+import { spendEquipmentChannelDivinity } from "../equipment/equipment-channel-divinity";
 export function martialRuntime(c:CharacterV2) { return c.builder?.classKey==="monk"?c.spellcasting.monk:c.builder?.classKey==="paladin"?c.spellcasting.paladin:null; }
 export const martialFeature=(c:CharacterV2,key:string)=>c.traits.flatMap((g)=>g.traits).find((t)=>t.id===martialRuntime(c)?.resourceIds[key]);
 export function martialAvailable(c:CharacterV2,key:string,cost=1) {const t=martialFeature(c,key);return !!t&&t.uses.maximum-t.uses.used>=cost;}
@@ -60,6 +61,7 @@ export async function performMartialAction(input:CharacterV2,operation:string,ac
   else if(a.kind==="end-effect")r.effects=r.effects.filter((e)=>e.key!==a.key);
   else if(a.kind==="feature") {
     const d=martialDefinitions(c.builder).find((d)=>d.key===a.key),discipline=a.key.startsWith("discipline-")?a.key.slice(11):null;
+    if(a.channelItemId&&(monk||d?.pool!=="channel"||(d.cost??0)!==1))throw new Error("El amuleto solo sustituye un uso de Canalizar Divinidad.");
     if(discipline) {
       const v=ELEMENTAL_DISCIPLINES[discipline];if(!monk||!v||v.spell||!replayMartialChoices(c.builder).disciplines.includes(discipline))throw new Error("Disciplina no disponible; los conjuros se lanzan desde su tarjeta.");
       const cost=v.cost+(["water-whip","air-fist"].includes(discipline)?a.amount:0);spend(c,"ki",cost);r.lastResult=`${v.name}: ${v.description}${["water-whip","air-fist"].includes(discipline)?` Daño: ${3+a.amount}d10.`:""}`;
@@ -78,7 +80,8 @@ export async function performMartialAction(input:CharacterV2,operation:string,ac
       if(["sharpen","quivering","sacred-weapon","enmity"].includes(a.key)&&!a.target.trim())throw new Error("Identificá el arma o criatura objetivo.");
       const cost=a.key==="sharpen"?a.amount:a.key==="sunburst"?a.amount:d.cost??0;
       if(a.key==="sharpen"&&(a.amount<1||a.amount>3)||a.key==="sunburst"&&a.amount>3)throw new Error("Este rasgo admite como máximo 3 ki (Afilar exige al menos 1).");
-      if(d.pool)spend(c,d.pool,cost);else if(d.maximum!==undefined||["divine-sense","cleansing"].includes(a.key))spend(c,a.key);
+      if(a.channelItemId){if(monk||d.pool!=="channel"||cost!==1)throw new Error("El amuleto solo sustituye un uso de Canalizar Divinidad.");spendEquipmentChannelDivinity(c,a.channelItemId);}
+      else if(d.pool)spend(c,d.pool,cost);else if(d.maximum!==undefined||["divine-sense","cleansing"].includes(a.key))spend(c,a.key);
       if(a.key==="wholeness")c.combat.hitPoints.current=Math.min(c.combat.hitPoints.maximum,c.combat.hitPoints.current+3*level);
       if(a.key==="undying"){c.combat.hitPoints.current=1;c.combat.deathSaves={successes:0,failures:0};c.combat.conditions=c.combat.conditions.filter((p)=>p.key!=="unconscious");}
       if(a.key==="protective-spirit") {if(c.combat.hitPoints.current<=0||c.combat.hitPoints.current>=c.combat.hitPoints.maximum/2||a.amount<1||a.amount>6)throw new Error("Al final del turno, entre 1 PG y menos de la mitad; ingresá el d6 (1–6).");c.combat.hitPoints.current=Math.min(c.combat.hitPoints.maximum,c.combat.hitPoints.current+a.amount+Math.floor(level/2));}
