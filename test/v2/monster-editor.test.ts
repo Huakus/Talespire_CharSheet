@@ -44,6 +44,16 @@ function enter(control: HTMLInputElement | HTMLTextAreaElement, value: string) {
 }
 
 describe("monster editor", () => {
+  it("edits casting ability, attack bonus, save DC and caster level as independent values", async () => {
+    const f = await editor();
+    f.form().querySelector<HTMLSelectElement>('[name="spellcastingAbility"]')!.value = "charisma";
+    for (const [name, value] of [["spellcastingAttack", "8"], ["spellcastingDc", "17"], ["spellcastingLevel", "11"]]) {
+      enter(f.form().querySelector<HTMLInputElement>(`[name="${name}"]`)!, value!);
+    }
+    f.submit(); await vi.waitFor(() => expect(f.save).toHaveBeenCalledOnce());
+    expect(f.save.mock.calls[0]![0].spellcasting).toEqual({ ability: "charisma", attackBonus: 8, saveDc: 17, casterLevel: 11 });
+  });
+
   it("edits saving throws and skills with numeric controls and preserves zero bonuses", async () => {
     const f = await editor();
     f.form().querySelector<HTMLInputElement>('[name="monster-saves-strength"]')!.value = "0";

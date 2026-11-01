@@ -1,8 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { parseMonsterChecks, serializeMonsterChecks, monsterSavingThrow } from "../../src/domain/monsters/monster-checks";
+import { parseMonsterChecks, serializeMonsterChecks, monsterSavingThrow, monsterPassiveChecks } from "../../src/domain/monsters/monster-checks";
 import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
 import { auditMonsterDefinition, monsterDiceExpressions } from "../../src/domain/monsters/monster-audit";
 describe("standard monster checks and legacy rules", () => {
+  it("projects all three passives from actual skill bonuses or abilities, preferring listed passive scores", () => {
+    const monster = normalizeMonsterDefinition({ Name: "Guardia", Abilities: { Wis: 14, Int: 8 }, Skills: ["Percepción +5", "Perspicacia +0"], Senses: ["Visión en la oscuridad 60 pies; Percepción pasiva: 17"] });
+    expect(monsterPassiveChecks(monster)).toEqual({ perception: 17, investigation: 9, insight: 10 });
+    monster.senses = ["Passive Perception 0; passive Investigation 13; Perspicacia pasiva 12"];
+    expect(monsterPassiveChecks(monster)).toEqual({ perception: 0, investigation: 13, insight: 12 });
+    monster.senses = [];
+    expect(monsterPassiveChecks(monster)).toEqual({ perception: 15, investigation: 9, insight: 10 });
+  });
+  it("does not manufacture passive values for missing or contradictory profile data", () => {
+    const monster = normalizeMonsterDefinition({ Name: "Incompleto", Senses: ["Percepción pasiva 11; passive Perception 13"] });
+    expect(monsterPassiveChecks(monster)).toEqual({ perception: null, investigation: null, insight: null });
+    monster.senses = []; monster.abilities = { Wis: 14, Int: 8 }; monster.skills = ["Percepción +2", "Perception +4"];
+    expect(monsterPassiveChecks(monster)).toEqual({ perception: null, investigation: 9, insight: 12 });
+  });
   it("normalizes Spanish ability keys before opening the editor, without replacing scores with ten", () => {
     const m = normalizeMonsterDefinition({ Name: "Aboleth", Abilities: { Fue: 21, Des: 9, Con: 15, Int: 18, Sab: 15, Car: 18 } });
     expect(m.abilities).toEqual({ Str: 21, Dex: 9, Con: 15, Int: 18, Wis: 15, Cha: 18 });

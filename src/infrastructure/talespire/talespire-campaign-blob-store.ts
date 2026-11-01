@@ -10,6 +10,7 @@ export interface TaleSpireBlobApi {
 }
 
 export interface TaleSpireApiSubset {
+  system?: { clipboard?: { setText(text: string): Promise<unknown> } };
   localStorage: {
     campaign: TaleSpireBlobApi;
     global?: TaleSpireBlobApi;

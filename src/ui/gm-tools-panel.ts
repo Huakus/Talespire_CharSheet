@@ -1,3 +1,7 @@
+import { bindInventoryDescriptions } from "./inventory-description-view";
+import { renderInventoryItemPreview } from "./inventory-item-preview";
+import { normalizeDiceExpression } from "../domain/dice/dice-expression";
+import { renderSpellEditor, renderEquipmentEditor, bindContentEditorVisibility, editorToolbar, editorSection, editorInput, editorNumber, editorSelect } from "./gm-content-editors";
 import { equipmentTagLabel, visibleEquipmentTags } from "../domain/equipment/equipment-tags";
 import type { EquipmentPreparation } from "../domain/equipment/equipment-preparation";
 import { EquipmentPreparationPanel } from "./equipment-preparation-panel";
@@ -5,19 +9,17 @@ import type { CampaignSnapshot } from "../application/ports/campaign-repository"
 import type { CharacterInventoryItemV2 } from "../domain/character/character-inventory-model";
 import { inventoryItemsCanStack } from "../domain/character/character-inventory";
 import type { SpellDefinition } from "../domain/character/character-spell-model";
-import { isOldSpell, spellSourceTag, spellSourceLabel } from "../domain/spells/spell-source";
+import { SPELL_SOURCE_TAGS, isOldSpell, spellSourceTag, spellSourceLabel } from "../domain/spells/spell-source";
 import { inventoryCostInCopper, merchantChallengeTarget, merchantNpcStatistics, normalizeMerchantInteraction } from "../domain/commerce/merchant-interaction";
 import {
-  DAMAGE_TYPES, EQUIPMENT_CATEGORIES, EQUIPMENT_PROPERTIES, EQUIPMENT_RARITIES,
   equipmentRarityLabel, normalizeEquipmentDefinition, normalizeEquipmentRarity, type EquipmentCatalogDraft,
 } from "../domain/equipment/equipment-catalog";
-import { SPELL_CLASS_OPTIONS, SPELL_COMPONENTS, SPELL_SAVE_ABILITIES, SPELL_SCHOOLS, spellClassLabel, spellClassLabels } from "../domain/spells/spell-catalog";
+import { spellClassLabel, spellClassLabels } from "../domain/spells/spell-catalog";
 import { type GmChecklistItem, type GmShop } from "../domain/gm/gm-global-content";
 import { removeGmNoteGroup, type GmWorkspace } from "../domain/gm/gm-workspace";
 import type { CampaignContent } from "../domain/content/campaign-content";
 import type { CatalogMetadata } from "../domain/content/catalog-metadata";
 import { createRandomId } from "../shared/id";
-import { renderCheckboxGroup } from "./checkbox-group";
 import { inventoryCatalogDefinition, inventoryViewIsVisible, inventoryViewMatchesBasicFilter, renderSharedInventoryCard } from "./inventory-view";
 import { renderUiEmptyState } from "./design-system/primitives";
 import { FormDraftStore } from "./form-draft-store";
@@ -25,8 +27,6 @@ import {
   bindInventoryStructuredEditors,
   readInventoryFeatures,
   readTopLevelInventoryBonuses,
-  renderInventoryBonusEditor,
-  renderInventoryFeatureEditor,
 } from "./inventory-capability-editor";
 
 export type GmSection = "encounter" | "characters" | "content" | "lore" | "notes" | "tools";
@@ -121,6 +121,7 @@ function selectOptions(values: readonly string[], selected: string, emptyLabel?:
 export class GmToolsPanel {
   private readonly preparation: EquipmentPreparationPanel;
   private readonly formDrafts = new FormDraftStore();
+  private savingContent = false;
   private content: CampaignContent = { spells: [], equipment: [], monsters: [], shops: [], checklist: [] };
   private selectedSpell = "";
   private selectedEquipment = "";
@@ -142,6 +143,7 @@ export class GmToolsPanel {
   private pendingDeleteContent: { section: GmContentSection; key: string } | null = null;
   private openContentFilterGroup: Record<GmContentSection, string | null> = { spell: null, equipment: null, shop: null };
   private showContentDescriptions = true;
+  private readonly expandedShopDescriptions = new Set<string>();
 
   constructor(
     private readonly root: HTMLElement,
@@ -171,6 +173,8 @@ export class GmToolsPanel {
     return section === "spell" ? this.content.spells.length : section === "equipment" ? this.content.equipment.length : this.content.shops.length;
   }
 
+  spellCatalog(): readonly SpellDefinition[] { return this.content.spells; }
+
   render(section: GmSection, workspace: GmWorkspace, contentSection: GmContentSection = "spell"): string {
     if (section === "content") return this.renderContent(contentSection);
     if (section === "notes") return this.renderNotes(workspace);
@@ -199,7 +203,7 @@ export class GmToolsPanel {
     if (editing) {
       const form = section === "spell" ? this.renderSpellForm(spell) : section === "equipment" ? this.renderEquipmentForm(equipment) : this.renderShopForm(shop);
       const draftKey = this.contentDraftKey();
-      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${spell?.name ?? equipment?.name ?? shop?.name ?? (section === "spell" ? "Nuevo conjuro" : section === "equipment" ? "Nuevo objeto" : "Nuevo comerciante")}</strong><small class="gm-draft-status" data-gm-draft-status ${draftKey && this.formDrafts.has(draftKey) ? "" : "hidden"}>Borrador sin guardar</small><button type="button" data-gm-cancel-edit>Descartar y volver</button></div>${form}</section>`;
+      return `<section class="gm-editor-surface"><div class="gm-edit-heading"><strong>${escapeHtml(spell?.name ?? equipment?.name ?? shop?.name ?? (section === "spell" ? "Nuevo conjuro" : section === "equipment" ? "Nuevo objeto" : "Nuevo comerciante"))}</strong><small class="gm-draft-status" data-gm-draft-status ${draftKey && this.formDrafts.has(draftKey) ? "" : "hidden"}>Borrador sin guardar</small></div>${form}</section>`;
     }
     const query = normalizedSearch(this.contentSearch[section]);
     const favoriteFirst = <T,>(entries: T[], favorite: (entry: T) => boolean, name: (entry: T) => string): T[] => entries.sort((left, right) =>
@@ -373,7 +377,7 @@ export class GmToolsPanel {
       quantity, catalog, articleAttributes: owned ? `data-gm-shop-inventory-item="${escapeHtml(owned.id)}"` : "",
       headerControlHtml: controls,
       statsHtml: `<span><small>Costo unitario</small>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span><span><small>Total</small>${inventoryCostInCopper(item.cost) * quantity} PC</span>${item.weapon?.damageExpression ? `<span><small>Daño</small>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.charges ? `<span><small>Cargas</small>${item.charges.current}/${item.charges.maximum}</span>` : ""}${owned?.attuned ? "<span>Sintonizado</span>" : ""}${owned?.equipped ? "<span>Equipado</span>" : ""}`,
-      descriptionHtml: this.showContentDescriptions && item.description ? `<p class="card-description">${escapeHtml(item.description)}</p>` : "",
+      descriptionHtml: renderInventoryItemPreview(item, { key: owned?.id ?? `shop-catalog:${item.name}`, expanded: this.expandedShopDescriptions.has(owned?.id ?? `shop-catalog:${item.name}`), showDescriptions: this.showContentDescriptions, catalogDefinition: this.shopInventoryDefinition(item) }),
       tags: this.shopInventoryTags(item), actionsHtml: actions,
     });
   }
@@ -399,66 +403,28 @@ export class GmToolsPanel {
   }
 
   private renderSpellForm(spell: SpellDefinition | null): string {
-    const components = spell?.components.split(/[, ]+/).filter(Boolean) ?? [];
-    const classes = spell?.classes ?? [];
-    const meta = catalogMetadata(spell);
-    return `<form data-gm-form="spell" class="gm-editor-form">
-      <input type="hidden" name="previousKey" value="${escapeHtml(spell?.name ?? "")}">
-      <div class="catalog-editor-meta"><span>Origen: ${escapeHtml(spellSourceLabel(spellSourceTag(spell) ?? "custom"))}</span></div>
-      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(spell?.name ?? "")}"></label><label>Nivel<select name="level">${Array.from({ length: 10 }, (_, level) => `<option value="${level}" ${spell?.level === level ? "selected" : ""}>${level === 0 ? "Truco" : `Nivel ${level}`}</option>`).join("")}</select></label><label>Escuela<select name="school">${selectOptions(SPELL_SCHOOLS, spell?.school ?? "", "Sin escuela")}</select></label><label>Tiempo<input name="castingTime" value="${escapeHtml(spell?.castingTime ?? "1 acción")}"></label><label>Alcance<input name="range" value="${escapeHtml(spell?.range ?? "")}"></label><label>Duración<input name="duration" value="${escapeHtml(spell?.duration ?? "")}"></label>${renderCheckboxGroup("Componentes", "components", SPELL_COMPONENTS, components)}${renderCheckboxGroup("Clases", "classes", SPELL_CLASS_OPTIONS, classes)}<label>Daño<input name="damageExpression" value="${escapeHtml(spell?.damageExpression ?? "")}" placeholder="2d6"></label><label>Daño al escalar<input name="upcastDamageExpression" value="${escapeHtml(spell?.upcastDamageExpression ?? "")}" placeholder="1d6"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, spell?.damageType ?? "", "Sin daño")}</select></label><label>Resolución<select name="attackType"><option value="none">Ninguna</option><option value="attack" ${spell?.attackType === "attack" ? "selected" : ""}>Ataque</option><option value="save" ${spell?.attackType === "save" ? "selected" : ""}>Salvación</option></select></label><label>Salvación<select name="saveAbility">${selectOptions(SPELL_SAVE_ABILITIES, spell?.saveAbility ?? "", "No aplica")}</select></label><input type="hidden" name="year" value="${escapeHtml(spell?.year ?? "2014")}"></div>
-      <div class="gm-check-row"><label><input name="ritual" type="checkbox" ${spell?.ritual ? "checked" : ""}> Ritual</label><label><input name="concentration" type="checkbox" ${spell?.concentration ? "checked" : ""}> Concentración</label><label><input name="addAbilityModifier" type="checkbox" ${spell?.addAbilityModifier ? "checked" : ""}> Sumar característica al daño</label></div>
-      <label>Material<input name="material" value="${escapeHtml(spell?.material ?? "")}"></label><label>Descripción<textarea name="description">${escapeHtml(spell?.description ?? "")}</textarea></label><label>A niveles superiores<textarea name="higherLevels">${escapeHtml(spell?.higherLevels ?? "")}</textarea></label><button type="submit">Guardar conjuro</button>
-    </form>`;
+    return renderSpellEditor(spell, catalogMetadata(spell));
   }
 
   private renderEquipmentForm(item: EquipmentCatalogDraft | null): string {
-    const kind = item?.weapon ? "weapon" : item?.armor ? "armor" : "gear";
-    const meta = catalogMetadata(item);
-    return `<form data-gm-form="equipment" class="gm-editor-form"><input type="hidden" name="previousKey" value="${escapeHtml(item?.name ?? "")}">
-      <div class="catalog-editor-meta"><span class="catalog-origin ${escapeHtml(meta.origin)}">${escapeHtml(meta.origin)}</span><label>Etiquetas de campaña<input name="catalogTags" value="${escapeHtml(visibleCatalogTags(meta.tags).join(", "))}" placeholder="oficial, tesoro, mágico"></label></div>
-      <div class="gm-form-grid"><label>Nombre<input name="name" required value="${escapeHtml(item?.name ?? "")}"></label><label>Tipo<select name="itemKind">${[["gear","Objeto"],["weapon","Arma"],["armor","Armadura"]].map(([value,label]) => `<option value="${value}" ${kind === value ? "selected" : ""}>${label}</option>`).join("")}</select></label><label>Categoría<select name="category">${selectOptions(EQUIPMENT_CATEGORIES, item?.category ?? "adventuring-gear")}</select></label><label>Rareza<select name="rarity">${selectOptions(EQUIPMENT_RARITIES, item?.rarity ?? "none")}</select></label><label>Peso<input name="weight" type="number" min="0" step="0.01" value="${item?.unitWeight ?? 0}"></label><label>Costo<input name="costQuantity" type="number" min="0" step="0.01" value="${item?.cost.quantity ?? 0}"></label><label>Moneda<select name="costUnit">${selectOptions(["cp","sp","ep","gp","pp"], item?.cost.unit ?? "gp")}</select></label>${renderCheckboxGroup("Propiedades", "properties", EQUIPMENT_PROPERTIES, item?.properties ?? [])}</div>
-      <fieldset><legend>Arma</legend><div class="gm-form-grid"><label>Categoría de arma<input name="weaponCategory" value="${escapeHtml(item?.weapon?.category ?? "")}"></label><label>Alcance/tipo<input name="weaponRange" value="${escapeHtml(item?.weapon?.range ?? "")}"></label><label>Alcance normal<input name="normalRange" type="number" min="0" value="${item?.weapon?.normalRange ?? ""}"></label><label>Alcance largo<input name="longRange" type="number" min="0" value="${item?.weapon?.longRange ?? ""}"></label><label>Daño<input name="damageExpression" value="${escapeHtml(item?.weapon?.damageExpression ?? "")}"></label><label>Daño versátil<input name="versatileDamageExpression" value="${escapeHtml(item?.weapon?.versatileDamageExpression ?? "")}"></label><label>Tipo de daño<select name="damageType">${selectOptions(DAMAGE_TYPES, item?.weapon?.damageType ?? "", "Sin daño")}</select></label><label>Bono ataque<input name="attackBonus" type="number" step="1" value="${item?.weapon?.attackBonus ?? 0}"></label><label>Bono daño<input name="damageBonus" type="number" step="1" value="${item?.weapon?.damageBonus ?? 0}"></label></div></fieldset>
-      <fieldset><legend>Armadura</legend><div class="gm-form-grid"><label>CA base<input name="armorBase" type="number" step="1" value="${item?.armor?.base ?? 10}"></label><label>Categoría<select name="armorCategory">${selectOptions(["light", "medium", "heavy", "shield"], item?.armor?.armorCategory ?? "", "Sin categoría")}</select></label><label>Máx. DES<input name="maximumDexterityBonus" type="number" min="0" value="${item?.armor?.maximumDexterityBonus ?? ""}"></label></div><div class="gm-check-row"><label><input name="dexterityBonus" type="checkbox" ${item?.armor?.dexterityBonus ? "checked" : ""}> Suma DES</label><label><input name="stealthDisadvantage" type="checkbox" ${item?.armor?.stealthDisadvantage ? "checked" : ""}> Desventaja en sigilo</label></div></fieldset>
-      <fieldset><legend>Uso y cargas</legend><div class="gm-check-row"><label><input name="usable" type="checkbox" ${item?.usable ? "checked" : ""}> Usable</label><label><input name="consumable" type="checkbox" ${item?.consumable ? "checked" : ""}> Consumible</label><label><input name="requiresAttunement" type="checkbox" ${item?.requiresAttunement ? "checked" : ""}> Requiere sintonización</label><label><input name="hasCharges" type="checkbox" ${item?.charges ? "checked" : ""}> Usa cargas</label></div><div class="gm-form-grid"><label>Cargas actuales<input name="chargesCurrent" type="number" min="0" value="${item?.charges?.current ?? 0}"></label><label>Cargas máximas<input name="chargesMaximum" type="number" min="0" value="${item?.charges?.maximum ?? 0}"></label><label>Recuperación<select name="chargesReset">${selectOptions(["none", "short-rest", "long-rest", "dawn", "daily", "never"], item?.charges?.reset ?? "none")}</select></label></div></fieldset>
-      <fieldset class="structured-bonus-fieldset"><legend>Bonificaciones permanentes</legend><p class="field-help">Se aplican al equipar y sintonizar el objeto.</p><div data-inventory-top-bonuses-container>${renderInventoryBonusEditor(item?.bonuses ?? [], true)}</div></fieldset>
-      <fieldset class="structured-feature-fieldset"><legend>Capacidades y efectos</legend><p class="field-help">Separá efectos pasivos, capacidades activables y otras reglas. Cada capacidad puede tener tiradas, bonos y recursos propios.</p><div data-inventory-features-container>${renderInventoryFeatureEditor(item?.features ?? [])}</div></fieldset>
-      <label>Efecto activable heredado<input name="effectDescription" value="${escapeHtml(item?.effect.description ?? "")}"></label><label class="checkbox"><input name="effectActive" type="checkbox" ${item?.effect.active ? "checked" : ""}> Efecto heredado activo por defecto</label>
-      <label>Descripción<textarea name="description">${escapeHtml(item?.description ?? "")}</textarea></label><button type="submit">Guardar objeto</button>
-    </form>`;
+    return renderEquipmentEditor(item, catalogMetadata(item), Boolean(this.runtime.prepareExistingEquipment));
   }
 
   private renderShopForm(shop: GmShop | null): string {
     const interaction = normalizeMerchantInteraction(shop?.interactions);
     const selectedNpcId = this.shopInventoryNpcId || shop?.npcId || "";
     const npcKey = normalizedSearch(selectedNpcId);
-    const npc = this.content.monsters.find((monster) => normalizedSearch(monster.id) === npcKey || normalizedSearch(monster.name) === npcKey) ?? null;
+    const npc = this.content.monsters.find(monster => normalizedSearch(monster.id) === npcKey || normalizedSearch(monster.name) === npcKey) ?? null;
     const statistics = npc ? merchantNpcStatistics(npc) : null;
-    const npcOptions = this.content.monsters.map((monster) => `<option value="${escapeHtml(monster.id || monster.name)}" ${selectedNpcId === (monster.id || monster.name) ? "selected" : ""}>${escapeHtml(monster.name)}</option>`).join("");
-    const toggle = (name: keyof typeof interaction, label: string): string => `<label><input name="${name}" type="checkbox" ${interaction[name] ? "checked" : ""}> ${label}</label>`;
-    const npcStatistics = statistics
-      ? `<p class="merchant-derived-stats">Estadísticas del NPC asociado <strong>${escapeHtml(npc!.name)}</strong>: CAR ${statistics.charisma >= 0 ? "+" : ""}${statistics.charisma} · PER ${statistics.perception >= 0 ? "+" : ""}${statistics.perception}</p>`
-      : '<p class="merchant-derived-stats">Seleccioná un NPC asociado. CAR y Percepción se obtienen de sus estadísticas.</p>';
-    return `<form data-gm-form="shop" class="gm-editor-form">
-      <input type="hidden" name="previousKey" value="${escapeHtml(shop?.name ?? "")}">
-      <div class="gm-form-grid">
-        <label>Nombre del comerciante<input name="name" required value="${escapeHtml(shop?.name ?? "")}"></label>
-        <label>NPC asociado<select name="npcId" required><option value="">Seleccionar NPC…</option>${npcOptions}</select></label>
-        <label>Estado del NPC<select name="merchantState"><option value="active" ${interaction.state === "active" ? "selected" : ""}>Activo</option><option value="unconscious" ${interaction.state === "unconscious" ? "selected" : ""}>Inconsciente</option><option value="dead" ${interaction.state === "dead" ? "selected" : ""}>Muerto</option></select></label>
-        <label>Reputación del grupo<input name="reputation" type="number" step="1" value="${interaction.reputation}"></label>
-        <label>Comisión (%)<input name="commissionPercent" type="number" min="0" max="100" step="0.1" value="${interaction.commissionPercent}"></label>
-        <label>Fondos disponibles (PC)<input name="fundsCopper" type="number" min="0" step="1" value="${interaction.fundsCopper}"></label>
-        <label>Reducción por persuasión (%)<input name="negotiationStep" type="number" min="0" max="100" step="0.1" value="${interaction.negotiationStep}"></label>
-        <label>Pérdida de reputación al intimidar<input name="intimidationReputationLoss" type="number" min="0" step="1" value="${interaction.intimidationReputationLoss}"></label>
-        <label>Modificador de dificultad<input name="merchantDifficulty" type="number" step="1" value="${interaction.difficulty}"></label>
-        <label>Límite de objetos al asaltar<input name="assaultMaxItems" type="number" min="1" step="1" value="${interaction.assaultMaxItems}"></label>
-        <label>Límite de peso al asaltar (lb)<input name="assaultMaxWeight" type="number" min="0.1" step="0.1" value="${interaction.assaultMaxWeight}"></label>
-      </div>
-      ${npcStatistics}
-      <fieldset><legend>Acciones habilitadas</legend><div class="gm-check-row">${toggle("interaction", "Abrir comerciante")}${toggle("negotiation", "Persuadir")}${toggle("intimidation", "Intimidar")}${toggle("barter", "Comprar y vender")}${toggle("loot", "Saquear")}${toggle("steal", "Hurtar")}${toggle("assault", "Asaltar")}${toggle("plantEvidence", "Implantar pruebas")}</div></fieldset>
-      <p class="merchant-rule-note">Con éxito, Persuadir reduce la comisión ${interaction.negotiationStep} puntos e Intimidar la reduce ${interaction.negotiationStep * 2}. Intimidar resta ${interaction.intimidationReputationLoss} de reputación si tiene éxito y el doble si falla. Hurtar e Implantar suman +2 a la CD por sospecha en cada intento. Asaltar usa Intimidación con Fuerza, transfiere objetos sin dinero y reduce 5 puntos de reputación.</p>
-      <label>Etiquetas<input name="catalogTags" value="${escapeHtml(this.shopVisibleTags(shop ?? { name: "", categories: {} }).join(", "))}" placeholder="mercado, ciudad, pociones"></label>
+    const toggle = (name: keyof typeof interaction, label: string) => `<label class="gm-editor-toggle"><input name="${name}" type="checkbox" ${interaction[name] ? "checked" : ""}><span>${label}</span></label>`;
+    const npcOptions = this.content.monsters.map(monster => ({ value: monster.id || monster.name, label: monster.name }));
+    return `<form data-gm-form="shop" class="gm-editor-form gm-content-editor gm-shop-editor"><input type="hidden" name="previousKey" value="${escapeHtml(shop?.name ?? "")}">${editorToolbar("Comerciante")}
+      ${editorSection("Identidad y disponibilidad", `<div class="gm-editor-grid">${editorInput("name", "Nombre", shop?.name ?? "", "required", true)}${editorSelect("merchantState", "Estado del NPC", [{ value: "active", label: "Activo" }, { value: "unconscious", label: "Inconsciente" }, { value: "dead", label: "Muerto" }], interaction.state)}<label class="gm-field-wide">NPC asociado<select name="npcId" required><option value="">Seleccionar NPC…</option>${npcOptions.map(n => `<option value="${escapeHtml(n.value)}" ${n.value === selectedNpcId ? "selected" : ""}>${escapeHtml(n.label)}</option>`).join("")}</select></label>${editorNumber("reputation", "Reputación del grupo", interaction.reputation, 'step="1"')}</div><div class="gm-editor-toggles">${toggle("interaction", "Comerciante disponible")}</div>${statistics ? `<p class="merchant-derived-stats"><strong>${escapeHtml(npc!.name)}</strong> · CAR ${statistics.charisma >= 0 ? "+" : ""}${statistics.charisma} · PER ${statistics.perception >= 0 ? "+" : ""}${statistics.perception}</p>` : '<p class="merchant-derived-stats">Seleccioná un NPC para administrar sus existencias. CAR y Percepción se toman de su ficha.</p>'}`)}
+      ${editorSection("Comercio", `<div class="gm-editor-grid">${editorNumber("commissionPercent", "Comisión (%)", interaction.commissionPercent, 'min="0" max="100" step="0.1"')}${editorNumber("fundsCopper", "Fondos (PC)", interaction.fundsCopper)}${editorNumber("merchantDifficulty", "Ajuste de dificultad", interaction.difficulty, 'step="1"')}</div><div class="gm-editor-toggles">${toggle("barter", "Comprar y vender")}${toggle("negotiation", "Persuadir")}${toggle("intimidation", "Intimidar")}</div>`, { collapsible: true, open: true })}
+      ${editorSection("Negociación y reputación", `<div class="gm-editor-grid">${editorNumber("negotiationStep", "Reducción por Persuasión (%)", interaction.negotiationStep, 'min="0" max="100" step="0.1"')}${editorNumber("intimidationReputationLoss", "Pérdida de reputación al intimidar", interaction.intimidationReputationLoss)}</div><p class="merchant-rule-note">Persuadir aplica la reducción configurada. Intimidar reduce el doble y descuenta la reputación indicada al tener éxito; al fallar descuenta el doble.</p>`, { collapsible: true })}
+      ${editorSection("Acciones sobre el inventario", `<div class="gm-editor-toggles">${toggle("loot", "Saquear")}${toggle("steal", "Hurtar")}${toggle("assault", "Asaltar")}${toggle("plantEvidence", "Implantar pruebas")}</div><div class="gm-editor-grid">${editorNumber("assaultMaxItems", "Máximo de objetos al asaltar", interaction.assaultMaxItems, 'min="1" step="1"')}${editorNumber("assaultMaxWeight", "Peso máximo al asaltar (lb)", interaction.assaultMaxWeight, 'min="0.1" step="0.1"')}</div><p class="merchant-rule-note">Hurtar e Implantar suman +2 a la CD por sospecha en cada intento. Asaltar usa Intimidación con Fuerza, transfiere objetos sin dinero y reduce 5 puntos de reputación.</p>`, { collapsible: true, open: interaction.assault || interaction.steal || interaction.plantEvidence })}
       ${this.renderShopInventory(shop)}
-      <button type="submit">Guardar comerciante</button>
+      ${editorSection("Etiquetas de campaña", editorInput("catalogTags", "Etiquetas", this.shopVisibleTags(shop ?? { name: "", categories: {} }).join(", "), 'placeholder="Separadas por comas"', true), { collapsible: true })}
     </form>`;
   }
 
@@ -546,7 +512,7 @@ export class GmToolsPanel {
       this.editingContent = section;
       this.rerender();
     }));
-    this.root.querySelector("[data-gm-cancel-edit]")?.addEventListener("click", () => { const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.contentTemplate = null; this.editingContent = null; this.shopInventoryDraft = null; this.shopInventoryNpcId = ""; this.rerender(); });
+    this.root.querySelector("[data-gm-cancel-edit]")?.addEventListener("click", () => { if (this.savingContent) return; const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.contentTemplate = null; this.editingContent = null; this.shopInventoryDraft = null; this.shopInventoryNpcId = ""; this.rerender(); });
     this.root.querySelector<HTMLInputElement>("[data-gm-content-search]")?.addEventListener("input", (event) => {
       const input = event.currentTarget as HTMLInputElement;
       const section = input.dataset.gmContentSearch as GmContentSection;
@@ -585,9 +551,9 @@ export class GmToolsPanel {
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-toggle-favorite]").forEach((button) => button.addEventListener("click", () => {
       void this.toggleFavorite(button.dataset.gmToggleFavorite as GmContentSection, button.dataset.gmContentKey ?? "");
     }));
-    this.root.querySelector<HTMLFormElement>('[data-gm-form="spell"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveSpell(new FormData(event.currentTarget as HTMLFormElement)); });
-    this.root.querySelector<HTMLFormElement>('[data-gm-form="equipment"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveEquipment(event.currentTarget as HTMLFormElement); });
-    this.root.querySelector<HTMLFormElement>('[data-gm-form="shop"]')?.addEventListener("submit", (event) => { event.preventDefault(); void this.saveShop(new FormData(event.currentTarget as HTMLFormElement)); });
+    this.root.querySelector<HTMLFormElement>('[data-gm-form="spell"]')?.addEventListener("submit", (event) => { event.preventDefault(); const form = event.currentTarget as HTMLFormElement; void this.submitContent(form, () => this.saveSpell(new FormData(form))); });
+    this.root.querySelector<HTMLFormElement>('[data-gm-form="equipment"]')?.addEventListener("submit", (event) => { event.preventDefault(); const form = event.currentTarget as HTMLFormElement; void this.submitContent(form, () => this.saveEquipment(form)); });
+    this.root.querySelector<HTMLFormElement>('[data-gm-form="shop"]')?.addEventListener("submit", (event) => { event.preventDefault(); const form = event.currentTarget as HTMLFormElement; void this.submitContent(form, () => this.saveShop(new FormData(form))); });
     const draftKey = this.contentDraftKey();
     bindInventoryStructuredEditors(this.root);
     if (draftKey) this.formDrafts.bind(
@@ -595,6 +561,11 @@ export class GmToolsPanel {
       draftKey,
       () => { const status = this.root.querySelector<HTMLElement>("[data-gm-draft-status]"); if (status) status.hidden = false; },
     );
+    bindContentEditorVisibility(this.root);
+    bindInventoryDescriptions(this.root, this.expandedShopDescriptions);
+    this.root.querySelector<HTMLButtonElement>("[data-gm-edit-equipment-rules]")?.addEventListener("click", () => {
+      this.editingContent = null; void this.preparation.prepare(this.root.querySelector<HTMLElement>("[data-gm-edit-equipment-rules]")!.dataset.gmEditEquipmentRules!);
+    });
     this.root.querySelector<HTMLSelectElement>('[data-gm-form="shop"] select[name="npcId"]')?.addEventListener("change", (event) => {
       this.shopInventoryNpcId = (event.currentTarget as HTMLSelectElement).value;
       const key = normalizedSearch(this.shopInventoryNpcId);
@@ -704,11 +675,30 @@ export class GmToolsPanel {
     this.root.querySelectorAll<HTMLFormElement>("[data-gm-calc]").forEach((form) => form.addEventListener("submit", (event) => { event.preventDefault(); const data = new FormData(form); const output = form.querySelector<HTMLOutputElement>("output")!; if (form.dataset.gmCalc === "travel") { const distance = number(data.get("distance")); const speed = number(data.get("speed")); const hours = number(data.get("hours")); output.value = speed > 0 && hours > 0 ? `${(distance / speed).toFixed(1)} h · ${(distance / speed / hours).toFixed(1)} días` : "Valores inválidos"; } else if (form.dataset.gmCalc === "jump") { const strength = number(data.get("strength")); const heightCm = number(data.get("height")); const modifier = Math.floor((strength - 10) / 2); const high = Math.max(0, 3 + modifier); output.value = `Con carrera: largo ${strength} pies · alto ${high} pies · alcance ${Math.floor(high + heightCm / 30.48 * 1.5)} pies. Sin carrera: la mitad.`; } else { const pick = (values: string[]) => values[Math.floor(Math.random() * values.length)]!; const givenName = String(data.get("name") ?? "").trim(); const role = String(data.get("role")) === "random" ? pick(["Aliado", "Neutral", "Rival", "Villano"]) : String(data.get("role")); output.value = `${givenName || pick(["Aldren", "Brina", "Corvin", "Dalia", "Edrik", "Fara"])} · ${role} · ${pick(["mercader", "soldado", "erudito", "artesano", "noble", "viajero"])} · ${pick(["amable pero reservado", "directo y desconfiado", "curioso y parlanchín", "sereno y calculador"])} · busca ${pick(["seguridad", "riqueza", "respuestas", "venganza", "reconocimiento"])}.`; } }));
   }
 
+  private async submitContent(form: HTMLFormElement, save: () => Promise<void>): Promise<void> {
+    if (this.savingContent) return;
+    this.savingContent = true;
+    form.setAttribute("aria-busy", "true"); form.setAttribute("inert", "");
+    form.querySelectorAll<HTMLButtonElement>('button[type="submit"], [data-gm-cancel-edit]').forEach(button => { button.disabled = true; });
+    try { await save(); } catch (error) { this.failure(error); }
+    finally {
+      this.savingContent = false; form.removeAttribute("aria-busy"); form.removeAttribute("inert");
+      form.querySelectorAll<HTMLButtonElement>('button[type="submit"], [data-gm-cancel-edit]').forEach(button => { button.disabled = false; });
+    }
+  }
+
   private async saveSpell(data: FormData): Promise<void> {
     if (!this.runtime.saveCustomSpell) return;
     const previous = String(data.get("previousKey") ?? "") || null;
     const existing = previous ? this.content.spells.find((entry) => !isOldSpell(entry) && entry.name === previous) ?? null : null;
-    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), catalog: { ...catalogMetadata(existing), tags: [spellSourceTag(existing) ?? "custom",...(existing && isCatalogFavorite(existing) ? [FAVORITE_TAG] : [])] } };
+    const metadata = catalogFormMetadata(existing, data);
+    metadata.tags = [...new Set([spellSourceTag(existing) ?? "custom", ...metadata.tags.filter(tag => !SPELL_SOURCE_TAGS.some(source => source === tag.toLowerCase()))])];
+    const definition: SpellDefinition = { name: String(data.get("name") ?? "").trim(), level: Math.max(0, Math.min(9, Math.trunc(number(data.get("level"))))), description: String(data.get("description") ?? ""), higherLevels: String(data.get("higherLevels") ?? ""), range: String(data.get("range") ?? ""), components: data.getAll("components").map(String).join(", "), material: String(data.get("material") ?? ""), ritual: data.get("ritual") === "on", duration: String(data.get("duration") ?? ""), concentration: data.get("concentration") === "on", castingTime: String(data.get("castingTime") ?? ""), school: String(data.get("school") ?? ""), classes: data.getAll("classes").map(String), attackType: String(data.get("attackType")) as SpellDefinition["attackType"], saveAbility: String(data.get("saveAbility") ?? ""), damageExpression: String(data.get("damageExpression") ?? ""), upcastDamageExpression: String(data.get("upcastDamageExpression") ?? ""), addAbilityModifier: data.get("addAbilityModifier") === "on", damageType: String(data.get("damageType") ?? ""), year: String(data.get("year") ?? "2014"), catalog: metadata };
+    for (const key of ["damageExpression", "upcastDamageExpression"] as const) {
+      if (!definition[key].trim() || definition[key] === existing?.[key]) continue;
+      try { normalizeDiceExpression(definition[key]); }
+      catch { throw new Error(`Revisá los dados ${key === "damageExpression" ? "del efecto" : "de escalado"}: usá una expresión como 2d6 o 1d8+3.`); }
+    }
     try { await this.runtime.saveCustomSpell(definition, previous); const draftKey = this.contentDraftKey(); if (draftKey) this.formDrafts.clear(draftKey); this.content.spells = [...this.content.spells.filter((entry) => isOldSpell(entry) || (entry.name !== previous && entry.name !== definition.name)), definition].sort((a, b) => a.name.localeCompare(b.name, "es")); this.selectedSpell = definition.name; this.contentSearch.spell = definition.name; this.contentShowAll.spell = false; this.contentTemplate = null; this.editingContent = null; this.recordAction(`Guardar conjuro: ${definition.name}`); this.success("Conjuro guardado."); } catch (error) { this.failure(error); }
   }
 
@@ -716,7 +706,7 @@ export class GmToolsPanel {
     if (!this.runtime.saveCustomEquipment) return;
     const data = new FormData(form);
     const previous = String(data.get("previousKey") ?? "") || null;
-    const existing = previous ? this.content.equipment.find((entry) => entry.name === previous) ?? null : null;
+    const existing = (previous ? this.content.equipment.find((entry) => entry.name === previous) : null) ?? (this.contentTemplate?.section === "equipment" ? this.contentTemplate.value as EquipmentCatalogDraft : null);
     const base = normalizeEquipmentDefinition({ name: String(data.get("name") ?? "").trim(), rarity: String(data.get("rarity") ?? "none"), weight: number(data.get("weight")), cost: { quantity: number(data.get("costQuantity")), unit: String(data.get("costUnit") ?? "gp") }, equipment_category: { index: String(data.get("category") ?? "adventuring-gear") }, description: String(data.get("description") ?? "") });
     const kind = String(data.get("itemKind") ?? "gear");
     const nullableInteger = (key: string): number | null => String(data.get(key) ?? "").trim() === "" ? null : Math.max(0, Math.trunc(number(data.get(key))));
@@ -726,6 +716,8 @@ export class GmToolsPanel {
     const maximumCharges = Math.max(0, Math.trunc(number(data.get("chargesMaximum"))));
     const definition: EquipmentCatalogDraft = {
       ...base,
+      quantity: Math.max(0, Math.trunc(number(data.get("quantity"), existing?.quantity ?? 1))), equipped: data.get("equipped") === "on", attuned: data.get("attuned") === "on",
+      ...(existing?.rules ? { rules: structuredClone(existing.rules) } : {}),
       rarity: String(data.get("rarity") ?? "none"), properties: data.getAll("properties").map(String),
       usable: data.get("usable") === "on", consumable: data.get("consumable") === "on", requiresAttunement: data.get("requiresAttunement") === "on",
       charges: data.get("hasCharges") === "on" ? { current: Math.min(maximumCharges, Math.max(0, Math.trunc(number(data.get("chargesCurrent"))))), maximum: maximumCharges, reset: String(data.get("chargesReset") ?? "none") } : null,
@@ -751,7 +743,7 @@ export class GmToolsPanel {
     const shop: GmShop = {
       name: String(data.get("name") ?? "").trim(),
       npcId,
-      categories: {},
+      categories: structuredClone(existing?.categories ?? {}),
       tags,
       interactions: normalizeMerchantInteraction({
         interaction: data.get("interaction") === "on", negotiation: data.get("negotiation") === "on",

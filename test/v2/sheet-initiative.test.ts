@@ -5,6 +5,7 @@ import { CampaignApplication } from "../../src/application/campaign/campaign-app
 import { EncounterApplication } from "../../src/application/encounter/encounter-application";
 import { InMemoryCampaignRepository } from "../../src/infrastructure/persistence/in-memory-campaign-repository";
 import { CombatSessionRepository, ACTIVE_COMBAT_ID } from "../../src/infrastructure/persistence/combat-session-repository";
+import type { TaleSpireResolvedRoll } from "../../src/infrastructure/talespire/talespire-dice-roller";
 afterEach(() => { document.body.replaceChildren(); localStorage.clear(); });
 
 it("routes the sheet header initiative roll with its character and combat epoch", async () => {
@@ -20,7 +21,8 @@ it("routes the sheet header initiative roll with its character and combat epoch"
   state = await combat.associateCharacter({ encounterId: encounter.id, combatantId: encounter.combatants[0]!.id, characterId: character.id, expectedEncounterRevision: encounter.revision, expectedCampaignChecksum: state.checksum });
   const roll = vi.fn(async () => ({ kind: "submitted" as const, totals: [], summary: "Bandeja" })), sendInitiative = vi.fn();
   const root = document.createElement("div"); document.body.append(root);
-  const sheet = new BrowserApp(root, application, { storageLabel: "Test", diceRoller: { roll }, sendInitiative });
+  let resolved: (result: TaleSpireResolvedRoll) => void = () => {};
+  const sheet = new BrowserApp(root, application, { storageLabel: "Test", diceRoller: { roll }, sendInitiative, subscribeDiceResults: listener => { resolved = listener; return () => {}; } });
   await sheet.start();
   try {
     const button = root.querySelector<HTMLButtonElement>(".hero-initiative"); expect(button).not.toBeNull(); button!.click();
@@ -28,5 +30,9 @@ it("routes the sheet header initiative roll with its character and combat epoch"
     expect(roll).toHaveBeenCalledWith(expect.objectContaining({ characterId: character.id, purpose: "initiative", encounterId: ACTIVE_COMBAT_ID,
       initiativeEpoch: state.campaign.encounters[ACTIVE_COMBAT_ID]!.initiativeEpoch, correlationId: expect.any(String), expressions: ["1d20+0"] }));
     expect(sendInitiative).not.toHaveBeenCalled(); // Native dice have not resolved yet.
+    resolved({ name: "Iniciativa: Kai", total: -1, characterId: character.id, purpose: "initiative", encounterId: ACTIVE_COMBAT_ID,
+      initiativeEpoch: state.campaign.encounters[ACTIVE_COMBAT_ID]!.initiativeEpoch, correlationId: "native-roll" });
+    await vi.waitFor(async () => expect((await source.load())!.campaign.encounters[ACTIVE_COMBAT_ID]!.combatants.find(c => c.kind === "player")?.initiative).toBe(-1));
+    expect(sendInitiative).not.toHaveBeenCalled();
   } finally { sheet.stop(); }
 });

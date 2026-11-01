@@ -1,3 +1,4 @@
+import { increaseMatchingDice } from "../dice/spell-dice";
 import { monkMovement,monkWeaponKeys,paladinOath } from "./martial-catalog";
 import { BUILDER_WEAPONS } from "./fighter-builder-catalog";
 import { sorcererOrigin } from "./sorcerer-catalog";
@@ -445,20 +446,6 @@ export function projectSpellcasting(character: CharacterV2, spell?: CharacterSpe
     saveDc: fixedItemStats?.saveDc ?? (8 + modifier + proficiency + sharedBonus + saveBonus + scopedBonus("bard-spell-save-dc") + character.spellcasting.saveDcBonus +
       traitBonus(character, "combatStats", ["SpellSaveDC", "SpellAttackandSave"])),
   };
-}
-
-function increaseMatchingDice(base: string, increment: string, times: number): string {
-  if (times <= 0) return base;
-  const match = increment.trim().match(/^(\d*)d(\d+)$/i);
-  if (!match) return base;
-  const amount = Number(match[1] || 1) * times;
-  const sides = match[2]!;
-  let replaced = false;
-  const result = base.replace(new RegExp(`(\\d*)d${sides}\\b`, "i"), (_whole, count: string) => {
-    replaced = true;
-    return `${Number(count || 1) + amount}d${sides}`;
-  });
-  return replaced ? result : `${base}${base ? "+" : ""}${amount}d${sides}`;
 }
 
 export function projectSpellDamageExpression(

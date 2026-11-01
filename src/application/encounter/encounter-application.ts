@@ -148,6 +148,7 @@ export class EncounterApplication {
         const before = "combatantId" in action ? original.combatants.find(c => c.id === action.combatantId) : null;
         const now = "combatantId" in action ? encounter.combatants.find(c => c.id === action.combatantId) : null;
         const safe = action.kind === "damage" || action.kind === "heal" || action.kind === "synchronize-talespire-initiative"
+          || action.kind === "rename-combatant" && before?.name === now?.name
           || action.kind === "set-initiative" && (action.onlyIfMissing || before?.initiative === now?.initiative)
           || action.kind === "set-visibility" && before?.visibleToPlayers === now?.visibleToPlayers;
         if (!safe) throw new Error("Otro GM modificó el combate. Se conservaron sus cambios; actualizá y revisá la acción.");
@@ -156,7 +157,15 @@ export class EncounterApplication {
       if (result.encounter === encounter) return { snapshot: current, effects: result.effects };
       result.encounter.appliedOperations = [...encounter.appliedOperations, operation].slice(-1024);
       try {
-        const snapshot = await this.persist(current, { ...current.campaign.encounters, [encounter.id]: result.encounter }, updatedAt);
+        let workspace = current.campaign.gm;
+        if (action.kind === "rename-combatant") {
+          const combatant = result.encounter.combatants.find(c => c.id === action.combatantId)!;
+          if (combatant.taleSpireCreatureId) {
+            const existing = workspace.miniatureAssociations?.[combatant.taleSpireCreatureId];
+            if (existing) workspace = { ...workspace, miniatureAssociations: { ...workspace.miniatureAssociations, [combatant.taleSpireCreatureId]: { ...existing, combatantName: combatant.name, updatedAt } } };
+          }
+        }
+        const snapshot = await this.persistState(current, { ...current.campaign.encounters, [encounter.id]: result.encounter }, workspace, updatedAt);
         return { snapshot, effects: result.effects };
       } catch (error) {
         if (!(error instanceof CampaignRepositoryConflictError) || attempt === 4) throw error;
@@ -272,6 +281,7 @@ export class EncounterApplication {
         displayName: combatant.taleSpireDisplayName ?? existing?.displayName ?? combatant.name,
         boardAssetId: combatant.taleSpireBoardAssetId ?? existing?.boardAssetId ?? "",
       }, existing, updatedAt);
+      associations[combatant.taleSpireCreatureId]!.monster = structuredClone(command.monster);
     }
     return this.persistState(
       current,
@@ -340,6 +350,7 @@ export class EncounterApplication {
     }, { expectedRevision: command.expectedEncounterRevision, updatedAt });
     const associations = { ...(current.campaign.gm.miniatureAssociations ?? {}) };
     associations[previous.taleSpireCreatureId] = {
+      combatantName: null,
       displayName: previous.taleSpireDisplayName ?? previous.name,
       boardAssetId: previous.taleSpireBoardAssetId ?? "", monster: null, characterId: null, updatedAt,
     };
@@ -384,7 +395,7 @@ export class EncounterApplication {
           taleSpireCreatureId: creatureId,
           taleSpireDisplayName: item.name.trim() || "Miniatura sin nombre",
           taleSpireBoardAssetId: association.boardAssetId || null,
-          name: association.monster.name,
+          name: association.combatantName ?? association.monster.name,
           initiative: null,
           order: 0,
           armorClass: association.monster.armorClass,
@@ -470,7 +481,7 @@ export class EncounterApplication {
         const wasAtMaximum = combatant.hitPoints.current === combatant.hitPoints.maximum;
         return {
           ...combatant,
-          name: monster.name,
+          name: combatant.name,
           monsterDefinitionId: monster.definitionId,
           armorClass: monster.armorClass,
           hitPoints: {
@@ -516,11 +527,12 @@ export class EncounterApplication {
     updatedAt: string,
   ): MiniatureAssociation {
     return {
+      combatantName: combatant.name,
       displayName: miniature.displayName,
       boardAssetId: miniature.boardAssetId,
       monster: combatant.kind === "monster" ? {
         definitionId: combatant.monsterDefinitionId,
-        name: combatant.name,
+        name: existing?.monster?.definitionId === combatant.monsterDefinitionId ? existing.monster.name : combatant.name,
         armorClass: combatant.armorClass ?? 0,
         hitPoints: combatant.hitPoints.maximum,
       } : combatant.kind === "player" ? null : existing?.monster ?? null,

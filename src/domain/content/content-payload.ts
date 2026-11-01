@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MonsterSpellcastingSchema } from "../monsters/monster-spellcasting-model";
 import type { SpellDefinition } from "../character/character-spell-model";
 import { CharacterInventoryItemV2Schema, CharacterInventoryItemFieldsSchema } from "../character/character-inventory-model";
 import type { EquipmentCatalogDraft } from "../equipment/equipment-catalog";
@@ -93,6 +94,7 @@ export const MonsterContentPayloadSchema = ContentPayloadMetadataSchema.extend({
   reactions: z.array(MonsterFeatureSchema),
   legendaryActions: z.array(MonsterFeatureSchema),
   spells: z.array(z.string()),
+  spellcasting: MonsterSpellcastingSchema.optional(),
   inventory: z.array(MonsterInventoryPayloadSchema),
 });
 

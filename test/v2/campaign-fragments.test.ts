@@ -34,6 +34,7 @@ describe("granular campaign fragments", () => {
       googleDocsUrl: "https://docs.google.com/document/d/example/edit",
       miniatureAssociations: {
         "creature-goblin": {
+          combatantName: null,
           displayName: "Goblin",
           boardAssetId: "asset-goblin",
           monster: { definitionId: "goblin", name: "Goblin", armorClass: 15, hitPoints: 7 },

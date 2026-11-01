@@ -127,12 +127,13 @@ describe("EncounterApplication", () => {
       hitPoints: 9,
     }, beforeEdit.checksum, time);
     expect(refreshed.campaign.encounters[encounter.id]?.combatants[0]).toMatchObject({
-      name: "Goblin editado",
+      name: "Goblin",
       monsterDefinitionId: "goblin-editado",
       armorClass: 17,
       hitPoints: { current: 9, maximum: 9 },
     });
     expect(refreshed.campaign.gm.miniatureAssociations["creature-goblin"]?.monster?.definitionId).toBe("goblin-editado");
+    expect(refreshed.campaign.gm.miniatureAssociations["creature-goblin"]?.monster?.name).toBe("Goblin editado");
   });
 
   it("refreshes linked character hit points, armor class and conditions from the sheet", async () => {

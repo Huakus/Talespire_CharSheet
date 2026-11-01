@@ -7,6 +7,9 @@ import type { CampaignSnapshot } from "../../src/application/ports/campaign-repo
 import { nativeCombatFixture } from "../fixtures/native-combat";
 import type { TaleSpireNativeInitiativeQueue } from "../../src/infrastructure/talespire/talespire-gm-collaboration";
 import type { DiceRollRequest } from "../../src/application/ports/dice-roller";
+import { normalizeMonsterDefinition } from "../../src/domain/monsters/monster-catalog";
+import { normalizeSpellDefinition } from "../../src/domain/spells/spell-catalog";
+import { normalizeEquipmentDefinition } from "../../src/domain/equipment/equipment-catalog";
 
 const apps: GmApp[] = [];
 afterEach(() => { apps.splice(0).forEach((app) => app.stop()); vi.useRealTimers(); vi.restoreAllMocks(); document.body.innerHTML = ""; });
@@ -55,6 +58,85 @@ async function setup(overrides: Partial<GmAppRuntime> = {}, configure?: (campaig
 }
 
 describe("native combat UI", () => {
+  it("keeps creature abilities and saves only in expanded details and still rolls them for the correct combatant", async () => {
+    const monster = normalizeMonsterDefinition({ Id: "goblin", Name: "Goblin", Abilities: { Str: 18, Dex: 14, Con: 12, Int: 10, Wis: 14, Cha: 8 }, Saves: ["Fuerza +6"] });
+    const f = await setup({ monsters: [monster] });
+    const card = () => f.cards()[0]!;
+    expect(card().querySelector(":scope > summary .gm-monster-ability-saves")).toBeNull();
+    expect(card().querySelectorAll(".gm-monster-ability-saves")).toHaveLength(1);
+    expect(card().querySelectorAll(".gm-combat-details .gm-save-roll")).toHaveLength(6);
+    card().querySelector<HTMLElement>(":scope > summary")!.click();
+    const save = card().querySelector<HTMLButtonElement>('.gm-combat-details .gm-save-roll[data-roll-expression="1d20+6"]')!;
+    const actor = f.combatants()[0]!.name;
+    save.click();
+    await vi.waitFor(() => expect(f.requests).toHaveLength(1));
+    expect(f.requests[0]).toMatchObject({ expressions: ["1d20+6"], name: expect.stringContaining(actor) });
+  });
+
+  it("uses the same quick-fact labels for creature and character passives and spellcasting", async () => {
+    const monster = normalizeMonsterDefinition({ Id: "goblin", Name: "Goblin", Speed: ["30 pies"], Abilities: { Wis: 14, Int: 8 }, Skills: ["Perspicacia +3"], Senses: ["Percepción pasiva 17"], spellcasting: { ability: "intelligence", attackBonus: 6, saveDc: 14, casterLevel: 5 } });
+    const f = await setup({ monsters: [monster] }, campaign => {
+      const character = Object.values(campaign.characters)[0]!;
+      character.abilities.wisdom = 14; character.abilities.intelligence = 8;
+      character.spellcasting.ability = "intelligence";
+    });
+    const creatureFacts = f.cards()[0]!.querySelector(":scope > summary .gm-combat-facts")!;
+    const characterFacts = f.cards()[1]!.querySelector(":scope > summary .gm-combat-facts")!;
+    expect([...creatureFacts.querySelectorAll("small")].map(e => e.textContent)).toEqual([...characterFacts.querySelectorAll("small")].map(e => e.textContent));
+    expect(creatureFacts.querySelector('[title="Percepción pasiva: 17"] strong')!.textContent).toBe("17");
+    expect(creatureFacts.querySelector('[title="Investigación pasiva: 9"] strong')!.textContent).toBe("9");
+    expect(creatureFacts.querySelector('[title="Perspicacia pasiva: 13"] strong')!.textContent).toBe("13");
+    expect(creatureFacts.querySelector('[title="CD de salvación de conjuros: 14"]')).not.toBeNull();
+    expect(creatureFacts.querySelector('[title="Bonificador de ataque con conjuros: +6"]')).not.toBeNull();
+    expect(characterFacts.querySelector('[title="Percepción pasiva: 12"]')).not.toBeNull();
+    expect(characterFacts.querySelector('[title="Investigación pasiva: 9"]')).not.toBeNull();
+    expect(characterFacts.querySelector('[title="Perspicacia pasiva: 12"]')).not.toBeNull();
+    expect(f.cards()[1]!.querySelector(".gm-combat-details .gm-passive-strip")).toBeNull();
+  });
+
+  it("keeps all passive fields present for incomplete creatures without guessing scores", async () => {
+    const f = await setup();
+    const facts = f.cards()[0]!.querySelector(":scope > summary .gm-combat-facts")!;
+    for (const name of ["Percepción", "Investigación", "Perspicacia"]) expect(facts.querySelector(`[title="${name} pasiva: —"]`)).not.toBeNull();
+  });
+
+  it("rolls shop item capabilities without spending stock and retains the merchant draft", async () => {
+    const item = { ...normalizeEquipmentDefinition({ name: "Vara de prueba", description: "Una descripción extensa con 2d6+1 de daño." }), id: "inv_11111111111111111111111111111111", order: 0, group: "backpack" };
+    item.features = [{ id: "itf_11111111111111111111111111111111", order: 0, kind: "action", name: "Descarga", description: "El objetivo debe estar a la vista.", active: false, toggleable: false, showInActions: true, chargeCost: 1, uses: { current: 2, maximum: 3, reset: "dawn" }, rolls: [{ label: "Impacto", expression: "1d20+5", mode: "advantage" }], bonuses: [] }];
+    const npc = normalizeMonsterDefinition({ Id: "merchant", Name: "Mercader", Inventory: [item] });
+    const save = vi.fn(async () => undefined);
+    const f = await setup({ loadGmContent: async () => ({ spells: [], equipment: [], monsters: [npc], shops: [{ name: "Tienda", npcId: npc.id, categories: {} }], checklist: [] }), saveCustomMonster: save });
+    f.root.querySelector<HTMLButtonElement>('[data-gm-section="content"]')!.click();
+    f.root.querySelector<HTMLButtonElement>('[data-gm-content-kind="shop"]')!.click();
+    f.root.querySelector<HTMLButtonElement>('[data-gm-edit="shop"]')!.click();
+    const name = f.root.querySelector<HTMLInputElement>('[name="name"]')!;
+    name.value = "Tienda editada"; name.dispatchEvent(new Event("input", { bubbles: true }));
+    f.root.querySelector<HTMLButtonElement>('[data-roll-expression="1d20+5"]')!.click();
+    await vi.waitFor(() => expect(f.requests).toHaveLength(1));
+    expect(f.requests[0]).toMatchObject({ expressions: ["1d20+5"], mode: "advantage" });
+    await vi.waitFor(() => expect(f.root.querySelector<HTMLInputElement>('[name="name"]')!.value).toBe("Tienda editada"));
+    expect(f.root.textContent).toContain("2/3 usos");
+    expect(save).not.toHaveBeenCalled();
+  });
+
+  it("rolls campaign monster spells with the selected level and keeps that level after an attack", async () => {
+    const monster = normalizeMonsterDefinition({ Id: "goblin", Name: "Goblin", Spells: ["Rayo propio"], spellcasting: { ability: "intelligence", attackBonus: 6, saveDc: 14, casterLevel: 5 } });
+    const spell = normalizeSpellDefinition({ name: "Rayo propio", level: 1, attackType: "attack", damageExpression: "2d6", upcastDamageExpression: "1d6", description: "Una descripción completa.", higherLevels: "Un dado por nivel." });
+    const f = await setup({ monsters: [monster], loadGmContent: async () => ({ spells: [spell], equipment: [], monsters: [monster], shops: [], checklist: [] }) });
+    const card = () => f.cards()[0]!.querySelector<HTMLElement>('[data-monster-spell]')!;
+    const level = card().querySelector<HTMLSelectElement>('[data-monster-spell-level]')!;
+    level.value = "3"; level.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(card().querySelector('[data-roll-expression="4d6"]')).not.toBeNull();
+    card().querySelector<HTMLButtonElement>('[data-roll-expression="1d20+6"]')!.click();
+    await vi.waitFor(() => expect(f.requests).toHaveLength(1));
+    await vi.waitFor(() => expect(card().querySelector<HTMLOptionElement>('[data-monster-spell-level] option[selected]')!.value).toBe("3"));
+    card().querySelector<HTMLButtonElement>('[data-roll-expression="4d6"]')!.click();
+    await vi.waitFor(() => expect(f.requests).toHaveLength(2));
+    expect(f.requests.map(r => r.expressions)).toEqual([["1d20+6"], ["4d6"]]);
+    expect(f.requests[0]!.name).toContain("Rayo propio");
+    expect(card().textContent).toContain("Una descripción completa.");
+  });
+
   it("shows projected spell bonuses in quick facts and keeps character states visible after compacting the card", async () => {
     const f = await setup({}, (campaign) => {
       const character = Object.values(campaign.characters)[0]!;
@@ -79,105 +161,31 @@ describe("native combat UI", () => {
     expect(summary.querySelector(".gm-summary-conditions")!.textContent).toContain("Agotamiento 1");
     expect(summary.querySelector(".gm-combat-identity-rank")!.textContent).toContain("nivel 10");
     summary.click();
-    expect(f.cards()[1]!.querySelector(".gm-character-identity-details")!.textContent).toContain("Escuela de abjuración");
+    expect(f.cards()[1]!.querySelector(".gm-character-identity-details")!.textContent).not.toContain("Escuela de abjuración"); // Already visible in the compact identity.
     expect(f.requests).toHaveLength(0);
   });
 
-  it("opens a copyable per-miniature diagnostic and retries images without changing combat state", async () => {
-    vi.spyOn(console, "warn").mockImplementation(() => undefined);
-    const copy = vi.spyOn(navigator.clipboard, "writeText").mockResolvedValue();
-    let unavailable = true;
-    const load = vi.fn(async () => {
-      if (unavailable) throw new Error("TALESPIRE_MINIATURE_IMAGE:model-lookup:notReady");
-      return document.createElement("canvas");
-    });
-    const f = await setup({ createMiniatureThumbnail: load, getMiniatureImageDiagnostics: () => ({
-      capabilities: { thumbnail: true },
-      images: [{ creatureId: "mini-goblin", stage: "model-lookup", status: "error", startedAt: "2026-10-20T00:00:00Z",
-        updatedAt: "2026-10-20T00:00:00Z", boardAssetId: "active-model", responses: {}, error: "notReady" }],
-    }) });
-    await vi.waitFor(() => expect(f.cards()[0]?.querySelector("[data-miniature-image]")?.getAttribute("data-miniature-image-state")).toBe("retrying"));
-    const before = structuredClone(f.combatants());
-    f.root.querySelector<HTMLButtonElement>("[data-open-image-diagnostics]")!.click();
-    const dialog = document.querySelector<HTMLDialogElement>(".miniature-image-diagnostics")!;
-    expect(dialog.open).toBe(true);
-    expect(dialog.textContent).toContain("Búsqueda del modelo");
-    expect(dialog.textContent).toContain("Goblin del puente");
-    const reportField = dialog.querySelector<HTMLTextAreaElement>("[data-image-report]")!;
-    const snapshot = JSON.parse(reportField.value);
-    expect(snapshot.participants[0]).toMatchObject({ creatureId: "mini-goblin", native: { boardAssetId: "active-model" },
-      failure: { attempt: 1, reason: "TALESPIRE_MINIATURE_IMAGE:model-lookup:notReady" } });
-    dialog.querySelector<HTMLButtonElement>("[data-image-copy]")!.click();
-    await vi.waitFor(() => expect(copy).toHaveBeenCalledWith(reportField.value));
-    unavailable = false;
-    dialog.querySelector<HTMLButtonElement>("[data-image-retry]")!.click();
-    await vi.waitFor(() => expect(f.root.querySelectorAll("[data-miniature-image] canvas")).toHaveLength(3));
-    dialog.querySelector<HTMLButtonElement>("[data-image-refresh]")!.click();
-    expect(JSON.parse(reportField.value).participants[0]).toMatchObject({ display: { elementTag: "CANVAS", canvases: [{ width: 300, height: 150 }] } });
-    expect(JSON.parse(reportField.value).participants[0]).not.toHaveProperty("failure");
-    expect(f.combatants()).toEqual(before);
-    expect(f.requests).toHaveLength(0);
-    f.app.stop();
-    expect(dialog.open).toBe(false);
+  it("does not fetch or display combat portraits even when native image capabilities are available", async () => {
+    const thumbnail = vi.fn(async () => document.createElement("img"));
+    const f = await setup({ createMiniatureThumbnail: thumbnail });
+    expect(f.root.querySelector("[data-miniature-image]")).toBeNull();
+    expect(thumbnail).not.toHaveBeenCalled();
+    expect(f.cards().map(card => card.querySelector<HTMLElement>("[data-combat-miniature-name]")?.dataset.combatMiniatureName)).toEqual(["Goblin del puente", "Delerion", "Guardia de la torre"]);
   });
 
-  it("automatically retries a native image failure without touching the combat or requiring user input", async () => {
-    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "Date"] });
-    vi.spyOn(console, "warn").mockImplementation(() => undefined);
-    let unavailable = true;
-    const load = vi.fn(async (id: string) => {
-      if (id === "mini-goblin" && unavailable) throw new Error("model-not-ready");
-      return document.createElement("img");
-    });
-    const f = await setup({ createMiniatureThumbnail: load });
-    await vi.advanceTimersByTimeAsync(0);
-    expect(f.cards()[0]?.querySelector("[data-miniature-image]")?.getAttribute("data-miniature-image-state")).toBe("retrying");
-    unavailable = false;
-    await vi.advanceTimersByTimeAsync(1000);
-    expect(f.cards()[0]?.querySelector("[data-miniature-image] img")).not.toBeNull();
-    expect(load.mock.calls.filter(([id]) => id === "mini-goblin")).toHaveLength(2);
-    expect(f.combatants()).toHaveLength(3);
-    expect(f.requests).toHaveLength(0);
-  });
-
-  it("immediately refreshes automatic images when a content pack becomes available", async () => {
-    vi.spyOn(console, "warn").mockImplementation(() => undefined);
-    let unavailable = true;
-    const f = await setup({ createMiniatureThumbnail: async () => unavailable ? null : document.createElement("img") });
-    unavailable = false;
-    f.imageChanged(null);
-    await vi.waitFor(() => expect(f.root.querySelectorAll("[data-miniature-image] img")).toHaveLength(3));
-  });
-
-  it("never replaces a changed miniature model with an older response that arrives late", async () => {
-    let resolveOld!: (element: HTMLElement) => void;
-    const old = new Promise<HTMLElement>((resolve) => { resolveOld = resolve; });
-    let first = true;
-    const newest = document.createElement("img"); newest.dataset.model = "new-model";
-    const f = await setup({ createMiniatureThumbnail: async (id) => {
-      if (id === "mini-goblin" && first) { first = false; return old; }
-      return id === "mini-goblin" ? newest : document.createElement("img");
-    } });
-    f.imageChanged("mini-goblin");
-    await vi.waitFor(() => expect(f.cards()[0]?.querySelector("img")).toBe(newest));
-    resolveOld(document.createElement("canvas"));
-    await old; await Promise.resolve();
-    expect(f.cards()[0]?.querySelector("img")).toBe(newest);
-    expect(f.cards()[0]?.querySelector("canvas")).toBeNull();
-  });
-  it("shows only the native queue with miniature images, missing bindings and no encounter management", async () => {
+  it("shows only the native queue with miniature names, missing bindings and no encounter management", async () => {
     const f = await setup();
     expect(f.root.textContent).toContain("Combate de TaleSpire");
     expect(f.root.querySelector('[data-action="create-encounter"]')).toBeNull();
     expect(f.root.querySelector('[data-action="select-encounter"]')).toBeNull();
-    expect(f.cards().map((card) => card.querySelector(".gm-combatant-miniature > small")?.textContent)).toEqual([
+    expect(f.cards().map((card) => card.querySelector<HTMLElement>("[data-combat-miniature-name]")?.dataset.combatMiniatureName)).toEqual([
       "Goblin del puente", "Delerion", "Guardia de la torre",
     ]);
     expect(f.cards()[0]?.classList.contains("active")).toBe(true);
     expect(f.cards()[2]?.querySelector(".needs-association")).not.toBeNull();
     expect(f.cards()[2]?.querySelector('[data-open-association="player"]')).not.toBeNull();
     expect(f.cards()[2]?.querySelector('[data-open-association="monster"]')).not.toBeNull();
-    await vi.waitFor(() => expect(f.root.querySelectorAll("[data-miniature-image] img")).toHaveLength(3));
+    expect(f.root.querySelectorAll("[data-miniature-image] img")).toHaveLength(0);
     expect(f.cards()[1]?.querySelector(".needs-initiative")?.textContent).toContain("Falta INI");
     // A sheet without a casting ability must not advertise fabricated spell stats.
     expect(f.cards()[1]?.querySelector('.gm-combat-facts [title^="CD de salvación de conjuros:"]')).toBeNull();
@@ -189,7 +197,7 @@ describe("native combat UI", () => {
     await f.idle();
     expect(f.combatants().find((entry) => entry.kind === "player")?.initiative).toBe(21);
     expect(f.cards()[1]?.querySelector(".gm-order-correction")?.textContent).toBe("↑ #1");
-    expect(f.cards()[0]?.querySelector(".gm-combatant-miniature > small")?.textContent).toBe("Goblin del puente");
+    expect(f.cards()[0]?.querySelector<HTMLElement>("[data-combat-miniature-name]")?.dataset.combatMiniatureName).toBe("Goblin del puente");
     const reordered = { ...f.queue, items: [f.queue.items[1]!, f.queue.items[0]!], activeItemIndex: 0 };
     f.native(reordered);
     await f.idle();
@@ -210,7 +218,7 @@ describe("native combat UI", () => {
     await f.idle();
     expect((await f.source.load())!.campaign.gm.miniatureAssociations?.["mini-new"]?.characterId).toBe(f.character.id);
     expect(f.cards()[2]?.querySelector(".needs-association")).toBeNull();
-    expect(f.cards()[2]?.querySelector(".gm-combatant-miniature > small")?.textContent).toBe("Guardia de la torre");
+    expect(f.cards()[2]?.querySelector<HTMLElement>("[data-combat-miniature-name]")?.dataset.combatMiniatureName).toBe("Guardia de la torre");
     expect(Object.keys((await f.source.load())!.campaign.encounters)).toHaveLength(1);
   });
 
@@ -271,26 +279,18 @@ describe("native combat UI", () => {
     expect(f.cards()[0]?.textContent).not.toContain("Tirando…");
   });
 
-  it("places HP in a separate summary column and opens the creature statistics with its details", async () => {
+  it("places horizontal HP below the name and groups initiative with AC without losing its controls", async () => {
     const f = await setup();
     const summary = f.cards()[0]!.querySelector(".gm-combatant-summary")!;
-    expect(summary.querySelector(":scope > .gm-combatant-hp-readout")).not.toBeNull();
-    expect(summary.querySelector(".gm-combatant-core .gm-combatant-hp-readout")).toBeNull();
+    const identity = summary.querySelector(".gm-combatant-identity")!;
+    expect(identity.nextElementSibling?.classList.contains("gm-combatant-hp-readout")).toBe(true);
+    const stats = identity.querySelector(".gm-combat-header-stats")!;
+    expect(stats.querySelector(".gm-combat-ac")).not.toBeNull();
+    expect(stats.querySelector('[data-action="roll-initiative"]')).not.toBeNull();
     (summary as HTMLElement).click();
     expect(f.cards()[0]?.hasAttribute("open")).toBe(true);
     expect(f.cards()[0]?.querySelector(".gm-monster-details")?.hasAttribute("open")).toBe(true);
     expect(f.cards()[0]?.querySelector(".gm-combat-detail-toolbar [data-action=damage]")).not.toBeNull();
-  });
-
-  it("keeps the original canvas thumbnail when the participant card is rendered again", async () => {
-    const f = await setup();
-    f.runtime.createMiniatureThumbnail = async () => document.createElement("canvas");
-    f.root.querySelector<HTMLButtonElement>('[data-action="refresh-combat"]')!.click();
-    await vi.waitFor(() => expect(f.root.querySelectorAll("[data-miniature-image] canvas")).toHaveLength(3));
-    const canvas = f.cards()[0]!.querySelector("canvas");
-    f.player("client-hero", 20, f.character.id);
-    await f.idle();
-    await vi.waitFor(() => expect(f.cards()[0]!.querySelector("canvas")).toBe(canvas));
   });
 
   it("restores initiatives and creature HP when the GM panel is reopened", async () => {

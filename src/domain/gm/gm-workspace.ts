@@ -21,7 +21,16 @@ export const GmRandomTableSchema = z.object({
   entries: z.array(z.string().min(1)),
 });
 
+export const GmCharacterGroupSchema = z.object({
+  id: StableIdSchema,
+  name: z.string().trim().min(1).max(100),
+  revision: z.number().int().nonnegative().default(0),
+  characterIds: z.array(StableIdSchema).refine(ids => new Set(ids).size === ids.length, "Una hoja no puede repetirse en el grupo."),
+});
+export type GmCharacterGroup = z.infer<typeof GmCharacterGroupSchema>;
+
 export const MiniatureAssociationSchema = z.object({
+  combatantName: z.string().min(1).nullable().default(null),
   displayName: z.string().default(""),
   boardAssetId: z.string().default(""),
   monster: z.object({
@@ -34,11 +43,29 @@ export const MiniatureAssociationSchema = z.object({
   updatedAt: z.string().datetime({ offset: true }),
 });
 
-export const GmWorkspaceSchema = z.object({
+const GmWorkspaceFieldsSchema = z.object({
   noteGroups: z.array(GmNoteGroupSchema).default([]),
   randomTables: z.array(GmRandomTableSchema).default([]),
   googleDocsUrl: z.string().default(""),
   miniatureAssociations: z.record(z.string().min(1), MiniatureAssociationSchema).default({}),
+  characterGroups: z.array(GmCharacterGroupSchema).superRefine((groups, context) => {
+    const ids = new Set<string>(), members = new Set<string>();
+    groups.forEach((group, index) => {
+      if (ids.has(group.id)) context.addIssue({ code: "custom", message: "El grupo está repetido.", path: [index, "id"] });
+      ids.add(group.id);
+      for (const character of group.characterIds) {
+        if (members.has(character)) context.addIssue({ code: "custom", message: "Una hoja sólo puede pertenecer a un grupo.", path: [index, "characterIds"] });
+        members.add(character);
+      }
+    });
+  }).optional(),
+});
+
+type WorkspaceFields = z.infer<typeof GmWorkspaceFieldsSchema>;
+type WorkspaceWithOptionalGroups = Omit<WorkspaceFields, "characterGroups"> & { characterGroups?: GmCharacterGroup[] };
+export const GmWorkspaceSchema = GmWorkspaceFieldsSchema.transform((value): WorkspaceWithOptionalGroups => {
+  const { characterGroups, ...rest } = value;
+  return characterGroups === undefined ? rest : { ...rest, characterGroups };
 });
 
 type ParsedGmWorkspace = z.infer<typeof GmWorkspaceSchema>;

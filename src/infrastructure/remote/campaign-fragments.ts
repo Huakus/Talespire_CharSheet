@@ -143,6 +143,7 @@ export function fragmentCampaign(campaignInput: CampaignV2): CampaignFragmentDra
       payload: object({
         googleDocsUrl: campaign.gm.googleDocsUrl,
         miniatureAssociations: campaign.gm.miniatureAssociations ?? {},
+        ...(campaign.gm.characterGroups !== undefined ? { characterGroups: campaign.gm.characterGroups } : {}),
       }, "GM settings"),
     },
     ...campaign.gm.noteGroups.map((payload, position) => ({
@@ -229,6 +230,7 @@ export function assembleCampaign(state: RemoteCampaignFragmentState): CampaignV2
     gm: {
       googleDocsUrl: String(settings.googleDocsUrl ?? ""),
       miniatureAssociations: settings.miniatureAssociations ?? {},
+      ...(settings.characterGroups !== undefined ? { characterGroups: settings.characterGroups } : {}),
       noteGroups: payloads(state.fragments, "gm-note-group", ""),
       randomTables: payloads(state.fragments, "gm-random-table", ""),
     },

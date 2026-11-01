@@ -1,4 +1,6 @@
+import { bindInventoryDescriptions, renderCollapsibleInventoryDescription, renderInventoryRichText } from "./inventory-description-view";
 import { renderMartialPanel,bindMartialPanel } from "./martial-play-panel";
+import { confirmAction } from "./confirm-action";
 import { renderSorcererPanel,bindSorcererPanel,sorcererSpellExtras,sorcererCastOptions } from "./sorcerer-play-panel";
 import { CharacterProgressionPanel } from "./character-progression-panel";
 import { renderRangerPanel,bindRangerPanel } from "./ranger-play-panel";
@@ -122,7 +124,7 @@ import type {
 import type { PlayerCustomContent } from "../infrastructure/talespire/custom-content-transfer";
 import { bindViewportConstrainedDetails } from "./floating-panel";
 import { inventoryCatalogDefinition, renderSharedInventoryCard } from "./inventory-view";
-import { inventoryDescriptionBlocks, inventoryDescriptionText, inventoryPlayerText, inventorySupplementalText } from "./inventory-description";
+import { inventoryPlayerText, inventorySupplementalText } from "./inventory-description";
 import { bindEquipmentToolChecks, renderEquipmentToolCheck } from "./equipment-tool-checks";
 import { inventoryEquipmentDefinition, equipmentBearerIssue, equipmentPlainDescription } from "../domain/equipment/equipment-live";
 import { equipmentClassResourceIssue } from "../domain/equipment/equipment-class-resources";
@@ -167,7 +169,7 @@ export interface BrowserAppRuntime {
   subscribeCampaignChanges?: (listener: (snapshot: CampaignSnapshot) => void) => () => void;
   loadStorageUsage?: () => Promise<CampaignStorageUsage>;
   diceRoller: DiceRoller;
-  subscribeDiceResults?: (listener: (result: { name: string; total: number }) => void) => () => void;
+  subscribeDiceResults?: (listener: (result: import("../infrastructure/talespire/talespire-dice-roller").TaleSpireResolvedRoll) => void) => () => void;
   selectMiniature?: () => Promise<NonNullable<CharacterV2["taleSpire"]>>;
   createMiniatureThumbnail?: (link: NonNullable<CharacterV2["taleSpire"]>) => Promise<HTMLElement | null>;
   requestInitiativeList?: () => Promise<void>;
@@ -242,14 +244,6 @@ export function experienceProgress(levelInput: number, experienceInput: number):
   return { level, current, next, percent };
 }
 
-function levelForExperience(experience: number): number {
-  let level = 1;
-  for (let index = 1; index < EXPERIENCE_THRESHOLDS.length; index += 1) {
-    if (experience < EXPERIENCE_THRESHOLDS[index]!) break;
-    level = index + 1;
-  }
-  return level;
-}
 
 function numberInput(name: string, label: string, value: number, min?: number): string {
   const minimum = min === undefined ? "" : ` min="${min}"`;
@@ -357,7 +351,6 @@ const characterSheetTabs: readonly { id: CharacterSheetTab; label: string; short
   { id: "notes", label: "Notas", shortLabel: "Notas" },
   { id: "extras", label: "Extras", shortLabel: "Extras" },
   { id: "lore", label: "Campaña", shortLabel: "Lore" },
-  { id: "initiative", label: "Iniciativa", shortLabel: "Iniciativa" },
 ];
 
 function sheetModePreference(): CharacterSheetMode {
@@ -762,7 +755,10 @@ export class BrowserApp {
   async start(): Promise<void> {
     this.stops.push(subscribeAppConnectionStatus(() => this.refreshConnectionIndicators()));
     if (this.runtime.subscribeCampaignChanges) this.stops.push(this.runtime.subscribeCampaignChanges(snapshot => this.handleRemoteCampaignChange(snapshot)));
-    this.runtime.subscribeDiceResults?.((result) => {
+    const stopDice = this.runtime.subscribeDiceResults?.((result) => {
+      if (result.purpose === "initiative" && result.characterId && result.encounterId && result.initiativeEpoch !== undefined && result.correlationId) {
+        void this.saveRolledInitiative(result.characterId, result.total, { encounterId: result.encounterId, epoch: result.initiativeEpoch, rollId: result.correlationId });
+      }
       this.appendActionLog(`${result.name}: resultado ${result.total}`, "roll");
       if (this.pendingMerchantChallenges.has(result.name)) {
         void this.resolveMerchantChallenge(result.name, result.total);
@@ -775,6 +771,7 @@ export class BrowserApp {
       this.initiativeState = state;
       this.render();
     });
+    if (stopDice) this.stops.push(stopDice);
     this.runtime.subscribeInitiativeDelivery?.((state) => { this.message = state; this.render(); });
     this.runtime.subscribeTransportDiagnostics?.((state) => {
       this.transportDiagnostics = state;
@@ -982,26 +979,6 @@ export class BrowserApp {
     }
   }
 
-  private async linkSelectedMiniature(): Promise<void> {
-    if (!this.snapshot || !this.selectedCharacterId || !this.runtime.selectMiniature) return;
-    const character = this.snapshot.campaign.characters[this.selectedCharacterId];
-    if (!character) return;
-    try {
-      const miniature = await this.runtime.selectMiniature();
-      this.acceptCharacterSnapshot(await this.application.linkCharacterMiniature({
-        characterId: character.id,
-        expectedCharacterRevision: character.revision,
-        expectedCampaignChecksum: this.snapshot.checksum,
-        miniature,
-      }), "Vincular miniatura");
-      this.message = { kind: "success", text: "Miniatura vinculada al personaje." };
-      this.render();
-    } catch (error) {
-      this.message = { kind: "error", text: formatError(error) };
-      this.render();
-    }
-  }
-
   private async createCharacter(): Promise<void> {
     if (!this.snapshot) return;
     const input = this.root.querySelector<HTMLInputElement>("#new-character-name");
@@ -1072,7 +1049,7 @@ export class BrowserApp {
   private async deleteCharacter(): Promise<void> {
     if (!this.snapshot || !this.selectedCharacterId) return;
     const character = this.snapshot.campaign.characters[this.selectedCharacterId];
-    if (!character || !window.confirm(`¿Eliminar a ${character.name}? Esta operación no se puede deshacer desde la hoja.`)) return;
+    if (!character || !await confirmAction(`Eliminar a ${character.name}`, "Se eliminará su hoja y se quitarán sus asociaciones. Esta acción no se puede deshacer.")) return;
     try {
       this.snapshot = await this.application.deleteCharacter({
         characterId: character.id,
@@ -1135,7 +1112,6 @@ export class BrowserApp {
               </div></section>
               <details class="color-picker menu-color-picker"><summary title="Cambiar color del personaje"><span>Color</span><i style="--swatch-color:${character.color}" aria-hidden="true"></i></summary><div class="color-picker-menu"><div class="color-palette" role="group" aria-label="Colores sugeridos">${UI_ACCENT_PRESETS.map((color) => `<button type="button" class="color-swatch ${color.toLowerCase() === character.color.toLowerCase() ? "active" : ""}" style="--swatch-color:${color}" data-character-color-value="${color}" aria-label="Usar color ${color}" aria-pressed="${color.toLowerCase() === character.color.toLowerCase()}"></button>`).join("")}</div><div class="color-custom-row"><label><span>Hexadecimal</span><input id="character-color" type="text" value="${character.color}" maxlength="7" spellcheck="false" aria-label="Color hexadecimal" placeholder="#RRGGBB"></label><button type="button" id="apply-character-color">Aplicar</button></div></div></details>
               <label>Tema<select id="theme"><option value="dark" ${this.theme === "dark" ? "selected" : ""}>Oscuro</option><option value="light" ${this.theme === "light" ? "selected" : ""}>Claro</option></select></label>
-              ${this.runtime.selectMiniature ? '<button type="button" class="secondary-button" id="link-miniature">Vincular mini</button>' : ""}
               ${this.runtime.canManageCharacters ? '<button type="button" class="secondary-button danger" id="delete-character">Eliminar personaje</button>' : ""}
               <button type="button" id="guided-level-up" ${character.builder && character.identity.level < 20 ? "" : "disabled"} title="${character.builder ? "Continuar el tutorial de tu clase" : "Disponible para personajes creados con el tutorial"}">Subir de nivel con tutorial</button>
               <details class="menu-section"><summary>Administrar personajes</summary>${this.renderCharacterManagement()}</details>
@@ -1329,7 +1305,7 @@ export class BrowserApp {
     if (this.activeSheetTab === "notes") return this.sheetMode === "edit" ? this.renderNotes(character) : this.renderNotesPlay(character);
     if (this.activeSheetTab === "extras") return this.sheetMode === "edit" ? this.renderExtras(character) : this.renderExtrasPlay(character);
     if (this.activeSheetTab === "lore") return this.loreBrowser?.render() ?? this.renderEmptyPanel("La biblioteca de campaña requiere una conexión con Supabase.");
-    return this.renderInitiativePanel(character, projection) || this.renderEmptyPanel("La colaboración de iniciativa no está disponible en este entorno.");
+    return this.renderSummaryPlay(character, projection);
   }
 
   private merchantInventory(shop: GmShop): CharacterInventoryItemV2[] {
@@ -1914,31 +1890,11 @@ export class BrowserApp {
   }
 
   private renderCollapsibleInventoryDescription(description: string, key: string, definition: ReturnType<typeof inventoryEquipmentDefinition> = null): string {
-    const expanded = this.expandedInventoryDescriptions.has(key);
-    const structured = definition && description === equipmentPlainDescription(definition);
-    const html = structured ? inventoryDescriptionBlocks(definition).map((block) => block.type === "paragraph" ? this.renderInventoryRichText(block.text, "Tirada") : block.type === "list" ? `<${block.ordered ? "ol" : "ul"}>${block.items.map((text) => `<li>${this.renderInventoryRichText(text, "Tirada")}</li>`).join("")}</${block.ordered ? "ol" : "ul"}>` : `<div class="inventory-rule-table"><table><thead><tr>${block.columns.map((text) => `<th>${escapeHtml(text)}</th>`).join("")}</tr></thead><tbody>${block.rows.map((row) => `<tr>${row.map((text) => `<td>${this.renderInventoryRichText(text, "Tirada")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`).join("") : this.renderInventoryRichText(inventoryDescriptionText(description, definition), "Tirada");
-    return `<div class="spell-description inventory-description ${expanded ? "expanded" : ""}" data-inventory-description="${escapeHtml(key)}"><div class="card-description rich-inventory-text">${html}</div><button type="button" class="spell-description-more" data-toggle-inventory-description aria-expanded="${expanded}">${expanded ? "Leer menos" : "Leer más"}</button></div>`;
+    return renderCollapsibleInventoryDescription(description, key, definition, this.expandedInventoryDescriptions.has(key));
   }
 
   private renderInventoryRichText(description: string, rollName: string): string {
-    const dice = /\b(?:\d+)?d\d+(?:\s*[+-]\s*(?:(?:\d+)?d\d+|\d+))*/gi;
-    return description.split(/\r?\n\s*\r?\n/).filter((paragraph) => paragraph.trim()).map((paragraph) => {
-      let cursor = 0;
-      let html = "";
-      for (const match of paragraph.matchAll(dice)) {
-        const index = match.index ?? 0;
-        html += escapeHtml(paragraph.slice(cursor, index)).replace(/\r?\n/g, "<br>");
-        try {
-          const expression = normalizeRollShortcut(match[0]);
-          html += `<button type="button" class="roll-button inline-dice-roll" data-roll-name="${escapeHtml(rollName)}" data-roll-expression="${escapeHtml(expression)}" data-roll-mode="normal">${escapeHtml(expression)}</button>`;
-        } catch {
-          html += escapeHtml(match[0]);
-        }
-        cursor = index + match[0].length;
-      }
-      html += escapeHtml(paragraph.slice(cursor)).replace(/\r?\n/g, "<br>");
-      return `<p>${html}</p>`;
-    }).join("");
+    return renderInventoryRichText(description, rollName);
   }
 
   private inventoryFeatureCanBeUsed(item: CharacterInventoryItemV2, feature: InventoryFeature): boolean {
@@ -2785,8 +2741,9 @@ export class BrowserApp {
     const remaining = progress.next === null ? null : Math.max(0, progress.next - progress.current);
     const target = remaining === null ? "nivel máximo" : `faltan ${remaining.toLocaleString("es-AR")} PX para el nivel ${progress.level + 1}`;
     const tooltip = `${current} PX actuales · ${target}`;
-    return `<details class="level-progress-card">
-      <summary class="level-progress-ring has-tooltip" data-tooltip="${tooltip}" aria-label="Nivel ${progress.level}. ${tooltip}" style="--level-progress:${progress.percent * 3.6}deg"><div><small>Nivel</small><strong>${progress.level}</strong></div></summary>
+    const ready = progress.next !== null && progress.current >= progress.next;
+    return `<details class="level-progress-card${ready ? " level-up-ready" : ""}">
+      <summary class="level-progress-ring has-tooltip" data-tooltip="${tooltip}" aria-label="Nivel ${progress.level}. ${tooltip}" style="--level-progress:${progress.percent * 3.6}deg"><div><small>Nivel</small><strong>${progress.level}</strong></div>${ready ? `<button type="button" data-guided-level-up ${character.builder ? "" : "disabled"} title="${character.builder ? `Subir a nivel ${progress.level + 1} con el tutorial` : "Requiere un personaje creado con el tutorial"}">Subir de nivel</button>` : ""}</summary>
       <form data-gain-experience><label>Experiencia ganada<input name="amount" type="number" min="1" step="1" value="100" required></label><button type="submit">Agregar</button></form>
     </details>`;
   }
@@ -2860,16 +2817,15 @@ export class BrowserApp {
     }
     try {
       const experience = character.identity.experience + amount;
-      const level = Math.min(20, Math.max(character.identity.level, levelForExperience(experience)));
       const snapshot = await this.application.editCharacter({
         characterId: character.id,
         expectedCharacterRevision: character.revision,
         expectedCampaignChecksum: this.snapshot.checksum,
-        patch: { identity: { experience, level } },
+        patch: { identity: { experience } },
       });
       this.acceptCharacterSnapshot(snapshot, `Ganar ${amount.toLocaleString("es-AR")} PX`);
       await this.refreshStorageUsage();
-      this.message = { kind: "success", text: level > character.identity.level ? `Subiste a nivel ${level}.` : `Ganaste ${amount.toLocaleString("es-AR")} PX.` };
+      this.message = { kind: "success", text: `Ganaste ${amount.toLocaleString("es-AR")} PX. Podés subir de nivel cuando quieras.` };
       this.render();
     } catch (error) {
       this.message = { kind: "error", text: formatError(error) };
@@ -3052,14 +3008,13 @@ export class BrowserApp {
           if (characterForm.isConnected) characterForm.requestSubmit();
         }, 250);
       });
-    this.root.querySelector<HTMLButtonElement>("#link-miniature")
-      ?.addEventListener("click", () => void this.linkSelectedMiniature());
     this.root.querySelector<HTMLButtonElement>("#create-character")
       ?.addEventListener("click", () => void this.createCharacter());
     this.root.querySelector<HTMLButtonElement>("#create-guided-character")
       ?.addEventListener("click", () => void this.openGuidedBuilder(false));
     this.root.querySelector<HTMLButtonElement>("#guided-level-up")
       ?.addEventListener("click", () => void this.openGuidedBuilder(true));
+    this.root.querySelectorAll<HTMLButtonElement>("[data-guided-level-up]").forEach(button => button.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); void this.openGuidedBuilder(true); }));
     this.root.querySelector<HTMLButtonElement>("#delete-character")
       ?.addEventListener("click", () => void this.deleteCharacter());
     this.root.querySelector<HTMLButtonElement>("#request-initiative-list")
@@ -3239,23 +3194,7 @@ export class BrowserApp {
       this.inventorySearch = "";
       this.render();
     });
-    this.root.querySelectorAll<HTMLButtonElement>("[data-toggle-inventory-description]").forEach((button) => {
-      const container = button.closest<HTMLElement>("[data-inventory-description]");
-      const description = container?.querySelector<HTMLElement>(".card-description");
-      if (!container || !description) return;
-      const key = container.dataset.inventoryDescription;
-      if (!container.classList.contains("expanded") && description.clientHeight > 0 && description.scrollHeight <= description.clientHeight + 1) button.hidden = true;
-      button.addEventListener("click", () => {
-        const expanded = !container.classList.contains("expanded");
-        container.classList.toggle("expanded", expanded);
-        button.textContent = expanded ? "Leer menos" : "Leer más";
-        button.setAttribute("aria-expanded", String(expanded));
-        if (key) {
-          if (expanded) this.expandedInventoryDescriptions.add(key);
-          else this.expandedInventoryDescriptions.delete(key);
-        }
-      });
-    });
+    bindInventoryDescriptions(this.root, this.expandedInventoryDescriptions);
     this.root.querySelectorAll<HTMLButtonElement>("[data-inventory-quantity]").forEach((button) => {
       button.addEventListener("click", () => void this.adjustInventoryQuantity(button));
     });
@@ -4612,6 +4551,17 @@ export class BrowserApp {
     this.render();
   }
 
+  private async saveRolledInitiative(characterId: string, initiative: number, context: { encounterId: string; epoch: number; rollId: string }): Promise<void> {
+    try {
+      const saved = await this.application.recordCharacterInitiative({ characterId, initiative, ...context });
+      if (saved) this.handleRemoteCampaignChange(saved);
+      const combat = saved?.campaign.encounters[context.encounterId];
+      const participant = combat?.combatants.find(c => c.kind === "player" && c.characterId === characterId);
+      this.message = { kind: "success", text: combat?.initiativeEpoch !== context.epoch || !participant ? "La tirada se completó, pero el combate o su asociación cambiaron." : participant.initiative === null ? "La tirada se completó; no se modificó la iniciativa." : `Iniciativa de combate: ${participant.initiative}. Se conserva cualquier resultado ya asignado.` };
+    } catch (error) { this.message = { kind: "error", text: `No se pudo guardar la iniciativa: ${formatError(error)}` }; }
+    this.render();
+  }
+
   private async rollInitiative(): Promise<void> {
     const character = this.snapshot && this.selectedCharacterId
       ? this.snapshot.campaign.characters[this.selectedCharacterId]
@@ -4640,10 +4590,10 @@ export class BrowserApp {
       this.appendActionLog(`Iniciativa: ${character.name}: ${result.summary}`, "roll");
       const total = result.totals[0];
       if (total !== undefined) {
-        if (combat) await this.runtime.sendInitiative?.(total, character.id, context);
-        this.message = { kind: "success", text: `${result.summary}.${useInspiration ? " Inspiración usada." : ""}${combat ? " Resultado confirmado por el GM." : ""}` };
+        if (combat) await this.saveRolledInitiative(character.id, total, { ...context, encounterId: combat.id, epoch: combat.initiativeEpoch });
+        else this.message = { kind: "success", text: `${result.summary}.${useInspiration ? " Inspiración usada." : ""}` };
       } else {
-        this.message = { kind: "success", text: `${result.summary}${useInspiration ? " · Inspiración usada." : ""}${combat ? " El resultado se enviará automáticamente al GM al completarse la tirada; también podés ingresarlo manualmente." : ""}` };
+        this.message = { kind: "success", text: `${result.summary}${useInspiration ? " · Inspiración usada." : ""}${combat ? " Al terminar se guardará directamente en el combate si la iniciativa sigue pendiente." : ""}` };
       }
     } catch (error) {
       this.message = { kind: "error", text: formatError(error) };

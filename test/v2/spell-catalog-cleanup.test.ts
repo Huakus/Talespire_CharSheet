@@ -71,6 +71,7 @@ describe("single-source catalog and retained character versions",() => {
     const view=panel as unknown as { renderSpellCard(s: SpellDefinition):string;renderSpellForm(s: SpellDefinition|null):string };
     const html=view.renderSpellCard(old);
     expect(html).toContain("Pendiente de reemplazo");expect(html).not.toContain("data-gm-edit");expect(html).not.toContain("data-gm-delete");
-    expect(view.renderSpellForm(null)).toContain("Origen: Custom");expect(view.renderSpellForm(null)).not.toContain('name="catalogTags"');
+    expect(view.renderSpellForm(null)).toContain("Origen: Custom");
+    expect(view.renderSpellForm(null)).not.toContain('<option value="old"');
   });
 });

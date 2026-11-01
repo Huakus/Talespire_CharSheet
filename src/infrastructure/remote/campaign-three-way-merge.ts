@@ -123,6 +123,13 @@ export function mergeCampaignChanges(
   local: CampaignV2,
   remote: CampaignV2,
 ): CampaignMergeResult {
+  // Membership and group-wide visibility form a semantic operation. Generic
+  // per-group merging could put one sheet in two groups after simultaneous moves.
+  const organization = (campaign: CampaignV2) => canonicalJsonStringify(campaign.gm.characterGroups ?? []);
+  const originalGroups = organization(base), localGroups = organization(local), remoteGroups = organization(remote);
+  if (localGroups !== originalGroups && remoteGroups !== originalGroups && localGroups !== remoteGroups) {
+    return { campaign: null, conflictPaths: ["gm.characterGroups"] };
+  }
   // Advancement is a semantic operation: two independently acquired levels
   // must never be combined by the generic collection merge.
   for (const [id, previous] of Object.entries(base.characters)) {

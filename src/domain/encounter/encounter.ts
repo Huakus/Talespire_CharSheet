@@ -13,6 +13,7 @@ export interface EncounterCommandOptions {
 }
 
 export type EncounterCommand =
+  | { kind: "rename-combatant"; combatantId: string; name: string }
   | { kind: "add-combatant"; combatant: EncounterCombatant }
   | { kind: "remove-combatant"; combatantId: string }
   | { kind: "advance-turn" }
@@ -87,6 +88,14 @@ export function isBloodied(combatant: EncounterCombatant): boolean {
     && combatant.hitPoints.current <= Math.floor(combatant.hitPoints.maximum / 2);
 }
 
+export function nextMonsterName(profileName: string, usedNames: string[]): string {
+  const used = new Set(usedNames.map(name => name.trim().toLocaleLowerCase()));
+  for (let counter = 0; ; counter++) {
+    const candidate = counter ? `${profileName} ${counter}` : profileName;
+    if (!used.has(candidate.trim().toLocaleLowerCase())) return candidate;
+  }
+}
+
 export function applyEncounterCommand(
   source: Encounter,
   command: EncounterCommand,
@@ -150,7 +159,7 @@ export function applyEncounterCommand(
       taleSpireCreatureId: previous.taleSpireCreatureId,
       taleSpireDisplayName: previous.taleSpireDisplayName,
       taleSpireBoardAssetId: previous.taleSpireBoardAssetId,
-      name: command.monster.name,
+      name: previous.kind === "monster" && previous.monsterDefinitionId === command.monster.definitionId ? previous.name : nextMonsterName(command.monster.name, encounter.combatants.filter(c => c.id !== previous.id).map(c => c.name)),
       initiative: previous.kind === "monster" && previous.monsterDefinitionId === command.monster.definitionId ? previous.initiative : null,
       order: previous.order,
       monsterDefinitionId: command.monster.definitionId,
@@ -165,6 +174,12 @@ export function applyEncounterCommand(
     };
   } else {
     const combatant = requireCombatant(encounter, command.combatantId);
+    if (command.kind === "rename-combatant") {
+      if (combatant.kind === "player") throw new Error("El nombre del personaje se toma de su hoja.");
+      const name = command.name.trim();
+      if (!name) throw new Error("Ingresá un nombre para el combatiente.");
+      combatant.name = name;
+    } else
     if (command.kind === "set-initiative") {
       if (command.onlyIfMissing && (combatant.initiative !== null || command.epoch !== undefined && command.epoch !== encounter.initiativeEpoch)) return { encounter: source, effects };
       if (command.initiative !== null && !Number.isSafeInteger(command.initiative)) {

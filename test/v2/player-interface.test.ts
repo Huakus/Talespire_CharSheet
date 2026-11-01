@@ -153,7 +153,8 @@ describe("player interface shell", () => {
     expect(html).not.toContain('id="miniature-thumbnail"');
     expect(html.indexOf('class="sheet-menu"')).toBeLessThan(html.indexOf('class="mode-switch"'));
     expect(html).toContain('data-active-sheet-tab="summary"');
-    for (const tab of ["summary", "actions", "spells", "inventory", "traits", "notes", "extras", "initiative"]) {
+    expect(html).not.toContain('data-sheet-tab="initiative"');
+    for (const tab of ["summary", "actions", "spells", "inventory", "traits", "notes", "extras"]) {
       expect(html).toContain(`data-sheet-tab="${tab}"`);
     }
     expect(html).toContain('<span>Acciones</span>');

@@ -1,3 +1,4 @@
+import { organizeCharacters } from "./application/gm/character-organization";
 import { CampaignApplication } from "./application/campaign/campaign-application";
 import { BlobCampaignRepository } from "./infrastructure/persistence/blob-campaign-repository";
 import { createBrowserExclusiveLock } from "./infrastructure/persistence/exclusive-lock";
@@ -121,8 +122,10 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     const combatRepository = new CombatSessionRepository(repository);
     const gmWorkspace = new GmWorkspaceApplication(combatRepository);
     void new GmApp(appRoot, new EncounterApplication(combatRepository), {
+      ...(api.system?.clipboard ? { copyText: (text: string) => api.system!.clipboard!.setText(text) } : {}),
       ...(services?.canManageCharacters === false ? {} : {
         manageCharacter: (command) => application.administerCharacter(command),
+        organizeCharacters: command => organizeCharacters(repository, command),
         openCharacter: async (id: string) => {
           const dialog = document.createElement("dialog"); dialog.className = "gm-character-sheet-dialog";
           const close = document.createElement("button"); close.type = "button"; close.textContent = "Guardar y volver al control GM";
@@ -194,11 +197,6 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     : null;
   activeCollaboration = collaboration;
   if (collaboration) await collaboration.initialize();
-  if (diceRoller instanceof TaleSpireDiceRoller) {
-    diceRoller.subscribe((result) => {
-      if (result.purpose === "initiative" ? Boolean(result.encounterId) : result.name.startsWith("Iniciativa:")) void activeCollaboration?.sendInitiative(result.total, result.characterId, result.correlationId ? { rollId: result.correlationId, ...(result.encounterId ? { encounterId: result.encounterId } : {}), ...(result.initiativeEpoch === undefined ? {} : { epoch: result.initiativeEpoch }) } : undefined).catch(error => console.warn("No se confirmó la iniciativa", error));
-    });
-  }
   void new BrowserApp(appRoot, application, {
     storageLabel: "Almacenamiento de campaña de TaleSpire",
     loadStorageUsage: () => primaryRepository.getStorageUsage(),

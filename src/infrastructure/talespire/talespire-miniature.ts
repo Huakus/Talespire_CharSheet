@@ -99,6 +99,7 @@ export class TaleSpireMiniatureAdapter {
   async selectFirst(): Promise<MiniatureLink> {
     if (!this.api.creatures) throw new Error("TaleSpire creature selection is unavailable");
     const selected = await this.api.creatures.getSelectedCreatures();
+    if (Array.isArray(selected) && selected.length > 1) throw new Error("Seleccioná una sola miniatura en TaleSpire para vincularla sin ambigüedad.");
     const first = Array.isArray(selected) ? selected[0] : null;
     const selectedId = typeof first === "string" ? first : String(object(first).id ?? "");
     if (!selectedId) {

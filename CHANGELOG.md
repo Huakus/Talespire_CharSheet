@@ -1,6 +1,79 @@
 # Changelog
 
-Changes to Talespire CharSheet from **1.0.29 through 1.0.34**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+Changes to Talespire CharSheet from **1.0.29 through 1.0.42**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+
+## 1.0.42 — 2026-10-31
+
+- Moved creature ability-check and saving-throw buttons from the collapsed combatant summary into the expanded details, preserving modifiers, roll modes and individual combatant names.
+- Creature and character combat summaries now consistently show speed plus passive Perception, Investigation and Insight. Creature spellcasters also show their spell save DC and spell attack bonus using the same labels as characters.
+- Creature passives honor explicitly listed scores; otherwise they use the listed skill bonus or the actual corresponding ability score. Missing or contradictory passive data displays a dash instead of an invented value.
+- Removed duplicate passive readouts from expanded character details when those values are already in the summary.
+
+## 1.0.41 — 2026-10-30
+
+- GM character cards now start collapsed, displaying only the character name and **Open** button. Expanded cards show class/player details, visibility, guided-creation provenance, renaming, export, deletion and group assignment.
+- Characters sort by visibility first, then name. **Hidden / Show / Hide** replaces the previous archive terminology; existing hidden sheets retain their state and remain excluded from player selection.
+- Removed miniature-linking controls from character administration and character sheets. Participant association remains available in combat.
+- Added persistent, collapsible character groups with creation, renaming, per-sheet membership and dissolution without deleting sheets. Group headers show visible/hidden counts, and group actions show or hide every member in a single save.
+- Group operations preserve unrelated sheet/combat edits, retry optimistic save conflicts and reject stale membership changes or campaign switches. Deleting a sheet also removes its group membership.
+- Search, visibility filters, expanded cards/groups and unsaved name drafts survive view updates. Group data round-trips through shared campaign storage without requiring a new database table.
+
+## 1.0.40 — 2026-10-27
+
+- Added a thin, theme-aware separator between combatant cards in the GM encounter view, with modest spacing to distinguish adjacent participants.
+
+## 1.0.39 — 2026-10-27
+
+- Ability-check and saving-throw colors now affect the modifier text only. Normal button backgrounds, borders, labels, ability scores and interaction styles are preserved; the scale reaches saturated red at −10 and green at +10, with zero retaining its default text color.
+- Shop stock and catalog cards share the character inventory's rich description renderer, including expandable full text, lists, tables and inline dice rolls. Linked structured definitions supply complete rules when an older description contains only a summary.
+- Shop previews include supplementary capability descriptions, roll shortcuts, uses/costs, additional effects, personal notes and resource recovery rules. Expanding a description survives filtering and rerenders; rolling a preview does not spend stock or discard merchant form changes.
+
+## 1.0.38 — 2026-10-27
+
+- Reorganized spell, equipment and merchant editors into compact sections with responsive columns, properly sized checkboxes, collapsible optional settings and a persistent save/discard toolbar.
+- Spell editing exposes every supported definition field, including rules edition/year, casting details, components, materials, classes, attack/save resolution, damage, scaling and campaign tags. Invalid changed dice expressions report an actionable error without discarding the draft.
+- Equipment fields adapt to weapon/armor type and charge usage while retaining draft values when switched. Added armor Strength requirements and initial quantity/equipped/attuned controls; ordinary edits preserve advanced rules, capabilities and resource state.
+- Merchant editing separates identity/NPC availability, commerce, negotiation, inventory actions and stock. Filtering stock preserves unsaved settings; legacy category references and interaction counters survive saving.
+- Creature spells now expose casting details, descriptions, attack/effect rolls, target save DCs and supported higher-level casting in GM combat. English/Spanish PHB names resolve automatically, while campaign definitions take precedence. Spell edits are available to combat immediately.
+- Added independent creature spellcasting ability, attack bonus, save DC and caster-level fields. Only unambiguous, explicit casting traits supply defaults; missing automation data is highlighted rather than guessed. Spell slots, uses, targets and concentration remain manual.
+- Added regression coverage for editor round trips, draft recovery, duplicate-save protection, advanced equipment preservation, casting-data serialization, spell scaling and actual GM stylesheet behavior.
+
+## 1.0.37 — 2026-10-27
+
+- Character administration now shows status badges: available characters in green, archived characters in bold red.
+- Fixed GM button theme specificity overriding the modifier color scale with the golden accent. Modifier fills use broadly supported alpha gradients, retain the default style at zero and preserve readable text in both themes.
+- Added regression checks against computed styles using the actual application stylesheet, covering positive/negative modifiers, neutral values and archived status.
+
+## 1.0.36 — 2026-10-27
+
+- Combatant name editing now uses a full-width input labeled **Name**, overriding the narrow input rule used for numeric combat controls.
+- Saving throw buttons display only their modifier; accessible names and tooltips still identify the saving throw.
+- Ability and saving throw buttons use independent modifier colors, blending from the default style at zero to saturated green at +20 or higher and red at −20 or lower.
+- Combat HP is a horizontal meter immediately below the name, retaining current, maximum and temporary HP.
+- Initiative sits beside AC in the header, preserving rolling, pending-result warnings and recommended-order indicators.
+
+## 1.0.35 — 2026-10-27
+
+### Character sheets and advancement
+
+- Experience accumulates independently of level, including excess XP spanning multiple levels. Reaching the next threshold gives the level indicator a golden glow and exposes a button to open the existing guided level-up tutorial. Advancing remains a deliberate action.
+- Spell selectors for all classes, feats and other catalog choices expose descriptions before selection, including keyboard previews, requirements and unavailable options. Copied wizard spells also include their descriptions.
+- Character-sheet initiative results write directly to persisted combat data. They fill pending initiative only, preserve existing zero/negative results, and ignore rolls invalidated by clearing initiative or changing associations. TaleSpire still rolls the dice; GM receipt no longer depends on its message transport.
+- Removed the redundant Initiative sheet tab. Section tabs wrap onto multiple rows instead of scrolling horizontally.
+
+### GM character administration
+
+- Replaced native browser deletion confirmations with an in-app confirmation dialog compatible with the TaleSpire WebView.
+- Moved character-card actions to the right and grouped editing controls to reduce wasted space.
+- Added direct linking to the selected board miniature. Linking updates the sheet, persistent association and current combat together, and clears the superseded binding.
+
+### Combat presentation and identity
+
+- Removed miniature images from combatant cards; native miniature names remain visible, including for unassociated participants.
+- Combatant names are independent of miniature names and creature profiles. New creature associations receive the smallest available numeric suffix, starting with no suffix. Individual names can be edited and survive queue changes and profile edits; player names always come from their sheets.
+- Saving throws sit directly beneath their matching ability buttons, with green/red styling when their bonus is higher/lower than the ability modifier.
+- Compact creature cards show ability checks, saving throws, action roll shortcuts and distinct vulnerability, resistance and immunity labels. AC uses an inline badge. Expanded details provide rules and editing controls without repeating the compact creature statistics.
+- Added **Copy name for TaleSpire**, using the native clipboard API where available. The public Symbiote API does not expose miniature renaming, so applying the copied name remains a native TaleSpire action.
 
 ## 1.0.34 — 2026-10-27
 

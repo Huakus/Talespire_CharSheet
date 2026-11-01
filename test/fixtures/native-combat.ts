@@ -14,10 +14,10 @@ export async function nativeCombatFixture() {
   const monster = normalizeMonsterDefinition({ Id: "goblin", Name: "Goblin", Type: "Humanoide", Challenge: "1/4",
     HP: { Value: 7 }, AC: { Value: 15 }, InitiativeModifier: 2, Speed: ["30 pies"] });
   snapshot.campaign.gm.miniatureAssociations = {
-    "mini-goblin": { displayName: "Goblin del puente", boardAssetId: "asset-goblin", monster: {
+    "mini-goblin": { combatantName: null, displayName: "Goblin del puente", boardAssetId: "asset-goblin", monster: {
       definitionId: monster.id, name: monster.name, armorClass: monster.armorClass, hitPoints: monster.hitPoints,
     }, characterId: null, updatedAt: "2026-10-20T12:00:00Z" },
-    "mini-hero": { displayName: "Delerion", boardAssetId: "asset-hero", monster: null,
+    "mini-hero": { combatantName: null, displayName: "Delerion", boardAssetId: "asset-hero", monster: null,
       characterId: character.id, updatedAt: "2026-10-20T12:00:00Z" },
   };
   await source.save(snapshot.campaign, { kind: "checksum", checksum: snapshot.checksum });

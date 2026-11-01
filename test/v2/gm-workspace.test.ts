@@ -72,7 +72,7 @@ describe("GM workspace", () => {
     editable.editingContent = "equipment";
     const equipmentEditor = panel.render("content", workspace, "equipment");
     expect(equipmentEditor).toContain(`<strong>${equipment.name}</strong>`);
-    expect(equipmentEditor).toContain(`<label>Nombre<input name="name" required value="${equipment.name}">`);
+    expect(equipmentEditor).toContain(`name="name" value="${equipment.name}" required`);
     expect(equipmentEditor).not.toContain(`<strong>${spell.name}</strong>`);
 
     editable.selectedSpell = openSpell.name;
@@ -80,7 +80,7 @@ describe("GM workspace", () => {
     editable.editingContent = "shop";
     const shopEditor = panel.render("content", workspace, "shop");
     expect(shopEditor).toContain(`<strong>${shop.name}</strong>`);
-    expect(shopEditor).toContain(`<label>Nombre del comerciante<input name="name" required value="${shop.name}">`);
+    expect(shopEditor).toContain(`name="name" value="${shop.name}" required`);
     expect(shopEditor).not.toContain(`<strong>${openSpell.name}</strong>`);
   });
 
@@ -239,7 +239,7 @@ describe("GM workspace", () => {
     const templateForm = panel.render("content", workspace, "shop");
     expect(templateForm).toContain('value="COPIA DE Mercado"');
     expect(templateForm).not.toContain('name="categories"');
-    expect(templateForm).toContain("Acciones habilitadas");
+    expect(templateForm).toContain("Acciones sobre el inventario");
     expect(templateForm).toContain('name="commissionPercent"');
     expect(templateForm).toContain('name="intimidationReputationLoss"');
     expect(templateForm).toContain('name="fundsCopper"');
@@ -251,7 +251,7 @@ describe("GM workspace", () => {
     expect(templateForm).toContain("Cuerda");
     expect(templateForm).toContain('<strong>2</strong>');
     expect(templateForm).toContain("20.0 lb");
-    expect(templateForm).toContain("Estadísticas del NPC asociado");
+    expect(templateForm).toContain('class="merchant-derived-stats"');
   });
 
   it("removes a complete note group without altering the other groups", () => {
@@ -312,12 +312,12 @@ describe("GM workspace", () => {
     });
     const view = Object.create(GmApp.prototype) as unknown as {
       runtime: { contentCatalogIsComplete: boolean };
-      customSpells: never[];
+      toolsPanel: { spellCatalog(): never[] };
       renderCustomMonsterView(value: typeof monster): string;
       renderCustomMonsterForm(value: typeof monster): string;
     };
     view.runtime = { contentCatalogIsComplete: true };
-    view.customSpells = [];
+    view.toolsPanel = { spellCatalog: () => [] };
     const html = `${view.renderCustomMonsterView(monster)}${view.renderCustomMonsterForm(monster)}`;
     expect(html).not.toContain("Daga de Mirna");
     expect(html).not.toContain("Inventario");

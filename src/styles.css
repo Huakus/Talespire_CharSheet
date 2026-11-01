@@ -1875,6 +1875,7 @@ select[data-cast-slot-level] { overflow-y: auto !important; scrollbar-gutter: au
 /* Full-width initiative board and inline participant sheets. */
 .gm-encounter-board { display: grid; grid-template-rows: auto minmax(0, 1fr); align-content: start; gap: 7px; width: 100%; min-height: calc(100vh - 170px); }
 .gm-encounter-board .gm-combatants { display: flex; flex-direction: column; width: 100%; gap: 5px; }
+.gm-native-combat .gm-combatant-divider { flex: 0 0 auto; align-self: center; width: calc(100% - 12px); height: 0; margin: 0; padding: 0; border: 0; border-top: 1px solid var(--ui-border-strong); }
 .gm-encounter-board .gm-combatant { width: 100%; }
 .gm-encounter-board .gm-turn-bar { display: inline-flex; align-items: center; align-self: start; justify-self: start; width: max-content; height: fit-content; min-height: 0; padding: 2px 4px; gap: 3px; }
 .gm-encounter-board .gm-turn-bar > strong { min-width: 0; padding: 0 3px; font-size: .64rem; line-height: 1; }
@@ -2319,3 +2320,215 @@ dialog { color: var(--ui-text); }
 .gm-character-sheet-dialog { width: min(1100px, 96vw); max-height: 94vh; overflow-y: auto; background: var(--ui-bg); color: var(--ui-text); border: 1px solid var(--ui-accent); border-radius: 10px; }
 .gm-character-sheet-dialog > button { position: sticky; top: 0; z-index: 4; display: block; margin: 0 0 12px auto; }
 .remote-failure-build { display: block; margin-top: 12px; color: var(--ui-text-muted); overflow-wrap: anywhere; }
+
+/* 1.0.35: compact combat and character administration */
+.sheet-tabs { flex-wrap: wrap; overflow-x: visible; row-gap: 3px; }
+.sheet-tabs > button { flex: 1 0 auto; min-width: 0; }
+.confirm-action-dialog { width: min(430px, calc(100vw - 28px)); padding: 22px; color: var(--ui-text); background: var(--ui-bg-surface); border: 1px solid var(--ui-danger-border); border-radius: 10px; box-shadow: 0 20px 65px #0008; }
+.confirm-action-dialog::backdrop { background: #0008; }
+.confirm-action-dialog h2 { margin: 0 0 12px; }
+.confirm-action-dialog p { line-height: 1.5; }
+.confirm-action-dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.gm-character-row { grid-template-columns: minmax(0, 1fr) minmax(160px, 230px); align-items: center; gap: 14px; padding: 12px 14px; }
+.gm-character-identity { min-width: 0; align-content: start; gap: 5px; }
+.gm-character-identity > strong { font-size: 1rem; overflow-wrap: anywhere; }
+.gm-character-actions { justify-content: end; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+.gm-character-actions > button { min-height: 30px; padding: 5px 8px; font-size: .72rem; }
+.gm-character-actions > [data-character-action="open"], .gm-character-actions > [data-character-action="link"] { grid-column: 1 / -1; }
+.gm-character-miniature { overflow-wrap: anywhere; }
+.gm-character-edit { padding: 0; border: 0; background: transparent; }
+.gm-character-edit > summary { font-size: .75rem; color: var(--ui-text-muted); }
+.gm-character-edit > div { display: flex; flex-wrap: wrap; align-items: end; gap: 6px; padding-top: 8px; }
+.gm-character-edit label { flex: 1 1 160px; }
+.level-progress-card.level-up-ready > .level-progress-ring { border-color: #e5bc58; box-shadow: 0 0 7px #e8bf6388, 0 0 17px #e8bf6335; }
+.level-up-ready > .level-progress-ring > div { transform: translateY(-6px); }
+.level-up-ready [data-guided-level-up] { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); z-index: 2; width: max-content; max-width: 110%; min-height: 20px; padding: 2px 5px; color: #241c0c; background: #e5bc58; border-color: #f2d58c; font-size: .51rem; line-height: 1.2; white-space: nowrap; }
+.gm-native-combat.gm-encounter-board .gm-combatant-summary { grid-template-columns: minmax(0, 1fr) 60px 58px 8px; align-items: stretch; gap: 6px; padding: 8px; }
+.gm-native-combat .missing-association .gm-combatant-core { grid-column: 1 / 3; }
+.gm-native-combat .gm-combatant-summary > .gm-combatant-core { gap: 6px; padding: 0 5px 0 0; }
+.gm-native-combat .gm-combatant-identity { grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 8px; row-gap: 3px; }
+.gm-native-combat .gm-combatant-identity > small { grid-column: 1 / -1; }
+.gm-native-combat .gm-combatant-identity > .gm-combat-ac { display: flex; align-items: baseline; gap: 4px; padding: 3px 6px; background: var(--ui-bg-sunken); border: 1px solid var(--ui-border-subtle); border-radius: 4px; }
+.gm-combatant-binding-labels { display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 2px; color: var(--ui-text-muted); font-size: .62rem; overflow-wrap: anywhere; }
+.gm-native-combat .gm-combat-facts { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.gm-native-combat .gm-combat-fact { display: flex; align-items: baseline; gap: 4px; padding: 0; background: transparent; }
+.gm-monster-ability-saves { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+.gm-monster-expanded-checks { display: grid; min-width: 0; gap: 6px; margin: 8px 0; }
+.gm-monster-expanded-checks > strong { color: var(--ui-text-muted); font-size: .68rem; }
+.gm-ability-save-pair { display: grid; gap: 2px; min-width: 0; }
+.gm-ability-save-pair > .gm-roll { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; column-gap: 5px; min-height: 28px; padding: 4px 2px; font-size: .67rem; line-height: 1.15; }
+.gm-ability-save-pair > .gm-roll small { font-size: .55rem; }
+.gm-ability-save-pair > .gm-roll em { font-size: .63rem; font-style: normal; color: var(--ui-text-muted); }
+.gm-ability-save-pair > .gm-save-roll { min-height: 23px; font-size: .62rem; background: var(--ui-bg-sunken); border-color: var(--ui-border-subtle); }
+.gm-defense-summary { display: flex; flex-wrap: wrap; gap: 4px; }
+.gm-defense-summary:empty, .gm-action-shortcuts:empty { display: none; }
+.gm-defense-chip { padding: 2px 5px; font-size: .61rem; border: 1px solid var(--ui-border-subtle); border-radius: 4px; line-height: 1.35; }
+.gm-defense-chip b { margin-right: 3px; }
+.gm-defense-chip.vulnerable { color: var(--ui-danger); border-color: var(--ui-danger-border); background: var(--ui-danger-surface); }
+.gm-defense-chip.resistant { color: var(--ui-success, #81bd84); background: color-mix(in srgb, #55815b 12%, var(--ui-bg-sunken)); border-color: color-mix(in srgb, #72b77b 60%, var(--ui-border)); }
+.gm-defense-chip.immune, .gm-defense-chip.immune-condition { color: var(--ui-info, #8dbbd6); background: color-mix(in srgb, #5c849b 12%, var(--ui-bg-sunken)); border-color: color-mix(in srgb, #8dbbd6 60%, var(--ui-border)); }
+.gm-action-shortcuts { display: grid; gap: 3px; border-top: 1px solid var(--ui-border-subtle); padding-top: 6px; }
+.gm-action-shortcut { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-width: 0; }
+.gm-action-shortcut > b { flex: 1 1 115px; color: var(--ui-text-secondary); font-size: .67rem; overflow-wrap: anywhere; }
+.gm-action-shortcut > button { min-height: 24px; padding: 3px 6px; font-size: .65rem; }
+.gm-combat-name-editor { display: flex; flex-wrap: wrap; gap: 6px; align-items: end; width: 100%; }
+.gm-combat-name-editor label { flex: 1 1 180px; }
+.gm-combat-name-editor input[readonly] { opacity: .75; }
+.gm-combat-name-editor > small { align-self: center; color: var(--ui-text-muted); }
+.gm-monster-rule p { white-space: pre-line; line-height: 1.45; margin: 4px 0 8px; }
+.gm-monster-rule > small { display: block; color: var(--ui-text-muted); }
+@media (max-width: 540px) {
+  .gm-character-row { grid-template-columns: minmax(0, 1fr) minmax(135px, 38%); gap: 8px; padding: 10px; }
+  .gm-character-actions { gap: 4px; }
+  .gm-native-combat.gm-encounter-board .gm-combatant-summary { grid-template-columns: minmax(0, 1fr) 48px 46px 7px; gap: 4px; padding: 5px; }
+
+}
+
+.dialog-option-preview p, .dialog-option-catalog p { white-space: pre-line; }
+.gm-character-actions > button { white-space: normal; }
+
+.gm-ability-save-pair > .gm-roll:not(.gm-save-roll) { display: grid; grid-template-columns: auto auto; column-gap: 4px; row-gap: 1px; }
+.gm-ability-save-pair > .gm-roll:not(.gm-save-roll) > small { grid-column: 1 / -1; }
+.gm-ability-save-pair > .gm-roll:not(.gm-save-roll) > strong { font-size: .78rem; }
+@container combat-info (max-width: 240px) { .gm-monster-ability-saves { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 380px) { .gm-monster-ability-saves { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* 1.0.36: horizontal combat header and modifier tint scale */
+.gm-native-combat.gm-encounter-board .gm-combatant-summary { grid-template-columns: minmax(0, 1fr) 8px; }
+.gm-native-combat .missing-association .gm-combatant-core { grid-column: auto; }
+.gm-native-combat .gm-combatant-summary > .gm-combatant-core { padding-right: 0; }
+.gm-combat-header-stats { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 5px; }
+.gm-combat-header-stats > .gm-combat-ac { display: flex; align-items: baseline; gap: 4px; min-height: 28px; padding: 4px 7px; border: 1px solid var(--ui-border-subtle); border-radius: 4px; background: var(--ui-bg-sunken); box-sizing: border-box; }
+.gm-combat-header-stats > .gm-combat-ac > small { font-size: .58rem; color: var(--ui-text-muted); }
+.gm-combat-header-stats > .gm-combat-initiative { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; padding: 3px 5px; border: 1px solid var(--ui-border-subtle); border-radius: 4px; background: var(--ui-bg-sunken); }
+.gm-combat-header-stats .gm-combat-initiative > small { font-size: .57rem; }
+.gm-combat-header-stats .gm-combat-initiative > button { width: auto; min-width: 28px; min-height: 25px; padding: 2px 6px; font-size: .8rem !important; }
+.gm-combat-header-stats .gm-combat-order { display: flex; align-items: baseline; gap: 4px; width: auto; padding: 3px 4px; }
+.gm-combat-header-stats .gm-combat-order > small { font-size: .56rem; }
+.gm-combatant-classification { display: flex; align-items: baseline; gap: 6px; min-width: 0; color: var(--ui-text-muted); font-size: .64rem; }
+.gm-native-combat.gm-encounter-board .gm-combatant-core > .gm-combatant-hp-readout { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 5px; grid-column: auto; width: 100%; height: 26px; min-height: 26px; padding: 3px 9px; box-sizing: border-box; }
+.gm-combatant-core > .gm-combatant-hp-readout::before { inset: 0 auto 0 0; width: var(--hp-level); height: 100%; background: linear-gradient(to right, color-mix(in srgb, var(--hp-tone) 62%, var(--ui-bg-sunken)), color-mix(in srgb, var(--hp-tone) 38%, var(--ui-bg-sunken))); border-top: 0; border-right: 1px solid var(--hp-tone); transition: width .25s ease, background .25s ease; }
+.gm-combatant-core > .gm-combatant-hp-readout::after { inset: 0 auto 0 var(--hp-temp-bottom); width: var(--hp-temp-level); height: 100%; border-top: 0; border-left: 1px solid #86bad2; transition: width .25s ease, left .25s ease; }
+.gm-native-combat .gm-combatant-core > .gm-combatant-hp-readout > strong { font-size: .88rem; }
+.gm-combatant-core > .gm-combatant-hp-readout > .gm-combat-temp-hp { margin: 0 0 0 auto; }
+.gm-combat-name-editor { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.gm-combat-name-editor > label { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; width: 100%; }
+.gm-combat-name-editor input[data-action="combatant-name"] { width: 100%; min-width: 0; min-height: 34px; padding: 7px 9px; font-size: .85rem; box-sizing: border-box; }
+.gm-combat-name-editor > [data-action="save-combatant-name"] { justify-self: start; }
+.gm-combat-name-editor > [data-action="copy-combatant-name"] { justify-self: end; }
+/* Tint the modifier only; retain each button's normal theme and interaction states. */
+.gm-shell .gm-ability-save-pair > button.gm-stat-roll:not([data-check-value="0"]) > .gm-modifier-value { color: var(--check-text); }
+:root[data-v2-theme="light"] .gm-shell .gm-ability-save-pair > button.gm-stat-roll:not([data-check-value="0"]) > .gm-modifier-value { color: var(--check-light-text); }
+@supports (color: color-mix(in srgb, red, green)) {
+  .gm-shell .gm-ability-save-pair > button.gm-stat-roll:not([data-check-value="0"]) > .gm-modifier-value { color: color-mix(in srgb, var(--character-color) calc(100% - var(--check-strength)), var(--check-tone)); }
+  :root[data-v2-theme="light"] .gm-shell .gm-ability-save-pair > button.gm-stat-roll:not([data-check-value="0"]) > .gm-modifier-value { color: color-mix(in srgb, var(--character-color) calc(100% - var(--check-strength)), var(--check-light-tone)); }
+}
+.gm-ability-save-pair > .gm-save-roll { font-weight: 750; }
+@container combat-info (max-width: 310px) {
+  .gm-native-combat .gm-combatant-identity { grid-template-columns: minmax(0, 1fr); }
+  .gm-combat-header-stats { justify-content: flex-start; }
+}
+
+.gm-character-identity > .gm-character-availability { justify-self: start; padding: 2px 7px; border: 1px solid var(--ui-success-border); border-radius: 4px; color: var(--ui-success); background: var(--ui-success-surface); font-weight: 600; }
+.gm-character-row[data-character-archived="true"] .gm-character-availability { color: var(--ui-danger); background: var(--ui-danger-surface); border-color: var(--ui-danger-border); font-weight: 800; }
+
+/* Shared GM content editors */
+.gm-content-editor { display: grid; gap: 10px; min-width: 0; container: gm-editor / inline-size; }
+.gm-content-editor-toolbar { position: sticky; top: 0; z-index: 8; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 8px; background: var(--ui-bg-surface); border: 1px solid var(--ui-border-subtle); border-radius: 5px; box-shadow: 0 3px 8px #0002; }
+.gm-content-editor-toolbar > strong { color: var(--character-color); font-size: .82rem; }
+.gm-content-editor-toolbar > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.gm-editor-section { min-width: 0; margin: 0; padding: 0; border: 1px solid var(--ui-border-subtle); border-radius: 5px; background: var(--ui-bg-sunken); }
+.gm-editor-surface fieldset.gm-editor-section { padding: 0; }
+.gm-editor-section > legend { margin-left: 8px; padding: 0 4px; color: var(--character-color); font-weight: 800; }
+.gm-editor-section > summary { display: flex; align-items: center; gap: 7px; padding: 9px; color: var(--character-color); font-size: .74rem; font-weight: 750; cursor: pointer; }
+.gm-editor-section > summary > small { margin-left: auto; color: var(--ui-text-muted); font-size: .62rem; font-weight: 500; }
+.gm-editor-section[open] > summary { border-bottom: 1px solid var(--ui-border-subtle); }
+.gm-editor-section-body { display: grid; gap: 9px; min-width: 0; padding: 10px; }
+.gm-editor-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 8px; min-width: 0; }
+.gm-editor-grid > label, .gm-content-editor label { display: grid; gap: 4px; min-width: 0; color: var(--ui-text-secondary); font-size: .71rem; }
+.gm-editor-grid > .gm-field-wide { grid-column: span 2; }
+.gm-content-editor input:not([type="checkbox"]), .gm-content-editor select, .gm-editor-grid input, .gm-editor-grid select { width: 100%; min-width: 0; min-height: 30px; box-sizing: border-box; }
+.gm-content-editor input[type="checkbox"] { flex: 0 0 14px; width: 14px !important; height: 14px; min-width: 14px; min-height: 14px; margin: 0; padding: 0; }
+.gm-content-editor label.gm-editor-toggle, .gm-content-editor .gm-checkbox-group label { display: inline-flex; align-items: center; gap: 6px; min-width: 0; padding: 4px 6px; font-size: .7rem; line-height: 1.3; }
+.gm-editor-toggles { display: flex; flex-wrap: wrap; gap: 5px 10px; }
+.gm-content-editor .gm-checkbox-group { min-width: 0; margin: 0; padding: 6px; border: 0; background: transparent; }
+.gm-content-editor .gm-checkbox-group > div { display: flex; flex-wrap: wrap; gap: 4px; max-height: none; min-height: 0; overflow: visible; }
+.gm-content-editor .gm-checkbox-group label { gap: 6px !important; padding: 4px 6px !important; font-size: .7rem !important; border: 1px solid var(--ui-border-subtle); border-radius: 4px !important; }
+.gm-editor-components { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 8px; }
+.gm-content-editor textarea { min-width: 0; min-height: 70px; padding: 8px; font-size: .75rem; line-height: 1.45; resize: vertical; }
+.gm-spell-editor textarea[name="description"] { min-height: 150px; }
+.gm-content-editor .field-help, .gm-content-editor .merchant-rule-note { margin: 0; color: var(--ui-text-muted); font-size: .66rem; line-height: 1.4; }
+.gm-content-editor [hidden] { display: none !important; }
+.gm-content-editor .gm-shop-inventory { margin: 0; padding: 10px; border: 1px solid var(--ui-border-subtle); border-radius: 5px; background: var(--ui-bg-sunken); }
+.gm-content-editor .merchant-derived-stats { margin: 0; padding: 6px 8px; font-size: .71rem; border-left: 2px solid var(--character-color); }
+.gm-content-editor .inventory-capability-editor :is(input, select), .gm-content-editor .inventory-bonus-editor :is(input, select) { min-width: 0; }
+.gm-editor-section input[type="number"] { max-width: 100%; }
+@container gm-editor (max-width: 400px) {
+  .gm-editor-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gm-editor-components { grid-template-columns: minmax(0, 1fr); }
+}
+@container gm-editor (max-width: 250px) {
+  .gm-editor-grid { grid-template-columns: minmax(0, 1fr); }
+  .gm-editor-grid > .gm-field-wide { grid-column: auto; }
+}
+.gm-monster-spells { display: grid; gap: 7px; min-width: 0; }
+.gm-monster-spell-card { display: grid; gap: 6px; min-width: 0; padding: 8px; border: 1px solid var(--ui-border-subtle); border-radius: 5px; background: var(--ui-bg-sunken); }
+.gm-monster-spell-card > header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px; }
+.gm-monster-spell-card > header > strong { color: var(--character-color); font-size: .78rem; }
+.gm-monster-spell-card > header > small, .gm-monster-spell-meta { color: var(--ui-text-muted); font-size: .63rem; line-height: 1.4; }
+.gm-monster-spell-meta { margin: 0; }
+.gm-monster-spell-rolls { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.gm-monster-spell-rolls .gm-roll { margin: 0; }
+.gm-monster-spell-rolls > small { width: 100%; color: var(--ui-text-muted); font-size: .63rem; }
+.gm-spell-save { padding: 4px 6px; border: 1px solid var(--ui-border-subtle); border-radius: 4px; font-size: .68rem; }
+.gm-spell-level-control { display: flex !important; align-items: center; justify-self: start; gap: 7px !important; font-size: .66rem; }
+.gm-spell-level-control > select { width: 58px; min-height: 28px; }
+.gm-spell-rules { padding: 0; border: 0; background: transparent; }
+.gm-spell-rules > summary { font-size: .66rem; color: var(--ui-text-muted); }
+.gm-spell-rules p { white-space: pre-line; font-size: .72rem; line-height: 1.45; }
+.gm-spell-missing { padding: 7px; color: var(--ui-danger); border: 1px solid var(--ui-danger-border); border-radius: 4px; background: var(--ui-danger-surface); font-size: .67rem; }
+.gm-spell-missing p { margin: 3px 0 6px; }
+
+.gm-shop-inventory .inventory-description.expanded .card-description { display: block; max-height: none; overflow: visible; -webkit-line-clamp: unset; }
+.gm-shop-inventory .inventory-preview-notes, .gm-shop-inventory .inventory-preview-recovery { grid-column: 1 / -1; min-width: 0; color: var(--ui-text-secondary); font-size: .7rem; }
+.gm-shop-inventory .inventory-preview-notes p, .gm-shop-inventory .inventory-preview-recovery p { margin: 5px 0; }
+.gm-shop-inventory .inventory-feature-controls { display: flex; flex-wrap: wrap; gap: 5px; }
+.gm-shop-inventory .inventory-rule-table { max-width: 100%; overflow-x: auto; }
+
+/* Collapsible GM character administration */
+.gm-character-manager .gm-character-row { display: block; min-width: 0; margin: 0; padding: 0; border: 1px solid var(--ui-border-subtle); border-radius: 5px; background: var(--ui-bg-sunken); }
+.gm-character-row > .gm-managed-character-summary { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 8px 10px; list-style: none; cursor: pointer; }
+.gm-managed-character-summary::-webkit-details-marker { display: none; }
+.gm-managed-character-summary::before { content: "▸"; color: var(--ui-text-muted); }
+.gm-character-row[open] > .gm-managed-character-summary::before { content: "▾"; }
+.gm-managed-character-summary > strong { min-width: 0; overflow-wrap: anywhere; font-size: .85rem; }
+.gm-managed-character-summary > button { min-height: 29px; padding: 4px 10px; }
+.gm-character-row > .gm-managed-character-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 10px; border-top: 1px solid var(--ui-border-subtle); }
+.gm-character-row:not([open]) > .gm-managed-character-body { display: none; }
+.gm-managed-character-body .gm-character-actions { display: flex; flex-wrap: wrap; align-items: start; justify-content: end; }
+.gm-managed-character-body .gm-character-actions > button { min-height: 29px; }
+.gm-character-origin { color: var(--ui-text-muted); font-size: .66rem; }
+.gm-character-rename, .gm-character-new-group { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 7px; margin: 0; }
+.gm-character-new-group { margin-bottom: 12px; }
+.gm-character-manager :is(.gm-character-rename, .gm-character-new-group) label, .gm-character-group-picker, [data-group-rename] label { display: grid; gap: 4px; min-width: 0; color: var(--ui-text-muted); font-size: .7rem; }
+.gm-character-manager input, .gm-character-manager select { width: 100%; min-width: 0; box-sizing: border-box; }
+.gm-character-rename { grid-column: 1 / -1; }
+.gm-character-group-picker { grid-column: 1 / -1; }
+.gm-character-manager .gm-character-group { margin: 0 0 10px; padding: 0; min-width: 0; border: 1px solid var(--ui-border); border-radius: 5px; background: var(--ui-bg-surface); }
+.gm-character-group > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 10px; padding: 10px; cursor: pointer; }
+.gm-character-group > summary::before { content: "▸"; color: var(--ui-text-muted); }
+.gm-character-group[open] > summary::before { content: "▾"; }
+.gm-character-group > summary > strong { min-width: 0; overflow-wrap: anywhere; color: var(--character-color); }
+.gm-character-group > summary > small { margin-left: auto; color: var(--ui-text-muted); font-size: .65rem; }
+.gm-character-group-body { display: grid; gap: 8px; padding: 0 10px 10px; }
+.gm-character-group:not([open]) > .gm-character-group-body { display: none; }
+.gm-character-group-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: 6px; }
+.gm-character-group-settings { padding: 6px; font-size: .7rem; }
+[data-group-rename] { display: flex; align-items: end; gap: 6px; margin: 6px 0; }
+[data-group-rename] > label { flex: 1; }
+.gm-character-ungrouped > h3 { color: var(--ui-text-muted); font-size: .8rem; }
+.gm-character-manager [hidden] { display: none !important; }
+@media (max-width: 430px) {
+  .gm-character-row > .gm-managed-character-body { grid-template-columns: minmax(0, 1fr); }
+  .gm-managed-character-body .gm-character-actions { justify-content: start; }
+}

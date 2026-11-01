@@ -1,4 +1,5 @@
 import { syncMonkActions } from "../../domain/character/martial-builder";
+import { EncounterApplication } from "../encounter/encounter-application";
 import { bindGuidedEquipmentCatalog } from "../../domain/equipment/guided-equipment-catalog";
 import type { EquipmentCatalogDraft } from "../../domain/equipment/equipment-catalog";
 import { storeEquipmentSpell, castEquipmentStoredSpell } from "../../domain/equipment/equipment-spell-storage";
@@ -494,7 +495,14 @@ export class CampaignApplication {
       }
       if (character.revision !== command.expectedCharacterRevision) throw new Error("La hoja cambió. Revisá la versión actual antes de administrarla.");
       const campaign = structuredClone(current.campaign), now = new Date().toISOString();
-      if (command.action === "delete") delete campaign.characters[character.id];
+      if (command.action === "delete") {
+        delete campaign.characters[character.id];
+        for (const group of campaign.gm.characterGroups ?? []) {
+          if (!group.characterIds.includes(character.id)) continue;
+          group.characterIds = group.characterIds.filter(id => id !== character.id);
+          group.revision++;
+        }
+      }
       else {
         const next = campaign.characters[character.id]!;
         if (command.action === "rename") {
@@ -527,18 +535,60 @@ export class CampaignApplication {
     throw new Error("No se pudo administrar el personaje.");
   }
 
+  async recordCharacterInitiative(command: { characterId: string; initiative: number; encounterId: string; epoch: number; rollId: string }): Promise<CampaignSnapshot | null> {
+    if (!Number.isSafeInteger(command.initiative)) throw new Error("La iniciativa debe ser un entero.");
+    const current = await this.repository.load();
+    const encounter = current?.campaign.encounters[command.encounterId];
+    if (!current || !encounter || encounter.initiativeEpoch !== command.epoch) return current;
+    const combatant = encounter.combatants.find(c => c.kind === "player" && c.characterId === command.characterId);
+    if (!combatant || combatant.initiative !== null) return current;
+    return (await new EncounterApplication(this.repository).apply({
+      encounterId: encounter.id, expectedEncounterRevision: encounter.revision, expectedCampaignChecksum: current.checksum,
+      operationId: command.rollId,
+      action: { kind: "set-initiative", combatantId: combatant.id, initiative: command.initiative, onlyIfMissing: true, epoch: command.epoch },
+    })).snapshot;
+  }
+
   async linkCharacterMiniature(command: LinkCharacterMiniatureCommand): Promise<CampaignSnapshot> {
-    return this.applyCharacterMutation(command, (character, updatedAt) => {
-      if (character.revision !== command.expectedCharacterRevision) {
-        throw new CharacterRevisionConflictError(command.expectedCharacterRevision, character.revision);
+    const original = await loadCampaignVersion(this.repository, command.expectedCampaignChecksum);
+    if (!original) throw new CampaignNotFoundError();
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const current = await this.repository.load();
+      if (!current || current.campaign.id !== original.campaign.id) throw new Error("La campaña cambió.");
+      const character = current.campaign.characters[command.characterId];
+      if (!character) throw new CharacterNotFoundError(command.characterId);
+      if (character.revision !== command.expectedCharacterRevision) throw new CharacterRevisionConflictError(command.expectedCharacterRevision, character.revision);
+      const campaign = structuredClone(current.campaign), updatedAt = command.updatedAt ?? new Date().toISOString();
+      const linked = campaign.characters[character.id]!;
+      linked.taleSpire = command.miniature; linked.revision++; linked.metadata.updatedAt = updatedAt;
+      const associations = campaign.gm.miniatureAssociations ??= {};
+      for (const [id, association] of Object.entries(associations)) if (association.characterId === character.id) associations[id] = { ...association, characterId: null, monster: null, updatedAt };
+      if (command.miniature) {
+        const mini = command.miniature;
+        associations[mini.creatureId] = { combatantName: character.name, displayName: mini.displayName, boardAssetId: mini.boardAssetId, characterId: character.id, monster: null, updatedAt };
+        for (const other of Object.values(campaign.characters)) if (other.id !== character.id && other.taleSpire?.creatureId === mini.creatureId) { other.taleSpire = null; other.revision++; other.metadata.updatedAt = updatedAt; }
       }
-      return CampaignV2Schema.shape.characters.valueType.parse({
-        ...character,
-        taleSpire: command.miniature,
-        revision: character.revision + 1,
-        metadata: { ...character.metadata, updatedAt },
-      });
-    });
+      for (const encounter of Object.values(campaign.encounters)) {
+        let changed = false;
+        encounter.combatants = encounter.combatants.map(c => {
+          if (command.miniature && c.taleSpireCreatureId === command.miniature.creatureId) {
+            changed = true;
+            return { ...c, kind: "player" as const, characterId: character.id, taleSpireClientId: null, name: character.name,
+              initiative: c.kind === "player" && c.characterId === character.id ? c.initiative : null,
+              armorClass: character.combat.armorClass, hitPoints: structuredClone(character.combat.hitPoints), conditions: structuredClone(character.combat.conditions) };
+          }
+          if (c.kind !== "player" || c.characterId !== character.id) return c;
+          changed = true;
+          const { characterId: _id, taleSpireClientId: _client, ...base } = c;
+          return { ...base, kind: "custom" as const, name: c.taleSpireDisplayName || c.name, initiative: null, armorClass: null, hitPoints: { current: 1, maximum: 1, temporary: 0 }, conditions: [] };
+        });
+        if (changed) { encounter.revision++; encounter.initiativeEpoch++; encounter.nativeQueueKey = null; encounter.metadata.updatedAt = updatedAt; }
+      }
+      campaign.revision++; campaign.metadata.updatedAt = updatedAt;
+      try { return await this.repository.save(CampaignV2Schema.parse(campaign), { kind: "checksum", checksum: current.checksum }); }
+      catch (error) { if (!(error instanceof CampaignRepositoryConflictError) || attempt === 3) throw error; }
+    }
+    throw new Error("No se pudo vincular la miniatura.");
   }
 
   async editCharacter(

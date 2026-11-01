@@ -2,6 +2,7 @@ import { CharacterInventoryItemV2Schema, type CharacterInventoryItemV2 } from ".
 import { normalizeEquipmentDefinition } from "../equipment/equipment-catalog";
 import type { JsonObject } from "../../shared/json";
 import type { CatalogMetadata } from "../content/catalog-metadata";
+import { MonsterSpellcastingSchema, type MonsterSpellcasting } from "./monster-spellcasting-model";
 
 export interface MonsterFeature {
   name: string;
@@ -36,6 +37,7 @@ export interface MonsterDefinition {
   reactions: MonsterFeature[];
   legendaryActions: MonsterFeature[];
   spells: string[];
+  spellcasting?: MonsterSpellcasting;
   inventory: CharacterInventoryItemV2[];
   catalog: CatalogMetadata | null;
 }
@@ -150,6 +152,7 @@ function mergedActions(source: JsonObject): MonsterFeature[] {
 
 export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
   const source = object(value);
+  const casting = MonsterSpellcastingSchema.safeParse(source.spellcasting ?? source.Spellcasting);
   const hp = object(source.HP ?? source.hp);
   const ac = object(source.AC ?? source.ac);
   const abilityData = object(source.Abilities ?? source.abilities);
@@ -184,6 +187,7 @@ export function normalizeMonsterDefinition(value: unknown): MonsterDefinition {
     reactions: features(source.Reactions ?? source.reactions),
     legendaryActions: features(source.LegendaryActions ?? source.legendaryActions),
     spells: strings(source.Spells ?? source.spells),
+    ...(casting.success ? { spellcasting: casting.data } : {}),
     inventory: inventory(source.Inventory ?? source.inventory, String(source.Id ?? source.id ?? source.Name ?? source.name ?? "monster")),
     catalog: null,
   };

@@ -1,3 +1,5 @@
+import { enrichChoiceDescriptions } from "./choice-descriptions";
+
 interface DialogSelect {
   select: HTMLSelectElement;
   field: HTMLElement;
@@ -11,6 +13,7 @@ let nextId = 0;
 
 /** Use in-page listboxes, avoiding the host WebView's separate select popup. */
 export function bindDialogSelects(dialog: HTMLDialogElement) {
+  enrichChoiceDescriptions(dialog);
   const controls = new Map<HTMLSelectElement, DialogSelect>();
   let active: DialogSelect | null = null;
   let search = "", searchedAt = 0;
@@ -83,7 +86,7 @@ export function bindDialogSelects(dialog: HTMLDialogElement) {
       const heading = document.createElement("strong"), requirements = document.createElement("small"), description = document.createElement("p");
       preview.append(heading, requirements, description); panel.append(preview);
       const show = (option: HTMLOptionElement | undefined) => {
-        heading.textContent = option?.dataset.description ? option.label : "Consultá una invocación";
+        heading.textContent = option?.dataset.description ? option.label : "Consultá una opción";
         requirements.textContent = [option?.dataset.requirements, option?.title].filter(Boolean).join(" · ");
         description.textContent = option?.dataset.description ?? "Recorré la lista con las flechas o pasá el mouse por una opción para leer qué hace antes de elegirla.";
       };
@@ -94,7 +97,7 @@ export function bindDialogSelects(dialog: HTMLDialogElement) {
       select.addEventListener("input", selected);
       button.addEventListener("click", selected);
       const catalog = document.createElement("details"); catalog.className = "dialog-option-catalog";
-      const summary = document.createElement("summary"); summary.textContent = "Consultar invocaciones y requisitos"; catalog.append(summary);
+      const summary = document.createElement("summary"); summary.textContent = "Consultar opciones y requisitos"; catalog.append(summary);
       for (const option of select.options) {
         if (!option.dataset.description) continue;
         const detail = document.createElement("details"), title = document.createElement("summary"), text = document.createElement("p"), req = document.createElement("small");
