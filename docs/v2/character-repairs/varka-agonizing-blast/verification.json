@@ -1,0 +1,24 @@
+{
+  "saved": true,
+  "campaignRevision": 1851,
+  "characterRevision": 43,
+  "changedFragments": [
+    "character-action",
+    "character-core",
+    "character-runtime",
+    "character-trait"
+  ],
+  "allOtherFragmentsUnchanged": true,
+  "inventoryUnchanged": true,
+  "combatUnchanged": true,
+  "currencyUnchanged": true,
+  "spellSlotsUnchanged": true,
+  "spellListUnchanged": true,
+  "level11Validated": true,
+  "blastDamageBefore": "1d10",
+  "blastDamageAfter": "1d10+5",
+  "pactAttackBefore": 8,
+  "pactAttackAfter": 7,
+  "pactDamageBonusBefore": 4,
+  "pactDamageBonusAfter": 3
+}

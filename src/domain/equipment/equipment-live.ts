@@ -6,6 +6,7 @@ import type { JsonObject } from "../../shared/json";
 import type { CharacterV2 } from "../character/character-v2";
 import { cleanEquipmentPlayerText } from "./equipment-player-content";
 import { independentEquipmentUses } from "./equipment-independent-uses";
+import { itemIsIdentified } from "./equipment-identification";
 
 const definitionCache = new WeakMap<object, EquipmentDefinitionDraft>();
 export function inventoryEquipmentDefinition(item: Pick<CharacterInventoryItemV2, "rules">): EquipmentDefinitionDraft | null {
@@ -24,6 +25,7 @@ const normalized = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g,
 const damageNames: Record<string, string> = { bludgeoning: "contundente", piercing: "perforante", slashing: "cortante", fire: "fuego", cold: "frío", necrotic: "necrótico", force: "fuerza", poison: "veneno" };
 const bonus = (category: string, key: string, value: number): InventoryBonus => ({ category, key, value, valueSource: null, advantage: false, disadvantage: false });
 export function equipmentBearerIssue(character: CharacterV2, item: CharacterInventoryItemV2, featureId?: string): string {
+  if (!itemIsIdentified(item)) return "El GM debe identificar el objeto antes de usarlo.";
   const definition = inventoryEquipmentDefinition(item);
   const requirements = featureId ? definition?.capabilities.find((cap) => cap.id === featureId)?.requirements : definition?.requirements;
   const classText = tokenClass(character.identity.className), classNames: Record<string, RegExp> = { wizard: /mago|wizard/, warlock: /brujo|bruja|warlock/, cleric: /clerigo|cleric/, druid: /druida|druid/, bard: /bardo|bard/, sorcerer: /hechicero|sorcerer/, paladin: /paladin/, ranger: /explorador|ranger/, rogue: /picaro|rogue/, fighter: /guerrero|fighter/, artificer: /artifice|artificer/ };

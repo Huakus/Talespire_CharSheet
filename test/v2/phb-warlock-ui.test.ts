@@ -9,6 +9,8 @@ import { phbWarlockCreation,completeWarlockChoice } from "../fixtures/phb-warloc
 import type { WarlockPatron,PactBoon } from "../../src/domain/character/warlock-model";
 import type { CampaignSnapshot } from "../../src/application/ports/campaign-repository";
 import type { CharacterV2 } from "../../src/domain/character/character-v2";
+import { warlockSpellExtras } from "../../src/ui/warlock-play-panel";
+import { projectSpellDamageExpression } from "../../src/domain/character/character-projection";
 const time = "2026-10-14T00:00:00.000Z",id = "chr_11111111111111111111111111111111",operation = "build_11111111111111111111111111111111";
 const diceRoller = { roll: vi.fn(async () => ({ kind: "rolled" as const,totals: [7],summary: "d8: 7" })) };
 const dialog = () => document.querySelector<HTMLDialogElement>(".character-builder-dialog")!;
@@ -21,6 +23,22 @@ async function build(level: number,boon: PactBoon = "tome") { let c = await crea
 beforeEach(() => { localStorage.clear(); vi.clearAllMocks(); });
 afterEach(async () => { dialog()?.close(); await new Promise((r) => setTimeout(r,0)); document.body.replaceChildren(); });
 describe("warlock tutorial and sheet", () => {
+  it("shows Agonizing Blast only while the invocation is selected, matching the damage after replacement", async () => {
+    const original=await build(5,"blade"),blast=original.spellcasting.spells.find(s=>s.casting?.key==="eldritch-blast")!;
+    expect(warlockSpellExtras(original,blast)).toContain("2 rayo(s)");
+    expect(warlockSpellExtras(original,blast)).toContain("Descarga agonizante");
+    expect(projectSpellDamageExpression(original,blast)).not.toBe("1d10");
+    const step=completeWarlockChoice(original,"blade");step.warlock.replaceInvocation={oldKey:"agonizing-blast",newKey:"fiendish-vigor"};
+    const replaced=await advanceGuidedWarlock(original,step,time);
+    expect(warlockSpellExtras(replaced,blast)).toContain("2 rayo(s): resolvé cada ataque y su daño por separado.");
+    expect(warlockSpellExtras(replaced,blast)).not.toContain("Descarga agonizante");
+    expect(projectSpellDamageExpression(replaced,blast)).toBe("1d10");
+    expect(warlockSpellExtras(original,blast)).toContain("Descarga agonizante");
+    const relearn=completeWarlockChoice(replaced,"blade");relearn.warlock.invocations=["agonizing-blast"];
+    const restored=await advanceGuidedWarlock(replaced,relearn,time);
+    expect(warlockSpellExtras(restored,blast)).toContain("sumá tu modificador de Carisma al daño de cada impacto");
+    expect(projectSpellDamageExpression(restored,blast)).not.toBe("1d10");
+  });
   it.each((["archfey","fiend","great-old-one"] as WarlockPatron[]).flatMap((patron) => (["blade","chain","tome"] as PactBoon[]).map((boon) => ({ patron,boon }))))("creates $patron / $boon at level three through the actual tutorial", async ({ patron,boon }) => {
     const application = new CampaignApplication(new InMemoryCampaignRepository()); let snapshot = await application.createCampaign(time);
     const onCreate = vi.fn(async (operationId,creation,initialLevels) => { snapshot = await application.createGuidedCharacter({ operationId,creation,initialLevels,expectedCampaignChecksum: snapshot.checksum }); });

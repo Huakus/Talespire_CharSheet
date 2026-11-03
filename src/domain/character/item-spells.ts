@@ -1,3 +1,4 @@
+import { itemIsIdentified } from "../equipment/equipment-identification";
 import type { CharacterV2 } from "./character-v2";
 import { CharacterSpellV2Schema, type CharacterSpellV2 } from "./character-spell-model";
 import { equipmentBearerIssue } from "../equipment/equipment-live";
@@ -9,7 +10,7 @@ import { independentEquipmentUses } from "../equipment/equipment-independent-use
 /** Reconcile grants after acquisition/transfer; an item never teaches a class spell. */
 export async function syncInventorySpellGrants(character: CharacterV2): Promise<void> {
   const validSources = new Set<string>();
-  for (const item of character.inventory) for (const cap of inventoryEquipmentDefinition(item)?.capabilities ?? []) for (const effect of cap.effects) {
+  for (const item of character.inventory.filter(itemIsIdentified)) for (const cap of inventoryEquipmentDefinition(item)?.capabilities ?? []) for (const effect of cap.effects) {
     if (effect.kind !== "spell" || !PHB_SPELLS[effect.spellKey]) continue;
     const source = itemSpellSource(item.id, cap.id); validSources.add(source);
     if (character.spellcasting.spells.some((s) => s.casting?.source === source)) continue;
@@ -22,7 +23,7 @@ export async function syncInventorySpellGrants(character: CharacterV2): Promise<
     if (spell.casting?.kind !== "item" || !spell.casting.source.startsWith("inventory:")) return true;
     const itemId = /^inventory:(inv_[a-f0-9]{32}):/.exec(spell.casting.source)?.[1];
     const item = character.inventory.find((i) => i.id === itemId);
-    return !!item && (!item.rules || validSources.has(spell.casting.source));
+    return !!item && itemIsIdentified(item) && (!item.rules || validSources.has(spell.casting.source));
   });
 }
 
@@ -36,6 +37,7 @@ export function itemSpellState(character: CharacterV2, spell: CharacterSpellV2) 
   const feature = item?.features.find((f) => f.id === match?.[2]);
   const independent = item && independentEquipmentUses(inventoryEquipmentDefinition(item)).find(e=>e.capability!.id===feature?.id);
   const reason = !item || !feature ? "El objeto o su capacidad ya no están en el inventario."
+    : !itemIsIdentified(item) ? "El GM debe identificar el objeto antes de usarlo."
     : item.quantity < 1 ? "No tenés este objeto."
     : !item.equipped ? "Equipá el objeto para lanzar este conjuro."
     : item.requiresAttunement && !item.attuned ? "Sintonizá el objeto para lanzar este conjuro."

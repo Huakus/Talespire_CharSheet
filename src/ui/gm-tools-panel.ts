@@ -1,3 +1,4 @@
+import { itemIsIdentified } from "../domain/equipment/equipment-identification";
 import { bindInventoryDescriptions } from "./inventory-description-view";
 import { renderInventoryItemPreview } from "./inventory-item-preview";
 import { normalizeDiceExpression } from "../domain/dice/dice-expression";
@@ -375,7 +376,7 @@ export class GmToolsPanel {
     return renderSharedInventoryCard({
       item, rarity, rarityLabel: equipmentRarityLabel(rarity), categoryTone: tone, categoryLabel: labels[tone] ?? item.category,
       quantity, catalog, articleAttributes: owned ? `data-gm-shop-inventory-item="${escapeHtml(owned.id)}"` : "",
-      headerControlHtml: controls,
+      headerControlHtml: controls + (owned ? `<details><summary>Identificación · GM</summary><label><input type="checkbox" data-gm-shop-identification="identified" ${itemIsIdentified(owned) ? "checked" : ""}> Identificado</label><label>Nombre sin identificar<input data-gm-shop-identification="name" value="${escapeHtml(owned.identification?.name ?? "Objeto sin identificar")}"></label><label>Apariencia visible<input data-gm-shop-identification="appearance" value="${escapeHtml(owned.identification?.appearance ?? "")}"></label></details>` : ""),
       statsHtml: `<span><small>Costo unitario</small>${item.cost.quantity} ${escapeHtml(item.cost.unit)}</span><span><small>Total</small>${inventoryCostInCopper(item.cost) * quantity} PC</span>${item.weapon?.damageExpression ? `<span><small>Daño</small>${escapeHtml(item.weapon.damageExpression)} ${escapeHtml(item.weapon.damageType)}</span>` : ""}${item.charges ? `<span><small>Cargas</small>${item.charges.current}/${item.charges.maximum}</span>` : ""}${owned?.attuned ? "<span>Sintonizado</span>" : ""}${owned?.equipped ? "<span>Equipado</span>" : ""}`,
       descriptionHtml: renderInventoryItemPreview(item, { key: owned?.id ?? `shop-catalog:${item.name}`, expanded: this.expandedShopDescriptions.has(owned?.id ?? `shop-catalog:${item.name}`), showDescriptions: this.showContentDescriptions, catalogDefinition: this.shopInventoryDefinition(item) }),
       tags: this.shopInventoryTags(item), actionsHtml: actions,
@@ -593,6 +594,17 @@ export class GmToolsPanel {
         : [...inventory, { ...draft, id: await createRandomId("inv"), order: inventory.length, group: "backpack", quantity: 1 }];
       this.rerenderPreservingShopForm();
     })(); }));
+    this.root.querySelectorAll<HTMLInputElement>("[data-gm-shop-identification]").forEach(input => input.addEventListener("change", () => {
+      const row = input.closest<HTMLElement>("[data-gm-shop-inventory-item]");
+      const id = row?.dataset.gmShopInventoryItem;
+      if (!row || !id) return;
+      const identified = row.querySelector<HTMLInputElement>('[data-gm-shop-identification="identified"]')!.checked;
+      const name = row.querySelector<HTMLInputElement>('[data-gm-shop-identification="name"]')!.value;
+      const appearance = row.querySelector<HTMLInputElement>('[data-gm-shop-identification="appearance"]')!.value;
+      this.shopInventoryDraft = (this.shopInventoryDraft ?? []).map(item => item.id !== id ? item : { ...item,
+        identification: { identified, name, appearance }, ...(identified ? {} : { equipped: false, attuned: false }) });
+      this.rerenderPreservingShopForm();
+    }));
     this.root.querySelectorAll<HTMLButtonElement>("[data-gm-shop-inventory-quantity], [data-gm-shop-inventory-action]").forEach((button) => button.addEventListener("click", () => {
       const id = button.closest<HTMLElement>("[data-gm-shop-inventory-item]")?.dataset.gmShopInventoryItem;
       const inventory = this.shopInventoryDraft ?? [];

@@ -1,3 +1,4 @@
+import { assertItemIdentified } from "./equipment-identification";
 import { CharacterV2Schema, type CharacterV2 } from "../character/character-v2";
 import { CharacterRevisionConflictError } from "../character/edit-character";
 import { CharacterSpellV2Schema, SpellDefinitionSchema, type SpellDefinition, type SpellcastingAbility } from "../character/character-spell-model";
@@ -16,6 +17,7 @@ function prepare(input: CharacterV2, itemId: string, options: Mutation) {
   const character = CharacterV2Schema.parse(input);
   if (character.revision !== options.expectedRevision) throw new CharacterRevisionConflictError(options.expectedRevision, character.revision);
   const item = character.inventory.find((i) => i.id === itemId);
+  if (item) assertItemIdentified(item);
   const resource = item && inventoryEquipmentDefinition(item)?.resources.find((r) => r.kind === "spell-storage");
   if (!item || !item.quantity || !item.rules?.storage || !resource?.maximum) throw new Error("El objeto no tiene almacenamiento de conjuros configurado.");
   if (!item.rules.storage.known) throw new Error("El contenido antiguo debe identificarse antes de modificarlo.");

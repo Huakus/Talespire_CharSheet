@@ -75,6 +75,7 @@ export interface RemoteCampaignContentEntry {
 }
 
 export interface RemoteCampaignMerchantTradeInput {
+  operation?: "trade" | "loot";
   campaignId: string;
   characterId: string;
   shopContentKey: string;
@@ -340,7 +341,7 @@ export class SupabaseCampaignDocumentClient {
   }
 
   async executeCampaignMerchantTrade(input: RemoteCampaignMerchantTradeInput): Promise<RemoteCampaignMerchantTradeResult> {
-    const result = await this.client.rpc("execute_campaign_merchant_trade", {
+    const result = await this.client.rpc(input.operation === "loot" ? "execute_campaign_merchant_loot" : "execute_campaign_merchant_trade", {
       p_campaign_id: input.campaignId,
       p_character_id: input.characterId,
       p_shop_content_key: input.shopContentKey,

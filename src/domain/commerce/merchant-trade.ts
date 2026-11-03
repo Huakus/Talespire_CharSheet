@@ -4,6 +4,7 @@ export interface MerchantTradeSelectionCommand {
 }
 
 export interface CampaignMerchantTradeCommand {
+  operation?: "trade" | "loot";
   expectedCampaignRevision: number;
   characterId: string;
   expectedCharacterRevision: number;

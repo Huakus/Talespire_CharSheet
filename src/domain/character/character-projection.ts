@@ -1,3 +1,4 @@
+import { itemIsIdentified } from "../equipment/equipment-identification";
 import { increaseMatchingDice } from "../dice/spell-dice";
 import { monkMovement,monkWeaponKeys,paladinOath } from "./martial-catalog";
 import { BUILDER_WEAPONS } from "./fighter-builder-catalog";
@@ -53,9 +54,9 @@ function championAthlete(character: CharacterV2): boolean {
   return character.identity.level >= 7 && character.builder?.levels.find((step) => step.subclass)?.subclass === "champion";
 }
 
-export const monkArmed = (c: CharacterV2) => c.inventory.some((i) => i.equipped && ["armor","shield"].includes(i.category));
+export const monkArmed = (c: CharacterV2) => c.inventory.some((i) => (itemIsIdentified(i) && i.equipped) && ["armor","shield"].includes(i.category));
 export function monkWeapon(c: CharacterV2,item: CharacterV2["inventory"][number]) { return !!item.weapon && (item.name === BUILDER_WEAPONS.shortsword!.name || item.weapon.range === "melee" && item.weapon.category.startsWith("simple") && !item.properties.some((p) => ["two-handed","heavy"].includes(p)) || !!c.builder && monkWeaponKeys(c.builder).some((k) => BUILDER_WEAPONS[k]?.name === item.name)); }
-export const monkMartialArts = (c: CharacterV2) => c.builder?.classKey === "monk" && !monkArmed(c) && !c.inventory.some((i) => i.equipped && i.weapon && !monkWeapon(c,i));
+export const monkMartialArts = (c: CharacterV2) => c.builder?.classKey === "monk" && !monkArmed(c) && !c.inventory.some((i) => (itemIsIdentified(i) && i.equipped) && i.weapon && !monkWeapon(c,i));
 export function paladinAuraBonus(c: CharacterV2) { return c.builder?.classKey === "paladin" && c.identity.level >= 6 && c.combat.hitPoints.current > 0 && !c.combat.conditions.some((p) => ["unconscious","dead"].includes(p.key)) ? Math.max(1,projectedAbilityModifier(c,"charisma")) : 0; }
 export function preferredWeaponAbility(
   scores: Pick<CharacterV2["abilities"], "strength" | "dexterity">,
@@ -67,7 +68,7 @@ export function preferredWeaponAbility(
 
 export function projectHeavyArmorSpeedPenalty(character: CharacterV2): number {
   if (!character.builder || character.builder.creation.race.includes("dwarf")) return 0;
-  const armor = character.inventory.find((item) => item.equipped && item.category === "armor" && item.armor);
+  const armor = character.inventory.find((item) => (itemIsIdentified(item) && item.equipped) && item.category === "armor" && item.armor);
   if (!armor?.armor || !["heavy", "pesada"].includes(armor.armor.armorCategory.toLowerCase())) return 0;
   // Legacy inventories predate the structured requirement. Recognize PHB armor
   // names until the player edits the item and saves an explicit requirement.
@@ -119,7 +120,7 @@ function inventoryBonusAmount(character: CharacterV2, bonus: InventoryBonus): nu
 
 function activeInventoryBonuses(character: CharacterV2): InventoryBonus[] {
   return character.inventory
-    .filter((item) => item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character, item))
+    .filter((item) => item.quantity > 0 && (itemIsIdentified(item) && item.equipped) && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character, item))
     .flatMap((item) => [
       ...item.bonuses,
       ...item.features
@@ -187,7 +188,7 @@ export function projectAdjustedRollMode(
     ((skills || saves) && strengthRoll && (character.builder?.classKey === "barbarian" ? barbarianRageBenefits(character) : conditionKeys.has("raging"))) ||
     (saves && dexterityRoll && conditionKeys.has("haste"));
   const conditionalDisadvantage =
-    (skills && keySet.has("stealth") && character.inventory.some((item) => item.equipped && item.armor?.stealthDisadvantage && !(item.armor.armorCategory.toLowerCase() === "medium" && hasBuilderFeat(character, "medium-armor-master")))) ||
+    (skills && keySet.has("stealth") && character.inventory.some((item) => (itemIsIdentified(item) && item.equipped) && item.armor?.stealthDisadvantage && !(item.armor.armorCategory.toLowerCase() === "medium" && hasBuilderFeat(character, "medium-armor-master")))) ||
     (skills && (character.combat.exhaustion >= 1 || conditionKeys.has("poisoned") || conditionKeys.has("frightened"))) ||
     (saves && character.combat.exhaustion >= 3) ||
     (saves && dexterityRoll && conditionKeys.has("restrained")) ||
@@ -206,7 +207,7 @@ export function projectAbilityScore(character: CharacterV2, ability: AbilityKey)
     intelligence: "INT", wisdom: "WIS", charisma: "CHA",
   };
   let score = character.abilities[ability] + character.equipmentBenefits.filter(b => b.ability === ability).reduce((sum,b) => sum+b.increase,0) + traitBonus(character, "attributes", [ability, short[ability]]) + inventoryBonus(character, "attributes", [ability, short[ability]]);
-  const effects = character.inventory.filter((item) => item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character,item)).flatMap((item) => (inventoryEquipmentDefinition(item)?.capabilities ?? []).filter((cap) => cap.activation === "passive").flatMap((cap) => cap.effects)).filter((effect) => effect.kind === "bonus" && effect.target === ability && !/48 horas|aumento permanente|misma lectura/i.test(effect.condition));
+  const effects = character.inventory.filter((item) => item.quantity > 0 && (itemIsIdentified(item) && item.equipped) && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character,item)).flatMap((item) => (inventoryEquipmentDefinition(item)?.capabilities ?? []).filter((cap) => cap.activation === "passive").flatMap((cap) => cap.effects)).filter((effect) => effect.kind === "bonus" && effect.target === ability && !/48 horas|aumento permanente|misma lectura/i.test(effect.condition));
   for (const effect of effects) if (effect.kind === "bonus" && effect.operation === "add") {
     const next = score + effect.value;
     score = /(?:máximo|maximo|encima de)(?: de)? 20/i.test(effect.condition) ? Math.max(score, Math.min(20, next)) : next;
@@ -334,7 +335,7 @@ export function projectActionDamageBonus(character: CharacterV2, action: Charact
     ? projectedAbilityModifier(character, action.ability) - abilityModifier(character.abilities[action.ability])
     : 0;
   const item = character.inventory.find((entry) => entry.id === action.inventoryItemId);
-  const equippedWeapons = character.inventory.filter((entry) => entry.equipped && entry.weapon);
+  const equippedWeapons = character.inventory.filter((entry) => (itemIsIdentified(entry) && entry.equipped) && entry.weapon);
   const dueling = hasBuilderStyle(character, "dueling") && item?.equipped && item.weapon?.range === "melee" && !item.properties.includes("two-handed") && !item.properties.includes("special") && equippedWeapons.length === 1 && (!item.weapon.versatileDamageExpression || action.damageExpression !== item.weapon.versatileDamageExpression) ? 2 : 0;
   const rage = barbarianRageBenefits(character) && action.ability === "strength" && barbarianMeleeAttack(character,action) ? barbarianRageDamage(character.identity.level) : 0;
   const martial = character.spellcasting.monk?.effects.find((e) => e.key === "sharpen" && e.target === action.inventoryItemId)?.amount ?? 0;
@@ -357,7 +358,7 @@ export interface InventoryProjection {
 export function projectInventory(character: CharacterV2): InventoryProjection {
   const dexterity = projectedAbilityModifier(character, "dexterity");
   const equippedArmor = character.inventory.find(
-    (item) => item.equipped && item.category === "armor" && item.armor !== null,
+    (item) => (itemIsIdentified(item) && item.equipped) && item.category === "armor" && item.armor !== null,
   );
   const baseArmorClass = equippedArmor?.armor === undefined || equippedArmor.armor === null
     ? Math.max(character.builder?.classKey === "monk" && !monkArmed(character) ? 10+projectedAbilityModifier(character,"wisdom") : 10,hasBuilderFeat(character,"dragon-hide") || character.builder && sorcererOrigin(character.builder) === "draconic" ? 13 : 10,character.builder?.classKey === "barbarian" ? 10+projectedAbilityModifier(character,"constitution") : 10) + dexterity
@@ -370,7 +371,7 @@ export function projectInventory(character: CharacterV2): InventoryProjection {
         : 0
     );
   const shieldBonus = character.inventory
-    .filter((item) => item.equipped && item.category === "shield")
+    .filter((item) => (itemIsIdentified(item) && item.equipped) && item.category === "shield")
     .reduce((total, item) => total + (item.armor?.base ?? 2), 0);
   const carryWeightBonus = activeInventoryBonuses(character)
     .filter((bonus) => bonus.category === "combatStats" && bonus.key === "CarryWeightBonus")
@@ -381,12 +382,12 @@ export function projectInventory(character: CharacterV2): InventoryProjection {
   );
   const adjustedStrength = projectAbilityScore(character, "strength");
   const carryingCapacity = (adjustedStrength * 15 + carryWeightBonus + traitBonus(character, "combatStats", ["CarryWeightBonus"])) * (character.builder && barbarianTotem(character.builder,6) === "bear" ? 2 : 1);
-  const meleeWeapons = character.inventory.filter((item) => item.equipped && item.weapon?.range.toLowerCase() === "melee" && !item.properties.includes("two-handed") && !item.properties.includes("special"));
+  const meleeWeapons = character.inventory.filter((item) => (itemIsIdentified(item) && item.equipped) && item.weapon?.range.toLowerCase() === "melee" && !item.properties.includes("two-handed") && !item.properties.includes("special"));
   return {
     totalWeight,
     carryingCapacity,
     overCapacity: totalWeight > carryingCapacity,
-    attuned: character.inventory.filter((item) => item.attuned).length,
+    attuned: character.inventory.filter((item) => itemIsIdentified(item) && item.attuned).length,
     maximumAttuned: 3,
     calculatedArmorClass: baseArmorClass + shieldBonus + legacyDefenseCorrection(character, !!equippedArmor) + (character.builder?.classKey === "monk" && !character.combat.conditions.some((p) => ["unconscious","incapacitated","paralyzed","stunned","petrified"].includes(p.key)) && character.spellcasting.monk?.effects.some((e) => e.key === "agile-parry") ? 2 : 0) + warMagicDefense(character) + (character.builder?.classKey === "cleric" && character.builder.creation.cleric.domain === "forge" && character.identity.level >= 6 && /heavy|pesada/i.test(equippedArmor?.armor?.armorCategory ?? "") ? 1 : 0) + (hasBuilderFeat(character, "dual-wielder") && meleeWeapons.length === 2 ? 1 : 0) + (equippedArmor && hasBuilderStyle(character, "defense") ? 1 : 0) + traitBonus(character, "combatStats", ["AC"]) +
       inventoryBonus(character, "combatStats", ["AC"]),
@@ -441,7 +442,7 @@ export function projectSpellcasting(character: CharacterV2, spell?: CharacterSpe
     !!spell && !spell.casting && !character.builder && /^(bardo|bard)$/i.test(character.identity.className.trim()) &&
     spell.definition?.classes.some((name) => /^(bardo|bard)$/i.test(name)) === true;
   const scopedEffects = bardSpell ? character.inventory
-    .filter((item) => item.quantity > 0 && item.equipped && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character, item))
+    .filter((item) => item.quantity > 0 && (itemIsIdentified(item) && item.equipped) && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character, item))
     .flatMap((item) => inventoryEquipmentDefinition(item)?.capabilities.filter((cap) => cap.activation === "passive").flatMap((cap) => cap.effects) ?? []) : [];
   const scopedBonus = (target: string) => scopedEffects.reduce((total, effect) => total + (effect.kind === "bonus" && effect.operation === "add" && effect.target === target ? effect.value : 0), 0);
   const proficiency = proficiencyBonus(character.identity.level);

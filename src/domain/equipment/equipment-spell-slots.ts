@@ -1,9 +1,10 @@
+import { itemIsIdentified } from "./equipment-identification";
 import type { CharacterV2 } from "../character/character-v2";
 import type { CharacterInventoryItemV2 } from "../character/character-inventory-model";
 import { inventoryEquipmentDefinition } from "./equipment-live";
 
 export function equipmentSlotCapacity(item: CharacterInventoryItemV2, level: number): number {
-  if (!item.rules || item.quantity < 1 || !item.equipped || item.requiresAttunement && !item.attuned) return 0;
+  if (!itemIsIdentified(item) || !item.rules || item.quantity < 1 || !item.equipped || item.requiresAttunement && !item.attuned) return 0;
   return (inventoryEquipmentDefinition(item)?.capabilities ?? []).filter((cap) => cap.activation === "passive").flatMap((cap) => cap.effects).reduce((sum, effect) => sum + (effect.kind === "spell-slot-capacity" && effect.level === level ? effect.amount : 0), 0);
 }
 export function projectEquipmentSpellSlots(character: CharacterV2, level: number): { maximum: number; used: number } {

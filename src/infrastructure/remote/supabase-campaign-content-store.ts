@@ -207,6 +207,7 @@ export class SupabaseCampaignContentStore {
       throw new Error("El comerciante cambió o ya no está disponible. Actualizá la tienda e intentá nuevamente.");
     }
     await this.client.executeCampaignMerchantTrade({
+      ...(command.operation ? { operation: command.operation } : {}),
       campaignId: this.campaignId,
       characterId: command.characterId,
       shopContentKey: shopEntry.contentKey,

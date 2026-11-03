@@ -1,3 +1,4 @@
+import { itemIsIdentified, unidentifiedItemView } from "../domain/equipment/equipment-identification";
 import { bindInventoryDescriptions, renderCollapsibleInventoryDescription, renderInventoryRichText } from "./inventory-description-view";
 import { renderMartialPanel,bindMartialPanel } from "./martial-play-panel";
 import { confirmAction } from "./confirm-action";
@@ -1097,7 +1098,14 @@ export class BrowserApp {
     </div>`;
   }
 
+  private characterWithVisibleEquipment(character: CharacterV2): CharacterV2 {
+    const hidden = new Set(character.inventory.filter(item => !itemIsIdentified(item)).map(item => item.id));
+    return { ...character, actions: character.actions.filter(action => !action.inventoryItemId || !hidden.has(action.inventoryItemId)),
+      spellcasting: { ...character.spellcasting, spells: character.spellcasting.spells.filter(spell => ![...hidden].some(id => spell.casting?.source.startsWith(`inventory:${id}:`))) } };
+  }
+
   private renderCharacterForm(character: CharacterV2): string {
+    character = this.characterWithVisibleEquipment(character);
     const projection = projectCharacterStatistics(character);
     const signed = (value: number): string => value >= 0 ? `+${value}` : String(value);
     const initiativeMode = projectAdjustedRollMode(character, "skills", ["Initiative"], character.checks.initiative.rollMode);
@@ -1260,16 +1268,16 @@ export class BrowserApp {
     return `<details class="currency-manager">
       <summary class="inventory-utility-button">Monedas</summary>
       <div class="currency-manager-popover"><header><strong>Gestor de monedas</strong><small>Completá una o más cantidades y elegí una acción.</small></header><div class="currency-denomination-grid" aria-label="Gestor de monedas">${currencyControls}</div><label class="currency-transfer-target">Destinatario<select data-currency-batch-target><option value="">Seleccionar personaje…</option>${targets}</select></label><footer><button type="button" data-currency-batch-action="add" disabled>Agregar</button><button type="button" data-currency-batch-action="remove" disabled>Quitar</button><button type="button" data-currency-batch-action="transfer" disabled>Transferir</button><button type="button" data-reset-currency-controls>Resetear</button><button type="button" data-close-currency-manager>Cerrar</button></footer></div>
-      <datalist id="equipment-catalog-names">${this.equipmentCatalog().map((item) => `<option value="${escapeHtml(item.name)}"></option>`).join("")}</datalist>
+      <datalist id="equipment-catalog-names">${this.equipmentCatalog().map((item) => `<option value="${escapeHtml(this.inventoryDisplayName(item))}"></option>`).join("")}</datalist>
     </details>`;
   }
 
   private renderInventoryAttunementControl(character: CharacterV2, projection: InventoryProjection): string {
-    const attunedItems = character.inventory.filter((item) => item.attuned);
-    const pendingItems = character.inventory.filter((item) => item.requiresAttunement && item.equipped && !item.attuned);
+    const attunedItems = character.inventory.filter((item) => itemIsIdentified(item) && item.attuned);
+    const pendingItems = character.inventory.filter((item) => itemIsIdentified(item) && item.requiresAttunement && item.equipped && !item.attuned);
     const available = Math.max(0, projection.maximumAttuned - projection.attuned);
     const itemList = (items: CharacterInventoryItemV2[]) => items.length
-      ? `<ul>${items.map((item) => `<li>${escapeHtml(item.name)}</li>`).join("")}</ul>`
+      ? `<ul>${items.map((item) => `<li>${escapeHtml(this.inventoryDisplayName(item))}</li>`).join("")}</ul>`
       : '<p class="muted">Ninguno.</p>';
     return `<details class="inventory-attunement-control"><summary class="inventory-utility-button" title="${available} espacios de sintonización libres">Sintonización <strong>${projection.attuned}/${projection.maximumAttuned}</strong></summary><div><p><strong>${available}</strong> espacios libres. Equipá un objeto que la requiera y usá <em>Sintonizar</em> en su tarjeta.</p><section><strong>Sintonizados</strong>${itemList(attunedItems)}</section>${pendingItems.length ? `<section><strong>Equipados pendientes</strong>${itemList(pendingItems)}</section>` : ""}</div></details>`;
   }
@@ -1455,10 +1463,10 @@ export class BrowserApp {
   }
 
   private renderMerchantRollDialog(prepared: PreparedMerchantRoll): string {
-    const quantities = prepared.selections.map((selection) => `<label class="merchant-roll-item"><span>${escapeHtml(selection.item.name)}</span><input data-merchant-roll-item-id="${escapeHtml(selection.item.id)}" type="number" min="1" max="${selection.item.quantity}" step="1" value="${selection.quantity}"><small>de ${selection.item.quantity}</small></label>`).join("");
+    const quantities = prepared.selections.map((selection) => `<label class="merchant-roll-item"><span>${escapeHtml(this.inventoryDisplayName(selection.item))}</span><input data-merchant-roll-item-id="${escapeHtml(selection.item.id)}" type="number" min="1" max="${selection.item.quantity}" step="1" value="${selection.quantity}"><small>de ${selection.item.quantity}</small></label>`).join("");
     return `<dialog class="merchant-roll-dialog" open aria-labelledby="merchant-roll-title">
       <div class="merchant-roll-confirmation">
-        <header><div><small>Acción preparada</small><strong id="merchant-roll-title">${escapeHtml(prepared.label)}</strong></div><button type="button" class="icon-button" data-merchant-action="cancel-roll" aria-label="Cerrar" title="Cerrar">×</button></header>
+        <header><div><small>Acción preparada</small><strong id="merchant-roll-title">${escapeHtml(this.visibleItemNames(prepared.label))}</strong></div><button type="button" class="icon-button" data-merchant-action="cancel-roll" aria-label="Cerrar" title="Cerrar">×</button></header>
         <div class="merchant-roll-inputs"><label>Modificador del intento<input data-merchant-difficulty type="number" step="1" value="${prepared.difficulty}"></label>${quantities}</div>
         <p class="merchant-roll-equation" data-merchant-roll-equation>${prepared.breakdown.parts.map((part, index) => `${index ? " + " : ""}(${part.value})`).join("")} = <strong>CD ${prepared.breakdown.total}</strong></p>
         <div class="merchant-roll-breakdown" data-merchant-roll-breakdown>${prepared.breakdown.parts.map((part) => `<span><b>${escapeHtml(part.label)}</b><strong>${part.value >= 0 ? "+" : ""}${part.value}</strong><small>${escapeHtml(part.explanation)}</small></span>`).join("")}</div>
@@ -1476,7 +1484,7 @@ export class BrowserApp {
     const currentWeight = projectInventory(character).totalWeight;
     const projectedWeight = projectInventory(this.projectedMerchantCartCharacter(character, cart)).totalWeight;
     const lines = (entries: readonly MerchantTradeSelection[], mode: "buy" | "sell"): string => entries.map((entry) =>
-      `<li><span><b>${escapeHtml(entry.item.name)}</b><small>${mode === "buy" ? "Recibís" : "Entregás"} ${entry.quantity} × ${this.formatCurrencyValue(entry.unitPriceCopper)}</small></span><strong>${this.formatCurrencyValue(entry.unitPriceCopper * entry.quantity)}</strong><button type="button" data-merchant-action="remove-cart-entry" data-cart-mode="${mode}" data-cart-item-id="${escapeHtml(entry.item.id)}" aria-label="Quitar ${escapeHtml(entry.item.name)} del carrito">×</button></li>`,
+      `<li><span><b>${escapeHtml(this.inventoryDisplayName(entry.item))}</b><small>${mode === "buy" ? "Recibís" : "Entregás"} ${entry.quantity} × ${this.formatCurrencyValue(entry.unitPriceCopper)}</small></span><strong>${this.formatCurrencyValue(entry.unitPriceCopper * entry.quantity)}</strong><button type="button" data-merchant-action="remove-cart-entry" data-cart-mode="${mode}" data-cart-item-id="${escapeHtml(entry.item.id)}" aria-label="Quitar ${escapeHtml(this.inventoryDisplayName(entry.item))} del carrito">×</button></li>`,
     ).join("");
     const settlement = cart.totals.characterCurrencyDeltaCopper < 0
       ? `Pagás ${this.formatCurrencyValue(-cart.totals.characterCurrencyDeltaCopper)}`
@@ -1508,6 +1516,12 @@ export class BrowserApp {
     const interaction = this.merchantInteractionForCharacter(active, character);
     const npc = this.linkedMerchantNpc(active)!;
     const statistics = merchantNpcStatistics(npc);
+    const canTrade = interaction.barter && interaction.state === "active";
+    const buyAvailable = canTrade || interaction.state === "active" && (interaction.steal || interaction.assault) || merchantCanBeLooted(interaction);
+    const sellAvailable = canTrade || interaction.state === "active" && interaction.plantEvidence;
+    if (this.merchantMode === "buy" && !buyAvailable && sellAvailable) this.merchantMode = "sell";
+    if (this.merchantMode === "sell" && !sellAvailable && buyAvailable) this.merchantMode = "buy";
+    if (!canTrade) this.merchantCartReviewShopName = null;
     const cart = this.merchantCartSelection(active, character);
     const merchantInventory = this.merchantInventory(active);
     const availableItems = this.merchantMode === "buy" ? merchantInventory : character.inventory;
@@ -1539,8 +1553,8 @@ export class BrowserApp {
     return `<section class="play-section merchant-interactions" data-merchant-card="${escapeHtml(active.name)}">
       <div class="section-heading merchant-detail-heading"><div><p class="eyebrow">NPC asociado · ${escapeHtml(npc.name)}</p><h2>${escapeHtml(active.name)}</h2></div><div class="merchant-heading-tools"><span class="merchant-state" data-state="${interaction.state}">${stateLabel[interaction.state]}</span><button type="button" class="secondary-button merchant-back-button" data-merchant-action="back">Volver</button></div></div>
       <div class="merchant-stat-ledger"><section><small>Trato</small><span><b>Reputación</b><strong>${interaction.reputation}</strong></span><span><b>Comisión</b><strong>${interaction.commissionPercent}%</strong></span><span><b>Sospecha</b><strong>+${merchantSuspicionDifficulty(interaction)} CD</strong></span></section><section><small>Defensas del NPC</small><span><b>CAR</b><strong>${statistics.charisma >= 0 ? "+" : ""}${statistics.charisma}</strong></span><span><b>PER</b><strong>${statistics.perception >= 0 ? "+" : ""}${statistics.perception}</strong></span></section><section><small>Tus pruebas</small><span><b>Persuasión</b><strong>${projection.skills.persuasion >= 0 ? "+" : ""}${projection.skills.persuasion}</strong></span><span><b>Intimidación</b><strong>${projection.skills.intimidation >= 0 ? "+" : ""}${projection.skills.intimidation}</strong></span><span><b>Asalto (FUE)</b><strong>${assaultModifier >= 0 ? "+" : ""}${assaultModifier}</strong></span><span><b>Juego de manos</b><strong>${projection.skills.sleightOfHand >= 0 ? "+" : ""}${projection.skills.sleightOfHand}</strong></span></section></div>
-      <nav class="merchant-commerce-mode-switch" aria-label="Sección del intercambio">${canUseBuyMode ? `<button type="button" data-merchant-mode="buy" class="buy ${this.merchantMode === "buy" ? "active" : ""}" aria-pressed="${this.merchantMode === "buy"}"><span>Comprar</span><small>${cart.buy.reduce((sum, entry) => sum + entry.quantity, 0)} en carrito</small></button>` : ""}${canUseSellMode ? `<button type="button" data-merchant-mode="sell" class="sell ${this.merchantMode === "sell" ? "active" : ""}" aria-pressed="${this.merchantMode === "sell"}"><span>Vender</span><small>${cart.sell.reduce((sum, entry) => sum + entry.quantity, 0)} en carrito</small></button>` : ""}</nav>
-      <div class="merchant-operation-summary"><div class="merchant-resource-stack">${this.renderMerchantMoneyMeter("character", playerFunds, cart.totals.characterCurrencyDeltaCopper)}${this.renderMerchantMoneyMeter("merchant", interaction.fundsCopper, cart.totals.merchantCurrencyDeltaCopper)}${this.renderMerchantWeightPreview(character, cart)}</div>${interaction.barter ? `<button type="button" class="merchant-cart-button" data-merchant-action="open-cart-review" ${cartValid ? "" : "disabled"}><span>Revisar intercambio</span><strong>${cartUnits} objeto${cartUnits === 1 ? "" : "s"}</strong></button>` : ""}</div>
+      <nav class="merchant-commerce-mode-switch" aria-label="Sección del intercambio">${canUseBuyMode ? `<button type="button" data-merchant-mode="buy" class="buy ${this.merchantMode === "buy" ? "active" : ""}" aria-pressed="${this.merchantMode === "buy"}"><span>${canTrade ? "Comprar" : "Inventario del comerciante"}</span><small>${cart.buy.reduce((sum, entry) => sum + entry.quantity, 0)} en carrito</small></button>` : ""}${canUseSellMode ? `<button type="button" data-merchant-mode="sell" class="sell ${this.merchantMode === "sell" ? "active" : ""}" aria-pressed="${this.merchantMode === "sell"}"><span>${canTrade ? "Vender" : "Mis objetos"}</span><small>${cart.sell.reduce((sum, entry) => sum + entry.quantity, 0)} en carrito</small></button>` : ""}</nav>
+      <div class="merchant-operation-summary"><div class="merchant-resource-stack">${this.renderMerchantMoneyMeter("character", playerFunds, canTrade ? cart.totals.characterCurrencyDeltaCopper : 0)}${this.renderMerchantMoneyMeter("merchant", interaction.fundsCopper, canTrade ? cart.totals.merchantCurrencyDeltaCopper : 0)}${this.renderMerchantWeightPreview(character, cart)}</div>${canTrade ? `<button type="button" class="merchant-cart-button" data-merchant-action="open-cart-review" ${cartValid ? "" : "disabled"}><span>Revisar intercambio</span><strong>${cartUnits} objeto${cartUnits === 1 ? "" : "s"}</strong></button>` : ""}</div>
       <nav class="merchant-action-bar merchant-secondary-actions" aria-label="Otras acciones del comerciante">${interaction.negotiation ? actionButton("persuade", "Persuadir", challengeDc) : ""}${interaction.intimidation ? actionButton("intimidate", "Intimidar", challengeDc) : ""}${interaction.assault && interaction.state === "active" ? `<button type="button" data-merchant-action="assault-selected" data-merchant-base-dc="${challengeDc}" data-merchant-dc-label="Asaltar" disabled><span>Asaltar</span><strong>CD ${challengeDc}</strong></button>` : ""}${merchantCanBeLooted(interaction) ? '<button type="button" data-merchant-action="loot-selected" disabled><span>Saquear</span></button>' : ""}</nav>
       ${this.renderInventoryDiscoveryTools(character, { allowCatalog: false, showResources: false, source: availableItems })}
       <div class="inventory-dense-list merchant-inventory-list">${commerceCards || `<div class="sheet-empty"><p>No hay objetos que coincidan con la búsqueda y los filtros.</p></div>`}</div>
@@ -1607,8 +1621,8 @@ export class BrowserApp {
     const activeEffects = [
       ...character.inventory.filter(item=>item.equipped&&(!item.requiresAttunement||item.attuned)&&!equipmentBearerIssue(character,item)&&equipmentFlightRule(item)&&(equipmentFlightState(item).flying||equipmentFlightState(item).descending)).map(item=>({source:item.name,description:equipmentFlightState(item).flying?`Vuelo activo: velocidad igual a caminar (${character.combat.speed}).`:`Descenso controlado: ${equipmentFlightState(item).altitudeFeet} pies hasta el suelo.`,kind:"Objeto"})),
       ...character.spellcasting.spells.filter((spell) => spell.effect.active && spell.effect.description.trim()).map((spell) => ({ source: spell.name, description: spell.effect.description, kind: "Conjuro" })),
-      ...character.inventory.filter((item) => item.equipped && (!item.requiresAttunement || item.attuned) && item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
-      ...character.inventory.flatMap((item) => item.equipped && (!item.requiresAttunement || item.attuned) ? item.features.filter((feature) => feature.active && feature.description.trim()).map((feature) => ({ source: `${item.name} · ${feature.name}`, description: feature.description, kind: inventoryFeatureKindLabel(feature.kind) })) : []),
+      ...character.inventory.filter((item) => itemIsIdentified(item) && item.equipped && (!item.requiresAttunement || item.attuned) && item.effect.active && item.effect.description.trim()).map((item) => ({ source: item.name, description: item.effect.description, kind: "Objeto" })),
+      ...character.inventory.flatMap((item) => itemIsIdentified(item) && item.equipped && (!item.requiresAttunement || item.attuned) ? item.features.filter((feature) => feature.active && feature.description.trim()).map((feature) => ({ source: `${item.name} · ${feature.name}`, description: feature.description, kind: inventoryFeatureKindLabel(feature.kind) })) : []),
       ...character.traits.flatMap((group) => group.traits).filter((trait) => trait.effect.active && trait.effect.description.trim()).map((trait) => ({ source: trait.name, description: trait.effect.description, kind: "Rasgo" })),
     ];
     return `<div class="play-dashboard">
@@ -1650,7 +1664,7 @@ export class BrowserApp {
 
   private renderActionFilterBar(character: CharacterV2): string {
     const filters: readonly [string, string][] = [["all", "Todas"], ["attack", "Ataques"], ["action", "Acciones"], ["bonus-action", "Adicionales"], ["reaction", "Reacciones"], ["other", "Otras"]];
-    const featureKinds = character.inventory.flatMap((item) => item.equipped ? item.features.filter((feature) => feature.showInActions || ["action", "bonus-action", "reaction"].includes(feature.kind)) : []);
+    const featureKinds = character.inventory.flatMap((item) => itemIsIdentified(item) && item.equipped ? item.features.filter((feature) => feature.showInActions || ["action", "bonus-action", "reaction"].includes(feature.kind)) : []);
     return `<nav class="filter-bar" aria-label="Filtrar acciones">${filters.map(([value, label]) => {
       const featureCount = value === "all"
         ? featureKinds.length
@@ -1825,6 +1839,7 @@ export class BrowserApp {
   }
 
   private inventoryMatchesFilter(item: CharacterInventoryItemV2 | EquipmentCatalogDraft, filter: string): boolean {
+    if (!itemIsIdentified(item) && !this.runtime.canManageCharacters) return false;
     const category = normalizedSearchText(item.category);
     if (filter === "equipped") return item.equipped;
     if (filter === "weapon") return item.weapon !== null || category.includes("weapon") || category.includes("arma");
@@ -1836,6 +1851,7 @@ export class BrowserApp {
   }
 
   private inventorySearchValue(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string {
+    if (!itemIsIdentified(item) && !this.runtime.canManageCharacters && "id" in item) return normalizedSearchText([item.identification?.name, item.identification?.appearance].join(" "));
     return normalizedSearchText([
       item.name,
       item.category,
@@ -1855,10 +1871,12 @@ export class BrowserApp {
   }
 
   private inventoryTags(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string[] {
+    if (!itemIsIdentified(item) && !this.runtime.canManageCharacters) return [];
     return visibleEquipmentTags(catalogTags(this.inventoryDefinition(item) ?? item));
   }
 
   private inventoryRarity(item: CharacterInventoryItemV2 | EquipmentCatalogDraft): string {
+    if (!itemIsIdentified(item) && !this.runtime.canManageCharacters) return "none";
     const definition = this.inventoryDefinition(item);
     if (definition) return normalizeEquipmentRarity(definition.rarity);
     return normalizeEquipmentRarity("none");
@@ -1958,7 +1976,7 @@ export class BrowserApp {
     const filtered = this.actionFilter === "all"
       ? character.actions
       : character.actions.filter((action) => action.categories.includes(this.actionFilter as CharacterActionV2["categories"][number]));
-    const inventoryFeatures = character.inventory.flatMap((item) => item.equipped
+    const inventoryFeatures = character.inventory.flatMap((item) => itemIsIdentified(item) && item.equipped
       ? item.features
         .filter((feature) => feature.showInActions || ["action", "bonus-action", "reaction"].includes(feature.kind))
         .filter((feature) => this.actionFilter === "all" || feature.kind === this.actionFilter || (this.actionFilter === "other" && !["action", "bonus-action", "reaction"].includes(feature.kind)))
@@ -2122,9 +2140,11 @@ export class BrowserApp {
     catalog = false,
     commerce?: { mode: "buy" | "sell"; unitPriceCopper: number; selectedQuantity: number; ownedQuantity: number; disabled: boolean; itemChallenge?: { action: "pilfer-item" | "plant-item"; label: string; dc: number } },
   ): string {
+    const unidentified = !itemIsIdentified(item);
+    if (unidentified && "id" in item && !this.runtime.canManageCharacters) item = unidentifiedItemView(item);
     const owned = !catalog && "id" in item;
     const ownedItem = owned ? item as CharacterInventoryItemV2 : null;
-    const description = item.description.trim() || this.findEquipment(item.name)?.description.trim() || "";
+    const description = item.description.trim() || (!unidentified ? this.findEquipment(item.name)?.description.trim() : "") || "";
     const categoryTone = inventoryCategoryTone(item);
     const useDisabled = !ownedItem?.usable || (!ownedItem.equipped && !ownedItem.consumable) ||
       (ownedItem.charges !== null && ownedItem.charges.current < 1) || ownedItem.quantity < 1;
@@ -2132,11 +2152,11 @@ export class BrowserApp {
     const quantity = ownedItem?.quantity ?? 0;
     const tags = this.inventoryTags(item);
     const rarity = this.inventoryRarity(item);
-    const linkedAction = ownedItem ? character.actions.find((action) => action.inventoryItemId === ownedItem.id) : undefined;
+    const linkedAction = ownedItem && (!unidentified || this.runtime.canManageCharacters) ? character.actions.find((action) => action.inventoryItemId === ownedItem.id) : undefined;
     const damageBase = linkedAction?.damageExpression || item.weapon?.damageExpression || "";
     const damageBonus = linkedAction ? projectActionDamageBonus(character, linkedAction) : item.weapon?.damageBonus ?? 0;
     const damageExpression = damageBase ? `${damageBase}${damageBonus > 0 ? `+${damageBonus}` : damageBonus < 0 ? damageBonus : ""}` : "";
-    const definition = inventoryEquipmentDefinition(item);
+    const definition = unidentified && !this.runtime.canManageCharacters ? null : inventoryEquipmentDefinition(item);
     const displayedText = [description, ...(definition && description === equipmentPlainDescription(definition) ? definition.description.map(block => block.type === "paragraph" ? block.text : block.type === "list" ? block.items.join("\n") : block.rows.map(row => row.join(" · ")).join("\n")) : [])];
     const featureDescriptions = new Map([...item.features].sort((a, b) => a.order - b.order).map(feature => {
       const extra = inventoryPlayerText(inventorySupplementalText(feature.description, displayedText));
@@ -2160,15 +2180,15 @@ export class BrowserApp {
     const effectHtml = !commerce && ownedItem?.effect.description ? `<div class="effect-control compact-effect ${effectAvailable ? "" : "unavailable"}"><span>${escapeHtml(effectText || "Efecto del objeto")}</span><select data-effect-toggle="inventory" aria-label="Estado del efecto" title="${effectAvailable ? "Estado del efecto" : "El objeto debe estar equipado y, cuando corresponda, sintonizado"}" ${effectAvailable ? "" : "disabled"}><option value="off" ${effectActive ? "" : "selected"}>Inactivo</option><option value="on" ${effectActive ? "selected" : ""}>Activo</option></select></div>` : "";
     const descriptionHtml = description && this.showInventoryDescriptions ? this.renderCollapsibleInventoryDescription(description, ownedItem?.id ?? `catalog:${normalizedSearchText(item.name)}`, inventoryEquipmentDefinition(item), item) : "";
     const transferControl = ownedItem ? `<details class="inventory-item-transfer"><summary>Transferir</summary><div><select data-item-transfer-target aria-label="Personaje destinatario"><option value="">Destinatario…</option>${targets}</select><div><input data-item-transfer-quantity type="number" min="1" max="${quantity}" step="1" value="1" aria-label="Cantidad a transferir"><button type="button" data-transfer-inventory-item disabled>Confirmar</button></div></div></details>` : "";
-    const inventoryHeaderControl = ownedItem ? `<div class="inventory-card-controls"><div class="inventory-card-primary"><label class="inventory-card-quantity"><span>Cant.</span><input data-inventory-quantity-input type="number" min="1" step="1" value="${quantity}" aria-label="Cantidad de ${escapeHtml(item.name)}"></label><button type="button" class="inventory-state-toggle ${ownedItem.equipped ? "active" : ""}" data-inventory-action="equip" aria-pressed="${ownedItem.equipped}" aria-label="${ownedItem.equipped ? "Quitar" : "Equipar"} ${escapeHtml(item.name)}" title="${ownedItem.equipped ? "Quitar" : "Equipar"}">${ownedItem.equipped ? "✓" : "✕"}</button></div>${transferControl}</div>` : '<span class="inventory-catalog-state">No adquirido</span>';
-    const actionsHtml = commerce ? "" : `<div class="inventory-row-actions">${catalog ? `<button type="button" data-add-catalog-inventory="${escapeHtml(item.name)}">Agregar</button>` : `${ownedItem?.usable && !equipmentConsumableRule(ownedItem) && !equipmentFoodCapability(ownedItem) ? `<button type="button" data-inventory-action="use" ${useDisabled ? "disabled" : ""} title="${useDisabled && !ownedItem.consumable && !ownedItem.equipped ? "Debe estar equipado" : "Usar objeto"}">Usar</button>` : ""}${ownedItem?.requiresAttunement && ownedItem.equipped ? `<button type="button" class="secondary-button" data-inventory-action="attune">${ownedItem.attuned ? "Desintonizar" : "Sintonizar"}</button>` : ""}`}</div>`;
+    const inventoryHeaderControl = ownedItem ? `<div class="inventory-card-controls"><div class="inventory-card-primary"><label class="inventory-card-quantity"><span>Cant.</span><input data-inventory-quantity-input type="number" min="1" step="1" value="${quantity}" aria-label="Cantidad de ${escapeHtml(this.inventoryDisplayName(item))}"></label><button type="button" ${unidentified ? "disabled" : ""} class="inventory-state-toggle ${ownedItem.equipped ? "active" : ""}" data-inventory-action="equip" aria-pressed="${ownedItem.equipped}" aria-label="${ownedItem.equipped ? "Quitar" : "Equipar"} ${escapeHtml(this.inventoryDisplayName(item))}" title="${ownedItem.equipped ? "Quitar" : "Equipar"}">${ownedItem.equipped ? "✓" : "✕"}</button></div>${transferControl}</div>` : '<span class="inventory-catalog-state">No adquirido</span>';
+    const actionsHtml = commerce ? "" : `<div class="inventory-row-actions">${catalog ? `<button type="button" data-add-catalog-inventory="${escapeHtml(this.inventoryDisplayName(item))}">Agregar</button>` : `${ownedItem?.usable && !equipmentConsumableRule(ownedItem) && !equipmentFoodCapability(ownedItem) ? `<button type="button" data-inventory-action="use" ${useDisabled ? "disabled" : ""} title="${useDisabled && !ownedItem.consumable && !ownedItem.equipped ? "Debe estar equipado" : "Usar objeto"}">Usar</button>` : ""}${ownedItem?.requiresAttunement && ownedItem.equipped ? `<button type="button" class="secondary-button" data-inventory-action="attune">${ownedItem.attuned ? "Desintonizar" : "Sintonizar"}</button>` : ""}`}</div>`;
     return renderSharedInventoryCard({
       item, rarity, rarityLabel: equipmentRarityLabel(rarity), categoryTone, categoryLabel: inventoryCategoryLabel(item), quantity: quantity || 1,
       catalog, commerce: !!commerce, ...(commerce ? { disabled: commerce.disabled } : {}),
       articleAttributes: ownedItem ? (commerce ? `data-merchant-commerce-item="${escapeHtml(ownedItem.id)}"` : "data-inventory-card") : "",
       headerControlHtml: commerceControl || inventoryHeaderControl,
-      statsHtml: `${commerce ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${damageExpression ? `<button type="button" class="roll-button inventory-damage-roll" data-roll-name="Daño: ${escapeHtml(item.name)}" data-roll-expression="${escapeHtml(damageExpression)}" data-roll-mode="normal">${escapeHtml(damageExpression)} ${escapeHtml(item.weapon?.damageType ?? "")}</button>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} ${equipmentFlightRule(item) ? "min de vuelo" : "cargas"}</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
-      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml: actionsHtml + (!commerce && ownedItem ? this.renderEquipmentFood(character,ownedItem) + renderEquipmentConsumable(character, ownedItem, Object.values(this.snapshot?.campaign.characters ?? {}).filter(c=>!c.archived||c.id===character.id)) + this.renderEquipmentPack(ownedItem) + renderEquipmentToolCheck(ownedItem) + renderConditionalEquipmentChecks(character,ownedItem) + renderEquipmentFlight(character,ownedItem) + renderEquipmentLastCharge(ownedItem) + this.renderEquipmentStudy(character,ownedItem) + this.renderEquipmentRecovery(ownedItem) + this.renderEquipmentSpellStorage(ownedItem) + this.renderLucentCore(character, ownedItem) + this.renderAssistedEquipmentCosts(character, ownedItem) : ""),
+      statsHtml: `${commerce && !unidentified ? `<span class="merchant-price-stat"><small>Valor base</small>${this.renderMerchantPrice(commerce.unitPriceCopper)}<em>c/u</em></span>${commerce.mode === "buy" ? `<span class="merchant-owned-count"><small>Ya tenés</small><strong>${commerce.ownedQuantity}</strong></span>` : ""}` : ""}${damageExpression ? `<button type="button" class="roll-button inventory-damage-roll" data-roll-name="Daño: ${escapeHtml(this.inventoryDisplayName(item))}" data-roll-expression="${escapeHtml(damageExpression)}" data-roll-mode="normal">${escapeHtml(damageExpression)} ${escapeHtml(item.weapon?.damageType ?? "")}</button>` : ""}${item.charges ? `<span>${item.charges.current}/${item.charges.maximum} ${equipmentFlightRule(item) ? "min de vuelo" : "cargas"}</span>` : ""}${ownedItem?.attuned ? "<span>Sintonizado</span>" : ""}${ownedItem?.equipped ? "<span>Equipado</span>" : ""}`,
+      descriptionHtml: effectHtml + descriptionHtml + featuresHtml, tags, actionsHtml: (unidentified ? '<span class="card-badge">Sin identificar · requiere GM</span>' : actionsHtml) + (!commerce && ownedItem && !unidentified ? this.renderEquipmentFood(character,ownedItem) + renderEquipmentConsumable(character, ownedItem, Object.values(this.snapshot?.campaign.characters ?? {}).filter(c=>!c.archived||c.id===character.id)) + this.renderEquipmentPack(ownedItem) + renderEquipmentToolCheck(ownedItem) + renderConditionalEquipmentChecks(character,ownedItem) + renderEquipmentFlight(character,ownedItem) + renderEquipmentLastCharge(ownedItem) + this.renderEquipmentStudy(character,ownedItem) + this.renderEquipmentRecovery(ownedItem) + this.renderEquipmentSpellStorage(ownedItem) + this.renderLucentCore(character, ownedItem) + this.renderAssistedEquipmentCosts(character, ownedItem) : ""),
     });
   }
 
@@ -2641,6 +2661,7 @@ export class BrowserApp {
     character: CharacterV2,
     item: CharacterInventoryItemV2 | null,
   ): string {
+    if (item && !itemIsIdentified(item) && !this.runtime.canManageCharacters) return this.renderInventoryPlayCard(character, item);
     const charges = item?.charges;
     const armor = item?.armor;
     const weapon = item?.weapon;
@@ -2651,6 +2672,7 @@ export class BrowserApp {
         <summary class="editor-card-summary"><strong>${escapeHtml(item?.name ?? "Agregar objeto")}</strong><span>${item ? `${item.quantity}× · ${escapeHtml(item.category)} · ${item.equipped ? "equipado" : "guardado"}` : "Nuevo"}</span></summary>
         <div class="editor-card-body">
         <div class="inventory-card-heading">
+          ${this.runtime.canManageCharacters ? `<fieldset><legend>Identificación · GM</legend><label><input data-inventory-field="identified" type="checkbox" ${itemIsIdentified(item ?? {}) ? "checked" : ""}> Identificado</label><label>Nombre sin identificar${field("unidentifiedName", item?.identification?.name ?? "Objeto sin identificar")}</label><label>Apariencia visible${field("unidentifiedAppearance", item?.identification?.appearance ?? "")}</label></fieldset>` : ""}
           <label>Nombre${field("name", item?.name ?? "", 'list="equipment-catalog-names" placeholder="Nuevo objeto"')}</label>
           ${item ? `<span>${item.equipped ? "Equipado" : "Guardado"}${item.attuned ? " · Sintonizado" : ""}</span>` : ""}
         </div>
@@ -3856,6 +3878,19 @@ export class BrowserApp {
     if (operation === "loot" && !merchantCanBeLooted(interaction)) {
       throw new Error("El comerciante no puede ser saqueado en su estado actual.");
     }
+    if (operation === "loot" && this.runtime.executeMerchantTrade) {
+      const character = this.snapshot && this.selectedCharacterId ? this.snapshot.campaign.characters[this.selectedCharacterId] : null;
+      const npc = this.linkedMerchantNpc(currentShop);
+      if (!this.snapshot || !character || !npc) throw new Error("El personaje o el comerciante ya no están disponibles.");
+      await this.runtime.executeMerchantTrade({ operation: "loot", expectedCampaignRevision: this.snapshot.campaign.revision,
+        characterId: character.id, expectedCharacterRevision: character.revision, shopName: currentShop.name, merchantNpcId: npc.id,
+        buys: selection.map(entry => ({ itemId: entry.item.id, quantity: entry.quantity })), sells: [] });
+      const [snapshot] = await Promise.all([this.application.reconcileInventorySpells(character.id), this.refreshCustomContent(false)]);
+      if (!snapshot) throw new Error("La campaña ya no está disponible.");
+      this.acceptCharacterSnapshot(snapshot, `Saquear en ${currentShop.name}`);
+      this.clearMerchantCart(currentShop, character);
+      return;
+    }
     if (operation === "pilfer" && (!interaction.steal || interaction.state !== "active")) {
       throw new Error("No se puede hurtar al comerciante en su estado actual.");
     }
@@ -4155,6 +4190,17 @@ export class BrowserApp {
     }
   }
 
+  private inventoryDisplayName(item: { name: string; identification?: { identified: boolean; name: string; appearance: string } }): string {
+    return !this.runtime.canManageCharacters && !itemIsIdentified(item) ? item.identification?.name.trim() || "Objeto sin identificar" : item.name;
+  }
+
+  private visibleItemNames(text: string): string {
+    if (this.runtime.canManageCharacters) return text;
+    const items = [...Object.values(this.snapshot?.campaign.characters ?? {}).flatMap(c => c.inventory), ...this.customMonsters.flatMap(npc => npc.inventory)];
+    for (const item of items) if (!itemIsIdentified(item)) text = text.replaceAll(item.name, item.identification?.name.trim() || "Objeto sin identificar");
+    return text;
+  }
+
   private appendActionLog(
     label: string,
     kind: SessionActionLogEntry["kind"] = "action",
@@ -4162,7 +4208,7 @@ export class BrowserApp {
   ): void {
     if (!characterId) return;
     const actionLog = this.actionLogs.get(characterId) ?? [];
-    actionLog.push({ id: this.nextHistoryId++, label, occurredAt: new Date().toISOString(), kind });
+    actionLog.push({ id: this.nextHistoryId++, label: this.visibleItemNames(label), occurredAt: new Date().toISOString(), kind });
     if (actionLog.length > 100) actionLog.splice(0, actionLog.length - 100);
     this.actionLogs.set(characterId, actionLog);
   }
@@ -5504,7 +5550,11 @@ export class BrowserApp {
       const hasCharges = checkbox("hasCharges");
       const hasArmor = checkbox("hasArmor");
       const hasWeapon = checkbox("hasWeapon");
+      if (existing && !itemIsIdentified(existing) && !this.runtime.canManageCharacters) throw new Error("Sólo el GM puede editar un objeto sin identificar.");
+      const identification = this.runtime.canManageCharacters ? { identified: checkbox("identified"), name: this.inventoryCardField<HTMLInputElement>(card,"unidentifiedName").value, appearance: this.inventoryCardField<HTMLInputElement>(card,"unidentifiedAppearance").value } : existing?.identification;
       const draft: CharacterInventoryItemDraft = {
+        ...(existing?.rules ? { rules: existing.rules } : {}),
+        ...(identification ? { identification } : {}),
         order: integer("order"),
         group: this.inventoryCardField<HTMLInputElement>(card, "group").value,
         name: this.inventoryCardField<HTMLInputElement>(card, "name").value,
@@ -5518,8 +5568,8 @@ export class BrowserApp {
         description: this.inventoryCardField<HTMLTextAreaElement>(card, "description").value,
         properties: this.inventoryCardField<HTMLInputElement>(card, "properties").value
           .split(",").map((value) => value.trim()).filter(Boolean),
-        equipped: existing?.equipped ?? false,
-        attuned: existing?.attuned ?? false,
+        equipped: identification?.identified === false ? false : existing?.equipped ?? false,
+        attuned: identification?.identified === false ? false : existing?.attuned ?? false,
         requiresAttunement: checkbox("requiresAttunement"),
         usable: checkbox("usable"),
         consumable: checkbox("consumable"),

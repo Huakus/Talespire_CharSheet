@@ -103,6 +103,7 @@ function omitUndefinedCore<T extends { lucentCore?: unknown; study?: unknown; fl
 }
 
 export const CharacterInventoryItemFieldsSchema = z.object({
+  identification: z.object({ identified: z.boolean(), name: z.string(), appearance: z.string() }).optional(),
   id: z.string().regex(STABLE_ID_PATTERN),
   order: z.number().int().nonnegative(),
   group: z.string().min(1),
@@ -165,17 +166,17 @@ export const CharacterInventoryItemFieldsSchema = z.object({
 });
 
 type ItemFields = z.infer<typeof CharacterInventoryItemFieldsSchema>;
-type WithOptionalRules<T extends { rules?: unknown }> = Omit<T, "rules"> & { rules?: NonNullable<ItemFields["rules"]> };
+type WithOptionalRules<T extends { rules?: unknown }> = Omit<T, "rules" | "identification"> & { rules?: NonNullable<ItemFields["rules"]>; identification?: NonNullable<ItemFields["identification"]> };
 export const CharacterInventoryItemV2Schema = CharacterInventoryItemFieldsSchema.transform((value): WithOptionalRules<ItemFields> => {
-  const { rules, ...rest } = value;
-  return rules === undefined ? rest : { ...rest, rules };
+  const { rules, identification, ...rest } = value;
+  return { ...rest, ...(rules === undefined ? {} : { rules }), ...(identification === undefined ? {} : { identification }) };
 });
 const DraftFieldsSchema = CharacterInventoryItemFieldsSchema.omit({
   id: true,
 });
 export const CharacterInventoryItemDraftSchema = DraftFieldsSchema.transform((value): WithOptionalRules<z.infer<typeof DraftFieldsSchema>> => {
-  const { rules, ...rest } = value;
-  return rules === undefined ? rest : { ...rest, rules };
+  const { rules, identification, ...rest } = value;
+  return { ...rest, ...(rules === undefined ? {} : { rules }), ...(identification === undefined ? {} : { identification }) };
 });
 
 export type CharacterInventoryItemV2 = z.infer<typeof CharacterInventoryItemV2Schema>;

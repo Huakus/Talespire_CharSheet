@@ -118,6 +118,7 @@ export function normalizeEquipmentDefinition(input: unknown): EquipmentCatalogDr
     ...raw,
     order: raw.order ?? 0,
     group: raw.group ?? "backpack",
+    ...(raw.identification && typeof raw.identification === "object" ? { identification: raw.identification } : {}),
     ...(raw.rules && typeof raw.rules === "object" && !Array.isArray(raw.rules)
       ? { rules: { ...raw.rules, original: (raw.rules as Record<string, unknown>).original ?? {} } }
       : {}),

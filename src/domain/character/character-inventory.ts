@@ -1,3 +1,4 @@
+import { assertItemIdentified, itemIsIdentified } from "../equipment/equipment-identification";
 import {
   CharacterV2Schema,
   IsoTimestampSchema,
@@ -162,7 +163,8 @@ export function upsertInventoryItem(
 ): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const previousItem = character.inventory.find((entry) => entry.id === itemInput.id);
-  const item = CharacterInventoryItemV2Schema.parse({ ...itemInput, ...(previousItem?.rules && !itemInput.rules ? { rules: previousItem.rules } : {}) });
+  const item = CharacterInventoryItemV2Schema.parse({ ...itemInput, ...(previousItem?.rules && !itemInput.rules ? { rules: previousItem.rules } : {}), ...(previousItem?.identification && !itemInput.identification ? { identification: previousItem.identification } : {}) });
+  if (!itemIsIdentified(item)) { item.equipped = false; item.attuned = false; }
   if (item.equipped && item.quantity !== 1) {
     throw new InventoryEquipmentError("Los objetos equipados deben tener cantidad 1");
   }
@@ -203,6 +205,7 @@ export function setInventoryItemEquipped(
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
   const target = character.inventory.find((item) => item.id === itemId);
+  if (target) assertItemIdentified(target);
   if (!target) throw new InventoryItemNotFoundError(itemId);
   if (equipped && target.quantity < 1) {
     throw new InventoryEquipmentError("No se puede equipar un objeto sin unidades disponibles");
@@ -275,6 +278,7 @@ export function setInventoryItemAttuned(
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
   const target = character.inventory.find((item) => item.id === itemId);
+  if (target) assertItemIdentified(target);
   if (!target) throw new InventoryItemNotFoundError(itemId);
   if (attuned && (!target.requiresAttunement || !target.equipped)) {
     throw new InventoryUseError("The item must require attunement and be equipped first");
@@ -310,6 +314,7 @@ export function useInventoryItem(
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
   const target = character.inventory.find((item) => item.id === itemId);
+  if (target) assertItemIdentified(target);
   if (!target) throw new InventoryItemNotFoundError(itemId);
   if (!target.usable) throw new InventoryUseError(`${target.name} is not usable`);
   if (equipmentConsumableRule(target)) throw new InventoryUseError("Elegí el objetivo y resolvé el uso del consumible.");
@@ -363,6 +368,7 @@ export function setInventoryFeatureActive(
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
   const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item) throw new InventoryItemNotFoundError(itemId);
   const feature = item.features.find((entry) => entry.id === featureId);
   if (!feature) throw new InventoryFeatureUseError("La capacidad ya no existe en el objeto");
@@ -393,6 +399,7 @@ export function useInventoryFeature(
   const { character, updatedAt } = prepare(input, options);
   const itemId = StableIdSchema.parse(itemIdInput);
   const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item) throw new InventoryItemNotFoundError(itemId);
   assertEquipmentLastChargeResolved(item);
   const feature = item.features.find((entry) => entry.id === featureId);
@@ -454,6 +461,7 @@ export function resetInventoryItemResources(
   reset: string,
   character?: CharacterV2,
 ): CharacterInventoryItemV2 {
+  if (!itemIsIdentified(item)) return item;
   const definition = inventoryEquipmentDefinition(item);
   const resource = definition?.resources.find((entry) => entry.kind !== "spell-storage");
   const typedRecovery = resource?.recovery;
@@ -475,6 +483,7 @@ export function resetInventoryItemResources(
 /** Consume and apply a rolled potion to its bearer in one saved character mutation. */
 export function useInventoryHealingFeature(input: CharacterV2, itemId: string, featureId: string, healing: number, options: InventoryMutationOptions): CharacterV2 {
   const { character }=prepare(input,options), item=character.inventory.find((entry)=>entry.id===itemId);
+  if (item) assertItemIdentified(item);
   assertCanAdministerPotion(character);
   const expression=item && inventoryHealingExpression(item,featureId);
   if (!expression) throw new InventoryFeatureUseError("Esta capacidad no es una curación consumible simple.");
@@ -510,6 +519,7 @@ export function administerInventoryHealingFeature(source: CharacterV2, target: C
   assertCanAdministerPotion(actor);
   const recipient = prepare(target, { ...options, expectedRevision: options.expectedTargetRevision }).character;
   const item = actor.inventory.find(i => i.id === itemId), expression = item && inventoryHealingExpression(item, featureId);
+  if (item) assertItemIdentified(item);
   if (!expression) throw new InventoryFeatureUseError("Esta capacidad no es una curación consumible simple.");
   const bounds = equipmentRollBounds(expression);
   if (!Number.isInteger(healing) || healing < Math.max(1, bounds.minimum) || healing > bounds.maximum) throw new InventoryFeatureUseError(`Ingresá un resultado válido de ${expression}.`);
@@ -532,6 +542,7 @@ export type LucentCoreAction =
 export function performLucentCoreAction(input: CharacterV2, itemIdInput: string, action: LucentCoreAction, options: InventoryMutationOptions): CharacterV2 {
   const { character, updatedAt } = prepare(input, options), itemId = StableIdSchema.parse(itemIdInput);
   const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item || !isLucentCore(item)) throw new InventoryUseError("Este objeto no es el Núcleo Luciente Adaptado.");
   if (!["elapsed", "end"].includes(action.kind)) {
     const issue = equipmentBearerIssue(character,item);
@@ -576,6 +587,7 @@ export function performLucentCoreAction(input: CharacterV2, itemIdInput: string,
 export function recoverInventoryItem(input: CharacterV2, itemId: string, event: string, rolled: number | undefined, options: InventoryMutationOptions & { conditionConfirmed?: boolean }): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item) throw new InventoryItemNotFoundError(itemId);
   if (isLucentCore(item)) throw new InventoryUseError("Usá la recarga condicionada del núcleo y confirmá el descanso largo y el cristal insertado.");
   assertEquipmentLastChargeResolved(item);
@@ -607,6 +619,7 @@ export function recoverInventoryItem(input: CharacterV2, itemId: string, event: 
 
 export function studyInventoryBook(input: CharacterV2, itemId: string, day: number, hours: number, options: InventoryMutationOptions): CharacterV2 {
   const {character,updatedAt}=prepare(input,options), item=character.inventory.find(i=>i.id===itemId);
+  if (item) assertItemIdentified(item);
   if(!item)throw new InventoryItemNotFoundError(itemId);
   const previousConstitution=abilityModifier(projectAbilityScore(character,"constitution"));
   recordEquipmentStudy(character,item,day,hours,updatedAt);
@@ -617,6 +630,7 @@ export function studyInventoryBook(input: CharacterV2, itemId: string, day: numb
 
 export function performEquipmentFlightAction(input:CharacterV2,itemId:string,action:EquipmentFlightAction,options:InventoryMutationOptions):CharacterV2{
   const{character,updatedAt}=prepare(input,options),item=character.inventory.find(i=>i.id===itemId);
+  if (item) assertItemIdentified(item);
   if(!item)throw new InventoryItemNotFoundError(itemId);
   applyEquipmentFlightAction(character,item,action);
   return finish(character,character.inventory,updatedAt);
@@ -624,6 +638,7 @@ export function performEquipmentFlightAction(input:CharacterV2,itemId:string,act
 
 export function resolveInventoryLastCharge(input: CharacterV2, itemId: string, roll: number | null, options: InventoryMutationOptions & EquipmentLastChargeOptions): CharacterV2 {
   const { character, updatedAt } = prepare(input, options), item = character.inventory.find(i => i.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item) throw new InventoryItemNotFoundError(itemId);
   const next = resolveEquipmentLastCharge(item, roll, options);
   if (!next) return finish(character, character.inventory.filter(i => i.id !== itemId), updatedAt, character.actions.filter(a => a.inventoryItemId !== itemId));
@@ -653,6 +668,7 @@ export function resolveInventoryLastCharge(input: CharacterV2, itemId: string, r
 /** Expand exactly one sealed pack atomically. Existing possessions are never replaced or merged. */
 export function unpackInventoryPack(input: CharacterV2, itemId: string, components: CharacterInventoryItemV2[], options: InventoryMutationOptions): CharacterV2 {
   const { character, updatedAt } = prepare(input, options), item = character.inventory.find(i => i.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item) throw new InventoryItemNotFoundError(itemId);
   const contents = equipmentPackContents(item);
   if (!contents || item.quantity < 1) throw new InventoryUseError("No queda un paquete completo para desembalar.");
@@ -674,6 +690,7 @@ export function unpackInventoryPack(input: CharacterV2, itemId: string, componen
 export function spendInventoryItemCharges(input: CharacterV2, itemId: string, amount: number, options: InventoryMutationOptions): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item) assertItemIdentified(item);
   if (item && isLucentCore(item)) throw new InventoryUseError("Usá una resonancia para registrar también su duración y desgaste.");
   if (!item?.charges || item.quantity < 1) throw new InventoryUseError("El objeto no tiene una reserva disponible.");
   assertEquipmentLastChargeResolved(item);
@@ -686,6 +703,7 @@ export function spendInventoryItemCharges(input: CharacterV2, itemId: string, am
 /** Explicit bookkeeping for a whole consumable unit after its assisted resolution. */
 export function eatInventoryFood(input:CharacterV2,itemId:string,day:number,options:InventoryMutationOptions):CharacterV2{
   const{character,updatedAt}=prepare(input,options),item=character.inventory.find(i=>i.id===itemId),food=item&&equipmentFoodCapability(item);
+  if (item) assertItemIdentified(item);
   if(!item||!food||food.capability.consumeQuantity!==1)throw new InventoryUseError("Este objeto no tiene una ración completa configurada.");
   if(!Number.isSafeInteger(day)||day<0)throw new InventoryUseError("Ingresá un día de campaña válido.");
   assertCanAdministerPotion(character,"food");
@@ -698,6 +716,7 @@ export function eatInventoryFood(input:CharacterV2,itemId:string,day:number,opti
 export function consumeInventoryUnit(input: CharacterV2, itemId: string, options: InventoryMutationOptions): CharacterV2 {
   const { character, updatedAt } = prepare(input, options);
   const item = character.inventory.find((entry) => entry.id === itemId);
+  if (item) assertItemIdentified(item);
   if (!item?.consumable || item.quantity < 1) throw new InventoryUseError("No queda una unidad consumible de este objeto.");
   const inventory = character.inventory.flatMap((entry) => entry.id !== itemId ? [entry] : entry.quantity > 1 ? [{ ...entry, quantity: entry.quantity - 1 }] : []);
   return finish(character, inventory, updatedAt, item.quantity === 1 ? character.actions.filter((a) => a.inventoryItemId !== itemId) : character.actions);

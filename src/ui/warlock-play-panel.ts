@@ -15,7 +15,8 @@ export function warlockCastingOptions(character: CharacterV2,spell: CharacterSpe
 }
 export function warlockSpellExtras(character: CharacterV2,spell: CharacterSpellV2) {
   if (character.builder?.classKey !== "warlock") return "";
-  const ray = spell.casting?.key === "eldritch-blast" ? `<p>${character.identity.level >= 17 ? 4 : character.identity.level >= 11 ? 3 : character.identity.level >= 5 ? 2 : 1} rayo(s): resolvé cada ataque y su daño por separado. Descarga agonizante se aplica a cada impacto.</p>` : "";
+  const agonizing = spell.casting?.key === "eldritch-blast" && replayWarlockChoices(character.builder).invocations.includes("agonizing-blast");
+  const ray = spell.casting?.key === "eldritch-blast" ? `<p>${character.identity.level >= 17 ? 4 : character.identity.level >= 11 ? 3 : character.identity.level >= 5 ? 2 : 1} rayo(s): resolvé cada ataque y su daño por separado.${agonizing ? " Descarga agonizante: sumá tu modificador de Carisma al daño de cada impacto." : ""}</p>` : "";
   return ray+(spell.casting?.kind === "pact-invocation" ? "<p>Consume un espacio de pacto y el uso de esta invocación por descanso largo.</p>" : spell.casting?.source.startsWith("builder:warlock:arcanum") ? "<p>Arcano místico: un lanzamiento sin espacio por descanso largo.</p>" : "");
 }
 export function renderWarlockPanel(character: CharacterV2) {
