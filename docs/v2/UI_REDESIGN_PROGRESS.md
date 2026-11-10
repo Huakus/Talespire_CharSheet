@@ -9,6 +9,31 @@ aplicar nuevos cambios de presentación.
 
 ## Estado actual
 
+### Distribución definitiva 1.0.45 y changelog acumulado
+
+Se consolidó la entrega completa en 1.0.45. La aplicación y sus pruebas no
+cambian respecto del commit de la 1.0.44; se actualizan versión, distribución
+y documentación. El changelog solicitado está en
+`CHANGELOG_1.0.43_TO_1.0.45.md`, tomando como base la publicación 1.0.43
+(`e14a223`) e incluyendo identificación de objetos, comerciantes, invocaciones
+y el rediseño posterior. El ZIP incorpora tanto `CHANGELOG.md` como
+`RELEASE_NOTES.md` con las notas acumuladas.
+
+Los 66 pendientes encontrados al iniciar esta entrega eran exclusivamente
+assets generados sin seguimiento, no fuentes omitidas. `.gitignore` ahora
+excluye assets no versionados de `dist-v2/assets/`; los ya versionados siguen
+siéndolo. Se conserva todo en disco por los posibles bloqueos de TaleSpire y
+se añaden explícitamente con `git add -f` los nueve assets del manifest vigente.
+El procedimiento queda documentado en README. Los ZIP excluyen builds obsoletos.
+
+Validación repetida: typecheck, 54 pruebas de interfaz/build en siete archivos,
+build de producción, ocho imports locales resueltos y 18 entradas del ZIP
+comparadas byte a byte. Registro/SHA256: `release-1.0.45-validation.json`.
+La regresión completa de la misma aplicación sigue respaldada por las 1501
+pruebas pasadas y tres omitidas de la 1.0.44; no se presenta como repetida.
+Se prepara commit en `main` y etiqueta `v1.0.45`. No se modifican campañas ni
+Toolset; las comprobaciones visuales y de dos clientes reales siguen pendientes.
+
 ### Distribución 1.0.44 para mod.io
 
 Versión incrementada a 1.0.44 con changelog y paquete

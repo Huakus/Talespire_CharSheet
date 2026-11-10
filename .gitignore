@@ -4,6 +4,9 @@ desktop.ini
 .localstorage/**/desktop.ini
 node_modules/
 dist-v2-pending/
+# Retained builds may be locked by TaleSpire. Releases explicitly add only
+# the current assets listed in dist-v2/.vite/manifest.json with git add -f.
+/dist-v2/assets/
 coverage/
 .localstorage/
 .localstorage.zip

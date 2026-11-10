@@ -1,6 +1,6 @@
 {
-  "_character-builder-CTgvZxpR.js": {
-    "file": "assets/character-builder-CTgvZxpR.js",
+  "_character-builder-DSnCd6PQ.js": {
+    "file": "assets/character-builder-DSnCd6PQ.js",
     "name": "character-builder",
     "imports": [
       "v2.html"
@@ -13,45 +13,45 @@
     "file": "assets/character-builder-Dq0ZihZs.css",
     "src": "_character-builder-Dq0ZihZs.css"
   },
-  "_theme-ucgDDYK5.js": {
-    "file": "assets/theme-ucgDDYK5.js",
+  "_theme-DaBvjjsE.js": {
+    "file": "assets/theme-DaBvjjsE.js",
     "name": "theme",
     "imports": [
       "v2.html"
     ]
   },
   "src/ui/classic-views.ts": {
-    "file": "assets/classic-views-9Ssba7-k.js",
+    "file": "assets/classic-views-CnjFhmr8.js",
     "name": "classic-views",
     "src": "src/ui/classic-views.ts",
     "isDynamicEntry": true,
     "imports": [
       "v2.html",
-      "_character-builder-CTgvZxpR.js",
-      "_theme-ucgDDYK5.js"
+      "_character-builder-DSnCd6PQ.js",
+      "_theme-DaBvjjsE.js"
     ],
     "css": [
       "assets/classic-views-CCT9_I51.css"
     ]
   },
   "src/ui/next/next-views.ts": {
-    "file": "assets/next-views-BYlaFXMf.js",
+    "file": "assets/next-views-CLKPATI4.js",
     "name": "next-views",
     "src": "src/ui/next/next-views.ts",
     "isDynamicEntry": true,
     "imports": [
       "v2.html",
-      "_theme-ucgDDYK5.js"
+      "_theme-DaBvjjsE.js"
     ],
     "dynamicImports": [
-      "_character-builder-CTgvZxpR.js"
+      "_character-builder-DSnCd6PQ.js"
     ],
     "css": [
       "assets/next-views-Cfpl4ssM.css"
     ]
   },
   "v2.html": {
-    "file": "assets/v2-DQwOC9qP.js",
+    "file": "assets/v2-BWDzpDJB.js",
     "name": "v2",
     "src": "v2.html",
     "isEntry": true,

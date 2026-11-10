@@ -19,6 +19,24 @@ npm run check
 The application entry point is `v2.html`; production assets are generated in
 `dist-v2/` and loaded by `manifest.json`.
 
+To generate the mod.io ZIP, run `npm run package:modio`. The package includes
+all current runtime assets, both interfaces and the icon license. It excludes
+old build outputs retained locally for TaleSpire. These untracked outputs are
+ignored by Git; existing tracked builds remain tracked. When committing a
+release, explicitly stage the fresh build manifest's assets:
+
+```powershell
+$releaseManifest = Get-Content dist-v2/.vite/manifest.json -Raw | ConvertFrom-Json
+$releaseAssets = @($releaseManifest.PSObject.Properties | ForEach-Object {
+  $_.Value.file; $_.Value.css; $_.Value.assets
+} | Where-Object { $_ } | Sort-Object -Unique | ForEach-Object { "dist-v2/$_" })
+git add -f -- @releaseAssets
+git add -- dist-v2/v2.html dist-v2/.vite/manifest.json dist-v2/third-party
+```
+
+The consolidated release notes are in
+[Changelog 1.0.43 → 1.0.45](docs/v2/CHANGELOG_1.0.43_TO_1.0.45.md).
+
 The **Interfaz** control offers **Actual** (default) and a **Nueva** pilot.
 The choice is local and takes effect on the next Symbiote reload; save
 work and finish pending operations before reloading. Nueva has a direct return

@@ -93,6 +93,16 @@ $entryImport = $scriptMatch.Groups['path'].Value | ConvertTo-Json -Compress
 "import $entryImport;" | Set-Content -LiteralPath (Join-Path $packageRoot 'script.js') -Encoding utf8
 Copy-Item -LiteralPath $sourceStylePath -Destination (Join-Path $packageRoot 'style.css')
 Copy-Item -LiteralPath (Join-Path $repoRoot 'README.md') -Destination (Join-Path $packageRoot 'README.md')
+Copy-Item -LiteralPath (Join-Path $repoRoot 'CHANGELOG.md') -Destination (Join-Path $packageRoot 'CHANGELOG.md')
+$packageDocumentation = @('CHANGELOG.md')
+$releaseNotesFiles = @(Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs\v2') -Filter "CHANGELOG_*_TO_$($manifest.version).md" -File)
+if ($releaseNotesFiles.Count -gt 1) {
+  throw 'More than one cumulative changelog was found for this release.'
+}
+if ($releaseNotesFiles.Count -eq 1) {
+  Copy-Item -LiteralPath $releaseNotesFiles[0].FullName -Destination (Join-Path $packageRoot 'RELEASE_NOTES.md')
+  $packageDocumentation += 'RELEASE_NOTES.md'
+}
 New-Item -ItemType Directory -Path (Join-Path $packageRoot 'third-party') -Force | Out-Null
 Copy-Item -LiteralPath $sourceLicensePath -Destination (Join-Path $packageRoot $licenseRelativePath)
 
@@ -142,7 +152,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $archive = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
 try {
   $entries = @($archive.Entries | ForEach-Object { $_.FullName.Replace('\', '/') })
-  foreach ($requiredEntry in @('manifest.json', 'index.html', 'script.js', 'style.css', 'README.md', $licenseRelativePath) + $buildFiles) {
+  foreach ($requiredEntry in @('manifest.json', 'index.html', 'script.js', 'style.css', 'README.md', $licenseRelativePath) + $buildFiles + $packageDocumentation) {
     if ($entries -notcontains $requiredEntry) {
       throw "ZIP validation failed: $requiredEntry is missing from the archive root."
     }

@@ -1,6 +1,13 @@
 # Changelog
 
-Changes to Talespire CharSheet from **1.0.29 through 1.0.44**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+Changes to Talespire CharSheet from **1.0.29 through 1.0.45**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+
+## 1.0.45 — 2026-11-09
+
+- Consolidated the complete current application and both interfaces into a final mod.io distribution. No application features from 1.0.44 were omitted; the application source is unchanged from that release.
+- Added the [complete Spanish changelog from the published 1.0.43 to 1.0.45](docs/v2/CHANGELOG_1.0.43_TO_1.0.45.md), including item identification, merchant looting and warlock invocation improvements that landed after the 1.0.43 publication and before the interface redesign.
+- Excluded retained, untracked build outputs from Git status. Release commits explicitly include the current build manifest's assets; superseded local files remain available for TaleSpire without entering the new ZIP.
+- Preserved Actual as the default, the local interface choice, the public communication channel and the complete dynamic module/CSS distribution.
 
 ## 1.0.44 — 2026-11-09
 
