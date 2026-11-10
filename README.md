@@ -19,6 +19,20 @@ npm run check
 The application entry point is `v2.html`; production assets are generated in
 `dist-v2/` and loaded by `manifest.json`.
 
+The **Interfaz** control offers **Actual** (default) and a **Nueva** pilot.
+The choice is local and takes effect on the next Symbiote reload; save
+work and finish pending operations before reloading. Nueva has a direct return
+to Actual. For redesign work, start with the
+[current implementation status and next task](docs/v2/UI_REDESIGN_PROGRESS.md).
+
+Nueva includes the compact character sheet with real statistics, bundled SVG
+icons, source tooltips, XP/level progression, inspiration and temporary/locked
+advantage controls for its skill/ability/save rolls. At zero HP it permits death
+save counters and healing, with other character actions blocked. The third death
+success restores 1 HP atomically in both interfaces. Players start on **Ficha**;
+GMs open **Personajes**. Select Nueva and reload the Symbiote in TaleSpire.
+General editing, attacks/spells, rest and condition/resource management remain in Actual.
+
 The GM **Combate** panel follows TaleSpire's native turn queue, restores saved
 miniature-to-character/creature associations, and receives character initiative
 rolls automatically. One active combat is saved automatically per campaign,

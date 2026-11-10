@@ -1,0 +1,35 @@
+.character-builder-dialog { width: min(820px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; border: 1px solid var(--ui-border); border-radius: 12px; background: var(--ui-bg-surface); box-shadow: 0 24px 80px #0008; }
+.character-builder-dialog::backdrop { background: #0009; }
+.character-builder-form { display: grid; gap: 16px; padding: 22px; font-size: .88rem; line-height: 1.5; }
+.character-builder-form > header { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.character-builder-form h2, .character-builder-form h3, .character-builder-form h4, .character-builder-form p { margin: 0 0 10px; }
+.character-builder-form h2 { margin: 0; font-size: 1.5rem; }
+.builder-eyebrow { color: var(--ui-accent); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
+.character-builder-form nav ol { display: flex; gap: 6px; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; }
+.character-builder-form nav button { font-size: .78rem; background: var(--ui-bg-sunken); color: var(--ui-text-secondary); }
+.character-builder-form nav [aria-current="step"] { background: var(--ui-accent-surface); border-color: var(--ui-accent); color: var(--ui-accent); }
+.builder-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0; }
+.character-builder-form label { display: grid; gap: 5px; color: var(--ui-text-secondary); }
+.dialog-select-field { display: grid; gap: 5px; align-content: start; min-width: 0; }
+.character-builder-form .dialog-select-button { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-width: 0; padding: 9px; color: var(--ui-text); background: var(--ui-bg-sunken); border: 1px solid var(--ui-border); border-radius: 5px; font-size: .86rem; text-align: left; }
+.dialog-select-button > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dialog-select-button[aria-expanded="true"] { border-color: var(--ui-accent); }
+.dialog-select-panel[hidden] { display: none; }
+.dialog-select-panel { min-width: 0; }
+.character-builder-form .dialog-select-panel select { display: block; max-height: min(240px, 45vh); padding: 3px; background: var(--ui-bg-sunken); border-color: var(--ui-accent); }
+.dialog-select-panel option { padding: 6px; white-space: normal; overflow-wrap: anywhere; }
+.character-builder-form :is(input, select, textarea) { width: 100%; min-width: 0; padding: 9px; font-size: .86rem; box-sizing: border-box; }
+.character-builder-form textarea { min-height: 90px; resize: vertical; }
+.character-builder-form fieldset { grid-column: 1 / -1; border: 1px solid var(--ui-border); padding: 12px; border-radius: 6px; }
+.builder-help, .character-builder-form small { color: var(--ui-text-muted); font-size: .78rem; }
+.builder-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+.builder-summary > div { padding: 12px; border: 1px solid var(--ui-border); background: var(--ui-bg-sunken); border-radius: 7px; }
+.builder-summary strong { display: block; font-size: 1.3rem; color: var(--ui-accent); }
+.builder-error { color: var(--ui-danger, #ef8d8d); white-space: pre-wrap; }
+.character-builder-form footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid var(--ui-border); padding-top: 14px; }
+.character-builder-form footer > div { display: flex; gap: 8px; }
+@media (max-width: 560px) { .character-builder-form { padding: 14px; } .builder-grid { grid-template-columns: 1fr; } .character-builder-form > header { align-items: start; } .character-builder-form footer > div { width: 100%; flex-wrap: wrap; } }
+
+.character-builder-dialog { color: var(--ui-text); font: 14px/1.5 system-ui, sans-serif; }
+.character-builder-dialog :is(button,input,select,textarea) { font: inherit; color: var(--ui-text); background: var(--ui-bg-surface); border: 1px solid var(--ui-border); border-radius: 5px; padding: 8px; }
+.character-builder-dialog button:disabled { opacity: .45; }

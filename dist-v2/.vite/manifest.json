@@ -1,0 +1,66 @@
+{
+  "_character-builder-CTgvZxpR.js": {
+    "file": "assets/character-builder-CTgvZxpR.js",
+    "name": "character-builder",
+    "imports": [
+      "v2.html"
+    ],
+    "css": [
+      "assets/character-builder-Dq0ZihZs.css"
+    ]
+  },
+  "_character-builder-Dq0ZihZs.css": {
+    "file": "assets/character-builder-Dq0ZihZs.css",
+    "src": "_character-builder-Dq0ZihZs.css"
+  },
+  "_theme-ucgDDYK5.js": {
+    "file": "assets/theme-ucgDDYK5.js",
+    "name": "theme",
+    "imports": [
+      "v2.html"
+    ]
+  },
+  "src/ui/classic-views.ts": {
+    "file": "assets/classic-views-9Ssba7-k.js",
+    "name": "classic-views",
+    "src": "src/ui/classic-views.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "v2.html",
+      "_character-builder-CTgvZxpR.js",
+      "_theme-ucgDDYK5.js"
+    ],
+    "css": [
+      "assets/classic-views-CCT9_I51.css"
+    ]
+  },
+  "src/ui/next/next-views.ts": {
+    "file": "assets/next-views-BYlaFXMf.js",
+    "name": "next-views",
+    "src": "src/ui/next/next-views.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "v2.html",
+      "_theme-ucgDDYK5.js"
+    ],
+    "dynamicImports": [
+      "_character-builder-CTgvZxpR.js"
+    ],
+    "css": [
+      "assets/next-views-Cfpl4ssM.css"
+    ]
+  },
+  "v2.html": {
+    "file": "assets/v2-DQwOC9qP.js",
+    "name": "v2",
+    "src": "v2.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/ui/classic-views.ts",
+      "src/ui/next/next-views.ts"
+    ],
+    "css": [
+      "assets/v2-DTMuOSVM.css"
+    ]
+  }
+}

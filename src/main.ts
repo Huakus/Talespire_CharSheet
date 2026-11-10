@@ -11,15 +11,17 @@ import {
   TaleSpireCampaignBlobStore,
   type TaleSpireApiSubset,
 } from "./infrastructure/talespire/talespire-campaign-blob-store";
-import "./styles.css";
-import { BrowserApp } from "./ui/browser-app";
+import "./ui/interface-shell.css";
+import { browserSymbiotePreferences } from "./ui/symbiote-preferences";
+import { startupInterface } from "./ui/interface-preference";
+import { mountInterfaceShell } from "./ui/interface-shell";
+import { loadInterfaceViews, type InterfaceViews } from "./ui/interface-views";
 import { BrowserDiceRoller } from "./infrastructure/dice/browser-dice-roller";
 import { TaleSpireDiceRoller } from "./infrastructure/talespire/talespire-dice-roller";
 import { TaleSpireMiniatureAdapter } from "./infrastructure/talespire/talespire-miniature";
 import { TaleSpirePlayerCollaboration } from "./infrastructure/talespire/talespire-player-collaboration";
 import { resolveTaleSpireClientRole } from "./infrastructure/talespire/talespire-client-role";
 import { EncounterApplication } from "./application/encounter/encounter-application";
-import { GmApp } from "./ui/gm-app";
 import { TaleSpireGmCollaboration } from "./infrastructure/talespire/talespire-gm-collaboration";
 import { GmWorkspaceApplication } from "./application/gm/gm-workspace-application";
 import { CombatSessionRepository } from "./infrastructure/persistence/combat-session-repository";
@@ -46,6 +48,17 @@ declare global {
 const discoveredAppRoot = document.querySelector<HTMLElement>("#app");
 if (!discoveredAppRoot) throw new Error("V2_APP_ROOT_NOT_FOUND");
 const appRoot: HTMLElement = discoveredAppRoot;
+const interfacePreferences = browserSymbiotePreferences();
+const interfaceVersion = startupInterface(interfacePreferences, window.location.search);
+appRoot.dataset.interfaceVersion = interfaceVersion;
+document.body.dataset.interfaceVersion = interfaceVersion;
+if (interfaceVersion === "next") {
+  try { document.documentElement.dataset.v2Theme = window.localStorage.getItem("talespire-5e-toolset:v2:theme") === "light" ? "light" : "dark"; }
+  catch { document.documentElement.dataset.v2Theme = "dark"; }
+}
+const interfaceShell = mountInterfaceShell(appRoot, { current: interfaceVersion, preferences: interfacePreferences });
+let interfaceViews: Promise<InterfaceViews> | null = null;
+const selectedViews = (): Promise<InterfaceViews> => interfaceViews ??= loadInterfaceViews(interfaceVersion);
 void mountBackendStatus(appRoot);
 
 let started = false;
@@ -63,12 +76,14 @@ function reportStartupFailure(error: unknown): void {
   message.textContent = error instanceof Error ? error.message : String(error);
   panel.append(title, message);
   appRoot.replaceChildren(panel);
+  interfaceShell.showRecovery();
   console.error("SYMBIOTE_STARTUP_FAILED", error);
 }
 
 async function startBrowserDevelopment(): Promise<void> {
   if (started) return;
   started = true;
+  const views = await selectedViews();
   const primaryRepository = new LocalStorageCampaignRepository(
     window.localStorage,
     DEFAULT_CAMPAIGN_STORAGE_KEY,
@@ -79,7 +94,7 @@ async function startBrowserDevelopment(): Promise<void> {
   const services = remoteServices as RemoteCampaignServices | null;
   const campaignContent = services?.content ?? null;
   const application = new CampaignApplication(repository);
-  void new BrowserApp(appRoot, application, {
+  void views.createPlayer(appRoot, application, {
     storageLabel: "Almacenamiento de desarrollo del navegador",
     storageEventKey: primaryRepository.storageKey,
     diceRoller: new BrowserDiceRoller(),
@@ -92,6 +107,7 @@ async function startBrowserDevelopment(): Promise<void> {
 async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   if (started) return;
   started = true;
+  const views = await selectedViews();
   const blobStore = new TaleSpireCampaignBlobStore(api.localStorage.campaign);
   const primaryRepository = new BlobCampaignRepository(
     blobStore,
@@ -109,7 +125,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
   activeMiniatureAdapter = miniature;
   if (diceRoller instanceof TaleSpireDiceRoller) activeTaleSpireDiceRoller = diceRoller;
   if (clientRole === "gm") {
-    if (campaignContent) await campaignContent.seedOfficialContent().catch(() => 0);
+    if (campaignContent && interfaceVersion === "classic") await campaignContent.seedOfficialContent().catch(() => 0);
     const collaboration = api.sync && api.clients
       ? new TaleSpireGmCollaboration({
           sync: api.sync,
@@ -121,7 +137,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     if (collaboration) await collaboration.initialize();
     const combatRepository = new CombatSessionRepository(repository);
     const gmWorkspace = new GmWorkspaceApplication(combatRepository);
-    void new GmApp(appRoot, new EncounterApplication(combatRepository), {
+    void views.createGm(appRoot, new EncounterApplication(combatRepository), {
       ...(api.system?.clipboard ? { copyText: (text: string) => api.system!.clipboard!.setText(text) } : {}),
       ...(services?.canManageCharacters === false ? {} : {
         manageCharacter: (command) => application.administerCharacter(command),
@@ -130,7 +146,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
           const dialog = document.createElement("dialog"); dialog.className = "gm-character-sheet-dialog";
           const close = document.createElement("button"); close.type = "button"; close.textContent = "Guardar y volver al control GM";
           const body = document.createElement("div"); dialog.append(close, body); document.body.append(dialog); dialog.showModal();
-          const sheet = new BrowserApp(body, application, { storageLabel: "Hoja administrada por el GM", diceRoller, allowArchivedCharacters: true, canManageCharacters: true,
+          const sheet = views.createPlayer(body, application, { storageLabel: "Hoja administrada por el GM", diceRoller, allowArchivedCharacters: true, canManageCharacters: true,
             ...(services ? { subscribeCampaignChanges: services.subscribeCampaignChanges } : {}),
             ...(campaignContent ? { loadCustomContent: () => campaignContent.load(), refreshCustomContent: () => campaignContent.reload() } : {}),
             ...(api.creatures ? { selectMiniature: () => miniature.selectFirst(), createMiniatureThumbnail: link => miniature.createThumbnail(link) } : {}),
@@ -189,7 +205,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
         createMiniatureThumbnail: (creatureId) => miniature.createCreatureThumbnail(creatureId),
         subscribeMiniatureChanges: (listener) => miniature.subscribeChanges(listener),
       } : {}),
-    }).start().catch(reportStartupFailure);
+    }, application).start().catch(reportStartupFailure);
     return;
   }
   const collaboration = api.sync && api.clients
@@ -197,7 +213,7 @@ async function startTaleSpire(api: TaleSpireApiSubset): Promise<void> {
     : null;
   activeCollaboration = collaboration;
   if (collaboration) await collaboration.initialize();
-  void new BrowserApp(appRoot, application, {
+  void views.createPlayer(appRoot, application, {
     storageLabel: "Almacenamiento de campaña de TaleSpire",
     loadStorageUsage: () => primaryRepository.getStorageUsage(),
     diceRoller,
@@ -258,10 +274,10 @@ window.handlePlayerPermissionEvents = () => undefined;
 window.handleChatMessage = () => undefined;
 window.handleInitiativeEvents = (event) => { void activeGmCollaboration?.handleInitiativeEvent(event); };
 if (taleSpireApi === null) {
-  void startBrowserDevelopment();
+  void startBrowserDevelopment().catch(reportStartupFailure);
 } else {
   appRoot.innerHTML = '<p class="welcome">Esperando la inicialización del API de TaleSpire…</p>';
   window.onStateChangeEvent = (event): void => {
-    if (event.kind === "hasInitialized") void startTaleSpire(taleSpireApi);
+    if (event.kind === "hasInitialized") void startTaleSpire(taleSpireApi).catch(reportStartupFailure);
   };
 }

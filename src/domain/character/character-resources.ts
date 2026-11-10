@@ -41,6 +41,7 @@ export const CharacterResourceCommandSchema = z.discriminatedUnion("kind", [
     successes: z.number().int().min(0).max(3),
     failures: z.number().int().min(0).max(3),
   }),
+  z.object({ kind: z.literal("record-death-save"), outcome: z.enum(["success", "failure"]) }),
   z.object({ kind: z.literal("toggle-inspiration") }),
   z.object({
     kind: z.literal("set-exhaustion"),
@@ -171,6 +172,19 @@ export function applyCharacterResourceCommand(
       const previous = combat.hitPoints.temporary;
       combat.hitPoints.temporary = Math.max(previous, command.amount);
       effects.temporaryHitPointsChangedBy = combat.hitPoints.temporary - previous;
+      break;
+    }
+    case "record-death-save": {
+      if (combat.hitPoints.current > 0 || combat.deathSaves.successes >= 3 || combat.deathSaves.failures >= 3) throw new Error("Las salvaciones de muerte no están pendientes.");
+      if (command.outcome === "success") combat.deathSaves.successes++;
+      else combat.deathSaves.failures++;
+      if (combat.deathSaves.successes === 3) {
+        if (combat.hitPoints.maximum < 1) throw new Error("Configurá al menos 1 PG máximo antes de recuperar PG.");
+        const previousHp = combat.hitPoints.current;
+        combat.hitPoints.current = 1;
+        combat.deathSaves = { successes: 0, failures: 0 };
+        effects.hitPointsChangedBy = 1 - previousHp;
+      }
       break;
     }
     case "set-death-saves":

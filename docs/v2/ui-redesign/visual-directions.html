@@ -1,0 +1,240 @@
+<div id="ts-visual-directions">
+  <style>
+    #ts-visual-directions .ds-stage { display: flex; align-items: flex-start; justify-content: center; min-height: 900px; padding: 54px 0 24px; }
+    #ts-visual-directions .ds-app {
+      --ds-bg: light-dark(#f4f5f6, #171a1f); --ds-surface: light-dark(#ffffff, #20252b);
+      --ds-ink: light-dark(#20242a, #e9edf1); --ds-muted: light-dark(#59616b, #acb4bf);
+      --ds-line: light-dark(#d8dde3, #3c434d); --ds-accent: #c18b57; --ds-on-accent: #171a1f;
+      --ds-row: 9px; --ds-width: 440px; --ds-font: 14px; --ds-radius: 6px;
+      width: min(100%, var(--ds-width)); min-width: 0; font: var(--ds-font)/1.45 system-ui, sans-serif;
+      color: var(--ds-ink); background: var(--ds-bg); border: 1px solid var(--ds-line); border-radius: var(--ds-radius);
+      overflow-wrap: anywhere; container-type: inline-size; text-align: left;
+    }
+    #ts-visual-directions .ds-app[data-design="atlas"] {
+      --ds-bg: light-dark(#edf2f7, #111b27); --ds-surface: light-dark(#ffffff, #1b2a3a);
+      --ds-ink: light-dark(#1d2d3e, #e4edf8); --ds-muted: light-dark(#516279, #a6b9cf);
+      --ds-line: light-dark(#c9d5e3, #354b64); --ds-accent: #73a7da; --ds-radius: 12px;
+    }
+    #ts-visual-directions .ds-app[data-design="journal"] {
+      --ds-bg: light-dark(#f6f0e4, #29251f); --ds-surface: light-dark(#fffaf0, #342f27);
+      --ds-ink: light-dark(#342c24, #f2e8d5); --ds-muted: light-dark(#695e50, #c5b9a5);
+      --ds-line: light-dark(#d5c8b6, #625747); --ds-accent: #a7603f; --ds-radius: 3px;
+    }
+    #ts-visual-directions .ds-app * { box-sizing: border-box; }
+    #ts-visual-directions .ds-app h2, #ts-visual-directions .ds-app h3, #ts-visual-directions .ds-app p, #ts-visual-directions .ds-app dl { margin: 0; }
+    #ts-visual-directions .ds-app h2 { font-size: 20px; font-weight: 650; letter-spacing: -.35px; }
+    #ts-visual-directions .ds-app h3 { font-size: 15px; font-weight: 650; }
+    #ts-visual-directions .ds-app[data-design="journal"] h2, #ts-visual-directions .ds-app[data-design="journal"] h3 { font-family: Georgia, serif; font-weight: 500; }
+    #ts-visual-directions .ds-app[data-design="journal"] h2 { font-size: 24px; }
+    #ts-visual-directions .ds-app button, #ts-visual-directions .ds-app select { font: inherit; color: inherit; max-width: 100%; min-width: 0; }
+    #ts-visual-directions .ds-app button { background: transparent; border: 0; }
+    #ts-visual-directions .ds-app button:focus-visible, #ts-visual-directions .ds-app select:focus-visible, #ts-visual-directions .ds-app summary:focus-visible { outline: 2px solid var(--ds-ink); outline-offset: 2px; }
+    #ts-visual-directions .ds-chrome { padding: 12px 16px 0; border-bottom: 1px solid var(--ds-line); }
+    #ts-visual-directions .ds-brand { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--ds-muted); }
+    #ts-visual-directions .ds-brand strong { color: var(--ds-ink); font-weight: 600; letter-spacing: 1.4px; font-size: 11px; }
+    #ts-visual-directions .ds-app nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; margin-top: 12px; }
+    #ts-visual-directions .ds-app nav button { padding: 10px 2px; border-bottom: 2px solid transparent; font-size: 12px; }
+    #ts-visual-directions .ds-app nav button[aria-pressed="true"] { border-bottom-color: var(--ds-accent); font-weight: 700; }
+    #ts-visual-directions .ds-app[data-design="atlas"] nav { gap: 4px; margin-bottom: 10px; }
+    #ts-visual-directions .ds-app[data-design="atlas"] nav button { border-bottom: 0; border-radius: 6px; }
+    #ts-visual-directions .ds-app[data-design="atlas"] nav button[aria-pressed="true"] { background: var(--ds-accent); color: var(--ds-on-accent); }
+    #ts-visual-directions .ds-body { padding: 18px 16px; display: grid; gap: 16px; }
+    #ts-visual-directions .ds-heading { display: grid; gap: 5px; }
+    #ts-visual-directions .ds-heading-line { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    #ts-visual-directions .ds-secondary { color: var(--ds-muted); font-size: 12px; }
+    #ts-visual-directions .ds-app select { width: 100%; background: var(--ds-surface); border: 1px solid var(--ds-line); padding: 8px 10px; border-radius: 5px; }
+    #ts-visual-directions .ds-app option { color: var(--ds-ink); background: var(--ds-surface); }
+    #ts-visual-directions .ds-context { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+    #ts-visual-directions .ds-badge { display: inline-flex; width: fit-content; align-items: center; gap: 4px; font-size: 11px; padding: 2px 6px; border-radius: 4px; background: color-mix(in srgb, var(--ds-accent) 15%, var(--ds-bg)); color: var(--ds-ink); font-weight: 600; }
+    #ts-visual-directions .ds-ledger { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    #ts-visual-directions .ds-ledger th { font-size: 11px; font-weight: 500; color: var(--ds-muted); text-align: right; padding: 0 8px 8px; }
+    #ts-visual-directions .ds-ledger th:first-child { text-align: left; width: 61%; }
+    #ts-visual-directions .ds-ledger th:nth-child(2) { width: 25%; }
+    #ts-visual-directions .ds-ledger td { padding: var(--ds-row) 8px; border-top: 1px solid var(--ds-line); vertical-align: middle; text-align: right; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-ledger td:first-child { text-align: left; }
+    #ts-visual-directions .ds-ledger tr.ds-selected { background: color-mix(in srgb, var(--ds-accent) 10%, var(--ds-bg)); }
+    #ts-visual-directions .ds-name-button { padding: 0; text-align: left; display: grid; gap: 3px; width: 100%; font-weight: 550; }
+    #ts-visual-directions .ds-max { color: var(--ds-muted); font-weight: 400; font-size: 12px; }
+    #ts-visual-directions .ds-row-list { display: grid; gap: 7px; }
+    #ts-visual-directions .ds-combat-card { border: 1px solid var(--ds-line); border-radius: 9px; background: var(--ds-surface); overflow-wrap: anywhere; }
+    #ts-visual-directions .ds-combat-card.ds-selected { border-left: 3px solid var(--ds-accent); }
+    #ts-visual-directions .ds-card-select { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: var(--ds-row) 12px; text-align: left; }
+    #ts-visual-directions .ds-card-name { display: flex; gap: 9px; align-items: center; min-width: 0; }
+    #ts-visual-directions .ds-avatar { width: 28px; height: 28px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; font-size: 12px; background: color-mix(in srgb, var(--ds-accent) 13%, var(--ds-surface)); }
+    #ts-visual-directions .ds-card-copy { display: grid; gap: 3px; min-width: 0; }
+    #ts-visual-directions .ds-card-copy strong { font-weight: 550; }
+    #ts-visual-directions .ds-card-numbers { display: grid; gap: 3px; text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-health { display: block; height: 3px; border-radius: 2px; background: var(--ds-line); margin-top: 3px; width: 72px; }
+    #ts-visual-directions .ds-health i { display: block; height: 100%; border-radius: inherit; background: var(--ds-accent); }
+    #ts-visual-directions .ds-journal-list { display: grid; }
+    #ts-visual-directions .ds-journal-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 10px; padding: calc(var(--ds-row) + 2px) 0; border-bottom: 1px solid var(--ds-line); }
+    #ts-visual-directions .ds-journal-row.ds-selected { border-left: 2px solid var(--ds-accent); padding-left: 9px; }
+    #ts-visual-directions .ds-journal-row button { font-family: Georgia, serif; }
+    #ts-visual-directions .ds-journal-values { text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-detail { display: grid; gap: 10px; border-top: 1px solid var(--ds-line); padding-top: 14px; }
+    #ts-visual-directions .ds-detail .ds-context { justify-content: space-between; }
+    #ts-visual-directions .ds-app[data-design="atlas"] .ds-detail { padding: 10px 12px 13px; margin-top: 0; }
+    #ts-visual-directions .ds-detail-stats { display: flex; gap: 24px; }
+    #ts-visual-directions .ds-detail-stats dt { font-size: 11px; color: var(--ds-muted); }
+    #ts-visual-directions .ds-detail-stats dd { margin: 2px 0 0; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-app .ds-action { justify-self: start; padding: 7px 11px; border: 1px solid var(--ds-line); border-radius: 5px; font-size: 12px; background: var(--ds-surface); }
+    #ts-visual-directions .ds-app .ds-action.ds-primary { color: var(--ds-on-accent); background: var(--ds-accent); border-color: transparent; }
+    #ts-visual-directions .ds-person { display: flex; gap: 12px; align-items: center; }
+    #ts-visual-directions .ds-person .ds-avatar { width: 44px; height: 44px; font-size: 18px; border-radius: 10px; }
+    #ts-visual-directions .ds-vitals { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; padding: 12px 0; border-block: 1px solid var(--ds-line); }
+    #ts-visual-directions .ds-vitals dt { font-size: 11px; color: var(--ds-muted); }
+    #ts-visual-directions .ds-vitals dd { margin: 3px 0 0; font-size: 21px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-abilities { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+    #ts-visual-directions .ds-ability { display: grid; gap: 3px; padding: 9px; background: var(--ds-surface); border: 1px solid var(--ds-line); border-radius: 5px; }
+    #ts-visual-directions .ds-ability-label { font-size: 11px; color: var(--ds-muted); }
+    #ts-visual-directions .ds-ability-value { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-ability-value small { font-size: 11px; font-weight: 400; color: var(--ds-muted); margin-left: 4px; }
+    #ts-visual-directions .ds-app[data-design="atlas"] .ds-abilities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #ts-visual-directions .ds-app[data-design="atlas"] .ds-ability { grid-template-columns: minmax(0, 1fr) auto; align-items: center; border: 0; padding: 9px 12px; border-radius: 8px; }
+    #ts-visual-directions .ds-app[data-design="journal"] .ds-abilities { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+    #ts-visual-directions .ds-app[data-design="journal"] .ds-ability { border: 0; border-bottom: 1px solid var(--ds-line); border-radius: 0; background: transparent; grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 10px 0; }
+    #ts-visual-directions .ds-app[data-design="journal"] .ds-ability-value { font-size: 17px; }
+    #ts-visual-directions .ds-skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 18px; }
+    #ts-visual-directions .ds-skill { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding-block: 5px; }
+    #ts-visual-directions .ds-skill strong { font-weight: 600; font-variant-numeric: tabular-nums; }
+    #ts-visual-directions .ds-group { display: grid; gap: 10px; }
+    #ts-visual-directions .ds-app details { padding-block: 10px; border-top: 1px solid var(--ds-line); }
+    #ts-visual-directions .ds-app summary { font-size: 12px; color: var(--ds-muted); }
+    #ts-visual-directions .ds-app details p { margin-top: 10px; }
+    #ts-visual-directions .ds-divider { height: 1px; background: var(--ds-line); }
+    #ts-visual-directions .ds-app footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 16px; border-top: 1px solid var(--ds-line); color: var(--ds-muted); font-size: 11px; }
+    #ts-visual-directions .ds-app footer button { color: inherit; padding: 2px 0; font-size: inherit; text-decoration: underline; }
+    @container (max-width: 350px) { #ts-visual-directions .ds-card-select { grid-template-columns: minmax(0, 1fr); } #ts-visual-directions .ds-card-numbers { display: flex; align-items: center; gap: 12px; text-align: left; padding-left: 37px; } #ts-visual-directions .ds-skills { grid-template-columns: minmax(0, 1fr); } #ts-visual-directions .ds-ledger th:first-child { width: 54%; } #ts-visual-directions .ds-ledger th:nth-child(2) { width: 30%; } }
+    @media (pointer: coarse) { #ts-visual-directions .ds-app nav button, #ts-visual-directions .ds-name-button, #ts-visual-directions .ds-app .ds-action, #ts-visual-directions .ds-app footer button, #ts-visual-directions .ds-app summary { min-height: 44px; } }
+  </style>
+  <div class="viz-carousel viz-dotted-background" aria-label="Direcciones visuales del symbiote" data-previous-label="Anterior" data-next-label="Siguiente">
+    <section data-variant="Mesa táctica" aria-label="Mesa táctica: consulta compacta">
+      <div class="ds-stage"><section class="ds-app" data-design="tactical" aria-label="Mesa táctica"></section></div>
+    </section>
+    <section data-variant="Atlas" aria-label="Atlas: agrupación por tarjetas" hidden>
+      <div class="ds-stage"><section class="ds-app" data-design="atlas" aria-label="Atlas"></section></div>
+    </section>
+    <section data-variant="Cuaderno" aria-label="Cuaderno: lectura editorial" hidden>
+      <div class="ds-stage"><section class="ds-app" data-design="journal" aria-label="Cuaderno"></section></div>
+    </section>
+  </div>
+  <script>
+    (() => {
+      const root = document.getElementById('ts-visual-directions');
+      const combatants = [
+        { id: 'varka', name: 'Varka', hp: 75, max: 83, ac: 14 },
+        { id: 'delerion', name: 'Delerion', hp: 62, max: 62, ac: 12 },
+        { id: 'ankylosaur', name: 'Anquilosaurio', hp: 68, max: 68, ac: 15 },
+        { id: 'vine', name: 'Enredadera', hp: 75, max: 75, ac: 15 },
+        { id: 'knight', name: 'Caballero Resonante', hp: 85, max: 85, ac: 17 },
+        { id: 'ghost', name: 'Monster Halloween 3 Fantome', hp: 1, max: 1, ac: null },
+        { id: 'dog', name: 'Dog, German Shepherd', hp: 1, max: 1, ac: null }
+      ];
+      const abilities = [['Fuerza', '+0', 10], ['Destreza', '+2', 14], ['Constitución', '+2', 14], ['Inteligencia', '+3', 16], ['Sabiduría', '+1', 13], ['Carisma', '+0', 11]];
+      const skills = [['Arcano', '+7'], ['Historia', '+3'], ['Investigación', '+7'], ['Percepción', '+5'], ['Religión', '+7'], ['Perspicacia', '+1']];
+      const configs = {
+        tactical: { accent: '#c18b57', width: 440, font: 14, airy: false, theme: 'auto', screen: 'combat', selected: 'delerion', encounter: 'main' },
+        atlas: { accent: '#73a7da', width: 440, font: 14, airy: false, theme: 'auto', screen: 'combat', selected: 'delerion', encounter: 'main' },
+        journal: { accent: '#a7603f', width: 440, font: 14, airy: false, theme: 'auto', screen: 'combat', selected: 'delerion', encounter: 'main' }
+      };
+      function restore(snapshot) {
+        const saved = snapshot?.privateContent?.designs;
+        if (!saved) return;
+        Object.entries(configs).forEach(([id, config]) => {
+          const value = saved[id];
+          if (!value || typeof value !== 'object') return;
+          if (/^#[0-9a-f]{6}$/i.test(value.accent)) config.accent = value.accent;
+          if (Number.isFinite(value.width)) config.width = Math.max(320, Math.min(480, value.width));
+          if (Number.isFinite(value.font)) config.font = Math.max(14, Math.min(16, value.font));
+          if (typeof value.airy === 'boolean') config.airy = value.airy;
+          if (['auto', 'light', 'dark'].includes(value.theme)) config.theme = value.theme;
+          if (['combat', 'character', 'content', 'more'].includes(value.screen)) config.screen = value.screen;
+          if (combatants.some(person => person.id === value.selected)) config.selected = value.selected;
+          if (['main', 'forest'].includes(value.encounter)) config.encounter = value.encounter;
+          if (!visiblePeople(config).some(person => person.id === config.selected)) config.selected = activePerson(config).id;
+        });
+      }
+      function remember() {
+        if (window.openai?.setWidgetState) window.openai.setWidgetState({ modelContent: { designOptions: Object.fromEntries(Object.entries(configs).map(([id, c]) => [id, { accent: c.accent, width: c.width, font: c.font, airy: c.airy, theme: c.theme }])) }, privateContent: { designs: configs } }).catch(() => {});
+      }
+      function onAccent(hex) {
+        const values = [1, 3, 5].map(index => parseInt(hex.slice(index, index + 2), 16) / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+        const luminance = values[0] * .2126 + values[1] * .7152 + values[2] * .0722;
+        return (luminance + .05) / .05 >= 1.05 / (luminance + .05) ? '#000000' : '#ffffff';
+      }
+      function applyOptions(app, config) {
+        app.style.setProperty('--ds-width', config.width + 'px');
+        app.style.setProperty('--ds-font', config.font + 'px');
+        app.style.setProperty('--ds-row', config.airy ? '13px' : '9px');
+        app.style.setProperty('--ds-accent', config.accent);
+        app.style.setProperty('--ds-on-accent', onAccent(config.accent));
+        if (config.theme === 'auto') app.style.removeProperty('color-scheme');
+        else app.style.colorScheme = config.theme;
+      }
+      function activePerson(config) { return combatants.find(person => person.id === (config.encounter === 'forest' ? 'vine' : 'delerion')); }
+      function visiblePeople(config) { return config.encounter === 'forest' ? combatants.slice(2, 5) : combatants; }
+      function badge(person, config) { return person.id === activePerson(config).id ? '<span class="ds-badge">En turno</span>' : ''; }
+      function detail(config) {
+        const person = combatants.find(entry => entry.id === config.selected);
+        return `<section class="ds-detail" aria-label="Combatiente consultado"><div class="ds-context"><h3>${person.name}</h3><span class="ds-secondary">Consulta${person.id === activePerson(config).id ? ' · en turno' : ' · fuera de turno'}</span></div><dl class="ds-detail-stats"><div><dt>Puntos de golpe</dt><dd>${person.hp}<span class="ds-max"> / ${person.max}</span></dd></div><div><dt>Clase de armadura</dt><dd>${person.ac ?? '—'}</dd></div></dl>${person.id === 'delerion' ? '<button type="button" class="ds-action ds-primary cursor-interaction" data-screen="character">Ver ficha de Delerion</button>' : `<span class="ds-secondary">Turno actual: ${activePerson(config).name}</span>`}</section>`;
+      }
+      function combatContent(id, config) {
+        let list;
+        const people = visiblePeople(config);
+        if (id === 'tactical') list = `<table class="ds-ledger"><thead><tr><th scope="col">Combatiente</th><th scope="col">PG</th><th scope="col">CA</th></tr></thead><tbody>${people.map(person => `<tr class="${config.selected === person.id ? 'ds-selected' : ''}"><td><button type="button" class="ds-name-button cursor-interaction" data-person="${person.id}" aria-pressed="${config.selected === person.id}"><span>${person.name}</span>${badge(person, config)}</button></td><td>${person.hp}<span class="ds-max"> / ${person.max}</span></td><td>${person.ac ?? '—'}</td></tr>`).join('')}</tbody></table>${detail(config)}`;
+        else if (id === 'atlas') list = `<div class="ds-row-list">${people.map(person => `<section class="ds-combat-card ${config.selected === person.id ? 'ds-selected' : ''}"><button type="button" class="ds-card-select cursor-interaction" data-person="${person.id}" aria-pressed="${config.selected === person.id}"><span class="ds-card-name"><span class="ds-avatar" aria-hidden="true">${person.name[0]}</span><span class="ds-card-copy"><strong>${person.name}</strong>${badge(person, config)}</span></span><span class="ds-card-numbers"><span>${person.hp}/${person.max} PG · CA ${person.ac ?? '—'}</span><span class="ds-health" aria-hidden="true"><i style="width:${person.hp / person.max * 100}%"></i></span></span></button>${config.selected === person.id ? detail(config) : ''}</section>`).join('')}</div>`;
+        else list = `<div class="ds-journal-list">${people.map(person => `<div class="ds-journal-row ${config.selected === person.id ? 'ds-selected' : ''}"><button type="button" class="ds-name-button cursor-interaction" data-person="${person.id}" aria-pressed="${config.selected === person.id}"><span>${person.name}</span>${badge(person, config)}</button><span class="ds-journal-values">${person.hp}<span class="ds-max">/${person.max}</span> PG<br>CA ${person.ac ?? '—'}</span></div>`).join('')}</div>${detail(config)}`;
+        return `<div class="ds-heading"><div class="ds-heading-line"><h2>Combate</h2><span class="ds-secondary">${people.length} participantes</span></div><span class="ds-secondary">Encuentro consultado</span><select aria-label="Encuentro consultado"><option value="main" ${config.encounter === 'main' ? 'selected' : ''}>Combate de TaleSpire</option><option value="forest" ${config.encounter === 'forest' ? 'selected' : ''}>Encuentro del bosque</option></select></div>${list}`;
+      }
+      function characterContent(id) {
+        return `<div class="ds-person">${id === 'atlas' ? '<span class="ds-avatar" aria-hidden="true">D</span>' : ''}<div class="ds-heading"><span class="ds-secondary">Personaje consultado</span><h2>Delerion</h2><span class="ds-secondary">Mago · nivel 10</span></div></div><dl class="ds-vitals"><div><dt>Puntos de golpe</dt><dd>62 <span class="ds-max">/ 62</span></dd></div><div><dt>Clase de armadura</dt><dd>12</dd></div></dl><section class="ds-group"><h3>Características</h3><div class="ds-abilities">${abilities.map(([name, modifier, score]) => `<div class="ds-ability"><span class="ds-ability-label">${name}</span><span class="ds-ability-value">${modifier}<small>${score}</small></span></div>`).join('')}</div></section><section class="ds-group"><h3>Habilidades</h3><div class="ds-skills">${skills.map(([name, modifier]) => `<div class="ds-skill"><span>${name}</span><strong>${modifier}</strong></div>`).join('')}</div><details><summary class="cursor-interaction">Otras habilidades</summary><div class="ds-skills"><div class="ds-skill"><span>Acrobacias</span><strong>+2</strong></div><div class="ds-skill"><span>Engaño</span><strong>+0</strong></div><div class="ds-skill"><span>Atletismo</span><strong>+0</strong></div><div class="ds-skill"><span>Supervivencia</span><strong>+1</strong></div></div></details></section><details><summary class="cursor-interaction">Rasgos, competencias y progresión</summary><p class="ds-secondary">La lectura detallada se abre aquí, conservando el contexto del personaje.</p></details>`;
+      }
+      function otherContent(screen) {
+        if (screen === 'content') return '<div class="ds-heading"><h2>Contenido de campaña</h2><span class="ds-secondary">Biblioteca del GM</span></div><details open><summary class="cursor-interaction">Criaturas</summary><p>Caballero Resonante</p><p>Enredadera</p></details><details><summary class="cursor-interaction">Conjuros</summary><p>Referencias y reglas de lanzamiento.</p></details><details><summary class="cursor-interaction">Objetos y comerciantes</summary><p>Equipo y contenido de campaña.</p></details>';
+        return '<div class="ds-heading"><h2>Campaña</h2><span class="ds-secondary">Notas y herramientas</span></div><details open><summary class="cursor-interaction">Notas de sesión</summary><p>El grupo se prepara para explorar el bosque.</p></details><details><summary class="cursor-interaction">Biblioteca y tablas</summary><p>Consulta de material de campaña.</p></details>';
+      }
+      function render(app, id) {
+        const config = configs[id];
+        applyOptions(app, config);
+        app.innerHTML = `<header class="ds-chrome"><div class="ds-brand"><strong>TALESPIRE</strong><span>Control GM</span></div><nav aria-label="Secciones del GM">${[['combat', 'Combate'], ['character', 'Personajes'], ['content', 'Contenido'], ['more', 'Más']].map(([screen, label]) => `<button type="button" class="cursor-interaction" data-screen="${screen}" aria-pressed="${config.screen === screen}">${label}</button>`).join('')}</nav></header><div class="ds-body" aria-live="polite">${config.screen === 'combat' ? combatContent(id, config) : config.screen === 'character' ? characterContent(id) : otherContent(config.screen)}</div><footer><span>Interfaz nueva · vista de ejemplo</span><button type="button" class="cursor-interaction" data-screen="combat">Volver a combate</button></footer>`;
+      }
+      restore(window.openai?.widgetState);
+      const apps = [...root.querySelectorAll('.ds-app')];
+      apps.forEach(app => {
+        const id = app.dataset.design;
+        render(app, id);
+        app.addEventListener('click', event => {
+          const control = event.target.closest('button');
+          if (!control || !app.contains(control)) return;
+          if (['combat', 'character', 'content', 'more'].includes(control.dataset.screen)) configs[id].screen = control.dataset.screen;
+          else if (combatants.some(person => person.id === control.dataset.person)) configs[id].selected = control.dataset.person;
+          else return;
+          const screen = control.dataset.screen, person = control.dataset.person;
+          render(app, id);
+          const focus = screen ? app.querySelector(`[data-screen="${screen}"]`) : app.querySelector(`[data-person="${person}"]`);
+          focus?.focus({ preventScroll: true });
+          remember();
+        });
+        app.addEventListener('change', event => {
+          if (!event.target.matches('select')) return;
+          configs[id].encounter = event.target.value === 'forest' ? 'forest' : 'main';
+          configs[id].selected = activePerson(configs[id]).id;
+          render(app, id);
+          app.querySelector('select')?.focus({ preventScroll: true });
+          remember();
+        });
+        if (globalThis.Tweak) {
+          const tweak = new Tweak({ container: app, onChange: () => { applyOptions(app, configs[id]); remember(); } });
+          tweak.addColorPicker(configs[id], 'accent', { label: 'Color de acento', reference: '--ds-accent' });
+          tweak.addSlider(configs[id], 'width', { label: 'Ancho del panel', min: 320, max: 480, step: 10, unit: 'px' });
+          tweak.addSlider(configs[id], 'font', { label: 'Tamaño de lectura', min: 14, max: 16, step: 1, unit: 'px' });
+          tweak.addToggle(configs[id], 'airy', { label: 'Más espacio entre filas' });
+          tweak.addSelect(configs[id], 'theme', { label: 'Apariencia', options: [{ label: 'Seguir conversación', value: 'auto' }, { label: 'Clara', value: 'light' }, { label: 'Oscura', value: 'dark' }] });
+        }
+      });
+      window.addEventListener('openai:set_globals', event => {
+        if (event.detail?.globals?.widgetState) { restore(event.detail.globals.widgetState); apps.forEach(app => render(app, app.dataset.design)); }
+      });
+    })();
+  </script>
+</div>

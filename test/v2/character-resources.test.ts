@@ -43,6 +43,25 @@ describe("character statistics projection", () => {
 });
 
 describe("character resource commands", () => {
+  it("records the third death success and recovers one HP in the same revision, without changing its input", async () => {
+    const character = await characterFixture();
+    character.combat.hitPoints.current = 0;
+    character.combat.deathSaves = { successes: 2, failures: 1 };
+    const before = structuredClone(character);
+    const result = applyCharacterResourceCommand(character, { kind: 'record-death-save', outcome: 'success' }, { expectedRevision: character.revision, updatedAt: time });
+    expect(result.character.combat.hitPoints.current).toBe(1);
+    expect(result.character.combat.deathSaves).toEqual({ successes: 0, failures: 0 });
+    expect(result.character.revision).toBe(character.revision + 1);
+    expect(result.effects.hitPointsChangedBy).toBe(1);
+    expect(character).toEqual(before);
+    expect(() => applyCharacterResourceCommand(result.character, { kind: 'record-death-save', outcome: 'success' }, { expectedRevision: result.character.revision, updatedAt: time })).toThrow('no están pendientes');
+  });
+
+  it("does not allow recording more failures after a resolved death save", async () => {
+    const character = await characterFixture();character.combat.hitPoints.current = 0;character.combat.deathSaves.failures = 3;
+    expect(() => applyCharacterResourceCommand(character, { kind: 'record-death-save', outcome: 'failure' }, { expectedRevision: character.revision, updatedAt: time })).toThrow('no están pendientes');
+  });
+
   it("applies temporary HP before current HP and requests concentration", async () => {
     const character = await characterFixture();
     const result = applyCharacterResourceCommand(

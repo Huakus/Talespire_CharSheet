@@ -12,7 +12,7 @@ $sourceHtmlPath = Join-Path $distRoot 'v2.html'
 Set-Location -LiteralPath $repoRoot
 
 Write-Host 'Building the production Symbiote...'
-& npm.cmd run build:v2 -- --emptyOutDir=false
+& npm.cmd run build:v2 -- --emptyOutDir=false --manifest
 if ($LASTEXITCODE -ne 0) {
   throw "The production build failed with exit code $LASTEXITCODE."
 }
@@ -51,6 +51,25 @@ function Resolve-DistAsset([string]$relativePath) {
 $sourceScriptPath = Resolve-DistAsset $scriptMatch.Groups['path'].Value
 $sourceStylePath = Resolve-DistAsset $styleMatch.Groups['path'].Value
 
+# The build manifest lists only this build's files, even when older output must
+# remain on disk because TaleSpire may have it open. Preserve module paths:
+# flattening the entry into script.js breaks relative imports of both views.
+$buildManifestPath = Join-Path $distRoot '.vite\manifest.json'
+$buildManifest = Get-Content -LiteralPath $buildManifestPath -Raw | ConvertFrom-Json
+$buildFiles = @($buildManifest.PSObject.Properties | ForEach-Object {
+  $_.Value.file
+  $_.Value.css
+  $_.Value.assets
+} | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Sort-Object -Unique)
+if ($buildFiles -notcontains $scriptMatch.Groups['path'].Value.Substring(2)) {
+  throw 'The application entry is not listed in the current build manifest.'
+}
+foreach ($relativeAsset in $buildFiles) {
+  $null = Resolve-DistAsset "./$relativeAsset"
+}
+$licenseRelativePath = 'third-party/lucide-LICENSE.txt'
+$sourceLicensePath = Resolve-DistAsset "./$licenseRelativePath"
+
 $expectedPackageRoot = [System.IO.Path]::GetFullPath((Join-Path $repoRoot 'release\Talespire_CharSheet'))
 if (-not $packageRoot.Equals($expectedPackageRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
   throw "Refusing to clean unexpected package directory: $packageRoot"
@@ -65,9 +84,17 @@ $html = $html.Replace($scriptMatch.Groups['path'].Value, './script.js')
 $html = $html.Replace($styleMatch.Groups['path'].Value, './style.css')
 $html | Set-Content -LiteralPath (Join-Path $packageRoot 'index.html') -Encoding utf8
 
-Copy-Item -LiteralPath $sourceScriptPath -Destination (Join-Path $packageRoot 'script.js')
+foreach ($relativeAsset in $buildFiles) {
+  $destination = Join-Path $packageRoot $relativeAsset
+  New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+  Copy-Item -LiteralPath (Resolve-DistAsset "./$relativeAsset") -Destination $destination
+}
+$entryImport = $scriptMatch.Groups['path'].Value | ConvertTo-Json -Compress
+"import $entryImport;" | Set-Content -LiteralPath (Join-Path $packageRoot 'script.js') -Encoding utf8
 Copy-Item -LiteralPath $sourceStylePath -Destination (Join-Path $packageRoot 'style.css')
 Copy-Item -LiteralPath (Join-Path $repoRoot 'README.md') -Destination (Join-Path $packageRoot 'README.md')
+New-Item -ItemType Directory -Path (Join-Path $packageRoot 'third-party') -Force | Out-Null
+Copy-Item -LiteralPath $sourceLicensePath -Destination (Join-Path $packageRoot $licenseRelativePath)
 
 $manifest.entryPoint = '/index.html'
 $manifest.name = 'Talespire CharSheet'
@@ -115,7 +142,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $archive = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
 try {
   $entries = @($archive.Entries | ForEach-Object { $_.FullName.Replace('\', '/') })
-  foreach ($requiredEntry in @('manifest.json', 'index.html', 'script.js', 'style.css', 'README.md')) {
+  foreach ($requiredEntry in @('manifest.json', 'index.html', 'script.js', 'style.css', 'README.md', $licenseRelativePath) + $buildFiles) {
     if ($entries -notcontains $requiredEntry) {
       throw "ZIP validation failed: $requiredEntry is missing from the archive root."
     }

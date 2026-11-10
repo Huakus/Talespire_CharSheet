@@ -1,6 +1,15 @@
 # Changelog
 
-Changes to Talespire CharSheet from **1.0.29 through 1.0.43**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+Changes to Talespire CharSheet from **1.0.29 through 1.0.44**, inclusive. Historical versions were identified using the `manifest.json` files in the GitHub commit history. Dates use Argentina time (UTC−3).
+
+## 1.0.44 — 2026-11-09
+
+- Added a local interface selector: Actual remains the default; Nueva is an opt-in pilot applied on reload, with a direct return to Actual and separate production styles.
+- Nueva's compact Ficha combines level, HP, armor, initiative, speed, identity and roll controls inside the sheet. The shared header keeps character selection, Edit and More options. Character colors can be saved using the shared editor.
+- Added bundled official SVG icons, offline tooltips explaining statistic sources, HP indicators that change from green to red, and stacked green/red advantage controls with optional locks.
+- Connected XP, guided level advancement, inspiration, skill/ability/save rolls, death save counters and zero-HP healing through shared application commands. The third death save success now restores 1 HP atomically in both interfaces.
+- General editing, attacks/spells, rests and condition/resource management remain in Actual. Visual validation in TaleSpire and testing with two real clients remain pending.
+- Updated mod.io packaging to include both interfaces, their dynamically loaded assets and the SVG license while preserving module-relative paths and the public communication channel.
 
 ## 1.0.43 — 2026-11-01
 

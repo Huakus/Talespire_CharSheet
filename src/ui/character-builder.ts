@@ -1,3 +1,4 @@
+import "./character-builder.css";
 import { martialInitialFields,martialEquipmentFields,readMartialInitial } from "./martial-builder-fields";
 import { builderGoldMultiplier } from "../domain/character/fighter-builder-catalog";
 import { sorcererIdentityFields,sorcererInitialFields,sorcererEquipmentFields,readSorcererInitial } from "./sorcerer-builder-fields";

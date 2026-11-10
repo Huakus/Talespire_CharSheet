@@ -1,3 +1,5 @@
+import { experienceProgress, inspiredRollMode, combineRollModes, toggleManualRollMode, toggleManualRollModeLock, consumeManualRollMode, applyCheckConditionDice, type ManualRollModeState, type ManualRollMode } from "./character-play-controls";
+export { experienceProgress, inspiredRollMode, combineRollModes, toggleManualRollMode, toggleManualRollModeLock, consumeManualRollMode, type ManualRollModeState } from "./character-play-controls";
 import { itemIsIdentified, unidentifiedItemView } from "../domain/equipment/equipment-identification";
 import { bindInventoryDescriptions, renderCollapsibleInventoryDescription, renderInventoryRichText } from "./inventory-description-view";
 import { renderMartialPanel,bindMartialPanel } from "./martial-play-panel";
@@ -242,24 +244,6 @@ function preference(key: string, fallback: string): string {
   catch { return fallback; }
 }
 
-const EXPERIENCE_THRESHOLDS = [
-  0, 300, 900, 2_700, 6_500, 14_000, 23_000, 34_000, 48_000, 64_000,
-  85_000, 100_000, 120_000, 140_000, 165_000, 195_000, 225_000, 265_000, 305_000, 355_000,
-] as const;
-
-export function experienceProgress(levelInput: number, experienceInput: number): {
-  level: number;
-  current: number;
-  next: number | null;
-  percent: number;
-} {
-  const level = Math.min(20, Math.max(1, Math.trunc(levelInput)));
-  const current = Math.max(0, Math.trunc(experienceInput));
-  const start = EXPERIENCE_THRESHOLDS[level - 1]!;
-  const next = EXPERIENCE_THRESHOLDS[level] ?? null;
-  const percent = next === null ? 100 : Math.round(Math.min(1, Math.max(0, (current - start) / (next - start))) * 100);
-  return { level, current, next, percent };
-}
 
 
 function numberInput(name: string, label: string, value: number, min?: number): string {
@@ -456,36 +440,6 @@ function inventoryCategoryLabel(item: Pick<CharacterInventoryItemV2, "category" 
     gear: "Equipo",
   };
   return labels[inventoryCategoryTone(item)] ?? (item.category || "Objeto");
-}
-
-export function inspiredRollMode(mode: "normal" | "advantage" | "disadvantage"): "normal" | "advantage" {
-  return mode === "disadvantage" ? "normal" : "advantage";
-}
-
-export function combineRollModes(...modes: RollMode[]): RollMode {
-  const advantage = modes.includes("advantage");
-  const disadvantage = modes.includes("disadvantage");
-  if (advantage === disadvantage) return "normal";
-  return advantage ? "advantage" : "disadvantage";
-}
-
-type ManualRollMode = Exclude<RollMode, "normal">;
-
-export interface ManualRollModeState {
-  mode: ManualRollMode;
-  locked: boolean;
-}
-
-export function toggleManualRollMode(current: ManualRollModeState | null, mode: ManualRollMode): ManualRollModeState | null {
-  return current?.mode === mode ? null : { mode, locked: false };
-}
-
-export function toggleManualRollModeLock(current: ManualRollModeState | null, mode: ManualRollMode): ManualRollModeState | null {
-  return current?.mode === mode ? { ...current, locked: !current.locked } : current;
-}
-
-export function consumeManualRollMode(current: ManualRollModeState | null): ManualRollModeState | null {
-  return current?.locked ? current : null;
 }
 
 export function formatCurrencyInLargestDenominations(value: number): string {
@@ -2839,7 +2793,7 @@ export class BrowserApp {
       : 0;
     const temporaryHitPointBottom = Math.min(hitPointLevel, 100 - temporaryHitPointLevel);
     const hitPointHue = Math.round(hitPointRatio * 112);
-    const deathSavesResolved = combat.deathSaves.successes >= 3 || combat.deathSaves.failures >= 3;
+    const deathSavesResolved = combat.hitPoints.current > 0 || combat.deathSaves.successes >= 3 || combat.deathSaves.failures >= 3;
     const successDeathSaveMarks = [3, 2, 1]
       .map((threshold) => `<i class="death-save-mark success ${combat.deathSaves.successes >= threshold ? "achieved" : "pending"}" aria-hidden="true"></i>`)
       .join("");
@@ -4533,10 +4487,7 @@ export class BrowserApp {
       let expressions = abilityCheck ? ["1d20", ...(conditionKeys.has("guidance") ? ["1d4"] : [])] : rawExpression.split("/").map((expression) => {
         if (!expression.toLowerCase().includes("d20")) return expression;
         let adjusted = expression;
-        if (conditionKeys.has("bless") || conditionKeys.has("guidance")) {
-          adjusted += "+1d4";
-        }
-        if (conditionKeys.has("bane")) adjusted += "-1d4";
+        adjusted = applyCheckConditionDice(adjusted, conditionKeys);
         return adjusted;
       });
       const weaponCard=button.dataset.combatRoll==="damage"?button.closest<HTMLElement>("[data-weapon-action-id]"):null;
@@ -6295,9 +6246,8 @@ export class BrowserApp {
     const current = character.combat.deathSaves;
     if (current.successes >= 3 || current.failures >= 3) return;
     await this.applyResourceAction({
-      kind: "set-death-saves",
-      successes: kind === "success" ? Math.min(3, current.successes + 1) : current.successes,
-      failures: kind === "failure" ? Math.min(3, current.failures + 1) : current.failures,
+      kind: "record-death-save",
+      outcome: kind,
     }, kind === "success" ? "Salvación de muerte agregada." : "Fallo de muerte agregado.");
   }
 

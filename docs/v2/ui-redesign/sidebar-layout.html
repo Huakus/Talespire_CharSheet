@@ -1,0 +1,138 @@
+<div id="ts-sidebar-exploration">
+  <style>
+    #ts-sidebar-exploration .exploration-controls { margin-bottom: 14px; padding-right: 94px; }
+    #ts-sidebar-exploration .exploration-stage { display: flex; justify-content: center; padding: 18px 0; }
+    #ts-sidebar-exploration .ts-panel {
+      --ts-bg: light-dark(#fafafa, #202224);
+      --ts-surface: light-dark(#ffffff, #292c2f);
+      --ts-text: light-dark(#242629, #f0f0ed);
+      --ts-secondary: light-dark(#50555a, #bfc4c7);
+      --ts-line: light-dark(#c8cdd0, #555c61);
+      --ts-selected: light-dark(#30373c, #d9dfe2);
+      --ts-selected-text: light-dark(#ffffff, #202629);
+      background: var(--ts-bg); color: var(--ts-text);
+      width: min(100%, var(--ts-preview-width, 400px)); min-width: 0;
+      border: 1px solid var(--ts-line); border-radius: 10px;
+      font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+    #ts-sidebar-exploration .ts-panel * { box-sizing: border-box; }
+    #ts-sidebar-exploration .ts-panel header { padding: 16px; display: grid; gap: 10px; }
+    #ts-sidebar-exploration .ts-panel h2 { font-size: 18px; font-weight: 600; margin: 0; }
+    #ts-sidebar-exploration .ts-panel h3 { font-size: 15px; font-weight: 600; margin: 0; }
+    #ts-sidebar-exploration .ts-panel p { margin: 0; }
+    #ts-sidebar-exploration .ts-caption { color: var(--ts-secondary); font-size: 12px; }
+    #ts-sidebar-exploration .ts-vitals { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    #ts-sidebar-exploration .ts-panel nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border-block: 1px solid var(--ts-line); }
+    #ts-sidebar-exploration .ts-panel button { font: inherit; padding: 7px 10px; border: 1px solid var(--ts-line); border-radius: 5px; color: var(--ts-text); background: var(--ts-surface); min-width: 0; }
+    #ts-sidebar-exploration .ts-panel nav button { flex: 1 1 auto; }
+    #ts-sidebar-exploration .ts-panel button[aria-pressed="true"] { background: var(--ts-selected); color: var(--ts-selected-text); border-color: var(--ts-selected); }
+    #ts-sidebar-exploration .ts-panel button:disabled { opacity: .65; cursor: not-allowed; }
+    #ts-sidebar-exploration .ts-body { padding: 16px; display: grid; gap: 16px; min-height: 350px; align-content: start; }
+    #ts-sidebar-exploration .ts-group { display: grid; gap: 8px; }
+    #ts-sidebar-exploration .ts-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; }
+    #ts-sidebar-exploration .ts-divider { padding-top: 12px; border-top: 1px solid var(--ts-line); }
+    #ts-sidebar-exploration .ts-panel details { border-top: 1px solid var(--ts-line); padding-top: 10px; }
+    #ts-sidebar-exploration .ts-panel summary { font-weight: 500; }
+    #ts-sidebar-exploration .ts-panel details p { margin-top: 10px; }
+    #ts-sidebar-exploration .ts-panel ul { margin: 0; padding-left: 20px; }
+    #ts-sidebar-exploration .ts-panel li + li { margin-top: 8px; }
+    #ts-sidebar-exploration .ts-panel footer { padding: 10px 16px; border-top: 1px solid var(--ts-line); color: var(--ts-secondary); font-size: 12px; }
+    @media (pointer: coarse) { #ts-sidebar-exploration .ts-panel button, #ts-sidebar-exploration .ts-panel summary { min-height: 44px; } }
+  </style>
+  <div class="viz-controls exploration-controls">
+    <label class="form-label">Experiencia
+      <select class="form-select" id="ts-preview-role">
+        <option value="player">Jugador</option>
+        <option value="gm">GM</option>
+      </select>
+    </label>
+  </div>
+  <div class="viz-dotted-background exploration-stage">
+    <section class="ts-panel" aria-label="Boceto del panel lateral">
+      <header id="ts-preview-header"></header>
+      <nav id="ts-preview-nav" aria-label="Secciones del boceto"></nav>
+      <div id="ts-preview-body" class="ts-body" aria-live="polite"></div>
+      <footer>Datos ficticios · Acciones de juego deshabilitadas</footer>
+    </section>
+  </div>
+  <script>
+    (() => {
+      const root = document.getElementById('ts-sidebar-exploration');
+      const panel = root.querySelector('.ts-panel');
+      const rolePicker = root.querySelector('#ts-preview-role');
+      const header = root.querySelector('#ts-preview-header');
+      const nav = root.querySelector('#ts-preview-nav');
+      const body = root.querySelector('#ts-preview-body');
+      const state = { role: 'player', playerSection: 'turn', gmSection: 'combat', creature: 'guardian', width: 400 };
+      const sections = {
+        player: [['turn', 'Turno'], ['sheet', 'Ficha'], ['equipment', 'Equipo'], ['more', 'Más']],
+        gm: [['combat', 'Combate'], ['characters', 'Personajes'], ['content', 'Contenido'], ['more', 'Más']]
+      };
+      function restore(snapshot) {
+        const saved = snapshot?.privateContent;
+        if (!saved || typeof saved !== 'object') return;
+        if (saved.role === 'player' || saved.role === 'gm') state.role = saved.role;
+        if (sections.player.some(([key]) => key === saved.playerSection)) state.playerSection = saved.playerSection;
+        if (sections.gm.some(([key]) => key === saved.gmSection)) state.gmSection = saved.gmSection;
+        if (saved.creature === 'guardian' || saved.creature === 'scout') state.creature = saved.creature;
+        if (Number.isFinite(saved.width)) state.width = Math.max(320, Math.min(460, saved.width));
+      }
+      function save() {
+        if (window.openai?.setWidgetState) window.openai.setWidgetState({ modelContent: { role: state.role, width: state.width }, privateContent: { ...state } }).catch(() => {});
+      }
+      function playerContent(section) {
+        if (section === 'turn') return `<section class="ts-group"><div class="ts-row"><h3>Acciones y recursos</h3><span class="ts-caption">Inspiración disponible</span></div><div class="ts-row"><span>Recuperación personal</span><span>1 de 2 usos</span></div></section><section class="ts-group ts-divider"><h3>Espada de práctica</h3><div class="ts-caption">Ataque +5 · Daño 1d8 + 3 · Cuerpo a cuerpo</div><div class="ts-row"><button type="button" disabled>Tirar ataque</button><button type="button" disabled>Tirar daño</button></div><details><summary class="cursor-interaction">Descripción y propiedades</summary><p>Arma ficticia para explorar la lectura: los valores para actuar aparecen junto a los controles; el texto extenso y las propiedades se consultan aquí.</p></details></section>`;
+        if (section === 'sheet') return `<section class="ts-group"><h3>Pruebas y salvaciones</h3><div class="ts-row"><span>Percepción</span><button type="button" disabled>Tirar +4</button></div><div class="ts-row"><span>Salvación de Destreza</span><button type="button" disabled>Tirar +5</button></div></section><details><summary class="cursor-interaction">Rasgos y competencias</summary><p>Reglas del personaje, idiomas y entrenamientos. Distribución de detalle pendiente.</p></details><details><summary class="cursor-interaction">Progresión y preparación</summary><p>Historial de niveles, edición de ficha y acceso a subida de nivel.</p></details>`;
+        if (section === 'equipment') return `<section class="ts-group"><div class="ts-row"><h3>Equipo personal</h3><span>12 PO</span></div><div class="ts-row"><span>Espada de práctica</span><span class="ts-caption">Equipada</span></div><div class="ts-row"><span>Poción de ejemplo ×2</span><button type="button" disabled>Usar</button></div></section><details><summary class="cursor-interaction">Comerciantes</summary><p>Inventario del comerciante, selección de objetos e intercambio. Flujo por diseñar.</p></details>`;
+        return `<section class="ts-group"><h3>Consulta y campaña</h3><ul><li>Notas del personaje</li><li>Extras y acompañantes</li><li>Biblioteca de campaña</li><li>Gestión de personajes</li><li>Ajustes del symbiote</li></ul></section><div class="ts-caption">Agrupación inicial; accesos y pantallas pendientes de diseño.</div>`;
+      }
+      function gmContent(section) {
+        if (section === 'combat') {
+          const guardian = state.creature === 'guardian';
+          return `<section class="ts-group"><h3>Consultar combatiente</h3><div class="ts-row"><button type="button" class="cursor-interaction" data-creature="guardian" aria-pressed="${guardian}">Guardián · en turno</button><button type="button" class="cursor-interaction" data-creature="scout" aria-pressed="${!guardian}">Explorador</button></div></section><section class="ts-group ts-divider"><h3>${guardian ? 'Guardián' : 'Explorador'}</h3><div class="ts-vitals"><span>PG <strong>${guardian ? '18 / 30' : '12 / 16'}</strong></span><span>CA <strong>${guardian ? '15' : '13'}</strong></span></div><div class="ts-row"><span>Acción de ejemplo · ataque +4</span><button type="button" disabled>Tirar</button></div><details><summary class="cursor-interaction">Defensas y reglas completas</summary><p>El detalle corresponde a ${guardian ? 'Guardián' : 'Explorador'}. La selección de consulta no cambia el turno de Guardián.</p></details></section>`;
+        }
+        if (section === 'characters') return `<section class="ts-group"><h3>Personajes de la campaña</h3><div class="ts-row"><span>Lira</span><span class="ts-caption">24 / 32 PG</span></div><div class="ts-row"><span>Taren</span><span class="ts-caption">18 / 25 PG</span></div><p class="ts-caption">Acceso a fichas, creación y organización. Flujo por diseñar.</p></section>`;
+        if (section === 'content') return `<section class="ts-group"><h3>Contenido de campaña</h3><ul><li>Monstruos</li><li>Conjuros</li><li>Objetos</li><li>Comerciantes</li></ul><p class="ts-caption">Consulta y edición de catálogos. Flujo por diseñar.</p></section>`;
+        return `<section class="ts-group"><h3>Consulta y herramientas</h3><ul><li>Biblioteca de campaña</li><li>Notas del GM</li><li>Herramientas y tablas</li><li>Ajustes del symbiote</li></ul></section><div class="ts-caption">Agrupación inicial; accesos y pantallas pendientes de diseño.</div>`;
+      }
+      function render() {
+        const player = state.role === 'player';
+        const current = player ? state.playerSection : state.gmSection;
+        rolePicker.value = state.role;
+        panel.style.setProperty('--ts-preview-width', `${state.width}px`);
+        header.innerHTML = player
+          ? '<div><div class="ts-caption">Personaje seleccionado</div><h2>Lira</h2></div><div class="ts-vitals"><span>PG <strong>24 / 32</strong></span><span>CA <strong>15</strong></span><span>Estado: sin condiciones</span></div>'
+          : '<div><div class="ts-caption">Control de GM · campaña de ejemplo</div><h2>Turno: Guardián</h2></div><div class="ts-caption">Consulta independiente del turno activo</div>';
+        nav.innerHTML = sections[state.role].map(([key, label]) => `<button type="button" class="cursor-interaction" data-section="${key}" aria-pressed="${key === current}">${label}</button>`).join('');
+        body.innerHTML = player ? playerContent(current) : gmContent(current);
+      }
+      rolePicker.addEventListener('change', () => { state.role = rolePicker.value === 'gm' ? 'gm' : 'player'; render(); save(); });
+      nav.addEventListener('click', event => {
+        const button = event.target.closest('button[data-section]');
+        if (!button) return;
+        const key = button.dataset.section;
+        if (!sections[state.role].some(([id]) => id === key)) return;
+        if (state.role === 'player') state.playerSection = key; else state.gmSection = key;
+        render();
+        nav.querySelector(`[data-section="${key}"]`).focus();
+        save();
+      });
+      body.addEventListener('click', event => {
+        const button = event.target.closest('button[data-creature]');
+        if (!button) return;
+        state.creature = button.dataset.creature === 'scout' ? 'scout' : 'guardian';
+        render();
+        body.querySelector(`[data-creature="${state.creature}"]`).focus();
+        save();
+      });
+      restore(window.openai?.widgetState);
+      render();
+      window.addEventListener('openai:set_globals', event => { if (event.detail?.globals?.widgetState) { restore(event.detail.globals.widgetState); render(); } });
+      if (globalThis.Tweak) {
+        const tweak = new Tweak({ container: panel, onChange: () => { panel.style.setProperty('--ts-preview-width', `${state.width}px`); save(); } });
+        tweak.addSlider(state, 'width', { label: 'Ancho del boceto', min: 320, max: 460, step: 10, unit: 'px' });
+      }
+    })();
+  </script>
+</div>

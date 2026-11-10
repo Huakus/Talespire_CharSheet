@@ -13,6 +13,7 @@ import { wizardSpellSource } from "./wizard-catalog";
 import type { CharacterV2 } from "./character-v2";
 import {
   SKILL_DEFINITIONS,
+  SAVE_DEFINITIONS,
   type SaveKey,
   type SkillKey,
 } from "./character-checks";
@@ -302,6 +303,86 @@ export function projectCharacterStatistics(
         traitBonus(character, "senses", ["PassiveInsight"]) + inventoryBonus(character, "senses", ["PassiveInsight"]),
     },
   };
+}
+
+export interface StatisticContribution { label: string; value: number; }
+export interface StatisticOrigin {
+  total: number;
+  contributions: StatisticContribution[];
+  incomplete: boolean;
+}
+
+/** Read-only provenance. The existing domain projection remains authoritative.
+ * Unattributed differences are explicit, never guessed from their magnitude.
+ * Only identified, effective equipment may contribute source names.
+ */
+export function projectCharacterStatisticOrigins(character: CharacterV2, statistics = projectCharacterStatistics(character)) {
+  const contribution = (label: string, value: number): StatisticContribution => ({ label, value });
+  const origin = (total: number, contributions: StatisticContribution[]): StatisticOrigin => {
+    const difference = total - contributions.reduce((sum, part) => sum + part.value, 0);
+    return { total, incomplete: difference !== 0, contributions: [...contributions,
+      ...(difference ? [contribution("Ajuste final del dominio · origen no desglosado", difference)] : [])] };
+  };
+  const matching = (value: string, keys: readonly string[]) => ["all", ...keys.map(normalizedKey)].includes(normalizedKey(value));
+  const extras = (category: string, keys: readonly string[]): StatisticContribution[] => [
+    ...character.traits.flatMap(group => group.traits).flatMap(trait => {
+      const adjustment = trait.adjustment;
+      return adjustment?.applyToDerived && normalizedKey(adjustment.category) === normalizedKey(category) && matching(adjustment.subcategory, keys) && adjustment.value
+        ? [contribution(trait.name, adjustment.value)] : [];
+    }),
+    ...character.inventory.filter(item => item.quantity > 0 && itemIsIdentified(item) && item.equipped && (!item.requiresAttunement || item.attuned) && !equipmentBearerIssue(character, item))
+      .flatMap(item => [
+        ...item.bonuses.map(bonus => ({ bonus, label: item.name })),
+        ...item.features.filter(feature => feature.kind === "passive" || feature.active)
+          .flatMap(feature => feature.bonuses.map(bonus => ({ bonus, label: `${item.name} · ${feature.name}` }))),
+      ]).filter(({ bonus }) => normalizedKey(bonus.category) === normalizedKey(category) && matching(bonus.key, keys))
+      .map(({ bonus, label }) => contribution(label, inventoryBonusAmount(character, bonus))).filter(part => part.value !== 0),
+  ];
+  const ability = (key: AbilityKey) => contribution(`${SAVE_DEFINITIONS[key].label} (puntaje ${statistics.abilityScores[key]})`, statistics.abilityModifiers[key]);
+  const training = (rank: number) => contribution(`${rank === 2 ? "Pericia (2 × competencia)" : rank === 0.5 ? "Media competencia" : "Competencia"} · nivel ${character.identity.level}`, statistics.proficiencyBonus * rank);
+  const optional = (label: string, value: number) => value ? [contribution(label, value)] : [];
+  const abilityScores = Object.fromEntries((Object.keys(SAVE_DEFINITIONS) as AbilityKey[]).map(key => [key, origin(statistics.abilityScores[key], [
+    contribution("Puntaje registrado", character.abilities[key]),
+    ...character.equipmentBenefits.filter(benefit => benefit.ability === key).map(benefit => contribution(benefit.name, benefit.increase)),
+    ...extras("attributes", [key, key.slice(0, 3)]),
+  ])])) as Record<AbilityKey, StatisticOrigin>;
+  const skills = Object.fromEntries((Object.keys(SKILL_DEFINITIONS) as SkillKey[]).map(key => {
+    const definition = SKILL_DEFINITIONS[key], state = character.checks.skills[key];
+    const parts = [ability(definition.ability), ...(state.proficiency ? [training(state.proficiency)] : []),
+      ...(state.proficiency === 0 ? optional("Aprendiz de todo", bardHalf(character)) : []),
+      ...(championAthlete(character) && state.proficiency === 0 && ["strength", "dexterity", "constitution"].includes(definition.ability) ? optional("Atleta notable", Math.ceil(statistics.proficiencyBonus / 2)) : []),
+      ...optional("Bono registrado de habilidad", state.bonus), ...extras("skills", [key, definition.label])];
+    if (key === "persuasion") {
+      if (character.builder?.classKey === "fighter" && character.builder.levels.find(step => step.level === 3)?.subclass === "samurai" && character.identity.level >= 7) parts.push(contribution("Cortesano elegante · Sabiduría", statistics.abilityModifiers.wisdom));
+      if (character.spellcasting.paladin?.effects.some(effect => effect.key === "emissary-peace")) parts.push(contribution("Emisario de la paz", 5));
+    }
+    const sum = parts.reduce((total, part) => total + part.value, 0);
+    if (sum !== Math.floor(sum)) parts.push(contribution("Redondeo hacia abajo", Math.floor(sum) - sum));
+    return [key, origin(statistics.skills[key], parts)];
+  })) as Record<SkillKey, StatisticOrigin>;
+  const savingThrows = Object.fromEntries((Object.keys(SAVE_DEFINITIONS) as SaveKey[]).map(key => {
+    const state = character.checks.savingThrows[key];
+    const stone = key === "constitution" && character.spellcasting.wizard?.stone?.bearer === "self" && character.spellcasting.wizard.stone.benefit === "constitution";
+    return [key, origin(statistics.savingThrows[key], [ability(key),
+      ...(state.proficiency ? [training(state.proficiency)] : stone ? [contribution("Piedra del transmutador · competencia", statistics.proficiencyBonus)] : []),
+      ...optional("Bono registrado de salvación", state.bonus), ...extras("saves", [key, key.slice(0, 3)]),
+      ...optional("Magia de guerra · defensa duradera", warMagicDefense(character)), ...optional("Aura de protección", paladinAuraBonus(character))])];
+  })) as Record<SaveKey, StatisticOrigin>;
+  const initiative = [ability("dexterity"), ...optional("Bono registrado de iniciativa", character.checks.initiative.bonus), ...extras("skills", ["Initiative"])];
+  if (character.builder && rangerArchetype(character.builder) === "gloom-stalker") initiative.push(contribution("Acechador en la penumbra · Sabiduría", statistics.abilityModifiers.wisdom));
+  if (character.builder && rogueArchetype(character.builder) === "swashbuckler") initiative.push(contribution("Audacia jovial · Carisma", statistics.abilityModifiers.charisma));
+  if (character.builder?.classKey === "wizard" && character.builder.levels.find(step => step.level === 2)?.subclass === "war-magic") initiative.push(contribution("Ingenio táctico · Inteligencia", statistics.abilityModifiers.intelligence));
+  initiative.push(...optional(championAthlete(character) ? "Atleta notable" : "Aprendiz de todo", championAthlete(character) ? Math.ceil(statistics.proficiencyBonus / 2) : bardHalf(character)),
+    ...optional("Alerta", hasBuilderFeat(character, "alert") ? 5 : 0));
+  const passives = Object.fromEntries((["perception", "investigation", "insight"] as const).map(key => [key, origin(statistics.passives[key], [
+    contribution("Base", 10), ...skills[key].contributions,
+    ...optional("Bono pasivo registrado", character.checks.passiveBonuses[key]),
+    ...optional("Observador", key !== "insight" && hasBuilderFeat(character, "observant") ? 5 : 0),
+    ...extras("senses", ["Passive" + key[0]!.toUpperCase() + key.slice(1)]),
+  ])])) as Record<"perception" | "investigation" | "insight", StatisticOrigin>;
+  // Preserve an inherited incomplete skill explanation in its passive, too.
+  for (const key of ["perception", "investigation", "insight"] as const) passives[key].incomplete ||= skills[key].incomplete;
+  return { abilityScores, skills, savingThrows, initiative: origin(statistics.initiativeModifier, initiative), passives };
 }
 
 export function projectActionAttackModifier(
